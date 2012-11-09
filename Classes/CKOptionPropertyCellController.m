@@ -1,14 +1,20 @@
 //
 //  CKOptionPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKOptionPropertyCellController.h"
 #import "CKLocalization.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
+
+#import "UIViewController+Style.h"
+#import "CKStyleManager.h"
+#import "CKPopoverController.h"
+#import "UIBarButtonItem+BlockBasedInterface.h"
+#import "CKDebug.h"
 
 
 @interface CKOptionPropertyCellController ()
@@ -27,14 +33,19 @@
 @synthesize multiSelectionEnabled;
 @synthesize optionsViewController = _optionsViewController;
 @synthesize internalBindingContext = _internalBindingContext;
+@synthesize presentationStyle = _presentationStyle;
 
-- (id)init{
-    self = [super init];
-    self.cellStyle = CKTableViewCellStylePropertyGrid;
-    self.optionCellStyle = CKTableViewCellStylePropertyGrid;
+
+- (void)postInit{
+    [super postInit];
+    
+    self.cellStyle = CKTableViewCellStyleIPhoneForm;
+    self.optionCellStyle = CKTableViewCellStyleIPhoneForm;
     self.internalBindingContext = [NSString stringWithFormat:@"<%p>_CKOptionPropertyCellController",self];
-    return self;
+    self.flags = CKItemViewFlagNone;
+    _presentationStyle = CKOptionPropertyCellControllerPresentationStyleDefault;
 }
+
 
 - (void)dealloc{
     [NSObject removeAllBindingsForContext:self.internalBindingContext];
@@ -46,18 +57,33 @@
 }
 
 - (void)setupLabelsAndValues{
-    CKObjectProperty* property = [self objectProperty];
-    CKObjectPropertyMetaData* metaData = [property metaData];
+    CKProperty* property = [self objectProperty];
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    
     NSDictionary* valuesAndLabels = nil;
-    if(metaData.valuesAndLabels) valuesAndLabels = metaData.valuesAndLabels;
-    else if(metaData.enumDescriptor) valuesAndLabels = metaData.enumDescriptor.valuesAndLabels;
+    if(attributes.valuesAndLabels) valuesAndLabels = attributes.valuesAndLabels;
+    else if(attributes.enumDescriptor) valuesAndLabels = attributes.enumDescriptor.valuesAndLabels;
 
-    NSAssert(valuesAndLabels != nil,@"No valuesAndLabels or EnumDefinition declared for property %@",property);
-    NSArray* orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        NSString* str1 = _(obj1);
-        NSString* str2 = _(obj2);
-        return [str1 compare:str2];
-    }];
+    CKAssert(valuesAndLabels != nil,@"No valuesAndLabels or EnumDefinition declared for property %@",property);
+    CKOptionPropertyCellControllerSortingBlock sortingBlock = attributes.sortingBlock;
+    NSArray* orderedLabels = nil;
+    if(sortingBlock){
+        orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSString* str1 = obj1;
+            NSString* str2 = obj2;
+            id value1 = [valuesAndLabels objectForKey:str1];
+            id value2 = [valuesAndLabels objectForKey:str2];
+            
+            return sortingBlock(value1,_(str1),value2,_(str2));
+        }];
+    }
+    else{
+        orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSString* str1 = _(obj1);
+            NSString* str2 = _(obj2);
+            return [str1 compare:str2];
+        }];
+    }
     
     NSMutableArray* orderedValues = [NSMutableArray array];
     for(NSString* label in orderedLabels){
@@ -70,18 +96,18 @@
 }
 
 - (BOOL)multiSelectionEnabled{
-    CKObjectProperty* property = [self objectProperty];
-    CKObjectPropertyMetaData* metaData = [property metaData];
-    return metaData.multiselectionEnabled;
+    CKProperty* property = [self objectProperty];
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    return (attributes.enumDescriptor && attributes.enumDescriptor.isBitMask) || attributes.multiSelectionEnabled;
 }
 
 - (NSString *)labelForValue:(NSInteger)intValue {
 	if (intValue < 0
 		|| intValue == NSNotFound) {
 		
-		CKObjectProperty* property = [self objectProperty];
+		CKProperty* property = [self objectProperty];
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
-		NSString* str = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
+		NSString* str = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		return _(str);
 	}
 	
@@ -103,7 +129,7 @@
 	}
 	else{
 		NSInteger index = intValue;
-        NSString* str = (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%@", intValue];
+        NSString* str = (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%d", intValue];
 		return _(str);
 	}
 	return nil;
@@ -122,7 +148,7 @@
 }
 
 - (NSInteger)currentValue{
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     if(self.multiSelectionEnabled){
         return [[property value]intValue];
     }
@@ -133,48 +159,61 @@
     return -1;
 }
 
+- (void)viewDidAppear:(UIView *)view{
+    [super viewDidAppear:view];
+    if(self.containerController.state != CKViewControllerStateDidAppear){
+        [self onValueChanged];
+    }
+}
+
 //
 
-- (void)setupCell:(UITableViewCell *)cell {
-	[super setupCell:cell];
-    
+
+- (void)onValueChanged{
     [self setupLabelsAndValues];
     
     if(self.readOnly){
         self.fixedSize = YES;
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        self.accessoryType = UITableViewCellAccessoryNone;
     }
     else{
         self.fixedSize = NO;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     
-    cell.textLabel.text = _(property.name);
-	cell.detailTextLabel.text = [self labelForValue:[self currentValue]];
-    if(cell.detailTextLabel.text == nil){
-        cell.detailTextLabel.text = @" ";
+    self.text = _(property.name);
+	self.detailText = [self labelForValue:[self currentValue]];
+    if(self.detailText == nil){
+        self.detailText = @" ";
     }
-
+    
+    __block CKOptionPropertyCellController* bself = self;
     [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [property.object bind:property.keyPath withBlock:^(id value){
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];
+        bself.detailText = [bself labelForValue:[bself currentValue]];
     }];
     [NSObject endBindingsContext];
 }
 
+- (void)setupCell:(UITableViewCell *)cell{
+    [self onValueChanged];
+    [super setupCell:cell];
+}
+
+
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
-    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentRight;
-        }  
-        else{
-            cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }
+        //}  
+        //else{
+        //    cell.detailTextLabel.numberOfLines = 0;
+        //    cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        //}
     }  
     
     if(self.readOnly){
@@ -182,18 +221,28 @@
     }
 }
 
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-    CKOptionPropertyCellController* staticController = (CKOptionPropertyCellController*)[params staticController];
-    if(staticController.readOnly){
-        return CKItemViewFlagNone;
+- (void)setReadOnly:(BOOL)bo{
+    [super setReadOnly:bo];
+    
+    if(bo){
+        self.flags = CKItemViewFlagNone;
+        return;
     }
-    return CKItemViewFlagSelectable;
+    self.flags = CKItemViewFlagSelectable;
 }
 
 - (void)didSelect {
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     
-    CKTableViewController* tableController = (CKTableViewController*)[self parentController];
+    [self setupLabelsAndValues];
+	
+	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",property.name];
+	NSString* propertyNavBarTitleLocalized = _(propertyNavBarTitle);
+	if ([propertyNavBarTitleLocalized isEqualToString:[NSString stringWithFormat:@"%@_NavBarTitle",property.name]]) {
+		propertyNavBarTitleLocalized = _(property.name);
+	}
+    
+    CKTableViewController* tableController = (CKTableViewController*)[self containerController];
 	if(self.multiSelectionEnabled){
 		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self currentValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
 	}
@@ -201,45 +250,83 @@
 		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self  currentValue] style:[tableController style]] autorelease];
 	}
     self.optionsViewController.optionCellStyle = self.optionCellStyle;
-	self.optionsViewController.title = _(property.name);
-	self.optionsViewController.optionTableDelegate = self;
+	self.optionsViewController.title = propertyNavBarTitleLocalized;
     
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
-	[self.parentController.navigationController pushViewController:self.optionsViewController animated:YES];
-}
-
-//
-
-- (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index {
-    [NSObject removeAllBindingsForContext:self.internalBindingContext];
     
-    if(self.multiSelectionEnabled){
-		NSArray* indexes = tableViewController.selectedIndexes;
-		NSInteger v = 0;
-		for(NSNumber* index in indexes){
-			v |= [[self.values objectAtIndex:[index intValue]]intValue];
-		}
-        
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:v];
-        [self setValueInObjectProperty:[NSNumber numberWithInt:v]];
+    CKPopoverController* popover = nil;
+    
+    //USE PRESENTATION STYLE
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    CKOptionPropertyCellControllerPresentationStyle presentationStyle = self.presentationStyle;
+    if(presentationStyle == CKOptionPropertyCellControllerPresentationStyleDefault){
+        presentationStyle = attributes.presentationStyle;
     }
-	else{
-        NSInteger index = tableViewController.selectedIndex;
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:index];
-        id value = [self.values objectAtIndex:index];
-        [self setValueInObjectProperty:value];
-	}
-	
-	if(!self.multiSelectionEnabled){
-		[self.parentController.navigationController popViewControllerAnimated:YES];
-	}
+
+    if((presentationStyle == CKOptionPropertyCellControllerPresentationStylePopover) && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ){
+        popover = [[CKPopoverController alloc]initWithContentViewController:self.optionsViewController];
+    }
     
-    CKObjectProperty* property = [self objectProperty];
-    [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
-    [property.object bind:property.keyPath withBlock:^(id value){
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];
-    }];
-    [NSObject endBindingsContext];
+    __block CKOptionPropertyCellController* bself = self;
+    self.optionsViewController.selectionBlock = ^(CKOptionTableViewController* tableViewController,NSInteger index){
+        [NSObject removeAllBindingsForContext:bself.internalBindingContext];
+        
+        if(bself.multiSelectionEnabled){
+            NSArray* indexes = tableViewController.selectedIndexes;
+            NSInteger v = 0;
+            for(NSNumber* index in indexes){
+                v |= [[bself.values objectAtIndex:[index intValue]]intValue];
+            }
+            
+            bself.detailText = [bself labelForValue:v];
+            [bself setValueInObjectProperty:[NSNumber numberWithInt:v]];
+        }
+        else{
+            NSInteger index = tableViewController.selectedIndex;
+            bself.detailText = [bself labelForValue:index];
+            id value = [bself.values objectAtIndex:index];
+            [bself setValueInObjectProperty:value];
+        }
+        
+        if(!bself.multiSelectionEnabled){
+            if(popover){
+                [popover dismissPopoverAnimated:YES];
+            }else{
+                if(presentationStyle == CKOptionPropertyCellControllerPresentationStyleModal){
+                    [bself.containerController dismissModalViewControllerAnimated:YES];
+                }else{
+                    [bself.containerController.navigationController popViewControllerAnimated:YES];
+                }
+            }
+        }
+        
+        CKProperty* property = [bself objectProperty];
+        [NSObject beginBindingsContext:bself.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [property.object bind:property.keyPath withBlock:^(id value){
+            bself.detailText = [bself labelForValue:[bself currentValue]];
+        }];
+        [NSObject endBindingsContext];
+    };
+    
+    if(popover){
+        [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
+    else{
+        if(presentationStyle == CKOptionPropertyCellControllerPresentationStyleModal){
+            __block CKOptionTableViewController* bcontroller = self.optionsViewController;
+            self.optionsViewController.leftButton = [[[UIBarButtonItem alloc]initWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{
+                [bcontroller dismissModalViewControllerAnimated:YES];
+            }]autorelease];
+            
+            UINavigationController* nav = [[[UINavigationController alloc]initWithRootViewController:self.optionsViewController]autorelease];
+            nav.modalPresentationStyle = UIModalPresentationFormSheet;
+            
+            [self.containerController presentModalViewController:nav animated:YES];
+        }else{
+            [self.containerController.navigationController pushViewController:self.optionsViewController animated:YES];
+        }
+    }
 }
+
 
 @end

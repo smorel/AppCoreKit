@@ -1,81 +1,104 @@
 //
 //  CKWebRequest.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 09-11-09.
-//  Copyright 2009 WhereCloud Inc. All rights reserved.
+//  Created by Fred Brunel.
+//  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-// TODO: How to solve the problem of establishing a "session" with credentials and
-// how to allow client classes to customize the behavior for non-standard authentication
-// TODO: the CKWebRequest should be initialized with a "session" (i.e. CKWebService)
+#import <UIKit/UIKit.h>
 
-#import <Foundation/Foundation.h>
-
-@protocol CKWebRequestDelegate;
-@protocol CKWebResponseTransformer;
-
-@class ASIHTTPRequest;
-
-
-/** TODO
+/**
  */
-@interface CKWebRequest : NSObject {
-	NSURL *_url;
-	NSDictionary *_headers;
-	
-	id<CKWebRequestDelegate> _delegate;
-	id<CKWebResponseTransformer> _transformer;
-	id _valueTarget;
-	NSString *_valueTargetKeyPath;
-	id _userInfo;
-	
-	// FIXME: Username & password should be in a "authentication class"
-	NSString *_username;
-	NSString *_password;
-	
-	ASIHTTPRequest *_httpRequest; // Weak reference
-}
+OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
-@property (nonatomic, readonly) NSURL *url;
-@property (nonatomic, retain, readwrite) NSDictionary *headers;
-@property (nonatomic, retain) id userInfo;
-@property (nonatomic, assign) id<CKWebRequestDelegate> delegate;
-@property (nonatomic, assign) id<CKWebResponseTransformer> transformer; // FIXME: assign or retain?
+@interface CKWebRequest : NSObject
 
-// Create a request from a URL string
-// <url> is an URL as a string with an optional base path (e.g., http://google.com/search)
-// <params> is the query as a key/value NSDictionary; it will be appended as a query string to the URL (e.g., <url>?q="example")
+///-----------------------------------
+/// @name Initializing WebRequest Objects
+///-----------------------------------
 
-+ (CKWebRequest *)requestWithURL:(NSURL *)url;
-+ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params;
-+ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate;
+/** 
+ */
+- (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSHTTPURLResponse *response, NSError *error))block;
 
-- (id)setValueTarget:(id)target forKeyPath:(NSString *)keyPath;
-- (void)setBasicAuthWithUsername:(NSString *)username password:(NSString *)password;
+/** 
+ */
+- (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters downloadAtPath:(NSString*)path completion:(void (^)(id object, NSHTTPURLResponse *response, NSError *error))block;
 
+
+///-----------------------------------
+/// @name Configuring the WebRequest
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, readonly) NSURL *URL;
+
+/** Need to be set at initialization 
+ */
+@property (nonatomic, retain, readonly) NSString *downloadPath; 
+
+
+/** Overwrite default credential
+ */
+@property (nonatomic, retain) NSURLCredential *credential;
+
+
+///-----------------------------------
+/// @name Reacting to WebRequest Events
+///-----------------------------------
+
+/** If urlResponse is nil, the data is from the cache
+ */
+@property (nonatomic, copy) void (^completionBlock)(id response, NSHTTPURLResponse *urlResponse, NSError *error);
+
+/** 
+ */
+@property (nonatomic, copy) void (^cancelBlock)(void);
+
+/** Called to apply a possible transformation to the response before the completion block
+ */
+@property (nonatomic, copy) id (^transformBlock)(id value);
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/** Forward URL connection delegate if nessesary
+ */
+@property (nonatomic, assign) id<NSURLConnectionDelegate, NSURLConnectionDataDelegate> delegate; 
+
+
+///-----------------------------------
+/// @name Getting the WebRequest status
+///-----------------------------------
+
+/** 
+ */
+@property (nonatomic, readonly) CGFloat progress;
+
+
+///-----------------------------------
+/// @name Executing the WebRequest
+///-----------------------------------
+
+/** Start on the currentRunLoop. Recommended to schedule with CKWebRequestManager
+ */
 - (void)start;
+
+/** 
+ */
+- (void)startOnRunLoop:(NSRunLoop*)runLoop;
+
+///-----------------------------------
+/// @name Cancelling the WebRequest
+///-----------------------------------
+
+/** 
+ */
 - (void)cancel;
 
 @end
 
-//
-
-/** TODO
- */
-@protocol CKWebRequestDelegate <NSObject> @optional
-- (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
-- (void)request:(id)request didReceiveValue:(id)value;
-//- (void)request:(id)request didReceiveError:(NSError *)error withResponseHeaders:(NSDictionary *)headers; // TODO: FOR HTTP ERRORS
-- (void)request:(id)request didFailWithError:(NSError *)error;
-@end
-
-//
-
-/** TODO
- */
-@protocol CKWebResponseTransformer <NSObject>
-- (id)request:(CKWebRequest *)request transformContent:(id)content;
-@end
-
-//
+#import "CKWebRequest+Initialization.h"

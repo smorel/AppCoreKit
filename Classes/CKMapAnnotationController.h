@@ -1,32 +1,102 @@
 //
 //  CKMapAnnotationController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-05-25.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "CKItemViewController.h"
+#import "CKCollectionCellController.h"
+#import "CKViewController.h"
 
-/** TODO
+/**
  */
 typedef enum CKMapAnnotationStyle{
 	CKMapAnnotationCustom,
 	CKMapAnnotationPin
 }CKMapAnnotationStyle;
 
+@class CKMapAnnotationController;
+@class CKAnnotationView;
 
-/** TODO
+typedef UIViewController*(^CKAnnotationCalloutViewControllerCreationBlock)(CKMapAnnotationController* annotationController, CKAnnotationView* annotationView);
+
+
+/**
  */
-@interface CKMapAnnotationController : CKItemViewController {
-	CKMapAnnotationStyle _style;
-}
+@interface CKAnnotationView : MKAnnotationView
 
-@property (nonatomic,assign) CKMapAnnotationStyle style;
+///-----------------------------------
+/// @name Customizing callout content
+///-----------------------------------
 
-- (MKAnnotationView*)loadAnnotationView;
-- (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style;
+/**
+ */
+@property(nonatomic,copy) CKAnnotationCalloutViewControllerCreationBlock calloutViewControllerCreationBlock;
+
+///-----------------------------------
+/// @name Accessing the parent controllers and views
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,assign)CKMapAnnotationController* annotationController;
+
+/**
+ */
+- (MKMapView*)mapView;
 
 @end
+
+
+/**
+ */
+@interface CKMapAnnotationController : CKCollectionCellController
+
+///-----------------------------------
+/// @name Creating Annotation Controller Objects
+///-----------------------------------
+
+/**
+ */
++ (CKMapAnnotationController*)annotationController;
+
+/**
+ */
++ (CKMapAnnotationController*)annotationControllerWithName:(NSString*)name;
+
+///-----------------------------------
+/// @name Customizing the Appearance
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) CKMapAnnotationStyle style;
+
+/** When inheriting CKMapAnnotationController you can override this method to return your own custom intitialized MKAnnotationView.
+ */
+- (MKAnnotationView*)loadAnnotationView;
+
+/** When inheriting CKMapAnnotationController you can override this method to return your own custom intitialized MKAnnotationView using the specified style.
+ */
+- (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style;
+
+///-----------------------------------
+/// @name Customizing the Selection behaviour
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain) CKCallback* deselectionCallback;
+/**
+ */
+- (void)didDeselect;
+
+
+
+@end
+
+
+#import "CKMapAnnotationController+BlockBasedInterface.h"

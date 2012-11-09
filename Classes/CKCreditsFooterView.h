@@ -1,27 +1,31 @@
 //
 //  CKCreditsFooterView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-09-08.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** 
+ */
 typedef enum {
 	CKCreditsViewStyleLight = 0,
 	CKCreditsViewStyleDark
 } CKCreditsViewStyle;
 
-/** TODO
+/** 
  */
-@interface CKCreditsFooterView : UIView {
-}
+@interface CKCreditsFooterView : UIView 
 
+///-----------------------------------
+/// @name Creating Credits Footer View
+///-----------------------------------
+
+/**
+ */
 + (id)creditsViewWithStyle:(CKCreditsViewStyle)style;
-
-- (id)initWithTitle:(NSString *)title DEPRECATED_ATTRIBUTE;
-+ (id)creditsViewWithTitle:(NSString *)title DEPRECATED_ATTRIBUTE;
 
 @end

@@ -1,11 +1,10 @@
 //
 //  Styles.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-19.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKStyleManager.h"
-#import "CKUIViewController+Style.h"
-#import "CKUIView+Style.h"
+#import "CKStyleView.h"

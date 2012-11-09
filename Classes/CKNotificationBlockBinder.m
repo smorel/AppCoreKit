@@ -1,8 +1,8 @@
 //
 //  CKNotificationBlockBinder.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-02-03.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,26 +10,36 @@
 #import "CKBindingsManager.h"
 
 @interface CKNotificationBlockBinder ()
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @property (nonatomic, retain) CKWeakRef* instanceRef;
 @property (nonatomic, retain) CKWeakRef* targetRef;
+#endif
 - (void)unbindInstance:(id)instance;
 @end
 
 
 @implementation CKNotificationBlockBinder
 
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @synthesize instanceRef;
+@synthesize targetRef;
+#endif
+
 @synthesize notificationName;
 @synthesize block;
-@synthesize targetRef;
 @synthesize selector;
+@synthesize target;
+@synthesize instance;
 
 - (id)init{
-	[super init];
-	//NSLog(@"CKNotificationBlockBinder init %p",self);
-	binded = NO;
-    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
-    self.instanceRef =  [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
+    if (self = [super init]) {
+        //NSLog(@"CKNotificationBlockBinder init %p",self);
+        binded = NO;
+#ifdef ENABLE_WEAK_REF_PROTECTION
+        self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+        self.instanceRef =  [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
+#endif
+    }
 	return self;
 }
 
@@ -37,71 +47,94 @@
 	//NSLog(@"CKNotificationBlockBinder dealloc %p",self);
 	[self unbind];
 	[self reset];
+#ifdef ENABLE_WEAK_REF_PROTECTION
     self.instanceRef = nil;
     self.targetRef = nil;
+#endif
 	[super dealloc];
 }
 
 - (NSString*)description{
 	return [NSString stringWithFormat:@"<CKNotificationBlockBinder : %p>{\ninstanceRef = %@\nNotificationName = %@}",
-			self,instanceRef ? instanceRef.object : @"(null)",notificationName];
+			self,self.instance ? self.instance : @"(null)",notificationName];
 }
 
 - (void)reset{
-	self.instanceRef.object = nil;
+    [super reset];
+	self.instance = nil;
+	self.target = nil;
 	self.notificationName = nil;
 	self.block = nil;
-	self.targetRef.object = nil;
 	self.selector = nil;
 }
 
+#ifdef ENABLE_WEAK_REF_PROTECTION
 - (id)releaseTarget:(CKWeakRef*)weakRef{
-	[self unbindInstance:weakRef.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    [self unbindInstance:weakRef.object];
+    [[CKBindingsManager defaultManager]unregister:self];
+
 	return nil;
 }
 
-- (void)setTarget:(id)instance{
-	self.targetRef.object = instance;
+- (void)setTarget:(id)theinstance{
+	self.targetRef.object = theinstance;
+}
+
+- (id)target{
+    return self.targetRef.object;
 }
 
 - (id)releaseInstance:(CKWeakRef*)weakRef{
-	[self unbindInstance:weakRef.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    [self unbindInstance:weakRef.object];
+    [[CKBindingsManager defaultManager]unregister:self];
 	return nil;
 }
 
-- (void)setInstance:(id)instance{
-	self.instanceRef.object = instance;
+- (void)setInstance:(id)theinstance{
+	self.instanceRef.object = theinstance;
+}
+
+- (id)instance{
+    return self.instanceRef.object;
+}
+#endif
+
+- (void)executeWithNotification:(NSNotification*)thenotification{
+	if(block){
+		block(thenotification);
+	}
+	else if(self.target && [self.target respondsToSelector:self.selector]){
+		[self.target performSelector:self.selector withObject:thenotification];
+	}
+	else{
+		//CKAssert(NO,@"CKNotificationBlockBinder no action plugged");
+	}
 }
 
 - (void)onNotification:(NSNotification*)notification{
-	if(block){
-		block(notification);
-	}
-	else if(targetRef.object && [targetRef.object respondsToSelector:self.selector]){
-		[targetRef.object performSelector:self.selector withObject:notification];
-	}
-	else{
-		NSAssert(NO,@"CKNotificationBlockBinder no action plugged");
-	}
+    if(self.contextOptions & CKBindingsContextPerformOnMainThread){
+        [self performSelectorOnMainThread:@selector(executeWithNotification:) withObject:notification waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
+    else {
+        [self performSelector:@selector(executeWithNotification:) onThread:[NSThread currentThread] withObject:notification waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
 }
 
 - (void) bind{
 	[self unbind];
 	//NSLog(@"CKNotificationBlockBinder bind %p %@",self,notification);
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:notificationName object:instanceRef.object];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:self.notificationName object:self.instance];
 	binded = YES;
 }
 
 -(void)unbind{
-	[self unbindInstance:instanceRef.object];
+	[self unbindInstance:self.instance];
 }
 
-- (void)unbindInstance:(id)instance{
+- (void)unbindInstance:(id)theinstance{
 	if(binded){
 		//NSLog(@"CKNotificationBlockBinder unbind %p %@",self,notification);
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:notificationName object:instance];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:self.notificationName object:theinstance];
 		binded = NO;
 	}
 }

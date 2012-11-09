@@ -1,8 +1,8 @@
 //
 //  CKCallback.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-05-13.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -23,12 +23,11 @@ typedef id(^CKCallbackBlock)(id value);
         [callback execute:someObject];
  
  */
-@interface CKCallback : NSObject{
-	id _target;
-	SEL _action;
-	CKCallbackBlock _block;
-	NSArray* _params;
-}
+@interface CKCallback : NSObject
+
+///-----------------------------------
+/// @name Setuping the callback
+///-----------------------------------
 
 /** target
  */

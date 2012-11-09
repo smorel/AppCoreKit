@@ -1,14 +1,13 @@
 //
 //  CKCreditsFooterView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-09-08.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCreditsFooterView.h"
-#import "CKUIColorAdditions.h"
-#import "CKBundle.h"
+#import "UIColor+Additions.h"
 #import "CKLocalization.h"
 
 @interface UIImageView (CKCreditsView)
@@ -20,7 +19,7 @@
 @implementation UIImageView (CKCreditsView)
 
 + (UIImageView *)imageViewWithImageNamed:(NSString *)imageName {
-	return [[[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]] autorelease];
+	return [[[UIImageView alloc] initWithImage:_img(imageName)] autorelease];
 }
 
 @end
@@ -65,8 +64,10 @@
 		CGFloat plateVersionMargin = 5;
 		
 		NSString *versionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-		NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];		
-		NSString *appVersion = [NSString stringWithFormat:@"Version %@ (%@)", versionNumber, buildNumber];	
+		NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+        
+        Class relayServiceClass = NSClassFromString(@"ARService");
+		NSString *appVersion = (relayServiceClass != nil) ? [NSString stringWithFormat:@"Version %@ [%@]", versionNumber, buildNumber] : [NSString stringWithFormat:@"Version %@ (%@)", versionNumber, buildNumber];
 		
 		self.plateView = nil;
 		switch (self.style) {
@@ -84,11 +85,24 @@
 		self.versionLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
 		_versionLabel.backgroundColor = [UIColor clearColor];
 		_versionLabel.textAlignment = UITextAlignmentCenter;
-		_versionLabel.shadowOffset = CGSizeMake(0, 1);
 		_versionLabel.font = [UIFont systemFontOfSize:14];
 		_versionLabel.text = appVersion;
 		_versionLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		[_versionLabel sizeToFit];
+        
+        switch (style) {
+            case CKCreditsViewStyleDark:
+                _versionLabel.textColor = [UIColor colorWithRGBValue:0xa4a4a4];
+                _versionLabel.shadowOffset = CGSizeMake(0, 1);
+                _versionLabel.shadowColor = [UIColor colorWithRGBValue:0x000000];
+                break;
+                
+            case CKCreditsViewStyleLight:
+                _versionLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
+                _versionLabel.shadowOffset = CGSizeMake(0, 1);
+                _versionLabel.shadowColor = [UIColor colorWithRGBValue:0xffffff];
+                break;
+        }
 		
 		UIView *plateContainerView = [[[UIView alloc] initWithFrame:self.plateView.frame] autorelease];
 		[plateContainerView addSubview:self.plateView];
@@ -165,53 +179,5 @@
 
 - (void)handleLeftSwipeGesture:(UISwipeGestureRecognizer *)gesture { [self togglePlateWithDirection:UISwipeGestureRecognizerDirectionLeft]; }
 - (void)handleRightSwipeGesture:(UISwipeGestureRecognizer *)gesture { [self togglePlateWithDirection:UISwipeGestureRecognizerDirectionRight]; }
-
-#pragma mark - Deprecated
-
-- (id)initWithTitle:(NSString *)title {
-    if ((self = [super initWithFrame:CGRectMake(0, 0, 320, (title ? 110 :60))])) {
-		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		CGFloat yOffset = 0;
-		if (title) {
-			UILabel *titleLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 25)] autorelease];
-			titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-			titleLabel.backgroundColor = [UIColor clearColor];
-			titleLabel.font = [UIFont systemFontOfSize:16];
-			titleLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
-			titleLabel.shadowColor = [UIColor whiteColor];
-			titleLabel.shadowOffset = CGSizeMake(0, 1);
-			titleLabel.textAlignment = UITextAlignmentCenter;
-			titleLabel.text = title;
-			[self addSubview:titleLabel];
-			
-			yOffset = 45;
-		}
-		
-		UIImageView *wherecloudLogo = [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"CKCreditsFooterViewWCLogo.png"]] autorelease];
-		wherecloudLogo.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		wherecloudLogo.contentMode = UIViewContentModeCenter;
-		wherecloudLogo.center = self.center;
-		CGRect logoFrame = wherecloudLogo.frame;
-		logoFrame.origin.y = yOffset;
-		wherecloudLogo.frame = logoFrame;
-		[self addSubview:wherecloudLogo];
-
-		UILabel *wherecloudLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(wherecloudLogo.frame) + 5, 320, 25)] autorelease];
-		wherecloudLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		wherecloudLabel.backgroundColor = [UIColor clearColor];
-		wherecloudLabel.font = [UIFont systemFontOfSize:16];
-		wherecloudLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
-		wherecloudLabel.shadowColor = [UIColor whiteColor];
-		wherecloudLabel.shadowOffset = CGSizeMake(0, 1);
-		wherecloudLabel.textAlignment = UITextAlignmentCenter;
-		wherecloudLabel.text = _(@"Beautifully crafted by WhereCloud Inc.");
-		[self addSubview:wherecloudLabel];
-	}
-    return self;
-}
-
-+ (id)creditsViewWithTitle:(NSString *)title {
-	return [[[CKCreditsFooterView alloc] initWithTitle:title] autorelease];
-}
 
 @end

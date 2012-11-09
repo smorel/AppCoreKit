@@ -5,3 +5,27 @@
   Created by Sebastien Morel on 11-07-20.
   Copyright 2011 Wherecloud. All rights reserved.
 */
+
+"Edit" = "Modifier";
+"Done" = "OK";
+
+"Could not find image file on disk" = "Impossible de trouver l’image sur le disque";
+"Did not receive an image" = "Aucune image reçue";
+
+"Inspector" = "Inspecteur";
+"Documents" = "Documents";
+
+"No Location Services" = "Pas de service de localisation";
+"We could not find your location" = "Nous n’avons pas votre localisation";
+"Dismiss" = "OK";
+
+"Previous" = "Précédent";
+"Next" = "Suivant";
+
+"No Title" = "Sans titre";
+
+"%d of %d" = "%d de %d";
+
+"No Internet Connection" = "Pas de connexion Internet";
+"You don't seems to have Internet access right now, do you want to try again?" = "Vous ne semblez pas avoir de connexion Internet, voulez vous réessayer?";
+"Retry" = "Réessayer";

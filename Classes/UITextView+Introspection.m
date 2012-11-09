@@ -1,35 +1,40 @@
 //
 //  UITextView+Introspection.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-09-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "UITextView+Introspection.h"
 #import "UITextInputTraits+Introspection.h"
-#import "CKNSValueTransformer+Additions.h"
-#import "CKModelObject.h"
+#import "NSValueTransformer+Additions.h"
+#import "CKObject.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 @implementation UITextView (CKIntrospectionAdditions)
 
 UITEXTINPUTTRAITS_IMPLEMENTATION;
 
-- (void)textAlignmentMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
+- (void)textAlignmentExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
                                                UITextAlignmentLeft,
 											   UITextAlignmentCenter,
 											   UITextAlignmentRight);
 }
 
-- (void)dataDetectorTypesMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UIDataDetectorTypes",
+- (void)dataDetectorTypesExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UIDataDetectorTypes",
                                                UIDataDetectorTypePhoneNumber,
                                                UIDataDetectorTypeLink,
                                                UIDataDetectorTypeAddress,
                                                UIDataDetectorTypeCalendarEvent,
                                                UIDataDetectorTypeNone,
                                                UIDataDetectorTypeAll );
+}
+
+- (void)textExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.multiLineEnabled = YES;
 }
 
 @end

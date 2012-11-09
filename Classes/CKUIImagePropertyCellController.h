@@ -1,18 +1,19 @@
 //
 //  CKUIImagePropertyCellController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-10.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
+#import "CKNSObjectPropertyCellController.h"
 
 
-/** TODO
+/**
  */
-@interface CKUIImagePropertyCellController : CKPropertyGridCellController {
+@interface CKUIImagePropertyCellController : CKNSObjectPropertyCellController/*CKPropertyTableViewCellController*/ {
 
 }
 

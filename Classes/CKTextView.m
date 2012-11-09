@@ -1,8 +1,8 @@
 //
 //  CKTextView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-11-24.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -19,12 +19,22 @@
 
 //
 
-@implementation CKTextView
+@implementation CKTextView{
+	UILabel *_placeholderLabel;
+	CGFloat _maxStretchableHeight;
+	CGFloat _minHeight;
+    CGPoint _placeholderOffset;
+    CGRect _oldFrame;
+    NSInteger _numberOfExtraLines;
+    id _frameChangeDelegate;
+}
 
 @synthesize placeholderLabel = _placeholderLabel;
 @synthesize maxStretchableHeight = _maxStretchableHeight;
 @synthesize placeholderOffset = _placeholderOffset;
 @synthesize frameChangeDelegate = _frameChangeDelegate;
+@synthesize minHeight = _minHeight;
+@synthesize numberOfExtraLines = _numberOfExtraLines;
 
 - (void)postInit {
     self.placeholderOffset = CGPointMake(8, 8);
@@ -44,6 +54,8 @@
     
     _oldFrame = self.frame;
     _frameChangeDelegate = nil;
+    _minHeight = -1;
+    _numberOfExtraLines = 1;
 }
 
 - (id)init {
@@ -86,8 +98,12 @@
     NSString* str = ([self.text length] <= 0 ) ? @"a" : self.text;
     CGSize size = [str sizeWithFont:self.font 
                   constrainedToSize:CGSizeMake( width  , CGFLOAT_MAX)];
-    CGFloat newheight = size.height + insets.top + insets.bottom + topMargin;
+    size.height += _numberOfExtraLines * self.font.lineHeight;
+    CGFloat newheight = size.height + insets.top + insets.bottom + topMargin + 5;
     newFrame.size.height = MIN(self.maxStretchableHeight, newheight);
+    if(_minHeight > 0){
+        newFrame.size.height = MAX(newFrame.size.height, _minHeight);
+    }
     
     return newFrame;
 }

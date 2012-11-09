@@ -1,8 +1,8 @@
 //
 //  CKTextView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-11-24.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,36 +10,85 @@
 #import <UIKit/UIKit.h>
 
 
-/** TODO
+/** 
  */
-@interface CKTextView : UITextView {
-	UILabel *_placeholderLabel;
-	CGFloat _maxStretchableHeight;
-    CGPoint _placeholderOffset;
-    CGRect _oldFrame;
-    id _frameChangeDelegate;
-}
+@interface CKTextView : UITextView 
 
-@property (nonatomic, readonly, retain) IBOutlet UILabel *placeholderLabel;
-@property (nonatomic, assign) NSString *placeholder;
-@property (nonatomic, assign) CGFloat maxStretchableHeight;
-@property (nonatomic, assign) CGPoint placeholderOffset;
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, assign) id frameChangeDelegate;
 
-- (void)updateHeightAnimated:(BOOL)animated;
-- (CGRect)frameForText:(NSString*)text;
+///-----------------------------------
+/// @name Getting the placeholder label
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, readonly, retain) IBOutlet UILabel *placeholderLabel;
+
+///-----------------------------------
+/// @name Customizing the placeholder
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign) NSString *placeholder;
+@property (nonatomic, assign) CGPoint placeholderOffset;
+
+///-----------------------------------
+/// @name Managing the text
+///-----------------------------------
+
+/**
+ */
 - (void)setText:(NSString*)text animated:(BOOL)animated;
+
+///-----------------------------------
+/// @name Managing the text view frame
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign) NSInteger numberOfExtraLines;
+
+/**
+ */
+@property (nonatomic, assign) CGFloat maxStretchableHeight;
+/**
+ */
+@property (nonatomic, assign) CGFloat minHeight;
+
+/**
+ */
+- (CGRect)frameForText:(NSString*)text;
+
+/**
+ */
+- (void)updateHeightAnimated:(BOOL)animated;
 
 @end
 
 //
 
 
-/** TODO
+/** 
  */
 @protocol CKTextViewDelegate
 
+///-----------------------------------
+/// @name Reacting to text view events
+///-----------------------------------
+
+/** 
+ */
 -(void)textViewValueChanged:(NSString*)text;
+
+/** 
+ */
 -(void)textViewFrameChanged:(CGRect)frame;
 
 @end

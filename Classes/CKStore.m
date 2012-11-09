@@ -1,7 +1,7 @@
 //
 //  CKStore.m
 //
-//  Created by Fred Brunel on 10-01-07.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -14,56 +14,96 @@
 #import "CKItem.h"
 #import "CKAttribute.h"
 
-#import "CKNSStringAdditions.h"
+#import "NSString+Additions.h"
 
+static CKCoreDataManager* CKStoreCoreDataManager = nil;
 static NSMutableDictionary* CKStoreCache = nil;
+
+
+//SEB : FIXME To move in a private file
+
+@class CKAttribute;
+@class CKItem;
+
+
+/**
+ */
+@interface CKStore (CKStorePrivateAddition)
+@property (retain, readwrite) CKDomain *domain;
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (id)insertNewObjectForEntityForName:(NSString *)entityName;
+
+@end
+
+
 
 @interface CKStore ()
 
-@property (retain, readwrite) CKCoreDataManager *manager;
 @property (retain, readwrite) CKDomain *domain;
 
 @end
 
-@implementation CKStore
+@implementation CKStore{
+	CKDomain *_domain;
+}
 
-@synthesize manager = _manager;
 @synthesize domain = _domain;
+
+#pragma mark Shared CKCoreDataManager
+
++ (CKCoreDataManager *)storeCoreDataManager {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"CloudKit" ofType:@"momd"];
+        NSURL *momURL = [NSURL fileURLWithPath:path];
+        CKStoreCoreDataManager = [[CKCoreDataManager alloc] initWithModelURL:momURL];
+    });
+    return CKStoreCoreDataManager;
+}
+
+- (NSManagedObjectContext *)context {
+    return [[CKStore storeCoreDataManager] objectContext];
+}
 
 #pragma mark CKStore Initialization
 
-+ (id)storeWithDomainName:(NSString *)domainName {
-	if(CKStoreCache){
-		id store = [CKStoreCache objectForKey:domainName];
-		if(store){
-			return store;
-		}
-	}
-	return [[[CKStore alloc] initWithDomainName:domainName] autorelease];
-}
-
 - (id)initWithDomainName:(NSString *)domainName {
 	if (self = [super init]) {
-		// FIXME: There should be 1 specific CoreDataManager for the CKStore, 
-		// separated from the CoreDataManager of the application.
-		self.manager = [CKCoreDataManager sharedManager];
-		
+        // FIXME: The CKDomain should be fetched on demand--or replaced by only its name.
+        
 		// Fetch the domain, creating it if necessary
 		BOOL created;
-		self.domain = [self.manager.objectContext fetchObjectForEntityForName:@"CKDomain" 
-																	predicate:[NSPredicate predicateWithFormat:@"name == %@", domainName] 
-															 createIfNotFound:YES
-																   wasCreated:&created];
+		self.domain = [[self context] fetchObjectForEntityForName:@"CKDomain" 
+                                                        predicate:[NSPredicate predicateWithFormat:@"name == %@", domainName] 
+                                                 createIfNotFound:YES
+                                                       wasCreated:&created];
 		if (created) { 
 			self.domain.name = domainName; 
 		}
-		
-		if(CKStoreCache == nil){
-			CKStoreCache = [[NSMutableDictionary alloc]init];
-		}
-		[CKStoreCache setObject:self forKey:domainName];
 	}
 	return self;
+}
+
++ (id)storeWithDomainName:(NSString *)domainName {
+    @synchronized(self) {
+        if (CKStoreCache == nil) {
+            CKStoreCache = [[NSMutableDictionary alloc]init];
+        }
+        
+        id store = [CKStoreCache objectForKey:domainName];
+        if (store) { return store; }
+    }
+    
+    CKStore *store = [[[CKStore alloc] initWithDomainName:domainName] autorelease];
+    [CKStoreCache setObject:store forKey:domainName];
+    return store;
+}
+
+- (void)dealloc {
+    // TODO
+    [super dealloc];
 }
 
 #pragma mark CKStore Fetch Items
@@ -114,7 +154,7 @@ static NSMutableDictionary* CKStoreCache = nil;
 	if (predicateFormat) { [scopedPredicateFormat appendFormat:@" AND (%@)", predicateFormat]; }
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:scopedPredicateFormat argumentArray:predicateArguments];
 	
-	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedByKeys:keys range:range];
+	return [[self context] fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedByKeys:keys range:range];
 }
 
 - (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments {
@@ -131,24 +171,24 @@ static NSMutableDictionary* CKStoreCache = nil;
 	}
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat argumentArray:predicateArguments];
-	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKAttribute" predicate:predicate sortedByKeys:keys range:range];
+	return [[self context] fetchObjectsForEntityForName:@"CKAttribute" predicate:predicate sortedByKeys:keys range:range];
 }
 
 #pragma mark CKStore Count Items
 
 - (NSUInteger)countItems {
-	return [self.manager.objectContext countObjectsForEntityForName:@"CKItem" 
-														  predicate:[NSPredicate predicateWithFormat:@"(domain == %@)", self.domain]];
+	return [[self context] countObjectsForEntityForName:@"CKItem" 
+                                              predicate:[NSPredicate predicateWithFormat:@"(domain == %@)", self.domain]];
 }
 
 #pragma mark CKStore Delete Items
 
-- (void)deleteItems:(NSArray *)items {
-	[self.manager.objectContext deleteObjects:items];
+- (void)removeItems:(NSArray *)items {
+	[[self context] removeObjects:items];
 }
 
-- (void)deleteItemsWithNames:(NSArray *)names {
-	[self deleteItems:[self fetchItemsWithNames:names]];
+- (void)removeItemsWithNames:(NSArray *)names {
+	[self removeItems:[self fetchItemsWithNames:names]];
 }
 
 #pragma mark CKStore Insert Attributes
@@ -162,10 +202,10 @@ static NSMutableDictionary* CKStoreCache = nil;
 	
 	// Fetch the item
 	
-	CKItem *item = [self.manager.objectContext fetchObjectForEntityForName:@"CKItem" 
-																 predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", name, self.domain]
-														  createIfNotFound:YES
-																wasCreated:&created];
+	CKItem *item = [[self context] fetchObjectForEntityForName:@"CKItem" 
+                                                     predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", name, self.domain]
+                                              createIfNotFound:YES
+                                                    wasCreated:&created];
 	if (created) {
 		item.name = name;
 		item.domain = self.domain;
@@ -192,10 +232,10 @@ static NSMutableDictionary* CKStoreCache = nil;
 		predicate = [NSPredicate predicateWithFormat:@"(item.name == %@) AND (item.domain == %@)", itemName, self.domain];
 	}
 		
-	NSArray *attributes = [self.manager.objectContext fetchObjectsForEntityForName:@"CKAttribute" 
-																		 predicate:predicate 
-																	  sortedByKeys:nil 
-																			 limit:0];
+	NSArray *attributes = [[self context] fetchObjectsForEntityForName:@"CKAttribute" 
+                                                             predicate:predicate 
+                                                          sortedByKeys:nil 
+                                                                 limit:0];
 	
 	if (resultType == CKStoreAttributeResultType) {
 		return attributes;
@@ -209,23 +249,24 @@ static NSMutableDictionary* CKStoreCache = nil;
 
 
 @implementation CKStore (CKStorePrivateAddition)
+@dynamic domain;
 
 - (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
-	return [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"
-														 predicate:predicate
-												  createIfNotFound:createIfNotFound 
-														wasCreated:wasCreated];
+	return [[self context] fetchObjectForEntityForName:@"CKAttribute"
+                                             predicate:predicate
+                                      createIfNotFound:createIfNotFound 
+                                            wasCreated:wasCreated];
 }
 
 - (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
-	return [self.manager.objectContext fetchObjectForEntityForName:@"CKItem"
-														 predicate:predicate
-												  createIfNotFound:createIfNotFound 
-														wasCreated:wasCreated];
+	return [[self context] fetchObjectForEntityForName:@"CKItem"
+                                             predicate:predicate
+                                      createIfNotFound:createIfNotFound 
+                                            wasCreated:wasCreated];
 }
 
 - (id)insertNewObjectForEntityForName:(NSString *)entityName{
-	return [self.manager.objectContext insertNewObjectForEntityForName:entityName];
+	return [[self context] insertNewObjectForEntityForName:entityName];
 }
 
 @end

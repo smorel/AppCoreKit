@@ -1,8 +1,8 @@
 //
 //  CKDataBlockBinder.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-02-17.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -13,15 +13,13 @@
 typedef void(^CKDataBlockBinderExecutionBlock)(id value);
 
 
-/** TODO
+/**
  */
 @interface CKDataBlockBinder : CKBinding {
-	CKWeakRef* instanceRef;
 	NSString* keyPath;
 	
 	//We can use block or target/selector
 	CKDataBlockBinderExecutionBlock block;
-	CKWeakRef* targetRef;
 	SEL selector;
 	
 	BOOL binded;
@@ -30,8 +28,7 @@ typedef void(^CKDataBlockBinderExecutionBlock)(id value);
 @property (nonatomic, retain) NSString* keyPath;
 @property (nonatomic, copy)   CKDataBlockBinderExecutionBlock block;
 @property (nonatomic, assign) SEL selector;
-
-- (void)setTarget:(id)instance;
-- (void)setInstance:(id)instance;
+@property (nonatomic, assign) id instance;
+@property (nonatomic, assign) id target;
 
 @end

@@ -1,17 +1,26 @@
 //
 //  CKVersion.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-08-09.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-/** TODO
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
+/**
  */
 NSString *CKApplicationVersion();
 
-/** TODO
+/**
  */
 NSString *CKOSVersion();
+
+    
+#ifdef __cplusplus
+}
+#endif

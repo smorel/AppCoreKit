@@ -1,113 +1,144 @@
 //
 //  CKUIControlBlockBinder.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-01-26.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKUIControlBlockBinder.h"
-#import "CKNSObject+Introspection.h"
+#import "NSObject+Runtime.h"
 #import "CKImageView.h"
 #import "CKBindingsManager.h"
 
 @interface CKUIControlBlockBinder ()
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @property (nonatomic, retain) CKWeakRef *controlRef;
 @property (nonatomic, retain) CKWeakRef* targetRef;
+#endif
 - (void)unbindInstance:(id)instance;
 @end
 
 
 @implementation CKUIControlBlockBinder
-@synthesize controlEvents;
-@synthesize block;
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @synthesize controlRef;
 @synthesize targetRef;
+#endif
+@synthesize controlEvents;
+@synthesize block;
 @synthesize selector;
+@synthesize target;
+@synthesize control;
 
 #pragma mark Initialization
 
 -(id)init{
-	[super init];
-	binded = NO;
-	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
-    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
-    self.controlRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseControl:)];
-	return self;
+    if (self = [super init]) {
+        binded = NO;
+        self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
+#ifdef ENABLE_WEAK_REF_PROTECTION
+        self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+        self.controlRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseControl:)];
+#endif
+    }
+    return self;
 }
 
 -(void)dealloc{
 	[self unbind];
 	[self reset];
+#ifdef ENABLE_WEAK_REF_PROTECTION
 	self.controlRef = nil;
 	self.targetRef = nil;
+#endif
 	[super dealloc];
 }
 
 - (NSString*)description{
 	return [NSString stringWithFormat:@"<CKUIControlBlockBinder : %p>{\ncontrolRef = %@\ncontrolEvents = %d}",
-			self,controlRef ? controlRef.object : @"(null)",controlEvents];
+			self,self.control ? self.control : @"(null)",controlEvents];
 }
 
 - (void)reset{
+    [super reset];
 	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 	self.block = nil;
-	self.controlRef.object = nil;
-	self.targetRef.object = nil;
+	self.control = nil;
+	self.target = nil;
 	self.selector = nil;
 }
 
+#ifdef ENABLE_WEAK_REF_PROTECTION
 - (id)releaseTarget:(CKWeakRef*)weakRef{
-	[self unbindInstance:weakRef.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    [self unbindInstance:self.control];
+    [[CKBindingsManager defaultManager]unregister:self];
 	return nil;
 }
 
-- (void)setTarget:(id)instance{
-	self.targetRef.object = instance;
+- (void)setTarget:(id)theinstance{
+	self.targetRef.object = theinstance;
+}
+
+- (id)target{
+    return self.targetRef.object;
 }
 
 - (id)releaseControl:(CKWeakRef*)weakRef{
-	//[self unbindInstance:weakRef.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    //[self unbindInstance:weakRef.object];
+    [[CKBindingsManager defaultManager]unregister:self];
 	return nil;
 }
 
-- (void)setControl:(UIControl*)control{
-    self.controlRef.object = control;
+- (void)setControl:(UIControl*)thecontrol{
+    self.controlRef.object = thecontrol;
+}
+
+- (id)control{
+    return self.controlRef.object;
+}
+#endif
+
+- (void)execute{
+	if(block){
+		block();
+	}
+	else if(self.target && [self.target respondsToSelector:self.selector]){
+		[self.target performSelector:self.selector];
+	}
+	else{
+		//CKAssert(NO,@"CKUIControlBlockBinder no action plugged");
+	}
 }
 
 //Update data in model
 -(void)controlChange{
-	if(block){
-		block();
-	}
-	else if(targetRef.object && [targetRef.object respondsToSelector:self.selector]){
-		[targetRef.object performSelector:self.selector];
-	}
-	else{
-		NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
-	}
+    if(self.contextOptions & CKBindingsContextPerformOnMainThread){
+        [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
+    else {
+        [self performSelector:@selector(execute) onThread:[NSThread currentThread] withObject:nil waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
 }
 
 #pragma mark Public API
 - (void)bind{
 	[self unbind];
 
-	if(self.controlRef.object){
-		[(UIControl*)self.controlRef.object addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+	if(self.control){
+		[(UIControl*)self.control addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 	}
 	binded = YES;
 }
 
 -(void)unbind{
-	[self unbindInstance:controlRef.object];
+	[self unbindInstance:self.control];
 }
 
-- (void)unbindInstance:(id)instance{
+- (void)unbindInstance:(id)theinstance{
 	if(binded){
-		if(instance){
-			[(UIControl*)instance removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+		if(theinstance){
+			[(UIControl*)theinstance removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 		}
 		binded = NO;
 	}

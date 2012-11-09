@@ -1,15 +1,20 @@
 //
 //  CKClassPropertyDescriptor.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKClassPropertyDescriptor.h"
-#import "CKNSObject+Introspection.h"
+#import "CKClassPropertyDescriptor_private.h"
+#import "CKPropertyExtendedAttributes.h"
+#import "NSObject+Runtime.h"
+#import "NSObject+Runtime_private.h"
 #import <objc/runtime.h>
 #import <MapKit/MapKit.h>
+
+#import "CKDebug.h"
 
 typedef struct CKStructParsedAttributes{
 	NSString* className;
@@ -44,7 +49,8 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.encoding = [NSString stringWithUTF8String:@encode(UIEdgeInsets)];
 		results.size = sizeof(UIEdgeInsets);
 	}
-	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]){
+	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]
+            || [attributes hasPrefix:@"T{?=dd}"]){//We assume unknown type here is a CLLocationCoordinate2D ...
 		results.encoding = [NSString stringWithUTF8String:@encode(CLLocationCoordinate2D)];
 		results.size = sizeof(CLLocationCoordinate2D);
 		results.className = @"CLLocationCoordinate2D";
@@ -52,7 +58,7 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 	else{
 		results.encoding = nil;
 		results.size = 0;
-		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
+		//CKAssert(NO,@"type '%@' not supported yet !",results.className);
 	}
     results.pointer = NO;
 	return results;
@@ -72,49 +78,31 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
     else{
 		results.encoding = nil;
 		results.size = 0;
-		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
+		//CKAssert(NO,@"type '%@' not supported yet !",results.className);
 	}
     results.pointer = YES;
 	return results;
 }
 
-/*
- NSRange rangeForClassName = [attributes rangeOfString:@"="];
- self.className = [attributes substringWithRange:NSMakeRange(2,rangeForClassName.location - 2)];
- NSRange rangeForEnd = [attributes rangeOfString:@"}"];
- NSString* attributesEncoding = [attributes substringWithRange:NSMakeRange(rangeForClassName.location + 2,rangeForEnd.location - (rangeForClassName.location + 2) )];
- NSArray* encodingComponents = [attributesEncoding componentsSeparatedByString:@"\""];
- 
- NSInteger size = 0;
- NSMutableString* theencoding = [NSMutableString stringWithFormat:@"{%@=",self.className];
- for(int i= 1; i < [encodingComponents count]; i += 2){
- NSString* e = [encodingComponents objectAtIndex:i];
- [theencoding appendString:e];
- if([e isEqual:@"@"]){size += sizeof(NSObject*);}
- else if([e isEqual:@"c"]){size += sizeof(char);}
- else if([e isEqual:@"i"]){size += sizeof(NSInteger);}
- else if([e isEqual:@"s"]){size += sizeof(short);}
- else if([e isEqual:@"l"]){size += sizeof(long);}
- else if([e isEqual:@"q"]){size += sizeof(long long);}
- else if([e isEqual:@"C"]){size += sizeof(unsigned char);}
- else if([e isEqual:@"I"]){size += sizeof(NSUInteger);}
- else if([e isEqual:@"S"]){size += sizeof(unsigned short);}
- else if([e isEqual:@"L"]){size += sizeof(unsigned long);}
- else if([e isEqual:@"Q"]){size += sizeof(unsigned long long);}
- else if([e isEqual:@"f"]){size += sizeof(CGFloat);}
- else if([e isEqual:@"d"]){size += sizeof(double);}
- else if([e isEqual:@"B"]){size += sizeof(BOOL);}
- else if([e isEqual:@"v"]){size += sizeof(void*);}
- else if([e isEqual:@"*"]){size += sizeof(char*);}
- else if([e isEqual:@"#"]){size += sizeof(Class);}
- else if([e isEqual:@":"]){size += sizeof(SEL);}
- else if([e hasPrefix:@"{"]){NSAssert(NO,@"not supported");}
- }
- [theencoding appendString:@"}"];
- */
+
+@implementation CKClassPropertyDescriptor{
+	NSString* name;
+	NSString* className;
+	NSString* encoding;
+	NSInteger typeSize;
+	Class type;
+	NSString* attributes;
+	CKClassPropertyDescriptorType propertyType;
+	CKClassPropertyDescriptorAssignementType assignementType;
+	BOOL isReadOnly;
+	
+	SEL extendedAttributesSelector;
+	SEL insertSelector;
+	SEL removeSelector;
+	SEL removeAllSelector;
+}
 
 
-@implementation CKClassPropertyDescriptor
 @synthesize name;
 @synthesize type;
 @synthesize attributes;
@@ -124,7 +112,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 @synthesize className;
 @synthesize encoding;
 @synthesize typeSize;
-@synthesize metaDataSelector;
+@synthesize extendedAttributesSelector;
 @synthesize insertSelector;
 @synthesize removeSelector;
 @synthesize removeAllSelector;
@@ -157,7 +145,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	NSArray * subStrings = [attributes componentsSeparatedByString:@","];
 	
 	self.isReadOnly = NO;
-	if([subStrings count] > 2){
+	if([subStrings count] >= 2){
 		for(int i = 1; i < [subStrings count] - 1; ++i){
 			NSString* assignementAttribute = [subStrings objectAtIndex:i];
 			if([assignementAttribute isEqual:@"&"]){
@@ -305,8 +293,8 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	descriptor.assignementType = assignment;
 	descriptor.type = c;
 	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
-	if([NSObject isKindOf:c parentType:[NSArray class]]){
+	descriptor.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:name];
+	if([NSObject isClass:c kindOfClass:[NSArray class]]){
 		descriptor.insertSelector = [NSObject insertSelectorForProperty:name];
 		descriptor.removeSelector = [NSObject removeSelectorForProperty:name];
 		descriptor.removeAllSelector = [NSObject removeAllSelectorForProperty:name];
@@ -324,44 +312,55 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
 	descriptor.type = nil;
 	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	descriptor.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:name];
 	return descriptor;
+}
+
+
++ (CKClassPropertyDescriptor*) classDescriptorForNativePropertyNamed:(NSString*)name nativeType:(CKClassPropertyDescriptorType)type readOnly:(BOOL)readOnly{
+	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+	descriptor.name = name;
+    switch(type){
+        case CKClassPropertyDescriptorTypeChar:              { descriptor.encoding =  @"c"; descriptor.typeSize = sizeof(char);break; }
+        case CKClassPropertyDescriptorTypeInt:               { descriptor.encoding =  @"i"; descriptor.typeSize = sizeof(int);break; }
+        case CKClassPropertyDescriptorTypeShort:             { descriptor.encoding =  @"s"; descriptor.typeSize = sizeof(short);break; }
+        case CKClassPropertyDescriptorTypeLong:              { descriptor.encoding =  @"l"; descriptor.typeSize = sizeof(long);break; }
+        case CKClassPropertyDescriptorTypeLongLong:          { descriptor.encoding =  @"q"; descriptor.typeSize = sizeof(long long);break; }
+        case CKClassPropertyDescriptorTypeUnsignedChar:      { descriptor.encoding =  @"C"; descriptor.typeSize = sizeof(unsigned char);break; }
+        case CKClassPropertyDescriptorTypeUnsignedInt:       { descriptor.encoding =  @"I"; descriptor.typeSize = sizeof(unsigned int);break; }
+        case CKClassPropertyDescriptorTypeUnsignedShort:     { descriptor.encoding =  @"S"; descriptor.typeSize = sizeof(unsigned short);break; }
+        case CKClassPropertyDescriptorTypeUnsignedLong:      { descriptor.encoding =  @"L"; descriptor.typeSize = sizeof(unsigned long);break; }
+        case CKClassPropertyDescriptorTypeUnsignedLongLong:  { descriptor.encoding =  @"Q"; descriptor.typeSize = sizeof(unsigned long long);break; }
+        case CKClassPropertyDescriptorTypeFloat:             { descriptor.encoding =  @"f"; descriptor.typeSize = sizeof(float);break; }
+        case CKClassPropertyDescriptorTypeDouble:            { descriptor.encoding =  @"d"; descriptor.typeSize = sizeof(double);break; }
+        case CKClassPropertyDescriptorTypeCppBool:           { descriptor.encoding =  @"B"; descriptor.typeSize = sizeof(bool);break; }
+        case CKClassPropertyDescriptorTypeVoid:              { descriptor.encoding =  @"v"; descriptor.typeSize = sizeof(void);break; }
+        case CKClassPropertyDescriptorTypeCharString:        { descriptor.encoding =  @"*"; descriptor.typeSize = sizeof(char*);break; }
+        case CKClassPropertyDescriptorTypeClass:             { descriptor.encoding =  @"#"; descriptor.typeSize = sizeof(Class);break; }
+        case CKClassPropertyDescriptorTypeSelector:          { descriptor.encoding =  @":"; descriptor.typeSize = sizeof(SEL);break; }
+    }
+    descriptor.propertyType = type;
+	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
+	descriptor.isReadOnly = readOnly;
+	descriptor.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:name];
+    return descriptor;
 }
 
 + (CKClassPropertyDescriptor*) boolDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
-	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
-	descriptor.name = name;
-	descriptor.encoding = @"c";
-	descriptor.typeSize = sizeof(char);
-	descriptor.propertyType = CKClassPropertyDescriptorTypeChar;
-	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
-	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
-	return descriptor;	
+    return [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:name nativeType:CKClassPropertyDescriptorTypeChar readOnly:readOnly];
 }
 
 + (CKClassPropertyDescriptor*) floatDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
-	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
-	descriptor.name = name;
-	descriptor.encoding = @"f";
-	descriptor.typeSize = sizeof(float);
-	descriptor.propertyType = CKClassPropertyDescriptorTypeFloat;
-	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
-	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
-	return descriptor;	
+    return [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:name nativeType:CKClassPropertyDescriptorTypeFloat readOnly:readOnly];
 }
 
 + (CKClassPropertyDescriptor*) intDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
-	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
-	descriptor.name = name;
-	descriptor.encoding = @"i";
-	descriptor.typeSize = sizeof(NSInteger);
-	descriptor.propertyType = CKClassPropertyDescriptorTypeInt;
-	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
-	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
-	return descriptor;
+    return [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:name nativeType:CKClassPropertyDescriptorTypeInt readOnly:readOnly];
+}
+
+
+- (CKPropertyExtendedAttributes*)extendedAttributesForInstance:(id)instance{
+    return [CKPropertyExtendedAttributes extendedAttributesForObject:instance property:self];
 }
 
 @end
@@ -376,7 +375,13 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 @end
 
 static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefault = nil;
-@implementation CKClassPropertyDescriptorManager
+@implementation CKClassPropertyDescriptorManager{
+	NSMutableDictionary* _propertiesByClassName;
+	NSMutableDictionary* propertiesByClassNameByName;
+	NSMutableDictionary* _viewPropertiesByClassName;
+	NSMutableDictionary* _propertyNamesByClassName;
+}
+
 @synthesize propertiesByClassName = _propertiesByClassName;
 @synthesize propertiesByClassNameByName = _propertiesByClassNameByName;
 @synthesize propertyNamesByClassName = _propertyNamesByClassName;
@@ -390,12 +395,13 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 }
 
 - (id)init{
-	[super init];
-	self.propertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
-	self.propertyNamesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
-	self.viewPropertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
-	self.propertiesByClassNameByName = [NSMutableDictionary dictionaryWithCapacity:500];
-	return self;
+    if (self = [super init]) {
+        self.propertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+        self.propertyNamesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+        self.viewPropertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+        self.propertiesByClassNameByName = [NSMutableDictionary dictionaryWithCapacity:500];
+    }
+    return self;
 }
 
 - (void)dealloc{
@@ -407,29 +413,51 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 }
 
 - (NSArray*)allPropertiesForClass:(Class)class{
-	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
-	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
-	if(allProperties == nil){
-		allProperties = [NSMutableArray array];
-		[NSObject introspection:class array:allProperties];
-		[_propertiesByClassName setObject:allProperties forKey:className];
-		
-		NSMutableDictionary* propertiesByName = [NSMutableDictionary dictionaryWithCapacity:[allProperties count]];
-		NSMutableArray* allPropertyNames = [NSMutableArray arrayWithCapacity:[allProperties count]];
-		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray arrayWithCapacity:[allProperties count]];
-		for(CKClassPropertyDescriptor* property in allProperties){
-			[allPropertyNames addObject:property.name];
-			if([NSObject isKindOf:property.type parentType:[UIView class]]){
-				[allViewPropertyDescriptors addObject:property];
-			}
-            [propertiesByName setObject:property forKey:property.name];
-		}
-		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
-		[_viewPropertiesByClassName setObject:allViewPropertyDescriptors forKey:className];
-        [_propertiesByClassNameByName setObject:propertiesByName forKey:className];
-	}
-	
-	return allProperties;
+    //@synchronized(self){
+        NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+        NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
+        if(allProperties == nil){
+            allProperties = [NSMutableArray array];
+            [NSObject introspection:class array:allProperties];
+            [_propertiesByClassName setObject:allProperties forKey:className];
+            
+            NSMutableDictionary* propertiesByName = [NSMutableDictionary dictionaryWithCapacity:[allProperties count]];
+            NSMutableArray* allPropertyNames = [NSMutableArray arrayWithCapacity:[allProperties count]];
+            NSMutableArray* allViewPropertyDescriptors = [NSMutableArray arrayWithCapacity:[allProperties count]];
+            for(CKClassPropertyDescriptor* property in allProperties){
+                [allPropertyNames addObject:property.name];
+                if([NSObject isClass:property.type kindOfClass:[UIView class]]){
+                    [allViewPropertyDescriptors addObject:property];
+                }
+                [propertiesByName setObject:property forKey:property.name];
+            }
+            [_propertyNamesByClassName setObject:allPropertyNames forKey:className];
+            [_viewPropertiesByClassName setObject:allViewPropertyDescriptors forKey:className];
+            [_propertiesByClassNameByName setObject:propertiesByName forKey:className];
+        }
+        
+        return allProperties;
+    //}
+}
+
+- (void)addPropertyDescriptor:(CKClassPropertyDescriptor*)descriptor forClass:(Class)c{
+   // @synchronized(self){
+        NSString* className = [NSString stringWithUTF8String:class_getName(c)];
+        CKAssert([_propertiesByClassName objectForKey:className],@"Could not add properties to non introspected class");
+        NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
+        [allProperties addObject:descriptor];
+        
+        NSMutableArray* allPropertiesNames = [_propertyNamesByClassName objectForKey:className];
+        [allPropertiesNames addObject:descriptor.name];
+        
+        if([NSObject isClass:descriptor.type kindOfClass:[UIView class]]){
+            NSMutableArray* allViewsProperties = [_viewPropertiesByClassName objectForKey:className];
+            [allViewsProperties addObject:descriptor];
+        }
+        
+        NSMutableDictionary* propertiesByName = [_propertiesByClassNameByName objectForKey:className];
+        [propertiesByName setObject:descriptor forKey:descriptor.name];
+   // }
 }
 
 
@@ -464,36 +492,37 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
     return [propertiesByName objectForKey:name];
 }
 
-/*
-- (NSArray*)allPropertiesForStruct:(NSString*)name{
-	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:name];
-	return allProperties;
-}
-
-- (NSArray*)allPropertieNamesForStruct:(NSString*)name{
-	NSMutableArray* allPropertyNames = [_propertyNamesByClassName objectForKey:name];
-	return allPropertyNames;
-}
-
-- (CKClassPropertyDescriptor*)property:(NSString*)name forStruct:(NSString*)structname{
-	NSArray* properties = [self allPropertiesForStruct:structname];
-	//TODO : Optimize this by getting a dictionary of properties instead of an array !
-	for(CKClassPropertyDescriptor* p in properties){
-		if([p.name isEqual:name])
-			return p;
-	}
-	return nil;
-}
-
-- (void)registerPropertyDescriptors:(NSArray*)propertyDescriptors forStructName:(NSString*)name{
-	[_propertiesByClassName setObject:propertyDescriptors forKey:name];
-	NSMutableArray* allPropertyNames = [NSMutableArray array];
-	for(CKClassPropertyDescriptor* p in propertyDescriptors){
-		[allPropertyNames addObject:p.name];
-	}
-	[_propertyNamesByClassName setObject:allPropertyNames forKey:name];
-}*/
-
 @end
 
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitMask,NSString* strValues, ...) {
+	NSArray* components = [strValues componentsSeparatedByString:@","];
+	
+	va_list ArgumentList;
+	va_start(ArgumentList,strValues);
+	
+	int i = 0;
+	NSMutableDictionary* valuesAndLabels = [NSMutableDictionary dictionary];
+	while (i < [components count]){
+		int value = va_arg(ArgumentList, int);
+        [valuesAndLabels setObject:[NSNumber numberWithInt:value] 
+                            forKey:[[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+		++i;
+    }
+    va_end(ArgumentList);
+	
+    CKEnumDescriptor* descriptor = [[[CKEnumDescriptor alloc]init]autorelease];
+    descriptor.name = name;
+    descriptor.valuesAndLabels = valuesAndLabels;
+    descriptor.isBitMask = bitMask;
+	return descriptor;
+}
+
+@implementation CKEnumDescriptor
+@synthesize name,valuesAndLabels,isBitMask;
+-(void)dealloc{
+    self.name = nil;
+    self.valuesAndLabels = nil;
+    [super dealloc];
+}
+@end
 

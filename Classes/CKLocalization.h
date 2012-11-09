@@ -1,20 +1,40 @@
 //
 //  CKLocalization.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-02-22.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "CKLocalizationManager.h"
 
-
-/** TODO
+/**
  */
 NSString *CKLocalizationCurrentLocalization(void);
-NSString* CKLocalizedString(NSString* key,NSString* value);
 
-
-/** TODO
+/**
  */
-#define _(key) CKLocalizedString(key,key)
+NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
+
+/**
+ */
+void CKResetLanguageFileCache();
+
+/**
+ */
+CKLocalizedString* CKLocalizedStringWithString(NSString* string);
+
+
+/**
+ */
+UIImage* CKLocalizedImageNamed(NSString* imageNamed);
+
+
+/**
+ */
+#define _(key) CKLocalizedStringWithString(key)
+
+/**
+ */
+#define _img(imageName) CKLocalizedImageNamed(imageName)

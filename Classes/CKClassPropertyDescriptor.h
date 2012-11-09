@@ -1,15 +1,16 @@
 //
 //  CKClassPropertyDescriptor.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
+@class CKPropertyExtendedAttributes;
 
-/** TODO
+/**
  */
 typedef enum{
 	CKClassPropertyDescriptorTypeChar,
@@ -36,7 +37,7 @@ typedef enum{
 }CKClassPropertyDescriptorType;
 
 
-/** TODO
+/**
  */
 typedef enum{
 	CKClassPropertyDescriptorAssignementTypeCopy,
@@ -46,74 +47,126 @@ typedef enum{
 }CKClassPropertyDescriptorAssignementType;
 
 
-/** TODO
+/**
  */
-@interface CKClassPropertyDescriptor : NSObject{
-	NSString* name;
-	NSString* className;
-	NSString* encoding;
-	NSInteger typeSize;
-	Class type;
-	NSString* attributes;
-	CKClassPropertyDescriptorType propertyType;
-	CKClassPropertyDescriptorAssignementType assignementType;
-	BOOL isReadOnly;
-	
-	SEL metaDataSelector;
-	SEL insertSelector;
-	SEL removeSelector;
-	SEL removeAllSelector;
-}
+@interface CKClassPropertyDescriptor : NSObject
 
+///-----------------------------------
+/// @name Accessing property descriptor attributes 
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, retain, readwrite) NSString *name;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) Class type;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) NSInteger typeSize;
+
+/**
+ */
 @property (nonatomic, retain, readwrite) NSString *className;
+
+/**
+ */
 @property (nonatomic, retain, readwrite) NSString *encoding;
+
+/**
+ */
 @property (nonatomic, retain, readwrite) NSString *attributes;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) CKClassPropertyDescriptorType propertyType;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) CKClassPropertyDescriptorAssignementType assignementType;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) BOOL isReadOnly;
-@property (nonatomic, assign, readwrite) SEL metaDataSelector;
+
+/**
+ */
+@property (nonatomic, assign, readwrite) SEL extendedAttributesSelector;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) SEL insertSelector;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) SEL removeSelector;
+
+/**
+ */
 @property (nonatomic, assign, readwrite) SEL removeAllSelector;
 
+///-----------------------------------
+/// @name Accessing property extended attributes 
+///-----------------------------------
+
+/**
+ */
+- (CKPropertyExtendedAttributes*)extendedAttributesForInstance:(id)instance;
+
+
+///-----------------------------------
+/// @name Creating property descriptor objects
+///-----------------------------------
+
+/**
+ */
 + (CKClassPropertyDescriptor*) classDescriptorForPropertyNamed:(NSString*)name withClass:(Class)c assignment:(CKClassPropertyDescriptorAssignementType)assignment readOnly:(BOOL)readOnly;
+
+/**
+ */
 + (CKClassPropertyDescriptor*) structDescriptorForPropertyNamed:(NSString*)name structName:(NSString*)structName structEncoding:(NSString*)encoding structSize:(NSInteger)size readOnly:(BOOL)readOnly;
+
+/**
+ */
 + (CKClassPropertyDescriptor*) boolDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
+
+/**
+ */
 + (CKClassPropertyDescriptor*) floatDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
+
+/**
+ */
 + (CKClassPropertyDescriptor*) intDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
 
--(NSString*)getTypeDescriptor;
-
-@end
-
-
-/** TODO
+/**
  */
-@interface CKClassPropertyDescriptorManager : NSObject{
-	NSMutableDictionary* _propertiesByClassName;
-	NSMutableDictionary* propertiesByClassNameByName;
-	NSMutableDictionary* _viewPropertiesByClassName;
-	NSMutableDictionary* _propertyNamesByClassName;
-	
-	//faire la gestion des descripteurs de struct
-}
++ (CKClassPropertyDescriptor*) classDescriptorForNativePropertyNamed:(NSString*)name nativeType:(CKClassPropertyDescriptorType)type readOnly:(BOOL)readOnly;
 
-+ (CKClassPropertyDescriptorManager*)defaultManager;
-- (NSArray*)allPropertiesForClass:(Class)class;
-- (NSArray*)allViewsPropertyForClass:(Class)class;
-- (NSArray*)allPropertieNamesForClass:(Class)class;
-- (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)class;
-/*
-- (NSArray*)allPropertiesForStruct:(NSString*)name;
-- (NSArray*)allPropertieNamesForStruct:(NSString*)name;
-- (CKClassPropertyDescriptor*)property:(NSString*)name forStruct:(NSString*)structname;
-- (void)registerPropertyDescriptors:(NSArray*)propertyDescriptors forStructName:(NSString*)name;
-*/
-/*@property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
-@property (nonatomic, retain, readonly) NSDictionary *propertyNamesByClassName;
-*/
+
 @end
 
+
+@interface CKEnumDescriptor : NSObject{}
+@property(nonatomic,assign)BOOL isBitMask;
+@property(nonatomic,retain)NSString* name;
+@property(nonatomic,retain)NSDictionary* valuesAndLabels;
+@end
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
+/**
+ */
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
+    
+#ifdef __cplusplus
+}
+#endif
+
+/**
+ */
+#define CKEnumDefinition(name,...) CKEnumDefinitionFunc(name,NO,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#define CKBitMaskDefinition(name,...) CKEnumDefinitionFunc(name,YES,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)

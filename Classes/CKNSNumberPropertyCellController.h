@@ -1,23 +1,38 @@
 //
 //  CKNSNumberPropertyCellController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 
-/** TODO
+/**
  */
-@interface CKNSNumberPropertyCellController : CKPropertyGridCellController<UITextFieldDelegate>{	
-	UITextField* _textField;
-	UISwitch* _toggleSwitch;
-}
+@interface CKNSNumberPropertyCellController : CKPropertyTableViewCellController<UITextFieldDelegate>
 
-@property (nonatomic,retain) UITextField* textField;
-@property (nonatomic,retain) UISwitch* toggleSwitch;
+///-----------------------------------
+/// @name Getting the Controls
+///-----------------------------------
+
+/** textField is a weak reference to the view currently associated to this controller if the property represents a number.
+ As tableViewCell are reused, this property will be null when the controller is not displayed on screen.
+ Do not keep any other reference between the textField and the controller to avoid problem with the reuse system.
+ */
+@property (nonatomic,retain,readonly) UITextField* textField;
+
+/** toggleSwitch is a weak reference to the view currently associated to this controller if the property represents a 'char'.
+ As tableViewCell are reused, this property will be null when the controller is not displayed on screen.
+ Do not keep any other reference between the toggleSwitch and the controller to avoid problem with the reuse system.
+ */
+@property (nonatomic,retain,readonly) UISwitch* toggleSwitch;
+
+/**
+ */
+@property (nonatomic,copy) CKInputTextFormatterBlock textInputFormatterBlock;
 
 @end

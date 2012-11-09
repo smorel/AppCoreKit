@@ -1,12 +1,13 @@
 //
 //  CKStyleManager.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-19.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKStyleManager.h"
+#import "UIView+Style.h"
 
 static CKStyleManager* CKStyleManagerDefault = nil;
 static NSInteger kLogEnabled = -1;
@@ -14,9 +15,10 @@ static NSInteger kLogEnabled = -1;
 @implementation CKStyleManager
 
 + (CKStyleManager*)defaultManager{
-	if(CKStyleManagerDefault == nil){
-		CKStyleManagerDefault = [[CKStyleManager alloc]init];
-	}
+	static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKStyleManagerDefault = [[CKStyleManager alloc]init];
+    });
 	return CKStyleManagerDefault;
 }
 
@@ -45,6 +47,10 @@ static NSInteger kLogEnabled = -1;
     return kLogEnabled;
 }
 
+- (BOOL)isEmpty{
+    return [self.tree count] <= 0;
+}
+
 @end
 
 
@@ -52,6 +58,24 @@ static NSInteger kLogEnabled = -1;
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
     return [self dictionaryForObject:object propertyName:propertyName];
+}
+
+@end
+
+
+@implementation NSObject (CKStyleManager)
+
+- (NSMutableDictionary*)stylesheet{
+#if !TARGET_IPHONE_SIMULATOR
+    return [self appliedStyle];
+#else
+    return [self debugAppliedStyle];
+#endif
+}
+
+- (void)findAndApplyStyleFromStylesheet:(NSMutableDictionary*)parentStylesheet  propertyName:(NSString*)propertyName{
+    NSMutableDictionary* style = parentStylesheet ? [parentStylesheet styleForObject:self propertyName:propertyName] : [[CKStyleManager defaultManager]styleForObject:self propertyName:propertyName];
+    [self applyStyle:style];
 }
 
 @end

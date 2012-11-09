@@ -1,31 +1,47 @@
 //
 //  CKNSDatePropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-09.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKNSDatePropertyCellController.h"
-#include "CKObjectProperty.h"
+#include "CKProperty.h"
 #include "CKLocalization.h"
-#include "CKNSObject+Bindings.h"
-#include "CKNSValueTransformer+Additions.h"
+#include "NSObject+Bindings.h"
+#include "NSValueTransformer+Additions.h"
 #import "CKPopoverController.h"
+#import "UIView+Positioning.h"
+#import "CKTableViewCellController+Responder.h"
+#import "CKWeakRef.h"
 
 //static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
-@implementation CKNSDateViewController
+@interface CKNSDateViewController()
+@property(nonatomic,retain) CKWeakRef* delegateRef;
+@end
+
+@implementation CKNSDateViewController{
+    CKProperty* _property;
+    UIDatePicker* _datePicker;
+    UIPickerView* _pickerView;
+    CKDatePickerMode _datePickerMode;
+    id _delegate;
+}
+
+
 @synthesize pickerView = _pickerView;
 @synthesize property = _property;
 @synthesize datePicker = _datePicker;
-@synthesize delegate = _delegate;
+@synthesize delegate;
 @synthesize datePickerMode = _datePickerMode;
+@synthesize delegateRef = _delegateRef;
 
 
-- (void)datePickerModeMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
+- (void)datePickerModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
                                                CKDatePickerModeTime,
                                                UIDatePickerModeTime,   
                                                CKDatePickerModeDate,
@@ -37,7 +53,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                                                CKDatePickerModeCreditCardExpirationDate);
 }
 
-- (id)initWithProperty:(CKObjectProperty*)theproperty mode:(CKDatePickerMode)mode{
+- (id)initWithProperty:(CKProperty*)theproperty mode:(CKDatePickerMode)mode{
     self = [super init];
     _property = [theproperty retain];
     self.datePickerMode = mode;
@@ -51,20 +67,18 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     [_pickerView release];
     _pickerView = nil;
     
-    if(_delegate){
-        if(_delegate && [_delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
-            [_delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:nil];
+    if(_delegateRef){
+        if(_delegateRef.object && [_delegateRef.object respondsToSelector:@selector(dateController:delegateChanged:)]){
+            [_delegateRef.object performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:nil];
         }
     }
     
-    _delegate = nil;
+    [_delegateRef release];
     [super dealloc];
 }
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
-    CGRect frame = [[self view]frame];
     
     CGFloat height = 162;
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
@@ -72,7 +86,11 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         height = 216;
     }
     
-    CGRect theFrame = CGRectMake((frame.size.width / 2.0) - 160.0,(frame.size.height / 2.0) - height / 2.0,320.0, height);
+    self.view.height = height;
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    CGRect frame = [[self view]frame];
+    CGRect theFrame = CGRectMake((frame.size.width / 2.0) - 160.0,(frame.size.height / 2.0) - (height / 2.0),320.0, height);
     
     switch(self.datePickerMode){
         case  CKDatePickerModeTime:
@@ -81,11 +99,20 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         case CKDatePickerModeCountDownTime :{
             self.datePicker = [[[UIDatePicker alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
             _datePicker.datePickerMode = UIDatePickerModeDate;
-            _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
-            UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+            
+            CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
+            if(attributes.minimumDate){
+                _datePicker.minimumDate = attributes.minimumDate;
+            }
+            if(attributes.maximumDate){
+                _datePicker.maximumDate = attributes.maximumDate;
+            }
+            
+            /*_datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             NSDate* date = [self.property value];
             if(date){
-                [_datePicker setDate:[self.property value] animated:NO];
+                [_datePicker setDate:date animated:NO];
             }
             else{
                 [_datePicker setDate:[NSDate date] animated:NO];
@@ -102,17 +129,45 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                 }
             }];
             [self endBindingsContext];
+            
+            //Adjust if navigationController with transparent toolbar
+            CGFloat y = self.view.frame.size.height - self.datePicker.frame.size.height;
+            self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x,
+                                                         y,
+                                                         self.datePicker.frame.size.width,
+                                                         self.datePicker.frame.size.height);
+            
             break;
         }
         case CKDatePickerModeCreditCardExpirationDate:{
             self.pickerView = [[[UIPickerView alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
-            _pickerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
-            UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            _pickerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+            /*_pickerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             [[self view]addSubview:_pickerView];
             
             _pickerView.showsSelectionIndicator = YES;
             _pickerView.dataSource = self;
             _pickerView.delegate = self;
+            
+            NSDate* date = [self.property value];
+            if(!date){
+                date = [NSDate date];
+            }
+            
+            NSDateComponents* comp2 = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear fromDate:[NSDate date]];
+            NSDateComponents* comp = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear|kCFCalendarUnitMonth fromDate:date];
+            NSInteger yearRow = [comp year] - [comp2 year];
+            NSInteger monthRow = [comp month] - 1;
+            
+            [_pickerView selectRow:monthRow inComponent:0 animated:NO];
+            [_pickerView selectRow:yearRow inComponent:1 animated:NO];
+            
+            //Adjust if navigationController with transparent toolbar
+            CGFloat y = self.view.frame.size.height - self.pickerView.frame.size.height;
+            self.pickerView.frame = CGRectMake(self.pickerView.frame.origin.x,
+                                               y,
+                                               self.pickerView.frame.size.width,
+                                               self.pickerView.frame.size.height);
             break;
         }
     }
@@ -187,11 +242,22 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     _pickerView = nil;
 }
 
-- (void)setProperty:(CKObjectProperty *)property{
+- (void)setProperty:(CKProperty *)property{
     [_property release];
     _property = [property retain];
     NSDate* date = [_property value];
     if(_datePicker){
+        _datePicker.minimumDate = nil;
+        _datePicker.maximumDate = nil;
+        
+        CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
+        if(attributes.minimumDate){
+            _datePicker.minimumDate = attributes.minimumDate;
+        }
+        if(attributes.maximumDate){
+            _datePicker.maximumDate = attributes.maximumDate;
+        }
+        
         [_datePicker setDate:(date ? date : [NSDate date])];
     }
     else{
@@ -208,25 +274,41 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     return CGSizeMake(320,height);
 }
 
+- (id)delegate{
+    return [self.delegateRef object];
+}
+
 - (void)setDelegate:(id)thedelegate{
-    if(_delegate){
-        if(_delegate && [_delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
-            [_delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:thedelegate];
+    if(self.delegate){
+        if(self.delegate && [self.delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
+            [self.delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:thedelegate];
         }
     }
-    _delegate = thedelegate;
+    self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
 }
 
 @end
 
-@implementation CKNSDatePropertyCellController
+
+
+@interface CKCollectionCellController()
+@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
+@end
+
+
+@implementation CKNSDatePropertyCellController {
+    CKCallback* _onBeginEditingCallback;
+    CKCallback* _onEndEditingCallback;
+    BOOL _enableAccessoryView;
+    CKDatePickerMode _datePickerMode;
+}
+
 @synthesize onBeginEditingCallback = _onBeginEditingCallback;
 @synthesize onEndEditingCallback = _onEndEditingCallback;
-@synthesize enableAccessoryView = _enableAccessoryView;
 @synthesize datePickerMode = _datePickerMode;
 
-- (void)datePickerModeMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
+- (void)datePickerModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
                                                CKDatePickerModeTime,
                                                UIDatePickerModeTime,   
                                                CKDatePickerModeDate,
@@ -238,14 +320,29 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                                                CKDatePickerModeCreditCardExpirationDate);
 }
 
-- (id)init{
-    self = [super init];
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
     _enableAccessoryView = NO;
     self.datePickerMode = CKDatePickerModeDate;
-    return self;
+}
+
+- (void)setContainerController:(CKCollectionViewController *)containerController{
+    [super setContainerController:containerController];
+    
+    __block CKNSDatePropertyCellController* bself = self;
+    [NSObject beginBindingsContext:[NSString stringWithFormat:@"Resign_<%p>",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [containerController bind:@"state" withBlock:^(id value) {
+        if(bself.containerController.state == CKViewControllerStateWillDisappear
+           || bself.containerController.state == CKViewControllerStateDidDisappear){
+            [bself resignFirstResponder];
+        }
+    }];
+    [NSObject endBindingsContext];
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"Resign_<%p>",self]];
     [_onBeginEditingCallback release];
     _onBeginEditingCallback = nil;
     [_onEndEditingCallback release];
@@ -253,87 +350,119 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     [super dealloc];
 }
 
+- (void)updateFlags{
+    CKProperty* model = self.objectProperty;
+    if([model isReadOnly] || self.readOnly){
+        self.flags = CKItemViewFlagNone;
+        return;
+    }
+    self.flags =  CKItemViewFlagSelectable;
+}
+
+- (void)setValue:(id)value{
+    [super setValue:value];
+    [self updateFlags];
+}
+
+- (void)setReadOnly:(BOOL)readOnly{
+    [super setReadOnly:readOnly];
+    [self updateFlags];
+}
+
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	[super setupCell:cell];
-	
-	CKObjectProperty* model = self.value;
+- (void)onValueChanged{
+    CKProperty* model = self.objectProperty;
     if([model isReadOnly] || self.readOnly){
         self.fixedSize = YES;
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        self.accessoryType = UITableViewCellAccessoryNone;
     }
     else{
         self.fixedSize = NO;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
-	cell.textLabel.text = _(descriptor.name);
+	self.text = _(descriptor.name);
     
-    NSString* placeholderText = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
+    NSString* placeholderText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
     NSDate* date = [model value];
     if(date){
-        cell.detailTextLabel.text = [NSValueTransformer transformProperty:model toClass:[NSString class]];
+        self.detailText = [NSValueTransformer transformProperty:model toClass:[NSString class]];
     }
     else{
-        cell.detailTextLabel.text = _(placeholderText);
+        self.detailText  = _(placeholderText);
     }
     
+    __block CKNSDatePropertyCellController* bself = self;
     [self beginBindingsContextByRemovingPreviousBindings];
-    [model.object bind:model.keyPath withBlock:^(id value){
+    [model.object bind:model.keyPath executeBlockImmediatly:YES withBlock:^(id value){
         NSDate* date = [model value];
+        NSString* str = nil;
         if(date){
-            cell.detailTextLabel.text = [NSValueTransformer transformProperty:model toClass:[NSString class]];
+            str  = [NSValueTransformer transformProperty:model toClass:[NSString class]];
         }
         else{
-            cell.detailTextLabel.text = _(placeholderText);
+            str  = _(placeholderText);
+        }
+        if(![bself.detailText isEqualToString:str]){
+            bself.detailText = str;
         }
     }];
     [self endBindingsContext];
 }
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-    CKNSDatePropertyCellController* staticController = (CKNSDatePropertyCellController*)[params staticController];
-	CKObjectProperty* model = object;
-    if([model isReadOnly] || staticController.readOnly){
-        return CKItemViewFlagNone;
-    }
-    return CKItemViewFlagSelectable;
-}
-
 
 - (void)didSelectRow{
 	[self becomeFirstResponder];
 }
 
 
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
-	CKObjectProperty* model = object;// || self.readonly
-	return ![model isReadOnly];
+- (BOOL)hasResponder{
+	return ![self.objectProperty isReadOnly];
 }
 
-+ (UIView*)responderInView:(UIView*)view{
-    return view;
+- (UIView*)nextResponder:(UIView*)view{
+    if(view == nil){
+        return self.tableViewCell;
+    }
+    return nil;
+}
+
+- (void)resignFirstResponder{
+    NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
+    CKSheetController*  sheetController = [CKNSDateSheetControllersSingleton objectForKey:dateSheetControllerKey];
+    if(sheetController && sheetController.visible){
+        [sheetController dismissSheetAnimated:YES];
+    }
 }
 
 - (void)becomeFirstResponder{
-    CKObjectProperty* model = self.value;
+    [super becomeFirstResponder];
+    
+    CKProperty* model = self.objectProperty;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
+	
+	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name];
+	NSString* propertyNavBarTitleLocalized = _(propertyNavBarTitle);
+	if ([propertyNavBarTitleLocalized isEqualToString:[NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name]]) {
+		propertyNavBarTitleLocalized = _(descriptor.name);
+	}
     
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
         CKSheetController*  sheetController = [CKNSDateSheetControllersSingleton objectForKey:dateSheetControllerKey];
         if(sheetController == nil){
-            CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value mode:self.datePickerMode]autorelease];
-            dateController.title = _(descriptor.name);
+            CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.objectProperty mode:self.datePickerMode]autorelease];
+            dateController.title = propertyNavBarTitleLocalized;
             dateController.delegate = self;
             
             if(_enableAccessoryView){
                 UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:dateController]autorelease];
-                navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+                
+                //FIXME : This has been commented because it offsets the view up and she appears behind the navigation bar.
+                //navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
                 sheetController = [[CKSheetController alloc]initWithContentViewController:navController];
             }
             else{
@@ -346,15 +475,18 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             [self onBeginEditingUsingViewController:dateController];
             
             sheetController.delegate = self;
-            UIView* parentView = self.parentController.view;
+            UIView* parentView = self.containerController.view;
             [sheetController showFromRect:[parentView bounds] 
                                    inView:parentView 
                                  animated:YES];
             
-            if(CKNSDateSheetControllersSingleton == nil){
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
                 CKNSDateSheetControllersSingleton = [[NSMutableDictionary dictionary]retain];
-            }
+            });
             [CKNSDateSheetControllersSingleton setObject:sheetController forKey:dateSheetControllerKey];
+            
+            [self scrollToRow];
         }
         else{
             CKNSDateViewController* dateController = nil;
@@ -364,23 +496,34 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             }
             else{
                 dateController = (CKNSDateViewController*)[sheetController contentViewController];
+                if(self.enableNavigationToolbar){
+                    dateController.navigationItem.titleView = [self navigationToolbar];
+                }
             }
-            dateController.title = _(descriptor.name);
+            dateController.title = propertyNavBarTitleLocalized;
             dateController.delegate = self;
             
             [self onBeginEditingUsingViewController:dateController];
             
             sheetController.delegate = self;
-            [dateController setProperty:self.value];
+            [dateController setProperty:self.objectProperty];
+            
+            
+            if(!sheetController.visible){
+                UIView* parentView = self.containerController.view;
+                [sheetController showFromRect:[parentView bounds] 
+                                       inView:parentView 
+                                     animated:YES];
+            }
             
             [self scrollToRow];
         }
     }
     else{
-        [[[self parentController]view]endEditing:YES];//Hides keyboard if needed
+        [[[self containerController]view]endEditing:YES];//Hides keyboard if needed
         
-        CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value mode:self.datePickerMode]autorelease];
-        dateController.title = _(descriptor.name);
+        CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.objectProperty mode:self.datePickerMode]autorelease];
+        dateController.title = propertyNavBarTitleLocalized;
         dateController.delegate = self;
         
         [self onBeginEditingUsingViewController:dateController];
@@ -406,11 +549,10 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 
 - (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController{
-    
+    [self scrollToRowAfterDelay:0];
 }
 
 - (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController{
-    [self scrollToRowAfterDelay:0.3];
 }
 
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{

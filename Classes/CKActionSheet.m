@@ -1,12 +1,13 @@
 //
 //  CKActionSheet.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-07-07.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud. All rights reserved.
 //
 
 #import "CKActionSheet.h"
+#import "CKDebug.h"
 
 
 @interface CKActionSheetAction : NSObject {
@@ -87,13 +88,13 @@
 }
 
 - (void)addCancelButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock {
-	NSAssert((self.cancelButtonIndex == -1), @"The cancel action is already set.");
+	CKAssert((self.cancelButtonIndex == -1), @"The cancel action is already set.");
 	[self addButtonWithTitle:title action:actionBlock];
 	self.cancelButtonIndex = [self.actions count] - 1;
 }
 
 - (void)addDestructiveButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock {
-	NSAssert((self.destructiveButtonIndex == -1), @"The desctructive action is already set.");
+	CKAssert((self.destructiveButtonIndex == -1), @"The desctructive action is already set.");
 	[self addButtonWithTitle:title action:actionBlock];
 	self.destructiveButtonIndex = [self.actions count] - 1;
 }

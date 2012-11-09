@@ -1,7 +1,7 @@
 //
 //  CKItem.m
 //
-//  Created by Fred Brunel on 10-01-07.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -11,6 +11,24 @@
 #import "CKStore.h"
 #import "CKDomain.h"
 #import "CKItemAttributeReference.h"
+#import "CKDebug.h"
+
+//SEB : FIXME To move in a private file
+
+@class CKAttribute;
+@class CKItem;
+
+
+/**
+ */
+@interface CKStore (CKStorePrivateAddition)
+@property (retain, readwrite) CKDomain *domain;
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (id)insertNewObjectForEntityForName:(NSString *)entityName;
+
+@end
 
 @implementation CKItem
 
@@ -29,10 +47,6 @@
 	return [[[CKAttributesDictionary alloc] initWithItem:self] autorelease];
 }
 
-- (NSDictionary *)attributesDictionary {
-	return [self propertyListRepresentation];
-}
-
 - (NSDictionary *)attributesIndexedByName{
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	for(CKAttribute* att in self.attributes){
@@ -49,7 +63,7 @@
 - (void)updateAttributes:(NSDictionary*)attributes{
 	NSDictionary* indexedAttributes = [self attributesIndexedByName];
 	for (id key in [attributes allKeys]) {
-		NSAssert([key isKindOfClass:[NSString class]], @"Attribute key must be of class NSString");
+		CKAssert([key isKindOfClass:[NSString class]], @"Attribute key must be of class NSString");
 		id value = [attributes objectForKey:key];
 		if(value != nil){
 			CKAttribute* attribute = [self findOrCreateAttributeInDictionary:indexedAttributes withName:key];

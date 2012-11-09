@@ -1,8 +1,8 @@
 //
 //  CKObjectController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-16.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,36 +10,77 @@
 #import <UIKit/UIKit.h>
 
 
-/** TODO
+/**
  */
 @protocol CKObjectController 
 @optional
 
-//Sections
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/** CKObjectControllerDelegate (Usually a CKCollectionViewController)
+ */
+- (void)setDelegate:(id)delegate;
+
+
+///-----------------------------------
+/// @name Managing the Sections
+///-----------------------------------
+
+/**
+ */
 - (NSInteger)numberOfSections;
+
+/**
+ */
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section;
 
+/**
+ */
 - (NSString*)headerTitleForSection:(NSInteger)section;
+
+/**
+ */
 - (UIView*)headerViewForSection:(NSInteger)section;
 
+/**
+ */
 - (NSString*)footerTitleForSection:(NSInteger)section;
+
+/**
+ */
 - (UIView*)footerViewForSection:(NSInteger)section;
 
-//Objects Management
+///-----------------------------------
+/// @name Managing the Content
+///-----------------------------------
+
+/**
+ */
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
 
-//remove
+/**
+ */
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath;
 
-//Move
+/**
+ */
 - (NSIndexPath*)targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath;
+
+/**
+ */
 - (void)moveObjectFromIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)indexPath;
 
-//Fetch
+///-----------------------------------
+/// @name Fetching More Content
+///-----------------------------------
+
+/**
+ */
 - (void)fetchRange:(NSRange)range forSection:(int)section;
 
-- (void)setDelegate:(id)delegate;//CKObjectControllerDelegate
-
+//FIXME : this should stay private !!!
 //For multithreading purpose all incoming event while locked should be ignored !!!
 - (void)lock;
 - (void)unlock;
@@ -47,18 +88,42 @@
 @end
 
 
-/** TODO
+/**
  */
 @protocol CKObjectControllerDelegate
 
+///-----------------------------------
+/// @name Notifying for document updates
+///-----------------------------------
+
+@optional
+
+/** 
+ */
 - (void)objectControllerReloadData:(id)controller;
+
+/** 
+ */
 - (void)objectControllerDidBeginUpdating:(id)controller;
+
+/** 
+ */
 - (void)objectControllerDidEndUpdating:(id)controller;  
-- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
-- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
+/** 
+ */
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
+
+/** 
+ */
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
+
+/** 
+ */
 - (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index;
+
+/** 
+ */
 - (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index;
 
 @end

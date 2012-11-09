@@ -1,39 +1,94 @@
 //
-//  CKBasicCellController.h
-//  CloudKit
+//  CKTableViewCellController.h
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 09-12-15.
+//  Created by Olivier Collet.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CKItemViewController.h"
-#import "CKManagedTableViewController.h"
-#import "CKModelObject.h"
-#import "CKNSDictionary+TableViewAttributes.h"
+#import "CKCollectionCellController.h"
+#import "CKTableViewController.h"
+#import "CKObject.h"
 #import "CKCallback.h"
+#import "CKWeakRef.h"
 
-@class CKObjectTableViewController;
+/********************************************** CKUITableViewCell *************************************/
 
+@class CKTableCollectionViewController;
+@class CKTableViewCellController;
+@class CKTableViewController;
 
-/** TODO
+/**
  */
 @interface CKUITableViewCell : UITableViewCell
 
-@property(nonatomic,assign) CKTableViewCellController* delegate;
-@property(nonatomic,retain) UIImage* disclosureIndicatorImage;//can be customized via stylesheets
-@property(nonatomic,retain) UIImage* checkMarkImage;//can be customized via stylesheets
-@property(nonatomic,retain) UIButton* disclosureButton;//can be customized via stylesheets
 
+///-----------------------------------
+/// @name Initializing a CKUITableViewCell instance
+///-----------------------------------
+
+/**
+ */
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)delegate;
+
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,readonly) CKTableViewCellController* delegate;
+
+///-----------------------------------
+/// @name Getting the TableViewCell status
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic, assign) UITableViewCellStateMask editingMask;
+
+///-----------------------------------
+/// @name Customizing the Appearance
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,retain) UIImage*   disclosureIndicatorImage;
+
+/**
+ */
+@property(nonatomic,retain) UIImage*   checkMarkImage;
+
+/**
+ */
+@property(nonatomic,retain) UIImage*   highlightedDisclosureIndicatorImage;
+
+/**
+ */
+@property(nonatomic,retain) UIImage*   highlightedCheckMarkImage;
+
+/**
+ */
+@property(nonatomic,retain) UIButton*  disclosureButton;
+
+///-----------------------------------
+/// @name Accessing The Layout Prefered Height
+///-----------------------------------
+
+/** Return the contentView Layout prefered height for the specified width
+ Return MAXFLOAT in case no layout applies to the contentView.
+ */
+- (CGFloat)preferedHeightConstraintToWidth:(CGFloat)width;
 
 @end
 
 
 
+/********************************************** CKTableViewCellController *************************************/
 
-
-/** TODO
+/**
  */
 enum{
 	CKTableViewCellFlagNone = CKItemViewFlagNone,
@@ -46,123 +101,201 @@ enum{
 typedef NSUInteger CKTableViewCellFlags;
 
 
-/** TODO
+/**
  */
 typedef enum CKTableViewCellStyle {
     CKTableViewCellStyleDefault = UITableViewCellStyleDefault,	
     CKTableViewCellStyleValue1 = UITableViewCellStyleValue1,		
     CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
     CKTableViewCellStyleSubtitle = UITableViewCellStyleSubtitle,
-	CKTableViewCellStyleValue3,
-	CKTableViewCellStylePropertyGrid
-} CKTableViewCellStyle;             
+    
+	CKTableViewCellStyleIPadForm,
+	CKTableViewCellStyleIPhoneForm,
+	CKTableViewCellStyleSubtitle2,
+    
+	CKTableViewCellStyleCustomLayout
+} CKTableViewCellStyle;           
 
-/** TODO
+
+typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* controller);
+
+/**
  */
-@interface CKTableViewCellController : CKItemViewController {
-	UITableViewCellAccessoryType _accessoryType;
-	CKTableViewCellStyle _cellStyle;
-	
-	NSString* _key;
-	CGFloat _componentsRatio;
-	CGFloat _componentsSpace;
-    UIEdgeInsets _contentInsets;
-    
-    NSString* _cacheLayoutBindingContextId;
-	
-#ifdef DEBUG 
-	id debugModalController;
-#endif
-    
-    //DEPRECATED 1.5
-    CGFloat _rowHeight;
-    BOOL _movable;
-    BOOL _editable;
-    BOOL _removable;
-    BOOL _selectable;
-}
+@interface CKTableViewCellController : CKCollectionCellController
 
-@property (nonatomic, readonly) UITableViewCell *tableViewCell;
+///-----------------------------------
+/// @name Creating TableView Cell Controller Objects
+///-----------------------------------
+
+/**
+ */
++ (id)cellController;
+
+/**
+ */
++ (id)cellControllerWithName:(NSString*)name;
+
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, assign) CKTableViewCellStyle cellStyle;
-@property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
-@property (nonatomic, retain) NSString* key;
 
-//for propertygrid and value3 only ...
+/**
+ */
+@property (nonatomic, assign) NSInteger indentationLevel;
+
+/**
+ */
+@property (nonatomic) UITableViewCellSelectionStyle  selectionStyle;
+
+/**
+ */
+@property (nonatomic) UITableViewCellAccessoryType   accessoryType;
+
+/**
+ */
+@property (nonatomic,retain) UIView                 *accessoryView;
+
+/**
+ */
+@property (nonatomic) UITableViewCellAccessoryType   editingAccessoryType;
+
+/**
+ */
+@property (nonatomic,retain) UIView                 *editingAccessoryView;
+
+/**
+ */
 @property (nonatomic, assign) CGFloat componentsRatio;
-@property (nonatomic, assign) CGFloat componentsSpace;
+
+/**
+ */
+@property (nonatomic, assign) CGFloat horizontalSpace;
+/**
+ */
+@property (nonatomic, assign) CGFloat verticalSpace;
+
+/**
+ */
 @property (nonatomic, assign) UIEdgeInsets contentInsets;
 
+///-----------------------------------
+/// @name Accessing the content
+///-----------------------------------
 
-- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
+/**
+ */
+@property (nonatomic, retain) NSString* text;
 
-- (void)cellDidAppear:(UITableViewCell *)cell;
-- (void)cellDidDisappear;
+/**
+ */
+@property (nonatomic, retain) NSString* detailText;
 
-- (UITableViewCell *)loadCell;
-- (void)setupCell:(UITableViewCell *)cell;
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
+/**
+ */
+@property (nonatomic, retain) UIImage*  image;
 
-- (NSIndexPath *)willSelectRow;
-- (void)didSelectRow;
+///-----------------------------------
+/// @name Getting the Table View Cell
+///-----------------------------------
 
-// Calls -setupCell with the cell associated with this controller.
-// Does not call -setupCell if the cell is not visible.
-- (void)setNeedsSetup;
+/** tableViewCell is a weak reference to the view currently associated to this controller.
+    As tableViewCell are reused, this property will be null when the controller is not displayed on screen.
+    Do not keep any other reference between the tableViewCell and the controller to avoid problem with the reuse system.
+ */
+@property (nonatomic, readonly) UITableViewCell *tableViewCell;
 
-//private
-- (void)initTableViewCell:(UITableViewCell*)cell;
-- (void)layoutCell:(UITableViewCell*)cell;
 
+///-----------------------------------
+/// @name Getting the Parent TableView Controller and Table View
+///-----------------------------------
+
+/**
+ */
 - (CKTableViewController*)parentTableViewController;
+
+/**
+ */
 - (UITableView*)parentTableView;
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params;
-+ (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
+///-----------------------------------
+/// @name Customizing the controller behaviour
+///-----------------------------------
 
+/**
+ */
+- (void)initTableViewCell:(UITableViewCell*)cell;
+/**
+ */
+- (void)setupCell:(UITableViewCell *)cell;
+/**
+ */
+- (void)rotateCell:(UITableViewCell*)cell animated:(BOOL)animated;
+/**
+ */
+- (void)layoutCell:(UITableViewCell*)cell;
+
+/**
+ */
+- (void)cellDidAppear:(UITableViewCell *)cell;
+
+/**
+ */
+- (void)cellDidDisappear;
+
+/**
+ */
+- (NSIndexPath *)willSelectRow;
+
+/**
+ */
+- (void)didSelectRow;
+
+///-----------------------------------
+/// @name Scrolling
+///-----------------------------------
+
+/**
+ */
 - (void)scrollToRow;
+
+/**
+ */
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay;
 
-+ (BOOL)hasAccessoryResponderWithValue:(id)object;
-+ (UIView*)responderInView:(UIView*)view;
-- (void)becomeFirstResponder;
 
-@end
+///-----------------------------------
+/// @name Layouting
+///-----------------------------------
 
-@interface CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
+/**
+ */
+@property (nonatomic,copy) CKTableViewCellControllerSizeBlock sizeBlock;
 
-@property (nonatomic, getter = heightForRow) CGFloat rowHeight DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isMovable) BOOL movable DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isEditable) BOOL editable DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isRemovable) BOOL removable DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isSelectable) BOOL selectable DEPRECATED_ATTRIBUTE;
-
-@property (nonatomic, assign) CGFloat value3Ratio DEPRECATED_ATTRIBUTE;
-@property (nonatomic, assign) CGFloat value3LabelsSpace DEPRECATED_ATTRIBUTE;
-
-- (CGFloat)heightForRow DEPRECATED_ATTRIBUTE;
-- (BOOL)isMovable DEPRECATED_ATTRIBUTE;
-- (BOOL)isEditable DEPRECATED_ATTRIBUTE;
-- (BOOL)isRemovable DEPRECATED_ATTRIBUTE;
-- (BOOL)isSelectable DEPRECATED_ATTRIBUTE;
 
 @end
 
 
 
+/**
+ */
+@interface CKTableViewCellController(CKLayout)
 
+///-----------------------------------
+/// @name Layouting
+///-----------------------------------
 
-
-//FIXME use layout when available !
-
-@interface CKTableViewCellController (CKLayout)
-
-- (id)performStandardLayout:(CKTableViewCellController *)controller;
-
-- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
-- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;
-
-- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell;
-- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell;
+/**
+ */
+- (void)performLayout;
 
 @end
 
+
+#import "CKTableViewCellController+BlockBasedInterface.h"
+#import "CKTableViewCellController+Responder.h"
+#import "CKTableViewCellController+PropertyGrid.h"
+#import "CKTableViewCellController+Menus.h"

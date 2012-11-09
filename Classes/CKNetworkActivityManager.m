@@ -1,8 +1,8 @@
 //
 //  CKNetworkActivityManager.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-02-22.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -13,9 +13,10 @@
 
 + (CKNetworkActivityManager*)defaultManager {
 	static CKNetworkActivityManager* CKDefaultNetworkActivityManager = nil;
-	if (CKDefaultNetworkActivityManager == nil) {
-		CKDefaultNetworkActivityManager = [[CKNetworkActivityManager alloc] init];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKDefaultNetworkActivityManager = [[CKNetworkActivityManager alloc] init];
+    });
 	return CKDefaultNetworkActivityManager;
 }
 

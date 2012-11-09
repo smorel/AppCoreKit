@@ -1,8 +1,8 @@
 //
 //  CKCarouselView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-07.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -11,29 +11,16 @@
 
 @class CKCarouselView;
 
-/** TODO
+/**
  */
 @protocol CKCarouselViewDataSource
 - (NSInteger)numberOfSectionsInCarouselView:(CKCarouselView*)carouselView;
 - (NSInteger)carouselView:(CKCarouselView*)carouselView numberOfRowsInSection:(NSInteger)section;
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath;
-
-/*Configuring a Table View
-– sectionIndexTitlesForTableView:
-– tableView:sectionForSectionIndexTitle:atIndex:
-– tableView:titleForHeaderInSection:
-– tableView:titleForFooterInSection:
-Inserting or Deleting Table Rows
-– tableView:commitEditingStyle:forRowAtIndexPath:
-– tableView:canEditRowAtIndexPath:
-Reordering Table Rows
-– tableView:canMoveRowAtIndexPath:
-– tableView:moveRowAtIndexPath:toIndexPath:
- */
 @end
 
 
-/** TODO
+/**
  */
 @protocol CKCarouselViewDelegate
 - (UIView*) carouselView:(CKCarouselView*)carouselView viewForHeaderInSection:(NSInteger)section;
@@ -41,91 +28,107 @@ Reordering Table Rows
 - (void) carouselView:(CKCarouselView*)carouselView viewDidDisappearAtIndexPath:(NSIndexPath*)indexPath;
 - (void) carouselView:(CKCarouselView*)carouselView viewDidAppearAtIndexPath:(NSIndexPath*)indexPath;
 - (void) carouselViewDidScroll:(CKCarouselView*)carouselView;
-
-/*Configuring Rows for the Table View
-– tableView:heightForRowAtIndexPath:
-– tableView:indentationLevelForRowAtIndexPath:
-– tableView:willDisplayCell:forRowAtIndexPath:
-Managing Accessory Views
-– tableView:accessoryButtonTappedForRowWithIndexPath:
-– tableView:accessoryTypeForRowWithIndexPath: Deprecated in iOS 3.0
-Managing Selections
-– tableView:willSelectRowAtIndexPath:
-– tableView:didSelectRowAtIndexPath:
-– tableView:willDeselectRowAtIndexPath:
-– tableView:didDeselectRowAtIndexPath:
-Modifying the Header and Footer of Sections
-– tableView:viewForHeaderInSection:
-– tableView:viewForFooterInSection:
-– tableView:heightForHeaderInSection:
-– tableView:heightForFooterInSection:
-Editing Table Rows
-– tableView:willBeginEditingRowAtIndexPath:
-– tableView:didEndEditingRowAtIndexPath:
-– tableView:editingStyleForRowAtIndexPath:
-– tableView:titleForDeleteConfirmationButtonForRowAtIndexPath:
-– tableView:shouldIndentWhileEditingRowAtIndexPath:
-Reordering Table Rows
-– tableView:targetIndexPathForMoveFromRowAtIndexPath:toProposedIndexPath:
-*/
 @end
 
 
-/** TODO
+/**
  */
 typedef enum{
 	CKCarouselViewDisplayTypeHorizontal
 }CKCarouselViewDisplayType;
 
 
-/** TODO
+/**
  */
-@interface CKCarouselView : UIScrollView<UIGestureRecognizerDelegate> {
-	NSMutableArray* _rowSizes;
-	CGFloat _internalContentOffset;
-	NSInteger _numberOfPages;
-	NSInteger _currentPage;
-	NSInteger _currentSection;
-	
-	CGFloat _spacing;
-	
-	UIView* _headerViewToRemove;
-	UIView* _visibleHeaderView;
-	NSMutableDictionary* _visibleViewsForIndexPaths;
-	
-	id _dataSource;
-	//id _delegate;
-	
-	NSMutableDictionary* _reusableViews;
-	CKCarouselViewDisplayType _displayType;
-	
-	CGFloat _contentOffsetWhenStartPanning;
-}
+@interface CKCarouselView : UIScrollView<UIGestureRecognizerDelegate> 
 
-@property (nonatomic,assign) NSInteger numberOfPages;
-@property (nonatomic,assign) NSInteger currentPage;
-@property (nonatomic,assign) NSInteger currentSection;
-@property (nonatomic,assign) CGFloat spacing;
-@property (nonatomic,assign) IBOutlet id dataSource;
-//@property (nonatomic,assign) IBOutlet id delegate;
-@property (nonatomic,assign) CKCarouselViewDisplayType displayType;
+///-----------------------------------
+/// @name Getting the carousel view status
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign,readonly) NSInteger numberOfPages;
+
+/**
+ */
+@property (nonatomic,assign,readonly) NSInteger currentPage;
+
+/**
+ */
+@property (nonatomic,assign,readonly) NSInteger currentSection;
+
+/**
+ */
 @property (nonatomic,assign,readonly) CGFloat internalContentOffset;
 
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) CGFloat spacing;
+
+/**
+ */
+@property (nonatomic,assign) CKCarouselViewDisplayType displayType;
+
+///-----------------------------------
+/// @name Managing the Data Source
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) IBOutlet id dataSource;
+
+///-----------------------------------
+/// @name Updating the Carousel View
+///-----------------------------------
+
+/**
+ */
 - (void)reloadData;
+
+/**
+ */
+- (void)updateViewsAnimated:(BOOL)animated;
+
+///-----------------------------------
+/// @name Configuring a Table View
+///-----------------------------------
+
+/**
+ */
 - (UIView*)dequeueReusableViewWithIdentifier:(id)identifier;
 
-//Offset is normalized between 0 & numberOfPages
-//contentOffset represents the center of the carousel
+/** Offset is normalized between 0 & numberOfPages
+    contentOffset represents the center of the carousel
+ */
 - (void)setContentOffset:(CGFloat)offset animated:(BOOL)animated;
 
 - (NSIndexPath*)indexPathForPage:(NSInteger)page;
 - (NSInteger)pageForIndexPath:(NSIndexPath*)indexPath;
 
+///-----------------------------------
+/// @name Accessing Cells and Sections
+///-----------------------------------
+
+/**
+ */
 - (NSArray*)visibleIndexPaths;
+
+/**
+ */
 - (NSArray*)visibleViews;
+
+/**
+ */
 - (UIView*)viewAtIndexPath:(NSIndexPath*)indexPath;
 
+/**
+ */
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath*)indexPath;
-- (void)updateViewsAnimated:(BOOL)animated;
+
 
 @end

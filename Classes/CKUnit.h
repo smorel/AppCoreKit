@@ -1,8 +1,8 @@
 //
 //  CKUnit.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-08-27.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -11,20 +11,20 @@
 
 // Distance
 
-/** TODO
+/**
  */
 CGFloat CKUnitConvertMetersToMiles(CGFloat meters);
 
-/** TODO
+/**
  */
 CGFloat CKUnitConvertMetersToYards(CGFloat meters);
 
 // Angle
 
-/** TODO
+/**
  */
 CGFloat CKUnitConvertDegreesToRadians(CGFloat degrees);
 
-/** TODO
+/**
  */
 CGFloat CKUnitConvertRadiansToDegrees(CGFloat radians);

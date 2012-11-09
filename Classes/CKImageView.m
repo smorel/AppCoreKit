@@ -1,18 +1,17 @@
 //
 //  CKImageView.m
-//  iPadSlideShow
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-05-20.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKImageView.h"
-#import "CKCache.h"
-#import "CKUIImage+Transformations.h"
+#import "UIImage+Transformations.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKDebug.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 
 @interface CKImageView ()
 
@@ -28,7 +27,25 @@
 
 //
 
-@implementation CKImageView
+@implementation CKImageView{
+	//Image Management
+	CKImageLoader *_imageLoader;
+	NSURL *_imageURL;
+	id<CKImageViewDelegate> _delegate;
+	
+	//Background View Management
+	UIImage *_defaultImage;	
+	UIView* _defaultImageView;
+	UIActivityIndicatorView* _activityIndicator;
+	CKImageViewSpinnerStyle _spinnerStyle;
+	
+	//View Management
+	UIImageView* _imageView;
+	BOOL _interactive;
+	
+	NSTimeInterval _fadeInDuration;
+	CKImageViewState _currentState;
+}
 
 @synthesize imageLoader = _imageLoader;
 @synthesize imageURL = _imageURL;
@@ -56,8 +73,10 @@
 }
 
 - (id)initWithCoder:(NSCoder *)decoder{
-	[super initWithCoder:decoder];
+	if (self = [super initWithCoder:decoder]) {
+  
 	[self postInit];
+    }
 	return self;
 }
 
@@ -248,13 +267,18 @@
 
 - (void)updateViews:(BOOL)animated{
 	UIImage* image = [self image];
-	if(!_defaultImage && !image && self.imageLoader){//spinner
+	if(!image && self.imageLoader){//spinner
+        if(_defaultImage){
+            [self createsDefaultImageView];
+            self.defaultImageView.alpha = 1;
+            self.defaultImageView.frame = self.bounds;
+        }
+        
 		if(_currentState != CKImageViewStateSpinner){
 			[self.layer removeAnimationForKey:[NSString stringWithFormat:@"CKImageView<%p>",self]];
             
 			[self.imageView removeFromSuperview];
 			[self.button removeFromSuperview];
-			[self.defaultImageView removeFromSuperview];
 			
 			if(self.imageLoader){
 				if(self.activityIndicator){
@@ -284,38 +308,62 @@
         _currentState = CKImageViewStateDefaultImage;
 	}
 	else {//image or button
-        if(animated){
-            [UIView beginAnimations:[NSString stringWithFormat:@"<%p>",self] context:nil];
-            [UIView setAnimationDuration:_fadeInDuration];
-        }
-        
-        [self.defaultImageView removeFromSuperview];
-        [self.activityIndicator stopAnimating];
-        [self.activityIndicator removeFromSuperview];
-        
-        if(_interactive){
-            [self.imageView removeFromSuperview];
-            self.button.frame = self.bounds;
-            [self addSubview:self.button];
-        }
-        else{
-            if(self.button){
-                [self.button removeFromSuperview];
+        if (animated) {
+            if(_interactive){
+                self.button.frame = self.bounds;
+                [self addSubview:self.button];
+                self.button.alpha = 0;
             }
-            self.imageView.frame = self.bounds;
-            [self addSubview:self.imageView];
+            else{
+                self.imageView.frame = self.bounds;
+                [self addSubview:self.imageView];
+                self.imageView.alpha = 0;
+            }
+            
+            if (self.superview != nil) {
+                [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                    self.imageView.alpha = 1;
+                    self.button.alpha = 1;
+                    self.defaultImageView.alpha = 0;
+                } completion:^(BOOL finished) {
+                    [self.defaultImageView removeFromSuperview];
+                    [self.activityIndicator stopAnimating];
+                    [self.activityIndicator removeFromSuperview];
+                    
+                    if(_interactive){
+                        [self.imageView removeFromSuperview];
+                    }
+                    else{
+                        if(self.button)
+                            [self.button removeFromSuperview];
+                    }
+                }];
+            }
         }
-        
-        if(animated){
-            [UIView commitAnimations];
+        else {
+            [self.defaultImageView removeFromSuperview];
+            [self.activityIndicator stopAnimating];
+            [self.activityIndicator removeFromSuperview];
+            
+            if(_interactive){
+                [self.imageView removeFromSuperview];
+                self.button.frame = self.bounds;
+                [self addSubview:self.button];
+            }
+            else{
+                if(self.button)
+                    [self.button removeFromSuperview];
+                self.imageView.frame = self.bounds;
+                [self addSubview:self.imageView];
+            }
         }
         
         _currentState = CKImageViewStateImage;
 	}
 }
 
-- (void)spinnerStyleMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKImageViewSpinnerStyle", 
+- (void)spinnerStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKImageViewSpinnerStyle", 
                                                CKImageViewSpinnerStyleWhiteLarge,
                                                CKImageViewSpinnerStyleWhite,
                                                CKImageViewSpinnerStyleGray,

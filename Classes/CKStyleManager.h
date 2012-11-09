@@ -1,8 +1,8 @@
 //
 //  CKStyleManager.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-19.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,24 +10,71 @@
 #import "CKCascadingTree.h"
 
 
-/** TODO
+/**
  */
-@interface CKStyleManager : CKCascadingTree {
-}
+@interface CKStyleManager : CKCascadingTree 
 
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
+
+/**
+ */
 + (CKStyleManager*)defaultManager;
 
-- (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
+///-----------------------------------
+/// @name Importing .style files content
+///-----------------------------------
 
+/**
+ */
 - (void)loadContentOfFileNamed:(NSString*)name;
+
+/**
+ */
 - (BOOL)importContentOfFileNamed:(NSString*)name;
 
+///-----------------------------------
+/// @name Querying Style
+///-----------------------------------
+
+/**
+ */
+- (BOOL)isEmpty;
+
+/**
+ */
+- (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
+
+///-----------------------------------
+/// @name Accessing Debug Attributes
+///-----------------------------------
+
+/**
+ */
 + (BOOL)logEnabled;
 
 @end
 
+
+/**
+ */
 @interface NSMutableDictionary (CKStyleManager)
 
+///-----------------------------------
+/// @name Querying Style
+///-----------------------------------
+
+/**
+ */
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
+
+@end
+
+
+@interface NSObject (CKStyleManager)
+
+- (NSMutableDictionary*)stylesheet;
+- (void)findAndApplyStyleFromStylesheet:(NSMutableDictionary*)parentStylesheet propertyName:(NSString*)propertyName;
 
 @end

@@ -1,8 +1,8 @@
 //
 //  CKTableViewCellController+Style.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,61 +10,41 @@
 #import "CKStyleManager.h"
 
 //HACK : here to know the context of the parent controller ...
-#import "CKObjectCarouselViewController.h"
+#import "CKCarouselCollectionViewController.h"
 #import "CKTableViewController.h"
-#import "CKMapViewController.h"
+#import "CKMapCollectionViewController.h"
 
-#import "CKGradientView.h"
-#import "CKNSArrayAdditions.h"
+#import "CKStyleView.h"
+#import "NSArray+Additions.h"
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"
 
-NSString* CKStyleCellType = @"cellType";
+NSString* CKStyleCellStyle = @"cellStyle";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
-NSString* CKStyleCellSize = @"size";
-NSString* CKStyleCellFlags = @"flags";
 
 @implementation NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (CKTableViewCellStyle)cellStyle{
-	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellType 
-									 withEnumDescriptor:CKEnumDefinition(@"UITableViewCellStyle",
-                                                                         UITableViewCellStyleDefault, 
-																	 UITableViewCellStyleValue1, 
-																	 UITableViewCellStyleValue2,
-																	 UITableViewCellStyleSubtitle,
-																	 CKTableViewCellStyleDefault, 
-																	 CKTableViewCellStyleValue1, 
-																	 CKTableViewCellStyleValue2,
-																	 CKTableViewCellStyleSubtitle,
-																	 CKTableViewCellStyleValue3,
-                                                                     CKTableViewCellStylePropertyGrid)];
+	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellStyle 
+                                    withEnumDescriptor:CKEnumDefinition(@"CKTableViewCellStyle",
+                                                                        CKTableViewCellStyleDefault,
+                                                                        UITableViewCellStyleDefault,
+                                                                        CKTableViewCellStyleValue1,
+                                                                        UITableViewCellStyleValue1,
+                                                                        CKTableViewCellStyleValue2,
+                                                                        UITableViewCellStyleValue2,
+                                                                        CKTableViewCellStyleSubtitle,
+                                                                        UITableViewCellStyleSubtitle,
+                                                                        CKTableViewCellStyleIPadForm,
+                                                                        CKTableViewCellStyleIPhoneForm,
+                                                                        CKTableViewCellStyleSubtitle2,
+                                                                        CKTableViewCellStyleCustomLayout)];
 }
 
 - (UIImage*)accessoryImage{
 	return [self imageForKey:CKStyleAccessoryImage];
 }
 
-- (CGSize)cellSize{
-	return [self cgSizeForKey:CKStyleCellSize];
-}
-
-- (CKItemViewFlags)cellFlags{
-	return (CKItemViewFlags)[self enumValueForKey:CKStyleCellFlags 
-										withEnumDescriptor:CKEnumDefinition(@"CKItemViewFlags",
-                                                                            CKItemViewFlagNone,
-																		CKItemViewFlagSelectable,
-																		CKItemViewFlagEditable,
-																		CKItemViewFlagRemovable,
-																		CKItemViewFlagMovable,
-																		CKItemViewFlagAll,
-																		CKTableViewCellFlagNone,
-																		CKTableViewCellFlagSelectable,
-																		CKTableViewCellFlagEditable,
-																		CKTableViewCellFlagRemovable,
-																		CKTableViewCellFlagMovable,
-																		CKTableViewCellFlagAll)];
-}
 
 @end
 
@@ -90,28 +70,16 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
-    CKGradientView* backgroundView = nil;
+    CKStyleView* backgroundView = nil;
     for(UIView* view in [self subviews]){
-        if([view isKindOfClass:[CKGradientView class]]
+        if([view isKindOfClass:[CKStyleView class]]
            && view != self.backgroundView){
-            backgroundView = (CKGradientView*)view;
+            backgroundView = (CKStyleView*)view;
             break;
         }
     }
     [super insertSubview:view atIndex:backgroundView ? index + 1 : index];
 }
-
-/*
-- (void)setBackgroundColor:(UIColor *)backgroundColor{
-    UIColor* previousColor = nil;
-    object_getInstanceVariable(self, "_backgroundColor", (void **)(&previousColor));
-    [previousColor release];
-    object_setInstanceVariable(self, "_backgroundColor", (void**)([backgroundColor retain]));
-
-    //bypass the custom set background color of UITableViewCell
-    [super setBackgroundColor:backgroundColor];
-}
-*/
 
 @end
 
@@ -122,7 +90,13 @@ NSString* CKStyleCellFlags = @"flags";
 		return NO;
 	
 	if([object isKindOfClass:[UITableView class]]){
-		if([descriptor.name isEqual:@"backgroundView"] && [style isEmpty] == NO){
+		if([descriptor.name isEqual:@"backgroundView"]
+           && ([style containsObjectForKey:CKStyleBackgroundGradientColors]
+                 || [style containsObjectForKey:CKStyleCornerStyle]
+                 || [style containsObjectForKey:CKStyleCornerSize]
+                 || [style containsObjectForKey:CKStyleBackgroundImage]
+                 || [style containsObjectForKey:CKStyleBorderColor]
+                 || [style containsObjectForKey:CKStyleBorderShadowColor])){
 			return YES;
 		}
 	}
@@ -130,7 +104,7 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (NSMutableDictionary*)applyStyle{
-	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:self];
@@ -139,39 +113,53 @@ NSString* CKStyleCellFlags = @"flags";
 
 @end
 
-
-@implementation CKItemViewController (CKStyle)
+@implementation CKCollectionCellController (CKStyle)
 
 - (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view{
-    //NSLog(@"apply style on CKItemViewController : %@",self);
+    //NSLog(@"apply style on CKCollectionCellController : %@",self);
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }
 
 - (NSMutableDictionary*)controllerStyle{
-	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:nil];
+    if([[CKStyleManager defaultManager]isEmpty])
+        return nil;
+    
+    if(!self.containerController){
+        return nil;
+    }
+    
+    //CACHE THE STYLE FOR CELL CONTROLLERS AS IT IS PART OF THEIR REUSE IDENTIFIER
+    NSMutableDictionary* style = [self appliedStyle];
+    if(style){
+        return style;
+    }
+    
+	NSMutableDictionary* parentControllerStyle = [self.containerController controllerStyle];
 	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
     
     if([CKStyleManager logEnabled]){
         if([controllerStyle isEmpty]){
-            CKDebugLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.parentController,parentControllerStyle);
+            CKDebugLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.containerController,parentControllerStyle);
         }
         else{
             CKDebugLog(@"found style for item controller %@",self);
         }
     }
     
+    [self setAppliedStyle:controllerStyle];
+    
 	return controllerStyle;
 }
 
 - (UIView*)parentControllerView{
 	UIView* view = nil;
-	if([self.parentController isKindOfClass:[CKObjectCarouselViewController class]] == YES) 
-		view = (UIView*)((CKObjectCarouselViewController*)self.parentController).carouselView;
-	else if([self.parentController isKindOfClass:[CKTableViewController class]] == YES) 
-		view = (UIView*)((CKTableViewController*)self.parentController).tableView;
-	else if([self.parentController isKindOfClass:[CKMapViewController class]] == YES) 
-		view = (UIView*)((CKMapViewController*)self.parentController).mapView;
+	if([self.containerController isKindOfClass:[CKCarouselCollectionViewController class]] == YES) 
+		view = (UIView*)((CKCarouselCollectionViewController*)self.containerController).carouselView;
+	else if([self.containerController isKindOfClass:[CKTableViewController class]] == YES) 
+		view = (UIView*)((CKTableViewController*)self.containerController).tableView;
+	else if([self.containerController isKindOfClass:[CKMapCollectionViewController class]] == YES) 
+		view = (UIView*)((CKMapCollectionViewController*)self.containerController).mapView;
 	return view;
 }
 
@@ -180,66 +168,134 @@ NSString* CKStyleCellFlags = @"flags";
 //delegate for tableViewCell styles
 @implementation CKTableViewCellController (CKStyle)
 
-- (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
-	CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
-	
-	switch([style cornerStyle]){
-		case CKViewCornerStyleDefault:{
+- (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
+    CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleCornerStyle]){
+        cornerStyle = [style cornerStyle];
+    }
+    
+	CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
+	switch(cornerStyle){
+		case CKViewCornerStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
-				UIView* parentView = [self parentControllerView];
-				if([parentView isKindOfClass:[UITableView class]]){
-					UITableView* tableView = (UITableView*)parentView;
-					if(tableView.style == UITableViewStyleGrouped){
-						NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-						if(self.indexPath.row == 0 && numberOfRows > 1){
-							roundedCornerType = CKRoundedCornerViewTypeTop;
-						}
-						else if(self.indexPath.row == 0){
-							roundedCornerType = CKRoundedCornerViewTypeAll;
-						}
-						else if(self.indexPath.row == numberOfRows-1){
-							roundedCornerType = CKRoundedCornerViewTypeBottom;
-						}
-					}
+				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+                if(tableView.style == UITableViewStyleGrouped){
+                    NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                    if(self.indexPath.row == 0 && numberOfRows > 1){
+                        roundedCornerType = CKStyleViewCornerTypeTop;
+                    }
+                    else if(self.indexPath.row == 0){
+                        roundedCornerType = CKStyleViewCornerTypeAll;
+                    }
+                    else if(self.indexPath.row == numberOfRows-1){
+                        roundedCornerType = CKStyleViewCornerTypeBottom;
+                    }
 				}
 			}
 			break;
 		}
+        case CKViewCornerStyleRounded:{
+            roundedCornerType = CKStyleViewCornerTypeAll;
+            break;
+        }
+        case CKViewCornerStyleRoundedTop:{
+            roundedCornerType = CKStyleViewCornerTypeTop;
+            break;
+        }
+        case CKViewCornerStyleRoundedBottom:{
+            roundedCornerType = CKStyleViewCornerTypeBottom;
+            break;
+        }
 	}
 	
 	return roundedCornerType;
 }
 
-- (CKGradientViewBorderType)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
-	CKGradientViewBorderType borderType = CKGradientViewBorderTypeNone;
+- (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
+    CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleBorderStyle]){
+        borderStyle = [style borderStyle];
+    }
 	
-	switch([style cornerStyle]){
-		case CKViewCornerStyleDefault:{
+    if(borderStyle & CKViewBorderStyleTableViewCell){
+        if(view == self.tableViewCell.backgroundView
+           || view == self.tableViewCell.selectedBackgroundView){
+            UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+            NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+            if(numberOfRows > 1){
+                if(self.indexPath.row == 0){
+                    return  CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationTop | CKStyleViewBorderLocationRight;
+                }else if(self.indexPath.row == numberOfRows-1){
+                    return  CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationBottom | CKStyleViewBorderLocationRight;
+                }else{
+                    return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
+                }
+            }
+            else{
+                return CKStyleViewBorderLocationAll;
+            }
+        }
+    }else{
+        CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;
+        if(borderStyle & CKViewBorderStyleTop){
+            viewBorderType |= CKStyleViewBorderLocationTop;
+        }
+        if(borderStyle & CKViewBorderStyleLeft){
+            viewBorderType |= CKStyleViewBorderLocationLeft;
+        }
+        if(borderStyle & CKViewBorderStyleRight){
+            viewBorderType |= CKStyleViewBorderLocationRight;
+        }
+        if(borderStyle & CKViewBorderStyleBottom){
+            viewBorderType |= CKStyleViewBorderLocationBottom;
+        }
+        return viewBorderType;
+    }
+	
+	return CKStyleViewBorderLocationNone;
+}
+
+- (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style{
+	CKStyleViewSeparatorLocation separatorType = CKStyleViewSeparatorLocationNone;
+    
+    CKViewSeparatorStyle separatorStyle = CKViewSeparatorStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleSeparatorStyle]){
+        separatorStyle = [style separatorStyle];
+    }
+	
+	switch(separatorStyle){
+		case CKViewSeparatorStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
-				UIView* parentView = [self parentControllerView];
-				if([parentView isKindOfClass:[UITableView class]]){
-					UITableView* tableView = (UITableView*)parentView;
-					if(tableView.style == UITableViewStyleGrouped){
-						NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-						if(self.indexPath.row == numberOfRows - 1){
-							borderType = CKGradientViewBorderTypeAll;
-						}
-						else {
-							borderType = CKGradientViewBorderTypeAll &~ CKGradientViewBorderTypeBottom;
-						}
-					}
-					else{
-						borderType = CKGradientViewBorderTypeBottom;
-					}
-				}
+				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+                NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                if(numberOfRows > 1 && self.indexPath.row != numberOfRows-1){
+                    return CKStyleViewSeparatorLocationBottom;
+                }
+                else{
+                    return CKStyleViewSeparatorLocationNone;
+                }
 			}
 			break;
 		}
+        case CKViewSeparatorStyleTop:    return CKStyleViewSeparatorLocationAll;
+        case CKViewSeparatorStyleBottom: return CKStyleViewSeparatorLocationBottom;
+        case CKViewSeparatorStyleLeft:   return CKStyleViewSeparatorLocationLeft;
+        case CKViewSeparatorStyleRight:  return CKStyleViewSeparatorLocationRight;
 	}
 	
-	return borderType;
+	return separatorType;
+}
+
+
+- (UIColor*)separatorColorForView:(UIView*)view withStyle:(NSMutableDictionary*)style{
+    BOOL hasSeparator = ([[self parentTableView]separatorStyle] != UITableViewCellSeparatorStyleNone);
+    UIColor* separatorColor = hasSeparator ? [[self parentTableView]separatorColor] : [UIColor clearColor];
+    if([style containsObjectForKey:CKStyleSeparatorColor]){
+        separatorColor = [style separatorColor];
+    }
+    return separatorColor;
 }
 
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
@@ -253,94 +309,6 @@ NSString* CKStyleCellFlags = @"flags";
 		}
 	}
 	return NO;
-}
-
-@end
-
-
-@implementation UITableView (CKStyle)
-
-- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
-    if([view isKindOfClass:[UITableViewCell class]]){
-        id dataSource = [self dataSource];
-        if([dataSource isKindOfClass:[CKItemViewContainerController class]]){
-            CKItemViewContainerController* controller = (CKItemViewContainerController*)dataSource;
-            NSIndexPath* indexPath = [controller indexPathForView:view];
-            if(indexPath.row > 0){
-                NSIndexPath* previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row -1 inSection:indexPath.section];
-                UIView* previousView = [controller viewAtIndexPath:previousIndexPath];
-                NSInteger index = previousView ? [[self subviews]indexOfObjectIdenticalTo:previousView] : NSNotFound;
-                if(index != NSNotFound){
-                    [super insertSubview:view atIndex:index+1];
-                    return;
-                }
-                else{
-                    NSInteger count = [controller numberOfObjectsForSection:indexPath.section];
-                    if(indexPath.row < count){
-                        NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-                        if([controller isValidIndexPath:nextIndexPath]){
-                            UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
-                            NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
-                            if(index != NSNotFound){
-                                [super insertSubview:view atIndex:index];
-                                return;
-                            }
-                        }
-                    }
-                    else{
-                        NSInteger sectionCount = [controller numberOfSections];
-                        if(indexPath.section < (sectionCount - 1)){
-                            NSInteger section = indexPath.section + 1;
-                            UIView* headerView = [controller.objectController headerViewForSection:section];
-                            //TODO find the headerView if headerTitle !
-                            if(headerView){
-                                NSInteger index = [[self subviews]indexOfObjectIdenticalTo:headerView];
-                                if(index != NSNotFound){
-                                    [super insertSubview:view atIndex:index];
-                                    return;
-                                }
-                            }
-                            else{
-                                NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:section];
-                                if([controller isValidIndexPath:nextIndexPath]){
-                                    UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
-                                    NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
-                                    if(index != NSNotFound){
-                                        [super insertSubview:view atIndex:index];
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else{
-                NSInteger section = indexPath.section;
-                UIView* headerView = [controller.objectController headerViewForSection:section];
-                //TODO find the headerView if headerTitle !
-                if(headerView){
-                    NSInteger index = [[self subviews]indexOfObjectIdenticalTo:headerView];
-                    if(index != NSNotFound){
-                        [super insertSubview:view atIndex:index + 1];
-                        return;
-                    }
-                }
-                else{
-                    NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:([controller numberOfObjectsForSection:section-1] - 1) inSection:section-1];
-                    if([controller isValidIndexPath:nextIndexPath]){
-                        UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
-                        NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
-                        if(index != NSNotFound){
-                            [super insertSubview:view atIndex:index + 1];
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    [super insertSubview:view atIndex:index];
 }
 
 @end

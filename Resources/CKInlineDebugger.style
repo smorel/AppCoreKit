@@ -1,0 +1,122 @@
+{
+    "$CKInlineDebugger_titleLabel" : {
+        "shadowColor" : "whiteColor",
+        "highlightedShadowColor" : "clearColor",
+        "shadowOffset" : "0 1",
+        "textColor" : "0.25 0.25 0.25 1",
+        "fontSize" : "15",
+        "fontName" : "Helvetica",
+        "backgroundColor" : "clearColor"
+    },
+    
+    "$CKInlineDebugger_subtitleLabel" : {
+        "shadowColor" : "whiteColor",
+        "shadowOffset" : "0 1",
+        "textColor" : "0.4 0.4 0.4 1",
+        "fontSize" : "12",
+        "fontName" : "Helvetica",
+        "highlightedShadowColor" : "clearColor",
+        "backgroundColor" : "clearColor"
+    },
+    
+    "$CKInlineDebugger_transparencyOptimization" : {
+        "backgroundColor" : "blackColor",
+        "opaque" : 1
+    },
+    
+    "$CKInlineDebugger_baseGrayCellController" : {
+        "UITableViewCell" : {
+            "backgroundView" : {
+                "@inherits" : [ "$CKInlineDebugger_transparencyOptimization" ],
+                "backgroundGradientColors" : [ "0.94 0.94 0.94 1", "0.84 0.84 0.84 1"],
+                "backgroundGradientLocations" : [ 0, 1],
+                "embossTopColor" : "whiteColor",
+                "embossBottomColor" : "0.7 0.7 0.7 1"
+            },
+            "textLabel" : {
+                "@inherits" : [ "$CKInlineDebugger_titleLabel" ]
+            },
+            "detailTextLabel" : {
+                "@inherits" : [ "$CKInlineDebugger_subtitleLabel" ]
+            },
+            "UILabel[tag=8724],UILabel[tag=8727],UILabel[tag=8730],UILabel[tag=8733],UILabel[tag=8736],UILabel[tag=8739],UILabel[tag=8742],UILabel[tag=8745]" : {
+                "@inherits" : [ "$CKInlineDebugger_subtitleLabel" ]
+            },
+            "UISwitch" : {
+                "onTintColor" : "blackColor"
+            },
+            "textField,textView" : {
+                "@inherits" : [ "$CKInlineDebugger_titleLabel" ]
+            }
+        }
+    },
+    
+    "$CKInlineDebugger_tableViewController" : {
+        "supportedInterfaceOrientations" : "CKInterfaceOrientationAll",
+        "UISearchBar" : {
+            "tintColor" : "blackColor"
+        },
+        "UITableView" : {
+            "backgroundColor" : "clearColor",
+            "separatorStyle" : "UITableViewCellSeparatorStyleNone"
+        },
+        "view" : {
+            "backgroundGradientColors" : [ "0.94 0.94 0.94 1", "0.64 0.64 0.64 1"],
+            "backgroundGradientLocations" : [ 0, 1]
+        },
+        "tableViewContainer" : {
+            "backgroundColor" : "clearColor"
+        },
+        
+        "UINavigationController" : {
+            "navigationBar" : {
+                "tintColor" : "blackColor",
+                "backgroundImage" : "CRAP",
+                "UIBarButtonItem" : {},
+                
+                "UILabel,titleView" : {
+                    "textColor" : "whiteColor"
+                }
+            }
+        },
+        
+        "CKTableViewCellController" : {
+            "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
+            "cellStyle" : "CKTableViewCellStyleSubtitle2"
+        },
+        
+        "CKNSNumberPropertyCellController" : {
+            "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
+            "cellStyle" : "CKTableViewCellStyleIPhoneForm"
+        },
+        
+        "sectionHeaderView" : {
+            "backgroundGradientColors" : [ "0.64 0.64 0.64 1", "0.34 0.34 0.34 1"],
+            "backgroundGradientLocations" : [ 0, 1],
+            "embossTopColor" : "whiteColor",
+            "embossBottomColor" : "0.7 0.7 0.7 1",
+            
+            "UILabel" : {
+                "textColor" : "0.95 0.95 0.95 1",
+                "fontSize" : "17"
+            }
+        }
+    },
+
+    
+    "CKFormTableViewController[name=CKInlineDebugger]" : {
+        "@inherits" : [  "$CKInlineDebugger_tableViewController" ],
+                
+        "CKTableViewController,CKOptionTableViewController,CKFormTableViewController,CKViewController" : {//controller pushed by a debugger take the same style.
+            "@inherits" : [  "$CKInlineDebugger_tableViewController" ]
+        },
+        
+        "CKFormTableViewController[name=CKInlineDebuggerForSubViews],CKFormTableViewController[name=CKInlineDebuggerForSuperViews]"  : {
+            "@inherits" : [ "$CKInlineDebugger_tableViewController" ],
+            "CKTableViewCellController" : {
+                "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
+                "cellStyle" : "CKTableViewCellStyleSubtitle" //for indentation level
+            }
+        }
+    }
+}

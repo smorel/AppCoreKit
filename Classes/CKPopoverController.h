@@ -1,13 +1,22 @@
 //
 //  CKPopoverController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-10.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
+@class CKPopoverController;
+
+@interface CKPopoverManager : NSObject
+@property(nonatomic,retain) NSSet* nonRetainedPopoverControllerValues;
+@end
+
+
+typedef void(^CKPopoverControllerDismissBlock)(CKPopoverController* popover);
 
 /** 
  CKPopoverController is an autonomous version of UIPopoverController that will retain itself when presented and autorelease itself when dismissed. This avoid client code to retain the popover while it is displayed. It is also registered on interface orientation change and can optionally dismiss itsel automatically.
@@ -15,15 +24,59 @@
  */
 @interface CKPopoverController : UIPopoverController<UIPopoverControllerDelegate> {}
 
-//default value is YES
-@property (nonatomic,assign)BOOL autoDismissOnInterfaceOrientation;
+///-----------------------------------
+/// @name Initializing a CKPopoverController
+///-----------------------------------
 
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController;
+
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController contentSize:(CGSize)contentSize;
+
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController inNavigationController:(BOOL)navigationController;
+
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController contentSize:(CGSize)contentSize inNavigationController:(BOOL)navigationController;
 
-//private
+/**
+ */
 - (void)postInit;
+
+///-----------------------------------
+/// @name Configuring a CKPopoverController
+///-----------------------------------
+
+/** default value is YES
+ */
+@property (nonatomic,assign)BOOL autoDismissOnInterfaceOrientation;
+
+///-----------------------------------
+/// @name Reacting to CKPopoverController events
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,copy) CKPopoverControllerDismissBlock didDismissPopoverBlock;
+
+
+@end
+
+/**
+ */
+@interface UIViewController (CKPopoverController)
+
+///-----------------------------------
+/// @name Popover
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,assign,readonly) BOOL isInPopover;
 
 @end

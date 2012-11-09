@@ -1,8 +1,8 @@
 //
 //  CKWeakRef.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -17,12 +17,13 @@
         }];
  
  */
-@interface CKWeakRef : NSObject {
-	id _object;
-	CKCallback* _callback;
-}
+@interface CKWeakRef : NSObject <NSCopying> 
 
-/** property test
+///-----------------------------------
+/// @name Managing the referenced object
+///-----------------------------------
+
+/** 
  */
 @property(nonatomic,assign)id object;
 
@@ -44,12 +45,6 @@
  */
 - (id)initWithObject:(id)object callback:(CKCallback*)callback;
 
-/** test
- @param object The target.
- @param block The block to execute when object is deallocated.
- @see object
- */
-- (id)initWithObject:(id)object block:(void (^)(id object))block;
 
 /** test
  @param object The target.
@@ -58,6 +53,13 @@
  @see object
  */
 - (id)initWithObject:(id)object target:(id)target action:(SEL)action;
+
+/** test
+ @param object The target.
+ @param block The block to execute when object is deallocated.
+ @see object
+ */
+- (id)initWithObject:(id)object block:(void (^)(CKWeakRef* weakRef))block;
 
 /** test
  @param object The target.
@@ -78,7 +80,7 @@
  @param block The block to execute when object is deallocated.
  @see object
  */
-+ (CKWeakRef*)weakRefWithObject:(id)object block:(void (^)(id object))block;
++ (CKWeakRef*)weakRefWithObject:(id)object block:(void (^)(CKWeakRef* weakRef))block;//object is the weakref ...
 
 /** test
  @param object The target.
@@ -89,4 +91,3 @@
 + (CKWeakRef*)weakRefWithObject:(id)object target:(id)target action:(SEL)action;
 
 @end
-

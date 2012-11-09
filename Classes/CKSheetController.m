@@ -1,12 +1,13 @@
 //
 //  CKSheetController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKSheetController.h"
+#import "CKWeakRef.h"
 
 NSString *const CKSheetResignNotification           = @"CKSheetResignNotification";
 NSString *const CKSheetWillShowNotification         = @"CKSheetWillShowNotification";
@@ -20,17 +21,51 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 
 @interface CKSheetController()//PRIVATE
 @property(nonatomic,retain) UIView* sheetView;
+@property(nonatomic,assign, readwrite) BOOL visible;
+@property(nonatomic,assign) BOOL registeredToNotifications;
+@property(nonatomic,retain) CKWeakRef* delegateRef;
+@property(nonatomic,retain,readwrite) UIViewController* contentViewController;
 @end
 
-@implementation CKSheetController
+@implementation CKSheetController{
+    id _delegate;
+    UIViewController* _contentViewController;
+    UIView* _sheetView;
+}
+
 @synthesize delegate = _delegate;
 @synthesize contentViewController = _contentViewController;
 @synthesize sheetView = _sheetView;
+@synthesize visible;
+@synthesize registeredToNotifications = _registeredToNotifications;
+@synthesize delegateRef = _delegateRef;
 
 - (id)initWithContentViewController:(UIViewController *)viewController{
     self = [super init];
     self.contentViewController = viewController;
+    self.visible = NO;
     return self;
+}
+
+- (void)setDelegate:(id)delegate{
+    self.delegateRef = [CKWeakRef weakRefWithObject:delegate];
+}
+
+- (id)delegate{
+    return [self.delegateRef object];
+}
+
+- (void)dealloc{
+    if(_registeredToNotifications){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetResignNotification object:nil];
+    }
+    
+    [_contentViewController release];
+    [_sheetView release];
+    [_delegateRef release];
+    
+    [super dealloc];
 }
 
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated{
@@ -38,6 +73,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldResign:) name:CKSheetResignNotification object:nil];
+    self.registeredToNotifications = YES;
     
     //this will retain the CKSheetController until it will get dismissed.
     //this avoid us to explicitelly retain it in the client code.
@@ -64,7 +100,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     }
     
     contentView.frame = CGRectMake(0,y,contentEndRect.size.width,contentEndRect.size.height - y);
-    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.sheetView addSubview:contentView];
     //add toolbar 
     //add contentview
@@ -138,11 +174,15 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                                                                    CKSheetAnimationCurveUserInfoKey,
                                                                    nil]];
     }
+    
+    self.visible = YES;
 }
 
 - (void)dismissSheetAnimated:(BOOL)animated  causedByKeyboard:(BOOL)causedByKeyboard{
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetResignNotification object:nil];
+    
+    self.registeredToNotifications = NO;
     
     UIView* contentView = self.sheetView;
     
@@ -226,6 +266,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         self.sheetView = nil;
         [self autorelease];
     }    
+    
+    self.visible = NO;
 }
 
 - (void)dismissSheetAnimated:(BOOL)animated{

@@ -1,26 +1,28 @@
 //
 //  CKStoreExplorer.h
-//  Express
+//  AppCoreKit
 //
-//  Created by Oli Kenobi on 10-01-24.
-//  Copyright 2010 Kenobi Studios. All rights reserved.
+//  Created by Oli Kenobi.
+//  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CKStore.h"
+#import "CKFormTableViewController.h"
 
-
-/** TODO
+/**
  */
-@interface CKStoreExplorer : UITableViewController {
-	NSArray *_domains;
-	
-	NSMutableArray *_stores;
-}
+@interface CKStoreExplorer : CKFormTableViewController
 
-@property (retain) NSArray *domains;
+///-----------------------------------
+/// @name Initializing a CKStore Explorer
+///-----------------------------------
 
+/**
+ */
 - (id)initWithDomains:(NSArray *)domains;
 
 @end
+
+

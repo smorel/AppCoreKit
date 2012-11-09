@@ -1,49 +1,65 @@
 //
 //  CKNSStringMultilinePropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-03.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKMultilineNSStringPropertyCellController.h"
-#import "CKObjectProperty.h"
-#import "CKNSObject+Bindings.h"
+#import "CKProperty.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
-#import "CKTableViewCellNextResponder.h"
-#import "CKObjectTableViewController.h"
+#import "CKTableViewCellController+Responder.h"
+#import "CKTableCollectionViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIView+Positioning.h"
+#import "NSValueTransformer+Additions.h"
 
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
+
+#define TEXTVIEW_TAG 50000
+
+@interface CKTableViewCellController()
+- (CGFloat)computeContentViewSize;
+@end
 
 @interface CKMultilineNSStringPropertyCellController()
 @property(nonatomic,retain,readwrite)CKTextView* textView;
 @end
 
-@implementation CKMultilineNSStringPropertyCellController
+@implementation CKMultilineNSStringPropertyCellController {
+    CKTextView* _textView;
+}
+
 @synthesize textView = _textView;
+@synthesize textInputFormatterBlock = _textInputFormatterBlock;
+
 
 - (void)dealloc {
 	[_textView release];
     _textView = nil;
+    [_textInputFormatterBlock release];
 	[super dealloc];
 }
-//
+
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
+}
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
     [super initTableViewCell:cell];
     
-	cell.accessoryView = nil;
-	cell.accessoryType = UITableViewCellAccessoryNone;
+	self.accessoryView = nil;
+	self.accessoryType = UITableViewCellAccessoryNone;
 	cell.clipsToBounds = NO;
 	cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-    if(_textView == nil){
-        self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
-    }
+    self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	_textView.backgroundColor = [UIColor clearColor];
-    _textView.tag = 50000;
+    _textView.tag = TEXTVIEW_TAG;
 	_textView.maxStretchableHeight = CGFLOAT_MAX;
     _textView.scrollEnabled = NO;
     _textView.placeholderOffset = CGPointMake(10,8);
@@ -51,106 +67,51 @@
     _textView.font = cell.detailTextLabel.font;
     _textView.placeholderLabel.font =  _textView.font;
     
-    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    _textView.hidden = YES;//will get displayed in setup depending on the model
+    [cell.contentView addSubview:_textView];
+    
+    if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             _textView.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }  
-        else{
-            _textView.textColor = [UIColor blackColor];
-            cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }
+       // }  
+        //else{
+       //     _textView.textColor = [UIColor blackColor];
+       //     cell.detailTextLabel.numberOfLines = 0;
+       //     cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+       // }
     }  
     
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
-        _textView.autoresizingMask = UIViewAutoresizingNone;
-    }
+    _textView.autoresizingMask = UIViewAutoresizingNone;
 }
 
-- (id)performStandardLayout:(CKMultilineNSStringPropertyCellController*)controller{
-    [super performStandardLayout:controller];
-    
-    UITableViewCell* cell = controller.tableViewCell;
-    if(controller.cellStyle == CKTableViewCellStyleValue3){
-        controller.textView.frame = [controller value3DetailFrameForCell:cell];
-    }
-    else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            if(cell.textLabel.text == nil || 
-               [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-               [cell.textLabel.text length] <= 0){
-                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
-                controller.textView.frame = textViewFrame;
-            }
-            else{
-                //sets the textLabel on one full line and the textView beside
-                CGRect textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
-                cell.textLabel.frame = textFrame;
-                
-                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
-                controller.textView.frame = textViewFrame;
-            }
-        }
-        else{
-            CGRect f = [controller propertyGridDetailFrameForCell:cell];
-            controller.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,controller.textView.frame.size.height);
-        }
-    }
-
-    return (id)nil;
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    UIViewController* controller = [params parentController];
-    NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
-    
-    CKObjectProperty* property = (CKObjectProperty*)object;
-    
-    CKMultilineNSStringPropertyCellController* staticController = (CKMultilineNSStringPropertyCellController*)[params staticController];
-    if([property isReadOnly] || staticController.readOnly){
-        return [CKTableViewCellController viewSizeForObject:object withParams:params];
-    }
-    else{
-        //NSString* text = staticController.tableViewCell.textLabel.text;
-        NSString* detail = [property value];
-        
-        CGRect newFrame = [staticController.textView frameForText:detail];      
-		CGFloat bottomTextView = staticController.textView.frame.origin.y + newFrame.size.height;     
-		//CGFloat bottomTextView = staticController.textView.frame.origin.y +  staticController.textView.frame.size.height;
-		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
-		return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
-    }
-    return nil;
-}
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
-}
- 
 - (void)textViewChanged:(id)value{
-    [self setValueInObjectProperty:value];
+    CKProperty* property = (CKProperty*)self.objectProperty;
+    id result = [NSValueTransformer transform:value toClass:property.type];
+    [self setValueInObjectProperty:result];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+    [cell clearBindingsContext];
     
-    CKObjectProperty* property = (CKObjectProperty*)self.value;
+    self.textView = (CKTextView*)[cell.contentView viewWithTag:TEXTVIEW_TAG];
+    
+    CKProperty* property = (CKProperty*)self.objectProperty;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-        cell.textLabel.text = _(descriptor.name);
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
+       || self.cellStyle == CKTableViewCellStyleIPadForm){
+        self.text = _(descriptor.name);
     }
     
     if([property isReadOnly] || self.readOnly){
         self.fixedSize = YES;
-        [self.textView removeFromSuperview];
+        _textView.hidden = YES;
         
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[property.object bind:property.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
-		[NSObject endBindingsContext];
+        [cell beginBindingsContextByRemovingPreviousBindings];
+		[property.object bind:property.keyPath toObject:self withKeyPath:@"detailText"];
+		[cell endBindingsContext];
 	}
 	else{
         self.fixedSize = NO;
@@ -158,22 +119,29 @@
         _textView.placeholder =  _(placeholerText);
         _textView.frameChangeDelegate = nil;
         _textView.delegate = nil;
-        [_textView setText:[property value] animated:NO];
+        
+        id result = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+        [_textView setText:result animated:NO];
         _textView.delegate = self;
         
-        [self beginBindingsContextByRemovingPreviousBindings];
-        [property.object bind:property.keyPath withBlock:^(id value) {
-            if(!_textView.frameChangeDelegate){//that means we are not currently editing the value
-                _textView.frameChangeDelegate = self;
-                _textView.delegate = nil;
-                [_textView setText:[property value] animated:YES];
-                _textView.delegate = self;
-                _textView.frameChangeDelegate = nil;
+        __block CKMultilineNSStringPropertyCellController* bself = self;
+        
+        [cell beginBindingsContextByRemovingPreviousBindings];
+        [property.object bind:property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
+            if(![_textView.text isEqualToString:value]){
+                if(!_textView.frameChangeDelegate){//that means we are not currently editing the value
+                    _textView.frameChangeDelegate = bself;
+                    _textView.delegate = nil;
+                    id result = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+                    [_textView setText:result animated:YES];
+                    _textView.delegate = bself;
+                    _textView.frameChangeDelegate = nil;
+                }
             }
         }];
-        [self endBindingsContext];
+        [cell endBindingsContext];
         
-        [cell.contentView addSubview:self.textView];
+        _textView.hidden = NO;
     }
 }
 
@@ -189,7 +157,7 @@
 	[self scrollToRow];
     
 	[self didBecomeFirstResponder];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 
@@ -200,7 +168,7 @@
         [textView resignFirstResponder];
      }*/
     _textView.frameChangeDelegate = nil;
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     return YES;
 }
 
@@ -210,14 +178,24 @@
 
 
 -(void)textViewFrameChanged:(CGRect)frame{
-    [[self parentTableView]beginUpdates];
-    [[self parentTableView]endUpdates];
+    //[[self parentTableView]beginUpdates];
+    //[[self parentTableView]endUpdates];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    CKObjectPropertyMetaData* metaData = [[self objectProperty]metaData];
-    NSInteger min = [metaData.options minimumLength];
-    NSInteger max = [metaData.options maximumLength];
+    CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
+    
+    CKInputTextFormatterBlock formatterBlock = self.textInputFormatterBlock;
+    if(!formatterBlock){
+        formatterBlock = [attributes textInputFormatterBlock];
+    }
+    
+    if(formatterBlock){
+        return formatterBlock(textView,range,text);
+    }
+    
+    NSInteger min = [attributes minimumLength];
+    NSInteger max = [attributes maximumLength];
 	if (range.length>0) {
         if(min >= 0 && range.location < min){
             return NO;
@@ -235,17 +213,18 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-    [self scrollToRowAfterDelay:0.3];
+    [self scrollToRowAfterDelay:0];
 }
 
-
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
+- (BOOL)hasResponder{
 	return YES;
 }
 
-+ (UIView*)responderInView:(UIView*)view{
-	UITextView *textView = (UITextView*)[view viewWithTag:50000];
-	return textView;
+- (UIView*)nextResponder:(UIView*)view{
+    if(view == nil){
+        return [self.tableViewCell viewWithTag:50000];
+    }
+	return nil;
 }
 
 @end

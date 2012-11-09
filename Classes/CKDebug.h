@@ -1,7 +1,7 @@
 //
 //  Debug.h
 //
-//  Created by Martin Dufort on 04/08/09.
+//  Created by Sebastien Morel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,24 +10,52 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-NSString* cleanString(NSString* str);
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
+/**
+ */
+extern NSString* cleanString(NSString* str);
+    
+#ifdef __cplusplus
+}
+#endif
 
 #ifdef DEBUG
-  /** TODO
-   */
-  #define CKDebugLog(s, ...) NSLog(@"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, cleanString([NSString stringWithFormat:(s), ##__VA_ARGS__]))
+    #define CKDebugLog(s, ...) NSLog(@"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, cleanString([NSString stringWithFormat:(s), ##__VA_ARGS__]))
+    #define CKAssert(condition, desc, ...) NSAssert(condition,desc,##__VA_ARGS__)
 #else
-  #define CKDebugLog(s, ...)
+    #define CKDebugLog(s, ...)
+    #define CKAssert(condition, desc, ...)
 #endif
 
 
+
 // UIView
+/**
+ */
 @interface UIView (CKDebug)
 
+///-----------------------------------
+/// @name Debugging view hierarchy
+///-----------------------------------
+
+/**
+ */
 - (void)printViewHierarchy;
+
+/**
+ */
+- (NSString*)viewHierarchy;
 
 @end
 
 // CallStack
+/**
+ */
 NSString* CKDebugGetCallStack();
+
+/**
+ */
 void CKDebugPrintCallStack();

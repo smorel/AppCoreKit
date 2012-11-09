@@ -1,8 +1,8 @@
 //
 //  CKDictionaryFromAttributesTransformer.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-02-10.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,6 +10,7 @@
 #import "CKAttribute.h"
 #import "CKItemAttributeReference.h"
 #import "CKItem.h"
+#import "CKObject+CKStore.h"
 
 @implementation CKDictionaryFromAttributesTransformer
 
@@ -38,7 +39,18 @@
 			else{
 				NSMutableArray* array = [NSMutableArray array];
 				for(CKItemAttributeReference* ref in attribute.itemReferences){
-					[array addObject:[ref.item propertyListRepresentation]];
+                    CKAttribute* uniqueIdAttribute = [ref.item attributeNamed:@"uniqueId" createIfNotFound:NO];
+                    if(uniqueIdAttribute){
+                        NSString* uniqueId = uniqueIdAttribute.value;
+                        CKObject* object = [CKObject objectWithUniqueId:uniqueId];
+                        if(object){
+                            [array addObject:object];
+                        }else{
+                            [array addObject:[ref.item propertyListRepresentation]];
+                        }
+                    }else{
+                        [array addObject:[ref.item propertyListRepresentation]];
+                    }
 				}
 				[result setObject:array forKey:attribute.name];
 			}

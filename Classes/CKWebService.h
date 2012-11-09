@@ -1,43 +1,65 @@
 //
 //  CKWebService.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 09-11-10.
+//  Created by Fred Brunel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-// TODO: the CKWebService should act as a "session" over the web service, the way
-// clients authenticate should be customizable. In this version, only the basic
-// authentication is supported.
-
 #import <Foundation/Foundation.h>
-
 #import "CKWebRequest.h"
-#import "Reachability.h"
+
+@class Reachability;
 
 
-/** TODO
+/**
  */
-@interface CKWebService : NSObject {
-	Reachability *_reachability;
-	NSURL *_baseURL;
-	NSMutableDictionary *_defaultParams;
-	NSMutableDictionary *_defaultHeaders;
-	NSString *_username;
-	NSString *_password;
-}
+@interface CKWebService : NSObject
 
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
+
+/**
+ */
++ (id)sharedWebService;
+
+/**
+ */
++ (void)setSharedWebService:(id)sharedWebService;
+
+///-----------------------------------
+/// @name Configuring WebService
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, retain, readwrite) NSURL *baseURL;
+
+/**
+ */
 @property (nonatomic, retain, readonly) NSMutableDictionary *defaultParams;
+
+/**
+ */
 @property (nonatomic, retain, readonly) NSMutableDictionary *defaultHeaders;
 
-- (void)setDefaultBasicAuthWithUsername:(NSString *)username password:(NSString *)password;
 
-//
+///-----------------------------------
+/// @name Creating an initialized Web Request
+///-----------------------------------
 
+/**
+ */
+- (CKWebRequest*)requestForPath:(NSString *)path params:(NSDictionary *)params;
+
+///-----------------------------------
+/// @name Executing a managed Web Request
+///-----------------------------------
+
+/**
+ */
 - (id)performRequest:(CKWebRequest *)request;
 
-- (id)getRequestForPath:(NSString *)path params:(NSDictionary *)params;
-- (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate;
 
 @end

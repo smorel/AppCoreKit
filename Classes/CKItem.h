@@ -1,7 +1,7 @@
 //
 //  CKItem.h
 //
-//  Created by Fred Brunel on 10-01-07.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 @class CKAttribute;
 
 
-/** TODO
+/**
  */
 @interface CKItem : NSManagedObject {
 }
@@ -31,7 +31,7 @@
 
 //
 
-/** TODO
+/**
  */
 @interface CKItem (CKItemAccessors)
 
@@ -53,18 +53,17 @@
 
 //
 
-/** TODO
+/**
  */
 @interface CKItem (CKItemRepresentations)
 
 - (NSDictionary *)propertyListRepresentation;
-- (NSDictionary *)attributesDictionary DEPRECATED_ATTRIBUTE;
 - (NSDictionary *)attributesIndexedByName;
 
 @end
 
 
-/** TODO
+/**
  */
 @interface CKItem (CKItemModification)
 
@@ -74,7 +73,7 @@
 @end
 
 
-/** TODO
+/**
  */
 @interface CKItem (CKOptimizedItemModification)
 

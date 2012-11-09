@@ -1,16 +1,22 @@
 //
 //  CKAddressBook.m
 //
-//  Created by Fred Brunel on 07/08/09.
+//  Created by Fred Brunel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKAddressBook.h"
 #import <AddressBook/AddressBook.h>
 
-#import "CKNSArrayAdditions.h"
+#import "NSArray+Additions.h"
 
-@implementation CKAddressBookPerson
+@implementation CKAddressBookPerson {
+	ABRecordRef _record;
+	NSString *_fullName;
+	NSString *_email;
+	UIImage *_image;
+	NSArray *_phoneNumbers;
+}
 
 + (id)personWithRecord:(ABRecordRef)record {
 	return [[[CKAddressBookPerson alloc] initWithRecord:record] autorelease];
@@ -81,6 +87,14 @@
 	if (companyName) CFRelease(companyName);
 
 	return _fullName;
+}
+
+- (NSString *)firstName {
+	return ABRecordCopyValue(_record, kABPersonFirstNameProperty);
+}
+
+- (NSString *)lastName {
+	return ABRecordCopyValue(_record, kABPersonLastNameProperty);
 }
 
 - (NSString *)email {
@@ -208,7 +222,9 @@
 
 //
 
-@implementation CKAddressBook
+@implementation CKAddressBook {
+	ABAddressBookRef _addressBook;
+}
 
 + (CKAddressBook *)defaultAddressBook {
 	static CKAddressBook *_instance = nil;

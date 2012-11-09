@@ -1,29 +1,49 @@
 //
 //  CKNSStringPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 
 #import "CKNSStringPropertyCellController.h"
-#import "CKObjectProperty.h"
-#import "CKNSObject+bindings.h"
+#import "CKProperty.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
-#import "CKTableViewCellNextResponder.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "CKTableViewCellController+Responder.h"
+#import "NSValueTransformer+Additions.h"
 
 #import "CKSheetController.h"
+#import "UIView+Positioning.h"
 
+#define TEXTFIELD_TAG 50000
 
-@implementation CKNSStringPropertyCellController
+@interface CKTableViewCellController()
+- (CGFloat)computeContentViewSize;
+@end
+
+@interface CKNSStringPropertyCellController()
+@property (nonatomic,retain,readwrite) UITextField* textField;
+@end
+
+@implementation CKNSStringPropertyCellController{
+	UITextField* _textField;
+}
+
 @synthesize textField = _textField;
+@synthesize textInputFormatterBlock = _textInputFormatterBlock;
 
 -(void)dealloc{
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_textField release];
+    [_textInputFormatterBlock release];
 	[super dealloc];
+}
+
+
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
 }
 
 //pas utiliser load cell mais initCell pour application des styles ...
@@ -31,61 +51,37 @@
 	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-    if(_textField == nil){
-        UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-        self.textField = txtField;
-    }
-	_textField.tag = 50000;
+    UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+    self.textField = txtField;
+    
+	_textField.tag = TEXTFIELD_TAG;
 	_textField.borderStyle = UITextBorderStyleNone;
 	_textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-	_textField.delegate = self;
 	_textField.textAlignment = UITextAlignmentLeft;
 	_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     
-    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    //_textField.hidden = YES; //will get displayed in setup depending on the model
+    [cell.contentView addSubview:_textField];
+    
+    if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             _textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }  
-        else{
-            _textField.textColor = [UIColor blackColor];
-            cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }
+        //}  
+        //else{
+        //    _textField.textColor = [UIColor blackColor];
+        //    cell.detailTextLabel.numberOfLines = 0;
+        //    cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        //}
     }  
     
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+    if(self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         _textField.autoresizingMask = UIViewAutoresizingNone;
     }
-}
-
-- (id)performStandardLayout:(CKNSStringPropertyCellController*)controller{
-	[super performStandardLayout:controller];
-    UITableViewCell* cell = controller.tableViewCell;
-	UITextField *textField = controller.textField;
-	if(textField){
-        if(controller.cellStyle == CKTableViewCellStyleValue3
-           || controller.cellStyle == CKTableViewCellStylePropertyGrid){
-            
-            textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-            
-            BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-            CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - ((textField.font.lineHeight + 10) / 2.0)) : self.contentInsets.top;
-            
-            CGFloat realWidth = cell.contentView.frame.size.width;
-            CGFloat textFieldWidth = realWidth - (realWidth * self.componentsRatio + self.componentsSpace) - self.contentInsets.right;
-            CGFloat textFieldX = realWidth - self.contentInsets.right - textFieldWidth;
-            if(![cell.textLabel.text isKindOfClass:[NSString class]] || [cell.textLabel.text length] <= 0){
-                textFieldWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
-                textFieldX = self.contentInsets.left;
-            }
-			textField.frame = CGRectIntegral(CGRectMake(textFieldX,y,textFieldWidth,(textField.font.lineHeight + 10)));
-        }
-    }
-    return (id)nil;
 }
 
 - (void)textFieldChanged:(id)value{
@@ -94,56 +90,71 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
-	[self clearBindingsContext];
+	[cell clearBindingsContext];
+    
+    self.textField = (UITextField*)[cell.contentView viewWithTag:TEXTFIELD_TAG];
 	
-	CKObjectProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-       || self.cellStyle != CKTableViewCellStylePropertyGrid){
-        cell.textLabel.text = _(descriptor.name);
+    if(([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStyleIPadForm)
+       || self.cellStyle != CKTableViewCellStyleIPhoneForm){
+        self.text = _(descriptor.name);
+    }else{
+        self.text = nil;
     }
 	
-	if(self.textField){
-		[self.textField removeFromSuperview];
-	}
-	cell.detailTextLabel.text = nil;
+	self.detailText = nil;
 	
+    [cell beginBindingsContextByRemovingPreviousBindings];
+    [model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
+    [cell endBindingsContext];
+    
 	if([model isReadOnly] || self.readOnly){
+        self.textField.hidden = YES;
+        
         self.fixedSize = YES;
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
-		[NSObject endBindingsContext];
+        _textField.delegate = nil;
 	}
 	else{
-        if(self.cellStyle == CKTableViewCellStylePropertyGrid
-           && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            self.fixedSize = YES;
+        if(_textField){
+            if(self.cellStyle == CKTableViewCellStyleIPhoneForm
+               /*&& [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone*/){
+                self.fixedSize = YES;
+            }
+            else{
+                self.fixedSize = NO;
+            }
+            
+            __block CKNSStringPropertyCellController* bself = self;
+            
+            [cell beginBindingsContextByRemovingPreviousBindings];
+            [model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
+                NSString* str = [value isKindOfClass:[NSString class]] ? value : nil;
+                if(![bself.textField.text isEqualToString:str]){
+                    bself.textField.text = str;
+                }
+            }];
+
+            [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
+                                                             withBlock:^(NSNotification *notification) {
+                                                                 [self textFieldChanged:self.textField.text];
+                                                             }];
+            [cell endBindingsContext];
+            
+            NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+            self.textField.placeholder = _(placeholerText);
+            self.textField.hidden = NO;
+            _textField.delegate = self;
+            
+            self.detailText = nil;
         }
-        else{
-            self.fixedSize = NO;
-        }
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
-        [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
-                                                         withBlock:^(NSNotification *notification) {
-                                                             [self textFieldChanged:self.textField.text];
-                                                              }];
-		[NSObject endBindingsContext];
-		
-		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
-		self.textField.placeholder = _(placeholerText);
-		[cell.contentView addSubview:self.textField];
 	}
 }
 
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
-	[super rotateCell:cell withParams:params animated:animated];
-}
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
+- (void)rotateCell:(UITableViewCell*)cell  animated:(BOOL)animated{
+	[super rotateCell:cell animated:animated];
 }
 
 #pragma mark UITextField Delegate
@@ -156,7 +167,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.textField.inputAccessoryView = [self navigationToolbar];
 
-    if([CKTableViewCellNextResponder needsNextKeyboard:self]){
+    if([self hasNextResponder]){
         self.textField.returnKeyType = UIReturnKeyNext;
     }
     else{
@@ -166,16 +177,16 @@
 	[self scrollToRow];
     
 	[self didBecomeFirstResponder];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[self didResignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	if([CKTableViewCellNextResponder activateNextResponderFromController:self] == NO){
+	if([self activateNextResponder] == NO){
 		[textField resignFirstResponder];
 	}
 	return YES;
@@ -186,9 +197,19 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    CKObjectPropertyMetaData* metaData = [[self objectProperty]metaData];
-    NSInteger min = [metaData.options minimumLength];
-    NSInteger max = [metaData.options maximumLength];
+    CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
+    
+    CKInputTextFormatterBlock formatterBlock = self.textInputFormatterBlock;
+    if(!formatterBlock){
+        formatterBlock = [attributes textInputFormatterBlock];
+    }
+    
+    if(formatterBlock){
+        return formatterBlock(textField,range,string);
+    }
+    
+    NSInteger min = [attributes minimumLength];
+    NSInteger max = [attributes maximumLength];
 	if (range.length>0) {
         if(min >= 0 && range.location < min){
             return NO;
@@ -206,19 +227,19 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-    [self scrollToRowAfterDelay:0.3];
+    [self scrollToRowAfterDelay:0];
 }
 
 
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
-	CKObjectProperty* model = object;// || self.readonly
-	return ![model isReadOnly];
+- (BOOL)hasResponder{
+	return ![self.objectProperty isReadOnly];
 }
 
-+ (UIView*)responderInView:(UIView*)view{
-	UITextField *textField = (UITextField*)[view viewWithTag:50000];
-	return textField;
+- (UIView*)nextResponder:(UIView*)view{
+    if(view == nil){
+        return [self.tableViewCell viewWithTag:TEXTFIELD_TAG];
+    }
+	return nil;
 }
 
 @end
-

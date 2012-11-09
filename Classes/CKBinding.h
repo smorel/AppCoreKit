@@ -1,25 +1,53 @@
 //
 //  CKBinding.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-11.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "NSObject+Bindings.h"
+#import "CKWeakRef.h"
 
-/** TODO
+#define ENABLE_WEAK_REF_PROTECTION
+
+/** 
  */
-@interface CKBinding : NSObject{
-    id _context;
-}
+@interface CKBinding : NSObject
 
-@property(nonatomic,assign) id context;
+///-----------------------------------
+/// @name Managing the context
+///-----------------------------------
 
+/**
+ */
+@property(nonatomic,assign)   id context;
+
+/**
+ */
+@property(nonatomic,assign)   CKBindingsContextOptions contextOptions;
+
+///-----------------------------------
+/// @name Executing the binding
+///-----------------------------------
+
+/**
+ */
 - (void)bind;
+
+/**
+ */
 - (void)unbind;
+
+///-----------------------------------
+/// @name Reusing the binding
+///-----------------------------------
+
+/**
+ */
 - (void)reset;
 
 @end

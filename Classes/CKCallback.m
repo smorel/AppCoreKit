@@ -1,15 +1,21 @@
 //
 //  CKCallback.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-05-13.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCallback.h"
 
 
-@implementation  CKCallback
+@implementation  CKCallback{
+	id _target;
+	SEL _action;
+	CKCallbackBlock _block;
+	NSArray* _params;
+}
+
 @synthesize target = _target;
 @synthesize action = _action;
 @synthesize block = _block;
@@ -32,15 +38,17 @@
 }
 
 - (id)initWithTarget:(id)thetarget action:(SEL)theaction{
-	[super init];
-	self.target = thetarget;
-	self.action = theaction;
+	if (self = [super init]) {
+        self.target = thetarget;
+        self.action = theaction;
+    }
 	return self;
 }
 
 - (id)initWithBlock:(CKCallbackBlock)theblock{
-	[super init];
-	self.block = theblock;
+	if (self = [super init]) {
+        self.block = theblock;
+    }
 	return self;
 }
 

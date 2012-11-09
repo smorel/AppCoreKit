@@ -1,107 +1,137 @@
 //
 //  CKConnections.m
-//  CloudKitApp
+//  AppCoreKitApp
 //
-//  Created by Sebastien Morel on 11-01-22.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKDataBinder.h"
-#import "CKValueTransformer.h"
 #import "CKBindingsManager.h"
-#import "CKNSObject+Introspection.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSObject+Runtime.h"
+#import "NSValueTransformer+Additions.h"
 
 
 @interface CKDataBinder ()
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @property (nonatomic, retain) CKWeakRef *instance1Ref;
 @property (nonatomic, retain) CKWeakRef *instance2Ref;
+#endif
+
 - (void)unbindInstance:(id)instance1 instance2:(id)instance2;
 @end
 
 @implementation CKDataBinder
+
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @synthesize instance1Ref;
-@synthesize keyPath1;
 @synthesize instance2Ref;
+#endif
+
+@synthesize instance1;
+@synthesize instance2;
+@synthesize keyPath1;
 @synthesize keyPath2;
 
 - (id)init{
-	[super init];
-	binded = NO;
-    self.instance1Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance1:)];
-    self.instance2Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance2:)];
+	if (self = [super init]) {
+        binded = NO;
+        
+#ifdef ENABLE_WEAK_REF_PROTECTION
+        self.instance1Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance1:)];
+        self.instance2Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance2:)];
+#endif
+    }
 	return self;
 }
 
 - (void)dealloc{
 	[self unbind];
 	[self reset];
+    
+#ifdef ENABLE_WEAK_REF_PROTECTION
     self.instance1Ref = nil;
     self.instance2Ref = nil;
+#endif
+    
 	[super dealloc];
 }
 
 - (NSString*)description{
-	return [NSString stringWithFormat:@"<CKDataBinder : %p>{\ninstance1Ref = %@\nkeyPath1 = %@\ninstance2Ref = %@\nkeyPath2 = %@}",
-			self,instance1Ref ? instance1Ref.object : @"(null)",keyPath1,instance2Ref ? instance2Ref.object : @"(null)",keyPath2];
+    return [NSString stringWithFormat:@"<CKDataBinder : %p>{\ninstance1 = %@\nkeyPath1 = %@\ninstance2 = %@\nkeyPath2 = %@}",
+			self,instance1 ? instance1 : @"(null)",keyPath1,instance2 ? instance2 : @"(null)",keyPath2];
 }
 
 - (void)reset{
-	self.instance1Ref.object = nil;
+    [super reset];
+    
+	self.instance1 = nil;
+	self.instance2 = nil;
 	self.keyPath1 = nil;
-	self.instance2Ref.object = nil;
 	self.keyPath2 = nil;
 }
 
+#ifdef ENABLE_WEAK_REF_PROTECTION
 - (id)releaseInstance1:(CKWeakRef*)weakRef{
-	[self unbindInstance:weakRef.object instance2:instance2Ref.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    [self unbindInstance:weakRef.object instance2:instance2Ref.object];
+    [[CKBindingsManager defaultManager]unregister:self];
 	return nil;
-}
-
-- (void)setInstance1:(id)instance{
-	self.instance1Ref.object = instance;
 }
 
 - (id)releaseInstance2:(CKWeakRef*)weakRef{
-	[self unbindInstance:instance1Ref.object instance2:weakRef.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    [self unbindInstance:instance1Ref.object instance2:weakRef.object];
+    [[CKBindingsManager defaultManager]unregister:self];
 	return nil;
 }
 
-- (void)setInstance2:(id)instance{
-	self.instance2Ref.object = instance;
+- (void)setInstance1:(id)theinstance{
+	self.instance1Ref.object = theinstance;
 }
+
+- (id)instance1{
+    return self.instance1Ref.object;
+}
+
+- (void)setInstance2:(id)theinstance{
+	self.instance2Ref.object = theinstance;
+}
+
+- (id)instance2{
+    return self.instance2Ref.object;
+}
+#endif
 
 -(void)bind{
 	[self unbind];
 	
-	CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.object forKeyPath:keyPath2];
+	CKClassPropertyDescriptor* property = [NSObject propertyDescriptorForObject:self.instance2 keyPath:self.keyPath2];
 	if(property == nil){
-		//cannot bind unfound property
 		return;
 	}
 	
-	[NSValueTransformer transform:[instance1Ref.object valueForKeyPath:keyPath1]
-							   inProperty:[CKObjectProperty propertyWithObject:instance2Ref.object keyPath:keyPath2]];
+	[NSValueTransformer transform:[self.instance1 valueForKeyPath:self.keyPath1]
+                       inProperty:[CKProperty propertyWithObject:self.instance2 keyPath:self.keyPath2]];
 	
-	[instance1Ref.object addObserver:self
-				forKeyPath:keyPath1
-				   options:(NSKeyValueObservingOptionNew)
-				   context:nil];
+	[self.instance1 addObserver:self
+                     forKeyPath:self.keyPath1
+                        options:(NSKeyValueObservingOptionNew)
+                        context:nil];
 	binded = YES;
 }
 
 - (void)unbind{
-	[self unbindInstance:instance1Ref.object instance2:instance2Ref.object];
+	[self unbindInstance:self.instance1 instance2:self.instance2];
 }
 
-- (void)unbindInstance:(id)instance1 instance2:(id)instance2{
+- (void)unbindInstance:(id)theinstance1 instance2:(id)theinstance2{
 	if(binded){
-		[instance1 removeObserver:self
-								 forKeyPath:keyPath1];
+		[theinstance1 removeObserver:self forKeyPath:self.keyPath1];
 		binded = NO;
 	}
+}
+
+- (void)executeWithValue:(id)value{
+	[NSValueTransformer transform:value inProperty:[CKProperty propertyWithObject:self.instance2 keyPath:self.keyPath2] ];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -113,7 +143,13 @@
 	if ([newValue isKindOfClass:[NSNull class]]) {
 		newValue = nil;
 	}
-	[NSValueTransformer transform:newValue inProperty:[CKObjectProperty propertyWithObject:instance2Ref.object keyPath:keyPath2] ];
+    
+    if(self.contextOptions & CKBindingsContextPerformOnMainThread){
+        [self performSelectorOnMainThread:@selector(executeWithValue:) withObject:newValue waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
+    else {
+        [self performSelector:@selector(executeWithValue:) onThread:[NSThread currentThread] withObject:newValue waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
 }
 
 @end

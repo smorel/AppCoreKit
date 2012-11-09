@@ -1,13 +1,13 @@
 //
 //  CKCarouselView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-07.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCarouselView.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import <QuartzCore/QuartzCore.h>
 #include <math.h>
 
@@ -66,6 +66,10 @@ double round(double x)
 @property (nonatomic,assign,readwrite) CGFloat internalContentOffset;
 @property (nonatomic, assign) id delegate;
 
+@property (nonatomic,assign,readwrite) NSInteger numberOfPages;
+@property (nonatomic,assign,readwrite) NSInteger currentPage;
+@property (nonatomic,assign,readwrite) NSInteger currentSection;
+
 - (void)enqueueReusableView:(UIView*)view;
 - (void)updateVisibleIndexPaths:(NSMutableArray*)visiblesIndexPaths indexPathToAdd:(NSMutableArray*)indexPathToAdd indexPathToRemove:(NSMutableArray*)indexPathToRemove;
 - (void)layoutSubView:(UIView*)view atIndexPath:(NSIndexPath*)indexPath;
@@ -76,7 +80,28 @@ double round(double x)
 
 @end
 
-@implementation CKCarouselView
+@implementation CKCarouselView{
+	NSMutableArray* _rowSizes;
+	CGFloat _internalContentOffset;
+	NSInteger _numberOfPages;
+	NSInteger _currentPage;
+	NSInteger _currentSection;
+	
+	CGFloat _spacing;
+	
+	UIView* _headerViewToRemove;
+	UIView* _visibleHeaderView;
+	NSMutableDictionary* _visibleViewsForIndexPaths;
+	
+	id _dataSource;
+	//id _delegate;
+	
+	NSMutableDictionary* _reusableViews;
+	CKCarouselViewDisplayType _displayType;
+	
+	CGFloat _contentOffsetWhenStartPanning;
+}
+
 @synthesize internalContentOffset = _internalContentOffset;
 @synthesize visibleHeaderView = _visibleHeaderView;
 @synthesize headerViewToRemove = _headerViewToRemove;
@@ -125,20 +150,23 @@ double round(double x)
 }
 
 - (id)init{
-	[super init];
-	[self postInit];
+	if (self = [super init]) {
+      [self postInit];
+    }
 	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{
-	[super initWithCoder:aDecoder];
-	[self postInit];
+    if (self = [super initWithCoder:aDecoder]) {
+        [self postInit];
+    }
 	return self;
 }
 
 - (id)initWithFrame:(CGRect)theFrame{
-	[super initWithFrame:theFrame];
-	[self postInit];
+    if (self = [super initWithFrame:theFrame]) {
+      [self postInit];  
+    }
 	return self;
 }
 
@@ -206,10 +234,27 @@ double round(double x)
 	if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewForHeaderInSection:)]){
 		self.visibleHeaderView = [self.delegate carouselView:self viewForHeaderInSection:0];
 	}
+    
+    for(UIView* view in [_visibleViewsForIndexPaths allValues]){
+		if(view != nil){
+			[view removeFromSuperview];
+			[self enqueueReusableView:view];
+		}
+	}
+    [_visibleViewsForIndexPaths removeAllObjects];
+
 	
 	self.numberOfPages = count;
 	self.currentPage = self.currentPage;
+    
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
 	[self updateViewsAnimated:YES];
+    
+    [CATransaction commit];
 }
 
 - (void)enqueueReusableView:(UIView*)view{
@@ -284,7 +329,7 @@ double round(double x)
                 
                 if(animated){
                     view.alpha = 0;
-                    [UIView beginAnimations:@"carouselAppear" context:view];
+                    [UIView beginAnimations:@"carouselAppear" context:((void *) view)];
                     view.alpha = 1;
                     [UIView commitAnimations];
                 }
@@ -359,7 +404,7 @@ double round(double x)
 		if(indexPath && [visiblesIndexPaths containsObject:indexPath] == NO){
 			if([self isVisibleAtIndexPath:indexPath]){
 				if([_visibleViewsForIndexPaths objectForKey:indexPath] == nil){
-					[indexPathToAdd addObject:indexPath];
+					[indexPathToAdd insertObject:indexPath atIndex:0];
 				}
 				[visiblesIndexPaths addObject:indexPath];
 			}

@@ -1,20 +1,46 @@
 //
 //  CKFormTableViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-06.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKFormTableViewController.h"
+#import "CKFormTableViewController_private.h"
+#import "CKFormSectionBase_private.h"
+#import "CKFormBindedCollectionSection_private.h"
 #import "CKObjectController.h"
-#import "CKObjectViewControllerFactory.h";
-#import "CKNSObject+Invocation.h"
+#import "CKCollectionCellControllerFactory.h"
+#import "NSObject+Invocation.h"
 #import "CKStyleManager.h"
-#import "CKUIView+Style.h"
+#import "UIView+Style.h"
+#import "CKTableViewCellController+Style.h"
+#import "CKPropertyTableViewCellController.h"
 
 #import "CKDebug.h"
 
+//private interfaces
+
+@interface CKCollectionViewController()
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+@end
+
+@interface CKCollectionViewController(CKCollectionCellControllerManagement)
+- (void) insertItemViewControllersSectionAtIndex:(NSInteger)index;
+@end
+
+@interface CKCollectionCellControllerFactory ()
+@property (nonatomic, assign) id objectController;
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+@end
+
+
+//CKFormObjectController
 
 @interface CKFormObjectController : NSObject<CKObjectController>{
 	id _delegate;
@@ -30,8 +56,9 @@
 @synthesize parentController = _parentController;
 
 - (id)initWithParentController:(CKFormTableViewController*)controller{
-	[super init];
-	self.parentController = controller;
+	if (self = [super init]) {
+      self.parentController = controller;  
+    }
 	return self;
 }
 
@@ -42,7 +69,7 @@
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	NSInteger count = [formSection numberOfObjects];
+	NSInteger count = formSection.collapsed ? 0 : [formSection numberOfObjects];
 	return count;
 }
 
@@ -61,10 +88,6 @@
 		 return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	/*if( formSection.headerView != nil ){
-		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-		[formSection.headerView applyStyle:controllerStyle];
-	}*/
 	return formSection.headerView;
 }
 
@@ -83,10 +106,6 @@
         return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	/*if( formSection.footerView != nil ){
-		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-		[formSection.footerView applyStyle:controllerStyle];
-	}*/
 	return formSection.footerView;
 }
 
@@ -126,686 +145,40 @@
 
 @end
 
+//CKFormObjectControllerFactory
 
-@interface CKFormObjectControllerFactory : CKObjectViewControllerFactory{
+@interface CKFormObjectControllerFactory : CKCollectionCellControllerFactory{
 }
 @end
 
 @implementation CKFormObjectControllerFactory
 
-- (CKObjectViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
-	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.parentController;
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController visibleSectionAtIndex:indexPath.section];
-	return [formSection factoryItemForIndex:indexPath.row];
+	return [formSection controllerForObject:object atIndex:indexPath.row];
 }
 
 @end
 
 
-@interface CKFormSectionBase()
-@property (nonatomic,readwrite) BOOL hidden;
-@end
+//CKFormTableViewController
 
-@implementation CKFormSectionBase
-@synthesize headerTitle = _headerTitle;
-@synthesize headerView = _headerView;
-@synthesize footerTitle = _footerTitle;
-@synthesize footerView = _footerView;
-@synthesize parentController = _parentController;
-@synthesize hidden = _hidden;
-
-- (id)init{
-	[super init];
-	_hidden = NO;
-	return self;
-}
-
-- (NSInteger)sectionIndex{
-	return [_parentController indexOfSection:self];
-}
-
-- (NSInteger)numberOfObjects{
-	NSAssert(NO,@"Base Implementation");
-	return 0;
-}
-
-- (id)objectAtIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
-	return nil;
-}
-
-- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
-	return nil;
-}
-
-- (void)updateStyleForNonNewVisibleCells{
-	NSAssert(NO,@"Base Implementation");
-}
-
-- (void)removeObjectAtIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
-}
-
-- (void)lock{
-}
-
-- (void)unlock{
-}
-
-- (void)fetchRange:(NSRange)range{}
-
-- (void)updateStyleForExistingCells{
-	//Update style for indexpath that have not been applyed
-	NSInteger count = [self numberOfObjects];
-	for(NSInteger i = 0; i < count; ++i){
-		NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:self.sectionVisibleIndex];
-		CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-		if(controller){
-			[controller applyStyle];
-		}
-	}
-}
-
-- (void)start{}
-- (void)stop{}
-
-- (NSInteger)sectionVisibleIndex{
-	return [_parentController indexOfVisibleSection:self];
-}
-
-- (void)setHeaderTitle:(NSString *)headerTitle{
-    [_headerTitle release];
-    _headerTitle = [headerTitle retain];
-    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)setHeaderView:(UIView *)headerView{
-    [_headerView release];
-    _headerView = [headerView retain];
-    
-    if(_headerView){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
-        [_headerView applyStyle:controllerStyle];
-    }
-    
-    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)setFooterTitle:(NSString *)footerTitle{
-    [_footerTitle release];
-    _footerTitle = [footerTitle retain];
-    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)setFooterView:(UIView *)footerView{
-    [_footerView release];
-    _footerView = [footerView retain];
-    if(_footerView){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
-        [_footerView applyStyle:controllerStyle];
-    }
-    
-    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-@end
-
-
-@implementation CKFormSection
-@synthesize cellDescriptors = _cellDescriptors;
-
-- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors headerTitle:(NSString*)title{
-	[super init];
-	self.headerTitle = title;
-	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
-	return self;
-}
-
-- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors headerView:(UIView*)view{
-	[super init];
-	self.headerView = view;
-	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
-	return self;
-}
-
-- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors{
-	[super init];
-	self.headerTitle = @"";
-	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
-	return self;
-}
-
-- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors footerTitle:(NSString*)title{
-    [super init];
-	self.footerTitle = title;
-	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
-	return self;
-}
-
-- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors footerView:(UIView*)view{
-    [super init];
-	self.footerView = view;
-	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
-	return self;
-}
-
-+ (CKFormSection*)section{
-	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerTitle:@""]autorelease];
-}
-
-+ (CKFormSection*)sectionWithHeaderTitle:(NSString*)title{
-	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerTitle:title]autorelease];
-}
-
-+ (CKFormSection*)sectionWithHeaderView:(UIView*)view{
-	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerView:view]autorelease];
-}
-
-+ (CKFormSection*)sectionWithFooterTitle:(NSString*)title{
-	return [[[CKFormSection alloc]initWithCellDescriptors:nil footerTitle:title]autorelease];
-}
-
-+ (CKFormSection*)sectionWithFooterView:(UIView*)view{
-	return [[[CKFormSection alloc]initWithCellDescriptors:nil footerView:view]autorelease];
-}
-
-+ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors{
-	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerTitle:@""]autorelease];
-}
-
-+ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title{
-	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerTitle:title]autorelease];
-}
-
-+ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view{
-	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerView:view]autorelease];
-}
-
-+ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors footerTitle:(NSString*)title{
-	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors footerTitle:title]autorelease];
-}
-
-+ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors footerView:(UIView*)view{
-	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors footerView:view]autorelease];
-}
-
-- (CKFormCellDescriptor*)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index{
-	if(_cellDescriptors == nil){
-		self.cellDescriptors = [NSMutableArray array];
-	}
-	[_cellDescriptors insertObject:cellDescriptor atIndex:index];
-    
-    [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
-    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
-	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
-	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
-    
-	return cellDescriptor;
-}
-
-- (CKFormCellDescriptor*)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor{
-	if(_cellDescriptors == nil){
-		self.cellDescriptors = [NSMutableArray array];
-	}
-	[_cellDescriptors addObject:cellDescriptor];
-    
-    [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
-    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:[_cellDescriptors count] -1 inSection:self.sectionVisibleIndex];
-	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
-	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
-    
-	return cellDescriptor;
-}
-
-- (void)removeCellDescriptorAtIndex:(NSUInteger)index{
-    CKFormCellDescriptor* descriptor = [_cellDescriptors objectAtIndex:index];
-    
-	[_cellDescriptors removeObjectAtIndex:index];
-	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
-    
-    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
-	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,descriptor.value,theIndexPath,nil]];
-    
-	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
-}
-
-- (void)removeCellDescriptor:(CKFormCellDescriptor *)descriptor{
-    NSInteger index = [_cellDescriptors indexOfObjectIdenticalTo:descriptor];
-    NSAssert(index != NSNotFound,@"cannot find %@",descriptor);
-    [self removeCellDescriptorAtIndex:index];
-}
-
-- (NSInteger)numberOfObjects{
-	return [_cellDescriptors count];
-}
-
-- (id)objectAtIndex:(NSInteger)index{
-    if(index < [_cellDescriptors count]){
-        CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-        id object =  cellDescriptor.value;
-        return object;
-    }
-    return nil;
+@implementation CKFormTableViewController{
+	NSMutableArray* _sections;
+	BOOL _autoHideSections;
+	BOOL _autoHideSectionHeaders;
+	BOOL reloading;
+    BOOL _validationEnabled;
 }
-
-- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
-    if([_cellDescriptors count] > index){
-        CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-        return (CKObjectViewControllerFactoryItem*)cellDescriptor;
-    }
-    return nil;
-}
-
-- (void)updateStyleForNonNewVisibleCells{
-	//Update style for indexpath that have not been applyed
-	NSInteger sectionIndex = [self sectionVisibleIndex];
-	
-	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		if(indexPath.section == sectionIndex){
-			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-			NSAssert(controller != nil,@"invalid controller");
-			[controller applyStyle];
-		}
-	}
-}
-
-- (void)removeObjectAtIndex:(NSInteger)index{
-	NSAssert(NO,@"NOT IMPLEMENTED");
-}
-
-@end
-
-@interface CKFormDocumentCollectionSection()
-@property (nonatomic,retain) CKDocumentCollectionController* objectController;
-@property (nonatomic,retain) CKObjectViewControllerFactory* controllerFactory;
-@property (nonatomic,retain) NSMutableArray* changeSet;
-
-@property (nonatomic,retain,readwrite) NSMutableArray* headerCellDescriptors;
-@property (nonatomic,retain,readwrite) NSMutableArray* footerCellDescriptors;
-@end
-
-@implementation CKFormDocumentCollectionSection
-@synthesize objectController = _objectController;
-@synthesize controllerFactory = _controllerFactory;
-@synthesize headerCellDescriptors = _headerCellDescriptors;
-@synthesize footerCellDescriptors = _footerCellDescriptors;
-@synthesize changeSet = _changeSet;
-
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	[super init];
-	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
-	
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
-	
-	if(_parentController.autoHideSections && (collection.count <= 0)) {
-		self.hidden = YES;
-	}
-	
-	sectionUpdate = NO;
-	
-	self.headerCellDescriptors = [NSMutableArray array];
-	self.footerCellDescriptors = [NSMutableArray array];
-	
-	return self;
-}
-
-- (void)start{
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:self];
-	}
-}
-
-- (void)stop{
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
-}
-
-- (void)lock{
-	[_objectController lock];
-}
-
-- (void)unlock{
-	[_objectController unlock];
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	section.headerTitle = title;
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings displayFeedSourceCell:displayFeedSourceCell];
-	section.headerTitle = title;
-	return section;
-}
-
-- (NSInteger)numberOfObjects{
-	NSInteger count = 0;
-	count += [_headerCellDescriptors count];
-	if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
-		count += [_objectController numberOfObjectsForSection:0];
-	}
-	count += [_footerCellDescriptors count];
-	return count;
-}
-
-- (id)objectAtIndex:(NSInteger)index{
-    if(index < 0)
-        return nil;
-    
-	int headerCount = [_headerCellDescriptors count];
-	if((NSInteger)index < (NSInteger)headerCount){
-		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
-		id object =  cellDescriptor.value;
-		return object;
-	}
-	
-	int count = [_objectController numberOfObjectsForSection:0];
-	if((NSInteger)index < (NSInteger)(count + headerCount)){
-		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-			id object = [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
-			return object;
-		}
-	}
-	
-	
-	int footerCount = [_footerCellDescriptors count];
-	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
-		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
-		id object =  cellDescriptor.value;
-		return object;
-	}
-	
-	return nil;
-}
-
-
-- (void)fetchRange:(NSRange)range{
-	int headerCount = [_headerCellDescriptors count];
-	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		[_objectController fetchRange:NSMakeRange(range.location - headerCount,range.length) forSection:0];
-	}
-}
-
-- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
-    if(index < 0)
-        return nil;
-    
-	int headerCount = [_headerCellDescriptors count];
-	if((NSInteger)index < (NSInteger)headerCount){
-		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
-		return cellDescriptor;
-	}
-	
-	int count = [_objectController numberOfObjectsForSection:0];
-	if((NSInteger)index < (NSInteger)(count + headerCount)){
-		return [_controllerFactory factoryItemAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
-	}
-	
-	int footerCount = [_footerCellDescriptors count];
-	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
-		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
-		return cellDescriptor;
-	}
-	
-	return nil;
-}
-
-- (void)removeObjectAtIndex:(NSInteger)index{
-    if(index < 0)
-        return;
-    
-	int headerCount = [_headerCellDescriptors count];
-	if((NSInteger)index < (NSInteger)headerCount){
-		NSAssert(NO,@"NOT IMPLEMENTED");
-	}
-	
-	int count = [_objectController numberOfObjectsForSection:0];
-	if((NSInteger)index < (NSInteger)(count + headerCount)){
-		if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
-			return [_objectController removeObjectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
-		}
-	}
-	
-	int footerCount = [_footerCellDescriptors count];
-	if((NSInteger)index < (NSInteger)(count + headerCount + footerCount)){
-		NSAssert(NO,@"NOT IMPLEMENTED");
-	}
-}
-
-- (void)updateStyleForNonNewVisibleCells{
-	//Update style for indexpath that have not been applyed
-	NSInteger sectionIndex = [self sectionVisibleIndex];
-	
-	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		if((self.changeSet == nil || [self.changeSet containsObject:indexPath] == NO)
-		   && indexPath.section == sectionIndex){
-			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-			if(controller != nil){
-				[controller applyStyle];
-			}
-		}
-	}
-	
-	[self.changeSet removeAllObjects];	
-}
-
-- (void)objectControllerReloadData:(id)controller{
-	[self.parentController performSelector:@selector(objectControllerReloadData:) withObject:self.objectController];
-	[self updateStyleForNonNewVisibleCells];
-}
-
-- (void)objectControllerDidBeginUpdating:(id)controller{
-	if(_hidden && _parentController.autoHideSections){
-		NSInteger objectCount = [self numberOfObjects];
-		if(objectCount > 0 ){
-            [_parentController setSections:[NSArray arrayWithObject:self] hidden:NO];
-			sectionUpdate = YES;
-			return;
-		}
-	}
-	
-	if(!_hidden && _parentController.autoHideSections){
-		NSInteger objectCount = [self numberOfObjects];
-		if(objectCount <= 0 ){
-            [_parentController setSections:[NSArray arrayWithObject:self] hidden:YES];
-			sectionUpdate = YES;
-			return;
-		}
-	}
-	
-	
-	if(self.changeSet == nil){
-		self.changeSet = [NSMutableArray array];
-	}
-	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self.objectController];
-}
-
-- (void)objectControllerDidEndUpdating:(id)controller{
-	if(sectionUpdate){
-		sectionUpdate = NO;
-		return;
-	}
-	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self.objectController];
-	[self updateStyleForNonNewVisibleCells];
-}
-
-- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	if(sectionUpdate || self.hidden){
-		return;
-	}
-	
-	int headerCount = [_headerCellDescriptors count];
-	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
-	[self.changeSet addObject:theIndexPath];
-	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-							   withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
-}
-
-- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	if(sectionUpdate || self.hidden){
-		return;
-	}
-	
-	int headerCount = [_headerCellDescriptors count];
-	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
-	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
-								withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
-}
-
-
-- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(sectionUpdate || self.hidden){
-		return;
-	}
-	int headerCount = [_headerCellDescriptors count];
-	NSMutableArray* newIndexPaths = [NSMutableArray array];
-	for(int i=0;i<[indexPaths count];++i){
-		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
-		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionVisibleIndex];
-		[newIndexPaths addObject:newIndexPath];
-		
-		[self.changeSet addObject:newIndexPath];
-	}
-	[self.parentController performSelector:@selector(objectController:insertObjects:atIndexPaths:) 
-							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
-}
-
-- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(sectionUpdate || self.hidden){
-		return;
-	}
-	int headerCount = [_headerCellDescriptors count];
-	NSMutableArray* newIndexPaths = [NSMutableArray array];
-	for(int i=0;i<[indexPaths count];++i){
-		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
-		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionVisibleIndex];
-		[newIndexPaths addObject:newIndexPath];
-	}
-	[self.parentController performSelector:@selector(objectController:removeObjects:atIndexPaths:) 
-							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
-}
-
-- (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)i{}
-- (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)i{}
-
-
-- (CKFormCellDescriptor*)addFooterCellDescriptor:(CKFormCellDescriptor*)descriptor{
-	int headerCount = [_headerCellDescriptors count];
-	int count = [_objectController numberOfObjectsForSection:0];
-	int footerCount = [_footerCellDescriptors count];
-	int index = headerCount + count + footerCount;
-	
-	[self.footerCellDescriptors addObject:descriptor];
-	
-	if(![_parentController reloading]){
-		[self objectControllerDidBeginUpdating:self.objectController];
-		[self objectController:self.objectController insertObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
-		[self objectControllerDidEndUpdating:self.objectController];
-	}
-	
-	return descriptor;
-}
-
-- (CKFormCellDescriptor*)addHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor{
-	int headerCount = [_headerCellDescriptors count];
-	int index = headerCount;
-	
-	[self.headerCellDescriptors addObject:descriptor];
-	
-	if(![_parentController reloading]){
-		[self objectControllerDidBeginUpdating:self.objectController];
-		[self objectController:self.objectController insertObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
-		[self objectControllerDidEndUpdating:self.objectController];
-	}
-	
-	return descriptor;
-}
-
-- (void)removeFooterCellDescriptor:(CKFormCellDescriptor*)descriptor{
-    NSInteger footerIndex = [_footerCellDescriptors indexOfObjectIdenticalTo:descriptor];
-    NSAssert(footerIndex != NSNotFound,@"cannot find %@",descriptor);
-    int headerCount = [_headerCellDescriptors count];
-	int count = [_objectController numberOfObjectsForSection:0];
-	int index = headerCount + count + footerIndex;
-	
-	[self.footerCellDescriptors removeObjectAtIndex:footerIndex];
-	
-	if(![_parentController reloading]){
-		[self objectControllerDidBeginUpdating:self.objectController];
-		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
-		[self objectControllerDidEndUpdating:self.objectController];
-	}
-}
-
-- (void)removeHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor{
-    NSInteger headerIndex = [_headerCellDescriptors indexOfObjectIdenticalTo:descriptor];
-	int index = headerIndex;
-	
-	[self.headerCellDescriptors removeObjectAtIndex:headerIndex];
-	
-	if(![_parentController reloading]){
-		[self objectControllerDidBeginUpdating:self.objectController];
-		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
-		[self objectControllerDidEndUpdating:self.objectController];
-	}
-}
-
-@end
-
-
-@implementation CKFormCellDescriptor
-@synthesize value = _value;
-
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass{
-	[super init];
-	self.value = theValue;
-	self.controllerClass = theControllerClass;
-	return self;
-}
-
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass]autorelease];
-}
-
-@end
-
-
-@interface CKFormTableViewController()
-@property (nonatomic,retain, readwrite) NSMutableArray* sections;
-@property (nonatomic,readwrite) BOOL reloading;
-@end
 
-@implementation CKFormTableViewController
 @synthesize sections = _sections;
 @synthesize autoHideSections = _autoHideSections;
 @synthesize autoHideSectionHeaders = _autoHideSectionHeaders;
 @synthesize reloading;
 @synthesize validationEnabled = _validationEnabled;
+@dynamic tableViewHasBeenReloaded;
 
 - (void)postInit{
 	[super postInit];
@@ -816,7 +189,7 @@
 	_autoHideSectionHeaders = NO;
     _validationEnabled = NO;
     self.style = UITableViewStyleGrouped;
-    _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyResignResponder;
+    self.scrollingPolicy = CKTableCollectionViewControllerScrollingPolicyResignResponder;
 }
 
 - (void)setValidationEnabled:(BOOL)validationEnabled{
@@ -837,7 +210,7 @@
 	self.reloading = YES;
 	for(CKFormSectionBase* section in _sections){
 		[section start];
-		if(self.autoHideSections && [section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+		if(self.autoHideSections && [section isKindOfClass:[CKFormBindedCollectionSection class]]){
 			section.hidden = ([section numberOfObjects] <= 0);
 		}
 	 }
@@ -855,15 +228,17 @@
 
 - (void)reload{
 	self.reloading = YES;
-	if(self.viewIsOnScreen){
+	if(self.state & CKViewControllerStateDidAppear){
 		for(CKFormSectionBase* section in _sections){
 			[section start];
 			
-			if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+			if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
 				section.hidden = (self.autoHideSections && [section numberOfObjects] <= 0);
 				if(section.hidden){
-					CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
-					[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+					CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
+                    if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
+                        [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                    }
 				}
 			}
 		}
@@ -871,12 +246,6 @@
 	
 	self.reloading = NO;
 	[super reload];
-	
-	if(self.viewIsOnScreen){
-		for(CKFormSectionBase* section in _sections){
-			[section updateStyleForNonNewVisibleCells];
-		}
-	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -887,43 +256,22 @@
 }
 
 
-- (id)initWithSections:(NSArray*)theSections withNibName:(NSString*)nibName{
-	[super initWithNibName:nibName bundle:[NSBundle mainBundle]];
+- (id)initWithSections:(NSArray*)theSections{
+	self = [super init];
 	self.sections = [NSMutableArray arrayWithArray:theSections];
 	for(CKFormSectionBase* section in theSections){
 		section.parentController = self;
 		if(section.hidden == YES){
-			if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
-				CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
-				[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+			if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
+				CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
+                if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
+                    [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                }
 			}
 		}
 	}
 	return self;
 }
-
-- (id)initWithSections:(NSArray*)theSections{
-	[self initWithSections:theSections withNibName:nil];
-	return self;
-}
-
-- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section{
-	section.parentController = self;
-	[_sections addObject:section];
-	if(section.hidden == YES){
-		if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
-			CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
-			[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
-		}
-	}
-    
-    if(self.viewIsOnScreen && section.hidden == NO){
-        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
-    }
-    
-	return section;
-}
-
 
 - (NSArray*)addSections:(NSArray *)sections{
 	[_sections addObjectsFromArray:sections];
@@ -931,6 +279,7 @@
     NSMutableIndexSet* indexSet = nil;
     for(CKFormSectionBase* section in sections){
         section.parentController = self;
+        [section start];
         if(!section.hidden){
             if(indexSet == nil){
                 indexSet = [NSMutableIndexSet indexSet];
@@ -938,60 +287,67 @@
             NSInteger index = section.sectionVisibleIndex;
             [indexSet addIndex:index];
         }
+        if(self.isViewDisplayed){
+            if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
+                CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
+                if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
+                    [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                }
+            }
+        }
     }
     
-    if(indexSet){
-        [self.tableView beginUpdates];
-        [self.tableView insertSections:indexSet withRowAnimation:self.rowInsertAnimation];
-        [self.tableView endUpdates];
+    if(indexSet && self.isViewDisplayed){
+        if((self.state & CKViewControllerStateDidAppear)){
+            UITableViewRowAnimation anim = self.rowInsertAnimation;
+            
+            NSInteger currentIndex = [indexSet firstIndex];
+            while (currentIndex != NSNotFound) {
+                [self insertItemViewControllersSectionAtIndex:currentIndex];
+                currentIndex = [indexSet indexGreaterThanIndex: currentIndex];
+            }
+            
+            [self.tableView beginUpdates];
+            [self.tableView insertSections:indexSet withRowAnimation:anim];
+            [self.tableView endUpdates];
+        }
+        else{
+            //Calls super explicitely here as we do not want initializations done in form.
+            [super reload];
+        }
+    }
+    else if(indexSet && !self.isViewDisplayed){
+        self.tableViewHasBeenReloaded = NO;
     }
     
     return sections;
 }
 
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{
-	return [self addSectionWithCellDescriptors:cellDescriptors headerTitle:@""];
-}
-
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle{
-	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle atIndex:[_sections count]];
-}
-
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	return [self insertSectionWithCollection:collection mappings:mappings atIndex:[_sections count]];
-}
-
-- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index{
-	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:@"" atIndex:index];
-}
-
-- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index{
-	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle];
+- (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index{
 	section.parentController = self;
+    [section start];
 	[_sections insertObject:section atIndex:index];
     
-    if(self.viewIsOnScreen && section.hidden == NO){
+    if(section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
 	return section;
 }
 
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings atIndex:(NSInteger)index{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings];
-	section.parentController = self;
-	[_sections insertObject:section atIndex:index];
-	
-	if(section.hidden == YES){
-		[collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
-	}
+- (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index{
+    CKFormSectionBase* section = (CKFormSectionBase*)[_sections objectAtIndex:index];
+    [section stop];
+    NSInteger visibleIndex = section.sectionVisibleIndex;
     
-    if(self.viewIsOnScreen && section.hidden == NO){
-        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    [section retain];
+    [_sections removeObjectAtIndex:index];
+    
+    if(section.hidden == NO && visibleIndex >= 0){
+        [self objectController:self.objectController removeSectionAtIndex:visibleIndex];
     }
     
-	return section;
-	
+	return [section autorelease];
 }
 
 - (CKFormSectionBase*)sectionAtIndex:(NSUInteger)index{
@@ -1046,30 +402,79 @@
 - (void)setSections:(NSArray*)sections hidden:(BOOL)hidden{
     [self objectControllerDidBeginUpdating:self.objectController];
     if(hidden){
+        NSMutableDictionary* sectionsByIndex = [NSMutableDictionary dictionary];
         for(CKFormSectionBase* section in sections){
             if(hidden && section.hidden == NO){
                 NSInteger index = section.sectionVisibleIndex;
-                [self objectController:self.objectController removeSectionAtIndex:index];
+                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInt:index]];
             }
         }
+        
+        //Sort by bigest number
+        NSArray* sortedIndexes = [[sectionsByIndex allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            if([obj1 intValue] > [obj2 intValue]){
+                return NSOrderedAscending;
+            }
+            else if([obj1 intValue] ==  [obj2 intValue]){
+                return NSOrderedSame;
+            }
+            return NSOrderedDescending;
+        }];
+        
+        for(NSNumber* indexNb in sortedIndexes)
+        {
+            NSInteger index = [indexNb intValue];
+            [self objectController:self.objectController removeSectionAtIndex:index];
+        }
+        
         for(CKFormSectionBase* section in sections){
             section.hidden = YES;
         }
     }
-    else{
-        NSMutableArray* toInsert = [NSMutableArray array];
+    else{ 
+        NSMutableDictionary* sectionsByIndex = [NSMutableDictionary dictionary];
         for(CKFormSectionBase* section in sections){
             if(!hidden && section.hidden == YES){
                 section.hidden = NO;
-                [toInsert addObject:section];
+                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInt:section.sectionVisibleIndex]];
             }
         }
-        for(CKFormSectionBase* section in toInsert){
-            NSInteger index = section.sectionVisibleIndex;
+        
+        //Sort by smallest number
+        NSArray* sortedIndexes = [[sectionsByIndex allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            if([obj1 intValue] < [obj2 intValue]){
+                return NSOrderedAscending;
+            }
+            else if([obj1 intValue] ==  [obj2 intValue]){
+                return NSOrderedSame;
+            }
+            return NSOrderedDescending;
+        }];
+
+        
+        for(NSNumber* indexNb in sortedIndexes){
+            NSInteger index = [indexNb intValue];
             [self objectController:self.objectController insertSectionAtIndex:index];
         }
     }
     [self objectControllerDidEndUpdating:self.objectController];
+}
+
+
+- (NSSet*)allEditingProperties{
+    NSMutableSet* set = [NSMutableSet set];
+    for(int section=0; section < [self numberOfSections];++section){
+        NSInteger rowCount = [self numberOfObjectsForSection:section];
+        for(int row=0;row < rowCount;++row){
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            CKCollectionCellController* cellController = [self controllerAtIndexPath:indexPath];
+            if([cellController isKindOfClass:[CKPropertyTableViewCellController class]]){
+                CKPropertyTableViewCellController* propertyCell = (CKPropertyTableViewCellController*)cellController;
+                [set addObject:propertyCell.value];
+            }
+        }
+    }
+    return set;
 }
 
 @end

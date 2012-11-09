@@ -1,18 +1,18 @@
 //
 //  CKMultiFloatPropertyCellController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-09.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 
 
-/** TODO
+/**
  */
-@interface CKMultiFloatPropertyCellController: CKPropertyGridCellController<UITextFieldDelegate> {
+@interface CKMultiFloatPropertyCellController: CKPropertyTableViewCellController<UITextFieldDelegate> {
 	id _multiFloatValue;
 	NSMutableDictionary* _textFields;
 	NSMutableDictionary* _labels;
@@ -20,11 +20,10 @@
 }
 
 @property(nonatomic,retain)id multiFloatValue;
-@property(nonatomic,retain)NSMutableDictionary* textFields;
-@property(nonatomic,retain)NSMutableDictionary* labels;
-@property(nonatomic,retain)NSMutableDictionary* namelabels;
 
 //private
--(void)valueChanged;
+- (void)valueChanged;
+- (void)propertyChanged;
+- (void)rebind;
 
 @end

@@ -1,179 +1,169 @@
 //
 //  CKStoreExplorer.m
-//  Express
+//  AppCoreKit
 //
-//  Created by Oli Kenobi on 10-01-24.
-//  Copyright 2010 Kenobi Studios. All rights reserved.
+//  Created by Oli Kenobi.
+//  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKStoreExplorer.h"
-#import "CKStoreDomainExplorer.h"
+#import "CKAttribute.h"
+#import "CKItemAttributeReference.h"
+#import "CKStore.h"
+#import "CKItem.h"
+#import "CKLocalization.h"
+#import "CKCoreDataManager.h"
+#import "CKDomain.h"
+#import "CKItem.h"
+
+
+/**
+ */
+@interface CKStoreDomainExplorer : CKFormTableViewController 
+
+///-----------------------------------
+/// @name Initializing a CKStore Domain Explorer
+///-----------------------------------
+
+/**
+ */
+- (id)initWithDomain:(NSString *)domain;
+
+/**
+ */
+- (id)initWithItems:(NSMutableArray *)items;
+
+@end
+
+
+
+/**
+ */
+@interface CKStoreItemExplorer : CKFormTableViewController 
+
+///-----------------------------------
+/// @name Initializing a CKStore item Explorer
+///-----------------------------------
+
+/**
+ */
+- (id)initWithItem:(CKItem *)item;
+
+@end
 
 
 @implementation CKStoreExplorer
 
-@synthesize domains = _domains;
-
-/*
-- (id)initWithStyle:(UITableViewStyle)style {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if (self = [super initWithStyle:style]) {
+- (void)setupWithDomains:(NSArray *)domains{
+    self.title = @"Domains";
+    
+    NSMutableArray* cellControllers = [NSMutableArray array];
+    for (NSString *domain in domains) {
+        //CKStore *store = [CKStore storeWithDomainName:domain];
+        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:domain action:^(CKTableViewCellController* controller){
+            CKStoreDomainExplorer *domainExplorer = [[CKStoreDomainExplorer alloc] initWithDomain:domain];
+            [self.navigationController pushViewController:domainExplorer animated:YES];
+            [domainExplorer release];
+        }];
+        [cellControllers addObject:cellController];
     }
+    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
+}
+
+- (id)init{
+    self = [super initWithStyle:UITableViewStylePlain];
+    
+    NSMutableArray* domains = [NSMutableArray array];
+    NSArray* objects = [[[CKStore storeCoreDataManager]objectContext]fetchObjectsForEntityForName:@"CKDomain" predicate:nil sortedBy:nil range:NSMakeRange(0, INT_MAX)];
+    for(CKDomain* domain in objects){
+        if(![domain.name isEqualToString:@"whatever"]){
+            [domains addObject:domain.name];
+        }
+    }
+    
+    [self setupWithDomains:domains];
+    
     return self;
 }
-*/
 
 - (id)initWithDomains:(NSArray *)domains {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if (self = [super initWithStyle:UITableViewStylePlain]) {
-		self.domains = domains;
-    }
+    self = [super initWithStyle:UITableViewStylePlain];
+    [self setupWithDomains:domains];
     return self;
 }
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-	self.title = @"Domains";
-
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	
-	_stores = [[NSMutableArray alloc] init];
-	for (NSString *domain in _domains) {
-		CKStore *store = [CKStore storeWithDomainName:domain];
-		if (store) [_stores addObject:domain];
-	}
-}
-
-/*
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-*/
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
-}
-*/
-
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
-
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-
-#pragma mark Table view methods
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-
-// Customize the number of rows in the table view.
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_stores count];
-}
-
-
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-
-    cell.textLabel.text = [_stores objectAtIndex:indexPath.row];
-	
-    return cell;
-}
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKStoreDomainExplorer *domainExplorer = [[CKStoreDomainExplorer alloc] initWithDomain:[_domains objectAtIndex:indexPath.row]];
-	[self.navigationController pushViewController:domainExplorer animated:YES];
-	[domainExplorer release];
-}
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
-
-- (void)dealloc {
-	[_domains release];
-	[_stores release];
-    [super dealloc];
-}
-
 
 @end
 
+@implementation CKStoreDomainExplorer
+
+- (void)setupWithItems:(NSArray*)items{
+    NSMutableArray* cellControllers = [NSMutableArray array];
+    for(CKItem* item in items){
+        CKAttribute* typeAttribute = [item attributeNamed:@"@class" createIfNotFound:NO];
+        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:typeAttribute ? 
+                                                                                                       [NSString stringWithFormat:@"[%@] %@",typeAttribute.value,item.name] :item.name 
+                                                                                              subtitle:[NSString stringWithFormat:@"%@", item.createdAt]  
+                                                                                                action:^(CKTableViewCellController* controller){
+                                                                                                    CKStoreItemExplorer *itemExplorer = [[[CKStoreItemExplorer alloc] initWithItem:item]autorelease];
+                                                                                                    [self.navigationController pushViewController:itemExplorer animated:YES];
+                                                                                                }];
+        [cellControllers addObject:cellController];
+    }
+    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
+}
+
+- (id)initWithDomain:(NSString *)domain {
+    self = [super initWithStyle:UITableViewStylePlain];
+    self.title = @"Items";
+    
+    CKStore *store = [CKStore storeWithDomainName:domain];
+    NSArray* items = [store fetchItems];
+    [self setupWithItems:items];
+    
+    return self;
+}
+
+- (id)initWithItems:(NSMutableArray *)theitems{
+	self = [super initWithStyle:UITableViewStylePlain];
+    [self setupWithItems:theitems];
+    return self;
+}
+
+@end
+
+
+@implementation CKStoreItemExplorer
+
+- (id)initWithItem:(CKItem *)item {
+    self = [super initWithStyle:UITableViewStylePlain];
+	self.title = @"Attributes";
+    
+    NSMutableArray* cellControllers = [NSMutableArray array];
+    
+    CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:@"item address" subtitle:[NSString stringWithFormat:@"%p",item] action:nil];
+    [cellControllers addObject:cellController];
+    
+    for(CKAttribute* attribute in [item.attributes allObjects]){
+        if(attribute.value != nil){
+            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:attribute.value action:nil];
+            [cellControllers addObject:cellController];
+        }
+        else{
+            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%d",[attribute.itemReferences count]] action:^(CKTableViewCellController* controller){
+                CKStoreDomainExplorer* domainController = [[[CKStoreDomainExplorer alloc]initWithItems:[NSMutableArray arrayWithArray:attribute.items]]autorelease];
+                domainController.title = attribute.name;
+                [self.navigationController pushViewController:domainController animated:YES];
+            }];
+            [cellControllers addObject:cellController];
+        }
+    }
+    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
+    
+    return self;
+}
+
+#pragma mark Table view methods
+
+
+
+@end

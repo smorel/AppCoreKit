@@ -1,8 +1,8 @@
 //
 //  CKWebSource.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-01-14.
+//  Created by Fred Brunel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,44 +10,46 @@
 #import "CKDebug.h"
 #import "CKAlertView.h"
 #import "CKLocalization.h"
+#import "CKWebRequestManager.h"
 
 NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 
 @interface CKWebSource ()
-@property (nonatomic, retain) CKWebRequest2 *request;
+@property (nonatomic, retain) CKWebRequest *request;
 @property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, assign) BOOL isFetching;
 @property (nonatomic, assign) NSUInteger currentIndex;
 @property (nonatomic, assign) NSRange range;
 @end
 
-@implementation CKWebSource
+@implementation CKWebSource{
+	CKWebRequest *_request;
+	NSUInteger _requestedBatchSize;
+	CKWebSourceRequestBlock _requestBlock;
+    CKWebSourceCompletionBlock _completionBlock;
+	
+	id _webSourceDelegate;
+}
 
 @synthesize request = _request;
 @synthesize requestBlock = _requestBlock;
-@synthesize transformBlock = _transformBlock;
-@synthesize failureBlock = _failureBlock;
+@synthesize completionBlock = _completionBlock;
 @synthesize webSourceDelegate = _webSourceDelegate;
-@synthesize successBlock = _successBlock;
 @dynamic hasMore;
 @dynamic isFetching;
 @dynamic currentIndex;
 @dynamic range;
 
-- (id)init {
-	if (self = [super init]) {
-	}
-	return self;
-}
-
 - (void)dealloc {
 	[self cancelFetch];
 	[_requestBlock release];
-	[_transformBlock release];
-	[_failureBlock release];
-	[_successBlock release];
+    [_completionBlock release];
 	_webSourceDelegate = nil;
 	[super dealloc];
+}
+
++ (CKWebSource*)webSource{
+    return [[[CKWebSource alloc]init]autorelease];
 }
 
 //
@@ -67,20 +69,36 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	else{
 		CKDebugLog(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
+    
+    void (^oldCompletionBlock)(id response, NSHTTPURLResponse *urlResponse, NSError *error) = self.request.completionBlock;
+    self.request.completionBlock = ^(id value, NSHTTPURLResponse *response, NSError *error){
+        if(oldCompletionBlock){
+            oldCompletionBlock(value,response,error);
+        }
+        
+        if(![value isKindOfClass:[NSArray class]]){
+            error = [NSError errorWithDomain:@"CKWebSourceErrorDomain" code:-1 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Result value isn't an array",@"cause", value,@"result", nil]];
+        }
+        
+        if (error) {
+            [self didFailWithError:error];
+        }
+        else{
+            [self didReceiveValue:value];
+        }
+    };
 	
 	if (self.request) {
-		self.request.delegate = self;
-		[self.request startAsynchronous];
+        [[CKWebRequestManager sharedManager] scheduleRequest:self.request];
 		self.isFetching = YES;
 		return YES;
 	}
-
+    
 	return NO;
 }
 
 - (void)cancelFetch {
 	[self.request cancel];
-	self.request.delegate = nil;
 	self.request = nil;
 	[super cancelFetch];
 }
@@ -90,43 +108,37 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	[super reset];
 }
 
-#pragma mark CKWebRequestDelegate
+#pragma mark Callback
 
-- (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers {
-	return;
-}
-
-- (void)request:(id)request didReceiveValue:(id)value {
+- (void)didReceiveValue:(id)value {
 	
 	id newItems = nil;
 	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
 		newItems = [_webSourceDelegate webSource:self transform:value];
 	}
-	else if(_transformBlock){
-		newItems = _transformBlock(value);
-	}
 	else{
-		NSAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
-	}
-	
-	if (newItems) {	
-		NSAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
-		[self performSelector:@selector(addItems:) withObject:newItems];
+        newItems = value;
+		//CKAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	self.hasMore = self.hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
 	self.isFetching = NO;
 	self.request = nil;
+    
+    if (newItems) {	
+		CKAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
+		[self performSelector:@selector(addItems:) withObject:newItems];
+	}
 	
 	if(_webSourceDelegate && [_webSourceDelegate respondsToSelector:@selector(webSourceDidSuccess:)]){
 		[_webSourceDelegate webSourceDidSuccess:self];
 	}
-	else if(_successBlock){
-		_successBlock();
+	else if(_completionBlock){
+		_completionBlock(value, nil);
 	}
 }
 
-- (void)request:(id)request didFailWithError:(NSError *)error {
+- (void)didFailWithError:(NSError *)error {
 	CKDebugLog(@"%@", error);
 	self.isFetching = NO;
 	self.request = nil;
@@ -135,24 +147,24 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	   && [_webSourceDelegate respondsToSelector:@selector(webSource:didFailWithError:)]){
 		[_webSourceDelegate webSource:self didFailWithError:error];
 	}
-	else if(_failureBlock){
-		_failureBlock(error);
+	else if(_completionBlock){
+		_completionBlock(nil, error);
 	}
 	else{
-		//NSAssert(NO,@"Invalid WebSource Definition : Needs to define _failureBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+		//CKAssert(NO,@"Invalid WebSource Definition : Needs to define _failureBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:CKWebSourceErrorNotification object:self];
 	
 	// TODO: Makes the alert optional and allow the request to be restarted.
 #ifdef DEBUG
-		/*CKAlertView *alertView = 
-		[[[CKAlertView alloc] initWithTitle:@"Fetching Error"
-									message:[NSString stringWithFormat:@"%d %@", [error code], [error localizedDescription]]
-								   delegate:self
-						  cancelButtonTitle:_(@"Dismiss")
-						  otherButtonTitles:nil] autorelease];
-		[alertView show];*/
+    /*CKAlertView *alertView = 
+     [[[CKAlertView alloc] initWithTitle:@"Fetching Error"
+     message:[NSString stringWithFormat:@"%d %@", [error code], [error localizedDescription]]
+     delegate:self
+     cancelButtonTitle:_(@"Dismiss")
+     otherButtonTitles:nil] autorelease];
+     [alertView show];*/
 #endif
 }
 

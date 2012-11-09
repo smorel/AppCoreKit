@@ -1,12 +1,13 @@
 //
 //  CKAlertView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-09-06.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKAlertView.h"
+#import "NSObject+Bindings.h"
 
 
 @interface CKAlertViewAction : NSObject {
@@ -24,7 +25,7 @@
 
 @interface CKAlertView ()
 
-@property (nonatomic, retain) UIAlertView *alertView;
+@property (nonatomic, retain, readwrite) UIAlertView *alertView;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSMutableArray *actions;
@@ -39,11 +40,15 @@
 @synthesize title = _title;
 @synthesize message = _message;
 @synthesize actions = _actions;
+@synthesize deallocBlock = _deallocBlock;
 
 - (void)postInit {
 	self.title = nil;
 	self.message = nil;
 	self.actions = [NSMutableArray array];
+    
+	self.alertView = [[[UIAlertView alloc] init] autorelease];
+	self.alertView.delegate = self;
 }
 
 - (id)init {
@@ -52,6 +57,10 @@
 		[self postInit];
 	}
 	return self;
+}
+
++ (id)alertViewWithTitle:(NSString *)title message:(NSString *)message{
+    return [[[CKAlertView alloc]initWithTitle:title message:message]autorelease];
 }
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message {
@@ -65,11 +74,17 @@
 }
 
 - (void)dealloc {
+    if(_deallocBlock){
+        _deallocBlock();
+    }
+    [self clearBindingsContext];
 	self.title = nil;
 	self.message = nil;
 //	self.alertView.delegate = nil;
 	self.alertView = nil;
 	self.actions = nil;
+    [_deallocBlock release];
+    _deallocBlock = nil;
 	[super dealloc];
 }
 
@@ -82,8 +97,6 @@
 #pragma mark - Setup the AlertView
 
 - (void)setupAlertView {
-	self.alertView = [[[UIAlertView alloc] init] autorelease];
-	self.alertView.delegate = self;
 	self.alertView.title = self.title;
 	self.alertView.message = self.message;
 	
@@ -97,15 +110,12 @@
 - (void)show {
 	[self setupAlertView];
 	[self.alertView show];
+	[self retain];
 }
 
 #pragma mark - UIAlertView delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-}
-
-- (void)willPresentAlertView:(UIAlertView *)alertView {
-	[self retain];
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {

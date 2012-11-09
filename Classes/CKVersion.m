@@ -1,8 +1,8 @@
 //
 //  CKVersion.m
-//  LOLEWall
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-08-09.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -19,8 +19,9 @@ NSString *CKApplicationVersion() {
 
 static NSString* osVersion = nil;
 NSString *CKOSVersion() {
-	if(osVersion == nil){
-		osVersion = [[[UIDevice currentDevice] systemVersion]retain];
-	}
+	static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        osVersion = [[[UIDevice currentDevice] systemVersion]retain];
+    });
 	return osVersion;
 }

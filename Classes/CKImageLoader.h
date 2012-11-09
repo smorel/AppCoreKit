@@ -1,59 +1,85 @@
 //
 //  CKImageLoader.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-07-20.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "CKWebRequest2.h"
+#import "CKWebRequest.h"
 
-/** TODO
+/**
  */
 extern NSString * const CKImageLoaderErrorDomain;
 
+@class CKImageLoader;
+typedef void(^CKImageLoaderCompletionBlock)(CKImageLoader* imageLoader, UIImage* image, BOOL loadedFromCache);
+typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* error);
 
-/** TODO
+
+/**
  */
-@interface CKImageLoader : NSObject <CKWebRequestDelegate> {
-	id _delegate;
-	CKWebRequest2 *_request;
-	NSURL *_imageURL;
-}
+@interface CKImageLoader : NSObject
 
+///-----------------------------------
+/// @name Managing the Delegate 
+///-----------------------------------
+
+/** 
+ */
 @property (nonatomic, assign) id delegate;
+
+/** 
+ */
+- (id)initWithDelegate:(id)delegate;
+
+///-----------------------------------
+/// @name Reacting to ImageLoader events 
+///-----------------------------------
+
+/** 
+ */
+@property (nonatomic, copy) CKImageLoaderCompletionBlock completionBlock;
+/** 
+ */
+@property (nonatomic, copy) CKImageLoaderErrorBlock errorBlock;
+
+///-----------------------------------
+/// @name Managing the URL and Requests
+///-----------------------------------
+
+/** 
+ */
 @property (nonatomic, retain) NSURL *imageURL;
 
-- (id)initWithDelegate:(id)delegate;
+/** 
+ */
 - (void)loadImageWithContentOfURL:(NSURL *)url;
+
+/** 
+ */
 - (void)cancel;
 
-+ (UIImage *)imageForURL:(NSURL *)URL;
-
 @end
 
 //
 
-/** TODO
- */
-@interface CKImageLoader (Deprecated)
-
-@property (nonatomic, assign) CGSize imageSize DEPRECATED_ATTRIBUTE; 
-@property (nonatomic, assign) BOOL aspectFill DEPRECATED_ATTRIBUTE; 
-
-+ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size DEPRECATED_ATTRIBUTE;
-
-@end
-
-//
-
-/** TODO
+/**
  */
 @protocol CKImageLoaderDelegate
 
+///-----------------------------------
+/// @name Reacting to ImageLoader events 
+///-----------------------------------
+
+/** 
+ */
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached;
+
+/** 
+ */
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error;
 
 @end

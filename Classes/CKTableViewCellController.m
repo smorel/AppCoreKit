@@ -1,61 +1,198 @@
 //
-//  CKBasicCellController.m
-//  CloudKit
+//  CKTableViewCellController.m
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 09-12-15.
+//  Created by Olivier Collet.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKTableViewCellController.h"
-#import "CKManagedTableViewController.h"
 #import "CKTableViewCellController+Style.h"
-#import "CKObjectTableViewController.h"
+#import "UIView+Style.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_Private.h"
+
+#import "UILabel+Style.h"
+#import "CKTableCollectionViewController.h"
+#import "CKPropertyExtendedAttributes.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
+#import "CKTableViewCellController+FlatHierarchy.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
-#import "CKNSObject+Bindings.h"
-#import "CKItemViewController+StyleManager.h"
+#import "NSObject+Bindings.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKUIView+Style.h"
+#import "UIView+Style.h"
+#import "CKLocalization.h"
+#import "CKRuntime.h"
+
+#import "UIView+Positioning.h"
+#import "CKProperty.h"
+#import "NSObject+Singleton.h"
+#import "CKDebug.h"
+#import "UIView+Name.h"
+#import "CKConfiguration.h"
+#import "CKLayoutBox.h"
+#import "CKStyle+Parsing.h"
+
+#import "CKVersion.h"
 
 //#import <objc/runtime.h>
 
-#ifdef DEBUG 
-#import "CKPropertyGridEditorController.h"
-#endif
+#define DisclosureImageViewTag  8888991
+#define CheckmarkImageViewTag   8888992
 
-#define ENABLE_DEBUG_GESTURE 1
+@interface CKCollectionCellController()
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, assign) BOOL isViewAppeared;
+@end
+
+
+@interface CKUITableViewCell()
+@property (nonatomic,retain) CKWeakRef* delegateRef;
+@property (nonatomic,assign,readwrite) CKTableViewCellController* delegate;
+@property (nonatomic, retain) NSString* syncControllerViewBindingContextId;
+@end
 
 @implementation CKUITableViewCell
-@synthesize delegate = _delegate;
+@synthesize delegate;
+@synthesize delegateRef = _delegateRef;
 @synthesize disclosureIndicatorImage = _disclosureIndicatorImage;
 @synthesize disclosureButton = _disclosureButton;
 @synthesize checkMarkImage = _checkMarkImage;
+@synthesize highlightedDisclosureIndicatorImage = _highlightedDisclosureIndicatorImage;
+@synthesize highlightedCheckMarkImage = _highlightedCheckMarkImage;
+@synthesize syncControllerViewBindingContextId = _syncControllerViewBindingContextId;
+@synthesize editingMask = _editingMask;
+
+//OverLoads sharedInstance here as CKUITableViewCell has to be inited using a style !
++ (id)sharedInstance{
+    static CKUITableViewCell* sharedCKUITableViewCell = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedCKUITableViewCell = [[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"sharedCKUITableViewCell"];
+    });
+    return sharedCKUITableViewCell;
+}
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:_syncControllerViewBindingContextId];
+    [self clearBindingsContext];
+    
+    [_syncControllerViewBindingContextId release];
+    _syncControllerViewBindingContextId = nil;
     [_disclosureIndicatorImage release];
+    _disclosureIndicatorImage = nil;
     [_disclosureButton release];
+    _disclosureButton = nil;
+    [_highlightedDisclosureIndicatorImage release];
+    _highlightedDisclosureIndicatorImage = nil;
+    [_highlightedCheckMarkImage release];
+    _highlightedCheckMarkImage = nil;
+    [_delegateRef release];
+    _delegateRef = nil;
     [super dealloc];
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
-	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
-	self.delegate = thedelegate;
+	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
+        self.delegate = thedelegate;
+        self.editingMask = UITableViewCellStateDefaultMask;
+    }
 	return self;
+}
+
+- (id)delegate{
+    return self.delegateRef.object;
+}
+
+- (void)setDelegate:(CKTableViewCellController *)thedelegate{
+    if(_delegateRef){
+        [_delegateRef setObject:thedelegate];
+    }else{
+        self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
+    }
+    
+    //Keeps controller in sync for size updates if user sets or bind data directly to the cell !
+    /*[NSObject beginBindingsContext:_syncControllerViewBindingContextId options:CKBindingsContextPolicyRemovePreviousBindings];
+     [self bind:@"indentationLevel"  toObject:thedelegate withKeyPath:@"indentationLevel"];
+     [self.textLabel bind:@"text"  toObject:thedelegate withKeyPath:@"text"];
+     [self.detailTextLabel bind:@"text"  toObject:thedelegate withKeyPath:@"detailText"];
+     [self.imageView bind:@"image"  toObject:thedelegate withKeyPath:@"image"];
+     [self bind:@"accessoryView"  toObject:thedelegate withKeyPath:@"accessoryView"];
+     [self bind:@"accessoryType"  toObject:thedelegate withKeyPath:@"accessoryType"];
+     [self bind:@"editingAccessoryView"  toObject:thedelegate withKeyPath:@"editingAccessoryView"];
+     [self bind:@"editingAccessoryType"  toObject:thedelegate withKeyPath:@"editingAccessoryType"];
+     [self bind:@"selectionStyle"  toObject:thedelegate withKeyPath:@"selectionStyle"];
+     [NSObject endBindingsContext];	*/
 }
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    if([_delegate layoutCallback] != nil && _delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
-		[_delegate performSelector:@selector(layoutCell:) withObject:self];
+    
+    if(self.contentView.layoutBoxes && !self.contentView.containerLayoutBox){
+        [self.contentView performLayoutWithFrame:self.contentView.bounds];
+    }
+
+    if([self.delegate layoutCallback] != nil && self.delegate && [self.delegate respondsToSelector:@selector(layoutCell:)]){
+		[self.delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
+}
+
+- (void)setDisclosureIndicatorImage:(UIImage*)img{
+    [_disclosureIndicatorImage release];
+    _disclosureIndicatorImage = [img retain];
+    if(self.accessoryType == UITableViewCellAccessoryDisclosureIndicator){
+        UIImageView* view = [[[UIImageView alloc]initWithImage:_disclosureIndicatorImage]autorelease];
+        view.highlightedImage = _highlightedDisclosureIndicatorImage;
+        view.tag = DisclosureImageViewTag;
+        self.accessoryView = view;
+    }
+}
+
+- (void)setHighlightedDisclosureIndicatorImage:(UIImage*)image{
+    [_highlightedDisclosureIndicatorImage release];
+    _highlightedDisclosureIndicatorImage = [image retain];
+    if([self.accessoryView tag] == DisclosureImageViewTag){
+        UIImageView* view = (UIImageView*)self.accessoryView;
+        view.highlightedImage = _highlightedDisclosureIndicatorImage;
+    }
+}
+
+- (void)setCheckMarkImage:(UIImage*)img{
+    [_checkMarkImage release];
+    _checkMarkImage = [img retain];
+    if(self.accessoryType == UITableViewCellAccessoryCheckmark){
+        UIImageView* view = [[[UIImageView alloc]initWithImage:_checkMarkImage]autorelease];
+        view.highlightedImage = _highlightedCheckMarkImage;
+        view.tag = CheckmarkImageViewTag;
+        self.accessoryView = view;
+    }
+}
+
+- (void)setHighlightedCheckMarkImage:(UIImage*)image{
+    [_highlightedCheckMarkImage release];
+    _highlightedCheckMarkImage = [image retain];
+    if([self.accessoryView tag] == CheckmarkImageViewTag){
+        UIImageView* view = (UIImageView*)self.accessoryView;
+        view.highlightedImage = _highlightedCheckMarkImage;
+    }
+}
+
+- (void)setDisclosureButton:(UIButton*)button{
+    [_disclosureButton release];
+    _disclosureButton = [button retain];
+    if(self.accessoryType == UITableViewCellAccessoryDetailDisclosureButton){
+        self.accessoryView = _disclosureButton;
+    }
 }
 
 - (void)setAccessoryType:(UITableViewCellAccessoryType)theAccessoryType{
     bool shouldRemoveAccessoryView = (self.accessoryType != theAccessoryType) && (
-          (self.accessoryType == UITableViewCellAccessoryDisclosureIndicator && _disclosureIndicatorImage)
-        ||(self.accessoryType == UITableViewCellAccessoryDetailDisclosureButton && _disclosureButton)
-        ||(self.accessoryType == UITableViewCellAccessoryCheckmark && _checkMarkImage));
+                                                                                  (self.accessoryType == UITableViewCellAccessoryDisclosureIndicator && _disclosureIndicatorImage)
+                                                                                  ||(self.accessoryType == UITableViewCellAccessoryDetailDisclosureButton && _disclosureButton)
+                                                                                  ||(self.accessoryType == UITableViewCellAccessoryCheckmark && _checkMarkImage));
     
     if(shouldRemoveAccessoryView){
         self.accessoryView = nil;
@@ -64,7 +201,14 @@
     switch (theAccessoryType) {
         case UITableViewCellAccessoryDisclosureIndicator:{
             if(_disclosureIndicatorImage){
-                UIImageView* view = [[[UIImageView alloc]initWithImage:_disclosureIndicatorImage]autorelease];
+                UIImageView* view = (UIImageView*)[self viewWithTag:DisclosureImageViewTag];
+                if(!view){
+                    view = [[[UIImageView alloc]init]autorelease];
+                    view.tag = DisclosureImageViewTag;
+                }
+                view.image = _disclosureIndicatorImage;
+                view.highlightedImage = _highlightedDisclosureIndicatorImage;
+                [view sizeToFit];
                 self.accessoryView = view;
             }
             break;
@@ -76,7 +220,14 @@
             break;        }
         case UITableViewCellAccessoryCheckmark:{
             if(_checkMarkImage){
-                UIImageView* view = [[[UIImageView alloc]initWithImage:_checkMarkImage]autorelease];
+                UIImageView* view = (UIImageView*)[self viewWithTag:DisclosureImageViewTag];
+                if(!view){
+                    view = [[[UIImageView alloc]init]autorelease];
+                    view.tag = DisclosureImageViewTag;
+                }
+                view.image = _checkMarkImage;
+                view.highlightedImage = _highlightedCheckMarkImage;
+                [view sizeToFit];
                 self.accessoryView = view;
             }
             break;
@@ -86,126 +237,500 @@
     [super setAccessoryType:theAccessoryType];
 }
 
-/* Tests for customizing Delete button and editing control
-- (void)willTransitionToState:(UITableViewCellStateMask)state{
-    [super willTransitionToState:state];
-    
-    NSMutableDictionary* controllerStyle = [self.delegate controllerStyle];
-    NSMutableDictionary* myStyle = [controllerStyle styleForObject:self propertyName:@"tableViewCell"];
-    
-    switch(state){
-        case UITableViewCellStateShowingEditControlMask:{
-            for(UIView* view in [self subviews]){
-                if([[[view class]description]isEqualToString:@"UITableViewCellEditControl"]){
-                    NSMutableDictionary* editControlStyle = [myStyle styleForObject:view propertyName:nil];
-                    [[view class] applyStyle:editControlStyle toView:view appliedStack:[NSMutableSet set] delegate:nil];
-                }
-            }
-            break;
-        }
-        case 3:
-        case UITableViewCellStateShowingDeleteConfirmationMask:{
-            for(UIView* view in [self subviews]){
-                if([[[view class]description]isEqualToString:@"UITableViewCellDeleteConfirmationControl"]){
-                    Class type = [view class];
-                    while(type){
-                        NSLog(@"%@",[type description]);
-                        type = class_getSuperclass(type);
-                    }
-                    
-                    NSArray* allProperties = [view allPropertyDescriptors];
-                    for(CKClassPropertyDescriptor* desc in allProperties){
-                        NSLog(@"%@",desc.name);
-                    }
-                    
-                     for(UIView* subview in [view subviews]){
-                         Class type = [subview class];
-                         while(type){
-                             NSLog(@"%@",[type description]);
-                             type = class_getSuperclass(type);
-                         }
-                         
-                         NSArray* allProperties = [subview allPropertyDescriptors];
-                         for(CKClassPropertyDescriptor* desc in allProperties){
-                             NSLog(@"%@",desc.name);
-                         }
-                     }
-                    
-                    
-                    NSMutableDictionary* deleteControlStyle = [myStyle styleForObject:view propertyName:nil];
-                    [[view class] applyStyle:deleteControlStyle toView:view appliedStack:[NSMutableSet set] delegate:nil];
-                }
-            }
-            break;
+- (void)setEditingMask:(UITableViewCellStateMask)editingMask{
+    if(_editingMask != editingMask){
+        UITableViewCellStateMask oldMask = _editingMask;
+        _editingMask = editingMask;
+        
+        if(editingMask == 3 || oldMask == 3){
+            //that means delete button shows/hides
+            [self.delegate invalidateSize];
         }
     }
 }
- */
+
+- (void)willTransitionToState:(UITableViewCellStateMask)state{
+    [super willTransitionToState:state];
+    
+    if(state == UITableViewCellStateShowingDeleteConfirmationMask){
+        if([self.delegate.containerController respondsToSelector:@selector(tableViewCellController:displaysDeletionAtIndexPath:)]){
+            [self.delegate.containerController performSelector:@selector(tableViewCellController:displaysDeletionAtIndexPath:) withObject:self.delegate withObject:self.delegate.indexPath];
+        }
+    }else if (self.editingMask == UITableViewCellStateShowingDeleteConfirmationMask && state == UITableViewCellStateDefaultMask){
+        if([self.delegate.containerController respondsToSelector:@selector(tableViewCellController:hidesDeletionAtIndexPath:)]){
+            [self.delegate.containerController performSelector:@selector(tableViewCellController:hidesDeletionAtIndexPath:) withObject:self.delegate withObject:self.delegate.indexPath];
+        }
+    }
+    
+    self.editingMask = state;
+    
+   
+    
+    /*NSMutableDictionary* controllerStyle = [self.delegate controllerStyle];
+     NSMutableDictionary* myStyle = [controllerStyle styleForObject:self propertyName:@"tableViewCell"];
+     
+     switch(state){
+     case UITableViewCellStateShowingEditControlMask:{
+     for(UIView* view in [self subviews]){
+     if([[[view class]description]isEqualToString:@"UITableViewCellEditControl"]){
+     NSMutableDictionary* editControlStyle = [myStyle styleForObject:view propertyName:nil];
+     [[view class] applyStyle:editControlStyle toView:view appliedStack:[NSMutableSet set] delegate:nil];
+     }
+     }
+     break;
+     }
+     case 3:
+     case UITableViewCellStateShowingDeleteConfirmationMask:{
+     for(UIView* view in [self subviews]){
+     if([[[view class]description]isEqualToString:@"UITableViewCellDeleteConfirmationControl"]){
+     Class type = [view class];
+     while(type){
+     NSLog(@"%@",[type description]);
+     type = class_getSuperclass(type);
+     }
+     
+     NSArray* allProperties = [view allPropertyDescriptors];
+     for(CKClassPropertyDescriptor* desc in allProperties){
+     NSLog(@"%@",desc.name);
+     }
+     
+     for(UIView* subview in [view subviews]){
+     Class type = [subview class];
+     while(type){
+     NSLog(@"%@",[type description]);
+     type = class_getSuperclass(type);
+     }
+     
+     NSArray* allProperties = [subview allPropertyDescriptors];
+     for(CKClassPropertyDescriptor* desc in allProperties){
+     NSLog(@"%@",desc.name);
+     }
+     }
+     
+     
+     NSMutableDictionary* deleteControlStyle = [myStyle styleForObject:view propertyName:nil];
+     [[view class] applyStyle:deleteControlStyle toView:view appliedStack:[NSMutableSet set] delegate:nil];
+     }
+     }
+     break;
+     }
+     }*/
+}
+
+- (void)setHighlighted:(BOOL)highlighted{
+    //[self willChangeValueForKey:@"highlighted"];
+    [super setHighlighted:highlighted];
+    //[self didChangeValueForKey:@"highlighted"];
+    
+    if(highlighted && self.selectionStyle != UITableViewCellSelectionStyleNone){
+        //Push on top of the render stack
+        UIView* s = [self superview];
+        if([s isKindOfClass:[UITableView class]]){
+            UITableViewCell* lastCell = nil;
+            for(int i = [[s subviews]count] - 1; i >= 0; --i){
+                UIView* v = [[s subviews]objectAtIndex:i];
+                if([v isKindOfClass:[UITableViewCell class]]){
+                    lastCell = (UITableViewCell*)v;
+                    break;
+                }
+            }
+            if(lastCell != self){
+                [self removeFromSuperview];
+                [s insertSubview:self aboveSubview:lastCell];
+            }
+        }
+    }
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [self willChangeValueForKey:@"highlighted"];
+    [super setHighlighted:highlighted animated:animated];
+    [self didChangeValueForKey:@"highlighted"];
+    
+    //if (self.delegate.wantFlatHierarchy)
+    //    [self.delegate flattenHierarchyHighlighted:highlighted];
+    
+    if(highlighted && self.selectionStyle != UITableViewCellSelectionStyleNone){
+        //Push on top of the render stack
+        UIView* s = [self superview];
+        if([s isKindOfClass:[UITableView class]]){
+            UITableViewCell* lastCell = nil;
+            for(int i = [[s subviews]count] - 1; i >= 0; --i){
+                UIView* v = [[s subviews]objectAtIndex:i];
+                if([v isKindOfClass:[UITableViewCell class]]){
+                    lastCell = (UITableViewCell*)v;
+                    break;
+                }
+            }
+            if(lastCell != self){
+                [self removeFromSuperview];
+                [s insertSubview:self aboveSubview:lastCell];
+            }
+        }
+    }
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    //[self.delegate restoreViews];
+}
+
+- (CGFloat)preferedHeightConstraintToWidth:(CGFloat)width{
+    if(self.contentView.layoutBoxes){
+        CGSize size = [self.contentView preferedSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
+        return size.height;
+    }
+    return MAXFLOAT;
+}
 
 @end
+
+
+@interface CKTableViewCellContentViewLayoutProxy : UIView
+@end
+
+@implementation CKTableViewCellContentViewLayoutProxy
+
+//Invalidating size when contentView layout boxes are invalidated !
+
+- (void)setLayoutBoxes:(NSArray *)layoutBoxes{
+    UIView* contentView = (UIView*)self;
+    
+    contentView.invalidatedLayoutBlock = nil;
+    
+    [super setLayoutBoxes:layoutBoxes];
+    
+    UITableViewCell* cell = (UITableViewCell*)[contentView superview];
+    if([cell isKindOfClass:[CKUITableViewCell class]]){
+        __block CKUITableViewCell* bcell = (CKUITableViewCell*)cell;
+        self.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+            [bcell.delegate invalidateSize];
+        };
+    }
+}
+
++ (void)load{
+    Class c = NSClassFromString(@"UITableViewCellContentView");
+    class_setSuperclass(c,[CKTableViewCellContentViewLayoutProxy class]);
+}
+
+@end
+
+
+
+
+
+
+
 
 @interface CKTableViewCellController ()
 
-#ifdef DEBUG 
-@property (nonatomic, retain) id debugModalController;
-#endif
-
 @property (nonatomic, retain) NSString* cacheLayoutBindingContextId;
+
+@property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
+@property (nonatomic, retain) CKWeakRef* parentCellControllerRef;//In case of grids, ...
+
+@property (nonatomic, assign) BOOL invalidatedSize;
+@property (nonatomic, assign) BOOL isInSetup;
+@property (nonatomic, retain) NSString* identifier;
+@property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
+
+@property (nonatomic, assign) BOOL hasCheckedStyleToReapply;
+@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForBackgroundView;
+@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForSelectedBackgroundView;
+
+@property (nonatomic, retain) NSMutableDictionary* textLabelStyle;
+@property (nonatomic, retain) NSMutableDictionary* detailTextLabelStyle;
+
+- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
+- (UITableViewCell *)loadCell;
+
 @end
 
 @implementation CKTableViewCellController
-
-@synthesize accessoryType = _accessoryType;
 @synthesize cellStyle = _cellStyle;
-@synthesize key = _key;
 @synthesize componentsRatio = _componentsRatio;
-@synthesize componentsSpace = _componentsSpace;
+@synthesize horizontalSpace = _horizontalSpace;
+@synthesize verticalSpace = _verticalSpace;
 @synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
 @synthesize contentInsets = _contentInsets;
+@synthesize indentationLevel = _indentationLevel;
+@synthesize text = _text;
+@synthesize detailText = _detailText;
+@synthesize image = _image;
+@synthesize accessoryType = _accessoryType;
+@synthesize accessoryView = _accessoryView;
+@synthesize editingAccessoryType = _editingAccessoryType;
+@synthesize editingAccessoryView = _editingAccessoryView;
+@synthesize selectionStyle = _selectionStyle;
+@synthesize invalidatedSize = _invalidatedSize;
+@synthesize sizeBlock = _sizeBlock;
+@synthesize parentCellController = _parentCellController;
+@synthesize parentCellControllerRef = _parentCellControllerRef;
+@synthesize isInSetup = _isInSetup;
+@synthesize identifier = _identifier;
+@synthesize styleForBackgroundView = _styleForBackgroundView;
+@synthesize styleForSelectedBackgroundView = _styleForSelectedBackgroundView;
+@synthesize hasCheckedStyleToReapply = _hasCheckedStyleToReapply;
+@synthesize textLabelStyle = _textLabelStyle;
+@synthesize detailTextLabelStyle = _detailTextLabelStyle;
 
-#ifdef DEBUG 
-@synthesize debugModalController;
-#endif
+//used in cell size invalidation process
+@synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
 
-- (id)init {
-	self = [super init];
-	if (self != nil) {
-		self.cellStyle = UITableViewCellStyleDefault;
-        
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            self.componentsRatio = 1.0 / 3.0;
-        }
-        else{
-            self.componentsRatio = 2.0 / 3.0;
-        }
-        
-		self.componentsSpace = 10;
-        
-        self.selectable = YES;
-        self.rowHeight = 44.0f;
-        self.editable = YES;
-        self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-        
-        self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
-	}
-	return self;
+- (void)textExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.multiLineEnabled = YES;
+}
+
+- (void)detailTextExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.multiLineEnabled = YES;
+}
+
+- (void)cellStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
+                                                 CKTableViewCellStyleDefault,
+                                                 UITableViewCellStyleDefault,
+                                                 CKTableViewCellStyleValue1,
+                                                 UITableViewCellStyleValue1,
+                                                 CKTableViewCellStyleValue2,
+                                                 UITableViewCellStyleValue2,
+                                                 CKTableViewCellStyleSubtitle,
+                                                 UITableViewCellStyleSubtitle,
+                                                 CKTableViewCellStyleIPadForm,
+                                                 CKTableViewCellStyleIPhoneForm,
+                                                 CKTableViewCellStyleSubtitle2,
+                                                 CKTableViewCellStyleCustomLayout
+                                                 );
+}
+
+- (void)accessoryTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+                                                 UITableViewCellAccessoryNone, 
+                                                 UITableViewCellAccessoryDisclosureIndicator, 
+                                                 UITableViewCellAccessoryDetailDisclosureButton,
+                                                 UITableViewCellAccessoryCheckmark);
+}
+
+- (void)editingAccessoryTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+                                                 UITableViewCellAccessoryNone, 
+                                                 UITableViewCellAccessoryDisclosureIndicator, 
+                                                 UITableViewCellAccessoryDetailDisclosureButton,
+                                                 UITableViewCellAccessoryCheckmark);
+}
+
+- (void)selectionStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellSelectionStyle",
+                                                 UITableViewCellSelectionStyleNone,
+                                                 UITableViewCellSelectionStyleBlue,
+                                                 UITableViewCellSelectionStyleGray);
+}
+
+- (void)editingStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellEditingStyle",
+                                                 UITableViewCellEditingStyleNone,
+                                                 UITableViewCellEditingStyleDelete,
+                                                 UITableViewCellEditingStyleInsert);
+}
+
+- (void)postInit {
+	[super postInit];
+    self.cellStyle = CKTableViewCellStyleDefault;
+    
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        self.componentsRatio = 1.0 / 3.0;
+    }
+    else{
+        self.componentsRatio = 2.0 / 3.0;
+    }
+    
+    self.horizontalSpace = 10;
+    self.verticalSpace = 5;
+    
+    self.size = CGSizeMake(320,44);
+    self.flags = CKItemViewFlagSelectable | CKItemViewFlagEditable;
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
+    self.accessoryType = UITableViewCellAccessoryNone;
+    self.editingAccessoryType = UITableViewCellAccessoryNone;
+    _contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    //self.wantFlatHierarchy = NO;
+    
+    self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
+    _indentationLevel = 0;
+    
+    _invalidatedSize = YES;
+    _sizeHasBeenQueriedByTableView = NO;
+    _hasCheckedStyleToReapply = NO;
+    
+    self.isInSetup = YES;//do not invalidate size until it has been setuped once.
 }
 
 - (void)dealloc {
 	[NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
+    
 	[self clearBindingsContext];
-	[_key release];
-	_key = nil;
     [_cacheLayoutBindingContextId release];
 	_cacheLayoutBindingContextId = nil;
-	
-#ifdef DEBUG 
-	[debugModalController release];
-	debugModalController = nil;
-#endif
-	
+    
+    [_text release];
+	_text = nil;
+    [_detailText release];
+	_detailText = nil;
+    [_image release];
+	_image = nil;
+    [_accessoryView release];
+	_accessoryView = nil;
+    [_editingAccessoryView release];
+	_editingAccessoryView = nil;
+	[_sizeBlock release];
+    _sizeBlock = nil;
+    [_parentCellControllerRef release];
+    _parentCellControllerRef = nil;
+    [_identifier release];
+    _identifier = nil;
+    [_styleForBackgroundView release];
+    _styleForBackgroundView = nil;
+    [_styleForSelectedBackgroundView release];
+    _styleForSelectedBackgroundView = nil;
+    [_textLabelStyle release];
+    _textLabelStyle = nil;
+    [_detailTextLabelStyle release];
+    _detailTextLabelStyle = nil;
+    
 	[super dealloc];
 }
+
+- (void)setContentInsets:(UIEdgeInsets)contentInsets{
+    _contentInsets = contentInsets;
+}
+
+- (UIEdgeInsets)contentInsets{
+    NSMutableDictionary* style = [self controllerStyle];
+    if(style && ![style isEmpty]){
+        if([style containsObjectForKey:@"contentInsets"]){
+            return [style edgeInsetsForKey:@"contentInsets"];
+        }
+    }
+    return _contentInsets;
+}
+
+- (void)setParentCellController:(CKTableViewCellController *)parentCellController{
+    self.parentCellControllerRef = [CKWeakRef weakRefWithObject:parentCellController];
+}
+
+- (CKTableViewCellController*)parentCellController{
+    return [[self parentCellControllerRef]object];
+}
+
+- (void)setCellStyle:(CKTableViewCellStyle)cellStyle{
+    if(cellStyle != _cellStyle){
+        _cellStyle = cellStyle;
+        [self invalidateSize];//as stylesheet selection could be dependent
+    }
+}
+
+- (CKTableViewCellStyle)cellStyle{
+    NSMutableDictionary* style = [self controllerStyle];
+    if(style && ![style isEmpty]){
+        if([style containsObjectForKey:CKStyleCellStyle]){
+            return [style cellStyle];
+        }
+    }
+    return _cellStyle;
+}
+
+- (void)reapplyStyleForBackgroundViews{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
+    //WE SHOULD OPTIMALLY DO THIS ONLY WHEN INDEXPATH CHANGE FROM FIRST/MIDDLE/LAST
+    if(self.tableViewCell){
+        CKStyleView* backgroundStyleView = nil;
+        CKStyleView* selectedBackgroundStyleView = nil;
+        
+        if(!_hasCheckedStyleToReapply){
+            
+            backgroundStyleView = (self.tableViewCell.backgroundView && [self.tableViewCell.backgroundView isKindOfClass:[CKStyleView class]]) 
+            ? (CKStyleView*)self.tableViewCell.backgroundView : nil;
+            selectedBackgroundStyleView = (self.tableViewCell.selectedBackgroundView && [self.tableViewCell.selectedBackgroundView isKindOfClass:[CKStyleView class]]) 
+            ? (CKStyleView*)self.tableViewCell.selectedBackgroundView : nil;
+            
+            if(backgroundStyleView || selectedBackgroundStyleView){
+                
+                NSMutableDictionary* style = [self controllerStyle];
+                NSMutableDictionary* tableViewCellStyle = [style styleForObject:self.tableViewCell  propertyName:@"tableViewCell"];
+                
+                if(backgroundStyleView){
+                    self.styleForBackgroundView = [tableViewCellStyle styleForObject:self.tableViewCell.backgroundView  propertyName:@"backgroundView"];
+                }
+                if(selectedBackgroundStyleView){
+                    self.styleForSelectedBackgroundView = [tableViewCellStyle styleForObject:self.tableViewCell.selectedBackgroundView  propertyName:@"selectedBackgroundView"];
+                }
+            }
+            
+            _hasCheckedStyleToReapply = YES;
+        }
+        
+        if(_styleForBackgroundView){
+            if(!backgroundStyleView){
+                backgroundStyleView = (self.tableViewCell.backgroundView && [self.tableViewCell.backgroundView isKindOfClass:[CKStyleView class]]) 
+                ? (CKStyleView*)self.tableViewCell.backgroundView : nil;
+            }
+            backgroundStyleView.corners = [self view:self.tableViewCell.backgroundView cornerStyleWithStyle:_styleForBackgroundView];
+            backgroundStyleView.borderLocation = [self view:self.tableViewCell.backgroundView borderStyleWithStyle:_styleForBackgroundView];
+            backgroundStyleView.separatorLocation = [self view:self.tableViewCell.backgroundView separatorStyleWithStyle:_styleForBackgroundView];
+        }
+        
+        if(_styleForSelectedBackgroundView){
+            if(!selectedBackgroundStyleView){
+                selectedBackgroundStyleView = (self.tableViewCell.selectedBackgroundView && [self.tableViewCell.selectedBackgroundView isKindOfClass:[CKStyleView class]]) 
+                ? (CKStyleView*)self.tableViewCell.selectedBackgroundView : nil;
+            }
+            selectedBackgroundStyleView.corners = [self view:self.tableViewCell.selectedBackgroundView cornerStyleWithStyle:_styleForSelectedBackgroundView];
+            selectedBackgroundStyleView.borderLocation = [self view:self.tableViewCell.selectedBackgroundView borderStyleWithStyle:_styleForSelectedBackgroundView];
+            selectedBackgroundStyleView.separatorLocation = [self view:self.tableViewCell.selectedBackgroundView separatorStyleWithStyle:_styleForSelectedBackgroundView];
+        }
+    }
+}
+
+- (void)setIndexPath:(NSIndexPath *)indexPath{
+    if([self.indexPath isEqual:indexPath] == NO){
+        [super setIndexPath:indexPath];
+    }
+    
+    if([self.tableViewCell superview]){
+        [self reapplyStyleForBackgroundViews];
+    }
+}
+
+- (void)setName:(NSString *)name{
+    if([self.name isEqual:name] == NO){
+        [super setName:name];
+    }
+}
+
+- (void)setValue:(id)value{
+    if([self.value isEqual:value] == NO){
+        [super setValue:value];
+        [self onValueChanged];
+        
+        if([self.tableViewCell superview]){
+            [self invalidateSize];
+        }
+    }
+}
+
++ (id)cellController{
+    return [[[[self class]alloc]init]autorelease];
+}
+
++ (id)cellControllerWithName:(NSString*)name{
+    id controller = [[[[self class]alloc]init]autorelease];
+    [controller setName:name];
+    return controller;
+}
+
 
 
 #pragma mark TableViewCell Setter getter
@@ -220,12 +745,8 @@
 
 - (UITableViewCell *)tableViewCell {
 	if(self.view){
-		NSAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+		CKAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 		return (UITableViewCell*)self.view;
-	}
-	else if([self.parentController isKindOfClass:[CKTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
-		return [tableViewController.tableView cellForRowAtIndexPath:self.indexPath];
 	}
 	return nil;
 }
@@ -234,7 +755,7 @@
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style {
 	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	CKTableViewCellStyle thecellStyle = style;
-	if([controllerStyle containsObjectForKey:CKStyleCellType]){
+	if([controllerStyle containsObjectForKey:CKStyleCellStyle]){
 		thecellStyle = [controllerStyle cellStyle];
     }
     
@@ -243,43 +764,34 @@
     //Redirect cell style to a known style for UITableViewCell initialization
     //The layoutCell method will then adapt the layout to our custom type of cell
 	CKTableViewCellStyle toUseCellStyle = thecellStyle;
-	if(toUseCellStyle == CKTableViewCellStyleValue3
-       ||toUseCellStyle == CKTableViewCellStylePropertyGrid){
+	if(toUseCellStyle == CKTableViewCellStyleIPadForm
+       ||toUseCellStyle == CKTableViewCellStyleIPhoneForm){
 		toUseCellStyle = CKTableViewCellStyleValue1;
 	}
-	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
-	self.view = cell;
+    else if(toUseCellStyle == CKTableViewCellStyleSubtitle2
+            || toUseCellStyle == CKTableViewCellStyleCustomLayout){
+		toUseCellStyle = CKTableViewCellStyleSubtitle;
+    }
+    
+	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	
 	return cell;
 }
 
 - (NSString *)identifier {
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
-    if(_createCallback){
-        [_createCallback execute:self];
-        if([controllerStyle containsObjectForKey:CKStyleCellType]){
-            self.cellStyle = [controllerStyle cellStyle];
+    if(_identifier == nil || [[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
+        if(self.createCallback){
+            [self.createCallback execute:self];
+            if([controllerStyle containsObjectForKey:CKStyleCellStyle]){
+                self.cellStyle = [controllerStyle cellStyle];
+            }
         }
+        
+        [_identifier release];
+        _identifier =  [[NSString stringWithFormat:@"%@-<%p>-[%@]-<%d>",[[self class] description],controllerStyle,self.name ? self.name : @"", self.cellStyle]retain];
     }
-	NSString* groupedTableModifier = @"";
-	UIView* parentView = [self parentControllerView];
-	if([parentView isKindOfClass:[UITableView class]]){
-		UITableView* tableView = (UITableView*)parentView;
-		if(tableView.style == UITableViewStyleGrouped){
-			NSInteger numberOfRows = [(CKItemViewContainerController*)self.parentController numberOfObjectsForSection:self.indexPath.section];
-			if(self.indexPath.row == 0 && numberOfRows > 1){
-				groupedTableModifier = @"BeginGroup";
-			}
-			else if(self.indexPath.row == 0){
-				groupedTableModifier = @"AloneInGroup";
-			}
-			else if(self.indexPath.row == numberOfRows-1){
-				groupedTableModifier = @"EndingGroup";
-			}
-		}
-	}
-	
-	return [NSString stringWithFormat:@"%@-<%p>-%@-%@",[[self class] description],controllerStyle,groupedTableModifier,self.name ? self.name : @""];
+    return _identifier;
 }
 
 - (UITableViewCell *)loadCell {
@@ -292,8 +804,9 @@
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
-	if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+	if(self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         //Ensure detailTextLabel is created !
         if(cell.detailTextLabel == nil){
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,100,44)];
@@ -304,7 +817,7 @@
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 	
-	if(self.cellStyle == CKTableViewCellStyleValue3){
+	if(self.cellStyle == CKTableViewCellStyleIPadForm){
 		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
@@ -318,28 +831,36 @@
         cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
         cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 	}
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+    else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
         cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
         cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
         
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            cell.textLabel.textColor = [UIColor blackColor];
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
-            cell.detailTextLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
-            cell.detailTextLabel.textAlignment = UITextAlignmentRight;
-            cell.textLabel.textAlignment = UITextAlignmentLeft;
-        }
-        else{
-            cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
-            cell.detailTextLabel.textColor = [UIColor blackColor];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-            cell.textLabel.textAlignment = UITextAlignmentRight;
-        }
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        cell.textLabel.textColor = [UIColor blackColor];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
+        cell.detailTextLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
+        cell.detailTextLabel.textAlignment = UITextAlignmentRight;
+        cell.textLabel.textAlignment = UITextAlignmentLeft;
+        //}
+        //else{
+        //    cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+        //    cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
+        //    cell.detailTextLabel.textColor = [UIColor blackColor];
+        //    cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
+        //    cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        //    cell.textLabel.textAlignment = UITextAlignmentRight;
+        //}
+    }
+    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
     }
 }
 
@@ -348,17 +869,14 @@
 }
 
 
-#pragma mark CKManagedTableViewController Protocol
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
-	return;
 }
 
 - (void)cellDidDisappear {
-	return;
 }
 
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
+- (void)rotateCell:(UITableViewCell*)cell animated:(BOOL)animated{
 }
 
 // Selection
@@ -373,69 +891,9 @@
 
 // Update
 
-- (void)setNeedsSetup {
-	if (self.tableViewCell)
-		[self setupCell:self.tableViewCell];
-}
-
-//This method is used by CKTableViewCellNextResponder to setup the keyboard and the next responder
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
-	return NO;
-}
-
-+ (UIView*)responderInView:(UIView*)view{
-	return nil;
-}
-
-- (void)becomeFirstResponder{
-    
-}
-
-+ (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller{
-    CGFloat rowWidth = 0;
-    UIView* tableViewContainer = [controller tableViewContainer];
-    UITableView* tableView = [controller tableView];
-    if(tableView.style == UITableViewStylePlain){
-        rowWidth = tableViewContainer.frame.size.width;
-    }
-    else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        rowWidth = tableViewContainer.frame.size.width - 18;
-    }
-    else{
-        CGFloat tableViewWidth = tableViewContainer.frame.size.width;
-        CGFloat offset = -1;
-        if(tableViewWidth > 716)offset = 90;
-        else if(tableViewWidth > 638) offset = 88 - (((NSInteger)(716 - tableViewWidth) / 13) * 2);
-        else if(tableViewWidth > 624) offset = 76;
-        else if(tableViewWidth > 545) offset = 74 - (((NSInteger)(624 - tableViewWidth) / 13) * 2);
-        else if(tableViewWidth > 400) offset = 62;
-        else offset = 20;
-        
-        rowWidth = tableViewWidth - offset;
-    }
-    return rowWidth;
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    UIViewController* parentController = [params parentController];
-    NSAssert([parentController isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
-    
-    CGFloat tableWidth = [params bounds].width;
-    CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
-    if(staticController.cellStyle == CKTableViewCellStyleValue3
-       || staticController.cellStyle == CKTableViewCellStylePropertyGrid){
-        CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-        CGFloat bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
-               
-        CGFloat maxHeight = MAX(44, MAX(bottomText,bottomDetails) + staticController.contentInsets.bottom);
-        return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
-    }
-    return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
-}
-
 - (CKTableViewController*)parentTableViewController{
-	if([self.parentController isKindOfClass:[CKTableViewController class]]){
-		return (CKTableViewController*)self.parentController;
+	if([self.containerController isKindOfClass:[CKTableViewController class]]){
+		return (CKTableViewController*)self.containerController;
 	}
 	return nil;
 }
@@ -445,26 +903,21 @@
 }
 
 
-#pragma mark CKItemViewController Implementation
+#pragma mark CKCollectionCellController Implementation
 
 - (UIView *)loadView{
-    [CATransaction begin];
-    [CATransaction 
+    /*[CATransaction begin];
+     [CATransaction 
      setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
+     forKey: kCATransactionDisableActions];*/
     
 	UITableViewCell* cell = [self loadCell];
+    self.view = cell;
+    
 	[self initView:cell];
 	[self layoutCell:cell];
-	[self applyStyle];
     
-    [CATransaction commit];
-	
-#ifdef DEBUG
-	if(ENABLE_DEBUG_GESTURE){
-		[cell addGestureRecognizer:[[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(debugGesture:)]autorelease]];
-	}
-#endif
+    //[CATransaction commit];
 	
 	return cell;
 }
@@ -472,56 +925,192 @@
 - (void)initView:(UIView*)view{
     [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+	CKAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self initTableViewCell:(UITableViewCell*)view];
 	[super initView:view];
 }
 
-- (void)setupView:(UIView *)view{
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
-        [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
-        if(_layoutCallback == nil){
-            self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
-        }
+- (void)setText:(NSString *)text{
+    if(_text == text)
+        return;
+    
+    [_text release];
+    _text = [text retain];
+    if(self.tableViewCell){
+        self.tableViewCell.textLabel.text = text;
     }
-        
-    [CATransaction begin];
-    [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
-    
-    
-	[self beginBindingsContextByRemovingPreviousBindings];
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
-	[self setupCell:(UITableViewCell*)view];
-	[super setupView:view];
-	[self endBindingsContext];
-    
-    UITableViewCell* cell = (UITableViewCell*)view;
-    
-    [NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
-    [cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
-    [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
-    [cell.imageView bind:@"hidden" target:self action:@selector(updateLayout:)];
-    [NSObject endBindingsContext];	
-    
-    [CATransaction commit];
+    [self invalidateSize];
 }
 
-- (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
-	[super rotateView:view withParams:params animated:animated];
-	[self rotateCell:(UITableViewCell*)view withParams:params animated:animated];
+- (void)setDetailText:(NSString *)detailText{
+    if(_detailText == detailText)
+        return;
+    
+    [_detailText release];
+    _detailText = [detailText retain];
+    if(self.tableViewCell){
+        self.tableViewCell.detailTextLabel.text = detailText;
+    }
+    [self invalidateSize];
+}
+
+- (void)setImage:(UIImage *)image{
+    if(_image == image)
+        return;
+    
+    [_image release];
+    _image = [image retain];
+    if(self.tableViewCell){
+        self.tableViewCell.imageView.image = image;
+    }
+    [self invalidateSize];
+}
+
+- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType{
+    if(_accessoryType == accessoryType)
+        return;
+    
+    _accessoryType = accessoryType;
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryType = accessoryType;
+    }
+    if(![self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
+- (void)setAccessoryView:(UIView *)accessoryView{
+    if(_accessoryView == accessoryView)
+        return;
+    
+    [_accessoryView release];
+    _accessoryView = [accessoryView retain];
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryView = accessoryView;
+    }
+    if(![self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
+- (void)setEditingAccessoryType:(UITableViewCellAccessoryType)editingAccessoryType{
+    if(_editingAccessoryType == editingAccessoryType)
+        return;
+    
+    _editingAccessoryType = editingAccessoryType;
+    if(self.tableViewCell){
+        self.tableViewCell.editingAccessoryType = editingAccessoryType;
+    }
+    if([self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
+- (void)setEditingAccessoryView:(UIView *)editingAccessoryView{
+    if(_editingAccessoryView == editingAccessoryView)
+        return;
+    
+    [_editingAccessoryView release];
+    _editingAccessoryView = [editingAccessoryView retain];
+    if(self.tableViewCell){
+        self.tableViewCell.editingAccessoryView = editingAccessoryView;
+    }
+    if([self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
+- (void)setSelectionStyle:(UITableViewCellSelectionStyle)selectionStyle{
+    if(_selectionStyle == selectionStyle)
+        return;
+    
+    _selectionStyle = selectionStyle;
+    if(self.tableViewCell){
+        self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? selectionStyle : UITableViewCellSelectionStyleNone;
+        
+       // NSMutableDictionary* style = [self stylesheet];
+        //NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self applyStyle];
+    }
+}
+
+- (void)setFlags:(CKItemViewFlags)theflags{
+    if(self.flags == theflags)
+        return;
+    
+    [super setFlags:theflags];
+    
+    if(self.tableViewCell){
+        self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? self.selectionStyle : UITableViewCellSelectionStyleNone;
+    }
+    
+    if(self.tableViewCell){
+        // NSMutableDictionary* style = [self stylesheet];
+        //NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self applyStyle];
+    }
+}
+
+- (void)setupView:(UIView *)view{
+    self.isInSetup = YES;
+    
+    [self reapplyStyleForBackgroundViews];
+    
+    if(self.layoutCallback == nil){
+        __block CKTableViewCellController* bself = self;
+        self.layoutCallback = [CKCallback callbackWithBlock:^id(id value) {
+            
+            BOOL enabled = [UIView areAnimationsEnabled];
+            [UIView setAnimationsEnabled:NO];
+            
+            //[CATransaction disableActions];
+            [bself performLayout];
+ 
+            //[CATransaction commit];
+            [UIView setAnimationsEnabled:enabled];
+            
+            return (id)nil;
+        }];
+    }
+    
+	CKAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+    
+    UITableViewCell* cell = (UITableViewCell*)view;
+    cell.indentationLevel = self.indentationLevel;
+    cell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? self.selectionStyle : UITableViewCellSelectionStyleNone;
+    cell.textLabel.text = self.text;
+    cell.detailTextLabel.text = self.detailText;
+    cell.imageView.image = self.image;
+    cell.accessoryView = self.accessoryView;
+    if(!self.accessoryView) cell.accessoryType = self.accessoryType;
+    cell.editingAccessoryView = self.editingAccessoryView;
+    if(!self.editingAccessoryView) cell.editingAccessoryType = self.editingAccessoryType;
+    
+	[self setupCell:cell];
+	[super setupView:view];
+    
+    self.isInSetup = NO;
+}
+
+- (void)rotateView:(UIView*)view animated:(BOOL)animated{
+    self.invalidatedSize = YES;
+	[super rotateView:view animated:animated];
+	[self rotateCell:(UITableViewCell*)view animated:animated];
 }
 
 - (void)viewDidAppear:(UIView *)view{
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
-	[self cellDidAppear:(UITableViewCell*)view];
+	CKAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+    if(!self.isViewAppeared){
+        [self cellDidAppear:(UITableViewCell*)view];
+    }
 	[super viewDidAppear:view];
 }
 
 - (void)viewDidDisappear{
-	[self cellDidDisappear];
+    if(self.isViewAppeared){
+        [self cellDidDisappear];
+        self.isViewAppeared = NO;
+    }
 	[super viewDidDisappear];
 }
 
@@ -530,37 +1119,30 @@
 }
 
 - (void)didSelect{
-	if([self.parentController isKindOfClass:[CKTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
-		if (tableViewController.stickySelection == NO){
-			[tableViewController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
+	if([self.containerController isKindOfClass:[CKTableViewController class]]){
+		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
+		if (tableViewController.stickySelectionEnabled == NO){
+            if(self.parentCellController){
+                [self.tableViewCell setHighlighted:NO animated:NO];
+                [self.tableViewCell setSelected:NO animated:NO];
+            }else{
+                [tableViewController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
+            }
 		}
 	}
 	[self didSelectRow];
 	[super didSelect];
 }
 
-- (void)setLayoutCallback:(CKCallback *)thelayoutCallback{
-    [_layoutCallback release];
-    _layoutCallback = [thelayoutCallback retain];
-}
-
 - (void)layoutCell:(UITableViewCell *)cell{
-    [CATransaction begin];
-    [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
-    
-    if(_layoutCallback){
-        [_layoutCallback execute:self];
+    if(self.layoutCallback){
+        [self.layoutCallback execute:self];
     }
-    
-    [CATransaction commit];
 }
 
 - (void)scrollToRow{
-    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
-    CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+    CKAssert([self.containerController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
+    CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
     [tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
                                          atScrollPosition:UITableViewScrollPositionNone 
                                                  animated:YES];
@@ -568,269 +1150,6 @@
 
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay{
     [self performSelector:@selector(scrollToRow) withObject:nil afterDelay:delay];
-}
-
-#ifdef DEBUG 
-- (void)debugGesture:(UILongPressGestureRecognizer *)recognizer{
-	if ((recognizer.state == UIGestureRecognizerStatePossible) ||
-		(recognizer.state == UIGestureRecognizerStateFailed)
-		|| self.debugModalController != nil){
-		return;
-	}
-	
-	CKPropertyGridEditorController* editor = [[[CKPropertyGridEditorController alloc]initWithObject:self]autorelease];
-	editor.title = [NSString stringWithFormat:@"%@ <%p>",[self class],self];
-	UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeDebug:)]autorelease];
-	editor.leftButton = close;
-	UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:editor]autorelease];
-	navc.modalPresentationStyle = UIModalPresentationPageSheet;
-	
-	self.debugModalController = editor;
-	[self.parentController presentModalViewController:navc animated:YES];
-}
-
-- (void)closeDebug:(id)sender{
-	[self.debugModalController dismissModalViewControllerAnimated:YES];
-	self.debugModalController = nil;
-}
-
-#endif
-
-@end
-
-
-
-@implementation CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
-@dynamic rowHeight;
-@dynamic movable;
-@dynamic editable;
-@dynamic removable;
-@dynamic selectable;
-@dynamic value3Ratio;
-@dynamic value3LabelsSpace;
-
-- (CGFloat)heightForRow{
-    return _rowHeight;
-}
-
-- (void)setRowHeight:(CGFloat)f{
-    _rowHeight = f;
-    if(self.parentController){
-        NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller");
-        CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
-        [[tableViewController tableView]beginUpdates];
-        [[tableViewController tableView]endUpdates];
-    }
-}
-
-- (CGFloat)value3Ratio{
-    return _componentsRatio;
-}
-
-- (void)setValue3Ratio:(CGFloat)f{
-    _componentsRatio = f;
-}
-
-- (CGFloat)value3LabelsSpace{
-    return _componentsSpace;
-}
-
-- (void)setValue3LabelsSpace:(CGFloat)f{
-    _componentsSpace = f;
-}
-
-- (BOOL)isMovable{
-    return _movable;
-}
-
-- (void)setMovable:(BOOL)bo{
-    _movable = bo;
-}
-
-- (BOOL)isEditable{
-    return _editable;
-}
-
-- (void)setEditable:(BOOL)bo{
-    _editable = bo;
-}
-
-- (BOOL)isRemovable{
-    return _movable;
-}
-
-- (void)setRemovable:(BOOL)bo{
-    _movable = bo;
-}
-
-- (BOOL)isSelectable{
-    return _selectable;
-}
-
-- (void)setSelectable:(BOOL)bo{
-    _selectable = bo;
-}
-
-@end
-
-
-
-@implementation CKTableViewCellController (CKLayout)
-
-
-//Value3 layout 
-- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
-    CGRect textFrame = [self value3TextFrameForCell:cell];
-    
-    CGFloat realWidth = cell.contentView.frame.size.width;
-	CGFloat width = realWidth - (textFrame.origin.x + textFrame.size.width + self.componentsSpace) - self.contentInsets.right;
-    
-    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
-	
-    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.detailTextLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
-	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
-                                     MIN(size.width,width) , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
-}
-
-- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
-    if(cell.textLabel.text == nil || 
-       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.textLabel.text length] <= 0){
-        return CGRectMake(0,0,0,0);
-    }
-    
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
-    CGFloat realWidth = rowWidth;
-    CGFloat width = realWidth * self.componentsRatio;
-    
-    CGFloat maxWidth = realWidth - width - self.componentsSpace;
-    
-    CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                                   constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                       lineBreakMode:cell.textLabel.lineBreakMode];
-    
-    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.textLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
-    if(cell.textLabel.textAlignment == UITextAlignmentRight){
-        return CGRectIntegral(CGRectMake(self.contentInsets.left + maxWidth - size.width,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-    }
-    else if(cell.textLabel.textAlignment == UITextAlignmentLeft){
-        return CGRectIntegral(CGRectMake(self.contentInsets.left,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-    }
-    
-    //else Center
-    return CGRectIntegral(CGRectMake(self.contentInsets.left + (maxWidth - size.width) / 2.0,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-}
-
-//PropertyGrid layout
-- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell{
-    //TODO : factoriser un peu mieux ce code la ....
-    CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            if(cell.detailTextLabel.text != nil && 
-               [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
-               [cell.detailTextLabel.text length] > 0 &&
-               cell.detailTextLabel.numberOfLines != 1){
-                
-                CGFloat realWidth = cell.contentView.frame.size.width;
-                CGFloat maxWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
-                
-                CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                                     constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                                         lineBreakMode:cell.detailTextLabel.lineBreakMode];
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), size.height);
-            }
-            else{
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
-            }
-        }
-        else{
-            //CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-            CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
-            CGFloat width = cell.contentView.frame.size.width - self.contentInsets.right - x;
-            if(width > 0 ){
-                if(cell.detailTextLabel.text != nil && 
-                   [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
-                   [cell.detailTextLabel.text length] > 0 &&
-                   cell.detailTextLabel.numberOfLines != 1){
-                    /*CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];*/
-                    return CGRectMake(x,self.contentInsets.top, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
-                }
-                else{
-                    return CGRectMake(x,self.contentInsets.top, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
-                }
-            }
-            else{
-                return CGRectMake(0,0,0,0);
-            }
-        }
-    }
-    return [self value3DetailFrameForCell:cell];
-}
-
-- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell{
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            return CGRectMake(0,0,0,0);
-        }
-        else{
-            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
-            CGFloat realWidth = rowWidth;
-            CGFloat width = realWidth * self.componentsRatio;
-            
-            CGFloat maxWidth = realWidth - width - self.contentInsets.left - self.componentsSpace;
-            CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                                           constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                               lineBreakMode:cell.textLabel.lineBreakMode];
-            // NSLog(@"propertyGridTextFrameForCell for cell at index: %@",self.indexPath);
-            //NSLog(@"cell width : %f",realWidth);
-            //NSLog(@"textLabel size %f %f",size.width,size.height);
-            return CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height);
-        }
-    }
-    return [self value3TextFrameForCell:cell];
-}
-
-
-- (id)performStandardLayout:(CKTableViewCellController *)controller{
-    UITableViewCell* cell = controller.tableViewCell;
-    //You can overload this method if you need to update cell layout when cell is resizing.
-	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
-	if(self.cellStyle == CKTableViewCellStyleValue3){
-        
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-            cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        }
-        
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self value3TextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-	}
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-	}
-    return (id)nil;
 }
 
 @end

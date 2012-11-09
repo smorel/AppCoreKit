@@ -1,8 +1,8 @@
 //
 //  CKGridView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-01-19.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -14,30 +14,9 @@
 
 // CKGridView
 
-/** TODO
+/**
  */
-@interface CKGridView : UIView {
-	id<CKGridViewDataSource> _dataSource;
-	id<CKGridViewDelegate> _delegate;
-
-	NSUInteger _rows;
-	NSUInteger _columns;
-	NSMutableArray *_views;
-
-	UIView *_draggedView;
-	CGFloat _draggedViewScale;
-	NSIndexPath *_fromIndexPath;
-	NSIndexPath *_toIndexPath;
-
-	BOOL _editing;
-	unsigned int _needsLayout:1;
-	unsigned int _animating:1;
-	CFTimeInterval _minimumPressDuration;
-
-	// Gesture Compatibilty with iOS 3.x
-	unsigned int _longPressRecognized:1;
-	NSTimeInterval _longPressStartTime;
-}
+@interface CKGridView : UIView 
 
 @property (nonatomic, assign) IBOutlet id<CKGridViewDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id<CKGridViewDelegate> delegate;
@@ -62,7 +41,7 @@
 
 // CKGridViewDataSource Protocol
 
-/** TODO
+/**
  */
 @protocol CKGridViewDataSource
 
@@ -85,7 +64,7 @@
 // CKGridViewDelegate Protocol
 
 
-/** TODO
+/**
  */
 @protocol CKGridViewDelegate
 
@@ -100,7 +79,7 @@
 // NSIndexPath Addition
 
 
-/** TODO
+/**
  */
 @interface NSIndexPath (CKGridView)
 

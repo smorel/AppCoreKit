@@ -1,19 +1,34 @@
 //
 //  CKCascadingTree.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-07-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKCascadingTree.h"
-#import "JSONKit.h"
+#import <VendorsKit/VendorsKit.h>
 
-#import "CKObjectProperty.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "CKProperty.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKDebug.h"
+#import <objc/runtime.h>
+#import "CKLiveProjectFileUpdateManager.h"
+#import "CKConfiguration.h"
+
+NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
 
 //CKCascadingTreeItemFormat
+
+
+/**
+ */
+@interface NSDictionary (CKCascadingTree)
+- (BOOL)isReservedKeyWord:(NSString*)key;
+@end
+
+
+
 
 @interface CKCascadingTreeItemFormat : NSObject{
 }
@@ -55,7 +70,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 			NSArray* propertyValuePairComponents = [allPropertyValuePairs componentsSeparatedByString:@";"];
 			for(NSString* propetyValuePair in propertyValuePairComponents){
 				NSArray* propertyValueComponents = [propetyValuePair componentsSeparatedByString:@"="];
-				NSAssert([propertyValueComponents count] == 2,@"Invalid format for '%@' : invalid property value pair '%@'",format,propetyValuePair);
+				CKAssert([propertyValueComponents count] == 2,@"Invalid format for '%@' : invalid property value pair '%@'",format,propetyValuePair);
 				
 				NSString* propertyName = [propertyValueComponents objectAtIndex:0];
 				propertyName = [propertyName stringByReplacingOccurrencesOfString:@"'" withString:@""];
@@ -77,9 +92,8 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 }
 
 + (NSString*)formatFromSplittedFormat:(NSArray*)splittedFormat{
-	NSAssert([splittedFormat count] >= 1,@"no identifier for format");
-	NSMutableString* str = [NSMutableString stringWithCapacity:1024];
-	[str appendString:[splittedFormat objectAtIndex:0]];
+	CKAssert([splittedFormat count] >= 1,@"no identifier for format");
+	NSMutableString* str = [NSMutableString stringWithString:[splittedFormat objectAtIndex:0]];
 	
 	if([splittedFormat count] > 1){
 		[str appendString:@"["];
@@ -104,25 +118,26 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 }
 
 - (id)initFormatWithFormat:(NSString*)theformat{
-	[super init];
-	self.properties = [NSMutableArray array];
-	
-	NSArray* splittedFormat = [[self class] parseFormat:theformat];
-	self.format = [[self class] formatFromSplittedFormat:splittedFormat];
-	
-	NSString* identifier = (NSString*)[splittedFormat objectAtIndex:0];
-	Class type = NSClassFromString(identifier);
-	if(type == nil){
-		self.propertyName = identifier;
-	}
-	else{
-		self.objectClass = type;
-	}
-	
-	for(int i=1;i<[splittedFormat count];i += 2){
-		NSString* name = [splittedFormat objectAtIndex:i];
-		[self.properties addObject:name];
-	}
+	if (self = [super init]) {
+        self.properties = [NSMutableArray array];
+        
+        NSArray* splittedFormat = [[self class] parseFormat:theformat];
+        self.format = [[self class] formatFromSplittedFormat:splittedFormat];
+        
+        NSString* identifier = (NSString*)[splittedFormat objectAtIndex:0];
+        Class type = NSClassFromString(identifier);
+        if(type == nil){
+            self.propertyName = identifier;
+        }
+        else{
+            self.objectClass = type;
+        }
+        
+        for(int i=1;i<[splittedFormat count];i += 2){
+            NSString* name = [splittedFormat objectAtIndex:i];
+            [self.properties addObject:name];
+        }
+    }
 	return self;
 }
 
@@ -146,7 +161,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 	
 	int i =0;
 	for(NSString* subPropertyName in properties){
-		CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:subPropertyName];
+		CKProperty* property = [CKProperty weakPropertyWithObject:object keyPath:subPropertyName];
         if([property descriptor]){
             id value = [property value];
             NSString* valueString = value ? [NSValueTransformer transformProperty:property toClass:[NSString class]] : @"null";
@@ -161,17 +176,30 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 	return str;
 }
 
+- (NSString*)description{
+    NSMutableString* str = [NSMutableString string];
+    [str appendFormat:@"CKCascadingTreeItemFormat <%p> : {\n",self];
+    [str appendFormat:@"format : %@\n",self.format];
+    [str appendFormat:@"objectClass : %@\n",self.objectClass];
+    [str appendFormat:@"propertyName : %@\n",self.propertyName];
+    [str appendFormat:@"properties : %@\n",self.properties];
+    [str appendString:@"}"];
+    return str;
+}
+
 @end
 
 //Constants
 
-NSString* CKCascadingTreeFormats  = @"CKCascadingTreeFormats";
-NSString* CKCascadingTreeParent   = @"CKCascadingTreeParent";
-NSString* CKCascadingTreeEmpty    = @"CKCascadingTreeEmpty";
-NSString* CKCascadingTreeInherits = @"@inherits";
-NSString* CKCascadingTreeImport   = @"@import";
-NSString* CKCascadingTreeIPad     = @"@ipad";
-NSString* CKCascadingTreeIPhone   = @"@iphone";
+NSString* const CKCascadingTreePrefix = @"CKCascadingTree";
+NSString* const CKCascadingTreeFormats  = @"CKCascadingTreeFormats";
+NSString* const CKCascadingTreeParent   = @"CKCascadingTreeParent";
+NSString* const CKCascadingTreeEmpty    = @"CKCascadingTreeEmpty";
+NSString* const CKCascadingTreeNode     = @"CKCascadingTreeNode";
+NSString* const CKCascadingTreeInherits = @"@inherits";
+NSString* const CKCascadingTreeImport   = @"@import";
+NSString* const CKCascadingTreeIPad     = @"@ipad";
+NSString* const CKCascadingTreeIPhone   = @"@iphone";
 
 @interface NSObject (CKCascadingTree)
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
@@ -180,7 +208,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 @implementation NSObject (CKCascadingTree)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
-	[keyWords addObjectsFromArray:[NSArray arrayWithObjects: CKCascadingTreeFormats,CKCascadingTreeParent,CKCascadingTreeEmpty,CKCascadingTreeInherits,CKCascadingTreeImport,nil]];
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects: CKCascadingTreeFormats,CKCascadingTreeParent,CKCascadingTreeEmpty,CKCascadingTreeInherits,CKCascadingTreeImport,CKCascadingTreeNode,nil]];
 }
 
 @end
@@ -252,13 +280,10 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (void)applyHierarchically:(NSDictionary*)source toDictionary:(NSDictionary*)target forKey:(NSString*)identifier{
-	NSMutableDictionary* mutableTarget = [NSMutableDictionary dictionaryWithDictionary:target];
+	NSMutableDictionary* mutableTarget = [target mutableCopy];
 	
-	for(id key in [source allKeys]){
-		if([key isEqual:CKCascadingTreeParent] == NO
-		   && [key isEqual:CKCascadingTreeEmpty] == NO
-		   && [key isEqual:CKCascadingTreeFormats] == NO){
-			id sourceObject = [source objectForKey:key];
+	[source enumerateKeysAndObjectsUsingBlock:^(id key, id sourceObject, BOOL *stop) {
+        if(![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode]){
             if([sourceObject isKindOfClass:[NSMutableDictionary class]]){
                 NSMutableDictionary* sourceDico = (NSMutableDictionary*)sourceObject;
                 [sourceDico makeAllInherits];
@@ -268,7 +293,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 					[mutableTarget setObject:[NSMutableDictionary dictionaryWithDictionary:sourceObject] forKey:key];
 				}
                 else if([sourceObject isKindOfClass:[NSDictionary class]]){
-                    NSAssert(NO,@"Should have been read as a mutable dico !");
+                    CKAssert(NO,@"Should have been read as a mutable dico !");
                 }
 				else{
 					[mutableTarget setObject:sourceObject forKey:key];
@@ -278,9 +303,10 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 				[mutableTarget applyHierarchically:sourceObject toDictionary:[mutableTarget objectForKey:key] forKey:key];
 			}
 		}
-	}
+    }];
     
 	[self setObject:mutableTarget forKey:identifier];
+    [mutableTarget release];
 }
 
 - (void)makeAllPlatformSpecific{
@@ -297,36 +323,27 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
         [self addEntriesFromDictionary:ipadDico];
         [self removeObjectForKey:CKCascadingTreeIPad];
     }
-    
-    //Apply makeAllPlatformSpecific to self
-    for(NSString* obj in [self allKeys]){
-        if([obj isEqual:CKCascadingTreeParent] == NO
-           && [obj isEqual:CKCascadingTreeEmpty] == NO
-           && [obj isEqual:CKCascadingTreeFormats] == NO){
-            if([obj isKindOfClass:[NSMutableDictionary class]]){
-                [(NSMutableDictionary*)obj makeAllPlatformSpecific];
-            }
-        }
-    }
 }
 
 - (NSMutableDictionary*)deepCleanCopy:(NSMutableDictionary*)dico{
     NSMutableDictionary* res = [NSMutableDictionary dictionary];
     for(id key in dico){
-        if([key isEqualToString:CKCascadingTreeParent]
-           || [key isEqualToString:CKCascadingTreeEmpty]
-           || [key isEqualToString:CKCascadingTreeFormats]){
+        if([key hasPrefix:CKCascadingTreePrefix]){
         }
         else{
             id object = [dico objectForKey:key];
             if([object isKindOfClass:[NSDictionary class]]){
-                [res setObject:[self deepCleanCopy:object] forKey:key];
+                NSMutableDictionary* copiedDico = [self deepCleanCopy:object];
+                [copiedDico setObject:[NSValue valueWithNonretainedObject:res] forKey:CKCascadingTreeParent];
+                [res setObject:copiedDico forKey:key];
             }
             else if([object isKindOfClass:[NSArray class]]){
                 NSMutableArray* ar = [NSMutableArray array];
                 for(id subObject in object){
                     if([subObject isKindOfClass:[NSDictionary class]]){
-                        [ar addObject:[self deepCleanCopy:subObject]];
+                        NSMutableDictionary* copiedDico = [self deepCleanCopy:subObject];
+                        [copiedDico setObject:[NSValue valueWithNonretainedObject:res] forKey:CKCascadingTreeParent];
+                        [ar addObject:copiedDico];
                     }
                     else{
                         [ar addObject:subObject];
@@ -355,12 +372,11 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
                 NSMutableDictionary* deepCopy = [self deepCleanCopy:inheritedDico];
 				//Apply inheritedStyle to self
 				for(NSString* obj in [deepCopy allKeys]){
-					if([obj isEqual:CKCascadingTreeParent] == NO
-					   && [obj isEqual:CKCascadingTreeEmpty] == NO
-					   && [obj isEqual:CKCascadingTreeFormats] == NO){
+					if(![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode]){
 						id inheritedObject = [deepCopy objectForKey:obj];
                         if([inheritedObject isKindOfClass:[NSMutableDictionary class]]){
                             NSMutableDictionary* sourceDico = inheritedObject;
+                            [sourceDico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                             [sourceDico makeAllInherits];
                         }
                         
@@ -380,7 +396,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 
 - (NSArray*)parseFormatGroups:(NSString*)formats{
 	NSArray* components = [formats componentsSeparatedByString:@","];
-	NSMutableArray* results = [NSMutableArray array];
+	NSMutableArray* results = [NSMutableArray arrayWithCapacity:components.count];
 	for(NSString* format in components){
 		NSString* result = [CKCascadingTreeItemFormat normalizeFormat:format];
 		[results addObject:result];
@@ -393,23 +409,12 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (void)initAfterLoading{
+    [self makeAllPlatformSpecific];
+    
     for(id key in [self allKeys]){
 		id object = [[self objectForKey:key]retain];
-		if([object isKindOfClass:[NSDictionary class]]
-		   && [key isEqual:CKCascadingTreeFormats] == NO
-		   && [key isEqual:CKCascadingTreeParent] == NO
-		   && [key isEqual:CKCascadingTreeEmpty] == NO){
-			NSArray* fromatGroups = [self parseFormatGroups:key];
-			[self removeObjectForKey:key];
-			
-			for(NSString* format in fromatGroups){
-				NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
-				[self setObject:dico forKey:format];
-				[dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
-				[dico initAfterLoading];
-			}
-		}
-        else if([object isKindOfClass:[NSArray class]]){
+        
+        if([object isKindOfClass:[NSArray class]]){
             int index = 0;
             for(id subObject in object){
                 if([subObject isKindOfClass:[NSDictionary class]]){
@@ -424,41 +429,95 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
                     }
                     [dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                 }
-                ++index;
             }
         }
+		else if([object isKindOfClass:[NSDictionary class]]
+                && (![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode])){
+			NSArray* fromatGroups = [self parseFormatGroups:key];
+			[self removeObjectForKey:key];
+			
+			for(NSString* format in fromatGroups){
+				NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
+				[self setObject:dico forKey:format];
+				[dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+				[dico initAfterLoading];
+			}
+		}
 		[object release];
 	}
 }
 
 - (void)postInitAfterLoading{
-    [self makeAllPlatformSpecific];
+    //Setup parent for hierarchical searchs
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
+        if([object isKindOfClass:[NSArray class]]){
+            for(id subObject in object){
+                if([subObject isKindOfClass:[NSDictionary class]]){
+                    [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                }
+            }
+        }
+        else if([object isKindOfClass:[NSDictionary class]]
+                && ![key hasPrefix:CKCascadingTreePrefix]){
+			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+		}
+    }];
+    
     [self makeAllInherits];
+    
+    //Init formats
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
-		if([object isKindOfClass:[NSDictionary class]]
-		   && [key isEqual:CKCascadingTreeFormats] == NO
-		   && [key isEqual:CKCascadingTreeParent] == NO
-		   && [key isEqual:CKCascadingTreeEmpty] == NO){
+        if([object isKindOfClass:[NSArray class]]){
+            for(id subObject in object){
+                if([subObject isKindOfClass:[NSDictionary class]]){
+                    [subObject postInitAfterLoading];
+                    [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                    [subObject setObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"address <%p>",subObject],@"address",nil] forKey:CKCascadingTreeNode];
+                }
+            }
+        }
+		else if([object isKindOfClass:[NSDictionary class]]
+                && ![key hasPrefix:CKCascadingTreePrefix]){
 			CKCascadingTreeItemFormat* format = [[[CKCascadingTreeItemFormat alloc]initFormatWithFormat:key]autorelease];
 			[self setFormat:format];
 			
 			[object postInitAfterLoading];
 			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+            [object setObject:[NSDictionary dictionaryWithObjectsAndKeys:key,@"name",[NSString stringWithFormat:@"address <%p>",object],@"address",nil] forKey:CKCascadingTreeNode];
 		}
-        else if([object isKindOfClass:[NSArray class]]){
-            for(id subObject in object){
-                if([subObject isKindOfClass:[NSDictionary class]]){
-                    [subObject postInitAfterLoading];
-                }
-            }
-        }
 	}
 	
 	//set the empty style
-	NSMutableDictionary* emptyDico = [NSMutableDictionary dictionary];
-	[emptyDico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+	NSMutableDictionary* emptyDico = [NSMutableDictionary dictionaryWithObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
 	[self setObject:emptyDico forKey:CKCascadingTreeEmpty];
+}
+
+- (void)validation{
+    /*    for(id key in [self allKeys]){
+     id object = [self objectForKey:key];
+     if([object isKindOfClass:[NSDictionary class]]
+     && [key isEqual:CKCascadingTreeFormats] == NO
+     && [key isEqual:CKCascadingTreeParent] == NO
+     && [key isEqual:CKCascadingTreeEmpty] == NO
+     && [key isEqual:CKCascadingTreeNode] == NO){
+     id parent = [[object objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+     CKAssert(parent == self,@"Invalid parent !");
+     
+     [object validation];
+     }
+     else if([object isKindOfClass:[NSArray class]]){
+     for(id subObject in object){
+     if([subObject isKindOfClass:[NSDictionary class]]){
+     id parent = [[subObject objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+     CKAssert(parent == self,@"Invalid parent !");
+     
+     [subObject validation];
+     }
+     }
+     }
+     }
+     */
 }
 
 @end
@@ -514,7 +573,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 			NSString* className = [CKCascadingTreeClassNamesCache objectForKey:type];
 			if(className == nil){
 				className = [type description];
-				[CKCascadingTreeClassNamesCache setObject:className forKey:type];
+				[CKCascadingTreeClassNamesCache setObject:className forKey:[[type copy] autorelease]];
 			}
 			
 			NSArray* formats = [allFormats objectForKey:type];
@@ -539,7 +598,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	
 	//Cascading
 	NSMutableDictionary* parentDico = [self parentDictionary];
-	if(parentDico){
+	if(parentDico && parentDico != self){
 		NSMutableDictionary* foundDico = [parentDico _dictionaryForObjectWithCascading:object propertyName:propertyName];
 		if(foundDico){
 			return foundDico;
@@ -569,7 +628,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
         NSString* className = [CKCascadingTreeClassNamesCache objectForKey:type];
         if(className == nil){
             className = [type description];
-            [CKCascadingTreeClassNamesCache setObject:className forKey:type];
+            [CKCascadingTreeClassNamesCache setObject:className forKey:[[type copy] autorelease]];
         }
         
         id foundDico = [self objectForKey:className];
@@ -587,7 +646,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 			return foundDico;
 		}
 	}
-
+    
     return nil;
 }
 
@@ -613,12 +672,31 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	if([self containsObjectForKey:CKCascadingTreeFormats]) --count;
 	if([self containsObjectForKey:CKCascadingTreeParent]) --count;
 	if([self containsObjectForKey:CKCascadingTreeEmpty]) --count;
+	if([self containsObjectForKey:CKCascadingTreeNode]) --count;
 	return count == 0;
 }
 
 - (BOOL)containsObjectForKey:(NSString*)key{
     id object = [self objectForKey:key];
 	return (object != nil);
+}
+
+- (NSString*)path{
+    NSMutableString* fullPath = [NSMutableString string];
+    NSMutableDictionary* currentDico = self;
+    while(currentDico){
+        NSMutableDictionary* node = [currentDico objectForKey:CKCascadingTreeNode];
+        if(node){
+            NSString* nodeName = [node objectForKey:@"name"];
+            if([fullPath length] > 0){
+                nodeName = [NSString stringWithFormat:@"%@/",nodeName];
+            }
+            [fullPath insertString:nodeName atIndex:0];
+        }
+        NSMutableDictionary* newdico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+        currentDico = (newdico == currentDico) ? nil : newdico;
+    }
+    return fullPath;
 }
 
 @end
@@ -632,7 +710,11 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 - (BOOL)importContentOfFile:(NSString*)path;
 @end
 
-@implementation CKCascadingTree
+@implementation CKCascadingTree{
+	NSMutableDictionary* _tree;
+	NSMutableSet* _loadedFiles;
+}
+
 @synthesize tree = _tree;
 @synthesize loadedFiles = _loadedFiles;
 
@@ -643,8 +725,9 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (id)init{
-	[super init];
-	self.loadedFiles = [NSMutableSet set];
+	if (self = [super init]) {
+        self.loadedFiles = [NSMutableSet set];
+    }
 	return self;
 }
 
@@ -665,6 +748,9 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	if([self importContentOfFile:path]){
 		[_tree initAfterLoading];
 		[_tree postInitAfterLoading];
+#ifdef DEBUG
+        [_tree validation];
+#endif
         return YES;
 	}
     return NO;
@@ -677,6 +763,20 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 - (BOOL)importContentOfFile:(NSString*)path{
     if(path == nil || [path isKindOfClass:[NSNull class]] || [_loadedFiles containsObject:path])
 		return NO;
+    
+    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        path = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
+            NSSet *toLoadFiles = _loadedFiles.copy;
+            [_loadedFiles removeAllObjects];
+            [_tree removeAllObjects];
+            for (NSString * path in toLoadFiles) {
+                [self loadContentOfFile:path];
+            }
+            [toLoadFiles release];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
+        }];
+    }
 	
     //TODO
     NSString* fileAndExtension = [path lastPathComponent];
@@ -687,8 +787,11 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	NSData* fileData = [NSData dataWithContentsOfFile:path];
 	NSError* error = nil;
     id result = [fileData mutableObjectFromJSONDataWithParseOptions:JKParseOptionValidFlags error:&error];
-	NSAssert(result != nil,@"invalid format in style file '%@'\nat line : '%@'\nwith error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
-             [[error userInfo]objectForKey:@"NSLocalizedDescription"]);
+    
+    if (error){
+        CKDebugLog(@"**** Parsing error : invalid format in style file '%@' at line : '%@' with error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
+              [[error userInfo]objectForKey:@"NSLocalizedDescription"]);
+    }
 	
     //Post process
     [_loadedFiles addObject:path];
@@ -716,16 +819,15 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	}
 	[dictionary removeObjectForKey:CKCascadingTreeImport];
 	
-	for(id key in [dictionary allKeys]){
-		id object = [dictionary objectForKey:key];
-		if([object isKindOfClass:[NSDictionary class]]
+    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
+        if([object isKindOfClass:[NSDictionary class]]
 		   && [key isEqual:CKCascadingTreeFormats] == NO
 		   && [key isEqual:CKCascadingTreeParent] == NO
 		   && [key isEqual:CKCascadingTreeEmpty] == NO){
 			NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
 			[self processImportsForDictionary:dico withMainExtension:mainExtension];
 		}
-	}
+    }];
 }
 
 - (NSMutableDictionary*)dictionaryForObject:(id)object propertyName:(NSString*)propertyName{
@@ -736,10 +838,6 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
     return [_tree objectForKey:key];
 }
 
-- (NSArray*)arrayForKey:(id)key{
-    return [_tree objectForKey:key];
-}
-
 - (NSMutableDictionary*)dictionaryForClass:(Class)c{
     return [_tree dictionaryForClass:c];
 }
@@ -747,7 +845,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 - (void)addDictionary:(NSMutableDictionary*)dictionary forKey:(id)key{
     id object = [_tree objectForKey:key];
     if(object){
-        NSAssert(NO,@"tree already contains an object for key '%@'",key);
+        CKAssert(NO,@"tree already contains an object for key '%@'",key);
     }
     [_tree setObject:dictionary forKey:key];
 }
@@ -759,6 +857,5 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 - (NSString*)description{
 	return [_tree description];
 }
-
 
 @end

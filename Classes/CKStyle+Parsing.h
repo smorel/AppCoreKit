@@ -1,16 +1,16 @@
 //
 //  CKStyle+Parsing.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-20.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "CKNSValueTransformer+Additions.h"
+#import <UIKit/UIKit.h>
+#import "NSValueTransformer+Additions.h"
 
 
-/** TODO
+/**
  */
 @interface NSMutableDictionary (CKStyleParsing)
 
@@ -19,11 +19,15 @@
 - (NSArray*) cgFloatArrayForKey:(NSString*)key;
 - (UIImage*) imageForKey:(NSString*)key;
 - (NSInteger) enumValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor;
+- (NSInteger) bitMaskValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor;
 - (CGSize) cgSizeForKey:(NSString*)key;
 - (CGFloat) cgFloatForKey:(NSString*)key;
 - (NSString*) stringForKey:(NSString*)key;
 - (NSInteger) integerForKey:(NSString*)key;
+- (BOOL) boolForKey:(NSString*)key;
+- (CGRect) cgRectForKey:(NSString*)key;
+- (UIEdgeInsets) edgeInsetsForKey:(NSString*)key;
 
-- (id)setObjectForKey:(NSString*)key inProperty:(CKObjectProperty*)property;
+- (id)setObjectForKey:(NSString*)key inProperty:(CKProperty*)property;
 
 @end

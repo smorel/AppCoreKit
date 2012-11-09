@@ -1,76 +1,125 @@
 //
-//  CKLocation.h
-//  CloudKit
+//  CKLocationManager.h
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 09-11-19.
-//  Copyright 2009 WhereCloud Inc. All rights reserved.
+//  Created by Fred Brunel.
+//  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
-#import <MapKit/MapKit.h>
 
 
-/** TODO
+/**
  */
-#define kLocationManagerDidFindCoordinateNotification @"kLocationManagerDidFindCoordinateNotification"
+extern NSString * const CKLocationManagerUserDeniedNotification;
 
-/** TODO
+/**
  */
-#define kLocationManagerDidFindAddressNotification @"kLocationManagerDidFindAddressNotification"
+extern NSString * const CKLocationManagerServiceDidDisableNotification;
 
-/** TODO
+@class CKLocationManager;
+
+/**
  */
-#define kLocationManagerDidFailCoordinateNotification @"kLocationManagerDidFailCoordinateNotification"
+@protocol CKLocationManagerDelegate <NSObject>
+@optional
 
-/** TODO
+///-----------------------------------
+/// @name Reacting to LocationManager events 
+///-----------------------------------
+
+/** 
  */
-#define kLocationManagerDidFailAddressNotification @"kLocationManagerDidFailAddressNotification"
+- (void)locationManager:(CKLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation;
 
-
-/** TODO
+/** 
  */
-typedef enum {
-	ErrorTypeTimeOut = 101,
-	ErrorTypeInvalidLocation
-} CKLocationManagerErrorType;
+- (void)locationManager:(CKLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading;
 
-
-/** TODO
+/** 
  */
-static NSString *const CKLocationManagerErrorDomain = @"CKLocationManagerErrorDomain";
+- (void)locationManager:(CKLocationManager *)manager didFailWithError:(NSError *)error;
 
+@end
 
-/** TODO
+//
+
+/**
  */
-@interface CKLocationManager : NSObject <CLLocationManagerDelegate, MKReverseGeocoderDelegate> {
-	CLLocationManager *_locationManager;
-	MKReverseGeocoder *_reverseGeocoder;
-	
-	CLLocation *_cachedLocation;
-	MKPlacemark *_cachedPlacemark;
-	
-	BOOL _activated;
-	BOOL _findAddress;
-	BOOL _timeoutEnabled;
+@interface CKLocationManager : NSObject <CLLocationManagerDelegate, UIAlertViewDelegate>
 
-	NSTimeInterval _timeToLive;
-	NSTimeInterval _acquisitionTimeout;
-	NSUInteger _accuracyThreshold;
-}
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
 
-@property (nonatomic, readonly) BOOL isActivated;
-@property (nonatomic, readonly) CLLocation *location;
-@property (nonatomic, readonly) MKPlacemark *placemark;
-@property (nonatomic, assign) NSTimeInterval timeToLive;
-@property (nonatomic, assign) NSTimeInterval acquisitionTimeout;
-@property (nonatomic, assign) NSUInteger accuracyThreshold;
+/** 
+ */
++ (id)sharedManager;
 
-+ (CKLocationManager *)manager;
+///-----------------------------------
+/// @name Managing the Delegate 
+///-----------------------------------
 
-- (void)findCurrentCoordinate;
-- (void)findCurrentAddress;
+/** 
+ */
+- (void)addDelegate:(id<CKLocationManagerDelegate>)delegate;
+/** 
+ */
+- (void)removeDelegate:(id<CKLocationManagerDelegate>)delegate;
+
+///-----------------------------------
+/// @name Accessing Location Manager Attributes
+///-----------------------------------
+
+/** 
+ */
+@property (nonatomic, assign, readonly) BOOL updating;
+
+/** 
+ */
+@property (nonatomic, retain, readonly) CLLocation *location;
+
+/** 
+ */
+@property (nonatomic, retain, readonly) CLHeading *heading;
+
+/** 
+ */
+- (BOOL)locationAvailable;
+
+/** 
+ */
+- (BOOL)headingAvailable;
+
+///-----------------------------------
+/// @name Configuring Location Manager
+///-----------------------------------
+
+/** 
+ */
+@property (nonatomic, assign, readwrite) BOOL shouldDisplayHeadingCalibration;
+
+/** 
+ */
+@property (nonatomic, assign, readwrite) BOOL shouldDisplayLocationServicesAlert;
+
+///-----------------------------------
+/// @name Managing Location Manager State
+///-----------------------------------
+
+/** 
+ */
+- (void)startUpdatingAndStopAfterDelay:(NSTimeInterval)delay;
+/** 
+ */
+- (void)startUpdating;
+/** 
+ */
 - (void)stopUpdating;
-- (void)findAddressWithLocation:(CLLocation *)location;
+/** 
+ */
+- (BOOL)checkLocationAvailabilityWithAlert;
 
 @end

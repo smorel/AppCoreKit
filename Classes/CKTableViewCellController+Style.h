@@ -1,66 +1,57 @@
 //
 //  CKTableViewCellController+Style.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
-#import "CKUIViewController+Style.h"
+#import "CKTableViewController.h"
+#import "UIViewController+Style.h"
 
 
-/** TODO
+/**
  */
-extern NSString* CKStyleCellType;
+extern NSString* CKStyleCellStyle;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleAccessoryImage;
 
-/** TODO
- */
-extern NSString* CKStyleCellSize;
-
-/** TODO
- */
-extern NSString* CKStyleCellFlags;
 
 
-/** TODO
+
+/**
  */
 @interface NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (CKTableViewCellStyle)cellStyle;
 - (UIImage*)accessoryImage;
-- (CGSize)cellSize;
-- (CKItemViewFlags)cellFlags;
 
 @end
 
 
-/** TODO
+/**
  */
 @interface CKTableViewCellController (CKStyle)
+
+- (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style;
+- (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style;
+- (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style;
+
 @end
 
-
-/** TODO
- */
-@interface UITableViewCell (CKStyle)
-@end
-
-
-/** TODO
+/**
  */
 @interface CKTableViewController (CKStyle)
 @end
 
 
-/** TODO
+/**
  */
-@interface CKItemViewController (CKStyle)
+@interface CKCollectionCellController (CKStyle)
 
 - (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view;
 - (NSMutableDictionary*)controllerStyle;
@@ -69,7 +60,7 @@ extern NSString* CKStyleCellFlags;
 @end
 
 
-/** TODO
+/**
  */
 @interface UITableView (CKStyle)
 @end

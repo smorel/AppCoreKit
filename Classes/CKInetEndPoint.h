@@ -1,8 +1,8 @@
 //
 //  CKInetEndPoint.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-12-15.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 //  Represents a network endpoint as an IP address and a port number.
@@ -13,16 +13,30 @@
 #import <arpa/inet.h>
 
 
-/** TODO
+/**
  */
-@interface CKInetEndPoint : NSObject {
-	NSString *_inetAddressRepresentation;
-	NSUInteger _port;
-}
+@interface CKInetEndPoint : NSObject 
 
+///-----------------------------------
+/// @name Initializing an InetEndPoint Object
+///-----------------------------------
+
+/**
+ */
+- (id)initWithCSockAddr:(const struct sockaddr_in *)addr;
+
+
+///-----------------------------------
+/// @name Accessing an InetEndPoint Attributes
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, readonly) NSString *inetAddressRepresentation;
+
+/**
+ */
 @property (nonatomic, readonly) NSUInteger port;
 
-- (id)initWithCSockAddr:(const struct sockaddr_in *)addr;
 
 @end

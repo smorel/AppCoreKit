@@ -1,61 +1,105 @@
 //
-//  CKSlideshowViewController.h
-//  CloudKit
+//  CKSlideShowViewController.h
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 09-12-01.
-//  Copyright 2009 WhereCloud Inc. All rights reserved.
+//  Created by Sebastien Morel.
+//  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
-#import "CKImageView.h"
+#import "CKTableCollectionViewController.h"
 
 
-/** TODO
- */
-@interface CKSlideshowViewController : UIViewController {
-	id _delegate;
-	NSArray *imagesPaths; // Contains the paths to the images
-	IBOutlet UIView *_imageContainerView;
-	CKImageView *leftImageView;
-	CKImageView *currentImageView;
-	CKImageView *rightImageView;	
-	NSUInteger _currentImageIndex;
-	BOOL swiping;
-	BOOL animating;
-	CGFloat swipeStartX;
-	UIBarButtonItem *previousButton;
-	UIBarButtonItem *nextButton;
-	BOOL useModalStyle;
-	BOOL canHideControls;
-	NSDictionary *_styles;
+/* StyleSheet example for CKSlideShowViewController :
+
+"CKSlideShowViewController" : {
+    "UINavigationController" : {
+        "navigationBar" : {
+            "backgroundImage" : "NONE", //this force to have no background image if 1 has been previously set on the navigation bar
+            "barStyle" : "UIBarStyleBlackTranslucent",
+            "backBarButtonItem" : {
+                "@inherits" : [ "UIBarButtonItem" ],
+                "defaultBackgroundImage" : ["button_header_left","15 0"],
+                "highlightedBackgroundImage" : ["button_header_left-highlight","15 0"],
+                "fontName" : "Helvetica-Bold",
+                "fontSize" : "13",
+                "defaultTextColor" : "whiteColor",
+                "height" : "30",
+                "contentEdgeInsets" : "-2 17 0 10"
+            }
+        },
+        
+        "UIToolbar" : {
+            "backgroundImage" : "NONE", //this force to have no background image if 1 has been previously set on the toolbar
+            "barStyle" : "UIBarStyleBlackTranslucent"
+        }
+    },
+    "UITableView" : {
+        "backgroundColor" : "blackColor",
+        "separatorStyle" : "UITableViewCellSeparatorStyleNone"
+    }
 }
+*/
+@interface CKSlideShowViewController : CKTableCollectionViewController
 
-@property (nonatomic, assign) id delegate;
-@property (nonatomic, assign) BOOL shouldHideControls;
-@property (nonatomic, assign) BOOL useModalStyle;
-@property (nonatomic, readonly) NSUInteger currentImageIndex;
+///-----------------------------------
+/// @name Creating CKSlideShowViewController Object
+///-----------------------------------
 
-- (id)initWithImagePaths:(NSArray *)paths startAtIndex:(NSUInteger)index;
-- (id)initWithImagePaths:(NSArray *)paths;
-- (void)showControls;
-- (void)hideControls;
-
-@end
-
-//
-
-/** TODO
+/**
  */
-@protocol CKSlideshowViewControllerDelegate
++ (id)slideShowControllerWithCollection:(CKCollection *)collection;
 
-- (NSUInteger)numberOfImagesInSlideshowView:(CKSlideshowViewController *)slideshowController;
-- (NSURL *)slideshowViewController:(CKSlideshowViewController *)slideshowController URLForImageAtIndex:(NSUInteger)index;
+/**
+ */
++ (id)slideShowControllerWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
 
-@optional
-- (void)slideshowViewController:(CKSlideshowViewController *)slideshowController imageDidAppearAtIndex:(NSUInteger)index;
+/**
+ */
++ (id)slideShowControllerWithCollection:(CKCollection *)collection startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
++ (id)slideShowControllerWithImagePaths:(NSArray*)imagePaths startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
++ (id)slideShowControllerWithImageURLs:(NSArray*)imageURLs startAtIndex:(NSInteger)startIndex;
+
+///-----------------------------------
+/// @name Initializing CKSlideShowViewController Object
+///-----------------------------------
+
+/**
+ */
+- (id)initWithCollection:(CKCollection *)collection;
+
+/**
+ */
+- (id)initWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
+- (id)initWithCollection:(CKCollection *)collection startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
+- (id)initWithImagePaths:(NSArray*)imagePaths startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
+- (id)initWithImageURLs:(NSArray*)imageURLs startAtIndex:(NSInteger)startIndex;
+
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign) BOOL shouldHideControls;
+
+/**
+ */
+@property (nonatomic, assign) BOOL overrideTitleToDisplayCurrentPage;
 
 @end
-
-//

@@ -1,244 +1,302 @@
 //
 //  CKWebRequest.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 09-11-09.
-//  Copyright 2009 WhereCloud Inc. All rights reserved.
+//  Created by Fred Brunel.
+//  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "NSString+URIQuery.h"
+#import "CKWebRequest+Initialization.h"
 #import "CKWebRequest.h"
-#import "ASIHTTPRequest.h"
-#import "ASINetworkQueue.h"
-#import "CKNSStringAdditions.h"
-#import "CKNSObject+JSON.h"
-#import "CXMLDocument.h"
-#import "RegexKitLite.h"
+#import "CKWebRequestManager.h"
+#import "CKWebDataConverter.h"
+#import "CKNetworkActivityManager.h"
+#import "CKVersion.h"
+#import "CKDebug.h"
 
-NSString* const CKWebRequestErrorDomain = @"CKWebRequestErrorDomain";
+NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
-static ASINetworkQueue *_sharedQueue = nil;
+@interface CKWebRequest () <NSURLConnectionDataDelegate, NSURLConnectionDelegate>
 
-#pragma mark Private Interface
+@property (nonatomic, retain) NSURLConnection *connection;
+@property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, retain) NSHTTPURLResponse *response;
 
-@interface CKWebRequest ()
+@property (nonatomic, retain) NSMutableData *data;
+@property (nonatomic, retain) NSFileHandle *handle;
+@property (nonatomic, retain, readwrite) NSString *downloadPath;
 
-@property (nonatomic, assign) id valueTarget;
-@property (nonatomic, retain) NSString *valueTargetKeyPath;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
+@property (nonatomic, assign, readwrite) CGFloat progress;
+@property (nonatomic, assign) NSUInteger retriesCount;
+
+@property (atomic, assign, getter = isCancelled) BOOL cancelled;
+@property (nonatomic, assign) dispatch_group_t operationsGroup;
+@property (nonatomic, assign) dispatch_group_t startGroup;
 
 @end
-
-@interface CKWebRequest (Private)
-- (ASINetworkQueue *)sharedQueue;
-- (ASIHTTPRequest *)connect;
-@end
-
-//
 
 @implementation CKWebRequest
 
-@synthesize delegate = _delegate;
-@synthesize transformer = _transformer;
-@synthesize valueTarget = _valueTarget;
-@synthesize valueTargetKeyPath = _valueTargetKeyPath;
-@synthesize userInfo = _userInfo;
-@synthesize url = _url;
-@synthesize username = _username;
-@synthesize password = _password;
-@synthesize headers = _headers;
+@synthesize connection, request, response, cancelled, operationsGroup, startGroup;
+@synthesize completionBlock, transformBlock, cancelBlock;
+@synthesize data, handle, downloadPath, credential;
+@synthesize delegate, progress, retriesCount;
 
-#pragma mark Initialization
+#pragma mark - Init/Dealloc
 
-- (id)initWithURL:(NSURL *)url {
-	if (self = [super init]) {
-		_delegate = nil;
-		_transformer = nil;
-		_valueTarget = nil;
-		_valueTargetKeyPath = nil;
-		_userInfo = nil;
-		_httpRequest = nil;
-		_url = [url retain];
-		_username = nil;
-		_password = nil;
-	}
-	return self;
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters transform:(id (^)(id value))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    if (self = [super init]) {
+        NSMutableURLRequest *mutableRequest = aRequest.mutableCopy;
+        if (parameters) {
+            NSURL *newURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", aRequest.URL.absoluteString, [NSString stringWithQueryDictionary:parameters]]];
+            [mutableRequest setURL:newURL];
+        }
+        
+        self.request = mutableRequest;
+        [mutableRequest release];
+        
+        self.completionBlock = block;
+        self.transformBlock = transform;
+        self.data = [[[NSMutableData alloc] init] autorelease];
+        self.cancelled = NO;
+        self.operationsGroup = dispatch_group_create();
+    }
+    return self;
+}
+
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    if (self = [self initWithURLRequest:aRequest parameters:parameters completion:block]) {
+        unsigned long long existingDataLenght = 0;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+            unsigned long long existingDataLenght = [attributes fileSize];
+            NSString* bytesStr = [NSString stringWithFormat:@"bytes=%qu-", existingDataLenght];
+            
+            NSMutableURLRequest *mutableRequest = self.request.mutableCopy;
+            [mutableRequest addValue:bytesStr forHTTPHeaderField:@"Range"];
+            self.request = mutableRequest;
+            [mutableRequest release];
+        }
+        else 
+            [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
+        
+        self.handle = [NSFileHandle fileHandleForWritingAtPath:path];
+        [self.handle seekToFileOffset:existingDataLenght];
+        
+        self.downloadPath = path;
+        self.retriesCount = 0;
+        self.data = nil;
+        self.cancelled = NO;
+        self.operationsGroup = dispatch_group_create();
+    }
+    return self;
 }
 
 - (void)dealloc {
-	[_valueTargetKeyPath release];
-	[_userInfo release];
-	[_url release];
-	[_username release];
-	[_password release];
-	
-	_valueTargetKeyPath = nil;
-	_userInfo = nil;
-	_httpRequest = nil;
-	_username = nil;
-	_password = nil;
-	_delegate = nil;
-	
-	[super dealloc];
+    self.connection = nil;
+    self.request = nil;
+    self.response = nil;
+    self.data = nil;
+    self.handle = nil;
+    self.downloadPath = nil;
+    self.completionBlock = nil;
+    self.transformBlock = nil;
+    self.cancelBlock = nil;
+    if (self.startGroup)
+        dispatch_release(self.startGroup);
+    dispatch_release(self.operationsGroup);
+    
+    [super dealloc];
 }
 
-#pragma mark Public API
-
-+ (CKWebRequest *)requestWithURL:(NSURL *)url {
-	return [[[CKWebRequest alloc] initWithURL:url] autorelease];
-}
-
-+ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params {
-	NSURL *theURL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]] : url)];
-	return [[[CKWebRequest alloc] initWithURL:theURL] autorelease];
-}
-
-+ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate {
-	CKWebRequest *request = [CKWebRequest requestWithURLString:url params:params];
-	request.delegate = delegate;
-	return request;
-}
-
-- (id)setValueTarget:(id)target forKeyPath:(NSString *)keyPath {
-	NSAssert(target && keyPath, @"Target and key path must not be NIL");
-	self.valueTarget = target;
-	self.valueTargetKeyPath = keyPath;
-	return self;
-}
-
-- (void)setBasicAuthWithUsername:(NSString *)username password:(NSString *)password {
-	self.username = username;
-	self.password = password;
-}
-
-//
+#pragma mark - LifeCycle
 
 - (void)start {
-	// Adds the configured ASIHTTPRequest to the (default) shared queue 
-	// to start immediately.
-	[[self sharedQueue] addOperation:[self connect]];
+    [self startOnRunLoop:[NSRunLoop currentRunLoop]];
+}
+
+- (void)startOnRunLoop:(NSRunLoop *)runLoop {
+    CKAssert(self.connection == nil, @"Connection already started");
+    
+    if (self.startGroup)
+        dispatch_release(self.startGroup);
+    
+    self.startGroup = dispatch_group_create();
+    dispatch_group_async(self.startGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        dispatch_group_wait(self.operationsGroup, DISPATCH_TIME_FOREVER);
+        
+        self.progress = 0.0;
+        self.cancelled = NO;
+        
+        NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
+
+        if (cachedResponse && [(NSHTTPURLResponse*)[cachedResponse response] statusCode] < 400 ) {
+            [self connection:nil didReceiveResponse:cachedResponse.response];
+            [self connection:nil didReceiveData:cachedResponse.data];
+            [self connectionDidFinishLoading:nil];
+        }
+        else {
+            self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
+            
+            [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
+            [self.connection start];
+            
+            [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:self];
+        }
+    });
 }
 
 - (void)cancel {
-	if (_httpRequest) {
-		[_httpRequest cancel];
-		_httpRequest = nil;
-	}
+    void (^doCancel)() = ^{
+        if (!self.cancelled) {
+            [self.connection cancel];
+            self.connection = nil;
+            self.cancelled = YES;
+            
+            [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:self];
+            
+            if (self.cancelBlock)
+                self.cancelBlock();
+        }
+    };
+    
+    if (self.startGroup)
+        dispatch_group_notify(self.startGroup, dispatch_get_current_queue(), doCancel);
+    else
+        doCancel();
 }
 
-#pragma mark Private
+#pragma mark - NSURLConnectionDataDelegate
 
-- (ASINetworkQueue *)sharedQueue {
-	if (!_sharedQueue) {
-		_sharedQueue = [[ASINetworkQueue queue] retain];
-		[_sharedQueue setShowAccurateProgress:NO];
-		[_sharedQueue setShouldCancelAllRequestsOnFailure:NO];
-		[_sharedQueue setSuspended:NO];
-		[_sharedQueue setMaxConcurrentOperationCount:4];
-	}
-	return _sharedQueue;
+- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([challenge previousFailureCount] == 0) {
+        NSURLCredential *aCredential = self.credential ? self.credential : [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:[challenge protectionSpace]];
+        
+        if (aCredential) {
+            [[challenge sender] useCredential:aCredential forAuthenticationChallenge:challenge];
+            return;
+        }
+    }
+    
+    [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
-// Connect the request (called by CKWebService)
-// TODO: Username and password should be part of the CKWebService and queried here
-
-- (ASIHTTPRequest *)connect {
-	
-	// Create an ASIHTTPRequest and keep it as a *weak* reference in the CKWebRequest
-	// and implement the following retain cycle,
-	//
-	// CKWebRequest > retained by > ASIHTTPRequest > retained by > ASINetworkQueue
-	//
-	// As soon as the queue is done by the request, objects will be released in the
-	// inverse cascade.
-	
-	_httpRequest = [ASIHTTPRequest requestWithURL:self.url];
-	_httpRequest.username = self.username;
-	_httpRequest.password = self.password;
-	_httpRequest.requestHeaders = [[self.headers mutableCopy] autorelease];
-	_httpRequest.delegate = self;
-	_httpRequest.userInfo = [NSDictionary dictionaryWithObject:self forKey:@"CKWebRequestKey"];
-	
-	return _httpRequest;
+- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
+    if (!self.isCancelled) {
+        self.response = aResponse;
+        
+        if ([aResponse statusCode] >= 400) {
+            self.handle = nil;
+            self.data = [NSMutableData data];
+            [[NSFileManager defaultManager] removeItemAtPath:self.downloadPath error:nil];
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)])
+            [self.delegate connection:aConnection didReceiveResponse:aResponse];  
+    }
 }
 
-#pragma mark ASIHTTPRequest Delegate
-
-- (void)requestFinished:(ASIHTTPRequest *)httpRequest {
-	_httpRequest = nil; // Remove the reference, since after this point the object will be deallocated
-		
-	if ([httpRequest responseStatusCode] > 400) {
-		NSError *error = [NSError errorWithDomain:CKWebRequestErrorDomain
-									code:[httpRequest responseStatusCode] 
-								userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[httpRequest responseStatusMessage], NSLocalizedDescriptionKey, nil]];
-		if ([_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
-			[_delegate request:self didFailWithError:error];
-		}
-		return;
-	}
-	
-	// Notifies the delegate data has been received with the HTTP headers
-	
-	if ([_delegate respondsToSelector:@selector(request:didReceiveData:withResponseHeaders:)]) {
-		[_delegate request:self didReceiveData:[httpRequest responseData] withResponseHeaders:[httpRequest responseHeaders]];
-	}
-	
-	// Try to process the response according to the Content-Type (e.g., XML, JSON).
-	// TODO: to be refactored
-	
-	id responseValue;
-	NSDictionary *responseHeaders = [httpRequest responseHeaders];
-	NSError *error = nil;
-	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
-	
-	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
-		responseValue = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
-	} else if ([contentType isMatchedByRegex:@"application/json"]) {
-		responseValue = [NSObject objectFromJSONData:[httpRequest responseData] error:&error];
-	} else if ([contentType isMatchedByRegex:@"image/"]) {
-		responseValue = [UIImage imageWithData:[httpRequest responseData]];
-	} else {
-		responseValue = [httpRequest responseString]; // FIXME: Risky! The content might not be a string!
-	}
-	
-	// Notifies the delegate
-	
-	if (error && [_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
-		[_delegate request:self didFailWithError:error];
-		return;
-	}
-	
-	// Process the content wih the user specified CKWebResponseTransformer
-	
-	id value = responseValue;
-	if (_transformer) {
-		value = [_transformer request:self transformContent:responseValue];
-	}
-	
-	if ([_delegate respondsToSelector:@selector(request:didReceiveValue:)]) {
-		[_delegate request:self didReceiveValue:value];
-	}
-	
-	// Notifies the target
-	
-	if (_valueTarget) {
-		[_valueTarget setValue:value forKeyPath:_valueTargetKeyPath];
-	}
+- (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
+    if (!self.isCancelled) {
+        if (self.handle) {
+            self.progress = self.handle.offsetInFile / self.response.expectedContentLength;
+            [self.handle writeData:someData];
+        }
+        else {
+            self.progress = self.data.length / self.response.expectedContentLength;
+            [self.data appendData:someData];
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(connection:didReceiveData:)]) 
+            [self.delegate connection:aConnection didReceiveData:someData];  
+    }
 }
 
-- (void)requestFailed:(ASIHTTPRequest *)httpRequest {
-	_httpRequest = nil;
-	
-	// Don't call the error delegate when the request has been cancelled.
-	// The delegate may be gone at this point.
-	if ([[httpRequest error] code] == ASIRequestCancelledErrorType) {
-		return;
-	}
-	
-	if ([_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
-		[_delegate request:self didFailWithError:[httpRequest error]];
-	}
+- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
+    self.progress = 1.0;
+    
+    dispatch_group_async(self.operationsGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        id object = self.isCancelled ? nil : [CKWebDataConverter convertData:self.data fromResponse:self.response];
+        
+        if (aConnection)
+            [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:self];
+        
+        if (self.transformBlock && !self.isCancelled) {
+            id transformedObject = transformBlock(object);
+            if (transformedObject)
+                object = transformedObject;
+        }
+        
+        if (!self.isCancelled) {
+            dispatch_group_async(self.operationsGroup, dispatch_get_main_queue(), ^(void) {
+                if (!self.isCancelled) {
+                    self.cancelled = YES;
+                    
+                    if (aConnection == nil)
+                        self.response = nil;
+                    
+                    if (self.completionBlock)
+                        self.completionBlock(object, self.response, nil);
+                    
+                    if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
+                        [self.delegate connectionDidFinishLoading:aConnection];
+                }
+            });  
+        }
+    });
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    if ([(NSHTTPURLResponse*)[cachedResponse response] statusCode] >= 400)
+        return nil;
+    
+    NSCachedURLResponse *onDiskCachedResponse = [[[NSCachedURLResponse alloc] initWithResponse:cachedResponse.response data:cachedResponse.data] autorelease];
+    [[NSURLCache sharedURLCache] storeCachedResponse:onDiskCachedResponse forRequest:self.request];
+    
+    return nil;
+}
+
+#pragma mark - NSURLConnectionDelegate
+
+- (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
+    if (!([error code] == NSURLErrorTimedOut && [self retry] && self.handle)) {
+        if ( !self.isCancelled ) {
+            dispatch_group_async(self.operationsGroup, dispatch_get_main_queue(), ^(void) {
+                if ( !self.isCancelled ) {
+                    self.cancelled = YES;
+                    if(self.completionBlock){
+                        self.completionBlock(nil, self.response, error);
+                    }
+                    
+                    if (aConnection)
+                        [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:self];
+                    
+                    if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)]){
+                        [self.delegate connection:aConnection didFailWithError:error];
+                    }
+                }
+            });
+        }
+    }
+}
+
+#pragma mark - Getters
+
+- (BOOL)retry {
+    if (self.retriesCount++ == 3)
+        return NO;
+    else {
+      	[self cancel];
+        self.connection = nil;
+        [self start];
+        return YES;  
+    }
+}
+
+- (NSURL *)URL {
+    return self.request.URL;
 }
 
 @end

@@ -1,16 +1,17 @@
 //
 //  CKGridView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-01-19.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKGridView.h"
-#import "CKCoreGraphicsAdditions.h"
+#import "CoreGraphics+Additions.h"
 #import "CKVersion.h"
-#import "CKConstants.h"
+#import "UIView+AutoresizingMasks.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKDebug.h"
 
 #define DEFAULT_DRAGGEDVIEW_SCALE 2
 
@@ -33,7 +34,28 @@
 @end
 
 
-@implementation CKGridView
+@implementation CKGridView{
+	id<CKGridViewDataSource> _dataSource;
+	id<CKGridViewDelegate> _delegate;
+    
+	NSUInteger _rows;
+	NSUInteger _columns;
+	NSMutableArray *_views;
+    
+	UIView *_draggedView;
+	CGFloat _draggedViewScale;
+	NSIndexPath *_fromIndexPath;
+	NSIndexPath *_toIndexPath;
+    
+	BOOL _editing;
+	unsigned int _needsLayout:1;
+	unsigned int _animating:1;
+	CFTimeInterval _minimumPressDuration;
+    
+	// Gesture Compatibilty with iOS 3.x
+	unsigned int _longPressRecognized:1;
+	NSTimeInterval _longPressStartTime;
+}
 
 @synthesize dataSource = _dataSource;
 @synthesize delegate = _delegate;
@@ -56,9 +78,11 @@
 
 
 - (id)initWithFrame:(CGRect)frame gridSize:(CGSize)size{
-	[self initWithFrame:frame];
-	_rows = size.height;
-	_columns = size.width;
+	if (self = [self initWithFrame:frame]) {
+    	_rows = size.height;
+        _columns = size.width;
+    }
+    
 	return self;
 }
 
@@ -85,26 +109,19 @@
 
 -(void)layoutSubviews{
 	[super layoutSubviews];
-	
-	if ([self.views count] == 0) {
-		[self reloadData];
-	}
 
-	if (_needsLayout) {
-		int index = 0;
-		for (int row=0 ; row<_rows ; row++) {
-			for (int column=0 ; column<_columns ; ++column, ++index) {
-				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
-				UIView *view = (index < [self.views count]) ? [self.views objectAtIndex:index] : nil;
-				if (view && [view isKindOfClass:[UIView class]]) {
-					CGPoint position = [self pointForIndexPath:indexPath];
-					view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));
-					view.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
-				}
-			}
-		}
-		_needsLayout = NO;
-	}
+    int index = 0;
+    for (int row=0 ; row<_rows ; row++) {
+        for (int column=0 ; column<_columns ; ++column, ++index) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
+            UIView *view = (index < [self.views count]) ? [self.views objectAtIndex:index] : nil;
+            if (view && [view isKindOfClass:[UIView class]]) {
+                CGPoint position = [self pointForIndexPath:indexPath];
+                view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));
+                view.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
+            }
+        }
+    }
 }
 
 // 
@@ -151,6 +168,7 @@
 			[(UIView *)view removeFromSuperview];
 		}
 	}
+    
 	self.views = [NSMutableArray array];
 }
 
@@ -176,15 +194,15 @@
 			[previousView removeFromSuperview];
 		[self.views removeObjectAtIndex:index];
 	}
-	NSAssert(index <= [self.views count],@"invalid view insertion order in CKGridView");
+	CKAssert(index <= [self.views count],@"invalid view insertion order in CKGridView");
 	[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:index];
-		
-	_needsLayout = YES;
+
 	[self setNeedsLayout];
 }
 
 - (void)reloadData {
 	[self clear];
+
 	_rows = [self.dataSource numberOfRowsForGridView:self];
 	_columns = [self.dataSource numberOfColumnsForGridView:self];
 
@@ -213,7 +231,7 @@
 - (NSIndexPath *)indexPathForIndex:(NSInteger)index {
 	int r = index / _columns;
 	int c = index - r * _columns;
-	NSAssert(r>= 0 && r<_rows && c>=0 && c<_columns,@"invalid row column");
+	CKAssert(r>= 0 && r<_rows && c>=0 && c<_columns,@"invalid row column");
 	return [NSIndexPath indexPathForRow:r column:c];
 }
 
@@ -355,7 +373,7 @@
 }
 
 - (void)swapAnimationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-	if (finished == NO) return;
+	if (finished.boolValue == NO) return;
 
 	if (self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:didMoveViewFromIndexPath:toIndexPath:)]) {
 		[self.dataSource gridView:self didMoveViewFromIndexPath:self.fromIndexPath toIndexPath:self.toIndexPath];

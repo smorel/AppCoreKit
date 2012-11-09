@@ -1,28 +1,36 @@
 //
 //  CKBinding.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-18.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKBinding.h"
+#import "CKBindingsManager.h"
+#import "CKWeakRef.h"
+#import "CKDebug.h"
 
 
-@implementation CKBinding
+@implementation CKBinding{
+    CKBindingsContextOptions _contextOptions;
+}
+
 @synthesize context = _context;
+@synthesize contextOptions = _contextOptions;
 
 - (void)bind{
-    NSAssert(NO,@"Should be implemented in inherited class");
+    CKAssert(NO,@"Should be implemented in inherited class");
 }
 
 - (void)unbind{
-    NSAssert(NO,@"Should be implemented in inherited class");
+    CKAssert(NO,@"Should be implemented in inherited class");
 }
+
 
 - (void)reset{
-    NSAssert(NO,@"Should be implemented in inherited class");
+    _context = nil;
+    _contextOptions = 0;
 }
-
 
 @end

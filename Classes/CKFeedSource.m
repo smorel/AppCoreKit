@@ -1,27 +1,37 @@
 //
 //  CKFeedSource.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-01-14.
+//  Created by Fred Brunel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKFeedSource.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 
 @interface CKFeedSource ()
 @property (nonatomic, assign) BOOL isFetching;
 @property (nonatomic, assign) NSRange range;
 @end
 
-@implementation CKFeedSource
+@implementation CKFeedSource {
+	id _delegate;
+	BOOL _hasMore;
+	BOOL _isFetching;
+	NSRange _range;
+}
 
 @synthesize delegate = _delegate;
 @synthesize hasMore = _hasMore;
 @synthesize isFetching = _isFetching;
 @synthesize range = _range;
+@synthesize fetchBlock = _fetchBlock;
 
 #pragma mark Initialization
+
++ (id)feedSource{
+    return [[[[self class]alloc]init]autorelease];
+}
 
 -(void)postInit{
 }
@@ -36,15 +46,26 @@
 
 - (void)dealloc {
 	_delegate = nil;
+    [_fetchBlock release];
+    _fetchBlock = nil;
 	[super dealloc];
 }
 
 #pragma mark Public API
 
 - (BOOL)fetchRange:(NSRange)theRange {
+    if(self.isFetching)
+        return NO;
+    
 	self.hasMore = NO;
 	self.range = theRange;
-	return NO;
+	self.isFetching = YES;
+    
+    if(self.fetchBlock){
+        self.fetchBlock(self,theRange);
+    }
+    
+	return YES;
 }
 
 - (void)cancelFetch {
@@ -64,6 +85,7 @@
 		[_delegate feedSource:self didFetchItems:theItems range:NSMakeRange(self.range.location, theItems.count)];
 	}
 	self.hasMore = (theItems.count >= self.range.length);
+	self.isFetching = NO;
 }
 
 @end

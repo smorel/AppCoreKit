@@ -1,277 +1,200 @@
 //
-//  CKLocation.m
-//  CloudKit
+//  CKLocationManager.m
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 09-11-19.
-//  Copyright 2009 WhereCloud Inc. All rights reserved.
+//  Created by Fred Brunel.
+//  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKLocationManager.h"
+#import "CKLocalization.h"
 #import "CKDebug.h"
 
-#define K_LOCATION_VALID_TIME_THRESHOLD    60*3
-#define K_LOCATION_ACCURACY_THRESHOLD      1000
-#define K_LOCATION_ACQUISITION_TIMEOUT     5.0   // Timeout in secs before we cancel the request
-#define K_LOCATION_ADDRESS_DISTANCE_DELTA  1000
+NSString * const CKLocationManagerUserDeniedNotification = @"CKLocationManagerUserDeniedNotification";
+NSString * const CKLocationManagerServiceDidDisableNotification = @"CKLocationManagerServiceDidDisableNotification";
 
-@interface CKLocationManager (Private)
+#define kAlertViewNoLocationServicesMessage 1
+
+@interface CKLocationManager ()
+@property (nonatomic, retain, readwrite) NSMutableSet *delegates;
+@property (nonatomic, retain, readwrite) CLLocationManager *locationManager;
+@property (nonatomic, retain, readwrite) CLHeading *heading;
 
 - (void)registerNotifications;
-- (void)findCurrentCoordinateWithAddress:(BOOL)findAddress;
-- (void)findAddressAtCurrentCoordinate;
-- (BOOL)isAccurateLocation:(CLLocation *)location;
-- (void)notifyLocation:(CLLocation *)newLocation;
-- (void)setCachedLocation:(CLLocation *)newLocation;
-- (void)setCachedPlacemark:(MKPlacemark *)newPlacemark;
-- (void)locationManagerDidTimeout:(CLLocationManager *)locationManager;
-- (void)locationManagerDidFailWithInvalidLocation:(CLLocationManager *)locationManager;
+- (void)displayLocationServicesAlert;
 
 @end
 
 //
 
-@implementation CKLocationManager
+@implementation CKLocationManager {
+	NSMutableSet *_delegates;
+	CLLocationManager *_locationManager;
+	CLHeading *_heading;
+	BOOL _updating;
+	BOOL _locationAvailable;
+	BOOL _shouldDisplayHeadingCalibration;
+	BOOL _shouldDisplayLocationServicesAlert;
+}
 
-@synthesize isActivated = _activated;
-@synthesize location = _cachedLocation;
-@synthesize placemark = _cachedPlacemark;
-@synthesize timeToLive = _timeToLive;
-@synthesize acquisitionTimeout = _acquisitionTimeout;
-@synthesize accuracyThreshold = _accuracyThreshold;
+@synthesize delegates = _delegates;
+@synthesize locationManager = _locationManager;
+@synthesize updating = _updating;
+@synthesize shouldDisplayHeadingCalibration = _shouldDisplayHeadingCalibration;
+@synthesize shouldDisplayLocationServicesAlert = _shouldDisplayLocationServicesAlert;
+@synthesize location = _location;
+@synthesize heading = _heading;
 
-#pragma mark Init
-
-+ (CKLocationManager *)manager {
-	static CKLocationManager *instance;
-	if (instance == nil) {
-		instance = [[CKLocationManager alloc] init];
-	}
-	return instance;
++ (id)sharedManager {
+	static CKLocationManager *_instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _instance = [[CKLocationManager alloc] init];
+    });
+	return _instance;
 }
 
 - (id)init {
 	if (self = [super init]) {
-		_locationManager = [[CLLocationManager alloc] init];
-		_locationManager.delegate = self;
-		_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-		_activated = _locationManager.locationServicesEnabled;
-		[self setCachedLocation:_locationManager.location];
+		self.delegates = [NSMutableSet set];
+		self.locationManager = [[[CLLocationManager alloc] init] autorelease];
+		self.locationManager.delegate = self;
+		self.locationManager.headingFilter = 5.0f; // kCLHeadingFilterNone
+		self.locationManager.distanceFilter = 20.0f; // kCLDistanceFilterNone
+		_locationAvailable = self.locationManager.locationServicesEnabled;
 		
-		_findAddress = NO;
-		self.timeToLive = K_LOCATION_VALID_TIME_THRESHOLD;
-		self.acquisitionTimeout = K_LOCATION_ACQUISITION_TIMEOUT;
-		self.accuracyThreshold = K_LOCATION_ACCURACY_THRESHOLD;
-
 		[self registerNotifications];
-}
+	}
 	return self;
 }
 
 - (void)dealloc {
-	[_locationManager release];
+	self.delegates = nil;
+	self.locationManager = nil;
+	self.heading = nil;
 	[super dealloc];
 }
 
-#pragma mark Tests
+#pragma mark Public API
 
-- (BOOL)isAccurateLocation:(CLLocation *)location {
-	NSAssert(location, @"location must not be nil");
-
-	NSTimeInterval timeElapsed = [[NSDate date] timeIntervalSinceDate:location.timestamp];
-	CLLocationAccuracy accuracy = location.horizontalAccuracy;
-	
-	if ((timeElapsed < (self.timeToLive)) && (accuracy < self.accuracyThreshold)) return YES;
-	return NO;
+- (CLLocation *)location {
+	return self.locationManager.location;
 }
 
-- (BOOL)isValidLocation:(CLLocation *)location {
-	NSAssert(location, @"location must not be nil");
-	
-	if (signbit(location.horizontalAccuracy) || ((location.coordinate.latitude == 0.0) && (location.coordinate.longitude == 0.0))) return NO;
-	return YES;
+- (CLHeading *)heading {
+	// The heading property on CLLocationManager is only available on iOS 4.0,
+	// so, we need to store it.
+	return _heading;
 }
 
-#pragma mark Find
-
-- (void)findCurrentCoordinate {
-	[self findCurrentCoordinateWithAddress:NO];
+- (BOOL)locationAvailable {
+	return _locationAvailable;
 }
 
-- (void)findCurrentAddress {
-	[self findCurrentCoordinateWithAddress:YES];
+- (BOOL)headingAvailable {
+	// On iOS 4.0, this property is deprecated, we should use the class method +headingAvailable
+	return self.locationManager.headingAvailable;
 }
 
-- (void)findCurrentCoordinateWithAddress:(BOOL)findAddress {
-	_findAddress = findAddress;
-	
-	// Cancel the delayed request location information
-	[NSObject cancelPreviousPerformRequestsWithTarget: self];
-	_timeoutEnabled = NO;
+- (void)startUpdatingAndStopAfterDelay:(NSTimeInterval)delay {
+	[self startUpdating];
+	[self performSelector:@selector(stopUpdating) withObject:nil afterDelay:delay];
+}
 
-	CLLocation *currentLocation = _locationManager.location;
-	[self setCachedLocation:currentLocation];
-	CKDebugLog(@"Location: %@", _cachedLocation);
-	
-	if (currentLocation == nil) {
-		[_locationManager startUpdatingLocation];
-		return;
-	}
-
-	if ([self isValidLocation:currentLocation] == NO) {
-		[self locationManagerDidFailWithInvalidLocation:_locationManager];
-		return;
-	}
-	
-	if ([self isAccurateLocation:currentLocation]) {
-		[self notifyLocation:currentLocation];
-		return;
-	}
-	
-	[_locationManager startUpdatingLocation];
+- (void)startUpdating {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self.locationManager startUpdatingLocation];
+	[self.locationManager startUpdatingHeading];
+	_updating = YES;
 }
 
 - (void)stopUpdating {
-	[_locationManager stopUpdatingLocation];
-	[_reverseGeocoder cancel];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self.locationManager stopUpdatingLocation];
+	[self.locationManager stopUpdatingHeading];
+	_updating = NO;
 }
 
-#pragma mark Current Location
+- (void)addDelegate:(id<CKLocationManagerDelegate>)delegate {
+	[self.delegates addObject:[NSValue valueWithNonretainedObject:delegate]];
+	[self startUpdating];
+}
 
-- (void)notifyLocation:(CLLocation *)location {
-	// Cancel the delayed request location information
-	[NSObject cancelPreviousPerformRequestsWithTarget: self];
-	
-	// This class is a delayed class that allows sending of the location information to a delegate
-	[_locationManager stopUpdatingLocation];
-	
-	// Post a notification
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:location forKey:@"location"];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kLocationManagerDidFindCoordinateNotification object:nil userInfo:userInfo];
-	
-	if (_findAddress == YES) {
-		[self findAddressWithLocation:location];
+- (void)removeDelegate:(id<CKLocationManagerDelegate>)delegate {
+	[self.delegates removeObject:[NSValue valueWithNonretainedObject:delegate]];
+	if (self.delegates.count == 0) {
+		[self stopUpdating];
 	}
 }
 
-#pragma mark Cached Location & Placemark
-
-- (void)setCachedLocation:(CLLocation *)newLocation {
-	[_cachedLocation release];
-	_cachedLocation = [newLocation retain];
+- (BOOL)checkLocationAvailabilityWithAlert {
+	if ([self locationAvailable] == YES)
+		return YES;
+	
+	[self displayLocationServicesAlert];
+	return NO;
 }
 
-- (void)setCachedPlacemark:(MKPlacemark *)newPlacemark {
-	[_cachedPlacemark release];
-	_cachedPlacemark = [newPlacemark retain];
-}
-
-#pragma mark Core Location
+#pragma mark CoreLocationManager Delegate
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-	
-	CKDebugLog(@"Update Location New: %@ Old: %@", newLocation, oldLocation);
-
-	if (_timeoutEnabled == NO) {
-		[self performSelector:@selector(locationManagerDidTimeout:) withObject:_locationManager afterDelay:self.acquisitionTimeout];
-		_timeoutEnabled = YES;
-	}
-	
-	if ([self isValidLocation:newLocation] == NO) {
-		[self locationManagerDidFailWithInvalidLocation:manager];
-		return;
-	}
-
-	// FIXME: Triggers a "deprecation warning" but works on OS < 3.2
-	if (_findAddress == YES) {
-		if ((_cachedLocation == nil) || ([newLocation getDistanceFrom:_cachedLocation] > K_LOCATION_ADDRESS_DISTANCE_DELTA)) {
-			[self findAddressWithLocation:newLocation];
+	_locationAvailable = YES;
+	for (NSValue *value in self.delegates) {
+		id<CKLocationManagerDelegate> delegate = [value nonretainedObjectValue];
+		if ([delegate respondsToSelector:@selector(locationManager:didUpdateToLocation:fromLocation:)]) {
+			[delegate locationManager:self didUpdateToLocation:newLocation fromLocation:oldLocation];
 		}
 	}
-	
-	[self setCachedLocation:newLocation];
+}
 
-	if ([self isAccurateLocation:newLocation]) {
-		if ((oldLocation == nil) || ([newLocation.timestamp timeIntervalSinceDate:oldLocation.timestamp] > 1)) {
-			[self notifyLocation:newLocation];
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+	self.heading = newHeading;
+	for (NSValue *value in self.delegates) {
+		id<CKLocationManagerDelegate> delegate = [value nonretainedObjectValue];
+		if ([delegate respondsToSelector:@selector(locationManager:didUpdateHeading:)]) {
+			[delegate locationManager:self didUpdateHeading:newHeading];
 		}
-	} 
+	}
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-	CKDebugLog(@"Error: %@", [error description]);
-
-	// Stop acquisition
-	[_locationManager stopUpdatingLocation];
-	
-	// Cancel the delayed request location information
-	[NSObject cancelPreviousPerformRequestsWithTarget: self];
-	
-	// We handle CoreLocation-related errors here
-	if ([error domain] == kCLErrorDomain) {
-
-		switch ([error code]) {
-				// This error code is usually returned whenever user taps "Don't Allow" in response to
-				// being told your app wants to access the current location. Once this happens, you cannot
-				// attempt to get the location again until the app has quit and relaunched.
-				//
-				// "Don't Allow" on two successive app launches is the same as saying "never allow". The user
-				// can reset this for all apps by going to Settings > General > Reset > Reset Location Warnings.
-				//
-			case kCLErrorDenied:
-				_activated = NO;
-				break;
-				
-				// This error code is usually returned whenever the device has no data or WiFi connectivity,
-				// or when the location cannot be determined for some other reason.
-				//
-				// CoreLocation will keep trying, so you can keep waiting, or prompt the user.
-				//
-			case kCLErrorLocationUnknown:
-				break;
-				
-				// We shouldn't ever get an unknown error code, but just in case...
-				//
-			default:
-				break;
+//	[self stopUpdating];
+	if ([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorDenied) {
+		_locationAvailable = NO;
+		[[NSNotificationCenter defaultCenter] postNotificationName:CKLocationManagerUserDeniedNotification object:self];
+		
+		if (_shouldDisplayLocationServicesAlert) {
+			[self displayLocationServicesAlert];
 		}
 	}
-
-	// Post a notification
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:error forKey:@"error"];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kLocationManagerDidFailCoordinateNotification object:nil userInfo:userInfo];
+	
+	for (NSValue *value in self.delegates) {
+		id<CKLocationManagerDelegate> delegate = [value nonretainedObjectValue];
+		if ([delegate respondsToSelector:@selector(locationManager:didFailWithError:)]) {
+			[delegate locationManager:self didFailWithError:error];
+		}
+	}
 }
 
-- (void)locationManagerDidTimeout:(CLLocationManager *)locationManager {
-	if (locationManager.location) [self notifyLocation:locationManager.location];
-	else [self locationManager:locationManager didFailWithError:[NSError errorWithDomain:CKLocationManagerErrorDomain code:ErrorTypeTimeOut userInfo:nil]];
+- (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager {
+	return _shouldDisplayHeadingCalibration;
 }
 
-- (void)locationManagerDidFailWithInvalidLocation:(CLLocationManager *)locationManager {
-	[self locationManager:locationManager didFailWithError:[NSError errorWithDomain:CKLocationManagerErrorDomain code:ErrorTypeInvalidLocation userInfo:nil]];
+- (void)displayLocationServicesAlert {
+	UIAlertView *alertView = 
+	  [[[UIAlertView alloc] initWithTitle:_(@"No Location Services")
+								  message:_(@"We could not find your location")
+								 delegate:self
+						cancelButtonTitle:_(@"Dismiss")
+						otherButtonTitles:nil] autorelease];
+	alertView.tag = kAlertViewNoLocationServicesMessage;
+	[alertView show];
 }
 
-#pragma mark MapKit ReverseGeocoder
-
-- (void)findAddressWithLocation:(CLLocation *)location {
-	[_reverseGeocoder release];
-	_reverseGeocoder = [[MKReverseGeocoder alloc] initWithCoordinate:location.coordinate];
-	_reverseGeocoder.delegate = self;
-	[_reverseGeocoder start];
-}
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFindPlacemark:(MKPlacemark *)placemark {
-	CKDebugLog(@"Placemark : %@, %@, %@, %@, %@", placemark.country, placemark.administrativeArea, placemark.locality, placemark.thoroughfare, placemark.subThoroughfare);
-	[self setCachedPlacemark:placemark];
-
-	// Post a notification
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:placemark forKey:@"placemark"];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kLocationManagerDidFindAddressNotification object:nil userInfo:userInfo];
-}
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFailWithError:(NSError *)error {
-	// Post a notification
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:error forKey:@"error"];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kLocationManagerDidFailAddressNotification object:nil userInfo:userInfo];
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (alertView.tag == kAlertViewNoLocationServicesMessage) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:CKLocationManagerServiceDidDisableNotification object:self];
+	}
 }
 
 #pragma mark Multitasking Notifications
@@ -288,9 +211,13 @@
 // Workaround to detect location availability after the application enters foreground, it seems that the
 // property -locationServicesEnabled is not reliable at this step. So, we'll do another run of update to 
 // check if it will fail.
+
 - (void)applicationWillEnterForeground:(NSNotification *)notification {
-	_activated = YES;
-	[self findCurrentAddress];
+	if (_updating) {
+		[self startUpdating];
+	} else {
+		[self startUpdatingAndStopAfterDelay:1.0];
+	}
 }
 
 @end

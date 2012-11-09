@@ -1,7 +1,7 @@
 //
 //  CKDomain.h
 //
-//  Created by Fred Brunel on 10-01-07.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 #import "CKItem.h"
 
 
-/** TODO
+/**
  */
 @interface CKDomain : NSManagedObject {
 }
@@ -23,7 +23,7 @@
 @end
 
 
-/** TODO
+/**
  */
 @interface CKDomain (CKDomainAccessors)
 

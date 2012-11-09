@@ -1,14 +1,19 @@
 //
 //  CKSheetController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 extern NSString *const CKSheetResignNotification;
 extern NSString *const CKSheetWillShowNotification;
 extern NSString *const CKSheetDidShowNotification;
@@ -18,28 +23,89 @@ extern NSString *const CKSheetFrameEndUserInfoKey;
 extern NSString *const CKSheetAnimationDurationUserInfoKey;
 extern NSString *const CKSheetAnimationCurveUserInfoKey;
 extern NSString *const CKSheetKeyboardWillShowInfoKey;
-
-@interface CKSheetController : NSObject{
-    id _delegate;
-    UIViewController* _contentViewController;
-    UIView* _sheetView;
+    
+#ifdef __cplusplus
 }
+#endif
 
+/**
+ */
+@interface CKSheetController : NSObject
+
+///-----------------------------------
+/// @name Initializing a CKSheetController Object
+///-----------------------------------
+
+/** 
+ */
+- (id)initWithContentViewController:(UIViewController *)viewController;
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/** 
+ */
 @property(nonatomic,assign) id delegate;
-@property(nonatomic,retain) UIViewController* contentViewController;
+
+///-----------------------------------
+/// @name Getting the sheetView and contentViewController
+///-----------------------------------
+
+/** 
+ */
+@property(nonatomic,retain,readonly) UIViewController* contentViewController;
+
+/** 
+ */
 @property(nonatomic,retain, readonly) UIView* sheetView;
 
-- (id)initWithContentViewController:(UIViewController *)viewController;
+///-----------------------------------
+/// @name Getting the sheetView status
+///-----------------------------------
+
+/** 
+ */
+@property(nonatomic,assign, readonly) BOOL visible;
+
+///-----------------------------------
+/// @name Presenting a sheetViewController
+///-----------------------------------
+
+/** 
+ */
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;
+
+///-----------------------------------
+/// @name Dismissing a sheetViewController
+///-----------------------------------
+
+/** 
+ */
 - (void)dismissSheetAnimated:(BOOL)animated;
 
 @end
 
 @protocol CKSheetControllerDelegate
 @optional
+///-----------------------------------
+/// @name Dismissing/Presenting a sheetViewController
+///-----------------------------------
+
+/** 
+ */
 - (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController;
+
+/** 
+ */
 - (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController;
+
+/** 
+ */
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController;
+
+/** 
+ */
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController;
 
 @end

@@ -1,14 +1,16 @@
 //
 //  CKUIColorPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-09.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKUIColorPropertyCellController.h"
-#import "CKUIColorAdditions.h"
-#import "CKObjectProperty.h"
+#import "UIColor+Additions.h"
+#import "CKProperty.h"
+#import "NSObject+Bindings.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface CGUIColorWrapper : NSObject{}
 @property(nonatomic,assign)CGFloat a;
@@ -22,32 +24,48 @@
 
 @implementation CKUIColorPropertyCellController
 
-- (id)init{
-	[super init];
+- (void)postInit{
+	[super postInit];
 	self.multiFloatValue = [[[CGUIColorWrapper alloc]init]autorelease];
-	return self;
+    self.size = CGSizeMake(100,44 + 4 * 44);
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)initTableViewCell:(UITableViewCell *)cell {
+    [super initTableViewCell:cell];
+    
+	CKProperty* p = (CKProperty*)self.objectProperty;
+	UIColor* color = [p value];
+    
+    UIView* colorView = [[[UIView alloc]initWithFrame:CGRectMake(10,80,80,80)]autorelease];
+    colorView.backgroundColor = color;
+    colorView.layer.borderColor = [[UIColor blackColor]CGColor];
+    colorView.layer.borderWidth = 2;
+    colorView.tag = 78;
+    
+    [cell.contentView addSubview:colorView];
+}
+
+- (void)propertyChanged{
+    CKProperty* p = (CKProperty*)self.objectProperty;
 	
 	UIColor* color = [p value];
 	
 	if(color){
 		const CGFloat* components = CGColorGetComponents(color.CGColor);
-	
+        
 		CGUIColorWrapper* colorWrapper = (CGUIColorWrapper*)self.multiFloatValue;
 		colorWrapper.r = components[0];
 		colorWrapper.g = components[1];
 		colorWrapper.b = components[2];
 		colorWrapper.a = CGColorGetAlpha(color.CGColor);
 	}
-	
-	[super setupCell:cell];
+    
+    UIView* colorView = [self.tableViewCell.contentView viewWithTag:78];
+    colorView.backgroundColor = color;
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.objectProperty;
 	CGUIColorWrapper* colorWrapper = (CGUIColorWrapper*)self.multiFloatValue;
 	
 	UIColor* color = [UIColor colorWithRed:colorWrapper.r
@@ -55,10 +73,9 @@
 					 blue:colorWrapper.b
 					alpha:colorWrapper.a];
 	[p setValue:color];
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 4 * 44)];
+    
+    UIView* colorView = [self.tableViewCell.contentView viewWithTag:78];
+    colorView.backgroundColor = color;
 }
 
 @end

@@ -1,14 +1,17 @@
 //
 //  CKInetEndPoint.m
-//  LoleWall
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-12-15.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKInetEndPoint.h"
 
-@implementation CKInetEndPoint
+@implementation CKInetEndPoint{
+	NSString *_inetAddressRepresentation;
+	NSUInteger _port;
+}
 
 @synthesize inetAddressRepresentation = _inetAddressRepresentation;
 @synthesize port = _port;

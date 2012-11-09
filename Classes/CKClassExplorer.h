@@ -1,19 +1,19 @@
 //
 //  CKClassExplorer.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-10.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import "CKObjectTableViewController.h"
-#import "CKDocumentArray.h"
+#import "CKTableCollectionViewController.h"
+#import "CKArrayCollection.h"
 #import "CKCallback.h"
 
 
-/** TODO
+/**
  */
 typedef enum CKClassExplorerType{
 	CKClassExplorerTypeClasses,
@@ -21,10 +21,10 @@ typedef enum CKClassExplorerType{
 }CKClassExplorerType;
 
 
-/** TODO
+/**
  */
-@interface CKClassExplorer : CKObjectTableViewController {
-	CKDocumentArray* _classesCollection;
+@interface CKClassExplorer : CKTableCollectionViewController {
+	CKArrayCollection* _classesCollection;
 	id _userInfo;
 	NSString* _className;
 }

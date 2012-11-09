@@ -1,8 +1,8 @@
 //
 //  CKAlertView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-09-06.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -15,10 +15,20 @@ typedef void (^CKAlertViewActionBlock)();
  */
 @interface CKAlertView : NSObject <UIAlertViewDelegate> {
 }
+@property (nonatomic, retain, readonly) UIAlertView *alertView;
+@property (nonatomic, copy) CKAlertViewActionBlock deallocBlock;
 
 ///-----------------------------------
 /// @name Creating the CKAlertView
 ///-----------------------------------
+
+/** 
+ Returns an autoreleased CKAlertView with the specified starting parameters.
+ @param title A string to display in the title area of the alert. Pass `nil` if you do not want to display any text in the title area.
+ @param message A string to display in the message area of the alert. Pass `nil` if you do not want to display any text in the message area.
+ @return A newly initialized CKAlertView.
+ */
++ (id)alertViewWithTitle:(NSString *)title message:(NSString *)message;
 
 /** 
  Initalizes the CKAlertView with the specified starting parameters.

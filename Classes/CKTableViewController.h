@@ -1,15 +1,19 @@
 //
 //  CKTableViewController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-02-15.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
-//
-//  Initial code created by Jonathan Wight on 2/25/09.
-//  Copyright 2009 toxicsoftware.com. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "CKItemViewContainerController.h"
+#import "CKCollectionViewController.h"
+
+/**
+ */
+typedef enum {
+	CKTableViewOrientationPortrait,
+	CKTableViewOrientationLandscape
+} CKTableViewOrientation;
 
 // From UITableViewController:
 // Creates a table view with the correct dimensions and autoresizing, setting the datasource and delegate to self.
@@ -18,30 +22,68 @@
 // Implements -setEditing:animated: to toggle the editing state of the table.
 
 
-/** TODO
+/**
  */
-@interface CKTableViewController : CKItemViewContainerController <UITableViewDataSource, UITableViewDelegate> {
-	UIView *_backgroundView;
-	UIView *_tableViewContainer;
-	UITableView *_tableView;
-	UITableViewStyle _style;
-	BOOL _stickySelection;
-	NSIndexPath *_selectedIndexPath;
-    UIEdgeInsets _tableViewInsets;
-}
+@interface CKTableView : UITableView
+@end
 
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property (nonatomic, retain) IBOutlet UIView *tableViewContainer;
+/**
+ */
+@interface CKTableViewController : CKCollectionViewController <UITableViewDataSource, UITableViewDelegate> 
+
+///-----------------------------------
+/// @name Initializing a TableView Controller Object
+///-----------------------------------
+
+/**
+ */
+- (id)initWithStyle:(UITableViewStyle)style;
+
+///-----------------------------------
+/// @name Getting the Table View
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain) CKTableView *tableView;
+
+/** tableView is a subview of tableViewContainer. tableViewContainer allow us to rotate the whole content in portrait or landscape correctly.
+ */
+@property (nonatomic, retain) UIView *tableViewContainer;
+
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, assign) UITableViewStyle style;
-@property (nonatomic, retain) UIView *backgroundView;
-@property (nonatomic, assign) BOOL stickySelection;
+
+/**
+ */
 @property (nonatomic, assign) UIEdgeInsets tableViewInsets;
 
-- (id)initWithStyle:(UITableViewStyle)style;
+
+///-----------------------------------
+/// @name Managing Selection
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign, getter = isStickySelection) BOOL stickySelectionEnabled;
+
+/**
+ */
 - (void)clearSelection:(BOOL)animated;
+
+
+///-----------------------------------
+/// @name Reloading the TableView Controller
+///-----------------------------------
+
+/**
+ */
 - (void)reload;
 
-//this will resize the tableViewContainer and the tableView contentOffset using the view frame and the tableViewInsets
-- (void)sizeToFit;
 
 @end

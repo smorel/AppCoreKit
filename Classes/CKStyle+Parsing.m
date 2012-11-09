@@ -1,14 +1,30 @@
 //
 //  CKStyle+Parsing.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-20.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKStyle+Parsing.h"
-#import "CKUIColorAdditions.h"
+#import "UIColor+Additions.h"
 #import "CKLocalization.h"
+
+
+#import "UIColor+ValueTransformer.h"
+#import "UIImage+ValueTransformer.h"
+#import "NSNumber+ValueTransformer.h"
+#import "NSURL+ValueTransformer.h"
+#import "NSDate+ValueTransformer.h"
+#import "NSArray+ValueTransformer.h"
+#import "CKCollection+ValueTransformer.h"
+#import "NSIndexPath+ValueTransformer.h"
+#import "NSObject+ValueTransformer.h"
+#import "NSValueTransformer+NativeTypes.h"
+#import "NSValueTransformer+CGTypes.h"
+#import "CKConfiguration.h"
+
+#import "CKDebug.h"
 
 //TODO : HERE store the converted data in the key to convert only once !
 
@@ -56,9 +72,12 @@ static NSSet* CKStyleResourceTypeSet = nil;
 		return object;
 	}
 	id result = [NSValueTransformer transform:object toClass:[UIImage class]];
-	if(result){
-		[self setObject:result forKey:key];
-	}	return result;
+    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        if(result){
+            [self setObject:result forKey:key];
+        }
+    }
+    return result;
 }
 
 - (NSInteger) enumValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor{
@@ -67,7 +86,18 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object intValue];
 	}
-	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor];
+	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor bitMask:enumDescriptor.isBitMask];
+	[self setObject:[NSNumber numberWithInt:result] forKey:key];
+	return result;
+}
+
+- (NSInteger) bitMaskValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor{
+	id object = [self objectForKey:key];
+    if(!object) return 0;
+	if([object isKindOfClass:[NSNumber class]]){
+		return [object intValue];
+	}
+	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor bitMask:YES];
 	[self setObject:[NSNumber numberWithInt:result] forKey:key];
 	return result;
 }
@@ -81,6 +111,29 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	CGSize result = [NSValueTransformer convertCGSizeFromObject:object];
 	[self setObject:[NSValue valueWithCGSize:result] forKey:key];
 	return result;	
+}
+
+- (CGRect) cgRectForKey:(NSString*)key{
+	id object = [self objectForKey:key];
+    if(!object) return CGRectMake(0,0,0,0);
+	if([object isKindOfClass:[NSValue class]]){
+		return [object CGRectValue];
+	}
+	CGRect result = [NSValueTransformer convertCGRectFromObject:object];
+	[self setObject:[NSValue valueWithCGRect:result] forKey:key];
+	return result;	
+}
+
+
+- (UIEdgeInsets) edgeInsetsForKey:(NSString*)key{
+    id object = [self objectForKey:key];
+    if(!object) return UIEdgeInsetsMake(0,0,0,0);
+	if([object isKindOfClass:[NSValue class]]){
+		return [object UIEdgeInsetsValue];
+	}
+	UIEdgeInsets result = [NSValueTransformer convertUIEdgeInsetsFromObject:object];
+	[self setObject:[NSValue valueWithUIEdgeInsets:result] forKey:key];
+	return result;
 }
 
 - (CGFloat) cgFloatForKey:(NSString*)key{
@@ -98,7 +151,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 - (NSString*) stringForKey:(NSString*)key{
 	id object = [self objectForKey:key];
     if(!object) return nil;
-	NSAssert(object == nil || [object isKindOfClass:[NSString class]],@"invalid class for string");
+	CKAssert(object == nil || [object isKindOfClass:[NSString class]],@"invalid class for string");
 	return _((NSString*)object);
 }
 
@@ -113,8 +166,20 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	return result;	
 }
 
+- (BOOL) boolForKey:(NSString*)key{
+    id object = [self objectForKey:key];
+    if(!object) return 0;
+	if([object isKindOfClass:[NSNumber class]]){
+		return [object boolValue];
+	}
+	BOOL result = [NSValueTransformer convertBoolFromObject:object];
+	[self setObject:[NSNumber numberWithBool:result] forKey:key];
+	return result;
+}
+
 + (NSSet*)resourceTypes{
-    if(CKStyleResourceTypeSet == nil){
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         CKStyleResourceTypeSet = [[NSSet setWithObjects:
                                    [NSValue valueWithPointer:[NSString class]],
                                    [NSValue valueWithPointer:[NSURL class]],
@@ -125,11 +190,11 @@ static NSSet* CKStyleResourceTypeSet = nil;
                                    [NSValue valueWithPointer:[NSDate class]],
                                    [NSValue valueWithPointer:[NSIndexPath class]],
                                    nil]retain];
-    }
+    });
     return CKStyleResourceTypeSet;
 }
 
-- (id)setObjectForKey:(NSString*)key inProperty:(CKObjectProperty*)property{
+- (id)setObjectForKey:(NSString*)key inProperty:(CKProperty*)property{
 	id object = [self objectForKey:key];
 	id transformedValue = [NSValueTransformer transform:object inProperty:property];
     if(object == transformedValue){

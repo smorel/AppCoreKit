@@ -1,15 +1,16 @@
 //
 //  CKCoreDataManager.h
 //
-//  Created by Fred Brunel on 2010/01/05.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 #import "CKCoreDataManager.h"
-#import "CKNSDateAdditions.h"
-#import "CKNSStringAdditions.h"
+#import "NSDate+Conversions.h"
+#import "NSDate+Calculations.h"
+#import "NSString+Additions.h"
 #import "CKDebug.h"
 
 // Private Interface
@@ -17,10 +18,10 @@
 @interface CKCoreDataManager ()
 
 @property (retain, readwrite) NSURL *storeURL;
+@property (retain, readwrite) NSURL *modelURL;
 @property (retain, readwrite) NSString *storeType;
 @property (retain, readwrite) NSDictionary *storeOptions;
 
-- (CKCoreDataManager *)initWithDefault;
 - (NSString *)_applicationDocumentsDirectory;
 - (NSURL *)_storeURLForName:(NSString *)name storeType:(NSString *)storeType;
 
@@ -28,9 +29,18 @@
 
 // Implementation
 
-@implementation CKCoreDataManager
+@implementation CKCoreDataManager{
+	NSURL *_storeURL;
+    NSURL *_modelURL;
+	NSString *_storeType;
+	NSDictionary *_storeOptions;
+    NSManagedObjectModel *_objectModel;
+    NSManagedObjectContext *_objectContext;	    
+    NSPersistentStoreCoordinator *_persistentStoreCoordinator;	
+}
 
 @synthesize storeURL = _storeURL;
+@synthesize modelURL = _modelURL;
 @synthesize storeType = _storeType;
 @synthesize storeOptions = _storeOptions;
 
@@ -40,36 +50,21 @@
 
 //
 
-static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
-
-+ (CKCoreDataManager *)sharedManager {
-
-	@synchronized(self) {
-		if (! _ckCoreDataManagerInstance) {
-			_ckCoreDataManagerInstance = [[CKCoreDataManager alloc] initWithDefault];
-		}
-	}
-	return _ckCoreDataManagerInstance;
-}
-
-+ (void)setSharedManager:(CKCoreDataManager *)manager {
-	[_ckCoreDataManagerInstance release];
-	_ckCoreDataManagerInstance = [manager retain];
-}
-
-//
-
-- (CKCoreDataManager *)initWithDefault {
+- (CKCoreDataManager *)initWithModelURL:(NSURL *)modelURL {
 	NSURL *storeURL = [self _storeURLForName:[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey] storeType:NSSQLiteStoreType];
 	NSDictionary *storeOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-								    [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                                    [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
 								    [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
-	return [self initWithPersistentStoreURL:storeURL storeType:NSSQLiteStoreType storeOptions:storeOptions];
+	return [self initWithPersistentStoreURL:storeURL 
+                                   modelURL:modelURL
+                                  storeType:NSSQLiteStoreType
+                               storeOptions:storeOptions];
 }
 
-- (CKCoreDataManager *)initWithPersistentStoreURL:(NSURL *)storeURL storeType:(NSString *)storeType storeOptions:(NSDictionary *)storeOptions {
+- (CKCoreDataManager *)initWithPersistentStoreURL:(NSURL *)storeURL modelURL:(NSURL *)modelURL storeType:(NSString *)storeType storeOptions:(NSDictionary *)storeOptions {
 	if (self = [super init]) {
 		self.storeURL = storeURL;
+        self.modelURL = modelURL;
 		self.storeType = storeType;
 		self.storeOptions = storeOptions;
 		
@@ -142,7 +137,13 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 
 - (NSManagedObjectModel *)objectModel {	
     if (_objectModel != nil) { return _objectModel; }
-    _objectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+    
+    if (_modelURL == nil) {
+        _objectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    } else {
+        _objectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:_modelURL];    
+    }
+
     return _objectModel;
 }
 

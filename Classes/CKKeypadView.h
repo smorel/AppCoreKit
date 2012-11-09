@@ -1,15 +1,15 @@
 //
 //  CKKeypadView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-05-26.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-/** TODO
+/**
  */
 typedef enum {
 	CKKeypadViewKeyZero = 0,
@@ -32,7 +32,7 @@ typedef enum {
 
 // CKKeypadViewDelegate
 
-/** TODO
+/**
  */
 @protocol CKKeypadViewDelegate
 @optional
@@ -43,7 +43,7 @@ typedef enum {
 
 // CKKeypadView
 
-/** TODO
+/**
  */
 @interface CKKeypadView : UIView {
 	NSString *_value;

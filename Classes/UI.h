@@ -1,76 +1,84 @@
 //
 //  UI.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-19.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
+#import "UIView+Name.h"
 #import "CKPopoverController.h"
 #import "CKSheetController.h"
 
-#import "CKUIViewController.h"
+#import "CKViewController.h"
+#import "UINavigationController+BlockBasedDelegate.h"
 
-#import "CKItemViewController.h"
-#import "CKItemViewContainerController.h"
+#import "CKCollectionCellController.h"
+#import "CKCollectionCellControllerFactory.h"
+#import "CKCollectionViewController.h"
 
 #import "CKCarouselView.h"
-#import "CKObjectCarouselViewController.h"
+#import "CKCarouselCollectionViewController.h"
 
-#import "CKTableViewCellNextResponder.h"
 #import "CKTableViewCellController.h"
+#import "CKTableViewCellController+BlockBasedInterface.h"
+#import "CKTableViewCellController+Responder.h"
 #import "CKTableViewController.h"
-#import "CKObjectTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKOptionTableViewController.h"
-#import "CKNSDictionary+TableViewAttributes.h"
-#import "CKManagedTableViewController.h"
-#import "CKClassExplorer.h"
+
+#import "CKSectionViews.h"
 #import "CKFormTableViewController.h"
-#import "CKFormTableViewController+PropertyGrid.h"
-#import "CKFormTableViewController+Menus.h"
+#import "CKTableViewCellController+PropertyGrid.h"
+#import "CKTableViewCellController+Menus.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+Factory.h"
+#import "CKViewControllerCellController.h"
 
-#import "CKDocumentCollectionCellController.h"
-#import "CKImageButtonCellController.h"
-#import "CKMoviePlayerCellController.h"
-#import "CKNibCellController.h"
-#import "CKOptionCellController.h"
-#import "CKStandardCellController.h"
-#import "CKTextFieldCellController.h"
-#import "CKTextViewCellController.h"
-#import "CKToggleSwitchCellController.h"
+#import "CKCollectionTableViewCellController.h"
 
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 #import "CKNSDatePropertyCellController.h"
 #import "CKNSNumberPropertyCellController.h"
 #import "CKNSStringPropertyCellController.h"
 #import "CKMultilineNSStringPropertyCellController.h"
 #import "CKOptionPropertyCellController.h"
-#import "CKMultiFloatPropertyCellController.h"
-#import "CKNSObjectPropertyCellController.h"
-#import "CKCGPropertyCellControllers.h"
-#import "CKUIColorPropertyCellController.h"
-#import "CKUIImagePropertyCellController.h"
 
-#import "CKMapCellController.h"
-#import "CKMapViewController.h"
+#import "CKMapAnnotationController.h"
+#import "CKMapCollectionViewController.h"
+#import "CKGridCollectionViewController.h"
 
 #import "CKActionSheet.h"
 #import "CKAlertView.h"
-#import "CKCalloutView.h"
 #import "CKCreditsFooterView.h"
-#import "CKRoundedCornerView.h"
-#import "CKGradientView.h"
-#import "CKGridView.h"
 #import "CKImageView.h"
-#import "CKKeypadView.h"
-#import "CKOverlayView.h"
-#import "CKOverlayView+Factory.h"
-#import "CKPageScrollView.h"
-#import "CKPickerView.h"
 #import "CKSlideshowViewController.h"
-#import "CKSlotView.h"
 #import "CKTextView.h"
-#import "CKUIView+Factory.h"
-#import "CKUIView+Layout.h"
 #import "CKWebViewController.h"
-#import "CKWebViewControllerRef.h"
+#import "CKWebBrowserViewController.h"
+
+#import "CKSegmentedControl.h"
+
+#import "CKInlineDebuggerController.h"
+#import "UIView+Positioning.h"
+#import "UIView+InlineDebugger.h"
+
+#import "UIView+DragNDrop.h"
+#import "UIBarButtonItem+BlockBasedInterface.h"
+
+
+#import "CKContainerViewController.h"
+#import "CKBreadCrumbViewController.h"
+#import "CKSplitViewController.h"
+#import "CKTabViewController.h"
+#import "CKSegmentedViewController.h"
+
+#import "UIViewController+DeviceOrientation.h"
+#import "UIGestureRecognizer+BlockBasedInterface.h"
+
+
+#import "CKObjectController.h"
+#import "CKCollectionController.h"
+
+
+#import "CKLayoutBox.h"

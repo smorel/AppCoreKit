@@ -1,3 +1,4 @@
+
 //
 //  CKSerializer.m
 //  CloudKit
@@ -10,9 +11,15 @@
 #import <objc/runtime.h>
 #import "CKLocalization.h"
 
-#import "CKModelObject+CKStore.h"
+#import "CKObject+CKStore.h"
 
 #define AUTO_LOCALIZATION 0
+
+typedef struct CKNSValueTransformerIdentifier {
+    Class fromClass;
+    Class toClass;
+    Class contentClass;
+} CKNSValueTransformerIdentifier;
 
 
 NSString* CKNSValueTransformerCacheClassTag = @"CKNSValueTransformerCacheClassTag";
@@ -33,18 +40,18 @@ NSString* CKSerializerIDTag = @"@id";
 @end
 
 
-@interface NSValueTransformer()
-+ (id)transform:(id)source toClass:(Class)type inProperty:(CKObjectProperty*)property;
+@interface NSValueTransformer(CKAdditionPrivate)
++ (id)transform:(id)source toClass:(Class)type inProperty:(CKProperty*)property;
 + (void)registerConverterWithIdentifier:(NSString*)identifier selectorClass:(Class)selectorClass selector:(SEL)selector;
 + (NSDictionary*)converterWithIdentifier:(NSString*)identifier;
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)class;
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content;
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)class;
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content;
 @end
 
 //utiliser des selector au lieu des valueTransformers
 @implementation NSValueTransformer (CKAddition)
 
-+ (id)transform:(id)object inProperty:(CKObjectProperty*)property{
++ (id)transform:(id)object inProperty:(CKProperty*)property{
 	CKClassPropertyDescriptor* descriptor = [property descriptor];
 	
 	switch(descriptor.propertyType){
@@ -55,10 +62,10 @@ NSString* CKSerializerIDTag = @"@id";
 			break;
 		}
 		case CKClassPropertyDescriptorTypeInt:{
-			CKObjectPropertyMetaData* metaData = [property metaData];
+			CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 			NSInteger i = 0;
-			if(metaData.enumDescriptor != nil){
-				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:metaData.enumDescriptor];
+			if(attributes.enumDescriptor != nil){
+				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
 			}
 			else{
 				i = [NSValueTransformer convertIntegerFromObject:object];
@@ -137,7 +144,7 @@ NSString* CKSerializerIDTag = @"@id";
 			Class c =  [NSValueTransformer convertClassFromObject:object];
             [property setValue:(id)c];
 			/*[property setValue:[NSValue valueWithPointer:c]];
-			return [NSValue valueWithPointer:c];*/
+             return [NSValue valueWithPointer:c];*/
             return c;
 			break;
 		}
@@ -219,54 +226,64 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (void)registerConverterWithIdentifier:(NSString*)identifier selectorClass:(Class)selectorClass selector:(SEL)selector{
-	if(CKNSValueTransformerCache == nil){
-		CKNSValueTransformerCache = [[NSMutableDictionary dictionary]retain];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKNSValueTransformerCache = [[NSMutableDictionary dictionary]retain];
+    });
 	[CKNSValueTransformerCache setValue:[NSDictionary dictionaryWithObjectsAndKeys:
 										 [NSValue valueWithPointer:selectorClass],CKNSValueTransformerCacheClassTag,
 										 [NSValue valueWithPointer:selector],CKNSValueTransformerCacheSelectorTag,nil]
 								 forKey:identifier];
 }
 
-+ (NSDictionary*)converterWithIdentifier:(NSString*)identifier{
++ (NSDictionary*)converterWithIdentifier:(id)identifier{
 	return [CKNSValueTransformerCache objectForKey:identifier];
 }
 
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)target{
-	NSDictionary* dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)target{
+	NSMutableDictionary* dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
 	if(dico != nil){
 		id value = [dico objectForKey:[target description]];
 		if([value isKindOfClass:[NSString class]])
 			return value;
 	}
 	
-	NSString* converterIdentifier = [NSString stringWithFormat:@"%@TO%@",[[source class]description],[target description]];
-	if(CKNSValueTransformerIdentifierCache == nil){
-		CKNSValueTransformerIdentifierCache = [[NSMutableDictionary dictionary]retain];
-		[CKNSValueTransformerIdentifierCache setObject:[NSMutableDictionary dictionaryWithObject:converterIdentifier 
-																		 forKey:[target description]]
-									  forKey:[source description]];
-	}
-	else{
-		NSMutableDictionary* dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
-		if(dico == nil){
-			[CKNSValueTransformerIdentifierCache setObject:[NSMutableDictionary dictionaryWithObject:converterIdentifier 
-																					   forKey:[target description]]
-													forKey:[source description]];
-		}
-		else{
-			[dico setObject:converterIdentifier forKey:[target description]];
-		}
-	}
-	return converterIdentifier;
+    CKNSValueTransformerIdentifier identifier;
+    identifier.fromClass = source;
+    identifier.toClass = target;
+    identifier.contentClass = nil;
+    
+    NSValue *identifierValue = [NSValue value:&identifier withObjCType:@encode(CKNSValueTransformerIdentifier)];
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKNSValueTransformerIdentifierCache = [[NSMutableDictionary alloc] init];
+    });
+    
+    dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
+    if(dico == nil){
+        [CKNSValueTransformerIdentifierCache setObject:[NSMutableDictionary dictionaryWithObject:identifierValue forKey:[target description]]
+                                                forKey:[source description]];
+    }
+    else{
+        [dico setObject:identifierValue forKey:[target description]];
+    }
+    
+	return identifierValue;
 }
 
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content{
-	NSString* converterIdentifier = [NSString stringWithFormat:@"%@_%@TO%@",[[source class]description],[content description],[target description]];
-	return converterIdentifier;
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content{
+	CKNSValueTransformerIdentifier identifier;
+    identifier.fromClass = source;
+    identifier.toClass = target;
+    identifier.contentClass = content;
+    
+    NSValue *identifierValue = [NSValue value:&identifier withObjCType:@encode(CKNSValueTransformerIdentifier)];
+    
+	return identifierValue;
 }
 
-+ (id)transform:(id)source toClass:(Class)type inProperty:(CKObjectProperty*)property{
++ (id)transform:(id)source toClass:(Class)type inProperty:(CKProperty*)property{
 	if(source == nil){
 		if(property != nil){
 			[property setValue:nil];
@@ -276,9 +293,9 @@ NSString* CKSerializerIDTag = @"@id";
 	
 	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
 	
-	CKObjectPropertyMetaData* metaData = [property metaData];
-	if(metaData.contentType != nil){
-		NSString* converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:metaData.contentType];
+	CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+	if(attributes.contentType != nil){
+		id converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:attributes.contentType];
 		NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
 		
 		SEL selector = nil;
@@ -292,7 +309,7 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		
 		if(selector != nil){
-			id result = [type performSelector:selector withObject:source withObject:[metaData.contentType description]];
+			id result = [type performSelector:selector withObject:source withObject:[attributes.contentType description]];
 			if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 				result = _(result);
 			}
@@ -305,17 +322,17 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 	
 	//special case for date
-	if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSDate class]]
+	if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSDate class]]
 	   && [source isKindOfClass:[NSString class]]){
-		id result = [NSDate convertFromNSString:source withFormat:metaData.dateFormat];
+		id result = [NSDate convertFromNSString:source withFormat:attributes.dateFormat];
 		if(property != nil){
 			[property setValue:result];
 		}
 		return source;
 	}
-	else if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSString class]]
+	else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSString class]]
 			&& [source isKindOfClass:[NSDate class]]){
-		id result = [NSDate convertToNSString:source withFormat:metaData.dateFormat];
+		id result = [NSDate convertToNSString:source withFormat:attributes.dateFormat];
 		if(property != nil){
 			[property setValue:result];
 		}
@@ -335,7 +352,7 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 	
 	//Use the cached selector if exists
-	NSString* converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type];
+	id converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type];
 	NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
 	if(dico != nil){
 		SEL selector = [[dico objectForKey:CKNSValueTransformerCacheSelectorTag]pointerValue];
@@ -403,14 +420,14 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		
         
-		if([NSObject isKindOf:typeToCreate parentType:[CKModelObject class]]){
+		if([NSObject isClass:typeToCreate kindOfClass:[CKObject class]]){
 			id uniqueId = [source valueForKeyPath:@"uniqueId"];
 			if([uniqueId isKindOfClass:[NSString class]]){
-				target = [CKModelObject objectWithUniqueId:uniqueId];
+				target = [CKObject objectWithUniqueId:uniqueId];
 			}
 			if(target == nil){
 				target = [[[typeToCreate alloc]init]autorelease];
-				[CKModelObject registerObject:target withUniqueId:uniqueId];
+				[CKObject registerObject:target withUniqueId:uniqueId];
 			}
 		}
 		else{
@@ -434,29 +451,29 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 
-+ (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type{
-    CKObjectPropertyMetaData* metaData = [property metaData];
-	if([NSObject isKindOf:type parentType:[NSString class]]
++ (id)transformProperty:(CKProperty*)property toClass:(Class)type{
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+	if([NSObject isClass:type kindOfClass:[NSString class]]
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		switch(descriptor.propertyType){
 			case CKClassPropertyDescriptorTypeInt:{
-				if(metaData.enumDescriptor != nil){
-					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:metaData.enumDescriptor];
+				if(attributes.enumDescriptor != nil){
+					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
 				}
 				break;
 			}
 		}
 	}
 	//special case for date ...
-    else if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSDate class]]
-	   && [property.value isKindOfClass:[NSString class]]){
-		id result = [NSDate convertFromNSString:property.value withFormat:metaData.dateFormat];
+    else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSDate class]]
+            && [property.value isKindOfClass:[NSString class]]){
+		id result = [NSDate convertFromNSString:property.value withFormat:attributes.dateFormat];
 		return result;
 	}
-	else if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSString class]]
+	else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSString class]]
 			&& [property.value isKindOfClass:[NSDate class]]){
-		id result = [NSDate convertToNSString:property.value withFormat:metaData.dateFormat];
+		id result = [NSDate convertToNSString:property.value withFormat:attributes.dateFormat];
 		return result;
 	}
     
@@ -464,21 +481,21 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 + (void)transform:(NSDictionary*)source toObject:(id)target{
-	if([target isKindOfClass:[CKModelObject class]]){
-		CKModelObject* model = (CKModelObject*)target;
+	if([target isKindOfClass:[CKObject class]]){
+		CKObject* model = (CKObject*)target;
 		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:YES]];//PRIVATE SELECTOR
 	}
 	NSArray* descriptors = [target allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in descriptors){
 		id object = [source objectForKey:descriptor.name];
 		if(object != nil){
-			CKObjectProperty* property = [[CKObjectProperty alloc]initWithObject:target keyPath:descriptor.name];
+			CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:descriptor.name];
 			[NSValueTransformer transform:object inProperty:property];
 			[property autorelease];
 		}
 	}
-	if([target isKindOfClass:[CKModelObject class]]){
-		CKModelObject* model = (CKModelObject*)target;
+	if([target isKindOfClass:[CKObject class]]){
+		CKObject* model = (CKObject*)target;
 		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:NO]];//PRIVATE SELECTOR
 	}
 }

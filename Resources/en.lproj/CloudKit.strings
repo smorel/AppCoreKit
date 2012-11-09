@@ -6,3 +6,26 @@
   Copyright 2011 Wherecloud. All rights reserved.
 */
 
+"Edit" = "Edit";
+"Done" = "Done";
+
+"Could not find image file on disk" = "Could not find image file on disk";
+"Did not receive an image" = "Did not receive an image";
+
+"Inspector" = "Inspector";
+"Documents" = "Documents";
+
+"No Location Services" = "No Location Services";
+"We could not find your location" = "We could not find your location";
+"Dismiss" = "Dismiss";
+
+"Previous" = "Previous";
+"Next" = "Next";
+
+"No Title" = "No Title";
+
+"%d of %d" = "%d of %d";
+
+"No Internet Connection" = "No Internet Connection";
+"You don't seems to have Internet access right now, do you want to try again?" = "You don’t seems to have Internet access right now, do you want to try again?";
+"Retry" = "Retry";
