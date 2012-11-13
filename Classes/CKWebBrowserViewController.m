@@ -44,6 +44,7 @@
 @synthesize showDocumentTitle;
 @synthesize wasUsingToolbar, wasUsingNavigationbar,autoManageNavigationAndToolBar;
 @synthesize webView;
+@synthesize webViewDidFinishLoadingBlock;
 
 - (id)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
@@ -51,6 +52,15 @@
         self.autoManageNavigationAndToolBar = YES;
 	}
     return self;	
+}
+
+- (id)initWithURL:(NSURL *)url webViewDidFinishLoadingBlock:(void (^)(UIWebView *webView, NSError *error))completion{
+    if (self = [super init]) {
+		self.homeURL = url;
+        self.autoManageNavigationAndToolBar = YES;
+        self.webViewDidFinishLoadingBlock = completion;
+	}
+    return self;
 }
 
 - (void)dealloc {
@@ -62,6 +72,7 @@
 	self.actionButtonItem = nil;
 	self.spinnerItem = nil;
     self.webView = nil;
+    self.webViewDidFinishLoadingBlock = nil;
     [super dealloc];
 }
 
@@ -75,6 +86,7 @@
     [super viewDidLoad];
     
     self.webController = [[[CKWebViewController alloc] init] autorelease];
+    self.webController.webViewDidFinishLoadingBlock = self.webViewDidFinishLoadingBlock;
     self.webController.view.frame = self.view.bounds;
     self.webController.view.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.webView = self.webController.webView;
