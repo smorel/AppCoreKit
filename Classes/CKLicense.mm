@@ -89,6 +89,7 @@ bool checkLicense(){
     @autoreleasepool {
         printf("Bypassing AppCoreKit License Check.\n");
     }
+    return true;
 }
 
 #endif
