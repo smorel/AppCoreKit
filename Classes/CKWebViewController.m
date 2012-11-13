@@ -41,7 +41,7 @@
 }
 
 - (id)initWithURL:(NSURL *)anURL {
-    return [self initWithURL:anURL withCompletionBlock:nil];
+    return [self initWithURL:anURL webViewDidFinishLoadingBlock:nil];
 }
 
 - (id)initWithURL:(NSURL *)anURL webViewDidFinishLoadingBlock:(void (^)(UIWebView *, NSError *))completion {
