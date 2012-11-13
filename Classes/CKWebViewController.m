@@ -44,7 +44,7 @@
     return [self initWithURL:anURL withCompletionBlock:nil];
 }
 
-- (id)initWithURL:(NSURL *)anURL withCompletionBlock:(void (^)(UIWebView *, NSError *))completion {
+- (id)initWithURL:(NSURL *)anURL webViewDidFinishLoadingBlock:(void (^)(UIWebView *, NSError *))completion {
     if (self = [super init]) {
         self.URL = anURL;
         self.webViewDidFinishLoadingBlock = completion;
