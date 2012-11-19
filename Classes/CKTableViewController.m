@@ -265,9 +265,12 @@
     
     if(!theTableView){
         theTableView = [[[CKTableView alloc] initWithFrame:containerView.bounds style:self.style] autorelease];
-        theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [containerView addSubview:theTableView];
+    }else{
+        theTableView.frame = containerView.bounds;
     }
+    theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [containerView addSubview:theTableView];
+    
     self.tableView = theTableView;
     
     theTableView.name = @"tableView";

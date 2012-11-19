@@ -23,13 +23,13 @@
 
 @implementation CKWebViewController
 
-@synthesize URL, webView, completionBlock, reachability;
+@synthesize URL, webView, webViewDidFinishLoadingBlock, reachability;
 @synthesize delegate;
 
 - (void)dealloc {    
     self.URL = nil;
     self.webView = nil;
-    self.completionBlock = nil;
+    self.webViewDidFinishLoadingBlock = nil;
     self.reachability = nil;
     self.webView.delegate = nil;
     
@@ -41,13 +41,13 @@
 }
 
 - (id)initWithURL:(NSURL *)anURL {
-    return [self initWithURL:anURL withCompletionBlock:nil];
+    return [self initWithURL:anURL webViewDidFinishLoadingBlock:nil];
 }
 
-- (id)initWithURL:(NSURL *)anURL withCompletionBlock:(void (^)(UIWebView *, NSError *))completion {
+- (id)initWithURL:(NSURL *)anURL webViewDidFinishLoadingBlock:(void (^)(UIWebView *, NSError *))completion {
     if (self = [super init]) {
         self.URL = anURL;
-        self.completionBlock = completion;
+        self.webViewDidFinishLoadingBlock = completion;
     }
     return self;
 }
@@ -132,16 +132,16 @@
 	if (height > 0)
 		self.contentSizeForViewInPopover = CGSizeMake(self.contentSizeForViewInPopover.width, height);
     
-    if (self.completionBlock)
-        completionBlock(self.webView, nil);
+    if (self.webViewDidFinishLoadingBlock)
+        webViewDidFinishLoadingBlock(self.webView, nil);
     
     if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)])
         [self.delegate webViewDidFinishLoad:self.webView];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    if (self.completionBlock)
-        completionBlock(self.webView, error);
+    if (self.webViewDidFinishLoadingBlock)
+        webViewDidFinishLoadingBlock(self.webView, error);
     
     if ([self.delegate respondsToSelector:@selector(webView:didFailLoadWithError:)])
         [self.delegate webView:self.webView didFailLoadWithError:error];

@@ -39,6 +39,10 @@ typedef enum {
  */
 - (id)initWithURL:(NSURL *)url;
 
+/**
+ */
+- (id)initWithURL:(NSURL *)url webViewDidFinishLoadingBlock:(void (^)(UIWebView *webView, NSError *error))completion;
+
 ///-----------------------------------
 /// @name Configuring a CKWebBrowserViewController
 ///-----------------------------------
@@ -67,6 +71,10 @@ typedef enum {
 /**
  */
 @property (nonatomic, readonly, retain) UIWebView *webView;
+
+/**
+ */
+@property (nonatomic, copy) void (^webViewDidFinishLoadingBlock)(UIWebView *webView, NSError *error);
 
 ///-----------------------------------
 /// @name Customizing the toolbar

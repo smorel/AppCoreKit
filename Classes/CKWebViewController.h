@@ -25,7 +25,7 @@
 
 /**
  */
-- (id)initWithURL:(NSURL*)URL withCompletionBlock:(void (^)(UIWebView *webView, NSError *error))completion;
+- (id)initWithURL:(NSURL*)URL webViewDidFinishLoadingBlock:(void (^)(UIWebView *webView, NSError *error))completion;
 
 ///-----------------------------------
 /// @name Getting the web view status
@@ -37,7 +37,7 @@
 
 /**
  */
-@property (nonatomic, copy) void (^completionBlock)(UIWebView *webView, NSError *error);
+@property (nonatomic, copy) void (^webViewDidFinishLoadingBlock)(UIWebView *webView, NSError *error);
 
 ///-----------------------------------
 /// @name Loading an URL

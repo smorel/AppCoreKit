@@ -23,7 +23,7 @@
                           transformRawData:(NSArray*(^)(id value))transformRawDataBlock
                                 completion:(void(^)(NSArray* objects))completionBlock 
                                      error:(void(^)(id value, NSHTTPURLResponse* response, NSError* error))errorBlock{
-    CKAssert((params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
+    CKAssert((!params && !body) || (params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
     
     CKWebRequest* request = nil;
     if(body){
@@ -86,7 +86,7 @@
                  transformRawData:(NSDictionary*(^)(id value))transformRawDataBlock
                        completion:(void(^)(id object))completionBlock 
                             error:(void(^)(id value, NSHTTPURLResponse* response, NSError* error))errorBlock{
-    CKAssert((params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
+    CKAssert((!params && !body) || (params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
     
     CKWebRequest* request = nil;
     if(body){

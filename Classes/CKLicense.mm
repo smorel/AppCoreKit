@@ -15,11 +15,14 @@
 @end
 
 #ifdef DISTRIBUTION
+#pragma message( "Compiling CKLicense by enabling License check." ) 
 
 static const char pub_key[] = {"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyjapahE9WLWaumlDcPJJ\nyql1xeMF3IZh123wFLW0E6K5Twgbg7aFzCnZCLj4j6n606m7OWWKNCHEAGO/68e4\nGRL+k2237iCLeDc4cGv94sENiBcJbt0lVTiLZbS8j7P/v58Cc83bXlRIwmKHyS4C\n1JnSeAPLsEbblKsgkEyX/xEgQYK8G2hhpdotMtKM2ltlvSE2PBSSE+61qxRaBQHy\nkgW3JUA9uDcxwXCRLT7AzC8MNqQk89pCPFEk6sgHslrFjQEIj54vEJBbDsbHnjON\n9wE6zAG23H/3i/zmmgWn/ueHmxGkxMbEFmKn8YllUZ3vDA1hffjyxsYv47qhtSye\nkQIDAQAB\n-----END PUBLIC KEY-----"};
 
 bool checkLicense(){
     @autoreleasepool {
+        printf("Checking AppCoreKit License.\n");
+        
         Class delegateClass = [CKLicense class];
         if([delegateClass respondsToSelector:@selector(licenseKey)]){
             NSString* licenseKey = [delegateClass performSelector:@selector(licenseKey)];
@@ -78,7 +81,18 @@ bool checkLicense(){
     return true;
 }
 
-static bool bo_checkLicense = checkLicense();
+#else
 
+#pragma message( "Compiling CKLicense by bypassing License check." )
+
+bool checkLicense(){
+    @autoreleasepool {
+        printf("Bypassing AppCoreKit License Check.\n");
+    }
+    return true;
+}
 
 #endif
+
+
+static bool bo_checkLicense = checkLicense();
