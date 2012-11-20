@@ -12,8 +12,10 @@
 
 NSString *CKApplicationVersion() {
 	NSString *versionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-	NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];		
-	NSString *appVersion = [NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber];
+	NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    
+    Class ARServiceClass = NSClassFromString(@"ARService");
+	NSString *appVersion = [NSString stringWithFormat:((ARServiceClass != nil) ? @"%@ [%@]" : @"%@ (%@)"), versionNumber, buildNumber];
 	return appVersion;
 }
 
