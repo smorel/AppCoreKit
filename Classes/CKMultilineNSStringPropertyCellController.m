@@ -191,7 +191,9 @@
     }
     
     if(formatterBlock){
-        return formatterBlock(textView,range,text);
+        BOOL bo = formatterBlock(textView,range,text);
+        [self textViewChanged:self.textView.text];
+        return bo;
     }
     
     NSInteger min = [attributes minimumLength];
