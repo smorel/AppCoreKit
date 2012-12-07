@@ -205,7 +205,9 @@
     }
     
     if(formatterBlock){
-        return formatterBlock(textField,range,string);
+        BOOL bo = formatterBlock(textField,range,string);
+        [self textFieldChanged:self.textField.text];
+        return bo;
     }
     
     NSInteger min = [attributes minimumLength];

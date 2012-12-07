@@ -177,6 +177,7 @@
                        [text substringWithRange:NSMakeRange(3, 3)],
                        [text substringWithRange:NSMakeRange(6, [text length] - 6)]];
         }
+        
         textField.text = newText;
         
         [self setCursorPosition:offset inTextField:textField];
