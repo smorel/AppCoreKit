@@ -43,6 +43,9 @@
 #import "CKMultilineNSStringPropertyCellController.h"
 #import "CKOptionPropertyCellController.h"
 
+#import "CKMultiFloatPropertyCellController.h"
+#import "CKCGPropertyCellControllers.h"
+
 #import "CKMapAnnotationController.h"
 #import "CKMapCollectionViewController.h"
 #import "CKGridCollectionViewController.h"
