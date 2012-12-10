@@ -1159,14 +1159,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4FBBA65213CF72B300772054 /* Styles */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Styles;
-			path = Resources/Styles;
-			sourceTree = "<group>";
-		};
 		7506E3ED13B8FA4F00EE1471 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1619,7 +1611,6 @@
 			children = (
 				7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */,
 				7536F9D113CE0BE900720C17 /* Images */,
-				4FBBA65213CF72B300772054 /* Styles */,
 				75A83AC213D75A8400413C17 /* CloudKit.strings */,
 			);
 			name = Resources;
