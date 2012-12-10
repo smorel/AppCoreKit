@@ -39,6 +39,8 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
 
 - (UIImage *)imageThatFits:(CGSize)theSize crop:(BOOL)crop
 {
+    theSize.width *= [[UIScreen mainScreen]scale];
+    theSize.height *= [[UIScreen mainScreen]scale];
     CGRect destRect = CGRectMake(0.0f, 0.0f, theSize.width, theSize.height);
     
 	CGImageRef srcImage;
@@ -106,7 +108,7 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
 	
 	if (crop) { CGImageRelease(srcImage); }
     
-    return result;
+    return [[[UIImage alloc]initWithCGImage:result.CGImage scale:[[UIScreen mainScreen]scale] orientation:result.imageOrientation]autorelease];
 }
 
 
