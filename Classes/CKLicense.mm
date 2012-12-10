@@ -23,18 +23,12 @@
 static const char pub_key[] = {"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyjapahE9WLWaumlDcPJJ\nyql1xeMF3IZh123wFLW0E6K5Twgbg7aFzCnZCLj4j6n606m7OWWKNCHEAGO/68e4\nGRL+k2237iCLeDc4cGv94sENiBcJbt0lVTiLZbS8j7P/v58Cc83bXlRIwmKHyS4C\n1JnSeAPLsEbblKsgkEyX/xEgQYK8G2hhpdotMtKM2ltlvSE2PBSSE+61qxRaBQHy\nkgW3JUA9uDcxwXCRLT7AzC8MNqQk89pCPFEk6sgHslrFjQEIj54vEJBbDsbHnjON\n9wE6zAG23H/3i/zmmgWn/ueHmxGkxMbEFmKn8YllUZ3vDA1hffjyxsYv47qhtSye\nkQIDAQAB\n-----END PUBLIC KEY-----"};
 
 void dumpLicense(std::vector<std::string> params){
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDirectory = [paths objectAtIndex:0];
-    NSString *path = [cacheDirectory stringByAppendingPathComponent:@"AppCoreKit.license"];
-    
-    std::string filePath = [path UTF8String];
-    
-    std::ofstream stream;
-    stream.open(filePath.c_str(), std::ios_base::out | std::ios_base::trunc);
-    for(std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it){
-        stream << *it << "\n";
+    int i =0;
+    for(std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it, ++i){
+        if(i != 5){
+            printf("AppCoreKit License : %s\n",(*it).c_str());
+        }
     }
-    stream.close();
 }
 
 bool checkLicense(){
