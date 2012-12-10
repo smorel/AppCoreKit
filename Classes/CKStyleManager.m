@@ -19,6 +19,7 @@ static NSInteger kLogEnabled = -1;
     dispatch_once(&onceToken, ^{
         CKStyleManagerDefault = [[CKStyleManager alloc]init];
     });
+    
 	return CKStyleManagerDefault;
 }
 
@@ -27,6 +28,12 @@ static NSInteger kLogEnabled = -1;
 }
 
 - (void)loadContentOfFileNamed:(NSString*)name{
+    static BOOL hasDebuggerStyleBeenLoaded = NO;
+    if(!hasDebuggerStyleBeenLoaded){
+        hasDebuggerStyleBeenLoaded = YES;
+        [self loadContentOfFileNamed:@"CKInlineDebugger"];//Imports debugger stylesheet first.
+    }
+    
 	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
    // NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	[self loadContentOfFile:path];
@@ -34,6 +41,7 @@ static NSInteger kLogEnabled = -1;
 
 
 - (BOOL)importContentOfFileNamed:(NSString*)name{
+    
 	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
     //NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	return [self appendContentOfFile:path];
