@@ -31,6 +31,9 @@ NSString* CKObjectGraphReferenceKey = @"@reference";
 NSString* CKObjectGraphVariablesKey = @"@vars";
 NSString* CKObjectGraphVariableKey  = @"@var";
 
+//We register references for arrays as property pointing on the collection, an index and the id of the referenced object.
+//When an object is referenced in a collection, we'll insert a NSNull object instead and replace it at the end of the process when solving references.
+
 
 @interface NSMutableDictionary (CKCascadingTreePrivate)
 - (NSMutableDictionary*)parentDictionary;
@@ -39,11 +42,13 @@ NSString* CKObjectGraphVariableKey  = @"@var";
 @interface CKObjectGraph()
 @property(nonatomic,retain)NSMutableDictionary* instances;
 @property(nonatomic,retain)NSMutableDictionary* references;
+@property(nonatomic,retain)NSMutableDictionary* referencesForCollectionItems;
 @end
 
 @implementation CKObjectGraph
 @synthesize instances;
 @synthesize references;
+@synthesize referencesForCollectionItems;
 
 - (id)init{
     self = [super init];
@@ -53,6 +58,7 @@ NSString* CKObjectGraphVariableKey  = @"@var";
 - (void)dealloc{
     self.instances = nil;
     self.references = nil;
+    self.referencesForCollectionItems = nil;
     [super dealloc];
 }
 
@@ -109,17 +115,51 @@ NSString* CKObjectGraphVariableKey  = @"@var";
     NSMutableDictionary* refDico = [NSMutableDictionary dictionary];
     [refDico setObject:uniqueId forKey:@"id"];
     [refDico setObject:[NSValue valueWithNonretainedObject:dico] forKey:@"dico"];
-    [self.references setObject:refDico forKey:property];
+    [self.references setObject:refDico forKey:[NSValue valueWithNonretainedObject:[property retain]]];
+}
+
+
+- (void)registerReferenceForCollectionProperty:(CKProperty*)property index:(NSInteger)index withUniqueId:(NSString*)uniqueId forDictionary:(NSMutableDictionary*)dico{
+    NSDictionary* propertyDico = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSValue valueWithNonretainedObject:[property retain]],@"property",
+                                         [NSNumber numberWithInt:index],@"index",
+                                         nil];
+    
+    NSMutableDictionary* refDico = [NSMutableDictionary dictionary];
+    [refDico setObject:uniqueId forKey:@"id"];
+    [refDico setObject:[NSValue valueWithNonretainedObject:dico] forKey:@"dico"];
+    [self.referencesForCollectionItems setObject:refDico forKey:propertyDico];
 }
 
 - (void)solveReferences{
-    for(CKProperty* property in [references allKeys]){
-        NSMutableDictionary* refDico = [references objectForKey:property];
+    for(NSValue* propertyValue in [references allKeys]){
+        NSMutableDictionary* refDico = [references objectForKey:propertyValue];
+        CKProperty* property = [propertyValue nonretainedObjectValue];
+        
         NSString* uniqueId = [refDico objectForKey:@"id"];
         NSMutableDictionary* dico = [[refDico objectForKey:@"dico"]nonretainedObjectValue];
         id object = [self instanceWithUniqueId:uniqueId fromDictionary:dico];
         CKAssert(object,@"object not found");
         [property setValue:object];
+        [property autorelease];
+    }
+    
+    for(NSDictionary* keyDico in [referencesForCollectionItems allKeys]){
+        NSValue* propertyValue = [keyDico objectForKey:@"property"];
+        NSInteger index = [[keyDico objectForKey:@"index"]intValue];
+        
+        NSMutableDictionary* refDico = [referencesForCollectionItems objectForKey:keyDico];
+        CKProperty* property = [propertyValue nonretainedObjectValue];
+        
+        NSString* uniqueId = [refDico objectForKey:@"id"];
+        NSMutableDictionary* dico = [[refDico objectForKey:@"dico"]nonretainedObjectValue];
+        
+        id object = [self instanceWithUniqueId:uniqueId fromDictionary:dico];
+        CKAssert(object,@"object not found");
+        
+        [property removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+        [property insertObjects:[NSArray arrayWithObject:object] atIndexes:[NSIndexSet indexSetWithIndex:index]];
+        [property autorelease];
     }
 }
 
@@ -167,12 +207,23 @@ NSString* CKObjectGraphVariableKey  = @"@var";
                         }
                     }
                     NSMutableArray* array = [NSMutableArray array];
+                    int i =0;
                     for(id subValue in value){
                         CKAssert([subValue isKindOfClass:[NSMutableDictionary class]],@"invalid value type");
-                        id subObject = [self createObjectFromDictionary:subValue withUniqueId:nil];
-                        if(subObject){
-                            [array addObject:subObject];
+                        
+                        id referenceObject = [subValue objectForKey:CKObjectGraphReferenceKey];
+                        if(referenceObject){
+                            CKAssert([referenceObject isKindOfClass:[NSString class]],@"invalid value type");
+                            [self registerReferenceForCollectionProperty:property index:i withUniqueId:referenceObject forDictionary:subValue];
+                            [array addObject:[NSNull null]];
                         }
+                        else{
+                            id subObject = [self createObjectFromDictionary:subValue withUniqueId:nil];
+                            if(subObject){
+                                [array addObject:subObject];
+                            }
+                        }
+                        ++i;
                     }
                     [property insertObjects:array atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [array count])]];
                 }
@@ -245,9 +296,13 @@ NSString* CKObjectGraphVariableKey  = @"@var";
         self.instances = [NSMutableDictionary dictionary];
         
         self.references = [NSMutableDictionary dictionary];
+        self.referencesForCollectionItems = [NSMutableDictionary dictionary];
+        
         [self createObjectFromDictionary:self.tree withUniqueId:nil];
         [self solveReferences];
+        
         self.references = nil;
+        self.referencesForCollectionItems = nil;
         
         return YES;
     }
