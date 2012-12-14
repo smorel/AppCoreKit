@@ -539,8 +539,8 @@
 		B084A649156E786D0077AFDE /* CKWebViewController.m in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6713B8ED3600268D13 /* CKWebViewController.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */; };
-		B0A46C9B1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B0A46C991582425900B6D5B3 /* CKLiveProjectFileUpdateManager.h */; settings = {ATTRIBUTES = (); }; };
-		B0A46C9C1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A46C9A1582425900B6D5B3 /* CKLiveProjectFileUpdateManager.m */; };
+		B0A46C9B1582425A00B6D5B3 /* CKResourceFileUpdateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B0A46C991582425900B6D5B3 /* CKResourceFileUpdateManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B0A46C9C1582425A00B6D5B3 /* CKResourceFileUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A46C9A1582425900B6D5B3 /* CKResourceFileUpdateManager.m */; };
 		B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */; };
 		B0EA78A6156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A4156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1110,8 +1110,8 @@
 		B02E75D41587E2B200A59A5A /* CKTableViewCellController+FlatHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+FlatHierarchy.m"; path = "Classes/CKTableViewCellController+FlatHierarchy.m"; sourceTree = "<group>"; };
 		B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKWebRequest+Initialization.h"; path = "Classes/CKWebRequest+Initialization.h"; sourceTree = "<group>"; };
 		B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKWebRequest+Initialization.m"; path = "Classes/CKWebRequest+Initialization.m"; sourceTree = "<group>"; };
-		B0A46C991582425900B6D5B3 /* CKLiveProjectFileUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLiveProjectFileUpdateManager.h; path = Classes/CKLiveProjectFileUpdateManager.h; sourceTree = "<group>"; };
-		B0A46C9A1582425900B6D5B3 /* CKLiveProjectFileUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLiveProjectFileUpdateManager.m; path = Classes/CKLiveProjectFileUpdateManager.m; sourceTree = "<group>"; };
+		B0A46C991582425900B6D5B3 /* CKResourceFileUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKResourceFileUpdateManager.h; path = Classes/CKResourceFileUpdateManager.h; sourceTree = "<group>"; };
+		B0A46C9A1582425900B6D5B3 /* CKResourceFileUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKResourceFileUpdateManager.m; path = Classes/CKResourceFileUpdateManager.m; sourceTree = "<group>"; };
 		B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebDataConverter.h; path = Classes/CKWebDataConverter.h; sourceTree = "<group>"; };
 		B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebDataConverter.m; path = Classes/CKWebDataConverter.m; sourceTree = "<group>"; };
 		B0EA78A4156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+BlockBasedDelegate.h"; path = "Classes/UINavigationController+BlockBasedDelegate.h"; sourceTree = "<group>"; };
@@ -1171,6 +1171,8 @@
 				7560DC5B13B8ED3600268D13 /* CKWeakRef.mm */,
 				7560DB2E13B8ED3600268D13 /* CKCallback.h */,
 				7560DB2F13B8ED3600268D13 /* CKCallback.m */,
+				B0A46C991582425900B6D5B3 /* CKResourceFileUpdateManager.h */,
+				B0A46C9A1582425900B6D5B3 /* CKResourceFileUpdateManager.m */,
 				966B00C51538884200360C0F /* Object Extension */,
 				7506E3F713B8FCBD00EE1471 /* Runtime */,
 				7506E3EF13B8FA5800EE1471 /* Conversion */,
@@ -1897,8 +1899,6 @@
 		75A405EC13D8B66E00D932B0 /* CascadingTree */ = {
 			isa = PBXGroup;
 			children = (
-				B0A46C991582425900B6D5B3 /* CKLiveProjectFileUpdateManager.h */,
-				B0A46C9A1582425900B6D5B3 /* CKLiveProjectFileUpdateManager.m */,
 				75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */,
 				75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */,
 			);
@@ -2465,7 +2465,7 @@
 				962347D01577FF5B0036002C /* CKSectionViews.h in Headers */,
 				96234819157D6A770036002C /* UIViewController+DeviceOrientation.h in Headers */,
 				960CAED6157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.h in Headers */,
-				B0A46C9B1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.h in Headers */,
+				B0A46C9B1582425A00B6D5B3 /* CKResourceFileUpdateManager.h in Headers */,
 				967CD1F715814048007F16D7 /* CKMockManager.h in Headers */,
 				9691A53B1582575900E4E6E8 /* CKWebRequest+Mapping.h in Headers */,
 				9601521C15892CBE00333DC4 /* CKTableViewCellCache.h in Headers */,
@@ -2840,7 +2840,7 @@
 				962347D11577FF5B0036002C /* CKSectionViews.m in Sources */,
 				9623481A157D6A770036002C /* UIViewController+DeviceOrientation.mm in Sources */,
 				960CAED7157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m in Sources */,
-				B0A46C9C1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.m in Sources */,
+				B0A46C9C1582425A00B6D5B3 /* CKResourceFileUpdateManager.m in Sources */,
 				967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */,
 				9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */,
 				9601521D15892CBE00333DC4 /* CKTableViewCellCache.mm in Sources */,

@@ -6,10 +6,9 @@
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKLiveProjectFileUpdateManager.h"
+#import "CKResourceFileUpdateManager.h"
 #import <UIKit/UIKit.h>
 
-#import "CKLiveProjectFileUpdateManager.h"
 #import "CKLocalization.h"
 #import "CKLocalizationManager.h"
 #import "CKCascadingTree.h"
@@ -24,11 +23,11 @@
 
 static char UIImageImageNameKey;
 
-@interface UIImage(CKLiveProjectFileUpdateManager)
+@interface UIImage(CKResourceFileUpdateManager)
 @property(nonatomic,copy) NSString* imageName;
 @end
 
-@implementation UIImage(CKLiveProjectFileUpdateManager)
+@implementation UIImage(CKResourceFileUpdateManager)
 
 - (void)setImageName:(NSString *)name{
     objc_setAssociatedObject(self, 
@@ -65,7 +64,7 @@ static char UIImageImageNameKey;
         return [self UIImageLiveUpdateProxy_initWithContentsOfFile:path];
     }
     
-    NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
+    NSString *localPath = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:path handleUpdate:^(NSString *localPath) {
         [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
         [[CKLocalizationManager sharedManager] refreshUI];
     }];
@@ -103,7 +102,7 @@ static char UIImageImageNameKey;
 
 
 
-@interface CKLiveProjectFileUpdateManager ()
+@interface CKResourceFileUpdateManager ()
 
 @property (retain) NSMutableDictionary*handles;
 @property (retain) NSMutableDictionary*projectPaths;
@@ -111,7 +110,7 @@ static char UIImageImageNameKey;
 
 @end
 
-@implementation CKLiveProjectFileUpdateManager
+@implementation CKResourceFileUpdateManager
 @synthesize handles,projectPaths,modificationDate;
 
 - (id)init {
@@ -125,7 +124,7 @@ static char UIImageImageNameKey;
     return self;
 }
 
-- (NSString*)projectPathOfFileToWatch:(NSString *)path handleUpdate:(void (^)(NSString* localPath))updateHandle {
+- (NSString*)registerFileWithProjectPath:(NSString *)path handleUpdate:(void (^)(NSString* localPath))updateHandle {
     NSString *localPath = [self.projectPaths objectForKey:path];
     
     if (!localPath) {
@@ -139,6 +138,12 @@ static char UIImageImageNameKey;
     }
     
     return localPath ? localPath : path;
+}
+
+- (void)unregisterFileWithProjectPath:(NSString*)path{
+    [self.handles removeObjectForKey:path];
+    [self.projectPaths removeObjectForKey:path];
+    [self.modificationDate removeObjectForKey:path];
 }
 
 - (NSString*)localPathForResourcePath:(NSString*)resourcePath {
