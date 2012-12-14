@@ -8,7 +8,7 @@
 
 #import "CKLocalization.h"
 #import "CKLocalizationManager_Private.h"
-#import "CKLiveProjectFileUpdateManager.h"
+#import "CKResourceFileUpdateManager.h"
 #import "NSObject+Singleton.h"
 #import "CKCascadingTree.h"
 #import "CKConfiguration.h"
@@ -35,7 +35,7 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
         if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
             NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
             for (NSURL *filePathURL in stringsURLs) {
-                NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:filePathURL.path handleUpdate:^(NSString *localPath) {
+                NSString *localPath = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:filePathURL.path handleUpdate:^(NSString *localPath) {
                     NSString *tempPath = NSTemporaryDirectory();
                     tempPath = [tempPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
                     

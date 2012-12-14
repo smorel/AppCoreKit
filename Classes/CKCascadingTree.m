@@ -13,7 +13,7 @@
 #import "NSValueTransformer+Additions.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
-#import "CKLiveProjectFileUpdateManager.h"
+#import "CKResourceFileUpdateManager.h"
 #import "CKConfiguration.h"
 
 NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
@@ -765,7 +765,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 		return NO;
     
     if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        path = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
+        path = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:path handleUpdate:^(NSString *localPath) {
             NSSet *toLoadFiles = _loadedFiles.copy;
             [_loadedFiles removeAllObjects];
             [_tree removeAllObjects];
