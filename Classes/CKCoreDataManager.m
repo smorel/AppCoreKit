@@ -51,6 +51,8 @@
 //
 
 - (CKCoreDataManager *)initWithModelURL:(NSURL *)modelURL {
+    [self _migratesFromDocumentToLibrayFolderIfNeeded];
+    
 	NSURL *storeURL = [self _storeURLForName:[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey] storeType:NSSQLiteStoreType];
 	NSDictionary *storeOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
@@ -167,11 +169,20 @@
 
 // Returns the path to the application's documents directory.
 
-- (NSString *)_applicationDocumentsDirectory {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+- (NSString *)_libraryAppCoreKitDirectory {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-    return basePath;
+    NSString* path = [basePath stringByAppendingPathComponent:@"com.wherecloud.appcorekit"];
+    
+    if(![[NSFileManager defaultManager]fileExistsAtPath:path]){
+        //Makes sure all folders are created !
+        NSError* error = nil;
+        [[NSFileManager defaultManager]createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
+    }
+    
+    return path;
 }
+
 
 - (NSURL *)_storeURLForName:(NSString *)name storeType:(NSString *)storeType {
 	NSString *extension;
@@ -184,7 +195,43 @@
 		NSAssert1(NO, @"Unsupported %@", storeType);
 	}
 	
+	return [NSURL fileURLWithPath:[[self _libraryAppCoreKitDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", name, extension]]];
+}
+
+#pragma mark Migration From Document's to Libray/com.wherecloud.apprelay Folder
+
+- (NSString *)_applicationDocumentsDirectory {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return basePath;
+}
+
+- (NSURL *)_documentsStoreURLForName:(NSString *)name storeType:(NSString *)storeType {
+	NSString *extension;
+	
+	if ([storeType isEqualToString:NSSQLiteStoreType]) {
+		extension = @"sqlite";
+	} else if ([storeType isEqualToString:NSBinaryStoreType]) {
+		extension = @"db";
+	} else {
+		NSAssert1(NO, @"Unsupported %@", storeType);
+	}
+    
 	return [NSURL fileURLWithPath:[[self _applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", name, extension]]];
+}
+
+- (void)_migratesFromDocumentToLibrayFolderIfNeeded{
+	NSURL *newStoreURL = [self _storeURLForName:[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey] storeType:NSSQLiteStoreType];
+    
+    BOOL newFileExists = [[NSFileManager defaultManager]fileExistsAtPath:[newStoreURL path]];
+    if(!newFileExists){
+        NSURL *oldStoreURL = [self _documentsStoreURLForName:[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey] storeType:NSSQLiteStoreType];
+        BOOL oldFileExists = [[NSFileManager defaultManager]fileExistsAtPath:[oldStoreURL path]];
+        if(oldFileExists){
+            NSError* error = nil;
+            [[NSFileManager defaultManager]moveItemAtURL:oldStoreURL toURL:newStoreURL error:&error];
+        }
+    }
 }
 
 @end
