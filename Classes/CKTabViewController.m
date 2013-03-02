@@ -437,7 +437,10 @@
 static char CKViewControllerTabViewItemKey;
 
 - (void)CKTabViewItem_UIViewController_dealloc{
-    [[self tabViewItem]clearBindingsContext];
+    id item = objc_getAssociatedObject(self, &CKViewControllerTabViewItemKey);
+    if(item){
+        [item clearBindingsContext];
+    }
     [self CKTabViewItem_UIViewController_dealloc];
 }
 
