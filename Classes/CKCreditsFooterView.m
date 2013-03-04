@@ -37,6 +37,10 @@
 @property (nonatomic, retain) UIImageView *plateBackView;
 @property (nonatomic, retain) UILabel *versionLabel;
 
+@property (nonatomic, retain) UIButton *versionLabelSwitchButton;
+@property (nonatomic, retain) NSMutableArray* versionLabels;
+@property (nonatomic, assign) NSInteger versionIndex;
+
 @end
 
 //
@@ -49,6 +53,26 @@
 @synthesize plateView = _plateView;
 @synthesize plateBackView = _plateBackView;
 @synthesize versionLabel = _versionLabel;
+@synthesize versionLabelSwitchButton;
+@synthesize versionLabels;
+
++ (NSString*)frameworkVersion:(NSString*)frameworkName{
+    NSURL* apprelayBundleUrl = [[NSBundle mainBundle]URLForResource:frameworkName withExtension:@"plist"];
+    if(!apprelayBundleUrl)
+        return nil;
+    
+    NSDictionary* AppRelayBundle = [NSDictionary dictionaryWithContentsOfURL:apprelayBundleUrl];
+    
+    NSString *versionNumber = [AppRelayBundle objectForKey:@"CFBundleShortVersionString"];
+	NSString *buildNumber = [AppRelayBundle objectForKey:@"CFBundleVersion"];
+    
+	NSString *version = [NSString stringWithFormat:@"%@ version: %@ (%@)", frameworkName, versionNumber, [versionNumber isEqualToString:buildNumber] ? @"dev" : buildNumber];
+	return version;
+}
+
++ (NSString*)appRelayUserId{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"com.wherecloud.userid.%@",[[NSBundle mainBundle] bundleIdentifier]]];
+}
 
 
 - (id)initWithStyle:(CKCreditsViewStyle)style {
@@ -68,6 +92,25 @@
         
         Class relayServiceClass = NSClassFromString(@"ARService");
 		NSString *appVersion = (relayServiceClass != nil) ? [NSString stringWithFormat:@"Version %@ [%@]", versionNumber, buildNumber] : [NSString stringWithFormat:@"Version %@ (%@)", versionNumber, buildNumber];
+        
+        self.versionIndex = 0;
+        self.versionLabels = [NSMutableArray array];
+        [self.versionLabels addObject:appVersion];
+        
+        NSString* AppCoreKitVersion = [CKCreditsFooterView frameworkVersion:@"AppCoreKit"];
+        if(AppCoreKitVersion)[self.versionLabels addObject:AppCoreKitVersion];
+        
+        NSString* VendorsKitVersion = [CKCreditsFooterView frameworkVersion:@"VendorsKit"];
+        if(VendorsKitVersion)[self.versionLabels addObject:VendorsKitVersion];
+        
+        NSString* AppMotionVersion = [CKCreditsFooterView frameworkVersion:@"AppMotion"];
+        if(AppMotionVersion)[self.versionLabels addObject:AppMotionVersion];
+        
+        NSString* AppRelayVersion = [CKCreditsFooterView frameworkVersion:@"AppRelay"];
+        if(AppRelayVersion)[self.versionLabels addObject:AppRelayVersion];
+        
+        NSString* AppRelayUserId = [CKCreditsFooterView appRelayUserId];
+        if(AppRelayUserId)[self.versionLabels addObject:[NSString stringWithFormat:@"%@",AppRelayUserId]];
 		
 		self.plateView = nil;
 		switch (self.style) {
@@ -87,7 +130,7 @@
 		_versionLabel.textAlignment = UITextAlignmentCenter;
 		_versionLabel.font = [UIFont systemFontOfSize:14];
 		_versionLabel.text = appVersion;
-		_versionLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+		_versionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[_versionLabel sizeToFit];
         
         switch (style) {
@@ -119,12 +162,18 @@
 		plateContainerView.frame = CGRectOffset(plateContainerView.frame, plateViewOffsetX, plateViewOffsetY);
 		plateContainerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		
-		CGFloat versionLabelOffsetX = roundf((CGRectGetMaxX(self.bounds) - CGRectGetMaxX(_versionLabel.bounds)) / 2);
 		CGFloat versionLabelOffsetY = roundf(CGRectGetMaxY(plateContainerView.frame) + plateVersionMargin);
-		_versionLabel.frame = CGRectOffset(_versionLabel.frame, versionLabelOffsetX, versionLabelOffsetY);
+		_versionLabel.frame = CGRectMake(10, versionLabelOffsetY, self.bounds.size.width - 20,_versionLabel.bounds.size.height);
+        
+        self.versionLabelSwitchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.versionLabelSwitchButton.frame = _versionLabel.frame;
+        self.versionLabelSwitchButton.autoresizingMask = _versionLabel.autoresizingMask;
+        
+        [self.versionLabelSwitchButton addTarget:self action:@selector(toggleVersion:) forControlEvents:UIControlEventTouchUpInside];
 		
 		[self addSubview:self.titleView];
 		[self addSubview:plateContainerView];
+		[self addSubview:self.versionLabelSwitchButton];
 		[self addSubview:_versionLabel];
 		
 		/*
@@ -139,6 +188,14 @@
 	return self;
 }
 
+- (void)toggleVersion:(id)sender{
+    self.versionIndex++;
+    if(self.versionIndex >= [self.versionLabels count]){
+        self.versionIndex = 0;
+    }
+    _versionLabel.text = [self.versionLabels objectAtIndex:self.versionIndex];
+}
+
 + (id)creditsViewWithStyle:(CKCreditsViewStyle)style {
 	return [[[CKCreditsFooterView alloc] initWithStyle:style] autorelease];
 }
@@ -148,6 +205,7 @@
 	self.plateView = nil;
 	self.plateBackView = nil;
 	self.versionLabel = nil;
+    self.versionLabelSwitchButton = nil;
 	[super dealloc];
 }
 
