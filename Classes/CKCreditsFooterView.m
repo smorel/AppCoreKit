@@ -74,6 +74,27 @@
     return [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"com.wherecloud.userid.%@",[[NSBundle mainBundle] bundleIdentifier]]];
 }
 
++ (NSString*)deviceId{
+    return [[UIDevice currentDevice] uniqueIdentifier];
+}
+
++ (NSString*)vendorId{
+    return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+}
+
++ (NSString*)advertisingId{
+    Class c = NSClassFromString(@"ASIdentifierManager");
+    if(c){
+        id sharedManager = [c performSelector:@selector(sharedManager)];
+        if(sharedManager){
+            id identifier =  [sharedManager performSelector:@selector(advertisingIdentifier)];
+            if(identifier){
+                return [identifier performSelector:@selector(UUIDString)];
+            }
+        }
+    }
+    return nil;
+}
 
 - (id)initWithStyle:(CKCreditsViewStyle)style {
 	self = [super init];
@@ -110,7 +131,16 @@
         if(AppRelayVersion)[self.versionLabels addObject:AppRelayVersion];
         
         NSString* AppRelayUserId = [CKCreditsFooterView appRelayUserId];
-        if(AppRelayUserId)[self.versionLabels addObject:[NSString stringWithFormat:@"%@",AppRelayUserId]];
+        if(AppRelayUserId)[self.versionLabels addObject:[NSString stringWithFormat:@"ar:%@",AppRelayUserId]];
+        
+        NSString* deviceId = [CKCreditsFooterView deviceId];
+        if(deviceId)[self.versionLabels addObject:[NSString stringWithFormat:@"de:%@",deviceId]];
+        
+        NSString* vendorId = [CKCreditsFooterView vendorId];
+        if(vendorId)[self.versionLabels addObject:[NSString stringWithFormat:@"ve:%@",vendorId]];
+        
+        NSString* advertisingId = [CKCreditsFooterView advertisingId];
+        if(advertisingId)[self.versionLabels addObject:[NSString stringWithFormat:@"ad:%@",advertisingId]];
 		
 		self.plateView = nil;
 		switch (self.style) {
