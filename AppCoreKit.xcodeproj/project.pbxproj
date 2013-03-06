@@ -455,6 +455,7 @@
 		96243226155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96243224155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96243227155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96243225155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.m */; };
 		962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
+		962C6C5B16E7DBD100852D21 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962C6C5A16E7DBD100852D21 /* AdSupport.framework */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		963826551484011700A9C98B /* CKFormSectionBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826531484011700A9C98B /* CKFormSectionBase.m */; };
 		963826581484012B00A9C98B /* CKFormSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826561484012A00A9C98B /* CKFormSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1022,6 +1023,7 @@
 		96234818157D6A760036002C /* UIViewController+DeviceOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIViewController+DeviceOrientation.mm"; path = "Classes/UIViewController+DeviceOrientation.mm"; sourceTree = "<group>"; };
 		96243224155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMapAnnotationController+BlockBasedInterface.h"; path = "Classes/CKMapAnnotationController+BlockBasedInterface.h"; sourceTree = "<group>"; };
 		96243225155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKMapAnnotationController+BlockBasedInterface.m"; path = "Classes/CKMapAnnotationController+BlockBasedInterface.m"; sourceTree = "<group>"; };
+		962C6C5A16E7DBD100852D21 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormSectionBase.h; path = Classes/CKFormSectionBase.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		963826531484011700A9C98B /* CKFormSectionBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSectionBase.m; path = Classes/CKFormSectionBase.m; sourceTree = "<group>"; };
 		963826561484012A00A9C98B /* CKFormSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSection.h; path = Classes/CKFormSection.h; sourceTree = "<group>"; };
@@ -1128,6 +1130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				962C6C5B16E7DBD100852D21 /* AdSupport.framework in Frameworks */,
 				7560DE5213B8F00F00268D13 /* MediaPlayer.framework in Frameworks */,
 				7560DE5313B8F00F00268D13 /* QuartzCore.framework in Frameworks */,
 				7560DE5413B8F00F00268D13 /* UIKit.framework in Frameworks */,
@@ -1720,6 +1723,7 @@
 			isa = PBXGroup;
 			children = (
 				7560DDB813B8EDB700268D13 /* Vendor */,
+				962C6C5A16E7DBD100852D21 /* AdSupport.framework */,
 				9660F471156308F700FE2081 /* VendorsKit.framework */,
 				7560DE4213B8F00F00268D13 /* MediaPlayer.framework */,
 				7560DE4313B8F00F00268D13 /* QuartzCore.framework */,

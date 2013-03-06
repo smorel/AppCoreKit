@@ -10,6 +10,7 @@
 #import "UIColor+Additions.h"
 #import "CKLocalization.h"
 #import "UIGestureRecognizer+BlockBasedInterface.h"
+#import <AdSupport/AdSupport.h>
 
 @interface UIImageView (CKCreditsView)
 
@@ -76,25 +77,25 @@
 }
 
 + (NSString*)deviceId{
-    return [[UIDevice currentDevice] uniqueIdentifier];
+    if([[UIDevice currentDevice]respondsToSelector:@selector(uniqueIdentifier)]){
+        return [[UIDevice currentDevice] uniqueIdentifier];
+    }
+    return @"";
 }
 
 + (NSString*)vendorId{
-    return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    if([[UIDevice currentDevice]respondsToSelector:@selector(identifierForVendor)]){
+        return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    }
+    return @"";
 }
 
 + (NSString*)advertisingId{
-    Class c = NSClassFromString(@"ASIdentifierManager");
-    if(c){
-        id sharedManager = [c performSelector:@selector(sharedManager)];
-        if(sharedManager){
-            id identifier =  [sharedManager performSelector:@selector(advertisingIdentifier)];
-            if(identifier){
-                return [identifier performSelector:@selector(UUIDString)];
-            }
-        }
-    }
-    return nil;
+    Class ASIdentifierManagerClass =  NSClassFromString(@"ASIdentifierManager");
+    if(ASIdentifierManagerClass == NULL)
+        return @"";
+    
+    return [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
 }
 
 - (id)initWithStyle:(CKCreditsViewStyle)style {
