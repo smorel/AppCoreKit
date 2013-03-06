@@ -9,6 +9,7 @@
 #import "CKCreditsFooterView.h"
 #import "UIColor+Additions.h"
 #import "CKLocalization.h"
+#import "UIGestureRecognizer+BlockBasedInterface.h"
 
 @interface UIImageView (CKCreditsView)
 
@@ -161,6 +162,7 @@
 		_versionLabel.font = [UIFont systemFontOfSize:14];
 		_versionLabel.text = appVersion;
 		_versionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _versionLabel.adjustsFontSizeToFitWidth = true;
 		[_versionLabel sizeToFit];
         
         switch (style) {
@@ -205,6 +207,24 @@
 		[self addSubview:plateContainerView];
 		[self addSubview:self.versionLabelSwitchButton];
 		[self addSubview:_versionLabel];
+        
+        __block UILabel* bVersionLabel = _versionLabel;
+        UILongPressGestureRecognizer* longPress = [[[UILongPressGestureRecognizer alloc]initWithBlock:^(UIGestureRecognizer *gestureRecognizer) {
+            if(gestureRecognizer.state == UIGestureRecognizerStateBegan){
+                
+                NSString *copyStringverse = _versionLabel.text;
+                UIPasteboard *pb = [UIPasteboard generalPasteboard];
+                [pb setString:copyStringverse];
+                
+                bVersionLabel.alpha = 0;
+                [UIView animateWithDuration:1 animations:^{
+                    bVersionLabel.alpha = 1;
+                }];
+            }
+        }]autorelease];
+        longPress.numberOfTapsRequired = 0;
+        
+        [self.versionLabelSwitchButton addGestureRecognizer:longPress];
 		
 		/*
 		UISwipeGestureRecognizer *leftSwipeGesture = [[[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleLeftSwipeGesture:)] autorelease];
