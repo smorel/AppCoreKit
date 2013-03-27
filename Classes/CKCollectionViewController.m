@@ -106,7 +106,7 @@
 }
 
 - (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
-    self = [self init];
+    self = [super init];
 	[self setupWithCollection:collection factory:factory];
 	return self;
 }

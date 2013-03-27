@@ -1452,7 +1452,7 @@
             }
             else{
                 [self.tableView selectRowAtIndexPath:indexPath
-                                            animated:NO
+                                            animated:animated
                                       scrollPosition:UITableViewScrollPositionNone];
             }
         }
