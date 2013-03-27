@@ -213,12 +213,14 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 	self.mapView.delegate = self;
     
+    /*
     if([self.annotations count] > 0 || (self.centerCoordinate.latitude != 0 && self.centerCoordinate.longitude != 0)){
         self.mapView.centerCoordinate = self.centerCoordinate;
         [self addAnnotations:self.annotations];
     }else{
         [self.mapView setVisibleMapRect:MKMapRectWorld];
     }
+     */
 }
 
 - (void)viewDidUnload {
@@ -233,12 +235,13 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	self.mapView.frame = self.view.bounds;
 	//self.mapView.showsUserLocation = YES;
 	
-    [self updateVisibleViewsRotation];
     
     if(!self.mapViewHasBeenReloaded){
         self.mapViewHasBeenReloaded = YES;
         [self reload];
     }
+    
+    [self updateVisibleViewsRotation];
 	
 	for(int i =0; i< [self numberOfSections];++i){
 		[self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
