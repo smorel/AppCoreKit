@@ -111,19 +111,36 @@
 	return [[[CKFormSection alloc]initWithCellControllers:nil footerView:view]autorelease];
 }
 
-- (void)insertCellController:(CKTableViewCellController *)cellController atIndex:(NSUInteger)index{
-	if(_cellControllers == nil){
+- (void)insertCellControllers:(NSArray *)controllers atIndexes:(NSIndexSet*)indexes{
+    if(_cellControllers == nil){
 		self.cellControllers = [NSMutableArray array];
 	}
-	[_cellControllers insertObject:cellController atIndex:index];
+	[_cellControllers insertObjects:controllers atIndexes:indexes];
     
     if(self.parentController.state != CKViewControllerStateNone && self.parentController.state != CKViewControllerStateDidLoad && !self.collapsed){
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
-        NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
-        [self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellController.value ? cellController.value : [NSNull null],theIndexPath,nil]];
+        
+        NSMutableArray* objects = [NSMutableArray array];
+        for(CKTableViewCellController* cellController in controllers){
+            [objects addObject:cellController.value ? cellController.value : [NSNull null]];
+        }
+        
+        NSMutableArray* indexPaths = [NSMutableArray array];
+        unsigned currentIndex = [indexes firstIndex];
+        while (currentIndex != NSNotFound) {
+            NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:currentIndex inSection:self.sectionVisibleIndex];
+            [indexPaths addObject:theIndexPath];
+            currentIndex = [indexes indexGreaterThanIndex: currentIndex];
+        }
+        
+        [self.parentController performSelector:@selector(objectController:insertObjects:atIndexPaths:)
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,objects,indexPaths,nil]];
         [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
     }
+}
+
+- (void)insertCellController:(CKTableViewCellController *)cellController atIndex:(NSUInteger)index{
+	[self insertCellControllers:[NSArray arrayWithObject:cellController] atIndexes:[NSIndexSet indexSetWithIndex:index]];
 }
 
 - (void)addCellController:(CKTableViewCellController *)cellController{
@@ -141,18 +158,48 @@
     }
 }
 
-- (void)removeCellControllerAtIndex:(NSUInteger)index{
-    CKTableViewCellController* controller = [_cellControllers objectAtIndex:index];
-    
-	[_cellControllers removeObjectAtIndex:index];
+
+
+- (void)removeCellControllersAtIndexes:(NSIndexSet*)indexes{
     
     if(self.parentController.state != CKViewControllerStateNone && self.parentController.state != CKViewControllerStateDidLoad && !self.collapsed){
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
-        NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
-        [self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
-                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,controller.value ? controller.value : [NSNull null],theIndexPath,nil]];
+        
+        NSMutableArray* objects = [NSMutableArray array];
+        NSMutableArray* indexPaths = [NSMutableArray array];
+        unsigned currentIndex = [indexes firstIndex];
+        while (currentIndex != NSNotFound) {
+            CKTableViewCellController* cellController = [_cellControllers objectAtIndex:currentIndex];
+            [objects addObject:cellController.value ? cellController.value : [NSNull null]];
+            
+            NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:currentIndex inSection:self.sectionVisibleIndex];
+            [indexPaths addObject:theIndexPath];
+            currentIndex = [indexes indexGreaterThanIndex: currentIndex];
+        }
+        
+        [_cellControllers removeObjectsAtIndexes:indexes];
+        
+        [self.parentController performSelector:@selector(objectController:removeObjects:atIndexPaths:)
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,objects,indexPaths,nil]];
+        
         [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    }else{
+        [_cellControllers removeObjectsAtIndexes:indexes];
     }
+}
+
+- (void)removeCellControllerAtIndex:(NSUInteger)index{
+    [self removeCellControllersAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+}
+
+
+- (void)removeCellControllers:(NSArray *)controllers{
+    NSMutableIndexSet* indexes = [NSMutableIndexSet indexSet];
+    for(CKTableViewCellController* cellController in controllers){
+        NSInteger index = [_cellControllers indexOfObjectIdenticalTo:cellController];
+        [indexes addIndex:index];
+    }
+    [self removeCellControllersAtIndexes:indexes];
 }
 
 - (void)removeCellController:(CKTableViewCellController *)cellController{
