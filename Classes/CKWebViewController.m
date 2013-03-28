@@ -12,25 +12,24 @@
 
 #define CKBarButtonItemFlexibleSpace [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]
 
+Reachability* CKWebViewControllerReachability = nil;
+
 @interface CKWebViewController () <UIWebViewDelegate>
 
 @property (nonatomic, retain) NSURL *URL;
 @property (nonatomic, retain) UIWebView *webView;
 
-@property (nonatomic, retain) Reachability *reachability;
-
 @end
 
 @implementation CKWebViewController
 
-@synthesize URL, webView, webViewDidFinishLoadingBlock, reachability;
+@synthesize URL, webView, webViewDidFinishLoadingBlock;
 @synthesize delegate;
 
 - (void)dealloc {    
     self.URL = nil;
     self.webView = nil;
     self.webViewDidFinishLoadingBlock = nil;
-    self.reachability = nil;
     self.webView.delegate = nil;
     
     [super dealloc];
@@ -78,14 +77,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.reachability startNotifer];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [self.reachability stopNotifer];    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
@@ -105,10 +102,11 @@
 }
 
 - (Reachability *)reachability {
-    if (reachability == nil) {
-        self.reachability = [Reachability reachabilityForInternetConnection];
+    if (CKWebViewControllerReachability == nil) {
+        CKWebViewControllerReachability = [Reachability reachabilityForInternetConnection];
+        [self.reachability startNotifer];
     }
-    return reachability;
+    return CKWebViewControllerReachability;
 }
 
 #pragma mark -
