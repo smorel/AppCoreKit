@@ -102,6 +102,10 @@
 
 /**
  */
+- (void)insertCellControllers:(NSArray *)controllers atIndexes:(NSIndexSet*)indexes;
+
+/**
+ */
 - (void)insertCellController:(CKTableViewCellController *)controller atIndex:(NSUInteger)index;
 
 /**
@@ -114,7 +118,15 @@
 
 /**
  */
+- (void)removeCellControllers:(NSArray *)controllers;
+
+/**
+ */
 - (void)removeCellController:(CKTableViewCellController *)controller;
+
+/**
+ */
+- (void)removeCellControllersAtIndexes:(NSIndexSet*)indexes;
 
 /**
  */

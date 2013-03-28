@@ -35,6 +35,8 @@ UIImage* CKLocalizedImageNamed(NSString* imageNamed);
  */
 #define _(key) CKLocalizedStringWithString(key)
 
+#define _C(key) CKLocalizedStringWithString([NSString stringWithFormat:@"%@.%@",[[self class]description],key])
+
 /**
  */
 #define _img(imageName) CKLocalizedImageNamed(imageName)
