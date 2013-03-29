@@ -17,9 +17,30 @@
 #import "CKCollectionController.h"
 #import "CKArrayCollection.h"
 
+CGFloat distance(MKMapPoint p1, MKMapPoint p2){
+    return sqrt(pow(p1.x-p2.x,2)+pow(p1.y-p2.y,2));
+}
 
 NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *context)
 {
+    /*
+	CLLocationCoordinate2D* centerCoordinate = (CLLocationCoordinate2D*)context;
+    
+    MKMapPoint centerLoc = MKMapPointForCoordinate(*centerCoordinate);
+    MKMapPoint obj1Loc = MKMapPointForCoordinate(obj1.coordinate);
+    MKMapPoint obj2Loc = MKMapPointForCoordinate(obj2.coordinate);
+    
+    CGFloat dist1 = distance(obj1Loc,centerLoc);
+    CGFloat dist2 = distance(obj2Loc,centerLoc);
+    
+    if (dist1 <dist2)
+        return NSOrderedAscending;
+    else if (dist1 > dist2)
+        return NSOrderedDescending;
+    else
+        return NSOrderedSame;
+    */
+    
 	CLLocationCoordinate2D* centerCoordinate = (CLLocationCoordinate2D*)context;
 	
 	CLLocation *centerLoc = [[[CLLocation alloc] initWithLatitude:centerCoordinate->latitude longitude:centerCoordinate->longitude]autorelease];
@@ -35,6 +56,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
         return NSOrderedDescending;
     else
         return NSOrderedSame;
+    
 }
 
 
@@ -139,7 +161,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)postInit {
 	[super postInit];
 
-	
 	_zoomStrategy = CKMapCollectionViewControllerZoomStrategyEnclosing;
     _selectionStrategy = CKMapCollectionViewControllerSelectionStrategyAutoSelectAloneAnnotations;
 	_smartZoomMinimumNumberOfAnnotations = 3;
@@ -334,8 +355,24 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
         
         bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, annotation.coordinate.longitude);
         bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude);
-    }	
-	
+    }
+    
+    /*
+    MKMapPoint topLeftPoint = MKMapPointForCoordinate(topLeftCoord);
+    MKMapPoint bottomRightPoint = MKMapPointForCoordinate(bottomRightCoord);
+    
+	MKMapPoint centerPoint = MKMapPointMake(topLeftPoint.x + ((bottomRightPoint.x - topLeftPoint.x) / 2), topLeftPoint.y + ((bottomRightPoint.y - topLeftPoint.y) / 2));
+    CGFloat width = (bottomRightPoint.x - topLeftPoint.x);
+    CGFloat height = (bottomRightPoint.y - topLeftPoint.y);
+    
+    
+    CGFloat mapMetersPerPoints = MKMetersPerMapPointAtLatitude((bottomRightCoord.latitude - topLeftCoord.latitude)/2.0f);
+    CGFloat offset = 500 / mapMetersPerPoints;
+    
+    MKMapRect zoomRect = MKMapRectMake(centerPoint.x, centerPoint.y, width + offset, height + offset);
+    [self.mapView setVisibleMapRect:zoomRect animated:animated];
+*/
+    
     
     MKCoordinateRegion region;
     region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5;
@@ -362,6 +399,12 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated{
+    
+    if(_centerCoordinate.latitude == 0 && _centerCoordinate.longitude == 0){
+        _centerCoordinate = self.mapView.userLocation.coordinate;
+    }
+    
+    
 	self.nearestAnnotation = nil;
 	NSArray* orderedByDistance = [annotations sortedArrayUsingFunction:&compareLocations context:&_centerCoordinate];
 	NSMutableArray* theAnnotations = [NSMutableArray array];
@@ -388,6 +431,15 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
             [self performSelector:@selector(notAnimatedZoomToRegionEnclosingAnnotations:) withObject:theAnnotations afterDelay:0.0];
 	}
 	else{
+        /*
+        CGFloat mapMetersPerPoints = MKMetersPerMapPointAtLatitude(_centerCoordinate.latitude);
+        CGFloat rectSize = _smartZoomDefaultRadius / mapMetersPerPoints;
+        
+        MKMapPoint annotationPoint = MKMapPointForCoordinate(_centerCoordinate);
+        MKMapRect zoomRect = MKMapRectMake(annotationPoint.x - (rectSize / 2), annotationPoint.y - (rectSize / 2), rectSize, rectSize);
+        [self.mapView setVisibleMapRect:zoomRect animated:YES];
+        */
+        
 		MKCoordinateRegion region;
 		region.center.latitude = _centerCoordinate.latitude;
 		region.center.longitude = _centerCoordinate.longitude;
@@ -450,10 +502,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     }
     
 	if(self.annotationToSelect != nil && [self.mapView.annotations containsObject:_annotationToSelect]){
-		[self.mapView selectAnnotation:self.annotationToSelect animated:YES];
+		[self.mapView selectAnnotation:self.annotationToSelect animated:animated];
 	}
 	else if(self.nearestAnnotation != nil){
-		[self.mapView selectAnnotation:self.nearestAnnotation animated:YES];
+		[self.mapView selectAnnotation:self.nearestAnnotation animated:animated];
+        self.nearestAnnotation = nil;//only the first time !
 	}
     
     if(_didScrollBlock){
@@ -578,9 +631,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		return;
     }
     
+    BOOL animated = (self.state == CKViewControllerStateDidAppear);
+    
     NSArray* selected = self.mapView.selectedAnnotations;
     for(id<MKAnnotation> annotation in selected){
-        [self.mapView deselectAnnotation:annotation animated:YES];
+        [self.mapView deselectAnnotation:annotation animated:animated];
     }
     
     self.annotationToSelect = nil;
@@ -603,7 +658,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[self addAnnotations:objects];
     
     if([objects count] > 0){
-        [self zoom:YES];
+        [self zoom:animated];
     }
 }
 
