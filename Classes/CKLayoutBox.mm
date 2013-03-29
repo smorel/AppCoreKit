@@ -42,7 +42,7 @@ template<> struct hash< id >
 @implementation CKLayoutBox
 @synthesize maximumSize, minimumSize, margins, padding, layoutBoxes = _layoutBoxes,frame,containerLayoutBox,containerLayoutView = _containerLayoutView,verticalAlignment,horizontalAlignment,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock, name;
 
 #ifdef LAYOUT_DEBUG_ENABLED
 @synthesize debugView;
@@ -338,14 +338,57 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 - (CGFloat)paddingBottom { return self.padding.bottom; }
 - (CGFloat)paddingRight  { return self.padding.right; }
 
+
+- (id<CKLayoutBoxProtocol>)_layoutWithNameInSelf:(NSString*)thename{
+    for(id<CKLayoutBoxProtocol> layoutBox in self.layoutBoxes){
+        if([[layoutBox name]isEqualToString:thename]){
+            return layoutBox;
+        }
+    }
+    return nil;
+}
+
+- (id<CKLayoutBoxProtocol>)layoutWithName:(NSString*)thename{
+    id<CKLayoutBoxProtocol> layoutBox = [self _layoutWithNameInSelf:thename];
+    if(layoutBox){
+        return layoutBox;
+    }
+    
+    for(id<CKLayoutBoxProtocol> layoutBox in self.layoutBoxes){
+        id<CKLayoutBoxProtocol> subLayoutBox = [layoutBox layoutWithName:thename];
+        if(subLayoutBox){
+            return subLayoutBox;
+        }
+    }
+    
+    return nil;
+}
+
+- (id<CKLayoutBoxProtocol>)layoutWithKeyPath:(NSString*)keypath{
+    id<CKLayoutBoxProtocol> currentBox = self;
+    
+    NSArray* components = [keypath componentsSeparatedByString:@"."];
+    for(NSString* str in components){
+        currentBox = [currentBox _layoutWithNameInSelf:str];
+        if(!currentBox)
+            return nil;
+    }
+    
+    return currentBox;
+}
+
+
 @end
 
 //UIView
 
 @implementation UIView (Layout)
+
+//TODO : Implements setter/getter for all properties
+
 @dynamic  maximumSize, minimumSize, margins, padding, layoutBoxes,frame,containerLayoutBox,containerLayoutView,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,name;
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -451,6 +494,44 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
         }else return l;
     }
     return nil;
+}
+
+- (id<CKLayoutBoxProtocol>)_layoutWithNameInSelf:(NSString*)thename{
+    for(id<CKLayoutBoxProtocol> layoutBox in self.layoutBoxes){
+        if([[layoutBox name]isEqualToString:thename]){
+            return layoutBox;
+        }
+    }
+    return nil;
+}
+
+- (id<CKLayoutBoxProtocol>)layoutWithName:(NSString*)thename{
+    id<CKLayoutBoxProtocol> layoutBox = [self _layoutWithNameInSelf:thename];
+    if(layoutBox){
+        return layoutBox;
+    }
+    
+    for(id<CKLayoutBoxProtocol> layoutBox in self.layoutBoxes){
+        id<CKLayoutBoxProtocol> subLayoutBox = [layoutBox layoutWithName:thename];
+        if(subLayoutBox){
+            return subLayoutBox;
+        }
+    }
+    
+    return nil;
+}
+
+- (id<CKLayoutBoxProtocol>)layoutWithKeyPath:(NSString*)keypath{
+    id<CKLayoutBoxProtocol> currentBox = self;
+    
+    NSArray* components = [keypath componentsSeparatedByString:@"."];
+    for(NSString* str in components){
+        currentBox = [currentBox _layoutWithNameInSelf:str];
+        if(!currentBox)
+            return nil;
+    }
+    
+    return currentBox;
 }
 
 @end

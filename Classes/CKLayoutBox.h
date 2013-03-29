@@ -17,6 +17,22 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
  */
 @protocol CKLayoutBoxProtocol
 
+///-----------------------------------
+/// @name Accessing a layout at runtime
+///-----------------------------------
+
+/** The name of the layout to acces it using layoutWithName: or layoutWithKeyPath:
+ */
+@property(nonatomic,retain) NSString* name;
+
+/* Returns the first layout box matching name in the layout hierarchy
+ */
+- (id<CKLayoutBoxProtocol>)layoutWithName:(NSString*)name;
+
+/* Returns the exact layout box matching the specified keypath (name.name.name ...)
+ */
+- (id<CKLayoutBoxProtocol>)layoutWithKeyPath:(NSString*)keypath;
+
 
 ///-----------------------------------
 /// @name Configuring a LayoutBox’s Visual Appearance
@@ -145,6 +161,8 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 
 @property(nonatomic,assign,readwrite) CGSize lastComputedSize;
 @property(nonatomic,assign,readwrite) CGSize lastPreferedSize;
+
+- (id<CKLayoutBoxProtocol>)_layoutWithNameInSelf:(NSString*)name;
 
 @end
 
