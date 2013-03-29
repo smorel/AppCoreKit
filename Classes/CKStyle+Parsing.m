@@ -196,16 +196,18 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (id)setObjectForKey:(NSString*)key inProperty:(CKProperty*)property{
 	id object = [self objectForKey:key];
+    
 	id transformedValue = [NSValueTransformer transform:object inProperty:property];
-    if(object == transformedValue){
-        return transformedValue;
-    }
     
     //Force localization
 	if([transformedValue isKindOfClass:[NSString class]]){
 		transformedValue = _((NSString*)transformedValue);
 		[property setValue:transformedValue];
 	}
+    
+    if(object == transformedValue){
+        return transformedValue;
+    }
     
     //Cache resources in style tree to avoid parsing each time
     NSSet* theResourceTypes = [NSMutableDictionary resourceTypes];
