@@ -28,4 +28,25 @@ typedef enum {
  */
 + (id)creditsViewWithStyle:(CKCreditsViewStyle)style;
 
+
+/**
+ */
+@property (nonatomic, retain, readonly) UIImageView *titleView;
+
+/**
+ */
+@property (nonatomic, retain, readonly) UIImageView *plateView;
+
+/**
+ */
+@property (nonatomic, retain, readonly) UIImageView *plateBackView;
+
+/**
+ */
+@property (nonatomic, retain, readonly) UILabel *versionLabel;
+
+/**
+ */
+@property (nonatomic, retain, readonly) UIButton *versionLabelSwitchButton;
+
 @end
