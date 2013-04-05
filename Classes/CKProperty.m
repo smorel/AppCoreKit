@@ -148,7 +148,7 @@
         else{
             self.descriptor = nil;
         }
-    }
+    } 
 }
 
 - (Class)type{

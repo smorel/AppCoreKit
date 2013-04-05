@@ -1197,8 +1197,15 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
     
+    if(ret.height < self.font.lineHeight){
+        ret.height = self.font.lineHeight;
+    }
+    
     //Adds padding 8
-    self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
+    
+    CGFloat width = MAX(size.width,ret.width) + self.padding.left + self.padding.right;
+    CGFloat height = ret.height + self.padding.top + self.padding.bottom;
+    self.lastPreferedSize = CGSizeMake(width,height);
     return self.lastPreferedSize;
 }
 
@@ -1246,7 +1253,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
     
     //Adds padding 8
-    self.lastPreferedSize = CGSizeMake(ret.width + self.padding.left + self.padding.right,ret.height + self.padding.top + self.padding.bottom);
+    self.lastPreferedSize = CGSizeMake(MAX(size.width,ret.width) + self.padding.left + self.padding.right,ret.height + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
 }
 
