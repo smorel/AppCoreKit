@@ -397,23 +397,44 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     [self zoomToRegionEnclosingAnnotations:annotations animated:NO];
 }
 
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
+  if(self.zoomStrategy == CKMapCollectionViewControllerZoomStrategySmart){
+    [self smartZoomWithAnnotations:self.annotations animated:YES];
+  }
+}
 
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated{
     
     if(_centerCoordinate.latitude == 0 && _centerCoordinate.longitude == 0){
         _centerCoordinate = self.mapView.userLocation.coordinate;
     }
+  
+  if(_centerCoordinate.latitude == 0 && _centerCoordinate.longitude == 0){
+    return;
+    //Waiting for user location to get set
+  }
     
     
-	self.nearestAnnotation = nil;
+  self.nearestAnnotation = nil;
+  BOOL foundNearest = NO;
 	NSArray* orderedByDistance = [annotations sortedArrayUsingFunction:&compareLocations context:&_centerCoordinate];
 	NSMutableArray* theAnnotations = [NSMutableArray array];
 	for (NSObject<MKAnnotation> *annotation in orderedByDistance) {
 		[theAnnotations addObject:annotation];
 		if(annotation.coordinate.latitude != _centerCoordinate.latitude
 		   && annotation.coordinate.longitude != _centerCoordinate.longitude
-		   && _nearestAnnotation == nil){
-			self.nearestAnnotation = annotation;
+		   && !foundNearest/*_nearestAnnotation == nil*/){
+          
+          //PATCH :BAD !!!!
+          foundNearest = YES;
+          
+          //Delay because when the controller appears, goToDefaultLocation on map is called
+          //during this zoom, we receive didUpdateUserLocation that sets self.nearestAnnotation
+          //and as we set a new zoom, regionDidChange is called and self.nearestAnnotation is handled
+          //as a result of the previous zoom not the one triggered by smart zoom.
+          [self performSelector:@selector(setNearestAnnotation:) withObject:annotation afterDelay:0.4];
+		
+          //self.nearestAnnotation = annotation;
 		}
 		if([theAnnotations count] >= _smartZoomMinimumNumberOfAnnotations)
 			break;
