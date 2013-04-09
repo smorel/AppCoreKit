@@ -22,6 +22,8 @@
 #import "CKContainerViewController.h"
 #import "CKConfiguration.h"
 #import "UINavigationController+Style.h"
+#import "CKLayoutBox.h"
+#import "UIView+Positioning.h"
 
 
 @interface CKViewController()
@@ -318,6 +320,7 @@
     [self observerNavigationChanges:YES];
 }
 
+/*
 - (void)applyStyleForTitleView{
     if([[CKStyleManager defaultManager]isEmpty])
         return;
@@ -337,6 +340,7 @@
     
     [self observerNavigationChanges:YES];
 }
+ */
 
 - (void)leftItemChanged:(UIBarButtonItem*)item{
     if(self.navigationItem.backBarButtonItem == self.navigationItem.leftBarButtonItem){
@@ -355,9 +359,11 @@
     [self applyStyleForBackBarButtonItem];
 }
 
+/*
 - (void)titleViewChanged:(UIBarButtonItem*)item{
     [self applyStyleForTitleView];
 }
+ */
 
 - (void)popViewController{
     [self.navigationController popViewControllerAnimated:YES];
@@ -477,6 +483,10 @@
                 [label sizeToFit];
             }];
             [NSObject endBindingsContext];
+        }else if([[view layoutBoxes]count] > 0){
+            CGSize preferedSize = [view preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            view.width = preferedSize.width;
+            view.height = preferedSize.height;
         }
     }else{
         UILabel* label = [[[UILabel alloc]init]autorelease];
