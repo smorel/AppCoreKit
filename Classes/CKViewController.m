@@ -420,6 +420,12 @@
         self.navigationItem.leftBarButtonItem = nil;
         [item applyStyle:barItemStyle];
         self.navigationItem.leftBarButtonItem = item;
+        
+        if(item.customView && [[item.customView layoutBoxes]count] > 0){
+            CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            item.customView.width = preferedSize.width;
+            item.customView.height = preferedSize.height;
+        }
     }
     
     //Back button
@@ -434,6 +440,12 @@
         self.navigationItem.backBarButtonItem = nil;
         [item applyStyle:backBarItemStyle];
         self.navigationItem.backBarButtonItem = item;
+        
+        if(item.customView && [[item.customView layoutBoxes]count] > 0){
+            CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            item.customView.width = preferedSize.width;
+            item.customView.height = preferedSize.height;
+        }
     }
     else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == topStackController){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
@@ -448,6 +460,13 @@
             [item applyStyle:backBarItemStyle];
             self.navigationItem.backBarButtonItem = item;
             
+            
+            if(item.customView && [[item.customView layoutBoxes]count] > 0){
+                CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+                item.customView.width = preferedSize.width;
+                item.customView.height = preferedSize.height;
+            }
+            
             self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
         }
     }
@@ -460,6 +479,13 @@
         self.navigationItem.rightBarButtonItem = nil;
         [item applyStyle:barItemStyle];
         self.navigationItem.rightBarButtonItem = item;
+        
+        
+        if(item.customView && [[item.customView layoutBoxes]count] > 0){
+            CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            item.customView.width = preferedSize.width;
+            item.customView.height = preferedSize.height;
+        }
     }
     
     if(self.navigationItem.titleView){
