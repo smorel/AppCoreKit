@@ -488,7 +488,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                             cornerStyle = [myViewStyle cornerStyle];
                         }
                         
-						if((cornerStyle & CKViewCornerStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
+						if((cornerStyle == CKViewCornerStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
 							roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
 						}
 						else{
