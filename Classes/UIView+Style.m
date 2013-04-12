@@ -32,6 +32,8 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKLayoutBox.h"
+
 #import "CKConfiguration.h"
 
 
@@ -429,7 +431,14 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 						[view insertSubview:gradientView atIndex:0];
 					}
                     
-                    [NSObject applyStyleByIntrospection:myViewStyle toObject:gradientView appliedStack:appliedStack delegate:(id)delegate];
+                    //Problem here is that we apply the view's style to the gradient view
+                    //but if a lyout is specified for the view, it will be applied to the gradient view too !
+                    //we ensure we do not have layout information when applying the view's style to the gradient view :
+                    
+                    NSMutableDictionary* gradientViewStyle = [NSMutableDictionary dictionaryWithDictionary:myViewStyle];
+                    [gradientViewStyle removeObjectForKey:@"layoutBoxes"];
+                    
+                    [NSObject applyStyleByIntrospection:gradientViewStyle toObject:gradientView appliedStack:appliedStack delegate:(id)delegate];
 		
 					backgroundView = gradientView;
 				}
