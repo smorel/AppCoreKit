@@ -46,6 +46,7 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 - (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay{
     self = [super init];
+    [self retain];
     self.block = theblock;
     
     static dispatch_once_t onceToken;
@@ -71,9 +72,42 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     }];
     
     [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
-    [self retain];
     return self;
 }
+
+
+- (id)initWithObject:(id)object block:(CKInvokationBlock)theblock{
+    self = [super init];
+    [self retain];
+    
+    self.block = theblock;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKInvokationRegistry = [[NSMutableDictionary alloc]init];
+    });
+    
+    NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:object]];
+    if(!ar){
+        ar = [NSMutableArray array];
+        [CKInvokationRegistry setObject:ar forKey:[NSValue valueWithNonretainedObject:object]];
+    }
+    
+    [ar addObject:[NSValue valueWithNonretainedObject:self]];
+    
+    __block CKInvokationObject* bself = self;
+    self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
+        if(weakRef == bself.objectRef){
+            [NSObject cancelPreviousPerformRequestsWithTarget:bself];
+            [bself unregister];
+            [bself autorelease];
+        }
+    }];
+    
+    [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:NO];
+    return self;
+}
+
 
 
 - (void)execute{
@@ -160,6 +194,10 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 - (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay{
     [[[CKInvokationObject alloc]initWithObject:self block:block delay:delay]autorelease];
+}
+
+- (void)performBlockOnMainThread:(void (^)())block{
+    [[[CKInvokationObject alloc]initWithObject:self block:block]autorelease];
 }
 
 - (void)cancelPeformBlock{

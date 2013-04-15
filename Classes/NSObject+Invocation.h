@@ -41,6 +41,10 @@
  */
 - (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay;
 
+/**
+ */
+- (void)performBlockOnMainThread:(void (^)())block;
+
 /** 
  */
 - (void)cancelPeformBlock;

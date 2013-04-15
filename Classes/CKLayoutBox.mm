@@ -1569,9 +1569,9 @@ static char UIViewSizeToFitLayoutBoxesKey;
     return self;
 }
 
-- (void)UIView_Layout_setHidden:(BOOL)hidden{
-    if(hidden != self.hidden){
-        [self UIView_Layout_setHidden:hidden];
+- (void)UIView_Layout_setHidden:(BOOL)thehidden{
+    if(thehidden != self.hidden){
+        [self UIView_Layout_setHidden:thehidden];
         [self invalidateLayout];
     }
 }
