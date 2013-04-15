@@ -15,6 +15,7 @@
 #import "CKStyleManager.h"
 #import "CKRuntime.h"
 #import "UIView+Name.h"
+#import "CKStyleView.h"
 
 using namespace __gnu_cxx;
 
