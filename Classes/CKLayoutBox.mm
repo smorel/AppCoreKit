@@ -420,12 +420,33 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
+    
     CGSize constraint = theframe.size;
     if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         constraint.height = MAXFLOAT;
     }
     
+    CGSize lastComputedSize = self.lastPreferedSize;
     CGSize size = [self preferedSizeConstraintToSize:constraint];
+    
+    //We hitted a special case in navigation bar subviews. Especially titleView
+    //We possibly try to set a frame in this method that will trigger setNeedsLayout on the navigation bar.
+    //At the next frame, the navigation bar will compute its own layoutSubviews and will crop the title view
+    //for it to fit between left and right items and call layoutsubviews on the titleview again
+    //And if we still try to set a higher width as the layout tells us, it creates a loop ...
+    //That's why we handle that case like this.
+    //Which means, if we already computed the layout for this title view, we'll already have a preferedSize set.
+    //If the content do not change, the prefered size computed here and the last prefered size will be equals.
+    //that means we do not need to set the frame of this view again like that the navigation bar will not
+    //get its layout invalidated !
+    
+    BOOL skipFrameSetAsNavigationBarSubView = false;
+    if([[self superview]isKindOfClass:[UINavigationBar class]]){
+        if(CGSizeEqualToSize(lastComputedSize,size)){
+            skipFrameSetAsNavigationBarSubView = YES;
+        }
+        
+    }
     
     CGRect frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
     
@@ -444,7 +465,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     
     [CKLayoutBox performLayoutWithFrame:subBoxesFrame forBox:self];
     
-    if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
+    if(!skipFrameSetAsNavigationBarSubView && self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         CGSize boundingBox = CGSizeMake(0, 0);
         for(NSObject<CKLayoutBoxProtocol>* subbox in self.layoutBoxes){
             if((subbox.frame.origin.x + subbox.frame.size.width) > boundingBox.width){
