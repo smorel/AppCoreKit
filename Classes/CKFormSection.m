@@ -48,6 +48,12 @@
 
 @synthesize cellControllers = _cellControllers;
 
+- (void)dealloc{
+    [super dealloc];
+    [_cellControllers release];
+    _cellControllers = nil;
+}
+
 - (NSInteger)count{
     return [_cellControllers count];
 }
