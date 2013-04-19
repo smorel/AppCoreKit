@@ -1066,14 +1066,14 @@
     [self reapplyStyleForBackgroundViews];
     
     if(self.layoutCallback == nil){
-        __block CKTableViewCellController* bself = self;
         self.layoutCallback = [CKCallback callbackWithBlock:^id(id value) {
+            CKTableViewCellController* controller = (CKTableViewCellController*)value;
             
             BOOL enabled = [UIView areAnimationsEnabled];
             [UIView setAnimationsEnabled:NO];
             
             //[CATransaction disableActions];
-            [bself performLayout];
+            [controller performLayout];
  
             //[CATransaction commit];
             [UIView setAnimationsEnabled:enabled];
