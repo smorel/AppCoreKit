@@ -398,8 +398,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
-  if(self.zoomStrategy == CKMapCollectionViewControllerZoomStrategySmart){
-    [self smartZoomWithAnnotations:self.annotations animated:YES];
+    if(self.zoomStrategy == CKMapCollectionViewControllerZoomStrategySmart){
+        if(_centerCoordinate.latitude == 0 && _centerCoordinate.longitude == 0){
+            [self smartZoomWithAnnotations:self.annotations animated:YES];
+        }
   }
 }
 
