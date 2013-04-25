@@ -434,9 +434,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
           //during this zoom, we receive didUpdateUserLocation that sets self.nearestAnnotation
           //and as we set a new zoom, regionDidChange is called and self.nearestAnnotation is handled
           //as a result of the previous zoom not the one triggered by smart zoom.
-          [self performSelector:@selector(setNearestAnnotation:) withObject:annotation afterDelay:0.4];
+          //[self performSelector:@selector(setNearestAnnotation:) withObject:annotation afterDelay:0.4];
 		
-          //self.nearestAnnotation = annotation;
+          self.nearestAnnotation = annotation;
 		}
 		if([theAnnotations count] >= _smartZoomMinimumNumberOfAnnotations)
 			break;
