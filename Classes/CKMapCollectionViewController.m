@@ -12,6 +12,7 @@
 #import "UIView+AutoresizingMasks.h"
 #import "UIColor+Additions.h"
 #import "CKDebug.h"
+#import "NSObject+Invocation.h"
 
 #import "CKTableViewCellController.h"
 #import "CKCollectionController.h"
@@ -398,8 +399,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
-  if(self.zoomStrategy == CKMapCollectionViewControllerZoomStrategySmart){
-    [self smartZoomWithAnnotations:self.annotations animated:YES];
+    if(self.zoomStrategy == CKMapCollectionViewControllerZoomStrategySmart){
+        if(_centerCoordinate.latitude == 0 && _centerCoordinate.longitude == 0){
+            [self smartZoomWithAnnotations:self.annotations animated:YES];
+        }
   }
 }
 
@@ -432,9 +435,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
           //during this zoom, we receive didUpdateUserLocation that sets self.nearestAnnotation
           //and as we set a new zoom, regionDidChange is called and self.nearestAnnotation is handled
           //as a result of the previous zoom not the one triggered by smart zoom.
-          [self performSelector:@selector(setNearestAnnotation:) withObject:annotation afterDelay:0.4];
+          //[self performSelector:@selector(setNearestAnnotation:) withObject:annotation afterDelay:0.05];
 		
-          //self.nearestAnnotation = annotation;
+          self.nearestAnnotation = annotation;
 		}
 		if([theAnnotations count] >= _smartZoomMinimumNumberOfAnnotations)
 			break;
@@ -515,13 +518,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 #pragma mark MKMapView Delegate
 
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-    CKMapView* ckMapView = (CKMapView*)mapView;
-    if(ckMapView.annotationToSelectAfterScrolling){
-        id<MKAnnotation> annotation = ckMapView.annotationToSelectAfterScrolling;
-		[self.mapView selectAnnotation:annotation animated:YES];
-    }
-    
+- (void)selectNearestAnnotation:(BOOL)animated{
 	if(self.annotationToSelect != nil && [self.mapView.annotations containsObject:_annotationToSelect]){
 		[self.mapView selectAnnotation:self.annotationToSelect animated:animated];
 	}
@@ -529,6 +526,17 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		[self.mapView selectAnnotation:self.nearestAnnotation animated:animated];
         self.nearestAnnotation = nil;//only the first time !
 	}
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+    CKMapView* ckMapView = (CKMapView*)mapView;
+    if(ckMapView.annotationToSelectAfterScrolling){
+        id<MKAnnotation> annotation = ckMapView.annotationToSelectAfterScrolling;
+		[self.mapView selectAnnotation:annotation animated:YES];
+    }
+    
+    //Force animated here for map to scroll when selecting to avoid the callout to be cropped.
+    [self selectNearestAnnotation:YES];
     
     if(_didScrollBlock){
         _didScrollBlock(self,animated);

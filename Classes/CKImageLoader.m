@@ -71,6 +71,10 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
         }
         else{
             UIImage *image = [UIImage imageWithContentsOfFile:[self.imageURL path]];
+            if(image.scale != [[UIScreen mainScreen]scale]){
+                image = [UIImage imageWithCGImage:image.CGImage scale:[[UIScreen mainScreen]scale] orientation:image.imageOrientation];
+            }
+            
             if (image) {
                 if(_completionBlock){
                     _completionBlock(self,image,YES);
