@@ -218,7 +218,18 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     self.progress = 1.0;
     
     dispatch_group_async(self.operationsGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        id object = self.isCancelled ? nil : [CKWebDataConverter convertData:self.data fromResponse:self.response];
+        NSError* converterError = nil;
+        id object = self.isCancelled ? nil : [CKWebDataConverter convertData:self.data fromResponse:self.response error:&converterError];
+        
+        if(converterError != nil){
+            if (self.completionBlock)
+                self.completionBlock(object, self.response, converterError);
+            
+            if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
+                [self.delegate connection:aConnection didFailWithError:converterError];
+            
+            return;
+        }
         
         if (aConnection)
             [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:self];
