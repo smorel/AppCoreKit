@@ -260,4 +260,14 @@
 	CKAssert(NO,@"NOT IMPLEMENTED");
 }
 
+- (CKTableViewCellController*)cellControllerWithValue:(id)value{
+    for(CKTableViewCellController* cellController in self.cellControllers){
+        if(cellController.value  == nil && value == nil)
+            return cellController;
+        if(cellController.value != nil && [cellController.value isEqual:value])
+            return cellController;
+    }
+    return nil;
+}
+
 @end

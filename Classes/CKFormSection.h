@@ -96,6 +96,10 @@
  */
 - (NSInteger)count;
 
+/**
+ */
+- (CKTableViewCellController*)cellControllerWithValue:(id)value;
+
 ///-----------------------------------
 /// @name Inserting Cell Controllers
 ///-----------------------------------
