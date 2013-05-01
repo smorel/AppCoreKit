@@ -555,6 +555,10 @@
     }
 }
 
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers{ return NO; }
+- (BOOL)shouldAutomaticallyForwardRotationMethods{ return NO; }
+- (BOOL)shouldAutomaticallyForwardAppearanceMethods{ return NO; }
+
 @end
 
 //UIViewController(CKSplitView)

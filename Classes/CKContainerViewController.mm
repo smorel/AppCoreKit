@@ -339,6 +339,10 @@ typedef void(^CKTransitionBlock)();
         [self.selectedViewController  willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     }
 }
+
+- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers{ return NO; }
+- (BOOL)shouldAutomaticallyForwardRotationMethods{ return NO; }
+- (BOOL)shouldAutomaticallyForwardAppearanceMethods{ return NO; }
  
 
 @end

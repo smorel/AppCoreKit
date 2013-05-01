@@ -535,6 +535,8 @@
 		96E4D4671540918800CCF421 /* UnitTests.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D40215407D8600CCF421 /* UnitTests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96EBE433159A43AB00E0F209 /* UIView+Name.h in Headers */ = {isa = PBXBuildFile; fileRef = 96EBE431159A43AB00E0F209 /* UIView+Name.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96EBE434159A43AB00E0F209 /* UIView+Name.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EBE432159A43AB00E0F209 /* UIView+Name.m */; };
+		96F9F36C173182D900AF4276 /* UIActivityIndicatorView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96F9F36A173182D900AF4276 /* UIActivityIndicatorView+Introspection.h */; };
+		96F9F36D173182D900AF4276 /* UIActivityIndicatorView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F9F36B173182D900AF4276 /* UIActivityIndicatorView+Introspection.m */; };
 		B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B01481171566A8FD000C1E1C /* CKWebRequestManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B01481181566A8FD000C1E1C /* CKWebRequestManager.m */; };
 		B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */ = {isa = PBXBuildFile; fileRef = B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1112,6 +1114,8 @@
 		96E4D40215407D8600CCF421 /* UnitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnitTests.h; path = Classes/UnitTests.h; sourceTree = "<group>"; };
 		96EBE431159A43AB00E0F209 /* UIView+Name.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Name.h"; path = "Classes/UIView+Name.h"; sourceTree = "<group>"; };
 		96EBE432159A43AB00E0F209 /* UIView+Name.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Name.m"; path = "Classes/UIView+Name.m"; sourceTree = "<group>"; };
+		96F9F36A173182D900AF4276 /* UIActivityIndicatorView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+Introspection.h"; path = "Classes/UIActivityIndicatorView+Introspection.h"; sourceTree = "<group>"; };
+		96F9F36B173182D900AF4276 /* UIActivityIndicatorView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActivityIndicatorView+Introspection.m"; path = "Classes/UIActivityIndicatorView+Introspection.m"; sourceTree = "<group>"; };
 		B01481171566A8FD000C1E1C /* CKWebRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequestManager.h; path = Classes/CKWebRequestManager.h; sourceTree = "<group>"; };
 		B01481181566A8FD000C1E1C /* CKWebRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequestManager.m; path = Classes/CKWebRequestManager.m; sourceTree = "<group>"; };
 		B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLRequest+Upload.h"; path = "Classes/NSURLRequest+Upload.h"; sourceTree = "<group>"; };
@@ -1907,6 +1911,8 @@
 				EDD9E7E21436166D00E104D9 /* UIViewController+Introspection.m */,
 				759569671444E9FD0092F317 /* UISegmentedControl+Introspection.h */,
 				759569681444E9FD0092F317 /* UISegmentedControl+Introspection.m */,
+				96F9F36A173182D900AF4276 /* UIActivityIndicatorView+Introspection.h */,
+				96F9F36B173182D900AF4276 /* UIActivityIndicatorView+Introspection.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2504,6 +2510,7 @@
 				96691E1215DD3BE500D73510 /* CKTableViewCellController+Factory.h in Headers */,
 				96AC0A8116021F6100CC3C77 /* CKCollectionBlockBinder.h in Headers */,
 				96AC0AA816022DBC00CC3C77 /* NSString+Formating.h in Headers */,
+				96F9F36C173182D900AF4276 /* UIActivityIndicatorView+Introspection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2879,6 +2886,7 @@
 				96691E1315DD3BE500D73510 /* CKTableViewCellController+Factory.m in Sources */,
 				96AC0A8216021F6100CC3C77 /* CKCollectionBlockBinder.m in Sources */,
 				96AC0AA916022DBC00CC3C77 /* NSString+Formating.m in Sources */,
+				96F9F36D173182D900AF4276 /* UIActivityIndicatorView+Introspection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
