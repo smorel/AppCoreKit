@@ -180,9 +180,13 @@ typedef NSUInteger CKItemViewFlags;
 /// @name Managing Stylesheets
 ///-----------------------------------
 
-/**
+/** This will apply the style to the sub views
  */
 - (void)applyStyle;
+
+/** This will apply the style to the controller itself
+ */
+- (void)applyControllerStyle;
 
 /**
  */
