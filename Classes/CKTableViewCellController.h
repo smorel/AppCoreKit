@@ -79,8 +79,15 @@
 
 /** Return the contentView Layout prefered height for the specified width
  Return MAXFLOAT in case no layout applies to the contentView.
+ //This allow to compute the prefered height of the row when the parent table view is in portrait orientation
  */
 - (CGFloat)preferedHeightConstraintToWidth:(CGFloat)width;
+
+/** Return the contentView Layout prefered height for the specified width
+ Return MAXFLOAT in case no layout applies to the contentView.
+ //This allow to compute the prefered width of the row when the parent table view is in portrait landscape
+ */
+- (CGFloat)preferedWidthConstraintToHeight:(CGFloat)height;
 
 @end
 

@@ -384,6 +384,15 @@
     return MAXFLOAT;
 }
 
+- (CGFloat)preferedWidthConstraintToHeight:(CGFloat)height{
+    if(self.contentView.layoutBoxes){
+        CGSize size = [self.contentView preferedSizeConstraintToSize:CGSizeMake(MAXFLOAT,height)];
+        return size.width;
+    }
+    return MAXFLOAT;
+}
+
+
 @end
 
 
