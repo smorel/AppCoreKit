@@ -47,6 +47,49 @@
                                             bindings:(NSDictionary*)bindings 
                                       controlActions:(NSDictionary*)controlActions 
                                               action:(void(^)(CKTableViewCellController* controller))action{
+    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:controlActions setup:nil action:action];
+}
+
++ (CKTableViewCellController*)cellControllerWithName:(NSString*)name
+                                               setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup{
+    return [CKTableViewCellController cellControllerWithName:name setup:setup action:nil];
+}
+
++ (CKTableViewCellController*)cellControllerWithName:(NSString*)name
+                                               setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup
+                                              action:(void(^)(CKTableViewCellController* controller))action{
+    return [CKTableViewCellController cellControllerWithName:name value:nil bindings:nil setup:setup action:action];
+}
+
++ (CKTableViewCellController*)cellControllerWithName:(NSString*)name
+                                               value:(id)value
+                                            bindings:(NSDictionary*)bindings
+                                               setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup{
+    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings setup:setup action:nil];
+}
+
++ (CKTableViewCellController*)cellControllerWithName:(NSString*)name
+                                               value:(id)value
+                                            bindings:(NSDictionary*)bindings
+                                               setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup
+                                              action:(void(^)(CKTableViewCellController* controller))action{
+    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:nil setup:setup action:action];
+}
+
++ (CKTableViewCellController*)cellControllerWithName:(NSString*)name
+                                               value:(id)value
+                                            bindings:(NSDictionary*)bindings
+                                      controlActions:(NSDictionary*)controlActions
+                                               setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup{
+    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:controlActions setup:setup action:nil];
+}
+
++ (CKTableViewCellController*)cellControllerWithName:(NSString*)name
+                                               value:(id)value
+                                            bindings:(NSDictionary*)bindings
+                                      controlActions:(NSDictionary*)controlActions
+                                               setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup
+                                              action:(void(^)(CKTableViewCellController* controller))action{
     
     //We have to copy controlActions here as we are on the right stack. if not the block will get copied in controller's setup block and crash if local data are referenced in the block.
     
@@ -108,6 +151,10 @@
                         actionBlock(bControl,bController);
                     }];
                 }
+            }
+            
+            if(setup){
+                setup(controller,cell);
             }
             
             [cell endBindingsContext];
