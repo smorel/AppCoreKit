@@ -22,6 +22,7 @@
 @property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
 @property (nonatomic, assign) BOOL isViewAppeared;
 @property (nonatomic, assign) BOOL controllerStyleApplyed;
+@property (nonatomic, assign) BOOL applyingStyle;
 @end
 
 
@@ -96,6 +97,7 @@
     _size = CGSizeMake(320,44);
     _isViewAppeared = NO;
     self.controllerStyleApplyed = NO;
+    self.applyingStyle = NO;
 }
 
 - (void)flagsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -171,21 +173,34 @@
 }
 
 - (void)applyStyleToView:(UIView*)view{
+    if(self.applyingStyle)
+        return;
+    
+    self.applyingStyle = YES;
 	[self applyStyle:[self controllerStyle] forView:view];
+    self.applyingStyle = NO;
 }
 
 - (void)applyStyle{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([[CKStyleManager defaultManager]isEmpty] || self.applyingStyle)
         return;
     
+    self.applyingStyle = YES;
+    
 	[self applyStyle:[self controllerStyle] forView:self.view];
+    
+    self.applyingStyle = NO;
 }
 
 - (void)applyControllerStyle{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([[CKStyleManager defaultManager]isEmpty] || self.applyingStyle)
         return;
     
+    self.applyingStyle = YES;
+    
     [NSObject applyStyleByIntrospection:[self controllerStyle] toObject:self appliedStack:[NSMutableSet set] delegate:nil];
+    
+    self.applyingStyle = NO;
 }
 
 - (void)setupView:(UIView *)view{

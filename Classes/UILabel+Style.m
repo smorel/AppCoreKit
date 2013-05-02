@@ -37,7 +37,7 @@ NSString* CKStyleFontName = @"fontName";
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UILabel* label = (UILabel*)view;
 		NSMutableDictionary* myLabelStyle = style;
-		if(myLabelStyle){
+		if(myLabelStyle && ![myLabelStyle isEmpty]){
 			
             CGFloat styleFontSize = [myLabelStyle fontSize];
 			CGFloat fontSize = styleFontSize ? styleFontSize : label.font.pointSize;
@@ -67,7 +67,7 @@ NSString* CKStyleFontName = @"fontName";
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UITextField* txtField = (UITextField*)view;
 		NSMutableDictionary* myLabelStyle = style;
-		if(myLabelStyle){
+		if(myLabelStyle && ![myLabelStyle isEmpty]){
 			
 			NSString* fontName = txtField.font.fontName;
 			if([myLabelStyle containsObjectForKey:CKStyleFontName])
