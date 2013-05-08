@@ -20,11 +20,19 @@
 
 /**
  */
++ (CGSize)parseDictionaryToCGSize:(NSDictionary*)dictionary;
+
+/**
+ */
 + (CGSize)convertCGSizeFromObject:(id)object;
 
 /**
  */
 + (CGRect)parseStringToCGRect:(NSString*)str;
+
+/**
+ */
++ (CGRect)parseDictionaryToCGRect:(NSDictionary*)dictionary;
 
 /**
  */
@@ -36,11 +44,19 @@
 
 /**
  */
++ (CGPoint)parseDictionaryToCGPoint:(NSDictionary*)dictionary;
+
+/**
+ */
 + (CGPoint)convertCGPointFromObject:(id)object;
 
 /**
  */
 + (UIEdgeInsets)parseStringToUIEdgeInsets:(NSString*)str;
+
+/**
+ */
++ (UIEdgeInsets)parseDictionaryToUIEdgeInsets:(NSDictionary*)dictionary;
 
 /**
  */
@@ -57,5 +73,14 @@
 /**
  */
 + (CLLocationCoordinate2D)convertCLLocationCoordinate2DFromObject:(id)object;
+
+
+/**
+ */
++ (CGAffineTransform)parseDictionaryToCGAffineTransform:(NSDictionary*)dictionary;
+
+/**
+ */
++ (CGAffineTransform)convertCGAffineTransformFromObject:(id)object;
 
 @end
