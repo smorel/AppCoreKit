@@ -70,3 +70,18 @@ extern NSString * const CKSpecialURLCharacters;
 - (NSDictionary*)queryDictionaryUsingEncoding:(NSStringEncoding)encoding ;
 
 @end
+
+@interface NSURL (CKNSURLURIQueryAdditions)
+
+
+/** Assuming that the receiver is a query string of key=value pairs,
+ of the form "key0=value0&key1=value1&...", with keys and values percent-escape
+ encoded per RFC 2396, returns a dictionary of the keys and values.
+ 
+ Supports both ampersand "&" and semicolon ";" to delimit key-value
+ pairs.  The latter is recommended here:
+ http://www.w3.org/TR/1998/REC-html40-19980424/appendix/notes.html#h-B.2.2
+ */
+- (NSDictionary*)queryDictionaryUsingEncoding:(NSStringEncoding)encoding ;
+
+@end
