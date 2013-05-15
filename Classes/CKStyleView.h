@@ -105,6 +105,10 @@ typedef enum {
 
 /**
  */
+@property (nonatomic, assign) CGFloat separatorInsets;
+
+/**
+ */
 @property (nonatomic, assign) NSInteger separatorLocation;
 
 /**
