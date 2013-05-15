@@ -118,3 +118,13 @@ NSString * const CKSpecialURLCharacters = @"!*'();:@&=+$,/?%#[]";
 }
 
 @end
+
+
+@implementation NSURL (CKNSURLURIQueryAdditions)
+
+- (NSDictionary*)queryDictionaryUsingEncoding:(NSStringEncoding)encoding {
+    NSString* params = [self query];
+    return [params queryDictionaryUsingEncoding:encoding];
+}
+
+@end
