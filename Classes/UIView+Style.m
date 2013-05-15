@@ -412,7 +412,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
 				BOOL opaque = YES;
-
 				
 				CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
 				CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;

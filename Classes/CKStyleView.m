@@ -95,6 +95,7 @@
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     self.drawFrame = CGRectMake(0,0,0,0);
+    self.separatorInsets = 0;
 }
 
 - (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -241,6 +242,13 @@
 - (void)setSeparatorLocation:(NSInteger)theseparatorLocation{
     if(_separatorLocation != theseparatorLocation){
         _separatorLocation = theseparatorLocation;
+        [self updateDisplay];
+    }
+}
+
+- (void)setSeparatorInsets:(CGFloat)theSeparatorInsets{
+    if(_separatorInsets != theSeparatorInsets){
+        _separatorInsets = theSeparatorInsets;
         [self updateDisplay];
     }
 }
@@ -850,7 +858,7 @@
 		[_separatorColor setStroke];
 		CGContextSetLineWidth(gc, self.separatorWidth);
 		CGMutablePathRef borderPath = CGPathCreateMutable();
-		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth inRect:rect];
+		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth inRect:CGRectInset(rect,self.separatorInsets,0)];
         
 		CGContextAddPath(gc, borderPath);
 		CFRelease(borderPath);

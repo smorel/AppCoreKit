@@ -34,7 +34,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (UIColor*) colorForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return nil;
+    if(!object || [object isKindOfClass:[NSNull class]]) return nil;
 	if([object isKindOfClass:[UIColor class]]){
 		return object;
 	}
@@ -47,7 +47,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (NSArray*) colorArrayForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return nil;
+    if(!object || [object isKindOfClass:[NSNull class]]) return nil;
 	id result = [NSArray convertFromNSArray:object withContentClassName:@"UIColor"];
 	if(result){
 		[self setObject:result forKey:key];
@@ -57,7 +57,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (NSArray*) cgFloatArrayForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return nil;
+    if(!object || [object isKindOfClass:[NSNull class]]) return nil;
 	id result = [NSArray convertFromNSArray:object withContentClassName:@"NSNumber"];
 	if(result){
 		[self setObject:result forKey:key];
@@ -67,7 +67,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (UIImage*) imageForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return nil;
+    if(!object || [object isKindOfClass:[NSNull class]]) return nil;
 	if([object isKindOfClass:[UIImage class]]){
 		return object;
 	}
@@ -82,7 +82,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (NSInteger) enumValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor{
 	id object = [self objectForKey:key];
-    if(!object) return 0;
+    if(!object || [object isKindOfClass:[NSNull class]]) return 0;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object intValue];
 	}
@@ -93,7 +93,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (NSInteger) bitMaskValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor{
 	id object = [self objectForKey:key];
-    if(!object) return 0;
+    if(!object || [object isKindOfClass:[NSNull class]]) return 0;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object intValue];
 	}
@@ -104,7 +104,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (CGSize) cgSizeForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return CGSizeMake(0,0);
+    if(!object || [object isKindOfClass:[NSNull class]]) return CGSizeMake(0,0);
 	if([object isKindOfClass:[NSValue class]]){
 		return [object CGSizeValue];
 	}
@@ -115,7 +115,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (CGRect) cgRectForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return CGRectMake(0,0,0,0);
+    if(!object || [object isKindOfClass:[NSNull class]]) return CGRectMake(0,0,0,0);
 	if([object isKindOfClass:[NSValue class]]){
 		return [object CGRectValue];
 	}
@@ -127,7 +127,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (UIEdgeInsets) edgeInsetsForKey:(NSString*)key{
     id object = [self objectForKey:key];
-    if(!object) return UIEdgeInsetsMake(0,0,0,0);
+    if(!object || [object isKindOfClass:[NSNull class]]) return UIEdgeInsetsMake(0,0,0,0);
 	if([object isKindOfClass:[NSValue class]]){
 		return [object UIEdgeInsetsValue];
 	}
@@ -138,7 +138,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (CGFloat) cgFloatForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return 0;
+    if(!object || [object isKindOfClass:[NSNull class]]) return 0;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object floatValue];
 	}
@@ -150,14 +150,14 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (NSString*) stringForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return nil;
+    if(!object || [object isKindOfClass:[NSNull class]]) return nil;
 	CKAssert(object == nil || [object isKindOfClass:[NSString class]],@"invalid class for string");
 	return _((NSString*)object);
 }
 
 - (NSInteger) integerForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-    if(!object) return 0;
+    if(!object || [object isKindOfClass:[NSNull class]]) return 0;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object intValue];
 	}
@@ -168,7 +168,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 
 - (BOOL) boolForKey:(NSString*)key{
     id object = [self objectForKey:key];
-    if(!object) return 0;
+    if(!object || [object isKindOfClass:[NSNull class]]) return 0;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object boolValue];
 	}
