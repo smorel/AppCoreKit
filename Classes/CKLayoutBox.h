@@ -164,6 +164,8 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 
 - (id<CKLayoutBoxProtocol>)_layoutWithNameInSelf:(NSString*)name;
 
+- (void)setBoxFrameTakingCareOfTransform:(CGRect)rect;
+
 @end
 
 

@@ -32,6 +32,7 @@ CloudKit is compiled as a static library. Use Xcode's "dependent project" facili
    * MobileCoreServices.framework
    * CFNetwork.framework
    * SystemConfiguration.framework
+   * AdSupport.framework
    * libz.1.2.3.dylib
    * libxml2.dylib
    * libicucore.dylib

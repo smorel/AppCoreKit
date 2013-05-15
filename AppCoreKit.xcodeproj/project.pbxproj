@@ -1088,6 +1088,7 @@
 		96AC0A9B16022A9C00CC3C77 /* TypeAheadCrunch.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = TypeAheadCrunch.1; sourceTree = "<group>"; };
 		96AC0AA616022DBC00CC3C77 /* NSString+Formating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Formating.h"; path = "Classes/NSString+Formating.h"; sourceTree = "<group>"; };
 		96AC0AA716022DBC00CC3C77 /* NSString+Formating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Formating.m"; path = "Classes/NSString+Formating.m"; sourceTree = "<group>"; };
+		96C1C4B21743D2710073F83E /* README.mdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.mdown; sourceTree = "<group>"; };
 		96C78A51155C6C9600A1120B /* CKAggregateCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAggregateCollection.h; path = Classes/CKAggregateCollection.h; sourceTree = "<group>"; };
 		96C78A52155C6C9600A1120B /* CKAggregateCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAggregateCollection.m; path = Classes/CKAggregateCollection.m; sourceTree = "<group>"; };
 		96CADE301486B229008A23E4 /* CKRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRuntime.h; path = Classes/CKRuntime.h; sourceTree = "<group>"; };
@@ -2030,6 +2031,7 @@
 		960A2D30150572C000D30AB4 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				96C1C4B21743D2710073F83E /* README.mdown */,
 				960A2D31150572D100D30AB4 /* index.markdown */,
 				96063591159A60E6007F3F2F /* Sample-template.markdown */,
 				9606358B159A532F007F3F2F /* CloudKitArchitecture102011.png */,

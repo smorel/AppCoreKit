@@ -77,13 +77,6 @@
     return [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"com.wherecloud.userid.%@",[[NSBundle mainBundle] bundleIdentifier]]];
 }
 
-+ (NSString*)deviceId{
-    if([[UIDevice currentDevice]respondsToSelector:@selector(uniqueIdentifier)]){
-        return [[UIDevice currentDevice] uniqueIdentifier];
-    }
-    return @"";
-}
-
 + (NSString*)vendorId{
     if([[UIDevice currentDevice]respondsToSelector:@selector(identifierForVendor)]){
         return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
@@ -156,9 +149,6 @@
     
     NSString* AppRelayUserId = [CKCreditsFooterView appRelayUserId];
     if(AppRelayUserId)[self.versionLabels addObject:[NSString stringWithFormat:@"ar:%@",AppRelayUserId]];
-    
-    NSString* deviceId = [CKCreditsFooterView deviceId];
-    if(deviceId)[self.versionLabels addObject:[NSString stringWithFormat:@"de:%@",deviceId]];
     
     NSString* vendorId = [CKCreditsFooterView vendorId];
     if(vendorId)[self.versionLabels addObject:[NSString stringWithFormat:@"ve:%@",vendorId]];

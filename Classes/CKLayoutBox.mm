@@ -38,6 +38,7 @@ template<> struct hash< id >
 #ifdef LAYOUT_DEBUG_ENABLED
 @property(nonatomic,assign,readwrite) UIView* debugView;
 #endif
+
 @end
 
 @implementation CKLayoutBox
@@ -166,7 +167,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     if(box.maximumSize.height < ret.height) {
         ret.height = box.maximumSize.height;
     }
-    
+       
     return ret;
     //return CGSizeMake(ret.width + box.padding.right + box.padding.left,ret.height+box.padding.top + box.padding.bottom);
 }
@@ -273,7 +274,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize size = [self preferedSizeConstraintToSize:theframe.size];
-    self.frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
+    [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
     [CKLayoutBox performLayoutWithFrame:self.frame forBox:self];
     
@@ -378,6 +379,9 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     return currentBox;
 }
 
+- (void)setBoxFrameTakingCareOfTransform:(CGRect)rect{
+    self.frame = rect;
+}
 
 @end
 
@@ -420,7 +424,6 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
-    
     CGSize constraint = theframe.size;
     if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         constraint.height = MAXFLOAT;
@@ -478,7 +481,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         
         CGRect newFrame = CGRectMake(self.frame.origin.x,self.frame.origin.y,boundingBox.width + (self.padding.left + self.padding.right),boundingBox.height + (self.padding.top + self.padding.bottom));
         CGRect oldFrame = self.frame;
-        self.frame = newFrame;
+        [self setBoxFrameTakingCareOfTransform:newFrame];
         
         if(!CGSizeEqualToSize(newFrame.size, oldFrame.size) && [[self superview]isKindOfClass:[UITableView class]]){
             //tableheaderview || tablefooterview
@@ -493,7 +496,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
             }
         }
     }else if([self.containerLayoutBox isKindOfClass:[UIView class]]){
-        self.frame = frame;
+        [self setBoxFrameTakingCareOfTransform:frame];
     }
 }
 
@@ -556,6 +559,13 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     return currentBox;
 }
 
+- (void)setBoxFrameTakingCareOfTransform:(CGRect)rect{
+//    rect = CGRectApplyAffineTransform(rect, self.transform);
+    self.frame = rect;
+    //self.bounds = CGRectMake(0,0,rect.size.width,rect.size.height);
+    //self.center = CGPointMake(rect.origin.x + (rect.size.width / 2),rect.origin.y + (rect.size.height /2));
+}
+
 @end
 
 //CKLayoutFlexibleSpace
@@ -588,10 +598,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
-    self.frame = theframe;
+    [self setBoxFrameTakingCareOfTransform:theframe];
     
-#ifdef LAYOUT_DEBUG_ENABLED    
-    self.debugView.frame = self.frame;
+#ifdef LAYOUT_DEBUG_ENABLED
+    [self.debugView.frame = self.frame;
 #endif
 }
 
@@ -762,7 +772,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize size = [self preferedSizeConstraintToSize:theframe.size];
-    self.frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
+    [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
     
 #ifdef LAYOUT_DEBUG_ENABLED
@@ -798,7 +808,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
                     CGSize subsize = box.lastPreferedSize;
                     
                     CGRect boxframe = CGRectMake(box.margins.left,y,MAX(0,subsize.width),MAX(0,subsize.height));
-                    box.frame = CGRectIntegral(boxframe);
+                    [box setBoxFrameTakingCareOfTransform:boxframe];
                     
                     y += subsize.height;
                 }
@@ -832,7 +842,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
                         }
                     }
                     
-                    box.frame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
+                    CGRect boxFrame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
+                    [box setBoxFrameTakingCareOfTransform:boxFrame];
                     [box performLayoutWithFrame:box.frame];
                 }
             }
@@ -1012,7 +1023,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize size = [self preferedSizeConstraintToSize:theframe.size];
-    self.frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
+    [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
 #ifdef LAYOUT_DEBUG_ENABLED
     self.debugView.frame = self.frame;
@@ -1047,7 +1058,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
                     CGSize subsize = box.lastPreferedSize;
                     
                     CGRect boxframe = CGRectMake(x,box.margins.top,MAX(0,subsize.width),MAX(0,subsize.height));
-                    box.frame = CGRectIntegral(boxframe);
+                    [box setBoxFrameTakingCareOfTransform:CGRectIntegral(boxframe)];
                     
                     x += subsize.width;
                 }
@@ -1084,7 +1095,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
                         }
                     }
                     
-                    box.frame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
+                    CGRect boxFrame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
+                    [box setBoxFrameTakingCareOfTransform:boxFrame];
                     [box performLayoutWithFrame:box.frame];
                 }
             }
@@ -1453,7 +1465,8 @@ static char UIViewSizeToFitLayoutBoxesKey;
 
 - (CGSize)fixedSize{
     if(CGSizeEqualToSize(self.maximumSize, self.minimumSize)){
-        return self.minimumSize;
+        CGSize size = self.minimumSize;
+        return size;
     }
     return CGSizeMake(MAXFLOAT, MAXFLOAT);
 }
@@ -1467,7 +1480,15 @@ static char UIViewSizeToFitLayoutBoxesKey;
 
 - (CGSize)maximumSize{
     id value = objc_getAssociatedObject(self, &UIViewMaximumSizeKey);
-    return value ? [value CGSizeValue] : CGSizeMake(0, 0);
+    CGSize size = value ? [value CGSizeValue] : CGSizeMake(0, 0);
+    
+    /*
+    if(!CGSizeEqualToSize(size, CGSizeMake(0,0)) && !CGAffineTransformEqualToTransform(self.transform, CGAffineTransformIdentity)){
+        CGRect rect = CGRectMake(0,0,size.width,size.height);
+        rect = CGRectApplyAffineTransform(rect, self.transform);
+        return rect.size;
+    }*/
+    return size;
 }
 
 - (void)setMinimumSize:(CGSize)s{
@@ -1479,7 +1500,16 @@ static char UIViewSizeToFitLayoutBoxesKey;
 
 - (CGSize)minimumSize{
     id value = objc_getAssociatedObject(self, &UIViewMinimumSizeKey);
-    return value ? [value CGSizeValue] : CGSizeMake(0, 0);
+    CGSize size = value ? [value CGSizeValue] : CGSizeMake(0, 0);
+    
+    /*
+    if(!CGSizeEqualToSize(size, CGSizeMake(0,0)) &&  !CGAffineTransformEqualToTransform(self.transform, CGAffineTransformIdentity)){
+        CGRect rect = CGRectMake(0,0,size.width,size.height);
+        rect = CGRectApplyAffineTransform(rect, self.transform);
+        return rect.size;
+    }*/
+    
+    return size;
 }
 
 - (void)setMargins:(UIEdgeInsets)m{
@@ -1598,11 +1628,19 @@ static char UIViewSizeToFitLayoutBoxesKey;
     }
 }
 
+- (void)UIView_Layout_setTransform:(CGAffineTransform)theTransform{
+    if(!CGAffineTransformEqualToTransform(theTransform, self.transform)){
+        [self UIView_Layout_setTransform:theTransform];
+        [self invalidateLayout];
+    }
+}
+
 + (void)load{
     CKSwizzleSelector([UIView class], @selector(layoutSubviews), @selector(UIView_Layout_layoutSubviews));
     CKSwizzleSelector([UIView class], @selector(init), @selector(UIView_Layout_init));
     CKSwizzleSelector([UIView class], @selector(initWithFrame:), @selector(UIView_Layout_initWithFrame:));
     CKSwizzleSelector([UIView class], @selector(setHidden:), @selector(UIView_Layout_setHidden:));
+    CKSwizzleSelector([UIView class], @selector(setTransform:), @selector(UIView_Layout_setTransform:));
 }
 
 @end
