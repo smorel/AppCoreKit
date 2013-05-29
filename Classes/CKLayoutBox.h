@@ -130,7 +130,7 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 /// @name Performing the layout
 ///-----------------------------------
 
-/** This returns the current frame of a layout box. Setting or animating this value in a layouted hierchy will have an unknown effect and will be ignore as soon as layoutSubviews will get called in one of the layouted UIView.
+/** This returns the current frame of a layout box. Setting or animating this value in a layouted hierachy will have an unknown effect and will be ignore as soon as layoutSubviews will get called in one of the layouted UIView.
  */
 @property(nonatomic,assign) CGRect frame;
 
@@ -232,7 +232,7 @@ typedef enum CKLayoutHorizontalAlignment{
 //CKLayoutFlexibleSpace
 
 /** CKLayoutFlexibleSpace responsability is to pack free space to the maximum. The space is distributed equally between the other items. You can also specify maximum/minimum or fixed size for flexible spaces as well as padding.
- CKLayoutFlexibleSpace Margins as weel as margins of the previous/next layoutbox are ignored to get the flexible space fill the empty space to the maximum. This helps to align boxes correctly.
+ CKLayoutFlexibleSpace Margins as well as margins of the previous/next layoutbox are ignored to get the flexible space fill the empty space to the maximum. This helps to align boxes correctly.
  */
 @interface CKLayoutFlexibleSpace : CKLayoutBox
 @end
@@ -258,18 +258,18 @@ typedef enum CKLayoutHorizontalAlignment{
 @interface UIButton (Layout)
 
 /** This attribute specify whether the button can be stretched horizontally to fill a bigger space. By default, the prefered size of a button uses sizeToFit in order to get the optimal size of a button.
- You can either use Minimum/maximum/fixed size on a button with flexibleWidth = NO to manage its size manually, or set flexibleWidth = YES to make it fill the space as maximum as possible.
+ You can either use Minimum/maximum/fixed size on a button with flexibleWidth = NO to manage its size manually, or set flexibleWidth = YES to make it fill the space as much as possible.
  */
 @property(nonatomic,assign) BOOL flexibleWidth;
 
 
 /** This attribute specify whether the button can be stretched vertically to fill a bigger space. By default, the prefered size of a button uses sizeToFit in order to get the optimal size of a button.
- You can either use Minimum/maximum/fixed size on a button with flexibleWidth = NO to manage its size manually, or set flexibleWidth = YES to make it fill the space as maximum as possible.
+ You can either use Minimum/maximum/fixed size on a button with flexibleWidth = NO to manage its size manually, or set flexibleWidth = YES to make it fill the space as much as possible.
  */
 @property(nonatomic,assign) BOOL flexibleHeight;
 
 /** This attribute specify whether the button can be stretched vertically and horizontally to fill a bigger space. By default, the prefered size of a button uses sizeToFit in order to get the optimal size of a button.
- You can either use Minimum/maximum/fixed size on a button with flexibleWidth = NO to manage its size manually, or set flexibleWidth = YES to make it fill the space as maximum as possible.
+ You can either use Minimum/maximum/fixed size on a button with flexibleWidth = NO to manage its size manually, or set flexibleWidth = YES to make it fill the space as much as possible.
  */
 @property(nonatomic,assign) BOOL flexibleSize;
 
