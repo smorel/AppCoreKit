@@ -361,6 +361,32 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
     return res;
 }
 
+- (void)getRecursiveInheritanceDependencies:(NSMutableArray*)dependencies{
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id sourceObject, BOOL *stop) {
+        if([sourceObject isKindOfClass:[NSDictionary class]]){
+            NSArray* inheritsArray = [sourceObject objectForKey:CKCascadingTreeInherits];
+            for(NSString* dependency in inheritsArray){
+                if(![dependencies containsObject:dependency]){
+                    [dependencies insertObject:dependency atIndex:0];
+                }
+            }
+            [sourceObject getRecursiveInheritanceDependencies:dependencies];
+        }else if([sourceObject isKindOfClass:[NSArray class]]){
+            for(id object in sourceObject){
+                if([object isKindOfClass:[NSDictionary class]]){
+                    NSArray* inheritsArray = [object objectForKey:CKCascadingTreeInherits];
+                    for(NSString* dependency in inheritsArray){
+                        if(![dependencies containsObject:dependency]){
+                            [dependencies insertObject:dependency atIndex:0];
+                        }
+                    }
+                    [object getRecursiveInheritanceDependencies:dependencies];
+                }
+            }
+        }
+    }];
+}
+
 - (void)makeAllInherits{
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
@@ -374,8 +400,35 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
                 NSMutableDictionary* deepCopy = [self deepCleanCopy:inheritedDico];
                 [deepCopy setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                 
+                NSMutableArray* recursiveDependencies = [NSMutableArray array];
+                [deepCopy getRecursiveInheritanceDependencies:recursiveDependencies];
+                
+                NSArray* sortedKeys = nil;
+                if(recursiveDependencies.count > 0){
+                    NSArray* allKeys = [deepCopy allKeys];
+                    //sort allkeys to put recursiveDependencies in order first and then the rest
+                    sortedKeys = [allKeys sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                        NSInteger dependencyObj1Index = [recursiveDependencies indexOfObject:obj1];
+                        NSInteger dependencyObj2Index = [recursiveDependencies indexOfObject:obj2];
+                        NSInteger indexObj1 = [allKeys indexOfObject:obj1];
+                        NSInteger indexObj2 = [allKeys indexOfObject:obj2];
+                        
+                        if(dependencyObj1Index != NSNotFound && dependencyObj2Index != NSNotFound){
+                            return [[NSNumber numberWithInt:dependencyObj1Index]compare:[NSNumber numberWithInt:dependencyObj2Index]];
+                        }else if(dependencyObj1Index != NSNotFound && dependencyObj2Index == NSNotFound){
+                            return NSOrderedAscending;
+                        }else if(dependencyObj1Index == NSNotFound && dependencyObj2Index != NSNotFound){
+                            return NSOrderedDescending;
+                        }
+                        
+                        return [[NSNumber numberWithInt:indexObj1]compare:[NSNumber numberWithInt:indexObj2]];
+                    }];
+                }else{
+                    sortedKeys = [deepCopy allKeys];
+                }
+                
 				//Apply inheritedStyle to self
-				for(NSString* obj in [deepCopy allKeys]){
+				for(NSString* obj in sortedKeys){
 					if(![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode]){
 						id inheritedObject = [deepCopy objectForKey:obj];
                         if([inheritedObject isKindOfClass:[NSMutableDictionary class]]){
@@ -401,18 +454,26 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
                                     NSMutableDictionary* subObject = selfArray ? (i < selfArray.count ? [selfArray objectAtIndex:i] : nil) : nil;
                                     
                                     if(subObject && inheritedSubObject){
+                                        
+                                        [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                                         [subObject makeAllInherits];
+                                        
+                                        [inheritedSubObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                                         [inheritedSubObject makeAllInherits];
+                                        
                                         NSMutableDictionary* resultObject = [self applyHierarchically:inheritedSubObject toDictionary:subObject forKey:nil];
                                         [resultObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                                         [result addObject:resultObject];
+                                        
                                     }else if(subObject != nil){
-                                        [subObject makeAllInherits];
                                         [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                                        [subObject makeAllInherits];
+                                        
                                         [result addObject:subObject];
                                     }else{
-                                        [inheritedSubObject makeAllInherits];
                                         [inheritedSubObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                                        [inheritedSubObject makeAllInherits];
+                                        
                                         [result addObject:inheritedSubObject];
                                     }
                                 }
