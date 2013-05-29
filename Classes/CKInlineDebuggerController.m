@@ -181,6 +181,7 @@
 @property(nonatomic,retain)UIBarButtonItem* oldRightButtonItem;
 @property(nonatomic,retain)UIBarButtonItem* oldLeftButtonItem;
 @property(nonatomic,assign)BOOL started;
+@property(nonatomic,retain) NSString* configCheckBindingContext;
 
 - (void)highlightView:(UIView*)view;
 
@@ -210,8 +211,8 @@
     self.started = NO;
     
     __block CKInlineDebuggerController* bDebugger = self;
-    
-    [NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_configurationCheck",self]];
+    self.configCheckBindingContext = [NSString stringWithFormat:@"<%p>_configurationCheck",self];
+    [NSObject beginBindingsContext:self.configCheckBindingContext];
     [[CKConfiguration sharedInstance]bind:@"inlineDebuggerEnabled" withBlock:^(id value) {
         if([value boolValue] && !bDebugger.started){
             [bDebugger start];
@@ -267,7 +268,7 @@
 }
 
 - (void)dealloc{
-    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_configurationCheck",self]];
+    [NSObject removeAllBindingsForContext:self.configCheckBindingContext];
     if(self.viewController){
         [self highlightView:nil];
         [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
@@ -296,6 +297,8 @@
     _oldRightButtonItem = nil;
     [_oldLeftButtonItem release];
     _oldLeftButtonItem = nil;
+    [_configCheckBindingContext release];
+    _configCheckBindingContext = nil;
     [super dealloc];
 }
 
