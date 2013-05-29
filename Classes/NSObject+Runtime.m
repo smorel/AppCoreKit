@@ -284,6 +284,10 @@ void introspectTextInputsProperties(){
     return nil;
 }
 
+- (BOOL)hasPropertyNamed:(NSString*)propertyName{
+    objc_property_t property = class_getProperty([self class],[propertyName UTF8String]);
+    return property != nil;
+}
 
 
 @end

@@ -87,4 +87,8 @@
  */
 - (NSArray*)allPropertyNames;
 
+/**
+ */
+- (BOOL)hasPropertyNamed:(NSString*)propertyName;
+
 @end
