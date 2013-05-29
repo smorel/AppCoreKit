@@ -94,11 +94,21 @@
     [super dealloc];
 }
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
+        self.editingMask = UITableViewCellStateDefaultMask;
+        self.showsReorderControl = YES;
+    }
+	return self;
+}
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
 	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
         self.delegate = thedelegate;
         self.editingMask = UITableViewCellStateDefaultMask;
+        self.showsReorderControl = YES;
     }
 	return self;
 }

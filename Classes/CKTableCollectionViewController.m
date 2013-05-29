@@ -764,8 +764,8 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(self.editableType == CKTableCollectionViewControllerEditingTypeNone
-       || self.editing == NO)
+    if(/*self.editableType == CKTableCollectionViewControllerEditingTypeNone
+       || */self.editing == NO && self.tableView.editing == NO)
         return NO;
     
 	return [self isViewMovableAtIndexPath:indexPath];
