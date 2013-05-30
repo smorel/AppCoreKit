@@ -132,6 +132,11 @@ typedef enum CKBindingsContextOptions{
  */
 - (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector;
 
+/**
+ */
+- (void)bindPropertyChangeWithBlock:(void (^)(NSString* propertyName, id value))block;
+
+
 @end
 
 //
