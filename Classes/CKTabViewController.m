@@ -15,6 +15,12 @@
 #import "NSObject+Bindings.h"
 #import <objc/runtime.h>
 #import "CKDebug.h"
+#import "UIView+Positioning.h"
+
+//CKTabViewItem
+@interface CKTabViewItem()
+@property(nonatomic,assign,readwrite)CKTabViewItemPosition position;
+@end
 
 
 #define kCKTabViewDefaultHeight 49
@@ -101,7 +107,7 @@
             
             CGFloat x = floorf(contentInsets.left + (viewWidth / 2.0) - (totalWidth / 2.0));
             for (CKTabViewItem *item in _items) {
-                [item sizeToFit];
+             //   [item sizeToFit];
                 CGFloat y = floorf(contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0));
                 item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
                 x += floorf(item.frame.size.width + self.itemsSpace);
@@ -112,7 +118,7 @@
         case CKTabViewStyleAlignLeft:{
             CGFloat x = floorf(contentInsets.left);
             for (CKTabViewItem *item in _items) {
-                [item sizeToFit];
+              //  [item sizeToFit];
                 CGFloat y = floorf(contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0));
                 item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
                 x += floorf(item.frame.size.width + self.itemsSpace);
@@ -123,7 +129,7 @@
         case CKTabViewStyleAlignRight:{
             CGFloat x = floorf(contentInsets.left + viewWidth);
             for (CKTabViewItem *item in _items) {
-                [item sizeToFit];
+              //  [item sizeToFit];
                 x -= floorf(item.frame.size.width);
                 CGFloat y = floorf(contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0));
                 item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
@@ -159,9 +165,31 @@
     
 	// Add the new items
 	_items = [items copy];
+    
+    
+    NSMutableDictionary* tabBarStyle = [self stylesheet];
+    
 	int index = 0;
 	for (CKTabViewItem *item in _items) {
 		CKAssert([item isKindOfClass:[CKTabViewItem class]], @"Items must be of class CKTabViewItem.");
+        
+        if([_items count] == 1){
+            item.position = CKTabViewItemPositionAlone;
+        }
+        else if(index == 0){
+            item.position = CKTabViewItemPositionFirst;
+        }else if(index == _items.count - 1){
+            item.position = CKTabViewItemPositionLast;
+        }else{
+            item.position = CKTabViewItemPositionMiddle;
+        }
+        
+        NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
+        [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
+        [item sizeToFit];
+        
+        item.width += item.titleEdgeInsets.left + item.titleEdgeInsets.right;
+        
         [item addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:item];
 		[(CKTabViewItem *)item setSelected:(index++ == _selectedIndex)];
@@ -204,10 +232,6 @@
 
 @end
 
-//CKTabViewItem
-@interface CKTabViewItem()
-@property(nonatomic,assign,readwrite)CKTabViewItemPosition position;
-@end
 
 @implementation CKTabViewItem
 @synthesize position;
@@ -388,11 +412,12 @@
                 item.position = CKTabViewItemPositionMiddle;
             }
             
+            /*
             if(self.isViewDisplayed){
                 NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
                 [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
                 [item sizeToFit];
-            }
+            }*/
 
 			[items addObject:item];
             ++i;
@@ -461,7 +486,7 @@ static char CKViewControllerTabViewItemKey;
 	[newItem setTitle:self.title forState:UIControlStateNormal];
 	[newItem setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
 	[newItem setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
-    [newItem sizeToFit];
+   // [newItem sizeToFit];
     newItem.bounds = CGRectMake(0, 0, newItem.bounds.size.width + (self.title ? 10 : 0), newItem.bounds.size.height + (self.title ? 10 : 0) );
 	[self setTabViewItem:newItem];
     
