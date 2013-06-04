@@ -45,6 +45,10 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 }
 
 - (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay{
+    return [self initWithObject:object block:theblock delay:delay modes:nil];
+}
+
+- (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay modes:(NSArray*)modes{
     self = [super init];
     [self retain];
     self.block = theblock;
@@ -71,7 +75,11 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
         }
     }];
     
-    [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
+    if(modes){
+        [self performSelector:@selector(execute) withObject:nil afterDelay:delay inModes:modes];
+    }else{
+        [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
+    }
     return self;
 }
 
@@ -194,6 +202,10 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 - (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay{
     [[[CKInvokationObject alloc]initWithObject:self block:block delay:delay]autorelease];
+}
+
+- (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay inModes:(NSArray*)modes{
+    [[[CKInvokationObject alloc]initWithObject:self block:block delay:delay modes:modes]autorelease];
 }
 
 - (void)performBlockOnMainThread:(void (^)())block{

@@ -43,6 +43,10 @@
 
 /**
  */
+- (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay inModes:(NSArray*)modes;
+
+/**
+ */
 - (void)performBlockOnMainThread:(void (^)())block;
 
 /** 
