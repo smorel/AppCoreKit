@@ -49,6 +49,10 @@
  */
 - (void)performBlockOnMainThread:(void (^)())block;
 
+/**
+ */
+- (void)performBlockOnMainThread:(void (^)())block inModes:(NSArray*)modes;
+
 /** 
  */
 - (void)cancelPeformBlock;

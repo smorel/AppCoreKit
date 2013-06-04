@@ -85,6 +85,11 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 
 - (id)initWithObject:(id)object block:(CKInvokationBlock)theblock{
+    return [self initWithObject:object block:theblock modes:nil];
+}
+
+
+- (id)initWithObject:(id)object block:(CKInvokationBlock)theblock modes:(NSArray*)modes{
     self = [super init];
     [self retain];
     
@@ -112,8 +117,13 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
         }
     }];
     
-    [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:NO];
+    if(modes){
+        [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:NO modes:modes];
+    }else{
+        [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:NO];
+    }
     return self;
+
 }
 
 
@@ -210,6 +220,10 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 - (void)performBlockOnMainThread:(void (^)())block{
     [[[CKInvokationObject alloc]initWithObject:self block:block]autorelease];
+}
+
+- (void)performBlockOnMainThread:(void (^)())block inModes:(NSArray*)modes{
+    [[[CKInvokationObject alloc]initWithObject:self block:block modes:modes]autorelease];
 }
 
 - (void)cancelPeformBlock{
