@@ -324,15 +324,15 @@
                     startAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateMoving);
                     
                     if(animationBlock){
-                        controller.view.layer.zPosition += 10;
+                        controller.view.layer.zPosition += 13;
                         
-                        __block UIViewController* bController = controller;
+                       // __block UIViewController* bController = controller;
                         [UIView animateWithDuration:animationDuration animations:^{
-                            animationBlock(bController,beginFrame,endFrame,CKSplitViewControllerAnimationStateMoving);
+                            animationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateMoving);
                         } completion:^(BOOL finished) {
-                            bController.view.layer.zPosition -= 10;
+                            controller.view.layer.zPosition -= 13;
                             if(endAnimationBlock){
-                                endAnimationBlock(bController,beginFrame,endFrame,CKSplitViewControllerAnimationStateMoving);
+                                endAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateMoving);
                             }
                         }];
                     }else if(endAnimationBlock){
@@ -354,69 +354,62 @@
                     startAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
                     
                     if(animationBlock){
-                        controller.view.layer.zPosition += 10;
+                        controller.view.layer.zPosition += 12;
                         
-                        __block UIViewController* bController = controller;
+                        //__block UIViewController* bController = controller;
                         [UIView animateWithDuration:animationDuration animations:^{
-                            animationBlock(bController,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
+                            animationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
                         } completion:^(BOOL finished) {
-                            bController.view.layer.zPosition -= 10;
+                            controller.view.layer.zPosition -= 12;
                             if(endAnimationBlock){
-                                endAnimationBlock(bController,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
+                                endAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
                             }
-                        }];
-                        
-                        
-                        if([CKOSVersion() floatValue] < 5){
-                        [self performBlock:^{
-                            [bController viewDidAppear:YES];
-                        } afterDelay:animationDuration];
-                    }
-                    }else if(endAnimationBlock){
-                        endAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
-                        
-                        if([CKOSVersion() floatValue] < 5){
                             [controller viewDidAppear:YES];
-                        }
+                        }];
+                    }
+                } else if(endAnimationBlock){
+                    endAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
+                    
+                    if([CKOSVersion() floatValue] < 5){
+                        [controller viewDidAppear:YES];
                     }
                 }
             }
-            
+        
             for(UIViewController* controller in removedController){
                 if([CKOSVersion() floatValue] < 5){
                     [controller viewWillDisappear:YES];
-                }                    
+                }
                 
                 CGRect beginFrame = [[beginFrames objectForKey:[NSValue valueWithNonretainedObject:controller]]CGRectValue];
                 CGRect endFrame = [[endFrames objectForKey:[NSValue valueWithNonretainedObject:controller]]CGRectValue];
                 
                 if(startAnimationBlock){
-                    startAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
+                    startAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateRemoving);
                     
                     if(animationBlock){
                         controller.view.layer.zPosition += 10;
                         
-                        __block UIViewController* bController = controller;
+                        // __block UIViewController* bController = controller;
                         [UIView animateWithDuration:animationDuration animations:^{
-                            animationBlock(bController,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
+                            animationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateRemoving);
                         } completion:^(BOOL finished) {
-                            bController.view.layer.zPosition -= 10;
+                            controller.view.layer.zPosition -= 10;
                             if(endAnimationBlock){
-                                endAnimationBlock(bController,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
+                                endAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateRemoving);
                             }
+                            [controller.view removeFromSuperview];
+                            [controller setContainerViewController:nil];
                         }];
                         
-                        [self performBlock:^{
-                            [bController.view removeFromSuperview];
-                            [bController setContainerViewController:nil];
-                        } afterDelay:animationDuration];
                     }else if(endAnimationBlock){
-                        endAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateAdding);
+                        endAnimationBlock(controller,beginFrame,endFrame,CKSplitViewControllerAnimationStateRemoving);
                         [controller.view removeFromSuperview];
                         [controller setContainerViewController:nil];
                     }
                 }
             }
+            
         }else{
             if([CKOSVersion() floatValue] < 5){
                 for(UIViewController* controller in addedController){
