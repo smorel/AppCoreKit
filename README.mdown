@@ -89,7 +89,9 @@ MobileCoreServices,
 AdSupport.
 </pre>
 
-<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/integrating-framework-projects-and-dependencies.png?raw=true" style="display: block; margin-left: auto; margin-right:auto;"/>
+<pre>
+<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/integrating-framework-projects-and-dependencies.png?raw=true"/>
+</pre>
 
 
 * Adds the following <b>Header Search Path</b> in your build settings (<b> HEADER_SEARCH_PATHS </b>):
