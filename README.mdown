@@ -27,9 +27,11 @@ AppCoreKit provides a "Documentation" target that generate a docset using the pu
 
 ## Using AppCoreKit
 
-* Drag'n'drop project in your workspace or as a subproject in Xcode.
+* <b>Drag'n'drop</b> the AppCoreKit project in your workspace or as a subproject in Xcode.
 
-* Add the following frameworks and libraries to your project : 
+* Adds the AppCoreKit.framework <b>link dependency on your target</b> in the build phases settings.
+
+* Add the following <b>frameworks and libraries dependencies</b> to your project in the build phases settings: 
 <pre>
 libstdc++.dylib, 
 UIKit, 
@@ -48,7 +50,7 @@ MobileCoreServices,
 AdSupport.
 </pre>
 
-* Add the following link flags in your build settings (<b>OTHER_LDFLAGS</b>) : 
+* Add the following <b>link flags</b> in your build settings (<b>OTHER_LDFLAGS</b>) : 
 <pre>
  -ObjC -all_load -lxml2 -licucore -lz -weak_library /usr/lib/libstdc++.dylib
 </pre>
