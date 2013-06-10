@@ -19,7 +19,19 @@ AppCoreKit do not offers out of the box UI components but the technology to help
 
 Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace.
 
-Screen Cast and high level description of the framework are available at http://www.appcorekit.net
+
+## Additional Information
+
+* If you have any comments, suggestions, question or information request, please contact us at appcorekitsupport@wherecloud.com.
+
+* Want to keep updated? Follow us on Twitter - @appcorekit.
+
+* Screen Cast and high level description of the framework are available at http://www.appcorekit.net
+
+* A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples
+
+
+
 
 ## Compiling the framework
 
@@ -83,15 +95,18 @@ sh "$YOUR_FRAMEWORKS_PATH/copy_framework_resources.sh"
         --project-dir "$PROJECT_DIR"
 </pre>
 
+
+## Additional dependencies
+
+AppCoreKit requires another framework to work properly. This is VendorsKit which groups all the third parties we need to share between frameworks and apps.
+You can find a pre-compiled version of vendors kit in our sample repository at https://github.com/wherecloud/appcorekit-samples
+
+Or you can get the sources of this framework at : https://github.com/wherecloud/vendorskit
+
 ## Minimum system requirements
 
 AppCoreKit supports all iOS versions 4.3 and higher.
 
-## Credits
-
-If you have any comments, suggestions, question or information request, please contact us at appcorekitsupport@wherecloud.com.
-
-Want to keep updated? Follow us on Twitter - @appcorekit.
 
 ## License
 
