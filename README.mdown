@@ -6,15 +6,15 @@ AppCoreKit do not offers out of the box UI components but the technology to help
 
 * Manage your data
 * Automatic serialization (KeyValue Store, Core Data)
-* Type and data structure conversions
-* Network
-* View controllers and containers
-* Ui vs. Models synchronization
-* Appearance customization
-* Responsive view layouts
-* Forms
-* Maps
 * Objective-C runtime apis 
+* Type and data structure conversions
+* View controllers and containers
+* Ui vs. Models synchronization with bindings
+* Appearance customization with cascading stylesheets
+* Responsive view layouts with a hbox/vbox model
+* Non homogenous Forms
+* Maps
+* Network
 * And more.
 
 Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace.
@@ -44,7 +44,7 @@ AppCoreKit provides a "Documentation" target that generate a docset using the pu
 
 * <b>Drag'n'drop</b> the AppCoreKit project in your workspace or as a subproject in Xcode.
 
-* Adds the AppCoreKit.framework <b>link dependency on your target</b> in the build phases settings.
+* Adds the AppCoreKit.framework <b>link dependency to your target</b> in the build phases settings.
 
 * Add the following <b>frameworks and libraries dependencies</b> to your project in the build phases settings: 
 <pre>
