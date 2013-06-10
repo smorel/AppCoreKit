@@ -83,9 +83,15 @@ sh "$YOUR_FRAMEWORKS_PATH/copy_framework_resources.sh"
         --project-dir "$PROJECT_DIR"
 </pre>
 
+## Minimum system requirements
+
+AppCoreKit supports all iOS versions 4.3 and higher.
+
 ## Credits
 
 If you have any comments, suggestions, question or information request, please contact us at appcorekitsupport@wherecloud.com.
+
+Want to keep updated? Follow us on Twitter - @appcorekit.
 
 ## License
 
