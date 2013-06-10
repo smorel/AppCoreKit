@@ -2,9 +2,24 @@
 
 AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 3 years experience at Wherecloud and is a production framework that shipped more than 20 apps.
 
-AppCoreKit do not offers out of the box UI components but the technology to help you manage your data, automatic serialization, type conversions, network, view controllers, ui vs. models synchronization, appearance customization, responsive view layouts, forms, maps, objective-C runtime apis and more.
+AppCoreKit do not offers out of the box UI components but the technology to help you:
+
+* Manage your data
+* Automatic serialization (KeyValue Store, Core Data)
+* Type and data structure conversions
+* Network
+* View controllers and containers
+* Ui vs. Models synchronization
+* Appearance customization
+* Responsive view layouts
+* Forms
+* Maps
+* Objective-C runtime apis 
+* And more.
 
 Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace.
+
+Screen Cast and high level description of the framework are available at http://www.appcorekit.net
 
 ## Compiling the framework
 
@@ -62,7 +77,7 @@ YOUR_FRAMEWORKS_PATH="$PROJECT_DIR/../../Frameworks/"
 sh "$YOUR_FRAMEWORKS_PATH/copy_framework_resources.sh" 
         --system-developer-dir "$SYSTEM_DEVELOPER_DIR" 
         --executable-name "$EXECUTABLE_NAME" 
-        --frameworks-dir "$YOUR_FRAMEWORS_PATH" 
+        --frameworks-dir "$YOUR_FRAMEWORKS_PATH" 
         --target-build-dir "$TARGET_BUILD_DIR" 
         --project "$PROJECT" 
         --project-dir "$PROJECT_DIR"
@@ -80,7 +95,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
