@@ -19,21 +19,20 @@ AppCoreKit do not offers out of the box UI components but the technology to help
 
 Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace.
 
+Screen Cast and high level description of the framework are available at http://www.appcorekit.net
+
+A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples
+
 ## Minimum system requirements
 
 AppCoreKit supports all iOS versions 4.3 and higher.
 
+## Additional dependencies
 
-## Additional Information
+AppCoreKit requires another framework to work properly. This is VendorsKit which groups all the third parties we need to share between frameworks and apps.
+You can find a pre-compiled version of vendors kit in our sample repository at https://github.com/wherecloud/appcorekit-samples
 
-* Screen Cast and high level description of the framework are available at http://www.appcorekit.net
-
-* A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples
-
-* If you have any comments, suggestions, question or information request, please contact us at appcorekitsupport@wherecloud.com.
-
-* Want to keep updated? Follow us on Twitter - @appcorekit.
-
+Or you can get the sources of this framework at : https://github.com/wherecloud/vendorskit
 
 
 ## Compiling the framework
@@ -52,13 +51,6 @@ And
 
 <b>IMPORTANT</b> : You will have to copy this file each time you update Xcode to a newer version.
 
-
-## Additional dependencies
-
-AppCoreKit requires another framework to work properly. This is VendorsKit which groups all the third parties we need to share between frameworks and apps.
-You can find a pre-compiled version of vendors kit in our sample repository at https://github.com/wherecloud/appcorekit-samples
-
-Or you can get the sources of this framework at : https://github.com/wherecloud/vendorskit
 
 ## Compiling the API Documentation
 
@@ -112,7 +104,9 @@ AdSupport.
 
 <pre>
 FRAMEWORKS_BUILD_PATH="$TARGET_BUILD_DIR"
-APPCOREKIT_PROJECT_PATH="$HOME/Projects/Frameworks/AppCoreKit/"    #Modify this path to point on your AppCoreKit folder!
+
+# Modify the following path to point on your AppCoreKit sources folder!
+APPCOREKIT_PROJECT_PATH="$HOME/Projects/Frameworks/AppCoreKit/"    
 
 sh "$APPCOREKIT_PROJECT_PATH/copy_framework_resources.sh" 
             --system-developer-dir "$SYSTEM_DEVELOPER_DIR"
@@ -124,6 +118,14 @@ sh "$APPCOREKIT_PROJECT_PATH/copy_framework_resources.sh"
 </pre>
 
 <img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/copy-resources-build-phase.png?raw=true"/>
+
+
+## Credits
+
+If you have any comments, suggestions, question or information request, please contact us at appcorekitsupport@wherecloud.com.
+
+Want to keep updated? Follow us on Twitter - @appcorekit.
+
 
 ## License
 
