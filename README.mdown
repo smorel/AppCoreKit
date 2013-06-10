@@ -66,9 +66,9 @@ AppCoreKit provides a "Documentation" target that generate a docset using the pu
 
 ## Using AppCoreKit in your own App
 
-* <b>Drag'n'drop</b> the AppCoreKit project in your workspace or as a subproject in Xcode.
+* <b>Drag'n'drop</b> the AppCoreKit and VendorsKit projects as subprojects in Xcode.
 
-* Adds the AppCoreKit.framework <b>link dependency to your target</b> in the build phases settings.
+* Adds the AppCoreKit.framework and VendorsKit.framework <b>link dependency to your target</b> in the build phases settings.
 
 * Add the following <b>frameworks and libraries dependencies</b> to your project in the build phases settings: 
 <pre>
@@ -89,7 +89,12 @@ MobileCoreServices,
 AdSupport.
 </pre>
 
-* Add the following <b>link flags</b> in your build settings (<b>OTHER_LDFLAGS</b>) : 
+* Adds the following <b>Header Search Path</b> in your build settings (<b> HEADER_SEARCH_PATHS </b>):
+<pre>
+/usr/include/libxml2
+</pre>
+
+* Adds the following <b>link flags</b> in your build settings (<b>OTHER_LDFLAGS</b>): 
 <pre>
  -ObjC -all_load -lxml2 -licucore -lz -weak_library /usr/lib/libstdc++.dylib
 </pre>
@@ -97,14 +102,16 @@ AdSupport.
 * As Xcode do not natively support static frameworks especially for resources, you'll need to add a post build phase if you'd like to use some components. In the build phase for your target, add a <b>"Run Script" build phase</b> and add the following script :
 
 <pre>
-YOUR_FRAMEWORKS_PATH="$PROJECT_DIR/../../Frameworks/"
-sh "$YOUR_FRAMEWORKS_PATH/copy_framework_resources.sh" 
-        --system-developer-dir "$SYSTEM_DEVELOPER_DIR" 
-        --executable-name "$EXECUTABLE_NAME" 
-        --frameworks-dir "$YOUR_FRAMEWORKS_PATH" 
-        --target-build-dir "$TARGET_BUILD_DIR" 
-        --project "$PROJECT" 
-        --project-dir "$PROJECT_DIR"
+FRAMEWORKS_BUILD_PATH="$TARGET_BUILD_DIR"
+APPCOREKIT_PROJECT_PATH="$HOME/Projects/Frameworks/AppCoreKit/"    #Modify this path to point on your AppCoreKit folder!
+
+sh "$APPCOREKIT_PROJECT_PATH/copy_framework_resources.sh" 
+            --system-developer-dir "$SYSTEM_DEVELOPER_DIR"
+            --executable-name "$EXECUTABLE_NAME" 
+            --frameworks-dir "$FRAMEWORKS_BUILD_PATH" 
+            --target-build-dir "$TARGET_BUILD_DIR" 
+            --project "$PROJECT" 
+            --project-dir "$PROJECT_DIR"
 </pre>
 
 
