@@ -50,6 +50,15 @@ To:
 And
 <pre>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Specifications</pre>
 
+<b>IMPORTANT</b> : You will have to copy this file each time you update Xcode to a newer version.
+
+
+## Additional dependencies
+
+AppCoreKit requires another framework to work properly. This is VendorsKit which groups all the third parties we need to share between frameworks and apps.
+You can find a pre-compiled version of vendors kit in our sample repository at https://github.com/wherecloud/appcorekit-samples
+
+Or you can get the sources of this framework at : https://github.com/wherecloud/vendorskit
 
 ## Compiling the API Documentation
 
@@ -98,13 +107,6 @@ sh "$YOUR_FRAMEWORKS_PATH/copy_framework_resources.sh"
         --project-dir "$PROJECT_DIR"
 </pre>
 
-
-## Additional dependencies
-
-AppCoreKit requires another framework to work properly. This is VendorsKit which groups all the third parties we need to share between frameworks and apps.
-You can find a pre-compiled version of vendors kit in our sample repository at https://github.com/wherecloud/appcorekit-samples
-
-Or you can get the sources of this framework at : https://github.com/wherecloud/vendorskit
 
 ## License
 
