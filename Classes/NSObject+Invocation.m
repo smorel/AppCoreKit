@@ -45,6 +45,10 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 }
 
 - (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay{
+    return [self initWithObject:object block:theblock delay:delay modes:nil];
+}
+
+- (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay modes:(NSArray*)modes{
     self = [super init];
     [self retain];
     self.block = theblock;
@@ -71,12 +75,21 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
         }
     }];
     
-    [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
+    if(modes){
+        [self performSelector:@selector(execute) withObject:nil afterDelay:delay inModes:modes];
+    }else{
+        [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
+    }
     return self;
 }
 
 
 - (id)initWithObject:(id)object block:(CKInvokationBlock)theblock{
+    return [self initWithObject:object block:theblock modes:nil];
+}
+
+
+- (id)initWithObject:(id)object block:(CKInvokationBlock)theblock modes:(NSArray*)modes{
     self = [super init];
     [self retain];
     
@@ -104,8 +117,13 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
         }
     }];
     
-    [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:NO];
+    if(modes){
+        [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:NO modes:modes];
+    }else{
+        [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:NO];
+    }
     return self;
+
 }
 
 
@@ -196,8 +214,16 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     [[[CKInvokationObject alloc]initWithObject:self block:block delay:delay]autorelease];
 }
 
+- (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay inModes:(NSArray*)modes{
+    [[[CKInvokationObject alloc]initWithObject:self block:block delay:delay modes:modes]autorelease];
+}
+
 - (void)performBlockOnMainThread:(void (^)())block{
     [[[CKInvokationObject alloc]initWithObject:self block:block]autorelease];
+}
+
+- (void)performBlockOnMainThread:(void (^)())block inModes:(NSArray*)modes{
+    [[[CKInvokationObject alloc]initWithObject:self block:block modes:modes]autorelease];
 }
 
 - (void)cancelPeformBlock{

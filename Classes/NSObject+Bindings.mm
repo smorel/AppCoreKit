@@ -216,6 +216,15 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[binder release];
 }
 
+- (void)bindPropertyChangeWithBlock:(void (^)(NSString* propertyName, id value))block{
+    NSArray* allProperties = [self allPropertyNames];
+    for(NSString* keyPath in allProperties){
+        [self bind:keyPath withBlock:^(id value) {
+            block(keyPath,value);
+        }];
+    }
+}
+
 @end
 
 //
