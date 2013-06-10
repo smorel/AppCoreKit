@@ -89,7 +89,7 @@ MobileCoreServices,
 AdSupport.
 </pre>
 
-<center><img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/integrating-framework-projects-and-dependencies.png?raw=true"/></center>
+-> <img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/integrating-framework-projects-and-dependencies.png?raw=true"/> <-
 
 
 * Adds the following <b>Header Search Path</b> in your build settings (<b> HEADER_SEARCH_PATHS </b>):
@@ -97,10 +97,14 @@ AdSupport.
 /usr/include/libxml2
 </pre>
 
+-> <img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/settings-header-search-path.png?raw=true"/> <-
+
 * Adds the following <b>link flags</b> in your build settings (<b>OTHER_LDFLAGS</b>): 
 <pre>
  -ObjC -all_load -lxml2 -licucore -lz -weak_library /usr/lib/libstdc++.dylib
 </pre>
+
+-> <img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/settings-other-linker-flags.png?raw=true"/> <-
 
 * As Xcode do not natively support static frameworks especially for resources, you'll need to add a post build phase if you'd like to use some components. In the build phase for your target, add a <b>"Run Script" build phase</b> and add the following script :
 
