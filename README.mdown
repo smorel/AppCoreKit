@@ -1,39 +1,88 @@
-CloudKit
-========
+# AppCoreKit
 
-CloudKit is a collection of iPhone utility classes and 3rd party libraries.
+AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 3 years experience at Wherecloud and is a production framework that shipped more than 20 apps.
 
-Adding CloudKit to your project
-===============================
+AppCoreKit do not offers out of the box UI components but the technology to help you manage your data, automatic serialization, type conversions, network, view controllers, ui vs. models synchronization, appearance customization, responsive view layouts, forms, maps, objective-C runtime apis and more.
 
-CloudKit is compiled as a static library. Use Xcode's "dependent project" facilities to add it to your project
+Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace.
 
-2. Drag CloudKit.xcodeproj and drop it onto the root of your Xcode project's "Groups and Files" sidebar. A dialog will appear --
-   make sure "Copy items" is unchecked and "Reference Type" is "Relative to Project" before clicking "Add".
+## Compiling the framework
 
-3. Click the "CloudKit.xcodeproj" item that has just been added to the sidebar. Under the "Details" table, you will 
-   see a single item: libCloudKit.a. Check the checkbox on the far right of libCloudKit.a.
+AppCoreKit is built as a Static Framework. Static Framework are not natively supported by Xcode and requires some additional specifications to get compiled properly.
 
-4. Add CloudKit as a dependency of your project, so Xcode compiles it whenever you compile your project. 
-   Expand the "Targets" section of the sidebar and double-click your application's target. Under the "General" 
-   tab you will see a "Direct Dependencies" section. Click the "+" button, select "CloudKit", and click "Add Target".
+Copy the following file:
 
-7. Add CloudKit headers. Open your "Project Settings" and go to the "Build" tab. Look for "Header Search Paths" 
-   and double-click it. Add the relative path from your project's directory to the "CloudKit/Headers" directory.
+<pre>./static Frameworks.xcspec</pre>
 
-8. Go to "Other Linker Flags" under the "Linker" section, and add "-ObjC" and "-all_load" to the list of flags.
+To:
 
-9. Add the following frameworks and libraries to your project
-   * AddressBook.framework
-   * CoreLocation.framework
-   * CoreData.framework
-   * CoreGraphics.framework
-   * MapKit.framework
-   * MobileCoreServices.framework
-   * CFNetwork.framework
-   * SystemConfiguration.framework
-   * AdSupport.framework
-   * libz.1.2.3.dylib
-   * libxml2.dylib
-   * libicucore.dylib
+<pre>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Specifications</pre>
+And
+<pre>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Specifications</pre>
+
+
+## Compiling the API Documentation
+
+AppCoreKit provides a "Documentation" target that generate a docset using the public header files and the additional programming guides in the Documentation folder. This target is a script base on "appledoc". To install appledoc, follow the installation procedure here : https://github.com/tomaz/appledoc
+
+## Using AppCoreKit
+
+* Drag'n'drop project in your workspace or as a subproject in Xcode.
+
+* Add the following frameworks and libraries to your project : 
+<pre>
+libstdc++.dylib, 
+UIKit, 
+Foundation, 
+CoreGraphics, 
+AddressBook, 
+CoreData, 
+QuartzCore, 
+CoreLocation, 
+MapKit, 
+MediaPlayer, 
+CoreFoundation, 
+CFNetwork, 
+SystemConfiguration, 
+MobileCoreServices, 
+AdSupport.
+</pre>
+
+* Add the following link flags in your build settings (<b>OTHER_LDFLAGS</b>) : 
+<pre>
+ -ObjC -all_load -lxml2 -licucore -lz -weak_library /usr/lib/libstdc++.dylib
+</pre>
+
+* As Xcode do not natively support static frameworks especially for resources, you'll need to add a post build phase if you'd like to use some components. In the build phase for your target, add a <b>"Run Script" build phase</b> and add the following script :
+
+<pre>
+YOUR_FRAMEWORKS_PATH="$PROJECT_DIR/../../Frameworks/"
+sh "$YOUR_FRAMEWORKS_PATH/copy_framework_resources.sh" 
+        --system-developer-dir "$SYSTEM_DEVELOPER_DIR" 
+        --executable-name "$EXECUTABLE_NAME" 
+        --frameworks-dir "$YOUR_FRAMEWORS_PATH" 
+        --target-build-dir "$TARGET_BUILD_DIR" 
+        --project "$PROJECT" 
+        --project-dir "$PROJECT_DIR"
+</pre>
+
+## Credits
+
+If you have any comments, suggestions, question or information request, please contact us at appcorekitsupport@wherecloud.com.
+
+## License
+
+Copyright 2009-2013 WhereCloud, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
    
