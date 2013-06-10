@@ -2,7 +2,7 @@
 
 AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 3 years experience at Wherecloud and is a production framework that shipped more than 20 apps.
 
-AppCoreKit do not offers out of the box UI components but the technology to help you:
+AppCoreKit does not offer out of the box UI components but the technology to help you:
 
 * Manage your data
 * Automatic serialization (KeyValue Store, Core Data)
