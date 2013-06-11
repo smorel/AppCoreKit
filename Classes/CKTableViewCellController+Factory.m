@@ -14,32 +14,32 @@
 @implementation CKTableViewCellController (Factory)
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name{
-    return [CKTableViewCellController cellControllerWithName:name action:nil];
+    return [[self class] cellControllerWithName:name action:nil];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name 
                                               action:(void(^)(CKTableViewCellController* controller))action{
-    return [CKTableViewCellController cellControllerWithName:name value:nil bindings:nil action:action];
+    return [[self class] cellControllerWithName:name value:nil bindings:nil action:action];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name 
                                                value:(id)value
                                             bindings:(NSDictionary*)bindings{
-    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings action:nil];
+    return [[self class] cellControllerWithName:name value:value bindings:bindings action:nil];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name 
                                                value:(id)value
                                             bindings:(NSDictionary*)bindings 
                                               action:(void(^)(CKTableViewCellController* controller))action{
-    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:nil action:action];
+    return [[self class] cellControllerWithName:name value:value bindings:bindings controlActions:nil action:action];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name 
                                                value:(id)value
                                             bindings:(NSDictionary*)bindings 
                                       controlActions:(NSDictionary*)controlActions{
-    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:controlActions action:nil];
+    return [[self class] cellControllerWithName:name value:value bindings:bindings controlActions:controlActions action:nil];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name 
@@ -47,25 +47,25 @@
                                             bindings:(NSDictionary*)bindings 
                                       controlActions:(NSDictionary*)controlActions 
                                               action:(void(^)(CKTableViewCellController* controller))action{
-    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:controlActions setup:nil action:action];
+    return [[self class] cellControllerWithName:name value:value bindings:bindings controlActions:controlActions setup:nil action:action];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name
                                                setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup{
-    return [CKTableViewCellController cellControllerWithName:name setup:setup action:nil];
+    return [[self class] cellControllerWithName:name setup:setup action:nil];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name
                                                setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup
                                               action:(void(^)(CKTableViewCellController* controller))action{
-    return [CKTableViewCellController cellControllerWithName:name value:nil bindings:nil setup:setup action:action];
+    return [[self class] cellControllerWithName:name value:nil bindings:nil setup:setup action:action];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name
                                                value:(id)value
                                             bindings:(NSDictionary*)bindings
                                                setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup{
-    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings setup:setup action:nil];
+    return [[self class] cellControllerWithName:name value:value bindings:bindings setup:setup action:nil];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name
@@ -73,7 +73,7 @@
                                             bindings:(NSDictionary*)bindings
                                                setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup
                                               action:(void(^)(CKTableViewCellController* controller))action{
-    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:nil setup:setup action:action];
+    return [[self class] cellControllerWithName:name value:value bindings:bindings controlActions:nil setup:setup action:action];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name
@@ -81,7 +81,7 @@
                                             bindings:(NSDictionary*)bindings
                                       controlActions:(NSDictionary*)controlActions
                                                setup:(void(^)(CKTableViewCellController* controller, UITableViewCell *cell))setup{
-    return [CKTableViewCellController cellControllerWithName:name value:value bindings:bindings controlActions:controlActions setup:setup action:nil];
+    return [[self class] cellControllerWithName:name value:value bindings:bindings controlActions:controlActions setup:setup action:nil];
 }
 
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name
@@ -102,7 +102,7 @@
         }
     }
     
-    CKTableViewCellController* controller = [CKTableViewCellController cellController];
+    CKTableViewCellController* controller = [[self class] cellController];
     controller.name = name;
     controller.value = value;
     
