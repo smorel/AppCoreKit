@@ -34,7 +34,7 @@
     }
     
     __block CKWebRequest* bRequest = request;
-    request.transformBlock = ^(id value){
+    request.transformBlock = ^id(id value){
         NSError* error = nil;
         
         if(transformRawDataBlock && [value isKindOfClass:[NSDictionary class]]){
@@ -42,7 +42,7 @@
         }
         
         if(![value isKindOfClass:[NSArray class]]){
-            return [NSMutableArray array];
+            return [NSArray array];
         }
         
         CKMappingContext* context = [CKMappingContext contextWithIdentifier:mappingIdentifier];
@@ -50,7 +50,7 @@
         if(error){
             CKDebugLog(@"request mappings error : %@", error);
         }
-        return (id)models;
+        return models;
     };
     
     request.completionBlock = ^(id value, NSHTTPURLResponse* response, NSError* error){

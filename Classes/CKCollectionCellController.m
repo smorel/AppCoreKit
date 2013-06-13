@@ -34,7 +34,7 @@
 @synthesize containerController = _containerController;
 @synthesize view = _view;
 @synthesize createCallback = _createCallback;
-@synthesize initCallback = _initCallback;
+@synthesize viewInitCallback = _viewInitCallback;
 @synthesize setupCallback = _setupCallback;
 @synthesize selectionCallback = _selectionCallback;
 @synthesize accessorySelectionCallback = _accessorySelectionCallback;
@@ -64,7 +64,7 @@
 	[_name release];
 	
 	[_accessorySelectionCallback release];
-	[_initCallback release];
+	[_viewInitCallback release];
 	[_setupCallback release];
 	[_selectionCallback release];
 	[_becomeFirstResponderCallback release];
@@ -216,8 +216,8 @@
 }
 
 - (void)initView:(UIView*)view{
-	if(_initCallback != nil){
-		[_initCallback execute:self];
+	if(_viewInitCallback != nil){
+		[_viewInitCallback execute:self];
 	}
     
 	[self applyStyleToView:view];

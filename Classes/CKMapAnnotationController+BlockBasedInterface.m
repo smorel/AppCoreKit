@@ -22,13 +22,13 @@
 
 - (void)setInitBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block{
     if(block){
-        self.initCallback = [CKCallback callbackWithBlock:^id(id value) {
+        self.viewInitCallback = [CKCallback callbackWithBlock:^id(id value) {
             CKMapAnnotationController* controller = (CKMapAnnotationController*)value;
             MKAnnotationView* view = (MKAnnotationView*)controller.view;
             block(controller,view);
             return (id)nil;
         }];
-    }else{ self.initCallback = nil; }
+    }else{ self.viewInitCallback = nil; }
 }
 
 - (void)setSetupBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block{

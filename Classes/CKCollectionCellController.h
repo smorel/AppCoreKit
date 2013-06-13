@@ -86,7 +86,7 @@ typedef NSUInteger CKItemViewFlags;
 
 /**
  */
-@property (nonatomic, retain) CKCallback* initCallback;
+@property (nonatomic, retain) CKCallback* viewInitCallback;
 
 /**
  */

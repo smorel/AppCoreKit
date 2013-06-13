@@ -22,13 +22,13 @@
 
 - (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
     if(block){
-        self.initCallback = [CKCallback callbackWithBlock:^id(id value) {
+        self.viewInitCallback = [CKCallback callbackWithBlock:^id(id value) {
             CKTableViewCellController* controller = (CKTableViewCellController*)value;
             UITableViewCell* cell = controller.tableViewCell;
             block(controller,cell);
             return (id)nil;
         }];
-    }else{ self.initCallback = nil; }
+    }else{ self.viewInitCallback = nil; }
 }
 
 - (void)setSetupBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
