@@ -18,6 +18,7 @@
 #import "NSArray+Additions.h"
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"
+#import "CKVersion.h"
 
 NSString* CKStyleCellStyle = @"cellStyle";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
@@ -177,22 +178,23 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 	CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
 	switch(cornerStyle){
 		case CKViewCornerStyleTableViewCell:{
-			if(view == self.tableViewCell.backgroundView
-			   || view == self.tableViewCell.selectedBackgroundView){
-				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
-                if(tableView.style == UITableViewStyleGrouped){
-                    NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-                    if(self.indexPath.row == 0 && numberOfRows > 1){
-                        roundedCornerType = CKStyleViewCornerTypeTop;
+            if([CKOSVersion() floatValue] < 7){
+                if(view == self.tableViewCell.backgroundView || view == self.tableViewCell.selectedBackgroundView){
+                    UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+                    if(tableView.style == UITableViewStyleGrouped){
+                        NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                        if(self.indexPath.row == 0 && numberOfRows > 1){
+                            roundedCornerType = CKStyleViewCornerTypeTop;
+                        }
+                        else if(self.indexPath.row == 0){
+                            roundedCornerType = CKStyleViewCornerTypeAll;
+                        }
+                        else if(self.indexPath.row == numberOfRows-1){
+                            roundedCornerType = CKStyleViewCornerTypeBottom;
+                        }
                     }
-                    else if(self.indexPath.row == 0){
-                        roundedCornerType = CKStyleViewCornerTypeAll;
-                    }
-                    else if(self.indexPath.row == numberOfRows-1){
-                        roundedCornerType = CKStyleViewCornerTypeBottom;
-                    }
-				}
-			}
+                }
+            }
 			break;
 		}
         case CKViewCornerStyleRounded:{
@@ -266,8 +268,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 	
 	switch(separatorStyle){
 		case CKViewSeparatorStyleTableViewCell:{
-			if(view == self.tableViewCell.backgroundView
-			   || view == self.tableViewCell.selectedBackgroundView){
+			if(view == self.tableViewCell.backgroundView || view == self.tableViewCell.selectedBackgroundView){
 				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
                 NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
                 if(numberOfRows > 1 && self.indexPath.row != numberOfRows-1){
