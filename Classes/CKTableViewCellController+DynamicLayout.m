@@ -155,6 +155,12 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     CGFloat rowWidth = 0;
     CGFloat tableViewWidth = tableView.frame.size.width;
     
+    if([CKOSVersion() floatValue] >= 7){
+        return tableViewWidth;
+    }
+    
+    
+    
     if(tableView.style == UITableViewStylePlain){
         rowWidth = tableViewWidth;
     }
@@ -177,6 +183,11 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 }
 
 + (CGFloat)computeTableViewCellMarginUsingTableView:(UITableView*)tableView{
+    if([CKOSVersion() floatValue] >= 7){
+        return 0;
+    }
+
+    
     CGFloat rowWidth = [CKTableViewCellController computeTableViewCellViewSizeUsingTableView:tableView];
     CGFloat allMArgins = tableView.frame.size.width - rowWidth;
     return allMArgins / 2;

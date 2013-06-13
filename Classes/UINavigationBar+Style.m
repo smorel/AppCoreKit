@@ -27,12 +27,24 @@
             return YES;
         }
     }
-    else{
+    else if([CKOSVersion() floatValue] < 7){
         if([appliedStack containsObject:view] == NO){
             if(style){
                 if([style containsObjectForKey:CKStyleBackgroundImage]){
                     UIImage* image = [style backgroundImage];
                     [navBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+                }
+                [appliedStack addObject:view];
+                [view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
+                return YES;
+            }
+        }
+    }else{
+        if([appliedStack containsObject:view] == NO){
+            if(style){
+                if([style containsObjectForKey:CKStyleBackgroundImage]){
+                    UIImage* image = [style backgroundImage];
+                    [navBar setBackgroundImage:image forBarPosition:UIBarPositionTop barMetrics:UIBarMetricsDefault];
                 }
                 [appliedStack addObject:view];
                 [view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
