@@ -13,6 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKDebug.h"
 #import "UIView+Name.h"
+#import "CKVersion.h"
 
 @interface CKViewController()
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
@@ -199,26 +200,23 @@
 #pragma mark View Management
 
 - (void)sizeToFit{
-   // if(!self.insetsApplied){
-        //FIXME : We do not take the table view orientation in account here (Portrait, Landscape)
-        
-        CGFloat toolbarHeight = self.navigationController.isToolbarHidden ? 0 : self.navigationController.toolbar.bounds.size.height;
-        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom+toolbarHeight,0);
-        
-        CGRect frame = self.view.bounds;
-        CGFloat height = frame.size.height + toolbarHeight;
-        if(height > (self.view.bounds.size.height + toolbarHeight)){
-            height = self.view.bounds.size.height + toolbarHeight;
-        }
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0,0,toolbarHeight,0);
-        
-        
-        self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,
-                                                                  0,
-                                                                  self.view.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
-                                                                  height));
-       // self.insetsApplied = YES;
-   // }
+    CGFloat navigationbarHeight = self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height;
+
+    CGFloat toolbarHeight = self.navigationController.isToolbarHidden ? 0 : self.navigationController.toolbar.bounds.size.height;
+    self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? navigationbarHeight : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
+    
+    CGRect frame = self.view.bounds;
+    CGFloat height = frame.size.height + toolbarHeight;
+    if(height > (self.view.bounds.size.height + toolbarHeight)){
+        height = self.view.bounds.size.height + toolbarHeight;
+    }
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0,0,toolbarHeight,0);
+    
+    
+    self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,
+                                                              0,
+                                                              self.view.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
+                                                              height));
 }
 
 
