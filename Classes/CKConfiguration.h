@@ -10,6 +10,8 @@
 #import "NSObject+Singleton.h"
 #import "CKCascadingTree.h"
 
+//#define ENABLE_XCODE5
+
 typedef enum CKConfigurationType{
     CKConfigurationTypeDebug,
     CKConfigurationTypeRelease

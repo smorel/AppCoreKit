@@ -10,6 +10,7 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "UIView+Style.h"
+#import "CKConfiguration.h"
 
 #import "CKVersion.h"
 
@@ -40,6 +41,7 @@
             }
         }
     }else{
+        #ifdef ENABLE_XCODE5
         if([appliedStack containsObject:view] == NO){
             if(style){
                 if([style containsObjectForKey:CKStyleBackgroundImage]){
@@ -51,6 +53,7 @@
                 return YES;
             }
         }
+        #endif
     }
 	return NO;
 }
