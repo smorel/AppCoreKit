@@ -66,6 +66,7 @@
 }
 
 - (void)dealloc{
+    [_objectsAsGrid release];
     [_subControllers release];
     [_linearCollection release];
     [_subControllersFactory release];
@@ -288,7 +289,6 @@
             break;
         }
     }
-    controller.controllerFactory = self.controllerFactory;
     return controller;
 }
 

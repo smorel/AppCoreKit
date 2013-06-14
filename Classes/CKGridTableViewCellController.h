@@ -9,7 +9,6 @@
 #import "CKTableViewCellController.h"
 
 @interface CKGridTableViewCellController : CKTableViewCellController
-@property(nonatomic,retain) CKCollectionCellControllerFactory* controllerFactory;
 @property(nonatomic,assign) NSInteger numberOfColumns;
 @property(nonatomic,retain) NSArray* cellControllers;
 @end
