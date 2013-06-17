@@ -399,7 +399,7 @@
         width += halfBorder;
     }
     
-	CGFloat radius = (self.roundedCornerSize > 0) ? (self.roundedCornerSize - halfBorder) : 0;
+	CGFloat radius = (roundedCorners != 0 && self.roundedCornerSize > 0) ? (self.roundedCornerSize - halfBorder) : 0;
 	
     BOOL shouldMove = YES;
 	if(borderStyle & CKStyleViewBorderLocationLeft){

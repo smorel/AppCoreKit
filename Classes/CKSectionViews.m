@@ -137,7 +137,8 @@
         }
         CGFloat widthMax = self.tableViewController.tableView.width - (2 * margin) - (2*labelOffsetFromLeftMargin) - _contentInsets.left - _contentInsets.right;
         
-        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, self.label.font.lineHeight) lineBreakMode:self.label.lineBreakMode];
+        CGFloat maxHeight = (self.label.numberOfLines == 0) ? MAXFLOAT : (self.label.numberOfLines * self.label.font.lineHeight);
+        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, maxHeight) lineBreakMode:self.label.lineBreakMode];
         
         CGFloat x = 0;
         switch(self.label.textAlignment){
@@ -157,7 +158,8 @@
         CGFloat labelOffsetFromTop = 1;
         CGFloat widthMax = self.tableViewController.tableView.width - (2 * labelOffsetFromLeftMargin) - _contentInsets.left - _contentInsets.right;
         
-        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, self.label.font.lineHeight) lineBreakMode:self.label.lineBreakMode];
+        CGFloat maxHeight = (self.label.numberOfLines == 0) ? MAXFLOAT : (self.label.numberOfLines * self.label.font.lineHeight);
+        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, maxHeight) lineBreakMode:self.label.lineBreakMode];
         
         CGFloat x = 0;
         switch(self.label.textAlignment){
@@ -238,7 +240,8 @@
         CGFloat labelOffsetFromTop = 6;
         CGFloat widthMax = self.tableViewController.tableView.width - (2 * margin) - (2*labelOffsetFromLeftMargin) - self.contentInsets.left - self.contentInsets.right;
         
-        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, MAXFLOAT) lineBreakMode:self.label.lineBreakMode];
+        CGFloat maxHeight = (self.label.numberOfLines == 0) ? MAXFLOAT : (self.label.numberOfLines * self.label.font.lineHeight);
+        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, maxHeight) lineBreakMode:self.label.lineBreakMode];
         
         CGFloat x = 0;
         switch(self.label.textAlignment){
@@ -257,7 +260,8 @@
         CGFloat labelOffsetFromTop = 1;
         CGFloat widthMax = self.tableViewController.tableView.width - (2 * labelOffsetFromLeftMargin) - self.contentInsets.left - self.contentInsets.right;
         
-        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, self.label.font.lineHeight) lineBreakMode:self.label.lineBreakMode];
+        CGFloat maxHeight = (self.label.numberOfLines == 0) ? MAXFLOAT : (self.label.numberOfLines * self.label.font.lineHeight);
+        CGSize labelSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(widthMax, maxHeight) lineBreakMode:self.label.lineBreakMode];
         
         CGFloat x = 0;
         switch(self.label.textAlignment){
