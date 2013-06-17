@@ -43,6 +43,14 @@
 
 @end
 
+
+
+@interface CKTableViewController ()
+
+- (void)sizeToFit;
+
+@end
+
 /********************************* CKTableCollectionViewController  *********************************
  */
 
@@ -306,78 +314,79 @@
     
     [super viewWillAppear:animated];
 	
-	//apply width constraint
-	if(_tableMaximumWidth > 0){
-		CGFloat tableWidth = MIN(_tableMaximumWidth, self.view.bounds.size.width);
-		CGFloat viewHeight = self.view.bounds.size.height;
-		CGFloat viewWidth = self.view.bounds.size.width;
-		CGFloat centerX = viewWidth / 2.0f;
-		
-		self.tableViewContainer.frame = CGRectIntegral(CGRectMake(centerX - tableWidth/2.0f,0 ,tableWidth,viewHeight));
-		self.tableViewContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin ;
-	}
-	
-	//Adds searchbars if needed
-	CGFloat tableViewOffset = 0;
-	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
-        UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
-		BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
-		BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-        if(!isIpad){
-            if(_searchScopeDefinition && isPortrait){
-                tableViewOffset = 88;
+    if([CKOSVersion() floatValue] < 7){
+        //apply width constraint
+        if(_tableMaximumWidth > 0){
+            CGFloat tableWidth = MIN(_tableMaximumWidth, self.view.bounds.size.width);
+            CGFloat viewHeight = self.view.bounds.size.height;
+            CGFloat viewWidth = self.view.bounds.size.width;
+            CGFloat centerX = viewWidth / 2.0f;
+            
+            self.tableViewContainer.frame = CGRectIntegral(CGRectMake(centerX - tableWidth/2.0f,0 ,tableWidth,viewHeight));
+            self.tableViewContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin ;
+        }
+        
+        //Adds searchbars if needed
+        CGFloat tableViewOffset = 0;
+        if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
+            UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+            BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
+            BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+            if(!isIpad){
+                if(_searchScopeDefinition && isPortrait){
+                    tableViewOffset = 88;
+                }
+                else{
+                    tableViewOffset = 44;
+                }
             }
             else{
-                tableViewOffset = 44;
+                BOOL tooSmall = self.view.bounds.size.width <= 320;
+                if(_searchScopeDefinition && tooSmall){
+                    tableViewOffset = 88;
+                }
+                else{
+                    tableViewOffset = 44;
+                }
             }
+            
+            self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
+            _searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            _searchBar.delegate = self;
+            //self.tableView.tableHeaderView = _searchBar;
+            [self.view addSubview:_searchBar];
+            
+            
+            if(_searchScopeDefinition){
+                _searchBar.showsScopeBar = YES;
+                _searchBar.scopeButtonTitles = [_searchScopeDefinition allKeys];
+                if(_defaultSearchScope){
+                    _searchBar.selectedScopeButtonIndex = [[_searchScopeDefinition allKeys]indexOfObject:_defaultSearchScope];
+                }
+            }
+            [[[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self]autorelease];
         }
-        else{
-            BOOL tooSmall = self.view.bounds.size.width <= 320;
-            if(_searchScopeDefinition && tooSmall){
-                tableViewOffset = 88;
+        
+        //adds segmented control on top if search disable and found _searchScopeDefinition
+        if(self.searchEnabled == NO && _searchScopeDefinition && [_searchScopeDefinition count] > 0 && _segmentedControl == nil){
+            self.segmentedControl = [[[UISegmentedControl alloc]initWithItems:[_searchScopeDefinition allKeys]]autorelease];
+            if(_defaultSearchScope){
+                _segmentedControl.selectedSegmentIndex = [[_searchScopeDefinition allKeys]indexOfObject:_defaultSearchScope];
             }
-            else{
-                tableViewOffset = 44;
-            }
+            _segmentedControl.frame = CGRectMake(0,tableViewOffset,self.tableView.frame.size.width,44);
+            _segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            [_segmentedControl addTarget:self
+                                  action:@selector(segmentedControlChange:)
+                        forControlEvents:UIControlEventValueChanged];
+            [self.view addSubview:_segmentedControl];
+            tableViewOffset += 44;
         }
-		
-		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
-		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		_searchBar.delegate = self;
-		//self.tableView.tableHeaderView = _searchBar;
-		[self.view addSubview:_searchBar];
-		
-		
-		if(_searchScopeDefinition){
-			_searchBar.showsScopeBar = YES;
-			_searchBar.scopeButtonTitles = [_searchScopeDefinition allKeys];
-			if(_defaultSearchScope){
-				_searchBar.selectedScopeButtonIndex = [[_searchScopeDefinition allKeys]indexOfObject:_defaultSearchScope];
-			}
-		}
-		[[[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self]autorelease];
-	}		
-	
-	//adds segmented control on top if search disable and found _searchScopeDefinition
-	if(self.searchEnabled == NO && _searchScopeDefinition && [_searchScopeDefinition count] > 0 && _segmentedControl == nil){
-		self.segmentedControl = [[[UISegmentedControl alloc]initWithItems:[_searchScopeDefinition allKeys]]autorelease];
-		if(_defaultSearchScope){
-			_segmentedControl.selectedSegmentIndex = [[_searchScopeDefinition allKeys]indexOfObject:_defaultSearchScope];
-		}
-		_segmentedControl.frame = CGRectMake(0,tableViewOffset,self.tableView.frame.size.width,44);
-		_segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[_segmentedControl addTarget:self
-							 action:@selector(segmentedControlChange:)
-				   forControlEvents:UIControlEventValueChanged];
-		[self.view addSubview:_segmentedControl];
-		tableViewOffset += 44;
+        
+        if(self.tableViewContainer.frame.origin.y < tableViewOffset){
+            self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
+                                                       self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
+        }
 	}
-	
-	if(self.tableViewContainer.frame.origin.y < tableViewOffset){
-		self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
-												   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
-	}
-	
     
     NSMutableDictionary* controllerStyle = [self controllerStyle];
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
@@ -1189,8 +1198,8 @@
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:animationDuration];
         [UIView setAnimationCurve:animationCurve];
-        self.tableView.contentInset =  UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom + offset, 0);
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0,0,offset, 0);
+        self.tableView.contentInset =  UIEdgeInsetsMake(self.tableView.contentInset.top,0,self.tableView.contentInset.bottom + offset, 0);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,0,self.tableView.scrollIndicatorInsets.bottom+offset, 0);
         [UIView commitAnimations];
     }
 }
@@ -1200,8 +1209,7 @@
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:animationDuration];
         [UIView setAnimationCurve:animationCurve];
-        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+        [self sizeToFit];
         
         [UIView commitAnimations];
     }

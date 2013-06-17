@@ -10,6 +10,7 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "UIView+Style.h"
+#import "CKConfiguration.h"
 
 #import "CKVersion.h"
 
@@ -27,7 +28,7 @@
             return YES;
         }
     }
-    else{
+    else if([CKOSVersion() floatValue] < 7){
         if([appliedStack containsObject:view] == NO){
             if(style){
                 if([style containsObjectForKey:CKStyleBackgroundImage]){
@@ -39,6 +40,20 @@
                 return YES;
             }
         }
+    }else{
+        #ifdef ENABLE_XCODE5
+        if([appliedStack containsObject:view] == NO){
+            if(style){
+                if([style containsObjectForKey:CKStyleBackgroundImage]){
+                    UIImage* image = [style backgroundImage];
+                    [navBar setBackgroundImage:image forBarPosition:UIBarPositionTop barMetrics:UIBarMetricsDefault];
+                }
+                [appliedStack addObject:view];
+                [view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
+                return YES;
+            }
+        }
+        #endif
     }
 	return NO;
 }

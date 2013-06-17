@@ -31,7 +31,6 @@
 //       Manage reuse of cellController's views
 
 @implementation CKGridTableViewCellController
-@synthesize controllerFactory = _controllerFactory;
 @synthesize numberOfColumns = _numberOfColumns;
 @synthesize cellControllers = _cellControllers;
 
@@ -44,7 +43,6 @@
 
 - (void)dealloc{
     [_cellControllers release];
-    [_controllerFactory release];
     [super dealloc];
 }
 

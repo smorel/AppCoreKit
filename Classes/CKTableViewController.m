@@ -13,6 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKDebug.h"
 #import "UIView+Name.h"
+#import "CKVersion.h"
 
 @interface CKViewController()
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
@@ -198,27 +199,35 @@
 
 #pragma mark View Management
 
+//iOS 7 insets management.
+- (BOOL)automaticallyAdjustsScrollViewInsets{
+    return NO;
+}
+
 - (void)sizeToFit{
-   // if(!self.insetsApplied){
-        //FIXME : We do not take the table view orientation in account here (Portrait, Landscape)
-        
-        CGFloat toolbarHeight = self.navigationController.isToolbarHidden ? 0 : self.navigationController.toolbar.bounds.size.height;
-        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom+toolbarHeight,0);
-        
-        CGRect frame = self.view.bounds;
-        CGFloat height = frame.size.height + toolbarHeight;
-        if(height > (self.view.bounds.size.height + toolbarHeight)){
-            height = self.view.bounds.size.height + toolbarHeight;
-        }
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0,0,toolbarHeight,0);
-        
-        
-        self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,
-                                                                  0,
-                                                                  self.view.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
-                                                                  height));
-       // self.insetsApplied = YES;
-   // }
+    BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
+    
+    CGFloat statusBarHeight = navBarTransulcent ? [[UIApplication sharedApplication]statusBarFrame].size.height : 0;
+    CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
+    
+    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
+    
+    CGFloat toolbarHeight = (self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height;
+    self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
+    
+    CGRect frame = self.view.bounds;
+    CGFloat height = frame.size.height + (toolbarTransulcent ? 0 : toolbarHeight);
+    if(height > (self.view.bounds.size.height + toolbarHeight)){
+        height = self.view.bounds.size.height + toolbarHeight;
+    }
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake((([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,toolbarHeight,0);
+    
+    
+    self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,
+                                                              0,
+                                                              self.view.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
+                                                              height));
+     
 }
 
 
@@ -243,9 +252,8 @@
     CKTableView* theTableView = self.tableView;
     if([self.view isKindOfClass:[CKTableView class]]){
         theTableView = (CKTableView*)self.view;
-        
-		CGRect theViewFrame = [[UIScreen mainScreen] applicationFrame];
-		UIView *theView = [[[CKTableView alloc] initWithFrame:theViewFrame] autorelease];
+
+		UIView *theView = [[[CKTableView alloc] initWithFrame:self.view.bounds] autorelease];
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         theView.name = @"view";
 		self.view = theView;

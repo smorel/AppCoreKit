@@ -8,7 +8,7 @@
 
 #import "CKGridCollectionViewController.h"
 #import "CKGridTableViewCellController.h"
-#import "CKArrayProxyCollection.h"
+#import "CKArrayCollection.h"
 #import "CKDebug.h"
 
 @interface CKCollectionViewController()
@@ -46,7 +46,7 @@
 
 @interface CKGridCollectionViewController ()
 @property(nonatomic,retain) NSMutableArray* subControllers;
-@property(nonatomic,retain) NSMutableArray* objectsAsGrid;
+@property(nonatomic,retain) CKArrayCollection* objectsAsGrid;
 @property(nonatomic,retain) CKCollection* linearCollection;
 @property(nonatomic,retain) CKCollectionCellControllerFactory* subControllersFactory;
 @property(nonatomic,retain) CKCollectionController* linearCollectionController;
@@ -66,6 +66,7 @@
 }
 
 - (void)dealloc{
+    [_objectsAsGrid release];
     [_subControllers release];
     [_linearCollection release];
     [_subControllersFactory release];
@@ -96,11 +97,10 @@
     _linearCollectionController.delegate = self;
     
     //OBSERVE collection & keeps factory to create/remove controllers in _subControllers
-    self.objectsAsGrid = [NSMutableArray array];
+    self.objectsAsGrid = [CKArrayCollection collection];
     [self updateGridArray];
     
-    CKArrayProxyCollection* gridCollection = [[[CKArrayProxyCollection alloc]initWithArrayProperty:[CKProperty propertyWithObject:self keyPath:@"objectsAsGrid"] ]autorelease];
-    [super setupWithCollection:gridCollection factory:factory];
+    [super setupWithCollection:self.objectsAsGrid factory:factory];
 }
 
 - (void)rebuildGridArray{
@@ -289,7 +289,6 @@
             break;
         }
     }
-    controller.controllerFactory = self.controllerFactory;
     return controller;
 }
 
