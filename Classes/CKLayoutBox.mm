@@ -1362,6 +1362,8 @@ static char UIButtonFlexibleHeightKey;
     size.height -= self.padding.top + self.padding.bottom;
     
     CGSize ret = [self sizeThatFits:size];
+    ret.width += self.titleEdgeInsets.left + self.titleEdgeInsets.right;
+    
     if(self.flexibleWidth){
         ret.width = size.width;
     }
