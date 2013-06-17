@@ -49,9 +49,9 @@
 @synthesize cellControllers = _cellControllers;
 
 - (void)dealloc{
-    [super dealloc];
     [_cellControllers release];
     _cellControllers = nil;
+    [super dealloc];
 }
 
 - (NSInteger)count{
