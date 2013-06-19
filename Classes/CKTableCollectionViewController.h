@@ -88,6 +88,10 @@ typedef UITableViewRowAnimation(^CKTableCollectionViewControllerSectionAnimation
 
 /**
  */
+- (void)deselectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
+
+/**
+ */
 @property (nonatomic, retain,readonly) NSIndexPath* selectedIndexPath;
 
 ///-----------------------------------

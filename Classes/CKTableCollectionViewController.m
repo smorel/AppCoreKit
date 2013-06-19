@@ -1468,4 +1468,11 @@
     }
 }
 
+- (void)deselectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
+    if([self isValidIndexPath:indexPath]){
+        [self.tableView deselectRowAtIndexPath:indexPath animated:animated];
+        self.selectedIndexPath = nil;
+    }
+}
+
 @end
