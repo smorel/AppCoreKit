@@ -1113,10 +1113,6 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 @end
 
 
-//UITextView
-
-@interface UITextView (Layout)
-@end
 
 //UITextField
 
@@ -1266,10 +1262,53 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 
 
 //UITextView
+     
+     
+@interface UITextView (Layout)
+@property(nonatomic,assign) BOOL registeredOnTextNotification;
+@end
+     
+static char UITextViewRegisteredOnTextNotificationKey;
 
 @implementation UITextView (Layout)
+@dynamic registeredOnTextNotification;
+     
+- (void)setRegisteredOnTextNotification:(BOOL)registeredOnTextNotification{
+    objc_setAssociatedObject(self, &UITextViewRegisteredOnTextNotificationKey, [NSNumber numberWithBool:registeredOnTextNotification], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+     
+- (BOOL)registeredOnTextNotification{
+    id value = objc_getAssociatedObject(self, &UITextViewRegisteredOnTextNotificationKey);
+    return value ? [value boolValue] : NO;
+}
+     
+- (void)UITextView_Layout_dealloc{
+    if([self registeredOnTextNotification]){
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:UITextViewTextDidChangeNotification object:self];
+    }
+    [self UITextView_Layout_dealloc];
+}
+     
+- (void)UITextView_Layout_setContentOffset:(CGPoint)offset{
+    //Adjusts content offset when layout system sets the frame of the UITextView.
+    if(self.bounds.size.height <= self.contentSize.height){
+        offset.y = 0;
+    }
+    if(self.bounds.size.width <= self.contentSize.width){
+        offset.x = 0;
+    }
+    
+    [self UITextView_Layout_setContentOffset:offset];
+}
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+    if(![self registeredOnTextNotification]){
+        [[NSNotificationCenter defaultCenter]addObserverForName:UITextViewTextDidChangeNotification object:self queue:nil usingBlock:^(NSNotification *note) {
+            [(UITextView*)note.object invalidateLayout];
+        }];
+        [self setRegisteredOnTextNotification:YES];
+    }
+    
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     self.lastComputedSize = size;
@@ -1278,16 +1317,24 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     size.height -= self.padding.top + self.padding.bottom;
     
     CGSize maxSize = CGSizeMake(size.width, MAXFLOAT);
-    CGSize ret = [self.text sizeWithFont:self.font constrainedToSize:maxSize];
+    
+    NSMutableString* str = [NSMutableString stringWithString:self.text];
+    //If ends by new line, adds an extra character for sizeWithFont to take this new line into account.
+    if([str characterAtIndex:[str length] -1] == '\n'){
+        [str appendString:@"a"];
+    }
+    CGSize ret = [str sizeWithFont:self.font constrainedToSize:maxSize];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
     
-    ret = CGSizeMake(MAX(size.width,ret.width) ,MAX(size.height,ret.height));
+    ret.height = MAX(self.contentSize.height,self.font.lineHeight);
+    
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
     
-    //Adds padding 8
-    self.lastPreferedSize = CGSizeMake(MAX(size.width,ret.width) + self.padding.left + self.padding.right,ret.height + self.padding.top + self.padding.bottom);
+    CGFloat width = MAX(size.width,ret.width) + self.padding.left + self.padding.right;
+    CGFloat height = ret.height + self.padding.top + self.padding.bottom;
+    self.lastPreferedSize = CGSizeMake(width,height);
     return self.lastPreferedSize;
 }
 
@@ -1308,6 +1355,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 + (void)load{
     CKSwizzleSelector([UITextView class], @selector(setText:), @selector(UITextView_Layout_setText:));
     CKSwizzleSelector([UITextView class], @selector(setFont:), @selector(UITextView_Layout_setFont:));
+    CKSwizzleSelector([UITextView class], @selector(setContentOffset:), @selector(UITextView_Layout_setContentOffset:));
+    CKSwizzleSelector([UITextView class], @selector(dealloc),  @selector(UITextView_Layout_dealloc));
 }
 
 @end
