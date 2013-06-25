@@ -30,6 +30,7 @@
 
 
 @interface CKTableViewController ()
+@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 

@@ -19,6 +19,12 @@
 #define InteractionButtonTag 3457
 #define ControllerViewBaseTag 3458
 
+
+@interface CKTableViewController ()
+@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
+@property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
+@end
+
 @interface CKCollectionCellController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @end
@@ -159,7 +165,12 @@
             
             [button beginBindingsContextByRemovingPreviousBindings];
             
+            
+            const NSUInteger indexes[3] = { [controller indexPath].section, [controller indexPath].row, i };
+            NSIndexPath* subRowIndexPath = [NSIndexPath indexPathWithIndexes:&indexes[0] length:3];
+            
             if([controller flags] & CKItemViewFlagSelectable){
+                __unsafe_unretained CKGridTableViewCellController* bself = self;
                 [button bindEvent:UIControlEventTouchDown withBlock:^{
                     if([[controller willSelect] isEqual:[controller indexPath]]){
                         [controller.tableViewCell setSelected:YES animated:NO];
@@ -177,6 +188,9 @@
                 [button bindEvent:UIControlEventTouchUpInside withBlock:^{
                     if(button.enabled){
                         [controller didSelect];
+                        if([(CKGridCollectionViewController*)bself.containerController isStickySelection]){
+                            ((CKGridCollectionViewController*)bself.containerController).selectedIndexPath = subRowIndexPath;
+                        }
                     }
                     button.enabled = YES; 
                 }];
@@ -187,6 +201,18 @@
                     }
                     button.enabled = YES;
                 }];
+                
+                if([(CKGridCollectionViewController*)self.containerController isStickySelection]){
+                    [self.containerController bind:@"selectedIndexPath" executeBlockImmediatly:YES withBlock:^(id value) {
+                        if(![((CKGridCollectionViewController*)bself.containerController).selectedIndexPath isEqual: subRowIndexPath]){
+                            [controller.tableViewCell setSelected:NO animated:NO];
+                            [controller.tableViewCell setHighlighted:NO animated:NO];
+                        }else{
+                            [controller.tableViewCell setSelected:YES animated:NO];
+                            [controller.tableViewCell setHighlighted:YES animated:NO];
+                        }
+                    }];
+                }
             }
             
             
