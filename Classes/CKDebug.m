@@ -8,6 +8,8 @@
 #import "CKDebug.h"
 #include <execinfo.h>
 
+#import "UIView+Name.h"
+
 #pragma mark - UIView
 
 NSString* cleanString(NSString* str){
@@ -26,17 +28,17 @@ NSString* cleanString(NSString* str){
         if(!systemColor){
             const CGFloat *comps = CGColorGetComponents([view.backgroundColor CGColor]);
             const CGFloat alpha = CGColorGetAlpha([view.backgroundColor CGColor]);
-            [str appendFormat:@"%@+- %@(tag:%d,bck:%g %g %g %g)\n",  
-                indentString, viewDescription, view.tag, comps[0],comps[1],comps[2],alpha];
+            [str appendFormat:@"%@+- %@(name:%@,tag:%d,bck:%g %g %g %g)\n",  
+                indentString, viewDescription, view.name, view.tag, comps[0],comps[1],comps[2],alpha];
         }
         else{
-            [str appendFormat:@"%@+- %@(tag:%d,bck:%@)\n",  
-                indentString, viewDescription, view.tag, systemColor];
+            [str appendFormat:@"%@+- %@(name:%@,tag:%d,bck:%@)\n",  
+                indentString, viewDescription, view.name, view.tag, systemColor];
         }
     }
     else{
-        [str appendFormat:@"%@+- %@(tag:%d)\n",  
-                indentString, viewDescription, view.tag];
+        [str appendFormat:@"%@+- %@(name:%@,tag:%d)\n",  
+                indentString, viewDescription, view.name, view.tag];
     }
 
 	if (view.subviews) {
