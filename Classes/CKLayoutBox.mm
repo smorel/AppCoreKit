@@ -1320,15 +1320,21 @@ static char UITextViewRegisteredOnTextNotificationKey;
     
     NSMutableString* str = [NSMutableString stringWithString:self.text];
     //If ends by new line, adds an extra character for sizeWithFont to take this new line into account.
-    if([str characterAtIndex:[str length] -1] == '\n'){
+    if([str length] > 0 && [str characterAtIndex:[str length] -1] == '\n'){
         [str appendString:@"a"];
     }
+    
     CGSize ret = [str sizeWithFont:self.font constrainedToSize:maxSize];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
     
-    ret.height = MAX(self.contentSize.height,self.font.lineHeight);
+    //If contentSize not initalized correctly, compute the size using the text and the font instead. (first initialization !)
+    if(self.contentSize.width < size.width){
+        ret.height =  MAX(ret.height+16,self.font.lineHeight + 16);
+    }else{
+        ret.height = MAX(self.contentSize.height,self.font.lineHeight + 16);
+    }
     
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
     
