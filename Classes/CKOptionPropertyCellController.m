@@ -258,6 +258,7 @@
     self.optionsViewController.optionCellStyle = self.optionCellStyle;
     self.optionsViewController.optionCellControllerCreationBlock = self.optionCellControllerCreationBlock;
 	self.optionsViewController.title = propertyNavBarTitleLocalized;
+    self.optionsViewController.name = property.keyPath;
     
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
     
