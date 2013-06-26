@@ -54,10 +54,10 @@ static char UITextViewRegisteredOnTextNotificationKey;
 
 - (void)UITextView_Layout_setContentOffset:(CGPoint)offset{
     //Adjusts content offset when layout system sets the frame of the UITextView.
-    if(self.bounds.size.height <= self.contentSize.height){
+    if(self.bounds.size.height >= self.contentSize.height){
         offset.y = 0;
     }
-    if(self.bounds.size.width <= self.contentSize.width){
+    if(self.bounds.size.width >= self.contentSize.width){
         offset.x = 0;
     }
     
