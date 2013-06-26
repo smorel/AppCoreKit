@@ -16,6 +16,7 @@
 #import "Bindings.h"
 #import "Mappings.h"
 #import "Styles.h"
+#import "Layout.h"
 #import "UI.h"
 #import "CoreData.h"
 #import "Network.h"

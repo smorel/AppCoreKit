@@ -32,7 +32,7 @@
 #import "CKDebug.h"
 #import "UIView+Name.h"
 #import "CKConfiguration.h"
-#import "CKLayoutBox.h"
+#import "Layout.h"
 #import "CKStyle+Parsing.h"
 
 #import "CKVersion.h"
