@@ -96,6 +96,11 @@
     
     self.drawFrame = CGRectMake(0,0,0,0);
     self.separatorInsets = 0;
+    
+    self.separatorDashPhase = 0;
+    self.separatorDashLengths = nil;
+    self.separatorLineCap = kCGLineCapButt;
+    self.separatorLineJoin = kCGLineJoinMiter;
 }
 
 - (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -861,6 +866,20 @@
 		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth inRect:CGRectInset(rect,self.separatorInsets,0)];
         
 		CGContextAddPath(gc, borderPath);
+        
+        if(self.separatorDashLengths){
+            CGFloat lengths[self.separatorDashLengths.count];
+            int i =0;
+            for(NSNumber* n in self.separatorDashLengths){
+                lengths[i] = [[self.separatorDashLengths objectAtIndex:i]floatValue];
+                ++i;
+            }
+            CGContextSetLineDash(gc, self.separatorDashPhase,lengths , [self.separatorDashLengths count]);
+        }
+        
+        CGContextSetLineCap(gc,self.separatorLineCap);
+        CGContextSetLineJoin(gc, self.separatorLineJoin);
+        
 		CFRelease(borderPath);
 		CGContextStrokePath(gc);
 		CGContextRestoreGState(gc);
@@ -884,6 +903,25 @@
     
     CFRelease(clippingPath);
 }
+
+- (void)separatorDashLengthsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.contentType = [NSNumber class];
+}
+
+- (void)separatorLineCapExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CGLineCap",
+                                                 kCGLineCapButt,
+                                                 kCGLineCapRound,
+                                                 kCGLineCapSquare);
+}
+
+- (void)separatorLineJoinExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CGLineJoin",
+                                                 kCGLineJoinMiter,
+                                                 kCGLineJoinRound,
+                                                 kCGLineJoinBevel);
+}
+
 
 
 @end
