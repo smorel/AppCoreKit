@@ -14,6 +14,8 @@
 #import "CKRuntime.h"
 #import "UIView+Name.h"
 #import "CKStyleView.h"
+#import "NSValueTransformer+Additions.h"
+#import "UIView+Style.h"
 
 
 @interface CKLayoutBox()
@@ -31,7 +33,7 @@
 
 @implementation UIView (CKLayout)
 
-//TODO : Implements setter/getter for all properties
+//TODO : Implements setter/getter for all properties and invalidate layout
 
 @dynamic  maximumSize, minimumSize, margins, padding, layoutBoxes,frame,containerLayoutBox,containerLayoutView,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
@@ -206,6 +208,26 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     self.frame = rect;
     //self.bounds = CGRectMake(0,0,rect.size.width,rect.size.height);
     //self.center = CGPointMake(rect.origin.x + (rect.size.width / 2),rect.origin.y + (rect.size.height /2));
+}
+
+
++ (id)inflateViewFromStyleWithId:(NSString*)styleId{
+    NSMutableDictionary* viewLayoutTemplate = [[CKStyleManager defaultManager]dictionaryForKey:styleId];
+    
+    Class c = [UIView class];
+    if([viewLayoutTemplate containsObjectForKey:@"@class"]){
+        c = NSClassFromString([viewLayoutTemplate objectForKey:@"@class"]);
+        NSAssert([NSObject isClass:c kindOfClass:[UIView class]],@"the @class in style with id '%@' must specify a UIView subclass",styleId);
+    }else{
+        NSAssert(NO,@"Style with id '%@' must specify a @class attributes with a UIView subclass",styleId);
+    }
+    
+    UIView* view = [[c alloc]init];
+   // [NSValueTransformer transform:viewLayoutTemplate toObject:view];
+    
+	[c applyStyle:viewLayoutTemplate toView:view appliedStack:[NSMutableSet set] delegate:nil];
+    
+    return view;
 }
 
 @end
