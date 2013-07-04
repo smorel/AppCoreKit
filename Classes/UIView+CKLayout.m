@@ -58,6 +58,11 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         }
         
         size = CGSizeMake(maxWidth,maxHeight);
+    }else{
+        size.width -= self.padding.left + self.padding.right;
+        size.height -= self.padding.top + self.padding.bottom;
+        
+        size = [self sizeThatFits:size];
     }
     
     size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
