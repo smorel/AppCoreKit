@@ -59,10 +59,15 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         
         size = CGSizeMake(maxWidth,maxHeight);
     }else{
-        size.width -= self.padding.left + self.padding.right;
-        size.height -= self.padding.top + self.padding.bottom;
-        
-        size = [self sizeThatFits:size];
+        if([self isKindOfClass:[UIControl class]]){
+            size.width -= self.padding.left + self.padding.right;
+            size.height -= self.padding.top + self.padding.bottom;
+            
+            size = [self sizeThatFits:size];
+            
+            size.width += self.padding.left + self.padding.right;
+            size.height += self.padding.top + self.padding.bottom;
+        }
     }
     
     size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
