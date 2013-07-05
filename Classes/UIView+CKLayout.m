@@ -44,6 +44,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
+    if([[[self class]description]isEqualToString:@"PXOptionsView"]){
+        int i =3;
+    }
+    
     if(self.layoutBoxes && [self.layoutBoxes count] > 0){
         CGFloat maxWidth = 0;
         CGFloat maxHeight = 0;

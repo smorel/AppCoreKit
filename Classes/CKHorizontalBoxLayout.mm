@@ -119,7 +119,7 @@ namespace __gnu_cxx{
                         precomputedSize[box] = CGSizeMake(box.minimumSize.width,height);
                     }else{
                         CGFloat preferedWidth = flexiblewidth / (flexibleCount - numberOfFlexiSpaces);
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(/*(NSInteger)preferedWidth*/ MAXFLOAT,height)];
+                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(size.width,/*(NSInteger)preferedWidth*/ /*MAXFLOAT,*/height)];
                         
                         if( numberOfFlexiSpaces > 0
                            || (subsize.width < preferedWidth && box.maximumSize.width == MAXFLOAT)
