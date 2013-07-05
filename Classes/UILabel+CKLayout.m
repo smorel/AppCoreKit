@@ -10,6 +10,7 @@
 #import "UIView+CKLayout.h"
 #import "CKVerticalBoxLayout.h"
 #import "CKRuntime.h"
+#import <objc/runtime.h>
 
 @interface CKLayoutBox()
 
@@ -17,7 +18,46 @@
 
 @end
 
+
+static char UILabelFlexibleWidthKey;
+static char UILabelFlexibleHeightKey;
+
 @implementation UILabel (CKLayout)
+@dynamic flexibleWidth,flexibleHeight,flexibleSize;
+
+- (void)setFlexibleWidth:(BOOL)flexibleWidth{
+    objc_setAssociatedObject(self,
+                             &UILabelFlexibleWidthKey,
+                             [NSNumber numberWithBool:flexibleWidth],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)flexibleWidth{
+    id value = objc_getAssociatedObject(self, &UILabelFlexibleWidthKey);
+    return value ? [value boolValue] : NO;
+}
+
+- (void)setFlexibleHeight:(BOOL)flexibleHeight{
+    objc_setAssociatedObject(self,
+                             &UILabelFlexibleHeightKey,
+                             [NSNumber numberWithBool:flexibleHeight],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)flexibleHeight{
+    id value = objc_getAssociatedObject(self, &UILabelFlexibleHeightKey);
+    return value ? [value boolValue] : NO;
+}
+
+- (void)setFlexibleSize:(BOOL)flexibleSize{
+    [self setFlexibleHeight:flexibleSize];
+    [self setFlexibleWidth:flexibleSize];
+}
+
+- (BOOL)flexibleSize{
+    return self.flexibleHeight && self.flexibleWidth;
+}
+
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -30,8 +70,20 @@
     CGSize maxSize = CGSizeMake(size.width, (self.numberOfLines > 0) ? self.numberOfLines * self.font.lineHeight : MAXFLOAT);
     CGSize ret = [self.text sizeWithFont:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
     
-    if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
+    //Backward Compatibility
+    if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){
+        id value = objc_getAssociatedObject(self, &UILabelFlexibleWidthKey);
+        if(!value){
+            ret.width = size.width;
+        }
+    }
+    
+    if(self.flexibleWidth){
         ret.width = size.width;
+    }
+    if(self.flexibleHeight){
+        ret.height = size.height;
+    }
     
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
     
