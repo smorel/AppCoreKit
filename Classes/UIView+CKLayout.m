@@ -48,6 +48,9 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         CGFloat maxWidth = 0;
         CGFloat maxHeight = 0;
         
+        size.width -= self.padding.left + self.padding.right;
+        size.height -= self.padding.top + self.padding.bottom;
+        
         for(NSObject<CKLayoutBoxProtocol>* box in self.layoutBoxes){
             CGSize constraint = size;
             
@@ -58,6 +61,9 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         }
         
         size = CGSizeMake(maxWidth,maxHeight);
+        
+        size.width += self.padding.left + self.padding.right;
+        size.height += self.padding.top + self.padding.bottom;
     }else{
         if([self isKindOfClass:[UIControl class]]){
             size.width -= self.padding.left + self.padding.right;
