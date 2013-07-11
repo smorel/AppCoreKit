@@ -98,7 +98,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         case CKDatePickerModeDateAndTime:  
         case CKDatePickerModeCountDownTime :{
             self.datePicker = [[[UIDatePicker alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
-            _datePicker.datePickerMode = UIDatePickerModeDate;
+            _datePicker.datePickerMode = self.datePickerMode;
             _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
             
             CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
