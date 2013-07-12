@@ -101,7 +101,8 @@
     CKProperty* property = (CKProperty*)self.objectProperty;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-       || self.cellStyle == CKTableViewCellStyleIPadForm){
+       || self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         self.text = _(descriptor.name);
     }
     
