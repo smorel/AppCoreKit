@@ -23,11 +23,14 @@
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){
-            if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
-                CKCollection* collection = [self valueForKey:property.name];
-                [collection addObserver:self];
-            }else{
-                [self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+            CKPropertyExtendedAttributes* attributes = [property extendedAttributesForInstance:self];
+            if(attributes.serializable == YES){
+                if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                    CKCollection* collection = [self valueForKey:property.name];
+                    [collection addObserver:self];
+                }else{
+                    [self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+                }
             }
         }
 	}
@@ -37,12 +40,15 @@
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){
-            if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
-                CKCollection* collection = [self valueForKey:property.name];
-                [collection removeObserver:self];
-            }
-            else{
-                [self removeObserver:self forKeyPath:property.name];
+            CKPropertyExtendedAttributes* attributes = [property extendedAttributesForInstance:self];
+            if(attributes.serializable == YES){
+                if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                    CKCollection* collection = [self valueForKey:property.name];
+                    [collection removeObserver:self];
+                }
+                else{
+                    [self removeObserver:self forKeyPath:property.name];
+                }
             }
 		}
 	}
@@ -100,15 +106,18 @@
     NSArray* allProperties = [self allPropertyDescriptors];
     for(CKClassPropertyDescriptor* property in allProperties){
         if(property.isReadOnly == NO){
-            NSString* key = [NSString stringWithFormat:@"%@_%@",[[self class]description],property.name];
-            id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-            if(value != nil){
-                if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
-                    CKCollection* collection = [self valueForKey:property.name];
-                    [collection addObjectsFromArray:value];
-                }
-                else{
-                    [self setValue:value forKeyPath:property.name];
+            CKPropertyExtendedAttributes* attributes = [property extendedAttributesForInstance:self];
+            if(attributes.serializable == YES){
+                NSString* key = [NSString stringWithFormat:@"%@_%@",[[self class]description],property.name];
+                id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+                if(value != nil){
+                    if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                        CKCollection* collection = [self valueForKey:property.name];
+                        [collection addObjectsFromArray:value];
+                    }
+                    else{
+                        [self setValue:value forKeyPath:property.name];
+                    }
                 }
             }
         }
