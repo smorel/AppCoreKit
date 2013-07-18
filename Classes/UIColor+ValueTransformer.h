@@ -24,6 +24,10 @@
 
 /**
  */
++ (UIColor*)convertFromNSValue:(NSValue*)v;
+
+/**
+ */
 + (NSString*)convertToNSString:(UIColor*)color;
 
 @end
