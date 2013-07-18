@@ -70,9 +70,9 @@ static char UIViewControllerStylesheetFileNameKey;
     //BACKWARD COMPATIBILITY :
     //check if default bundle has a style for this controller.
     //if so, uses the default manager.
-    [self setStyleManager:[CKStyleManager defaultManager]];
-    NSMutableDictionary* styleInDefaultManager = [self controllerStyle];
+    NSMutableDictionary* styleInDefaultManager = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
     if(styleInDefaultManager && ![styleInDefaultManager isEmpty]){
+        [self setStyleManager:[CKStyleManager defaultManager]];
         return [CKStyleManager defaultManager];
     }
     
