@@ -13,26 +13,84 @@
 #import "CKCascadingTree.h"
 #import "CKConfiguration.h"
 
+#import "CKResourceManager.h"
+
 NSString *CKLocalizationCurrentLocalization(void) {
 	NSArray *l18n = [[NSBundle mainBundle] preferredLocalizations];
 	return [l18n objectAtIndex:0];
 }
 
 static NSMutableArray* kLocalizationStringTableNames = nil;
+static NSString* kLastLocalization = nil;
 
 void CKResetLanguageFileCache(){
     [kLocalizationStringTableNames release];
     kLocalizationStringTableNames = nil;
 }
 
-NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
-    //Find all localization tables
+void rebuildLocalizationTablesForLocalization(NSArray* stringsPaths){
+    
+    NSMutableArray* files = [NSMutableArray arrayWithCapacity:stringsPaths.count];
+    for(NSString* stringsPath in stringsPaths){
+        NSString* fileName = [stringsPath lastPathComponent];
+        NSRange range = [fileName rangeOfString:@"."];
+        if(range.location != NSNotFound){
+            NSString* file = [fileName substringToIndex:range.location];
+            //priority to application table
+            if([file isEqualToString:@"Localizable"]){
+                [files insertObject:file atIndex:0];
+            }
+            [files addObject:file];
+        }
+    }
+    
+    kLocalizationStringTableNames = [files retain];
+}
+
+void createTemporaryLocalizationBundle(NSArray* stringsPaths){
+    NSString *tempPath = NSTemporaryDirectory();
+    tempPath = [tempPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+    
+    [[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    for (NSString *path in stringsPaths) {
+        NSURL* URL = [NSURL fileURLWithPath:path];
+        
+        NSString *localizationPath = [tempPath stringByAppendingPathComponent:URL.path.stringByDeletingLastPathComponent.lastPathComponent];
+        [[NSFileManager defaultManager] createDirectoryAtPath:localizationPath withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        NSString *lastPath = [localizationPath stringByAppendingPathComponent:URL.lastPathComponent];
+        [[NSFileManager defaultManager] copyItemAtPath:path toPath:lastPath error:nil];
+    }
+    
+    [[CKLocalizationManager sharedManager] reloadBundleAtPath:tempPath];
+}
+
+void updateUI(){
+    [[CKLocalizationManager sharedManager] refreshUI];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
+}
+
+NSString* CKGetLocalizedString(NSString* localization,NSString* key,NSString* value){
+    //Init resource manager updates
     if(kLocalizationStringTableNames == nil){
-        NSMutableArray* files = [NSMutableArray array];
+        [CKResourceManager addObserverForResourcesWithExtension:@"strings" object:@"CKGetLocalizedString" usingBlock:^(id observer, NSArray* paths){
+            rebuildLocalizationTablesForLocalization(paths);
+            createTemporaryLocalizationBundle(paths);
+            updateUI();
+        }];
+    }
+    
+    
+    //Find all localization tables
+    if(kLastLocalization != localization || kLocalizationStringTableNames == nil){
+        kLastLocalization = localization;
         
-        NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
+        NSArray* stringsURLs = [CKResourceManager pathsForResourcesWithExtension:@"strings" localization:kLastLocalization];
+        rebuildLocalizationTablesForLocalization(stringsURLs);
+        createTemporaryLocalizationBundle(stringsURLs);//necessary if we already have files in cache from dropbox
         
-        if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        /*if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
             NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
             for (NSURL *filePathURL in stringsURLs) {
                 NSString *localPath = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:filePathURL.path handleUpdate:^(NSString *localPath) {
@@ -59,25 +117,12 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
             }
             
             stringsURLs = newStringsURL;
-        }
+        }*/
         
-        for(NSURL* stringsURL in stringsURLs){
-            NSString* fileName = [[stringsURL absoluteString]lastPathComponent];
-            NSRange range = [fileName rangeOfString:@"."];
-            if(range.location != NSNotFound){
-                NSString* file = [fileName substringToIndex:range.location];
-                //priority to application table
-                if([file isEqualToString:@"Localizable"]){
-                    [files insertObject:file atIndex:0];
-                }
-                [files addObject:file];
-            }
-        }
-        kLocalizationStringTableNames = [files retain];
     }
     
     for(NSString* tableName in kLocalizationStringTableNames){
-        NSString* result =  [bundle localizedStringForKey:key value:value table:tableName];
+        NSString* result =  [[[CKLocalizationManager sharedManager]localizedBundle] localizedStringForKey:key value:value table:tableName];
         if(![result isEqualToString:key])
             return result;
     }

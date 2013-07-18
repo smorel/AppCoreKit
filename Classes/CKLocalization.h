@@ -15,7 +15,7 @@ NSString *CKLocalizationCurrentLocalization(void);
 
 /**
  */
-NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
+NSString* CKGetLocalizedString(NSString* localization,NSString* key,NSString* value);
 
 /**
  */

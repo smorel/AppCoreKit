@@ -57,7 +57,7 @@ static CKLocalizationManager *sharedInstance = nil;
 // example calls:
 // AMLocalizedString(@"Text to localize",@"Alternative text, in case hte other is not find");
 - (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value {
-    return CKGetLocalizedString(self.localizedBundle,key,value);
+    return CKGetLocalizedString(self.language,key,value);
 }
 
 
@@ -153,19 +153,19 @@ static CKLocalizationManager *sharedInstance = nil;
         [self refreshView:window viewStack:viewStack];
     }
     
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+   // if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
         double delayInSeconds = 2.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             self.needsLiveUpdateRefresh = NO;
         });
-    }
+   // }
 }
 
 - (void)reloadBundleAtPath:(NSString *)path {
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+  //  if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
         self.localizedBundle = [NSBundle bundleWithPath:path];
-    }
+  //  }
 }
 
 @end

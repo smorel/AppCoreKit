@@ -21,6 +21,7 @@
 
 #import "CKDebug.h"
 
+/*
 static char UIImageImageNameKey;
 
 @interface UIImage(CKResourceFileUpdateManager)
@@ -46,6 +47,7 @@ static char UIImageImageNameKey;
 @end
 
 @implementation UIImageLiveUpdateProxy
+
 
 + (UIImage*)UIImageLiveUpdateProxy_imageNamed:(NSString *)name{
     if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
@@ -94,12 +96,13 @@ static char UIImageImageNameKey;
 }
 
 + (void)load{
-    CKSwizzleSelector([UIImage class], @selector(imageNamed:), @selector(UIImageLiveUpdateProxy_imageNamed:));
+    CKSwizzleClassSelector([UIImage class], @selector(imageNamed:), @selector(UIImageLiveUpdateProxy_imageNamed:));
     CKSwizzleSelector([UIImage class], @selector(initWithContentsOfFile:), @selector(UIImageLiveUpdateProxy_initWithContentsOfFile:));
 }
+ 
 
 @end
-
+*/
 
 
 @interface CKResourceFileUpdateManager ()

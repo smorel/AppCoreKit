@@ -9,6 +9,7 @@
 #import "UIColor+ValueTransformer.h"
 #import "NSValueTransformer+Additions.h"
 #import "UIColor+Additions.h"
+#import "CKResourceManager.h"
 
 #import "CKDebug.h"
 
@@ -45,7 +46,7 @@
 				return color;
 			}
 			else{
-                UIImage* image = [UIImage imageNamed:str];
+                UIImage* image = [CKResourceManager imageNamed:str];
                 if(image){
                     UIColor* color = [UIColor colorWithPatternImage:image];
                     return color;

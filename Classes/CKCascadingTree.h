@@ -51,6 +51,8 @@ extern NSString * const CKCascadingTreeFilesDidUpdateNotification;
  */
 - (BOOL)appendContentOfFile:(NSString*)path;
 
+- (void)reloadAfterFileUpdate;
+
 ///-----------------------------------
 /// @name Accessing Cascading tree content
 ///-----------------------------------

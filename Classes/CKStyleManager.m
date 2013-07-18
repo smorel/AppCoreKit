@@ -8,6 +8,7 @@
 
 #import "CKStyleManager.h"
 #import "UIView+Style.h"
+#import "CKResourceManager.h"
 
 static CKStyleManager* CKStyleManagerDefault = nil;
 static NSInteger kLogEnabled = -1;
@@ -18,6 +19,14 @@ static NSInteger kLogEnabled = -1;
 	static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         CKStyleManagerDefault = [[CKStyleManager alloc]init];
+        
+        __unsafe_unretained CKStyleManager* bself = CKStyleManagerDefault;
+        [CKResourceManager addObserverForResourcesWithExtension:@"png" object:@"CKStyleManagerDefault" usingBlock:^(id observer, NSArray *paths) {
+            [bself reloadAfterFileUpdate];
+        }];
+        [CKResourceManager addObserverForResourcesWithExtension:@"jpeg" object:@"CKStyleManagerDefault" usingBlock:^(id observer, NSArray *paths) {
+            [bself reloadAfterFileUpdate];
+        }];
     });
     
 	return CKStyleManagerDefault;
@@ -34,7 +43,7 @@ static NSInteger kLogEnabled = -1;
         [self loadContentOfFileNamed:@"CKInlineDebugger"];//Imports debugger stylesheet first.
     }
     
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"style"];
    // NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	[self loadContentOfFile:path];
 }
@@ -42,7 +51,7 @@ static NSInteger kLogEnabled = -1;
 
 - (BOOL)importContentOfFileNamed:(NSString*)name{
     
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"style"];
     //NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	return [self appendContentOfFile:path];
 }

@@ -9,13 +9,14 @@
 #import "UIImage+ValueTransformer.h"
 #import "NSValueTransformer+Additions.h"
 #import "NSValueTransformer+CGTypes.h"
+#import "CKResourceManager.h"
 
 #import "CKDebug.h"
 
 @implementation UIImage (CKValueTransformer)
 
 + (UIImage*)convertFromNSString:(NSString*)str{
-	UIImage* image = [UIImage imageNamed:str];
+	UIImage* image = [CKResourceManager imageNamed:str];
 	return image;
 }
 
@@ -32,7 +33,7 @@
 	CKAssert([components count] == 2,@"invalid format for image");
 	NSString* name = [components objectAtIndex:0];
 	
-	UIImage* image = [UIImage imageNamed:name];
+	UIImage* image = [CKResourceManager imageNamed:name];
 	if(image){
 		NSString* sizeStr = [components objectAtIndex:1];
 		CGSize size = [NSValueTransformer parseStringToCGSize:sizeStr];

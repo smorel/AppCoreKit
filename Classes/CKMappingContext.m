@@ -31,6 +31,8 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKResourceManager.h"
+
 NSString * const CKMappingErrorDomain = @"CKMappingErrorDomain";
 
 //behaviour
@@ -557,12 +559,12 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 }
 
 - (void)loadContentOfFileNamed:(NSString*)name{
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"mappings"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"mappings"];
 	[self loadContentOfFile:path];
 }
 
 - (BOOL)importContentOfFileNamed:(NSString*)name{
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"mappings"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"mappings"];
 	return [self appendContentOfFile:path];
 }
 

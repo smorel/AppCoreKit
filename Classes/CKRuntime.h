@@ -27,6 +27,10 @@ extern "C" {
     /**
      */
     void CKSwizzleSelector(Class c,SEL selector, SEL newSelector);
+    
+    /**
+     */
+    void CKSwizzleClassSelector(Class c,SEL selector, SEL newSelector);
 
     
 #ifdef __cplusplus

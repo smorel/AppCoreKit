@@ -15,6 +15,7 @@
 #import <objc/runtime.h>
 #import "CKResourceFileUpdateManager.h"
 #import "CKConfiguration.h"
+#import "CKResourceManager.h"
 
 NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
 
@@ -861,10 +862,33 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
     return [self importContentOfFile:path];
 }
 
+- (void)reloadAfterFileUpdate{
+    [CKResourceManager removeObserver:self];
+    
+    NSSet *toLoadFiles = _loadedFiles.copy;
+    [_loadedFiles removeAllObjects];
+    [_tree removeAllObjects];
+    for (NSString * path in toLoadFiles) {
+        [self loadContentOfFile:path];
+    }
+    [toLoadFiles release];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
+}
+
 - (BOOL)importContentOfFile:(NSString*)path{
     if(path == nil || [path isKindOfClass:[NSNull class]] || [_loadedFiles containsObject:path])
 		return NO;
     
+    __unsafe_unretained CKCascadingTree* bself = self;
+    [CKResourceManager addObserverForPath:path object:self usingBlock:^(id observer, NSString *newpath) {
+        [bself.loadedFiles removeObject:path];
+        [bself.loadedFiles addObject:newpath];
+        
+        [bself reloadAfterFileUpdate];
+    }];
+    
+    /*
     if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
         path = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:path handleUpdate:^(NSString *localPath) {
             NSSet *toLoadFiles = _loadedFiles.copy;
@@ -878,6 +902,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
             [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
         }];
     }
+     */
 	
     //TODO
     NSString* fileAndExtension = [path lastPathComponent];
@@ -914,7 +939,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
         if(importFileExtension == nil){
             importFileExtension = mainExtension;
         }
-        NSString* path = [[NSBundle mainBundle]pathForResource:importFileName ofType:importFileExtension];
+        NSString* path = [CKResourceManager pathForResource:importFileName ofType:importFileExtension];
         //CKDebugLog(@"processImportsForDictionary %@ with path %@",importFileName,path);
         [self importContentOfFile:path];
 	}

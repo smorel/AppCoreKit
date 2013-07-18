@@ -262,3 +262,10 @@ void CKSwizzleSelector(Class c,SEL selector, SEL newSelector){
         method_exchangeImplementations(origMethod, newMethod);
     }
 }
+
+void CKSwizzleClassSelector(Class c,SEL selector, SEL newSelector){
+	Method origMethod = class_getClassMethod(c, selector);
+    Method newMethod = class_getClassMethod(c, newSelector);
+	
+    method_exchangeImplementations(origMethod, newMethod);
+}
