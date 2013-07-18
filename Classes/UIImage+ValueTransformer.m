@@ -11,17 +11,31 @@
 #import "NSValueTransformer+CGTypes.h"
 #import "CKResourceManager.h"
 
+#import "CKResourceDependencyContext.h"
+
 #import "CKDebug.h"
 
 @implementation UIImage (CKValueTransformer)
 
 + (UIImage*)convertFromNSString:(NSString*)str{
-	UIImage* image = [CKResourceManager imageNamed:str];
-	return image;
+    NSString* imagePath = [CKResourceManager pathForImageNamed:str];
+    if(imagePath){
+        [CKResourceDependencyContext addDependency:imagePath];
+        return [UIImage imageWithContentsOfFile:imagePath];
+    }
+	return [UIImage imageNamed:str];;
 }
 
 + (UIImage*)convertFromNSURL:(NSURL*)url{
 	if([url isFileURL]){
+        if([url isFileURL]){
+            NSString* imagePath = [url path];
+            if(imagePath){
+                [CKResourceDependencyContext addDependency:imagePath];
+                return  [UIImage imageWithContentsOfFile:imagePath];
+            }
+        }
+        
 		UIImage* image = [UIImage imageWithContentsOfFile:[url path]];
 		return image;
 	}
@@ -33,7 +47,15 @@
 	CKAssert([components count] == 2,@"invalid format for image");
 	NSString* name = [components objectAtIndex:0];
 	
-	UIImage* image = [CKResourceManager imageNamed:name];
+    UIImage* image = nil;
+    NSString* imagePath = [CKResourceManager pathForImageNamed:name];
+    if(imagePath){
+        [CKResourceDependencyContext addDependency:imagePath];
+        image = [UIImage imageWithContentsOfFile:imagePath];
+    }else{
+        image = [UIImage imageNamed:name];
+    }
+    
 	if(image){
 		NSString* sizeStr = [components objectAtIndex:1];
 		CGSize size = [NSValueTransformer parseStringToCGSize:sizeStr];

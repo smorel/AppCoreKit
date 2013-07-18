@@ -20,6 +20,14 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
 
 @implementation CKResourceManager
 
+
++ (BOOL)isResourceManagerConnected{
+    if([self resourceManagerClass]){
+        return [[self resourceManagerClass]isResourceManagerConnected];
+    }
+    return NO;
+}
+
 + (Class)resourceManagerClass{
     static NSInteger kIsResourceManagerFrameworkAvailable = -1;
     static Class kResourceManagerClass = nil;
@@ -106,6 +114,17 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return  path ? [[UIImage class]performSelector:@selector(imageWithContentsOfFile:update:) withObject:path withObject:update] : nil;
     }
     return [UIImage imageNamed:name];
+}
+
++ (NSString*)pathForImageNamed:(NSString*)name{
+    if([self resourceManagerClass]){
+        NSString* path = [[UIImage class]performSelector:@selector(resoucePathForImageNamed:) withObject:name];
+        return path;
+    }
+    
+    NSLog(@"You should not the method [CKResourceManager pathForImageNamed] without the ResourceManager framework linked to your app or it will return nil !!!");
+    
+    return nil;
 }
 
 + (void)setHudTitle:(NSString*)title{

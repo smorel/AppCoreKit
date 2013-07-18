@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CKCascadingTree.h"
 
+extern NSString* CKStyleManagerDidReloadNotification;
 
 /**
  */
@@ -53,6 +54,11 @@
 /**
  */
 + (BOOL)logEnabled;
+
+/** PRIVATE : When viewControllers or cell controller apply style, they keep a track of the resource paths they are dependent
+    By this way, the stylemanager can register for updates on those dependencies and reload correctly when the resources gets updated.
+ */
+- (void)registerOnDependencies:(NSSet*)dependencies;
 
 @end
 

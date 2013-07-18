@@ -68,7 +68,7 @@ void createTemporaryLocalizationBundle(NSArray* stringsPaths){
 
 void updateUI(){
     [[CKLocalizationManager sharedManager]setNeedsLiveUpdateRefresh : YES];
-    [CKResourceManager refreshUI];
+    [CKResourceManager reloadUI];
     [[CKLocalizationManager sharedManager]performSelector:@selector(setNeedsLiveUpdateRefresh:) withObject:@(NO) afterDelay:2];
 }
 
@@ -110,7 +110,7 @@ NSString* CKGetLocalizedString(NSString* localization,NSString* key,NSString* va
                     
                     [[CKLocalizationManager sharedManager] reloadBundleAtPath:tempPath];
                     
-                    [CKResourceManager refreshUI];
+                    [CKResourceManager reloadUI];
                     [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
                 }];
                 

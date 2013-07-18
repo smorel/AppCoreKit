@@ -87,7 +87,7 @@ static CKLocalizationManager *sharedInstance = nil;
         _language = [l retain];
         
         self.needsLiveUpdateRefresh = YES;
-        [CKResourceManager refreshUI];
+        [CKResourceManager reloadUI];
         [self performSelector:@selector(setNeedsLiveUpdateRefresh:) withObject:@(NO) afterDelay:2];
     }
 }

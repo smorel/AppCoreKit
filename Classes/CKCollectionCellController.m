@@ -14,6 +14,9 @@
 #import "NSObject+Bindings.h"
 #import "CKDebug.h"
 
+#import "CKResourceDependencyContext.h"
+#import "CKResourceManager.h"
+
 @interface CKCollectionCellController()
 @property (nonatomic, retain) CKWeakRef *viewRef;
 @property (nonatomic, retain) CKWeakRef *weakParentController;
@@ -191,7 +194,17 @@
     
     self.applyingStyle = YES;
     
+    if([CKResourceManager isResourceManagerConnected]){
+        [CKResourceDependencyContext beginContext];
+    }
+    
 	[self applyStyle:[self controllerStyle] forView:self.view];
+    
+    
+    if([CKResourceManager isResourceManagerConnected]){
+        NSSet* dependenciesFilePaths = [CKResourceDependencyContext endContext];
+        [self.styleManager registerOnDependencies:dependenciesFilePaths];
+    }
     
     self.applyingStyle = NO;
 }
@@ -202,7 +215,16 @@
     
     self.applyingStyle = YES;
     
+    if([CKResourceManager isResourceManagerConnected]){
+        [CKResourceDependencyContext beginContext];
+    }
+    
     [NSObject applyStyleByIntrospection:[self controllerStyle] toObject:self appliedStack:[NSMutableSet set] delegate:nil];
+    
+    if([CKResourceManager isResourceManagerConnected]){
+        NSSet* dependenciesFilePaths = [CKResourceDependencyContext endContext];
+        [self.styleManager registerOnDependencies:dependenciesFilePaths];
+    }
     
     self.applyingStyle = NO;
 }

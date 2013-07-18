@@ -10,45 +10,11 @@
 #import "NSObject+Runtime.h"
 #import "CKLayoutBoxProtocol.h"
 #import "UIView+CKLayout.h"
+#import "CKViewController.h"
 
 
 @implementation CKResourceManager (UIUpdate)
 
-+ (void)refreshView:(UIView*)view viewStack:(NSMutableSet*)viewStack{
-    if(view == nil || [viewStack containsObject:view])
-        return;
-    
-    [viewStack addObject:view];
-    
-    for(UIView* v in [view subviews]){
-        [self refreshView:v viewStack:viewStack];
-    }
-    
-    [view invalidateLayout];
-    [view setNeedsDisplay];
-    [view setNeedsLayout];
-}
-
-+ (void)refreshViewController:(UIViewController*)controller controllerStack:(NSMutableSet*)controllerStack viewStack:(NSMutableSet*)viewStack{
-    if(controller == nil || [controllerStack containsObject:controller])
-        return;
-    
-    [controllerStack addObject:controller];
-    
-    [self refreshViewController:[controller modalViewController] controllerStack:controllerStack viewStack:viewStack];
-    
-    [self refreshView:[controller view] viewStack:viewStack];
-    
-    if([NSObject isClass:[controller class] kindOfClassNamed:@"CKContainerViewController"]
-       || [NSObject isClass:[controller class] kindOfClassNamed:@"CKSplitViewController"]
-       || [NSObject isClass:[controller class] kindOfClassNamed:@"UINavigationController"]){
-        
-        NSArray* controllers = [controller performSelector:@selector(viewControllers)];
-        for(UIViewController* c in controllers){
-            [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
-        }
-    }
-}
 
 + (void)reloadViewController:(UIViewController*)controller controllerStack:(NSMutableSet*)controllerStack viewStack:(NSMutableSet*)viewStack{
     if(controller == nil || [controllerStack containsObject:controller])
@@ -56,13 +22,10 @@
     
     [controllerStack addObject:controller];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [controller resourceManagerReloadUI];
-    });
+    [controller resourceManagerReloadUI];
     
     [self reloadViewController:[controller modalViewController] controllerStack:controllerStack viewStack:viewStack];
     
-  //  [self refreshView:[controller view] viewStack:viewStack];
     
     if([NSObject isClass:[controller class] kindOfClassNamed:@"CKContainerViewController"]
        || [NSObject isClass:[controller class] kindOfClassNamed:@"CKSplitViewController"]
@@ -76,43 +39,12 @@
 }
 
 + (void)reloadUI{
-    //TODO : if only localization change, we don't need to re-setup all the view controllers !
-    
-    //we offen modify 1 file at a time :
-    //if we could have 1 stylesheet manager per view controller
-    //we could reload only this stylesheet (with imports/dependencies (color palettes) ...) and this view controller !
-    //we could store references to images too and reload only the controllers that loaded particular images.
-    //we could auto load the controller's class named .stylesheet file at launch.
-    
-    [CKResourceManager setHudTitle:@"Reloading UI..."];
-    
     NSMutableSet* controllerStack = [NSMutableSet set];
     NSMutableSet* viewStack = [NSMutableSet set];
     NSArray* windows = [[UIApplication sharedApplication]windows];
     for(UIWindow* window in windows){
         UIViewController* c = [window rootViewController];
         [self reloadViewController:c controllerStack:controllerStack viewStack:viewStack];
-       // [self refreshView:window viewStack:viewStack];
-    }
-    
-    [CKResourceManager setHudTitle:nil];
-}
-
-+ (void)refreshUI{
-    [self reloadUI];
-    
-    return;
-    
-    //tried to optimize but very few elements get updated.
-    [CKResourceManager setHudTitle:@"Refreshing UI..."];
-    
-    NSMutableSet* controllerStack = [NSMutableSet set];
-    NSMutableSet* viewStack = [NSMutableSet set];
-    NSArray* windows = [[UIApplication sharedApplication]windows];
-    for(UIWindow* window in windows){
-        UIViewController* c = [window rootViewController];
-        [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
-        [self refreshView:window viewStack:viewStack];
     }
     
     [CKResourceManager setHudTitle:nil];
@@ -125,18 +57,30 @@
 @implementation UIViewController (CKResourceManager)
 
 - (void)resourceManagerReloadUI{
-    //self.title = self.title;
-    //if([self respondsToSelector:@selector(reload)]){
-    //    [self performSelector:@selector(reload)];
-    //}
     
-    if(![self isViewLoaded] || [self.view window] == nil)
-        return;
+    static dispatch_queue_t reloadQueue = nil;
+    if(!reloadQueue){
+        reloadQueue = dispatch_queue_create("com.wherecloud.CKStyleManager.reload", 0);
+    }
     
-    [self viewWillDisappear:NO];
-    [self viewDidDisappear:NO];
-    [self viewWillAppear:NO];
-    [self viewDidAppear:NO];
+    dispatch_async(reloadQueue, ^{
+        NSString* name = [self isKindOfClass:[CKViewController class]] ? [(CKViewController*)self name] : nil;
+        NSString* hudTitle = name ? [NSString stringWithFormat:@"Reloading '%@ : %@'",[self class],name] : [NSString stringWithFormat:@"Reloading '%@'",[self class]];
+        [CKResourceManager setHudTitle:hudTitle];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(![self isViewLoaded] || [self.view window] == nil)
+                return;
+            
+            [self viewWillDisappear:NO];
+            [self viewDidDisappear:NO];
+            [self viewWillAppear:NO];
+            [self viewDidAppear:NO];
+            
+            [CKResourceManager setHudTitle:nil];
+            
+        });
+    });
 }
 
 @end

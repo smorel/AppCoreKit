@@ -10,6 +10,8 @@
 #import "UIView+Style.h"
 #import "CKResourceManager.h"
 
+NSString* CKStyleManagerDidReloadNotification = @"CKStyleManagerDidReloadNotification";
+
 static CKStyleManager* CKStyleManagerDefault = nil;
 static NSInteger kLogEnabled = -1;
 
@@ -20,6 +22,7 @@ static NSInteger kLogEnabled = -1;
     dispatch_once(&onceToken, ^{
         CKStyleManagerDefault = [[CKStyleManager alloc]init];
         
+        /*
         __unsafe_unretained CKStyleManager* bself = CKStyleManagerDefault;
         [CKResourceManager addObserverForResourcesWithExtension:@"png" object:@"CKStyleManagerDefault" usingBlock:^(id observer, NSArray *paths) {
             [bself reloadAfterFileUpdate];
@@ -27,10 +30,27 @@ static NSInteger kLogEnabled = -1;
         [CKResourceManager addObserverForResourcesWithExtension:@"jpeg" object:@"CKStyleManagerDefault" usingBlock:^(id observer, NSArray *paths) {
             [bself reloadAfterFileUpdate];
         }];
+         */
+        
     });
     
 	return CKStyleManagerDefault;
 }
+
+
+- (void)registerOnDependencies:(NSSet*)dependencies{
+    __unsafe_unretained CKStyleManager* bself = self;
+    for(NSString* path in dependencies){
+        [CKResourceManager addObserverForPath:path object:bself usingBlock:^(id observer, NSString *path) {
+          //  if([[path pathExtension]isEqualToString:@"colors"]){
+                [bself reloadAfterFileUpdate];
+         //   }else{
+         //       [[NSNotificationCenter defaultCenter]postNotificationName:CKStyleManagerDidReloadNotification object:bself];
+         //   }
+        }];
+    }
+}
+
 
 - (void)reloadAfterDelay{
     static dispatch_queue_t reloadQueue = nil;
@@ -40,11 +60,11 @@ static NSInteger kLogEnabled = -1;
     
     [CKResourceManager setHudTitle:@"Reloading Stylesheets..."];
     dispatch_async(reloadQueue, ^{
+        
         [super reloadAfterFileUpdate];
         [CKResourceManager setHudTitle:nil];
-        dispatch_async(reloadQueue, ^{
-            [CKResourceManager reloadUI];
-        });
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:CKStyleManagerDidReloadNotification object:self];
     });
     
 }

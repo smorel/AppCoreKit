@@ -11,7 +11,6 @@
 @interface CKResourceManager (UIUpdate)
 
 + (void)reloadUI;
-+ (void)refreshUI;
 
 
 @end

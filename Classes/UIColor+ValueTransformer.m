@@ -11,11 +11,15 @@
 #import "UIColor+Additions.h"
 #import "CKResourceManager.h"
 
+#import "CKResourceDependencyContext.h"
+
 #import "CKDebug.h"
 
 @implementation UIColor (CKUIColor_ValueTransformer)
 
 + (UIColor*)convertFromNSString:(NSString*)str{
+    //CKResourceDependencyContext for color palettes
+    
 	NSArray* components = [str componentsSeparatedByString:@" "];
 	if([components count] == 4){
 		return [UIColor colorWithRed:[[components objectAtIndex:0]floatValue] 

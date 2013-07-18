@@ -25,6 +25,7 @@
 #import "Layout.h"
 #import "UIView+Positioning.h"
 #import "CKResourceManager.h"
+#import "CKResourceDependencyContext.h"
 
 
 @interface CKViewController()
@@ -108,7 +109,7 @@
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
     self.state = CKViewControllerStateNone;
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsDisplayed:) name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsHidden:) name:UINavigationControllerWillHideToolbar object:nil];
 }
@@ -170,7 +171,7 @@
     [_inlineDebuggerController release];
 	_inlineDebuggerController = nil;
     
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillHideToolbar object:nil];
     
@@ -181,12 +182,15 @@
     return [self controllerStyle];
 }
 
+- (void)styleManagerDidUpdate:(NSNotification*)notification{
+    if(notification.object == [self styleManager]){
+        [self resourceManagerReloadUI];
+    }
+}
+
 - (void)resourceManagerReloadUI{
-    
     self.styleHasBeenApplied = NO;
     [super resourceManagerReloadUI];
-    
-   // [self updateStylesheets];
 }
 
 + (id)controller{
@@ -560,7 +564,11 @@
 
 - (void)applyStylesheet:(BOOL)animated{
     //Force to create the manager here !
-    CKStyleManager* manager = [self styleManager];
+    [self styleManager];
+    
+    if([CKResourceManager isResourceManagerConnected]){
+        [CKResourceDependencyContext beginContext];
+    }
     
     if([[self containerViewController]isKindOfClass:[CKCollectionViewController class]]){
         //skip style for navigation as we are contained by a collection view cell
@@ -601,6 +609,11 @@
         }
         
         [self observerNavigationChanges:YES];
+    }
+    
+    if([CKResourceManager isResourceManagerConnected]){
+        NSSet* dependenciesFilePaths = [CKResourceDependencyContext endContext];
+        [self.styleManager registerOnDependencies:dependenciesFilePaths];
     }
 }
 

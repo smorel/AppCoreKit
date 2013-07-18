@@ -53,6 +53,10 @@ extern NSString* CKResourceManagerMostRecentPathKey;
  */
 @interface CKResourceManager : NSObject
 
+/** This returns TRUE if the resource Manager framework is linked and has been initialized.
+ */
++ (BOOL)isResourceManagerConnected;
+
 /******************************************************
  Accessing resource files
  *****************************************************/
@@ -68,6 +72,8 @@ extern NSString* CKResourceManagerMostRecentPathKey;
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext observer:(id)observer usingBlock:(void(^)(id observer, NSArray* paths))updateBlock;
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext localization:(NSString *)localizationName observer:(id)observer usingBlock:(void(^)(id observer, NSArray* paths))updateBlock;
+
++ (NSString*)pathForImageNamed:(NSString*)name;
 
 + (UIImage*)imageNamed:(NSString*)image;
 
