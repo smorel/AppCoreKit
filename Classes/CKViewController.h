@@ -224,12 +224,6 @@ typedef enum CKViewControllerState{
 - (void)postInit;
 
 
-/** This method forces a complete reload of the view and its style. This is mainly usefull while reloading stylesheet definitions at runtime.
- @warning In theory you should not need to call this method directly.
- */
-- (void)updateStylesheets;
-
-
 @end
 
 

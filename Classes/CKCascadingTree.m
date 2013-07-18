@@ -17,7 +17,7 @@
 #import "CKConfiguration.h"
 #import "CKResourceManager.h"
 
-NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
+//NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
 
 //CKCascadingTreeItemFormat
 
@@ -873,7 +873,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
     }
     [toLoadFiles release];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
 }
 
 - (BOOL)importContentOfFile:(NSString*)path{

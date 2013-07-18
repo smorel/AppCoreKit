@@ -32,6 +32,13 @@ static NSInteger kLogEnabled = -1;
 	return CKStyleManagerDefault;
 }
 
+
+- (void)reloadAfterFileUpdate{
+    NSLog(@"Reloading Stylesheets");
+    [super reloadAfterFileUpdate];
+    [CKResourceManager reloadUI];
+}
+
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
 	return [self dictionaryForObject:object propertyName:propertyName];
 }

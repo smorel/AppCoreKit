@@ -17,7 +17,7 @@ extern NSString* const CKCascadingTreeImport;
 extern NSString* const CKCascadingTreeIPad;
 extern NSString* const CKCascadingTreeIPhone;
 
-extern NSString * const CKCascadingTreeFilesDidUpdateNotification;
+//extern NSString * const CKCascadingTreeFilesDidUpdateNotification;
 
 /**
  */

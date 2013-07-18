@@ -292,14 +292,6 @@
     [super viewDidUnload];
 }
 
-
-
-- (void)updateStylesheets{
-    //NSIndexPath* indexPath = [[self visibleIndexPaths]objectAtIndex:0];
-    [super updateStylesheets];
-    //[self scrollToRowAtIndexPath:indexPath animated:NO];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     CKViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
     self.viewWillAppearEndBlock = nil;

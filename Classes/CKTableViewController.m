@@ -14,6 +14,7 @@
 #import "CKDebug.h"
 #import "UIView+Name.h"
 #import "CKVersion.h"
+#import "CKResourceManager.h"
 
 @interface CKViewController()
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
@@ -310,19 +311,10 @@
     [super viewDidUnload];
 }
 
-
-- (void)updateStylesheets{
-    [UIView setAnimationsEnabled:NO];
-    [super updateStylesheets];
-    if([self isViewDisplayed]){
-        [self viewWillDisappear:NO];
-        [self viewDidDisappear:NO];
-        [self viewWillAppear:NO];
-        [self viewDidAppear:NO];
-    }
-    [UIView setAnimationsEnabled:YES];
+- (void)resourceManagerReloadUI{
+    self.tableViewHasBeenReloaded = NO;
+    [super resourceManagerReloadUI];
 }
-
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];

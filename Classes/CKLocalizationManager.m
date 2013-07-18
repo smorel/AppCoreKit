@@ -13,6 +13,7 @@
 #import "CKLocalizationManager_Private.h"
 #import "CKDebug.h"
 #import "CKConfiguration.h"
+#import "CKResourceManager.h"
 
 @interface CKLocalizationManager() 
 @property(nonatomic,retain,readwrite)NSBundle* localizedBundle;
@@ -22,8 +23,7 @@
 @implementation CKLocalizationManager
 @synthesize language = _language;
 @synthesize localizedBundle = _localizedBundle;
-
-@synthesize needsLiveUpdateRefresh;
+@synthesize needsLiveUpdateRefresh = _needsLiveUpdateRefresh;
 
 //Current application bungle to get the languages.
 static CKLocalizationManager *sharedInstance = nil;
@@ -86,7 +86,9 @@ static CKLocalizationManager *sharedInstance = nil;
         [_language release];
         _language = [l retain];
         
-        [self refreshUI];
+        self.needsLiveUpdateRefresh = YES;
+        [CKResourceManager refreshUI];
+        [self performSelector:@selector(setNeedsLiveUpdateRefresh:) withObject:@(NO) afterDelay:2];
     }
 }
 
@@ -95,6 +97,7 @@ static CKLocalizationManager *sharedInstance = nil;
 
 
 @implementation CKLocalizationManager(CKPrivate)
+@dynamic needsLiveUpdateRefresh;
 
 // Resets the localization system, so it uses the OS default language.
 //
@@ -105,62 +108,6 @@ static CKLocalizationManager *sharedInstance = nil;
     self.language = [[NSLocale preferredLanguages] objectAtIndex:0];
 }
 
-
-- (void)refreshView:(UIView*)view viewStack:(NSMutableSet*)viewStack{
-    if(view == nil || [viewStack containsObject:view])
-        return;
-    
-    [viewStack addObject:view];
-    [view setNeedsDisplay];
-    [view setNeedsLayout];
-    for(UIView* v in [view subviews]){
-        [self refreshView:v viewStack:viewStack];
-    }
-}
-
-- (void)refreshViewController:(UIViewController*)controller controllerStack:(NSMutableSet*)controllerStack viewStack:(NSMutableSet*)viewStack{
-    if(controller == nil || [controllerStack containsObject:controller])
-        return;
-    
-    [controllerStack addObject:controller];
-    
-    controller.title = controller.title;
-    if([controller respondsToSelector:@selector(reload)]){
-        [controller performSelector:@selector(reload)];
-    }
-    [self refreshViewController:[controller modalViewController] controllerStack:controllerStack viewStack:viewStack];
-    
-    [self refreshView:[controller view] viewStack:viewStack];
-    
-    if([NSObject isClass:[controller class] kindOfClassNamed:@"CKContainerViewController"]
-       || [NSObject isClass:[controller class] kindOfClassNamed:@"CKSplitViewController"]){
-        NSArray* controllers = [controller performSelector:@selector(viewControllers)];
-        for(UIViewController* c in controllers){
-            [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
-        }
-    }
-}
-
-- (void)refreshUI{
-    self.needsLiveUpdateRefresh = YES;
-    
-    NSMutableSet* controllerStack = [NSMutableSet set];
-    NSMutableSet* viewStack = [NSMutableSet set];
-    NSArray* windows = [[UIApplication sharedApplication]windows];
-    for(UIWindow* window in windows){
-        UIViewController* c = [window rootViewController];
-        [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
-        [self refreshView:window viewStack:viewStack];
-    }
-    
-   // if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        double delayInSeconds = 2.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            self.needsLiveUpdateRefresh = NO;
-        });
-   // }
-}
 
 - (void)reloadBundleAtPath:(NSString *)path {
   //  if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){

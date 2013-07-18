@@ -394,8 +394,8 @@
 	if (self.viewControllers) {
 		NSMutableArray *items = [NSMutableArray arrayWithCapacity:[self.viewControllers count]];
         
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-        NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
+      //  NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+      //  NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
         
         int i =0;
 		for (UIViewController *vc in self.viewControllers) {

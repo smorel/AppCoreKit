@@ -24,6 +24,7 @@
 #import "UINavigationController+Style.h"
 #import "Layout.h"
 #import "UIView+Positioning.h"
+#import "CKResourceManager.h"
 
 
 @interface CKViewController()
@@ -106,7 +107,7 @@
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
     self.state = CKViewControllerStateNone;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsDisplayed:) name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsHidden:) name:UINavigationControllerWillHideToolbar object:nil];
 }
@@ -168,7 +169,7 @@
     [_inlineDebuggerController release];
 	_inlineDebuggerController = nil;
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillHideToolbar object:nil];
     
@@ -179,16 +180,12 @@
     return [self controllerStyle];
 }
 
-- (void)updateStylesheets {
-    if ([self isViewLoaded]) {
-        self.styleHasBeenApplied = NO;
-        
-        if ([self respondsToSelector:@selector(reload)]){
-            [self performSelector:@selector(reload)];
-        }
-        
-        [self applyStyleForNavigation];
-    }
+- (void)resourceManagerReloadUI{
+    
+    self.styleHasBeenApplied = NO;
+    [super resourceManagerReloadUI];
+    
+   // [self updateStylesheets];
 }
 
 + (id)controller{

@@ -84,3 +84,6 @@ extern NSString* CKResourceManagerMostRecentPathKey;
 + (void)removeObserver:(id)object;
 
 @end
+
+
+#import "CKResourceManager+UIUpdate.h"

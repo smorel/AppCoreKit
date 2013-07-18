@@ -68,7 +68,7 @@ static char UIImageImageNameKey;
     
     NSString *localPath = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:path handleUpdate:^(NSString *localPath) {
         [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
-        [[CKLocalizationManager sharedManager] refreshUI];
+        [CKResourceManager reloadUI];
     }];
     
     CGDataProviderRef ref = CGDataProviderCreateWithCFData((CFDataRef) [NSData dataWithContentsOfFile:localPath]);

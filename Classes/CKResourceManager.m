@@ -18,7 +18,6 @@ NSString* CKResourceManagerMostRecentPathKey         = @"RMResourceManagerMostRe
 NSString* CKResourceManagerDidEndUpdatingResourcesNotification = @"RMResourceManagerDidEndUpdatingResourcesNotification";
 NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceManagerUpdatedResourcesPathKey";
 
-
 @implementation CKResourceManager
 
 + (Class)resourceManagerClass{
