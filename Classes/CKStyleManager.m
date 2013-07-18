@@ -21,17 +21,6 @@ static NSInteger kLogEnabled = -1;
 	static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         CKStyleManagerDefault = [[CKStyleManager alloc]init];
-        
-        /*
-        __unsafe_unretained CKStyleManager* bself = CKStyleManagerDefault;
-        [CKResourceManager addObserverForResourcesWithExtension:@"png" object:@"CKStyleManagerDefault" usingBlock:^(id observer, NSArray *paths) {
-            [bself reloadAfterFileUpdate];
-        }];
-        [CKResourceManager addObserverForResourcesWithExtension:@"jpeg" object:@"CKStyleManagerDefault" usingBlock:^(id observer, NSArray *paths) {
-            [bself reloadAfterFileUpdate];
-        }];
-         */
-        
     });
     
 	return CKStyleManagerDefault;
@@ -42,11 +31,7 @@ static NSInteger kLogEnabled = -1;
     __unsafe_unretained CKStyleManager* bself = self;
     for(NSString* path in dependencies){
         [CKResourceManager addObserverForPath:path object:bself usingBlock:^(id observer, NSString *path) {
-          //  if([[path pathExtension]isEqualToString:@"colors"]){
-                [bself reloadAfterFileUpdate];
-         //   }else{
-         //       [[NSNotificationCenter defaultCenter]postNotificationName:CKStyleManagerDidReloadNotification object:bself];
-         //   }
+            [bself reloadAfterFileUpdate];
         }];
     }
 }
