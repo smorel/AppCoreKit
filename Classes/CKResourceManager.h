@@ -83,6 +83,12 @@ extern NSString* CKResourceManagerMostRecentPathKey;
 
 + (void)removeObserver:(id)object;
 
+/******************************************************
+ Managing HUD
+ *****************************************************/
+
++ (void)setHudTitle:(NSString*)title;
+
 @end
 
 

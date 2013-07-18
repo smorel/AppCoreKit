@@ -223,6 +223,7 @@ typedef enum CKViewControllerState{
  */
 - (void)postInit;
 
+- (void)reapplyStylesheet;
 
 @end
 

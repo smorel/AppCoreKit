@@ -56,7 +56,10 @@
     
     [controllerStack addObject:controller];
     
-    [controller resourceManagerReloadUI];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [controller resourceManagerReloadUI];
+    });
+    
     [self reloadViewController:[controller modalViewController] controllerStack:controllerStack viewStack:viewStack];
     
   //  [self refreshView:[controller view] viewStack:viewStack];
@@ -81,7 +84,8 @@
     //we could store references to images too and reload only the controllers that loaded particular images.
     //we could auto load the controller's class named .stylesheet file at launch.
     
-    NSLog(@"Reloading UI");
+    [CKResourceManager setHudTitle:@"Reloading UI..."];
+    
     NSMutableSet* controllerStack = [NSMutableSet set];
     NSMutableSet* viewStack = [NSMutableSet set];
     NSArray* windows = [[UIApplication sharedApplication]windows];
@@ -90,6 +94,8 @@
         [self reloadViewController:c controllerStack:controllerStack viewStack:viewStack];
        // [self refreshView:window viewStack:viewStack];
     }
+    
+    [CKResourceManager setHudTitle:nil];
 }
 
 + (void)refreshUI{
@@ -98,7 +104,8 @@
     return;
     
     //tried to optimize but very few elements get updated.
-    NSLog(@"Refreshing UI");
+    [CKResourceManager setHudTitle:@"Refreshing UI..."];
+    
     NSMutableSet* controllerStack = [NSMutableSet set];
     NSMutableSet* viewStack = [NSMutableSet set];
     NSArray* windows = [[UIApplication sharedApplication]windows];
@@ -107,6 +114,8 @@
         [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
         [self refreshView:window viewStack:viewStack];
     }
+    
+    [CKResourceManager setHudTitle:nil];
 }
 
 @end

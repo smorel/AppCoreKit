@@ -32,11 +32,29 @@ static NSInteger kLogEnabled = -1;
 	return CKStyleManagerDefault;
 }
 
+- (void)reloadAfterDelay{
+    static dispatch_queue_t reloadQueue = nil;
+    if(!reloadQueue){
+        reloadQueue = dispatch_queue_create("com.wherecloud.CKStyleManager.reload", 0);
+    }
+    
+    [CKResourceManager setHudTitle:@"Reloading Stylesheets..."];
+    dispatch_async(reloadQueue, ^{
+        [super reloadAfterFileUpdate];
+        [CKResourceManager setHudTitle:nil];
+        dispatch_async(reloadQueue, ^{
+            [CKResourceManager reloadUI];
+        });
+    });
+    
+}
 
 - (void)reloadAfterFileUpdate{
-    NSLog(@"Reloading Stylesheets");
-    [super reloadAfterFileUpdate];
-    [CKResourceManager reloadUI];
+    //If multiple requests for reloading stylesheets occurs in batch like
+    //images and several style files have been updated, we delay the effective reload to avoid
+    //doing it several times
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(reloadAfterDelay) object:nil];
+    [self performSelector:@selector(reloadAfterDelay) withObject:nil afterDelay:.2];
 }
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{

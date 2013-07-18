@@ -108,4 +108,10 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
     return [UIImage imageNamed:name];
 }
 
++ (void)setHudTitle:(NSString*)title{
+    if([self resourceManagerClass]){
+        [[self resourceManagerClass]setHudTitle:title];
+    }
+}
+
 @end

@@ -544,19 +544,14 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewWillAppear:(BOOL)animated{
-    self.state = CKViewControllerStateWillAppear;
-    if(_viewWillAppearBlock){
-        _viewWillAppearBlock(self,animated);
-    }
-    
+- (void)applyStylesheet:(BOOL)animated{
     if([[self containerViewController]isKindOfClass:[CKCollectionViewController class]]){
         //skip style for navigation as we are contained by a collection view cell
-               
+        
         NSMutableDictionary* controllerStyle = nil;
-        if(!self.styleHasBeenApplied){ 
+        if(!self.styleHasBeenApplied){
             [CATransaction begin];
-            [CATransaction 
+            [CATransaction
              setValue: [NSNumber numberWithBool: YES]
              forKey: kCATransactionDisableActions];
             
@@ -590,6 +585,20 @@
         
         [self observerNavigationChanges:YES];
     }
+}
+
+- (void)reapplyStylesheet{
+    self.styleHasBeenApplied = NO;
+    [self applyStylesheet:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    self.state = CKViewControllerStateWillAppear;
+    if(_viewWillAppearBlock){
+        _viewWillAppearBlock(self,animated);
+    }
+    
+    [self applyStylesheet:animated];
     
     [super viewWillAppear:animated];
     
