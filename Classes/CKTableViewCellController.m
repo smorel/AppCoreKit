@@ -660,7 +660,7 @@
 }
 
 - (void)reapplyStyleForBackgroundViews{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([[self styleManager] isEmpty])
         return;
     
     //WE SHOULD OPTIMALLY DO THIS ONLY WHEN INDEXPATH CHANGE FROM FIRST/MIDDLE/LAST

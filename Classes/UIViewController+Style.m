@@ -7,11 +7,14 @@
 //
 
 #import "UIViewController+Style.h"
+#import "UIView+Style.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"
 #import "CKVersion.h"
 #import <objc/runtime.h>
+#import "CKResourceManager.h"
+#import "CKContainerViewController.h"
 
 
 static char UIViewControllerDataDrivenViewsKey;
@@ -35,18 +38,80 @@ static char UIViewControllerDataDrivenViewsKey;
 }
 @end
 
+static char UIViewControllerStyleManagerKey;
+static char UIViewControllerStylesheetFileNameKey;
 
 @implementation UIViewController (CKStyle)
+@dynamic stylesheetFileName, styleManager;
+
+- (void)setStylesheetFileName:(NSString *)stylesheetFileName{
+    objc_setAssociatedObject(self,
+                             &UIViewControllerStylesheetFileNameKey,
+                             stylesheetFileName,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSString*)stylesheetFileName{
+    return objc_getAssociatedObject(self, &UIViewControllerStylesheetFileNameKey);
+}
+
+- (void)setStyleManager:(CKStyleManager *)styleManager{
+    objc_setAssociatedObject(self,
+                             &UIViewControllerStyleManagerKey,
+                             styleManager,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CKStyleManager*)styleManager{
+    CKStyleManager* manager = objc_getAssociatedObject(self, &UIViewControllerStyleManagerKey);
+    if(manager)
+        return manager;
+    
+    //BACKWARD COMPATIBILITY :
+    //check if default bundle has a style for this controller.
+    //if so, uses the default manager.
+    [self setStyleManager:[CKStyleManager defaultManager]];
+    NSMutableDictionary* styleInDefaultManager = [self controllerStyle];
+    if(styleInDefaultManager && ![styleInDefaultManager isEmpty]){
+        return [CKStyleManager defaultManager];
+    }
+    
+    //TODO : register on updates for this file as it can be created from dropbox ...
+    //If this file or one of its dependencies refreshes, only update this view controller.
+    
+    if(self.stylesheetFileName){
+        manager = [[CKStyleManager alloc]init];
+        [manager loadContentOfFileNamed:self.stylesheetFileName];
+    }else{
+        NSString* filePath = [CKResourceManager pathForResource:[[self class]description] ofType:@".style"];
+        if(!filePath){
+            if(self.containerViewController){
+                self.stylesheetFileName = self.containerViewController.stylesheetFileName;
+                manager = [self.containerViewController styleManager];
+            }else{
+                manager = [CKStyleManager defaultManager];
+            }
+        }else{
+            self.stylesheetFileName = [[self class]description];
+            manager = [[CKStyleManager alloc]init];
+            [manager loadContentOfFileNamed:[[self class]description]];
+        }
+    }
+    
+    [self setStyleManager:manager];
+    return manager;
+}
 
 - (NSMutableDictionary*)controllerStyle{
-    NSMutableDictionary* previousControllerStyle = nil;
+    //Returns the more specific style taking care of navigation and container hierarchy
+    NSMutableArray* controllerStack = [NSMutableArray array];
+    
     NSInteger index = [self.navigationController.viewControllers indexOfObjectIdenticalTo:self];
     if(index != NSNotFound && index >= 1){
         UIViewController* previousViewController = [self.navigationController.viewControllers objectAtIndex:index - 1];
-        previousControllerStyle = [[CKStyleManager defaultManager] styleForObject:previousViewController  propertyName:nil];
+        [controllerStack addObject:previousViewController];
     }
     
-    NSMutableArray* controllerStack = [NSMutableArray array];
     UIViewController* c = self;
     while(c){
         if([c respondsToSelector:@selector(containerViewController)]){
@@ -61,10 +126,13 @@ static char UIViewControllerDataDrivenViewsKey;
     }
     
     for(UIViewController* controller in controllerStack){
-        previousControllerStyle = previousControllerStyle ? [previousControllerStyle styleForObject:controller  propertyName:nil] : [[CKStyleManager defaultManager] styleForObject:controller  propertyName:nil];
+        NSMutableDictionary* styleInContainer = [controller.stylesheet styleForObject:self propertyName:nil];
+        if(styleInContainer && ![styleInContainer isEmpty]){
+            return styleInContainer;
+        }
     }
     
-    return previousControllerStyle ? [previousControllerStyle styleForObject:self  propertyName:nil] : [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    return [[self styleManager] styleForObject:self  propertyName:nil];
 }
 
 - (NSMutableDictionary* )applyStyle{
@@ -118,7 +186,7 @@ static char UIViewControllerDataDrivenViewsKey;
 }
 
 - (NSMutableDictionary*)applyStyleWithParentStyle:(NSMutableDictionary*)style{
-    NSMutableDictionary* controllerStyle = style ? [style styleForObject:self  propertyName:nil] : [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    NSMutableDictionary* controllerStyle = style ? [style styleForObject:self  propertyName:nil] : [[self styleManager] styleForObject:self  propertyName:nil];
 	
     if([CKStyleManager logEnabled]){
         if([controllerStyle isEmpty]){

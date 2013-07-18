@@ -181,8 +181,12 @@
     self.applyingStyle = NO;
 }
 
+- (CKStyleManager*)styleManager{
+    return self.containerController.styleManager;
+}
+
 - (void)applyStyle{
-    if([[CKStyleManager defaultManager]isEmpty] || self.applyingStyle)
+    if([[self styleManager]isEmpty] || self.applyingStyle)
         return;
     
     self.applyingStyle = YES;
@@ -193,7 +197,7 @@
 }
 
 - (void)applyControllerStyle{
-    if([[CKStyleManager defaultManager]isEmpty] || self.applyingStyle)
+    if([[self styleManager]isEmpty] || self.applyingStyle)
         return;
     
     self.applyingStyle = YES;

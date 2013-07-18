@@ -102,6 +102,7 @@
 
 - (void)postInit {	
     self.styleHasBeenApplied = NO;
+    
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.navigationTitleBindingContext = [NSString stringWithFormat:@"<%p>_navigationTitle",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
@@ -198,6 +199,19 @@
     return controller;
 }
 
+
++ (id)controllerWithStylesheetFileName:(NSString*)stylesheetFileName{
+    id c = [[self class]controller];
+    [c setStylesheetFileName:stylesheetFileName];
+    return c;
+}
+
++ (id)controllerWithName:(NSString*)name stylesheetFileName:(NSString*)stylesheetFileName{
+    id c = [[self class]controllerWithName:name];
+    [c setStylesheetFileName:stylesheetFileName];
+    return c;
+}
+
 #pragma mark - Style Management
 
 
@@ -230,7 +244,7 @@
 }
 
 - (void)applyStyleForLeftBarButtonItem{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -258,7 +272,7 @@
 }
 
 - (void)applyStyleForRightBarButtonItem{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -287,7 +301,7 @@
 }
 
 - (void)applyStyleForBackBarButtonItem{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -319,7 +333,7 @@
 
 /*
 - (void)applyStyleForTitleView{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -368,7 +382,7 @@
 
 
 - (void)applyStyleForController{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     //disable animations in case frames are set in stylesheets and currently in animation...
@@ -383,7 +397,7 @@
 }
 
 - (void)applyStyleForNavigation{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -545,6 +559,9 @@
 #pragma mark - View lifecycle
 
 - (void)applyStylesheet:(BOOL)animated{
+    //Force to create the manager here !
+    CKStyleManager* manager = [self styleManager];
+    
     if([[self containerViewController]isKindOfClass:[CKCollectionViewController class]]){
         //skip style for navigation as we are contained by a collection view cell
         

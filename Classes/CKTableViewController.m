@@ -15,6 +15,7 @@
 #import "UIView+Name.h"
 #import "CKVersion.h"
 #import "CKResourceManager.h"
+#import "UIViewController+Style.h"
 
 @interface CKViewController()
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
@@ -242,7 +243,7 @@
 
 
 - (void)viewDidLoad{
-    NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    NSMutableDictionary* controllerStyle = [self.styleManager styleForObject:self  propertyName:nil];
     if([controllerStyle containsObjectForKey:@"style"]){
         self.style = [controllerStyle enumValueForKey:@"style" 
                                    withEnumDescriptor:CKEnumDefinition(@"UITableViewStyle",

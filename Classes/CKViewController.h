@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "CKLocalization.h"
 #import "CKInlineDebuggerController.h"
+#import "CKStyleManager.h"
 
 @class CKViewController;
 @class CKFormTableViewController;
@@ -58,14 +59,26 @@ typedef enum CKViewControllerState{
 ///-----------------------------------
 /// @name Creating initialized View Controller Objects
 ///-----------------------------------
+
 /** 
  This returns an autorelease view controller of the calling class.
  */
 + (id)controller;
+
 /** 
  This returns an autorelease view controller of the calling class by initializing its name property with the specified name.
  */
 + (id)controllerWithName:(NSString*)name;
+
+/**
+ This returns an autorelease view controller of the calling class initializing it style manager using the specified stylesheetFileName.
+ */
++ (id)controllerWithStylesheetFileName:(NSString*)stylesheetFileName;
+
+/**
+ This returns an autorelease view controller of the calling class by initializing its name property with the specified name and its style manager using the specified stylesheetFileName.
+ */
++ (id)controllerWithName:(NSString*)name stylesheetFileName:(NSString*)stylesheetFileName;
 
 ///-----------------------------------
 /// @name Identifying View Controller at runtime

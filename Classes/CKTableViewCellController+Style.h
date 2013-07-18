@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
 #import "CKTableViewController.h"
+#import "UIView+Style.h"
 #import "UIViewController+Style.h"
 
 

@@ -286,7 +286,7 @@
 		7560DD9613B8ED3600268D13 /* UIView+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC4913B8ED3600268D13 /* UIView+Style.m */; };
 		7560DD9713B8ED3600268D13 /* CKViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4A13B8ED3600268D13 /* CKViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD9813B8ED3600268D13 /* CKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC4B13B8ED3600268D13 /* CKViewController.m */; };
-		7560DD9913B8ED3600268D13 /* UIViewController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4C13B8ED3600268D13 /* UIViewController+Style.h */; settings = {ATTRIBUTES = (); }; };
+		7560DD9913B8ED3600268D13 /* UIViewController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4C13B8ED3600268D13 /* UIViewController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD9A13B8ED3600268D13 /* UIViewController+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC4D13B8ED3600268D13 /* UIViewController+Style.m */; };
 		7560DD9D13B8ED3600268D13 /* CKUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5013B8ED3600268D13 /* CKUnit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5113B8ED3600268D13 /* CKUnit.m */; };

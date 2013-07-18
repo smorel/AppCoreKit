@@ -10,6 +10,7 @@
 #import "CKObject.h"
 #import "CKCallback.h"
 #import "CKWeakRef.h"
+#import "CKStyleManager.h"
 
 
 /**
@@ -179,6 +180,10 @@ typedef NSUInteger CKItemViewFlags;
 ///-----------------------------------
 /// @name Managing Stylesheets
 ///-----------------------------------
+
+/** This will return the containerController's StyleManager.
+ */
+- (CKStyleManager*)styleManager;
 
 /** This will apply the style to the sub views
  */

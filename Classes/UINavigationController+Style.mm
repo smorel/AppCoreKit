@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKRuntime.h"
 #import "CKStyleManager.h"
+#import "UIView+Style.h"
 
 NSString* UINavigationControllerWillDisplayToolbar = @"UINavigationControllerWillDisplayToolbar";
 NSString* UINavigationControllerWillHideToolbar = @"UINavigationControllerWillHideToolbar";

@@ -116,7 +116,10 @@ static NSInteger kLogEnabled = -1;
 }
 
 - (void)findAndApplyStyleFromStylesheet:(NSMutableDictionary*)parentStylesheet  propertyName:(NSString*)propertyName{
-    NSMutableDictionary* style = parentStylesheet ? [parentStylesheet styleForObject:self propertyName:propertyName] : [[CKStyleManager defaultManager]styleForObject:self propertyName:propertyName];
+    if(!parentStylesheet)
+        return;
+    
+    NSMutableDictionary* style = [parentStylesheet styleForObject:self propertyName:propertyName];
     if([self isKindOfClass:[UIView class]]){
         [[self class] applyStyle:style toView:(UIView*)self appliedStack:[NSMutableSet set] delegate:nil];
     }else{
