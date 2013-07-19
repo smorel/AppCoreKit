@@ -13,11 +13,8 @@
 #import "NSValueTransformer+Additions.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
-#import "CKResourceFileUpdateManager.h"
 #import "CKConfiguration.h"
 #import "CKResourceManager.h"
-
-//NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
 
 //CKCascadingTreeItemFormat
 
@@ -887,24 +884,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
         
         [bself reloadAfterFileUpdate];
     }];
-    
-    /*
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        path = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:path handleUpdate:^(NSString *localPath) {
-            NSSet *toLoadFiles = _loadedFiles.copy;
-            [_loadedFiles removeAllObjects];
-            [_tree removeAllObjects];
-            for (NSString * path in toLoadFiles) {
-                [self loadContentOfFile:path];
-            }
-            [toLoadFiles release];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
-        }];
-    }
-     */
 	
-    //TODO
     NSString* fileAndExtension = [path lastPathComponent];
     NSRange dotRange = [fileAndExtension rangeOfString:@"."];
     NSString* importFileExtension = (dotRange.location != NSNotFound) ? [fileAndExtension substringFromIndex:dotRange.location+1] : nil;

@@ -43,4 +43,3 @@
 #import "CKLocalization.h"
 
 #import "Document.h"
-#import "CKResourceFileUpdateManager.h"

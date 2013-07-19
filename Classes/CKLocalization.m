@@ -8,7 +8,6 @@
 
 #import "CKLocalization.h"
 #import "CKLocalizationManager_Private.h"
-#import "CKResourceFileUpdateManager.h"
 #import "NSObject+Singleton.h"
 #import "CKCascadingTree.h"
 #import "CKConfiguration.h"
@@ -90,36 +89,6 @@ NSString* CKGetLocalizedString(NSString* localization,NSString* key,NSString* va
         NSArray* stringsURLs = [CKResourceManager pathsForResourcesWithExtension:@"strings" localization:kLastLocalization];
         rebuildLocalizationTablesForLocalization(stringsURLs);
         createTemporaryLocalizationBundle(stringsURLs);//necessary if we already have files in cache from dropbox
-        
-        /*if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-            NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
-            for (NSURL *filePathURL in stringsURLs) {
-                NSString *localPath = [[CKResourceFileUpdateManager sharedInstance] registerFileWithProjectPath:filePathURL.path handleUpdate:^(NSString *localPath) {
-                    NSString *tempPath = NSTemporaryDirectory();
-                    tempPath = [tempPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-                    
-                    [[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:nil];
-                    
-                    for (NSURL *URL in newStringsURL) {
-                        NSString *localizationPath = [tempPath stringByAppendingPathComponent:URL.path.stringByDeletingLastPathComponent.lastPathComponent];
-                        [[NSFileManager defaultManager] createDirectoryAtPath:localizationPath withIntermediateDirectories:YES attributes:nil error:nil];
-                        
-                        NSString *lastPath = [localizationPath stringByAppendingPathComponent:URL.lastPathComponent];
-                        [[NSFileManager defaultManager] copyItemAtPath:localPath toPath:lastPath error:nil];
-                    }
-                    
-                    [[CKLocalizationManager sharedManager] reloadBundleAtPath:tempPath];
-                    
-                    [CKResourceManager reloadUI];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
-                }];
-                
-                [newStringsURL addObject:[NSURL fileURLWithPath:localPath]];
-            }
-            
-            stringsURLs = newStringsURL;
-        }*/
-        
     }
     
     for(NSString* tableName in kLocalizationStringTableNames){
