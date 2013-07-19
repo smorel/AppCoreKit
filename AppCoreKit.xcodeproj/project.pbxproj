@@ -468,6 +468,7 @@
 		963AB797179881110076925C /* CKResourceDependencyContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 963AB795179881110076925C /* CKResourceDependencyContext.m */; };
 		963AB79B17988D840076925C /* CKColorPalette.h in Headers */ = {isa = PBXBuildFile; fileRef = 963AB79917988D840076925C /* CKColorPalette.h */; };
 		963AB79C17988D840076925C /* CKColorPalette.m in Sources */ = {isa = PBXBuildFile; fileRef = 963AB79A17988D840076925C /* CKColorPalette.m */; };
+		963AB7B41799E1280076925C /* README.mdown in Resources */ = {isa = PBXBuildFile; fileRef = 963AB7B31799E1280076925C /* README.mdown */; };
 		96445943154869170054F907 /* CKViewControllerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96445941154869170054F907 /* CKViewControllerCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96445944154869170054F907 /* CKViewControllerCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96445942154869170054F907 /* CKViewControllerCellController.m */; };
 		964AFFCC15DED1C4000C11F9 /* CKLicense.h in Headers */ = {isa = PBXBuildFile; fileRef = 964AFFCA15DED1AB000C11F9 /* CKLicense.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1070,6 +1071,7 @@
 		963AB795179881110076925C /* CKResourceDependencyContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKResourceDependencyContext.m; path = Classes/CKResourceDependencyContext.m; sourceTree = "<group>"; };
 		963AB79917988D840076925C /* CKColorPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKColorPalette.h; path = CloudKit/CKColorPalette.h; sourceTree = "<group>"; };
 		963AB79A17988D840076925C /* CKColorPalette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKColorPalette.m; path = CloudKit/CKColorPalette.m; sourceTree = "<group>"; };
+		963AB7B31799E1280076925C /* README.mdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.mdown; sourceTree = "<group>"; };
 		96445941154869170054F907 /* CKViewControllerCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKViewControllerCellController.h; path = Classes/CKViewControllerCellController.h; sourceTree = "<group>"; };
 		96445942154869170054F907 /* CKViewControllerCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKViewControllerCellController.m; path = Classes/CKViewControllerCellController.m; sourceTree = "<group>"; };
 		964AFFCA15DED1AB000C11F9 /* CKLicense.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CKLicense.h; path = Classes/CKLicense.h; sourceTree = "<group>"; };
@@ -1770,6 +1772,7 @@
 		7550152413B8EA08002DAE8B = {
 			isa = PBXGroup;
 			children = (
+				963AB7B31799E1280076925C /* README.mdown */,
 				7560DDB713B8EDA300268D13 /* Classes */,
 				7506E41413B902ED00EE1471 /* Resources */,
 				7550153713B8EA08002DAE8B /* CloudKit */,
@@ -2743,6 +2746,7 @@
 				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
 				7580AFF0144F59C3004DCF7A /* CKInlineDebugger.style in Resources */,
 				96063592159A60E6007F3F2F /* Sample-template.markdown in Resources */,
+				963AB7B41799E1280076925C /* README.mdown in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
