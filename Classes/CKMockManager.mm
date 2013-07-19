@@ -10,6 +10,7 @@
 #import "CKObject.h"
 #import "CKRuntime.h"
 #import "NSValueTransformer+Additions.h"
+#import "CKResourceManager.h"
 
 static CKMockManager* CKMockManagerDefault = nil;
 
@@ -24,12 +25,12 @@ static CKMockManager* CKMockManagerDefault = nil;
 }
 
 - (void)loadContentOfFileNamed:(NSString*)name{
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"mock"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"mock"];
 	[self loadContentOfFile:path];
 }
 
 - (BOOL)importContentOfFileNamed:(NSString*)name{
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"mock"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"mock"];
 	return [self appendContentOfFile:path];
 }
 

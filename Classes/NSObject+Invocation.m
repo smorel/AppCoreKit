@@ -176,6 +176,7 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 - (id)performSelector:(SEL)selector onThread:(NSThread *)thread withObjects:(NSArray *)args waitUntilDone:(BOOL)wait {
     if ([self respondsToSelector:selector]) {
+        
         NSMethodSignature *signature = [self methodSignatureForSelector:selector];
         if (signature) {
 			NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
@@ -203,6 +204,8 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
             if([signature methodReturnLength] > 0){
                 void* returnValue = nil;
                 [invocation getReturnValue:&returnValue];
+                
+                
                 return (id)returnValue;      
             }
 		}

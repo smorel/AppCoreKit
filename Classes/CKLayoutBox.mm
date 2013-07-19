@@ -61,18 +61,21 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     self.debugView.layer.borderWidth = 1;
 #endif
     
+    /*
 #if TARGET_IPHONE_SIMULATOR
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
 #endif
+    */
     
     return self;
 }
 
 - (void)dealloc{
-    
+    /**
 #if TARGET_IPHONE_SIMULATOR
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
 #endif
+    */
     
     [_layoutBoxes release];
     [_invalidatedLayoutBlock release];

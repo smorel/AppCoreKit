@@ -8,6 +8,9 @@
 
 #import "CKStyleManager.h"
 #import "UIView+Style.h"
+#import "CKResourceManager.h"
+
+NSString* CKStyleManagerDidReloadNotification = @"CKStyleManagerDidReloadNotification";
 
 static CKStyleManager* CKStyleManagerDefault = nil;
 static NSInteger kLogEnabled = -1;
@@ -23,6 +26,42 @@ static NSInteger kLogEnabled = -1;
 	return CKStyleManagerDefault;
 }
 
+
+- (void)registerOnDependencies:(NSSet*)dependencies{
+    __unsafe_unretained CKStyleManager* bself = self;
+    for(NSString* path in dependencies){
+        [CKResourceManager addObserverForPath:path object:bself usingBlock:^(id observer, NSString *path) {
+            [bself reloadAfterFileUpdate];
+        }];
+    }
+}
+
+
+- (void)reloadAfterDelay{
+    static dispatch_queue_t reloadQueue = nil;
+    if(!reloadQueue){
+        reloadQueue = dispatch_queue_create("com.wherecloud.CKStyleManager.reload", 0);
+    }
+    
+    [CKResourceManager setHudTitle:@"Reloading Stylesheets..."];
+    dispatch_async(reloadQueue, ^{
+        
+        [super reloadAfterFileUpdate];
+        [CKResourceManager setHudTitle:nil];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:CKStyleManagerDidReloadNotification object:self];
+    });
+    
+}
+
+- (void)reloadAfterFileUpdate{
+    //If multiple requests for reloading stylesheets occurs in batch like
+    //images and several style files have been updated, we delay the effective reload to avoid
+    //doing it several times
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(reloadAfterDelay) object:nil];
+    [self performSelector:@selector(reloadAfterDelay) withObject:nil afterDelay:.2];
+}
+
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
 	return [self dictionaryForObject:object propertyName:propertyName];
 }
@@ -34,7 +73,7 @@ static NSInteger kLogEnabled = -1;
         [self loadContentOfFileNamed:@"CKInlineDebugger"];//Imports debugger stylesheet first.
     }
     
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"style"];
    // NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	[self loadContentOfFile:path];
 }
@@ -42,7 +81,7 @@ static NSInteger kLogEnabled = -1;
 
 - (BOOL)importContentOfFileNamed:(NSString*)name{
     
-	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
+	NSString* path = [CKResourceManager pathForResource:name ofType:@"style"];
     //NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	return [self appendContentOfFile:path];
 }
@@ -82,7 +121,10 @@ static NSInteger kLogEnabled = -1;
 }
 
 - (void)findAndApplyStyleFromStylesheet:(NSMutableDictionary*)parentStylesheet  propertyName:(NSString*)propertyName{
-    NSMutableDictionary* style = parentStylesheet ? [parentStylesheet styleForObject:self propertyName:propertyName] : [[CKStyleManager defaultManager]styleForObject:self propertyName:propertyName];
+    if(!parentStylesheet)
+        return;
+    
+    NSMutableDictionary* style = [parentStylesheet styleForObject:self propertyName:propertyName];
     if([self isKindOfClass:[UIView class]]){
         [[self class] applyStyle:style toView:(UIView*)self appliedStack:[NSMutableSet set] delegate:nil];
     }else{

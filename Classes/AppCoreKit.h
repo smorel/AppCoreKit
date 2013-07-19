@@ -28,3 +28,5 @@
 
 #import "RegexKitLite.h"
 #import "TouchXML.h"
+
+#import "CKResourceManager.h"

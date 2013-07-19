@@ -8,3 +8,4 @@
 
 #import "CKStyleManager.h"
 #import "CKStyleView.h"
+#import "UIViewController+Style.h"

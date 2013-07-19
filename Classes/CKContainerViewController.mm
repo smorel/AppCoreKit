@@ -139,6 +139,12 @@ typedef void(^CKTransitionBlock)();
 	self.containerView = nil;
 }
 
+
+- (void)resourceManagerReloadUI{
+    [self reapplyStylesheet];
+    //do not update childrens as it's done by the ResourceManager itself
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     

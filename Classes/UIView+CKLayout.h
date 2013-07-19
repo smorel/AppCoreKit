@@ -8,6 +8,7 @@
 
 #import "CKLayoutBoxProtocol.h"
 #import "CKLayoutBox.h"
+#import "CKStyleManager.h"
 
 /**
  */
@@ -22,7 +23,18 @@
   This style requiers a "@class" key to be defined and the class must be a subclass of UIView.
   You can define a layout and any of the view hierarchy property and style in this scope.
   The view that gets returned will get the subview hierarchy style applied to it.
+ 
+  This method will lookup for the id in the default style manager.
  */
 + (id)inflateViewFromStyleWithId:(NSString*)styleId;
+
+/** This method will lookup for a style with the specified id in the global stylesheet scope.
+ This style requiers a "@class" key to be defined and the class must be a subclass of UIView.
+ You can define a layout and any of the view hierarchy property and style in this scope.
+ The view that gets returned will get the subview hierarchy style applied to it.
+ 
+ This method will lookup for the id in the specified style manager.
+ */
++ (id)inflateViewFromStyleWithId:(NSString*)styleId fromStyleManager:(CKStyleManager*)styleManager;
 
 @end

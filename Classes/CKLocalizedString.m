@@ -84,6 +84,7 @@
     }
     
     return _currentValue;
+
 }
 
 - (NSString*)description{

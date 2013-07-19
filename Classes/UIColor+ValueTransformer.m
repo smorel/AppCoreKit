@@ -9,12 +9,24 @@
 #import "UIColor+ValueTransformer.h"
 #import "NSValueTransformer+Additions.h"
 #import "UIColor+Additions.h"
+#import "CKResourceManager.h"
+
+#import "CKResourceDependencyContext.h"
 
 #import "CKDebug.h"
+
+#import "CKColorPalette.h"
+
+
+@interface CKCascadingTree()
+@property (nonatomic,retain) NSMutableSet* loadedFiles;
+@end
 
 @implementation UIColor (CKUIColor_ValueTransformer)
 
 + (UIColor*)convertFromNSString:(NSString*)str{
+    //CKResourceDependencyContext for color palettes
+    
 	NSArray* components = [str componentsSeparatedByString:@" "];
 	if([components count] == 4){
 		return [UIColor colorWithRed:[[components objectAtIndex:0]floatValue] 
@@ -39,30 +51,43 @@
 			return color;
 		}
 		else{
+            UIColor* colorFromPalette = [CKColorPalette colorWithKeyPath:str];
+            if(colorFromPalette){
+                for(NSString* path in [[CKColorPalette sharedInstance]loadedFiles]){
+                    [CKResourceDependencyContext addDependency:path];
+                }
+                return colorFromPalette;
+            }
+            
 			SEL colorSelector = NSSelectorFromString(str);
 			if(colorSelector && [[UIColor class] respondsToSelector:colorSelector]){
 				UIColor* color = [[UIColor class] performSelector:colorSelector];
 				return color;
 			}
 			else{
-                UIImage* image = [UIImage imageNamed:str];
+                UIImage* image = [CKResourceManager imageNamed:str];
                 if(image){
                     UIColor* color = [UIColor colorWithPatternImage:image];
                     return color;
                 }
                 else{
-                    CKAssert(NO,@"invalid format for color with text : %@",str);
+                    NSLog(@"Couldn't a valid format for converting color '%@'",str);
+                    //CKAssert(NO,@"invalid format for color with text : %@",str);
                 }
 			}
 		}
 	}
 	
-	return nil;
+	return [UIColor clearColor];
 }
 
 + (UIColor*)convertFromNSNumber:(NSNumber*)n{
 	UIColor* result = [UIColor colorWithRGBValue:[n intValue]];
 	return result;
+}
+
++ (UIColor*)convertFromNSValue:(NSValue*)v{
+    return [UIColor clearColor];
 }
 
 + (NSString*)convertToNSString:(UIColor*)color{

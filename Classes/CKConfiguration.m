@@ -31,14 +31,12 @@
     
     [self updateConfig];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConfig) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-    
     return self;
 }
 
-- (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-	[super dealloc];
+- (void)reloadAfterFileUpdate{
+    [super reloadAfterFileUpdate];
+    [self updateConfig];
 }
 
 + (BOOL)isSimulator{

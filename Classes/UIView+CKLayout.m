@@ -228,7 +228,11 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 
 
 + (id)inflateViewFromStyleWithId:(NSString*)styleId{
-    NSMutableDictionary* viewLayoutTemplate = [[CKStyleManager defaultManager]dictionaryForKey:styleId];
+    return [self inflateViewFromStyleWithId:styleId fromStyleManager:[CKStyleManager defaultManager]];
+}
+
++ (id)inflateViewFromStyleWithId:(NSString*)styleId fromStyleManager:(CKStyleManager*)styleManager{
+    NSMutableDictionary* viewLayoutTemplate = [styleManager dictionaryForKey:styleId];
     
     Class c = [UIView class];
     if([viewLayoutTemplate containsObjectForKey:@"@class"]){
@@ -239,8 +243,6 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     }
     
     UIView* view = [[c alloc]init];
-   // [NSValueTransformer transform:viewLayoutTemplate toObject:view];
-    
 	[c applyStyle:viewLayoutTemplate toView:view appliedStack:[NSMutableSet set] delegate:nil];
     
     return view;

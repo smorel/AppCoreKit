@@ -24,6 +24,8 @@
 #import "UINavigationController+Style.h"
 #import "Layout.h"
 #import "UIView+Positioning.h"
+#import "CKResourceManager.h"
+#import "CKResourceDependencyContext.h"
 
 
 @interface CKViewController()
@@ -101,12 +103,13 @@
 
 - (void)postInit {	
     self.styleHasBeenApplied = NO;
+    
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.navigationTitleBindingContext = [NSString stringWithFormat:@"<%p>_navigationTitle",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
     self.state = CKViewControllerStateNone;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsDisplayed:) name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsHidden:) name:UINavigationControllerWillHideToolbar object:nil];
 }
@@ -168,7 +171,7 @@
     [_inlineDebuggerController release];
 	_inlineDebuggerController = nil;
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillHideToolbar object:nil];
     
@@ -179,16 +182,15 @@
     return [self controllerStyle];
 }
 
-- (void)updateStylesheets {
-    if ([self isViewLoaded]) {
-        self.styleHasBeenApplied = NO;
-        
-        if ([self respondsToSelector:@selector(reload)]){
-            [self performSelector:@selector(reload)];
-        }
-        
-        [self applyStyleForNavigation];
+- (void)styleManagerDidUpdate:(NSNotification*)notification{
+    if(notification.object == [self styleManager]){
+        [self resourceManagerReloadUI];
     }
+}
+
+- (void)resourceManagerReloadUI{
+    self.styleHasBeenApplied = NO;
+    [super resourceManagerReloadUI];
 }
 
 + (id)controller{
@@ -199,6 +201,19 @@
 	CKViewController* controller = [[[[self class]alloc]init]autorelease];
     controller.name = name;
     return controller;
+}
+
+
++ (id)controllerWithStylesheetFileName:(NSString*)stylesheetFileName{
+    id c = [[self class]controller];
+    [c setStylesheetFileName:stylesheetFileName];
+    return c;
+}
+
++ (id)controllerWithName:(NSString*)name stylesheetFileName:(NSString*)stylesheetFileName{
+    id c = [[self class]controllerWithName:name];
+    [c setStylesheetFileName:stylesheetFileName];
+    return c;
 }
 
 #pragma mark - Style Management
@@ -233,7 +248,7 @@
 }
 
 - (void)applyStyleForLeftBarButtonItem{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -261,7 +276,7 @@
 }
 
 - (void)applyStyleForRightBarButtonItem{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -290,7 +305,7 @@
 }
 
 - (void)applyStyleForBackBarButtonItem{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -322,7 +337,7 @@
 
 /*
 - (void)applyStyleForTitleView{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -371,7 +386,7 @@
 
 
 - (void)applyStyleForController{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     //disable animations in case frames are set in stylesheets and currently in animation...
@@ -386,7 +401,7 @@
 }
 
 - (void)applyStyleForNavigation{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([self.styleManager isEmpty])
         return;
     
     [self observerNavigationChanges:NO];
@@ -547,19 +562,21 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewWillAppear:(BOOL)animated{
-    self.state = CKViewControllerStateWillAppear;
-    if(_viewWillAppearBlock){
-        _viewWillAppearBlock(self,animated);
+- (void)applyStylesheet:(BOOL)animated{
+    //Force to create the manager here !
+    [self styleManager];
+    
+    if([CKResourceManager isResourceManagerConnected]){
+        [CKResourceDependencyContext beginContext];
     }
     
     if([[self containerViewController]isKindOfClass:[CKCollectionViewController class]]){
         //skip style for navigation as we are contained by a collection view cell
-               
+        
         NSMutableDictionary* controllerStyle = nil;
-        if(!self.styleHasBeenApplied){ 
+        if(!self.styleHasBeenApplied){
             [CATransaction begin];
-            [CATransaction 
+            [CATransaction
              setValue: [NSNumber numberWithBool: YES]
              forKey: kCATransactionDisableActions];
             
@@ -593,6 +610,25 @@
         
         [self observerNavigationChanges:YES];
     }
+    
+    if([CKResourceManager isResourceManagerConnected]){
+        NSSet* dependenciesFilePaths = [CKResourceDependencyContext endContext];
+        [self.styleManager registerOnDependencies:dependenciesFilePaths];
+    }
+}
+
+- (void)reapplyStylesheet{
+    self.styleHasBeenApplied = NO;
+    [self applyStylesheet:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    self.state = CKViewControllerStateWillAppear;
+    if(_viewWillAppearBlock){
+        _viewWillAppearBlock(self,animated);
+    }
+    
+    [self applyStylesheet:animated];
     
     [super viewWillAppear:animated];
     

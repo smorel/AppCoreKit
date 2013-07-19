@@ -16,6 +16,7 @@
 #import <objc/runtime.h>
 #import "CKDebug.h"
 #import "UIView+Positioning.h"
+#import "UIView+Style.h"
 
 //CKTabViewItem
 @interface CKTabViewItem()
@@ -369,7 +370,7 @@
     
     [self setStyle:self.style];//Apply layout ...
     
-    NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    NSMutableDictionary* controllerStyle = [self.styleManager styleForObject:self  propertyName:nil];
 	NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
     for(CKTabViewItem* item in self.tabBar.items){
         NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
@@ -394,8 +395,8 @@
 	if (self.viewControllers) {
 		NSMutableArray *items = [NSMutableArray arrayWithCapacity:[self.viewControllers count]];
         
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-        NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
+      //  NSMutableDictionary* controllerStyle = [self.styleManager styleForObject:self  propertyName:nil];
+      //  NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
         
         int i =0;
 		for (UIViewController *vc in self.viewControllers) {

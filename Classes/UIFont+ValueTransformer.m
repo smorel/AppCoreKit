@@ -9,6 +9,8 @@
 #import "UIFont+ValueTransformer.h"
 #import "CKDebug.h"
 
+#import "CKResourceDependencyContext.h"
+
 @implementation UIFont (CKValueTransformer)
 
 + (UIFont*)convertFromNSString:(NSString*)str{
@@ -20,6 +22,10 @@
     CKAssert([ar count] == 2,@"Invalid font format");
     NSString* fontName = [ar objectAtIndex:0];
     CGFloat sizeValue = [[ar objectAtIndex:1]floatValue];
+    
+    //TODO : CKResourceDependencyContext
+    //if font name is a ttf file we added, register dependency and manage reload of fonts when font file changes.
+    
     return [UIFont fontWithName:fontName size:sizeValue];
 }
 

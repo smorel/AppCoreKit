@@ -17,7 +17,7 @@ extern NSString* const CKCascadingTreeImport;
 extern NSString* const CKCascadingTreeIPad;
 extern NSString* const CKCascadingTreeIPhone;
 
-extern NSString * const CKCascadingTreeFilesDidUpdateNotification;
+//extern NSString * const CKCascadingTreeFilesDidUpdateNotification;
 
 /**
  */
@@ -50,6 +50,8 @@ extern NSString * const CKCascadingTreeFilesDidUpdateNotification;
 /**
  */
 - (BOOL)appendContentOfFile:(NSString*)path;
+
+- (void)reloadAfterFileUpdate;
 
 ///-----------------------------------
 /// @name Accessing Cascading tree content

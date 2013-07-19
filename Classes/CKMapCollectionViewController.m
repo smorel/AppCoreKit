@@ -18,6 +18,8 @@
 #import "CKCollectionController.h"
 #import "CKArrayCollection.h"
 
+#import "CKResourceManager.h"
+
 CGFloat distance(MKMapPoint p1, MKMapPoint p2){
     return sqrt(pow(p1.x-p2.x,2)+pow(p1.y-p2.y,2));
 }
@@ -249,6 +251,12 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[super viewDidUnload];
 	self.mapView = nil;
 }
+
+- (void)resourceManagerReloadUI{
+    self.mapViewHasBeenReloaded = NO;
+    [super resourceManagerReloadUI];
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];

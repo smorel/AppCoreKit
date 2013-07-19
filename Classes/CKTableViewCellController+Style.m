@@ -123,7 +123,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (NSMutableDictionary*)controllerStyle{
-    if([[CKStyleManager defaultManager]isEmpty])
+    if([[self styleManager] isEmpty])
         return nil;
     
     if(!self.containerController){
