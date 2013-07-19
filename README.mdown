@@ -33,7 +33,7 @@ You must uncomment this preprocessor macro while working in XCode5 to profit of 
 
 ## Additional dependencies
 
-**VendrosKit**
+**VendorsKit**
 
 AppCoreKit requires another framework to work properly. This is VendorsKit which groups all the third parties we need to share between frameworks and apps.
 You can find a pre-compiled version of vendors kit in our sample repository at https://github.com/wherecloud/appcorekit-samples
