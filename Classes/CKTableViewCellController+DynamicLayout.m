@@ -85,12 +85,16 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     if(self.cellStyle == CKTableViewCellStyleCustomLayout){
         if(self.tableViewCell){
             CKTableCollectionViewController* parentController = (CKTableCollectionViewController*)self.parentTableViewController;
-            if(parentController.orientation == CKTableViewOrientationPortrait){
+            if(parentController && parentController.orientation == CKTableViewOrientationPortrait){
                 CGFloat height = [(CKUITableViewCell*)self.tableViewCell preferedHeightConstraintToWidth:self.tableViewCell.contentView.width];
                 return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
-            }else{
+            }else if(parentController){
                 CGFloat width = [(CKUITableViewCell*)self.tableViewCell preferedWidthConstraintToHeight:self.tableViewCell.contentView.height];
                 return CGSizeMake((width >= MAXFLOAT) ? 0 : width, [self tableViewCellWidth]);
+            }else{
+                //not a table (carousel ?)
+                CGFloat width = [(CKUITableViewCell*)self.tableViewCell preferedWidthConstraintToHeight:self.containerController.view.height];
+                return CGSizeMake((width >= MAXFLOAT) ? 0 : width, self.containerController.view.height);
             }
         }else{
             CKUITableViewCell* view = (CKUITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
@@ -113,18 +117,22 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             self.view = original;
             
             CKTableCollectionViewController* parentController = (CKTableCollectionViewController*)self.parentTableViewController;
-            if(parentController.orientation == CKTableViewOrientationPortrait){
+            if(parentController && parentController.orientation == CKTableViewOrientationPortrait){
                 view.contentView.height = 100;
                 view.contentView.width = [self contentViewWidth];
                 
                 CGFloat height = [view preferedHeightConstraintToWidth:view.contentView.width];
                 return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
-            }else{
+            }else if(parentController){
                 view.contentView.height = [self contentViewWidth];
                 view.contentView.width = 100;
                 
                 CGFloat width = [view preferedWidthConstraintToHeight:view.contentView.height];
                 return CGSizeMake((width >= MAXFLOAT) ? 0 : width, [self tableViewCellWidth]);
+            }else{
+                //not a table (carousel ?)
+                CGFloat width = [view preferedWidthConstraintToHeight:self.containerController.view.height];
+                return CGSizeMake((width >= MAXFLOAT) ? 0 : width, self.containerController.view.height);
             }
         }
     }

@@ -98,7 +98,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         case CKDatePickerModeDateAndTime:  
         case CKDatePickerModeCountDownTime :{
             self.datePicker = [[[UIDatePicker alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
-            _datePicker.datePickerMode = UIDatePickerModeDate;
+            _datePicker.datePickerMode = self.datePickerMode;
             _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
             
             CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
@@ -444,9 +444,9 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     CKProperty* model = self.objectProperty;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	
-	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name];
-	NSString* propertyNavBarTitleLocalized = _(propertyNavBarTitle);
-	if ([propertyNavBarTitleLocalized isEqualToString:[NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name]]) {
+	NSString* propertyNavBarTitle = self.enableNavigationToolbar ? [NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name] : nil;
+	NSString* propertyNavBarTitleLocalized = propertyNavBarTitle ? _(propertyNavBarTitle) : nil;
+	if (propertyNavBarTitleLocalized && [propertyNavBarTitleLocalized isEqualToString:[NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name]]) {
 		propertyNavBarTitleLocalized = _(descriptor.name);
 	}
     

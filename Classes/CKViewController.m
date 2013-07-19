@@ -22,7 +22,7 @@
 #import "CKContainerViewController.h"
 #import "CKConfiguration.h"
 #import "UINavigationController+Style.h"
-#import "CKLayoutBox.h"
+#import "Layout.h"
 #import "UIView+Positioning.h"
 
 

@@ -30,6 +30,7 @@
 
 
 @interface CKTableViewController ()
+@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 
@@ -98,9 +99,9 @@
     
     //OBSERVE collection & keeps factory to create/remove controllers in _subControllers
     self.objectsAsGrid = [CKArrayCollection collection];
-    [self updateGridArray];
     
     [super setupWithCollection:self.objectsAsGrid factory:factory];
+    [self updateGridArray];
 }
 
 - (void)rebuildGridArray{

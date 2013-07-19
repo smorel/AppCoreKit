@@ -98,7 +98,8 @@
     NSString* text = self.text;
     CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-        || self.cellStyle == CKTableViewCellStyleIPadForm){
+       || self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         text = _(descriptor.name);
     }
     

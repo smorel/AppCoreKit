@@ -193,6 +193,10 @@ typedef enum CKOptionPropertyCellControllerPresentationStyle{
  */
 @property (nonatomic, copy) CKOptionPropertyCellControllerSortingBlock sortingBlock;
 
+/**
+ */
+@property (nonatomic, copy) CKTableViewCellController*(^optionCellControllerCreationBlock)(NSString* label, id value);
+
 @end
 
 

@@ -727,26 +727,40 @@ static char NSObjectDebugAppliedStyleObjectKey;
 		if([reserverKeyWords containsObject:key] == NO){
 			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
             if(descriptor){
-                BOOL isUIView = (descriptor != nil && [NSObject isClass:descriptor.type kindOfClass:[UIView class]] == YES);
-                if(!isUIView){
+                //When creating subviews by introspection, ensure style is applied on these views.
+                if([descriptor.name isEqualToString: @"subviews"] && [object isKindOfClass:[UIView class]]){
                     //FIXME : We could propbably optimize here by not creating the CKProperty as it registers weakrefs and other stuff ...
                     [style setObjectForKey:key inProperty:[CKProperty propertyWithObject:object keyPath:key]];
-                }
-                else if(isUIView){
-                    if(   ([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"])
-                       || ([object isKindOfClass:[UITableView class]] && [descriptor.name isEqualToString:@"backgroundView"])){
-                        //DO NOTHING !
+                    
+                    UIView* view = (UIView*)object;
+                    for(UIView* subView in view.subviews){
+                        
+                        NSMutableDictionary* myViewStyle = [style styleForObject:subView propertyName:nil];
+                        [[subView class] applyStyle:myViewStyle toView:subView appliedStack:appliedStack delegate:delegate];
                     }
-                    else{
-                        id theView = [object valueForKeyPath:key];
-                        if(!theView){
-                            id subViewStyle = [style objectForKey:key];
-                            NSString* className = [subViewStyle objectForKey:@"@class"];
-                            Class theClass = NSClassFromString(className);
-                            if(theClass && [NSObject isClass:theClass kindOfClass:[UIView class]] == YES){
-                                UIView* createdView = [[[theClass alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
-                                [[createdView class] applyStyle:subViewStyle toView:createdView appliedStack:appliedStack delegate:delegate];
-                                [object setValue:createdView forKeyPath:key];
+                }
+                else{
+                    BOOL isUIView = (descriptor != nil && [NSObject isClass:descriptor.type kindOfClass:[UIView class]] == YES);
+                    if(!isUIView){
+                        //FIXME : We could propbably optimize here by not creating the CKProperty as it registers weakrefs and other stuff ...
+                        [style setObjectForKey:key inProperty:[CKProperty propertyWithObject:object keyPath:key]];
+                    }
+                    else if(isUIView){
+                        if(   ([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"])
+                           || ([object isKindOfClass:[UITableView class]] && [descriptor.name isEqualToString:@"backgroundView"])){
+                            //DO NOTHING !
+                        }
+                        else{
+                            id theView = [object valueForKeyPath:key];
+                            if(!theView){
+                                id subViewStyle = [style objectForKey:key];
+                                NSString* className = [subViewStyle objectForKey:@"@class"];
+                                Class theClass = NSClassFromString(className);
+                                if(theClass && [NSObject isClass:theClass kindOfClass:[UIView class]] == YES){
+                                    UIView* createdView = [[[theClass alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
+                                    [[createdView class] applyStyle:subViewStyle toView:createdView appliedStack:appliedStack delegate:delegate];
+                                    [object setValue:createdView forKeyPath:key];
+                                }
                             }
                         }
                     }

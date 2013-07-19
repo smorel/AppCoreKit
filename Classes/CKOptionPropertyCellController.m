@@ -34,6 +34,7 @@
 @synthesize optionsViewController = _optionsViewController;
 @synthesize internalBindingContext = _internalBindingContext;
 @synthesize presentationStyle = _presentationStyle;
+@synthesize optionCellControllerCreationBlock = _optionCellControllerCreationBlock;
 
 
 - (void)postInit{
@@ -53,6 +54,7 @@
     self.labels = nil;
     [_optionsViewController release];
     [_internalBindingContext release];
+    [_optionCellControllerCreationBlock release];
     [super dealloc];
 }
 
@@ -195,6 +197,10 @@
         bself.detailText = [bself labelForValue:[bself currentValue]];
     }];
     [NSObject endBindingsContext];
+    
+    
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    self.optionCellControllerCreationBlock = attributes.optionCellControllerCreationBlock;
 }
 
 - (void)setupCell:(UITableViewCell *)cell{
@@ -250,7 +256,9 @@
 		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self  currentValue] style:[tableController style]] autorelease];
 	}
     self.optionsViewController.optionCellStyle = self.optionCellStyle;
+    self.optionsViewController.optionCellControllerCreationBlock = self.optionCellControllerCreationBlock;
 	self.optionsViewController.title = propertyNavBarTitleLocalized;
+    self.optionsViewController.name = property.keyPath;
     
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
     

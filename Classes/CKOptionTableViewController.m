@@ -39,6 +39,7 @@
 @synthesize multiSelectionEnabled = _multiSelectionEnabled;
 @synthesize optionCellStyle;
 @synthesize selectionBlock = _selectionBlock;
+@synthesize optionCellControllerCreationBlock = _optionCellControllerCreationBlock;
 
 
 
@@ -52,8 +53,6 @@
 		self.multiSelectionEnabled = NO;
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
-        
-        [self setup];
 	}
 	return self;	
 }
@@ -68,8 +67,6 @@
 		self.multiSelectionEnabled = multiSelect;
 		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
         self.optionCellStyle = CKTableViewCellStyleValue1;
-        
-        [self setup];
 	}
 	return self;	
 }
@@ -85,8 +82,6 @@
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
         self.style = thestyle;
-        
-        [self setup];
 	}
 	return self;	
 }
@@ -102,8 +97,6 @@
 		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
         self.optionCellStyle = CKTableViewCellStyleValue1;
         self.style = thestyle;
-        
-        [self setup];
 	}
 	return self;	
 }
@@ -114,9 +107,14 @@
 	[_labels release];
 	[_selectedIndexes release];
     [_selectionBlock release];
+    [_optionCellControllerCreationBlock release];
     [super dealloc];
 }
 
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    [self setup];
+}
 
 //
 
@@ -159,27 +157,6 @@
 		
         __block CKOptionTableViewController* bself = self;
         
-        CKTableViewCellController* cellController = [CKTableViewCellController cellController];
-        cellController.value = ([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0];
-        cellController.cellStyle = self.optionCellStyle;
-        cellController.name = @"OptionCell";
-        
-        /*
-        if(cellController.cellStyle == CKTableViewCellStyleIPadForm
-           || cellController.cellStyle == CKTableViewCellStyleIPhoneForm){
-            cellController.textAlignment = UITextAlignmentLeft;
-        }
-         */
-        
-        cellController.componentsRatio = 0;
-        
-        if([self.selectedIndexes containsObject:index]){
-            cellController.accessoryType = UITableViewCellAccessoryCheckmark;
-        }
-        else{
-            cellController.accessoryType = UITableViewCellAccessoryNone;
-        }
-        
         NSString* text = @"UNKNOWN";
         NSUInteger rowIndex = i;
         if(_labels){
@@ -193,7 +170,32 @@
             }
         }
         
-        cellController.text = _(text);
+        CKTableViewCellController* cellController = nil;
+        if(self.optionCellControllerCreationBlock){
+            cellController = self.optionCellControllerCreationBlock(text,[self.values objectAtIndex:i]);
+            cellController.flags |= CKTableViewCellFlagSelectable;
+            if(cellController.selectionStyle == UITableViewCellSelectionStyleNone){
+                cellController.selectionStyle = UITableViewCellSelectionStyleBlue;
+            }
+        }else{
+            cellController = [CKTableViewCellController cellController];
+            cellController.cellStyle = self.optionCellStyle;
+            cellController.componentsRatio = 0;
+            cellController.text = _(text);
+        }
+        
+        if(cellController.name == nil){
+            cellController.name = @"OptionCell";
+        }
+        
+        cellController.value = ([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0];
+        
+        if([self.selectedIndexes containsObject:index]){
+            cellController.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        else{
+            cellController.accessoryType = UITableViewCellAccessoryNone;
+        }
 
         [cellController setSelectionBlock:^(CKTableViewCellController *controller) {
             [bself selectCell:controller];
@@ -201,6 +203,8 @@
         
 		[cellControllers addObject:cellController];
 	}
+    
+    
     CKFormSection* section = [CKFormSection sectionWithCellControllers:cellControllers];
 	[self addSections:[NSArray arrayWithObject:section]];
 }

@@ -103,6 +103,22 @@ typedef enum {
  */
 @property (nonatomic, assign) CGFloat separatorWidth;
 
+/** see. CGContextSetLineDash
+ */
+@property (nonatomic, retain) NSArray* separatorDashLengths;
+
+/** see. CGContextSetLineDash
+ */
+@property (nonatomic, assign) CGFloat separatorDashPhase;
+
+/** see. CGContextSetLineCap
+ */
+@property (nonatomic, assign) CGLineCap separatorLineCap;
+
+/** see. CGContextSetLineJoin
+ */
+@property (nonatomic, assign) CGLineCap separatorLineJoin;
+
 /**
  */
 @property (nonatomic, assign) CGFloat separatorInsets;

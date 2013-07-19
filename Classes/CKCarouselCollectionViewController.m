@@ -11,6 +11,10 @@
 #import "NSObject+Bindings.h"
 #import "CKCollectionController.h"
 
+#import "CKTableViewCellController.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_Private.h"
+
 
 
 @interface CKCollectionViewController()
@@ -166,6 +170,25 @@
 	UIView* view = [self createViewAtIndexPath:indexPath];
 	[self fetchMoreIfNeededFromIndexPath:indexPath];
 	return view;
+}
+
+- (CGSize)sizeForViewAtIndexPath:(NSIndexPath*)indexPath{
+    CKCollectionCellController* cellController = [self controllerAtIndexPath:indexPath];
+    if([cellController isKindOfClass:[CKTableViewCellController class]]){
+        CKTableViewCellController* controller = (CKTableViewCellController*)[self controllerAtIndexPath:indexPath];
+        controller.sizeHasBeenQueriedByTableView = YES;
+        if(controller.invalidatedSize){
+            CGSize size;
+            if(controller.sizeBlock){
+                size = controller.sizeBlock(controller);
+            }else{
+                size = [controller computeSize];
+            }
+            [controller setSize:size notifyingContainerForUpdate:NO];
+        }
+        return controller.size;
+    }
+    return [super sizeForViewAtIndexPath:indexPath];
 }
 
 #pragma mark CKCarouselViewDelegate

@@ -426,8 +426,8 @@
     if(indexPath == nil)
         return NO;
     
-	id object = [self objectAtIndexPath:indexPath];
-	return object != nil;
+    CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
+	return controller != nil;
 }
 
 - (NSArray*)objectsForSection:(NSInteger)section{

@@ -170,6 +170,11 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 @implementation CKTableViewCellController (CKStyle)
 
 - (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
+    if(![self.containerController isKindOfClass:[CKTableViewController class]]){
+        return CKStyleViewCornerTypeNone;
+    }
+    
+    
     CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
     if([style containsObjectForKey:CKStyleCornerStyle]){
         cornerStyle = [style cornerStyle];
@@ -215,6 +220,10 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
+    if(![self.containerController isKindOfClass:[CKTableViewController class]]){
+        return CKViewBorderStyleNone;
+    }
+    
     CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
     if([style containsObjectForKey:CKStyleBorderStyle]){
         borderStyle = [style borderStyle];
@@ -259,6 +268,10 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style{
+    if(![self.containerController isKindOfClass:[CKTableViewController class]]){
+        return CKStyleViewSeparatorLocationNone;
+    }
+    
 	CKStyleViewSeparatorLocation separatorType = CKStyleViewSeparatorLocationNone;
     
     CKViewSeparatorStyle separatorStyle = CKViewSeparatorStyleTableViewCell;

@@ -208,6 +208,7 @@
 @dynamic multiSelectionEnabled;
 @dynamic sortingBlock;
 @dynamic presentationStyle;
+@dynamic optionCellControllerCreationBlock;
 
 - (void)setMultiSelectionEnabled:(BOOL)multiSelectionEnabled{
     [self.attributes setObject:[NSNumber numberWithBool:multiSelectionEnabled] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
@@ -235,6 +236,14 @@
 
 - (CKOptionPropertyCellControllerSortingBlock)sortingBlock{
     return [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_sortingBlock"];
+}
+
+- (void)setOptionCellControllerCreationBlock:(CKTableViewCellController *(^)(NSString *, id))optionCellControllerCreationBlock{
+    [self.attributes setObject:[[optionCellControllerCreationBlock copy] autorelease] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_optionCellControllerCreationBlock"];
+}
+
+- (CKTableViewCellController *(^)(NSString *, id))optionCellControllerCreationBlock{
+    return [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_optionCellControllerCreationBlock"];
 }
 
 @end
