@@ -42,8 +42,9 @@ Or you can get the sources of this framework at : https://github.com/wherecloud/
 
 **ResourceManager**
 
-Since the begining the the version 2.2.0 (Master), AppCoreKit integrates a new Resource management framework as a weak dependency. This framework called "ResourceManager" allow to update your application live when you modify your application resource from 1 or several repositories. You can provide your XCode project folder when working in the simulator or a dropbox folder when working on your device to see your application reload when you modify or add images, strings files, sounds, stylesheets, layouts, color palettes, mappings, ...
-If this framework is not linked with your app, the AppCoreKit will use the resources from your application bundle. If the framework is linked, you can specify one or several repository you want to sync with, by following the documentation of the framework at:
+Since the begining the the version 2.2.0 (Master), AppCoreKit integrates a new Resource management framework as a weak dependency. This framework called **ResourceManager** allows live update of your application when you modify your application's resources from 1 or several repositories. You can provide your XCode project folder when working in the simulator or a dropbox folder when working on your device to see your application reload when you modify or add images, strings files, sounds, stylesheets, layouts, color palettes, mappings, ...
+
+If this framework is not linked with your app, the AppCoreKit will use the resources from your application's main bundle. If the framework is linked, you can specify one or several repository you want to sync with by following the documentation of the framework at:
 
 https://github.com/wherecloud/ResourceManager
 
