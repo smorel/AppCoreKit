@@ -36,7 +36,8 @@ void rebuildLocalizationTablesForLocalization(NSArray* stringsPaths){
         if(range.location != NSNotFound){
             NSString* file = [fileName substringToIndex:range.location];
             //priority to application table
-            if([file isEqualToString:@"Localizable"]){
+            if([file isEqualToString:@"Localizable"]
+               || [file isEqualToString:@"Localization"]){
                 [files insertObject:file atIndex:0];
             }
             [files addObject:file];
@@ -55,8 +56,16 @@ void createTemporaryLocalizationBundle(NSArray* stringsPaths){
     for (NSString *path in stringsPaths) {
         NSURL* URL = [NSURL fileURLWithPath:path];
         
-        NSString *localizationPath = [tempPath stringByAppendingPathComponent:URL.path.stringByDeletingLastPathComponent.lastPathComponent];
-        [[NSFileManager defaultManager] createDirectoryAtPath:localizationPath withIntermediateDirectories:YES attributes:nil error:nil];
+        NSString* languagePath = URL.path.stringByDeletingLastPathComponent.lastPathComponent;
+        NSRange lprojRange = [languagePath rangeOfString:@"lproj"];
+        
+        NSString *localizationPath = nil;
+        if(lprojRange.location != NSNotFound){
+            localizationPath = [tempPath stringByAppendingPathComponent:languagePath];
+            [[NSFileManager defaultManager] createDirectoryAtPath:localizationPath withIntermediateDirectories:YES attributes:nil error:nil];
+        }else{
+            localizationPath = tempPath;
+        }
         
         NSString *lastPath = [localizationPath stringByAppendingPathComponent:URL.lastPathComponent];
         [[NSFileManager defaultManager] copyItemAtPath:path toPath:lastPath error:nil];
