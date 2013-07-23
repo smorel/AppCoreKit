@@ -265,14 +265,14 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 	[self setFormat:format];
 }
 
-- (NSMutableDictionary*)findDictionaryInHierarchy:(NSString*)key{
+- (id)findObjectInHierarchy:(NSString*)keyPath{
 	NSMutableDictionary* dico = self;
 	while(dico != nil){
-		NSMutableDictionary* foundDico = [dico objectForKey:key];
-		if(foundDico && foundDico != self){
-			return foundDico;
+		id foundObject = [dico valueForKeyPath:keyPath];
+		if(foundObject && foundObject != self){
+			return foundObject;
 		}
-		dico = [dico parentDictionary];
+        dico = [dico parentDictionary];
 	}
 	return nil;
 }
@@ -375,7 +375,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
                 }
                 [dependencies insertObject:dependency atIndex:0];
                 
-                NSMutableDictionary* dependencyDictionary = [(NSMutableDictionary*)dico findDictionaryInHierarchy:dependency];
+                NSMutableDictionary* dependencyDictionary = [(NSMutableDictionary*)dico findObjectInHierarchy:dependency];
                 [NSMutableDictionary getRecursiveInheritanceDependenciesFromDictionary:dependencyDictionary dependencies:dependencies forObjectWithKey:dependency];
             }
             [NSMutableDictionary getRecursiveInheritanceDependenciesFromDictionary:sourceObject dependencies:dependencies forObjectWithKey:key];
@@ -394,7 +394,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
                         [dependencies insertObject:dependency atIndex:0];
                         
                         
-                        NSMutableDictionary* dependencyDictionary = [(NSMutableDictionary*)dico findDictionaryInHierarchy:dependency];
+                        NSMutableDictionary* dependencyDictionary = [(NSMutableDictionary*)dico findObjectInHierarchy:dependency];
                         [NSMutableDictionary getRecursiveInheritanceDependenciesFromDictionary:dependencyDictionary dependencies:dependencies forObjectWithKey:dependency];
                         
                     }
@@ -442,7 +442,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
 			NSString* normalizedKey = [CKCascadingTreeItemFormat normalizeFormat:key];
-			NSMutableDictionary* inheritedDico = [self findDictionaryInHierarchy:normalizedKey];
+			NSMutableDictionary* inheritedDico = [self findObjectInHierarchy:normalizedKey];
             
             NSMutableDictionary* deepCopy = inheritedDico ? [self deepCleanCopy:inheritedDico] : nil;
             [deepCopy setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
@@ -526,6 +526,23 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 	}
 }
 
+- (void)makeAllInjectionsForObjectWithKey:(NSString*)objectKey{
+    for(NSString* key in [self allKeys]){
+        id object = [self objectForKey:key];
+        if([object isKindOfClass:[NSString class]]){
+            NSString* injectionPath = (NSString*)object;
+            
+            id result = [self findObjectInHierarchy:injectionPath];
+            if(result){
+                if([result isKindOfClass:[NSDictionary class]]){
+                    result = [self deepCleanCopy:result];
+                }
+                [self setObject:result forKey:key];
+            }
+        }
+    }
+}
+
 - (NSArray*)parseFormatGroups:(NSString*)formats{
 	NSArray* components = [formats componentsSeparatedByString:@","];
 	NSMutableArray* results = [NSMutableArray arrayWithCapacity:components.count];
@@ -595,6 +612,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 		}
     }];
     
+    [self makeAllInjectionsForObjectWithKey:objectKey];
     [self makeAllInheritsForObjectWithKey:objectKey];
     
     NSArray* sortedKeys = [self sortedKeysTakingCareOfInheritanceDependenciesForObjectWithKey:objectKey];
