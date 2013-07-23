@@ -528,6 +528,19 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 
 - (void)makeAllInjectionsForObjectWithKey:(NSString*)objectKey{
     for(NSString* key in [self allKeys]){
+        if([key isEqualToString:@"@class"]
+           || [key isEqualToString:CKCascadingTreePrefix]
+           || [key isEqualToString:CKCascadingTreeFormats]
+           || [key isEqualToString:CKCascadingTreeParent]
+           || [key isEqualToString:CKCascadingTreeEmpty]
+           || [key isEqualToString:CKCascadingTreeNode]
+           || [key isEqualToString:CKCascadingTreeInherits]
+           || [key isEqualToString:CKCascadingTreeImport]
+           || [key isEqualToString:CKCascadingTreeIPad]
+           || [key isEqualToString:CKCascadingTreeIPhone]){
+            continue;
+        }
+        
         id object = [self objectForKey:key];
         if([object isKindOfClass:[NSString class]]){
             NSString* injectionPath = (NSString*)object;
@@ -625,6 +638,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
             for(id subObject in object){
                 if([subObject isKindOfClass:[NSDictionary class]]){
                     [subObject postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"array object %d %@ in %@",i,key,objectKey]];
+                    
                     [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                     [subObject setObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"address <%p>",subObject],@"address",nil] forKey:CKCascadingTreeNode];
                 }
@@ -637,6 +651,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 			[self setFormat:format];
 			
             [object postInitAfterLoadingForObjectWithKey:key];
+            object = [self objectForKey:key];//in case it has been muted in postInitAfterLoadingForObjectWithKey
 			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
             [object setObject:[NSDictionary dictionaryWithObjectsAndKeys:key,@"name",[NSString stringWithFormat:@"address <%p>",object],@"address",nil] forKey:CKCascadingTreeNode];
 		}
