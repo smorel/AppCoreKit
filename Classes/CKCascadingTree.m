@@ -189,7 +189,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 
 //Constants
 
-NSString* const CKCascadingTreePrefix = @"CKCascadingTree";
+NSString* const CKCascadingTreePrefix   = @"CKCascadingTree";
 NSString* const CKCascadingTreeFormats  = @"CKCascadingTreeFormats";
 NSString* const CKCascadingTreeParent   = @"CKCascadingTreeParent";
 NSString* const CKCascadingTreeEmpty    = @"CKCascadingTreeEmpty";
@@ -528,7 +528,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 
 - (void)makeAllInjectionsForObjectWithKey:(NSString*)objectKey{
     for(NSString* key in [self allKeys]){
-        if([key isEqualToString:@"@class"]
+        if([key hasPrefix:@"@"]
            || [key isEqualToString:CKCascadingTreePrefix]
            || [key isEqualToString:CKCascadingTreeFormats]
            || [key isEqualToString:CKCascadingTreeParent]
