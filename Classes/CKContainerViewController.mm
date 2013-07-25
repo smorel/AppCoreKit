@@ -238,10 +238,10 @@ typedef void(^CKTransitionBlock)();
         newController.view.frame = self.containerView.bounds;
         newController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        //if([CKOSVersion() floatValue] < 5){
+        if([CKOSVersion() floatValue] < 5){
             [oldController viewWillDisappear:YES];
             [newController viewWillAppear:YES];
-        //}
+        }
         
         UIView *containerView = self.containerView;
         __block UIViewController *bOldController = oldController;
@@ -265,15 +265,15 @@ typedef void(^CKTransitionBlock)();
             
             animation.endBlock = ^(){
                 if(bOldController){
-                    //if([CKOSVersion() floatValue] < 5){
+                    if([CKOSVersion() floatValue] < 5){
                         [bOldController viewDidDisappear:YES];
-                    //}
+                    }
                     [bOldController release];
                 }
                 if(bNewController){
-                    //if([CKOSVersion() floatValue] < 5){
+                    if([CKOSVersion() floatValue] < 5){
                         [bNewController viewDidAppear:YES];
-                    //}
+                    }
                     [bNewController release];
                 }
             };
@@ -304,15 +304,15 @@ typedef void(^CKTransitionBlock)();
                             animations:^(void){} 
                             completion:^(BOOL finished){
                                 if(bOldController){
-                                    //if([CKOSVersion() floatValue] < 5){
+                                    if([CKOSVersion() floatValue] < 5){
                                         [bOldController viewDidDisappear:YES];
-                                    //}
+                                    }
                                     [bOldController release];
                                 }
                                 if(bNewController){
-                                    //if([CKOSVersion() floatValue] < 5){
+                                    if([CKOSVersion() floatValue] < 5){
                                         [bNewController viewDidAppear:YES];
-                                    //}
+                                    }
                                     [bNewController release];
                                 }
                             }];
