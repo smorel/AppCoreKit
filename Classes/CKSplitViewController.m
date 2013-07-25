@@ -59,8 +59,6 @@
 }
 
 - (void)reloadData{
-    NSLog(@"reloadData - SplitView '%@",[self name]);
-    
     [NSObject beginBindingsContext:[NSString stringWithFormat:@"CKSplitView<%p>",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
     NSInteger count = self.delegate ? [delegate numberOfViewsInSplitView:self] : 0;
     if(count && !_controllerViews){
@@ -92,8 +90,6 @@
         //This calls viewWill appear on the view's controller
         //if subview controller is also a splitter, or whatever it needs to know its size in viewWillApear
         //preformLayoutOnSubViewControllers needs to get called before addSubview
-        
-        NSLog(@"SplitView '%@' addSubview - %@" ,[self name], [v name]);
         [self addSubview:v];
     }
 }
@@ -217,7 +213,6 @@
 }
 
 - (void)preformLayoutOnSubViewControllers{
-    NSLog(@"preformLayoutOnSubViewControllers - SplitView '%@",[self name]);
     
     NSMutableArray* constraints = [NSMutableArray array];
     int i =0;
@@ -231,14 +226,12 @@
     i =0;
     for(UIView* view in self.controllerViews){
         CGRect  newFrame = [[frames objectAtIndex:i]CGRectValue];
-        NSLog(@"SplitView '%@' setFrame %@ to view %@" ,[self name], NSStringFromCGRect(newFrame), [view name]);
         view.frame = CGRectIntegral(newFrame);
         ++i;
     }
 }
 
 - (void)layoutSubviews{
-    NSLog(@"layoutSubviews - SplitView '%@",[self name]);
     
     [super layoutSubviews];
     [self preformLayoutOnSubViewControllers];
@@ -385,8 +378,6 @@
             
             [self.splitView reloadData];
             
-            NSLog(@"\n\nsplitter %@ setViewControllers animated",self.name);
-            
             for(int i =0;i<oldAndNewViewControllers.count;++i){
                 UIViewController* controller = [oldAndNewViewControllers objectAtIndex:i];
                 
@@ -421,8 +412,6 @@
                 }
             }
             
-            
-            NSLog(@"\n\nsplitter %@ start animation",self.name);
             //Keeping Controllers
             [UIView animateWithDuration:animationDuration animations:^{
                 for(int i =0;i<oldAndNewViewControllers.count;++i){
@@ -439,9 +428,6 @@
                     }
                 }
             } completion:^(BOOL finished) {
-                
-                NSLog(@"\n\nsplitter %@ end animating",self.name);
-                
                 for(int i =0;i<oldAndNewViewControllers.count;++i){
                     UIViewController* controller = [oldAndNewViewControllers objectAtIndex:i];
                     
