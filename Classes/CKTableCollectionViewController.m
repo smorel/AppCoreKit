@@ -24,6 +24,7 @@
 #import "CKLocalization.h"
 #import "NSObject+Invocation.h"
 #import "CKRuntime.h"
+#import "UIView+Positioning.h"
 
 
 @interface CKCollectionViewController()
@@ -469,6 +470,41 @@
         self.viewWillAppearEndBlock = [oldViewWillAppearEndBlock autorelease];
     }
     
+}
+
+- (void)sizeToFit{
+    [super sizeToFit];
+    
+    if([CKOSVersion() floatValue] < 7){
+        CGFloat tableViewOffset = 0;
+        if(self.searchEnabled && _searchBar != nil){
+            UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+            BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
+            BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+            if(!isIpad){
+                if(_searchScopeDefinition && isPortrait){
+                    tableViewOffset = 88;
+                }
+                else{
+                    tableViewOffset = 44;
+                }
+            }
+            else{
+                BOOL tooSmall = self.view.bounds.size.width <= 320;
+                if(_searchScopeDefinition && tooSmall){
+                    tableViewOffset = 88;
+                }
+                else{
+                    tableViewOffset = 44;
+                }
+            }
+        }
+        
+        if(self.tableViewContainer.frame.origin.y < tableViewOffset){
+            self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
+                                                       self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
+        }
+    }
 }
 
 - (void)tableViewVisibilityChanged:(NSNumber*)hidden{

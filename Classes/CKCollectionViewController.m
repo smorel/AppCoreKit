@@ -775,7 +775,7 @@
         }
     }
 }
- 
+
 - (void) insertItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{ 
     if(!_sectionsToControllers){
         self.sectionsToControllers = [NSMutableArray array];
