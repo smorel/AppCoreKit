@@ -250,10 +250,12 @@ typedef void(^CKTransitionBlock)();
     }
     
     if(_presentsSelectedViewControllerItemsInToolbar){
-        
-        [viewController.navigationItem bind:@"toolbarItems" executeBlockImmediatly:YES withBlock:^(id value) {
+        bContainer.toolbarItems = bViewController.toolbarItems;
+     
+        /*   [viewController.navigationItem bind:@"toolbarItems" executeBlockImmediatly:YES withBlock:^(id value) {
             bContainer.toolbarItems = bViewController.toolbarItems;
         }];
+      */
     
     }
     
