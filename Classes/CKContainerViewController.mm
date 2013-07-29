@@ -12,6 +12,7 @@
 #import <objc/runtime.h>
 #import "CKRuntime.h"
 #import "UIView+Positioning.h"
+#import "CKBinding.h"
 
 typedef void(^CKTransitionBlock)();
 
@@ -53,6 +54,7 @@ typedef void(^CKTransitionBlock)();
 @interface CKContainerViewController ()
 @property (nonatomic, retain) UIView *containerView;
 @property (nonatomic, assign) BOOL needsToCallViewDidAppearOnSelectedController;
+@property (nonatomic, retain) NSString* subControllerNavigationItemBindings;
 @end
 
 //
@@ -86,6 +88,9 @@ typedef void(^CKTransitionBlock)();
 }
 
 - (void)dealloc {
+    if(self.subControllerNavigationItemBindings){
+        [NSObject removeAllBindingsForContext:self.subControllerNavigationItemBindings];
+    }
 	[_containerView release]; _containerView = nil;
 	[_viewControllers release]; _viewControllers = nil;
 	[super dealloc];
@@ -124,6 +129,8 @@ typedef void(^CKTransitionBlock)();
 
 - (void)loadView {
 	[super loadView];
+    
+    self.subControllerNavigationItemBindings = [NSString stringWithFormat:@"subControllerNavigationItemBindings_<%p>",self];
 
 	if (self.containerView == nil) {
 		self.containerView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
@@ -199,24 +206,59 @@ typedef void(^CKTransitionBlock)();
     [self.navigationController.navigationBar pushNavigationItem:self.navigationItem animated:NO];
     */
     
+    
     UIViewController* container = self;
     while([container containerViewController]){
         container = [container containerViewController];
     }
     
+    
+    [NSObject beginBindingsContext:self.subControllerNavigationItemBindings policy:CKBindingsContextPolicyRemovePreviousBindings ];
+    __unsafe_unretained UIViewController* bContainer = container;
+    __unsafe_unretained UIViewController* bViewController = viewController;
+    
     if(_presentsSelectedViewControllerItemsInNavigationBar){
-        container.title = viewController.title;
-        [container.navigationItem setLeftBarButtonItem:viewController.navigationItem.leftBarButtonItem animated:YES];
-        [container.navigationItem setRightBarButtonItem:viewController.navigationItem.rightBarButtonItem animated:YES];
-        container.navigationItem.backBarButtonItem = viewController.navigationItem.backBarButtonItem;	
-        container.navigationItem.title = viewController.navigationItem.title;
-        container.navigationItem.prompt = viewController.navigationItem.prompt;
-        container.navigationItem.titleView = viewController.navigationItem.titleView;
+        [viewController bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.title = bViewController.title;
+        }];
+        
+        [viewController.navigationItem bind:@"leftBarButtonItem" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.navigationItem.leftBarButtonItem = bViewController.navigationItem.leftBarButtonItem;
+        }];
+        
+        [viewController.navigationItem bind:@"rightBarButtonItem" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.navigationItem.rightBarButtonItem = bViewController.navigationItem.rightBarButtonItem;
+        }];
+        
+        [viewController.navigationItem bind:@"backBarButtonItem" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.navigationItem.backBarButtonItem = bViewController.navigationItem.backBarButtonItem;
+        }];
+        
+        [viewController.navigationItem bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.navigationItem.title = bViewController.navigationItem.title;
+        }];
+        
+        [viewController.navigationItem bind:@"prompt" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.navigationItem.prompt = bViewController.navigationItem.prompt;
+        }];
+        
+        [viewController.navigationItem bind:@"titleView" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.navigationItem.titleView = bViewController.navigationItem.titleView;
+        }];
+        	
+       // [self.navigationController.navigationBar pushNavigationItem:container.navigationItem animated:NO];
     }
     
     if(_presentsSelectedViewControllerItemsInToolbar){
-        container.toolbarItems = viewController.toolbarItems;
+        
+        [viewController.navigationItem bind:@"toolbarItems" executeBlockImmediatly:YES withBlock:^(id value) {
+            bContainer.toolbarItems = bViewController.toolbarItems;
+        }];
+    
     }
+    
+    [NSObject endBindingsContext];
+     
 }
 
 //
@@ -234,7 +276,6 @@ typedef void(^CKTransitionBlock)();
         
         UIViewController *oldController = (index == _selectedIndex) ? nil : [self.viewControllers objectAtIndex:_selectedIndex];
         
-        [self setNavigationItemFromViewController:newController];
         newController.view.frame = self.containerView.bounds;
         newController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
@@ -317,6 +358,7 @@ typedef void(^CKTransitionBlock)();
                                 }
                             }];
         }
+        [self setNavigationItemFromViewController:newController];
     }
 	_selectedIndex = index;
 }
@@ -440,9 +482,11 @@ static char CKViewControllerContainerViewControllerKey;
 	return (self.containerViewController && self.containerViewController.navigationController) ? self.containerViewController.navigationController : [super navigationController];
 }
 
+/*
 - (UINavigationItem *)navigationItem {
 	return self.containerViewController ? self.containerViewController.navigationItem : [super navigationItem];
-}
+}*/
+
 
 @end
 
