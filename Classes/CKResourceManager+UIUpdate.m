@@ -11,6 +11,7 @@
 #import "CKLayoutBoxProtocol.h"
 #import "UIView+CKLayout.h"
 #import "CKViewController.h"
+#import "UIView+Style.h"
 
 
 @implementation CKResourceManager (UIUpdate)
@@ -72,6 +73,7 @@
             if(![self isViewLoaded] || [self.view window] == nil)
                 return;
             
+            [self invalidateStylesheetForAllViews];
             [self viewWillDisappear:NO];
             [self viewDidDisappear:NO];
             [self viewWillAppear:NO];
@@ -81,6 +83,25 @@
             
         });
     });
+}
+
+- (void)invalidateStylesheetForAllViews{
+    [self invalidateStylesheetForView:self.view];
+    [self invalidateStylesheetForView:self.navigationItem.titleView];
+    [self invalidateStylesheetForView:self.navigationItem.leftBarButtonItem.customView];
+    [self invalidateStylesheetForView:self.navigationItem.rightBarButtonItem.customView];
+    [self invalidateStylesheetForView:self.navigationController.navigationBar];
+    [self invalidateStylesheetForView:self.navigationController.toolbar];
+}
+
+- (void)invalidateStylesheetForView:(UIView*)view{
+    if(!view)
+        return;
+    
+    [view setAppliedStyle:nil];
+    for(UIView* v in view.subviews){
+        [self invalidateStylesheetForView:v];
+    }
 }
 
 @end

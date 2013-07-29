@@ -413,13 +413,11 @@
      forKey: kCATransactionDisableActions];
     
     
-    NSMutableDictionary* controllerStyle = nil;
+    NSMutableDictionary* controllerStyle =  [self controllerStyle];;
+    
     if(!self.styleHasBeenApplied){
         controllerStyle = [self applyStyle];
         self.styleHasBeenApplied = YES;
-    }
-    else{
-        controllerStyle = [self controllerStyle];
     }
     
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
@@ -553,6 +551,7 @@
         }];
         [NSObject endBindingsContext];
     }
+    
     
     [CATransaction commit];
     

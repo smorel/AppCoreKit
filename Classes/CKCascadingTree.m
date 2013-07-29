@@ -625,8 +625,8 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 		}
     }];
     
-    [self makeAllInjectionsForObjectWithKey:objectKey];
     [self makeAllInheritsForObjectWithKey:objectKey];
+    [self makeAllInjectionsForObjectWithKey:objectKey];
     
     NSArray* sortedKeys = [self sortedKeysTakingCareOfInheritanceDependenciesForObjectWithKey:objectKey];
     

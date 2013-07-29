@@ -774,6 +774,11 @@ static char NSObjectDebugAppliedStyleObjectKey;
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	if(style == nil)
 		return;
+    
+    
+	//if([appliedStack containsObject:self] == NO){
+    [[self class] applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
+	//}
 	
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];
@@ -851,9 +856,6 @@ static char NSObjectDebugAppliedStyleObjectKey;
 	
     [self setAppliedStyle:style];
 	
-	//if([appliedStack containsObject:self] == NO){
-		[[self class] applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
-	//}
 	[appliedStack addObject:self];
 }
 

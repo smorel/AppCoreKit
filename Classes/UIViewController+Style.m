@@ -89,7 +89,33 @@ static char UIViewControllerStylesheetFileNameKey;
                 self.stylesheetFileName = self.containerViewController.stylesheetFileName;
                 manager = [self.containerViewController styleManager];
             }else{
-                manager = [CKStyleManager defaultManager];
+                
+                NSMutableArray* controllerStack = [NSMutableArray array];
+                
+                NSInteger index = [self.navigationController.viewControllers indexOfObjectIdenticalTo:self];
+                if(index != NSNotFound && index >= 1){
+                    UIViewController* previousViewController = [self.navigationController.viewControllers objectAtIndex:index - 1];
+                    [controllerStack addObject:previousViewController];
+                }
+                
+                UIViewController* c = self;
+                while(c){
+                    if([c respondsToSelector:@selector(containerViewController)]){
+                        c = [c performSelector:@selector(containerViewController)];
+                        if(c){
+                            [controllerStack insertObject:c atIndex:0];
+                        }
+                    }
+                    else{
+                        c = nil;
+                    }
+                }
+                
+                if([controllerStack count] > 0){
+                    manager = [[controllerStack objectAtIndex:0]styleManager];
+                }else{
+                    manager = [CKStyleManager defaultManager];
+                }
             }
         }else{
             self.stylesheetFileName = [[self class]description];
