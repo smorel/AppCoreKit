@@ -56,8 +56,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
             
             CGSize s = [box preferedSizeConstraintToSize:constraint];
             
-            if(s.width > maxWidth) maxWidth = s.width;
-            if(s.height > maxHeight) maxHeight = s.height;
+            if(s.width > maxWidth && s.width < MAXFLOAT)   maxWidth = s.width;
+            if(s.height > maxHeight && s.height < MAXFLOAT) maxHeight = s.height;
         }
         
         size = CGSizeMake(maxWidth,maxHeight);
