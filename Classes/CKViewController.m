@@ -845,7 +845,7 @@
     if(self.isViewDisplayed){
         UIView* v0 = [[self.view subviews]objectAtIndex:0];
         if([v0 isKindOfClass:[CKStyleView class]]){
-            if(hidden && !animated){
+            if(hidden){
                 v0.frame = self.view.bounds;
             }else{
                 CGFloat toolbarHeight = self.navigationController.toolbar.bounds.size.height;
