@@ -12,6 +12,24 @@
 #import "CKRuntime.h"
 #import <objc/runtime.h>
 
+CGSize CKSizeThatFitsRatio(CGSize size, CGFloat ratio){
+    NSInteger ratioHeight = (size.width / ratio);
+    NSInteger ratioWidth = (size.height * ratio);
+    
+    if(ratioHeight - size.height < 0){
+        //
+        NSInteger width = size.width;
+        NSInteger height = ratioHeight;
+        size = CGSizeMake( width, height);
+    }else{
+        NSInteger width = ratioWidth;
+        NSInteger height = size.height;
+        size = CGSizeMake( width, height);
+    }
+    
+    return size;
+}
+
 @interface CKLayoutBox()
 
 + (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
@@ -77,14 +95,28 @@ static char UIImageViewFlexibleHeightKey;
     
     CGSize ret = self.image ? self.image.size : CGSizeMake(0,0);
     
+    //re-Compute after constraints to keep aspect ratio
+    CGFloat aspect = (ret.height != 0) ? ((CGFloat)ret.width / (CGFloat)ret.height) : 1.0f;
+    
+    if(ret.width > size.width){
+        ret.width = size.width;
+    }
+    if(ret.height > size.height){
+        ret.height = size.height;
+    }
+    ret = CKSizeThatFitsRatio(ret,aspect);
+    //---------------------
+    
     if(self.flexibleWidth){
         ret.width = size.width;
     }
+    
     if(self.flexibleHeight){
         ret.height = size.height;
     }
     
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    
     
     self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
