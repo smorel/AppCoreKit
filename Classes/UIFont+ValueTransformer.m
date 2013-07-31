@@ -19,7 +19,11 @@
 }
 
 + (UIFont*)convertFromNSArray:(NSArray*)ar{
-    CKAssert([ar count] == 2,@"Invalid font format");
+    if([ar count] != 2){
+        NSLog(@"Invalid font format : %@",ar);
+        return [UIFont systemFontOfSize:18];
+    }
+    
     NSString* fontName = [ar objectAtIndex:0];
     CGFloat sizeValue = [[ar objectAtIndex:1]floatValue];
     
