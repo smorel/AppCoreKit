@@ -19,9 +19,11 @@
 #define InteractionButtonTag 3457
 #define ControllerViewBaseTag 3458
 
+@interface CKGridCollectionViewController ()
+@property (nonatomic, retain) NSIndexPath *gridItemSelectedIndexPath;
+@end
 
 @interface CKTableViewController ()
-@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 
@@ -189,7 +191,7 @@
                     if(button.enabled){
                         [controller didSelect];
                         if([(CKGridCollectionViewController*)bself.containerController isStickySelection]){
-                            ((CKGridCollectionViewController*)bself.containerController).selectedIndexPath = subRowIndexPath;
+                            ((CKGridCollectionViewController*)bself.containerController).gridItemSelectedIndexPath = subRowIndexPath;
                         }
                     }
                     button.enabled = YES; 
@@ -203,8 +205,8 @@
                 }];
                 
                 if([(CKGridCollectionViewController*)self.containerController isStickySelection]){
-                    [self.containerController bind:@"selectedIndexPath" executeBlockImmediatly:YES withBlock:^(id value) {
-                        if(![((CKGridCollectionViewController*)bself.containerController).selectedIndexPath isEqual: subRowIndexPath]){
+                    [self.containerController bind:@"gridItemSelectedIndexPath" executeBlockImmediatly:YES withBlock:^(id value) {
+                        if(![((CKGridCollectionViewController*)bself.containerController).gridItemSelectedIndexPath isEqual: subRowIndexPath]){
                             [controller.tableViewCell setSelected:NO animated:NO];
                             [controller.tableViewCell setHighlighted:NO animated:NO];
                         }else{

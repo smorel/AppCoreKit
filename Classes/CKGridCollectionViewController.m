@@ -51,6 +51,7 @@
 @property(nonatomic,retain) CKCollection* linearCollection;
 @property(nonatomic,retain) CKCollectionCellControllerFactory* subControllersFactory;
 @property(nonatomic,retain) CKCollectionController* linearCollectionController;
+@property (nonatomic, retain) NSIndexPath *gridItemSelectedIndexPath;
 @end
 
 @implementation CKGridCollectionViewController
