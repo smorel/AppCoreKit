@@ -142,6 +142,10 @@
         }
     }
     
+    if([currentArray count] > 0 && [currentArray count] < columnCount){
+        [arrayOfArray addObject:currentArray];
+    }
+    
     if([arrayOfArray count] > 0 ){
         [theCollection addObjectsFromArray:arrayOfArray];
     }
@@ -164,7 +168,8 @@
     
     CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
     
-    NSInteger numberOfRows = [self.linearCollection count] / columnCount;
+    CGFloat floatingNumberOfRows = (CGFloat)[self.linearCollection count] / (CGFloat)columnCount;
+    NSInteger numberOfRows = ceilf(floatingNumberOfRows);
     if(numberOfRows < [theCollection count]){
         [theCollection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(numberOfRows, [theCollection count] - numberOfRows)]];
     }
