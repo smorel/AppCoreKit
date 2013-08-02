@@ -549,8 +549,13 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
             if(result){
                 if([result isKindOfClass:[NSDictionary class]]){
                     result = [self deepCleanCopy:result];
+                    [result setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                    [self setObject:result forKey:key];
+                    
+                    [self postInitAfterLoadingForObjectWithKey:objectKey];
+                }else{
+                    [self setObject:result forKey:key];
                 }
-                [self setObject:result forKey:key];
             }
         }
     }
