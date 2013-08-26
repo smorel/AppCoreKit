@@ -538,10 +538,15 @@
 		96CADE351486B6F6008A23E4 /* NSObject+Runtime_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE341486B6F6008A23E4 /* NSObject+Runtime_private.h */; };
 		96CADE381486BDFF008A23E4 /* NSObject+Validation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE361486BDFC008A23E4 /* NSObject+Validation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CADE391486BDFF008A23E4 /* NSObject+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CADE371486BDFD008A23E4 /* NSObject+Validation.m */; };
-		96CC492517CBF6C10017A6E7 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC48C617CBF6C10017A6E7 /* Reachability.m */; };
-		96CC492717CBF6C10017A6E7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC48C917CBF6C10017A6E7 /* JSONKit.m */; };
-		96CC492C17CBF6C10017A6E7 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC48CF17CBF6C10017A6E7 /* UIScrollView+SVPullToRefresh.m */; settings = {COMPILER_FLAGS = " -fobjc-arc"; }; };
-		96CC497C17CBF9580017A6E7 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC48CD17CBF6C10017A6E7 /* UIScrollView+SVInfiniteScrolling.m */; settings = {COMPILER_FLAGS = " -fobjc-arc"; }; };
+		96CC498117CBFE710017A6E7 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC497D17CBFE710017A6E7 /* JSONKit.h */; };
+		96CC498217CBFE710017A6E7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC497E17CBFE710017A6E7 /* JSONKit.m */; };
+		96CC498317CBFE710017A6E7 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC497F17CBFE710017A6E7 /* Reachability.h */; };
+		96CC498417CBFE710017A6E7 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC498017CBFE710017A6E7 /* Reachability.m */; };
+		96CC498A17CBFE780017A6E7 /* SVPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498517CBFE780017A6E7 /* SVPullToRefresh.h */; };
+		96CC498B17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498617CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h */; };
+		96CC498C17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC498717CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		96CC498D17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498817CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h */; };
+		96CC498E17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC498917CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		96D2674215923B7700840A7F /* NSTimer+BlockBaseInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */; };
 		96D4B83515125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1146,15 +1151,15 @@
 		96CADE341486B6F6008A23E4 /* NSObject+Runtime_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Runtime_private.h"; path = "Classes/NSObject+Runtime_private.h"; sourceTree = "<group>"; };
 		96CADE361486BDFC008A23E4 /* NSObject+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Validation.h"; path = "Classes/NSObject+Validation.h"; sourceTree = "<group>"; };
 		96CADE371486BDFD008A23E4 /* NSObject+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Validation.m"; path = "Classes/NSObject+Validation.m"; sourceTree = "<group>"; };
-		96CC48C517CBF6C10017A6E7 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = "../../AppCoreKit-2.0.x/Vendor/Reachability.h"; sourceTree = "<group>"; };
-		96CC48C617CBF6C10017A6E7 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = "../../AppCoreKit-2.0.x/Vendor/Reachability.m"; sourceTree = "<group>"; };
-		96CC48C817CBF6C10017A6E7 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = JSONKit.h; path = "../../AppCoreKit-2.0.x/Vendor/JSONKit.h"; sourceTree = "<group>"; };
-		96CC48C917CBF6C10017A6E7 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = JSONKit.m; path = "../../AppCoreKit-2.0.x/Vendor/JSONKit.m"; sourceTree = "<group>"; };
-		96CC48CB17CBF6C10017A6E7 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVPullToRefresh.h; path = "../../AppCoreKit-2.0.x/Vendor/SVPullToRefresh2/SVPullToRefresh.h"; sourceTree = "<group>"; };
-		96CC48CC17CBF6C10017A6E7 /* UIScrollView+SVInfiniteScrolling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SVInfiniteScrolling.h"; path = "../../AppCoreKit-2.0.x/Vendor/SVPullToRefresh2/UIScrollView+SVInfiniteScrolling.h"; sourceTree = "<group>"; };
-		96CC48CD17CBF6C10017A6E7 /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+SVInfiniteScrolling.m"; path = "../../AppCoreKit-2.0.x/Vendor/SVPullToRefresh2/UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
-		96CC48CE17CBF6C10017A6E7 /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SVPullToRefresh.h"; path = "../../AppCoreKit-2.0.x/Vendor/SVPullToRefresh2/UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
-		96CC48CF17CBF6C10017A6E7 /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+SVPullToRefresh.m"; path = "../../AppCoreKit-2.0.x/Vendor/SVPullToRefresh2/UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
+		96CC497D17CBFE710017A6E7 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = Vendor/JSONKit.h; sourceTree = "<group>"; };
+		96CC497E17CBFE710017A6E7 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = Vendor/JSONKit.m; sourceTree = "<group>"; };
+		96CC497F17CBFE710017A6E7 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Vendor/Reachability.h; sourceTree = "<group>"; };
+		96CC498017CBFE710017A6E7 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Vendor/Reachability.m; sourceTree = "<group>"; };
+		96CC498517CBFE780017A6E7 /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVPullToRefresh.h; path = Vendor/SVPullToRefresh2/SVPullToRefresh.h; sourceTree = "<group>"; };
+		96CC498617CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SVInfiniteScrolling.h"; path = "Vendor/SVPullToRefresh2/UIScrollView+SVInfiniteScrolling.h"; sourceTree = "<group>"; };
+		96CC498717CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+SVInfiniteScrolling.m"; path = "Vendor/SVPullToRefresh2/UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
+		96CC498817CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SVPullToRefresh.h"; path = "Vendor/SVPullToRefresh2/UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
+		96CC498917CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+SVPullToRefresh.m"; path = "Vendor/SVPullToRefresh2/UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
 		96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSTimer+BlockBaseInterface.h"; path = "Classes/NSTimer+BlockBaseInterface.h"; sourceTree = "<group>"; };
 		96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTimer+BlockBaseInterface.m"; path = "Classes/NSTimer+BlockBaseInterface.m"; sourceTree = "<group>"; };
 		96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+BlockBasedInterface.h"; path = "Classes/UIBarButtonItem+BlockBasedInterface.h"; sourceTree = "<group>"; };
@@ -1860,9 +1865,15 @@
 		7560DDB813B8EDB700268D13 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				96CC48C717CBF6C10017A6E7 /* Apple */,
-				96CC48CA17CBF6C10017A6E7 /* JSONKit */,
-				96CC48D017CBF6C10017A6E7 /* SVPullToRefresh */,
+				96CC498517CBFE780017A6E7 /* SVPullToRefresh.h */,
+				96CC498617CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h */,
+				96CC498717CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m */,
+				96CC498817CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h */,
+				96CC498917CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m */,
+				96CC497D17CBFE710017A6E7 /* JSONKit.h */,
+				96CC497E17CBFE710017A6E7 /* JSONKit.m */,
+				96CC497F17CBFE710017A6E7 /* Reachability.h */,
+				96CC498017CBFE710017A6E7 /* Reachability.m */,
 				7560DE1C13B8EF9000268D13 /* RegexKitLite */,
 				7560DDC613B8EE6800268D13 /* TouchXML */,
 			);
@@ -2336,39 +2347,6 @@
 			name = "Dynamic Layouts";
 			sourceTree = "<group>";
 		};
-		96CC48C717CBF6C10017A6E7 /* Apple */ = {
-			isa = PBXGroup;
-			children = (
-				96CC48C517CBF6C10017A6E7 /* Reachability.h */,
-				96CC48C617CBF6C10017A6E7 /* Reachability.m */,
-			);
-			name = Apple;
-			path = ../VendorsKit/VendorsKit;
-			sourceTree = "<group>";
-		};
-		96CC48CA17CBF6C10017A6E7 /* JSONKit */ = {
-			isa = PBXGroup;
-			children = (
-				96CC48C817CBF6C10017A6E7 /* JSONKit.h */,
-				96CC48C917CBF6C10017A6E7 /* JSONKit.m */,
-			);
-			name = JSONKit;
-			path = ../VendorsKit/VendorsKit;
-			sourceTree = "<group>";
-		};
-		96CC48D017CBF6C10017A6E7 /* SVPullToRefresh */ = {
-			isa = PBXGroup;
-			children = (
-				96CC48CB17CBF6C10017A6E7 /* SVPullToRefresh.h */,
-				96CC48CC17CBF6C10017A6E7 /* UIScrollView+SVInfiniteScrolling.h */,
-				96CC48CD17CBF6C10017A6E7 /* UIScrollView+SVInfiniteScrolling.m */,
-				96CC48CE17CBF6C10017A6E7 /* UIScrollView+SVPullToRefresh.h */,
-				96CC48CF17CBF6C10017A6E7 /* UIScrollView+SVPullToRefresh.m */,
-			);
-			name = SVPullToRefresh;
-			path = ../VendorsKit/VendorsKit;
-			sourceTree = "<group>";
-		};
 		96E4D3FD15407D2700CCF421 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2662,6 +2640,11 @@
 				96EFE7D3179700BE0034F935 /* CKResourceManager.h in Headers */,
 				96FEFDF517978D620001CC4A /* CKResourceManager+UIUpdate.h in Headers */,
 				963AB796179881110076925C /* CKResourceDependencyContext.h in Headers */,
+				96CC498117CBFE710017A6E7 /* JSONKit.h in Headers */,
+				96CC498317CBFE710017A6E7 /* Reachability.h in Headers */,
+				96CC498A17CBFE780017A6E7 /* SVPullToRefresh.h in Headers */,
+				96CC498B17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h in Headers */,
+				96CC498D17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3050,10 +3033,10 @@
 				96EFE7D4179700BE0034F935 /* CKResourceManager.m in Sources */,
 				96FEFDF617978D620001CC4A /* CKResourceManager+UIUpdate.m in Sources */,
 				963AB797179881110076925C /* CKResourceDependencyContext.m in Sources */,
-				96CC492517CBF6C10017A6E7 /* Reachability.m in Sources */,
-				96CC492717CBF6C10017A6E7 /* JSONKit.m in Sources */,
-				96CC492C17CBF6C10017A6E7 /* UIScrollView+SVPullToRefresh.m in Sources */,
-				96CC497C17CBF9580017A6E7 /* UIScrollView+SVInfiniteScrolling.m in Sources */,
+				96CC498217CBFE710017A6E7 /* JSONKit.m in Sources */,
+				96CC498417CBFE710017A6E7 /* Reachability.m in Sources */,
+				96CC498C17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m in Sources */,
+				96CC498E17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
