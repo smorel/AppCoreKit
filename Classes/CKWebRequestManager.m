@@ -10,7 +10,8 @@
 #import "CKLocalization.h"
 #import "CKWebRequest.h"
 #import "CKAlertView.h"
-#import <VendorsKit/VendorsKit.h>
+#import "JSONKit.h"
+#import "Reachability.h"
 #import "CKNetworkActivityManager.h"
 
 @interface CKWebRequestManager ()

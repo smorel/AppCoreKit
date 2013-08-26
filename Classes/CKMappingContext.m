@@ -12,7 +12,7 @@
 #import "CKProperty.h"
 #import "CKCollection.h"
 #import "CKCallback.h"
-#import <VendorsKit/VendorsKit.h>
+#import "JSONKit.h"
 #import <objc/runtime.h>
 #import "NSError+Additions.h"
 #import "NSObject+Invocation.h"

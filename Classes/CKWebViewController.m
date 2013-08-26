@@ -8,7 +8,7 @@
 
 #import "CKWebViewController.h"
 #import "UIView+AutoresizingMasks.h"
-#import <VendorsKit/Reachability.h>
+#import "Reachability.h"
 
 #define CKBarButtonItemFlexibleSpace [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]
 

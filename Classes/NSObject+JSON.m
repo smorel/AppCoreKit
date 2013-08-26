@@ -7,7 +7,7 @@
 //
 
 #import "NSObject+JSON.h"
-#import <VendorsKit/VendorsKit.h>
+#import "JSONKit.h"
 
 @implementation NSObject (CKNSObjectJSON)
 
