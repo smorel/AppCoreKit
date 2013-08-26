@@ -1,0 +1,3 @@
+[submodule "Vendor/SVPullToRefresh"]
+	path = Vendor/SVPullToRefresh
+	url = git@github.com:smorel/SVPullToRefresh.git
