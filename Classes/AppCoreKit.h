@@ -24,7 +24,6 @@
 #import "UnitTests.h"
 
 #import "CKMockManager.h"
-#import "CKLicense.h"
 
 #import "RegexKitLite.h"
 #import "TouchXML.h"

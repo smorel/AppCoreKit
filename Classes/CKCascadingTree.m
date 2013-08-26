@@ -7,7 +7,7 @@
 //
 
 #import "CKCascadingTree.h"
-#import <VendorsKit/VendorsKit.h>
+#import "JSONKit.h"
 
 #import "CKProperty.h"
 #import "NSValueTransformer+Additions.h"

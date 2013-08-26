@@ -15,12 +15,6 @@
 
 #import "CKDebug.h"
 
-#import "CKColorPalette.h"
-
-
-@interface CKCascadingTree()
-@property (nonatomic,retain) NSMutableSet* loadedFiles;
-@end
 
 @implementation UIColor (CKUIColor_ValueTransformer)
 
@@ -51,14 +45,6 @@
 			return color;
 		}
 		else{
-            UIColor* colorFromPalette = [CKColorPalette colorWithKeyPath:str];
-            if(colorFromPalette){
-                for(NSString* path in [[CKColorPalette sharedInstance]loadedFiles]){
-                    [CKResourceDependencyContext addDependency:path];
-                }
-                return colorFromPalette;
-            }
-            
 			SEL colorSelector = NSSelectorFromString(str);
 			if(colorSelector && [[UIColor class] respondsToSelector:colorSelector]){
 				UIColor* color = [[UIColor class] performSelector:colorSelector];

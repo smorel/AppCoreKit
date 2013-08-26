@@ -9,7 +9,7 @@
 #import "CKWebDataConverter.h"
 #import <UIKit/UIKit.h>
 #import "CXMLDocument.h"
-#import <VendorsKit/VendorsKit.h>
+#import "JSONKit.h"
 #import "RegexKitLite.h"
 
 @implementation CKWebDataConverter
