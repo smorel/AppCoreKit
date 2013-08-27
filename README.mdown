@@ -33,13 +33,6 @@ You must uncomment this preprocessor macro while working in XCode5 to profit of 
 
 ## Additional dependencies
 
-**VendorsKit**
-
-AppCoreKit requires another framework to work properly. This is VendorsKit which groups all the third parties we need to share between frameworks and apps.
-You can find a pre-compiled version of vendors kit in our sample repository at https://github.com/wherecloud/appcorekit-samples
-
-Or you can get the sources of this framework at : https://github.com/wherecloud/vendorskit
-
 **ResourceManager**
 
 Since the begining the the version 2.2.0 (Master), AppCoreKit integrates a new Resource management framework as a weak dependency. This framework called **ResourceManager** allows live update of your application when you modify your application's resources from 1 or several repositories. You can provide your XCode project folder when working in the simulator or a dropbox folder when working on your device to see your application reload when you modify or add images, strings files, sounds, stylesheets, layouts, color palettes, mappings, ...
@@ -74,9 +67,9 @@ AppCoreKit provides a "Documentation" target that generate a docset using the pu
 
 ## Using AppCoreKit in your own App
 
-* <b>Drag'n'drop</b> the AppCoreKit and VendorsKit projects as subprojects in Xcode.
+* <b>Drag'n'drop</b> the AppCoreKit projects as subprojects in Xcode.
 
-* Adds the AppCoreKit.framework and VendorsKit.framework <b>link dependency to your target</b> in the build phases settings.
+* Adds the AppCoreKit.framework <b>link dependency to your target</b> in the build phases settings.
 
 * Add the following <b>frameworks and libraries dependencies</b> to your project in the build phases settings: 
 <pre>
