@@ -18,6 +18,11 @@ AppCoreKit does not offer out of the box UI components but the technology to hel
 * And more.
 
 Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace.
+The framework is splitted in several modules with the following dependencies:
+
+<div style="text-align:center">
+<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/AppCoreKit-Framework-Overview.png?raw=true"/>
+</div>
 
 Screen Cast and high level description of the framework are available at http://www.appcorekit.net
 
