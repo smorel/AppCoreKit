@@ -101,7 +101,7 @@
         };
         
         self.reachability = [Reachability reachabilityForInternetConnection];
-        [self.reachability startNotifer];
+        [self.reachability startNotifier];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityDidChange) name:kReachabilityChangedNotification object:self.reachability];
     }
@@ -122,7 +122,7 @@
 }
 
 - (void)dealloc {
-    [self.reachability stopNotifer];
+    [self.reachability stopNotifier];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:self.reachability];
     
     dispatch_release(self.requestQueue);

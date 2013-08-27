@@ -97,7 +97,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 	[myPool release];
 }
 
-- (BOOL) startNotifer
+- (BOOL) startNotifier
 {
 	BOOL retVal = NO;
 	SCNetworkReachabilityContext	context = {0, self, NULL, NULL, NULL};
@@ -111,7 +111,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 	return retVal;
 }
 
-- (void) stopNotifer
+- (void) stopNotifier
 {
 	if(reachabilityRef!= NULL)
 	{
@@ -121,7 +121,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 
 - (void) dealloc
 {
-	[self stopNotifer];
+	[self stopNotifier];
 	if(reachabilityRef!= NULL)
 	{
 		CFRelease(reachabilityRef);

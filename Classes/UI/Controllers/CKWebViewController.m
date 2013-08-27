@@ -104,7 +104,7 @@ Reachability* CKWebViewControllerReachability = nil;
 - (Reachability *)reachability {
     if (CKWebViewControllerReachability == nil) {
         CKWebViewControllerReachability = [Reachability reachabilityForInternetConnection];
-        [self.reachability startNotifer];
+        [self.reachability startNotifier];
     }
     return CKWebViewControllerReachability;
 }

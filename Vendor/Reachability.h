@@ -77,8 +77,8 @@ typedef enum {
 + (Reachability*) reachabilityForLocalWiFi;
 
 //Start listening for reachability notifications on the current run loop
-- (BOOL) startNotifer;
-- (void) stopNotifer;
+- (BOOL) startNotifier;
+- (void) stopNotifier;
 
 - (NetworkStatus) currentReachabilityStatus;
 //WWAN may be available, but not active until a connection has been established.
