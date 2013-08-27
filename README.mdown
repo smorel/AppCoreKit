@@ -26,6 +26,8 @@ The framework is splitted in several modules with the following dependencies:
 
 Screen Cast and high level description of the framework are available at http://www.appcorekit.net
 
+Lets go to http://www.wherecloud.com/apps.html to get an idea of some of the apps we made at Wherecloud based on the AppCoreKit framework.
+
 A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples
 
 ## Minimum system requirements
