@@ -8,9 +8,8 @@
 
 #import "UIView+Name.h"
 #import <objc/runtime.h>
-#import "CKStyleManager.h"
-#import "CKStyle+Parsing.h"
 #import "CKDebug.h"
+#import "NSObject+Runtime.h"
 
 @implementation UIView (Factory)
 

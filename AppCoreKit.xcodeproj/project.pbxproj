@@ -704,7 +704,7 @@
 		7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKClassPropertyDescriptor.m; path = Classes/Foundation/Runtime/CKClassPropertyDescriptor.m; sourceTree = "<group>"; };
 		7560DB3A13B8ED3600268D13 /* CLLocation+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLLocation+Additions.h"; path = "Classes/Location/CLLocation+Additions.h"; sourceTree = "<group>"; };
 		7560DB3B13B8ED3600268D13 /* CLLocation+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+Additions.m"; path = "Classes/Location/CLLocation+Additions.m"; sourceTree = "<group>"; };
-		7560DB3E13B8ED3600268D13 /* UIView+AutoresizingMasks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+AutoresizingMasks.h"; path = "Classes/UI/Views/UIView+AutoresizingMasks.h"; sourceTree = "<group>"; };
+		7560DB3E13B8ED3600268D13 /* UIView+AutoresizingMasks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+AutoresizingMasks.h"; path = "Classes/Foundation/Helpers/UIView+AutoresizingMasks.h"; sourceTree = "<group>"; };
 		7560DB3F13B8ED3600268D13 /* CKCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCoreDataManager.h; path = Classes/CoreData/CKCoreDataManager.h; sourceTree = "<group>"; };
 		7560DB4013B8ED3600268D13 /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CoreData/CKCoreDataManager.m; sourceTree = "<group>"; };
 		7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CoreGraphics+Additions.h"; path = "Classes/Foundation/Helpers/CoreGraphics+Additions.h"; sourceTree = "<group>"; };
@@ -1498,7 +1498,6 @@
 				96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */,
 				7560DC3213B8ED3600268D13 /* UIKeyboard+Information.h */,
 				7560DC3313B8ED3600268D13 /* UIKeyboard+Information.m */,
-				7560DB3E13B8ED3600268D13 /* UIView+AutoresizingMasks.h */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
 			name = Views;
@@ -2288,6 +2287,7 @@
 		96CC499117CCD3740017A6E7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				7560DB3E13B8ED3600268D13 /* UIView+AutoresizingMasks.h */,
 				96EBE431159A43AB00E0F209 /* UIView+Name.h */,
 				96EBE432159A43AB00E0F209 /* UIView+Name.m */,
 				7560DC5013B8ED3600268D13 /* CKUnit.h */,

@@ -7,9 +7,9 @@
 //
 
 #import "NSObject+ValueTransformer.h"
-#import "CKObject+CKStore_Private.h"
+//#import "CKObject+CKStore_Private.h"
 #import "NSValueTransformer+Additions.h"
-#import "CKObject+CKStore.h"
+//#import "CKObject+CKStore.h"
 
 #import "CKDebug.h"
 
@@ -57,11 +57,18 @@
 	if([NSObject isClass:typeToCreate kindOfClass:[CKObject class]]){
 		id uniqueId = [dictionary valueForKeyPath:@"uniqueId"];
 		if([uniqueId isKindOfClass:[NSString class]]){
-			returnObject = [CKObject objectWithUniqueId:uniqueId];
+            //CKStore Extension Weak Compatibility
+            if([CKObject respondsToSelector:@selector(objectWithUniqueId:)] ){
+                returnObject = [CKObject performSelector:@selector(objectWithUniqueId:) withObject:uniqueId];
+            }
 		}
 		if(returnObject == nil){
 			returnObject = [[[typeToCreate alloc]init]autorelease];
-			[CKObject registerObject:returnObject withUniqueId:uniqueId];
+            
+            //CKStore Extension Weak Compatibility
+            if([CKObject respondsToSelector:@selector(registerObject:withUniqueId:)] ){
+                [CKObject performSelector:@selector(registerObject:withUniqueId:) withObject:returnObject withObject:uniqueId];
+            }
 		}
 	}
 	else{

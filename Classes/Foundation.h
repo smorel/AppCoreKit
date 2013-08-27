@@ -98,6 +98,7 @@
 #import "CoreGraphics+Additions.h"
 #import "NSTimer+BlockBaseInterface.h"
 #import "UIView+Name.h"
+#import "UIView+AutoresizingMasks.h"
 
 
 //ResourceManager

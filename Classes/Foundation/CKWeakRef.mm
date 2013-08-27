@@ -7,7 +7,6 @@
 //
 
 #import "CKWeakRef.h"
-#import "NSObject+Bindings.h"
 #import "NSObject+Invocation.h"
 #import <objc/runtime.h>
 

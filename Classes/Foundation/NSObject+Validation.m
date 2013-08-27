@@ -10,7 +10,6 @@
 #import "NSObject+Runtime.h"
 #import "NSObject+Runtime_private.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "NSObject+Bindings.h"
 #import "CKProperty.h"
 
 /* TODO : see how we could integrate our validation predicates from attributes in the KVO validation methods.

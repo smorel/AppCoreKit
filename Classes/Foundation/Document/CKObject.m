@@ -12,7 +12,6 @@
 #import "CKLocalization.h"
 #import "CKDebug.h"
 #import "CKCollection.h"
-#import "NSObject+Bindings.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "NSObject+Runtime_private.h"
 #import <objc/runtime.h>
