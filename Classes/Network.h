@@ -6,6 +6,10 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
+#import "CKImageLoader.h"
+#import "CKNetworkActivityManager.h"
+#import "NSURLRequest+Upload.h"
+
 #import "CKMultipartEncoder.h"
 #import "CKMultipartParser.h"
 #import "CKWebRequest.h"
@@ -17,7 +21,6 @@
 #import "CKHost.h"
 
 #import "CKDownloadManager.h"
-#import "NSURLRequest+Upload.h"
 #import "CKWebDataConverter.h"
 
 #import "CKWebRequestManager.h"

@@ -7,3 +7,6 @@
 //
 
 #import "NSObject+Bindings.h"
+#import "CKBinding.h"
+#import "CKObjectController.h"
+#import "CKCollectionController.h"

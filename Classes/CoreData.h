@@ -8,8 +8,6 @@
 
 #import "CKCoreDataManager.h"
 #import "NSManagedObjectContext+Requests.h"
+
 #import "CKStore.h"
-
-#import "CKStoreExplorer.h"
-
 #import "CKObject+CKStore.h"
