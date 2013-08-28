@@ -50,8 +50,28 @@ You can find a pre-compiled version of ResourceManager and sample integration in
 
 Or you can get the sources of this framework and more informations at : https://github.com/wherecloud/ResourceManager
 
+ResourceManager is also available as CocoaPods:
 
-## Compiling the framework
+<pre>pod 'ResourceManager'</pre>
+
+
+## Installation
+
+The recommended approach for installing AppCoreKit is via the [CocoaPods](http://cocoapods.org/) package manager, as it provides flexible dependency management and dead simple installation. For best results, it is recommended that you install via CocoaPods **>= 0.19.1** using Git **>= 1.8.0** installed via Homebrew.
+
+### via CocoaPods
+
+Adds the following lines in you PodFile
+
+<pre>
+platform :ios, '5.0'
+
+pod 'AppCoreKit'
+</pre>
+
+### As a framework
+
+#### Compiling the framework
 
 AppCoreKit is built as a Static Framework. Static Framework are not natively supported by Xcode and requires some additional specifications to get compiled properly.
 
@@ -68,11 +88,11 @@ And
 <b>IMPORTANT</b> : You will have to copy this file each time you update Xcode to a newer version.
 
 
-## Compiling the API Documentation
+#### Compiling the API Documentation
 
 AppCoreKit provides a "Documentation" target that generate a docset using the public header files and the additional programming guides in the Documentation folder. This target is a script base on "appledoc". To install appledoc, follow the installation procedure here : https://github.com/tomaz/appledoc
 
-## Using AppCoreKit in your own App
+#### Using AppCoreKit in your own App
 
 * <b>Drag'n'drop</b> the AppCoreKit projects as subprojects in Xcode.
 
