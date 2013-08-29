@@ -14,6 +14,7 @@
 
 @interface CKBarButtonItemButton()
 @property(nonatomic,retain) CKWeakRef* barButtonItemWeakRef;
+@property(nonatomic,assign) BOOL observing;
 @end
 
 @implementation CKBarButtonItemButton
@@ -23,11 +24,14 @@
 - (void)setBarButtonItem:(UIBarButtonItem *)barButtonItem{
     __block CKBarButtonItemButton* bself = self;
     self.barButtonItemWeakRef = [CKWeakRef weakRefWithObject:barButtonItem block:^(CKWeakRef *weakRef) {
-        [weakRef.object removeObserver:bself forKeyPath:@"title"];
-        [weakRef.object removeObserver:bself forKeyPath:@"image"];
-        [weakRef.object removeObserver:bself forKeyPath:@"target"];
-        [weakRef.object removeObserver:bself forKeyPath:@"action"];
-        [weakRef.object removeObserver:bself forKeyPath:@"enabled"];
+        if(bself.observing){
+            [weakRef.object removeObserver:bself forKeyPath:@"title"];
+            [weakRef.object removeObserver:bself forKeyPath:@"image"];
+            [weakRef.object removeObserver:bself forKeyPath:@"target"];
+            [weakRef.object removeObserver:bself forKeyPath:@"action"];
+            [weakRef.object removeObserver:bself forKeyPath:@"enabled"];
+            bself.observing = NO;
+        }
     }];
 }
 
@@ -36,13 +40,15 @@
 }
 
 - (void)dealloc{
-    if(_barButtonItemWeakRef.object){
+    if(self.observing){
         [self.barButtonItem removeObserver:self forKeyPath:@"title"];
         [self.barButtonItem removeObserver:self forKeyPath:@"image"];
         [self.barButtonItem removeObserver:self forKeyPath:@"target"];
         [self.barButtonItem removeObserver:self forKeyPath:@"action"];
         [self.barButtonItem removeObserver:self forKeyPath:@"enabled"];
+        self.observing = NO;
     }
+    [_barButtonItemWeakRef autorelease];
     _barButtonItemWeakRef = nil;
     [super dealloc];
 }
@@ -66,6 +72,8 @@
     self = [super init];
     self.barButtonItem = theBarButtonItem;
     [self update];
+    
+    self.observing = YES;
     
     theBarButtonItem.customView = self;
     
