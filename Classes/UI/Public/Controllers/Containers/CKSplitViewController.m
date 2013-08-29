@@ -466,6 +466,8 @@
             }];
         }else{
             
+            [self.splitView reloadData];
+            
             for(int i =0;i<oldAndNewViewControllers.count;++i){
                 UIViewController* controller = [oldAndNewViewControllers objectAtIndex:i];
                 CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]intValue];
