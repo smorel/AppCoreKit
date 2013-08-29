@@ -10,17 +10,40 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "UIView+Style.h"
+#import "CKWeakRef.h"
+
+@interface CKBarButtonItemButton()
+@property(nonatomic,retain) CKWeakRef* barButtonItemWeakRef;
+@end
 
 @implementation CKBarButtonItemButton
 @synthesize barButtonItem = _barButtonItem;
+@synthesize barButtonItemWeakRef = _barButtonItemWeakRef;
+
+- (void)setBarButtonItem:(UIBarButtonItem *)barButtonItem{
+    __block CKBarButtonItemButton* bself = self;
+    self.barButtonItemWeakRef = [CKWeakRef weakRefWithObject:barButtonItem block:^(CKWeakRef *weakRef) {
+        [weakRef.object removeObserver:bself forKeyPath:@"title"];
+        [weakRef.object removeObserver:bself forKeyPath:@"image"];
+        [weakRef.object removeObserver:bself forKeyPath:@"target"];
+        [weakRef.object removeObserver:bself forKeyPath:@"action"];
+        [weakRef.object removeObserver:bself forKeyPath:@"enabled"];
+    }];
+}
+
+- (UIBarButtonItem*)barButtonItem{
+    return self.barButtonItemWeakRef.object;
+}
 
 - (void)dealloc{
-    [_barButtonItem removeObserver:self forKeyPath:@"title"];
-    [_barButtonItem removeObserver:self forKeyPath:@"image"];
-    [_barButtonItem removeObserver:self forKeyPath:@"target"];
-    [_barButtonItem removeObserver:self forKeyPath:@"action"];
-    [_barButtonItem removeObserver:self forKeyPath:@"enabled"];
-    _barButtonItem = nil;
+    if(_barButtonItemWeakRef.object){
+        [self.barButtonItem removeObserver:self forKeyPath:@"title"];
+        [self.barButtonItem removeObserver:self forKeyPath:@"image"];
+        [self.barButtonItem removeObserver:self forKeyPath:@"target"];
+        [self.barButtonItem removeObserver:self forKeyPath:@"action"];
+        [self.barButtonItem removeObserver:self forKeyPath:@"enabled"];
+    }
+    _barButtonItemWeakRef = nil;
     [super dealloc];
 }
 
