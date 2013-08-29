@@ -27,8 +27,6 @@
         if(bself.observing){
             [weakRef.object removeObserver:bself forKeyPath:@"title"];
             [weakRef.object removeObserver:bself forKeyPath:@"image"];
-            [weakRef.object removeObserver:bself forKeyPath:@"target"];
-            [weakRef.object removeObserver:bself forKeyPath:@"action"];
             [weakRef.object removeObserver:bself forKeyPath:@"enabled"];
             bself.observing = NO;
         }
@@ -43,8 +41,6 @@
     if(self.observing){
         [self.barButtonItem removeObserver:self forKeyPath:@"title"];
         [self.barButtonItem removeObserver:self forKeyPath:@"image"];
-        [self.barButtonItem removeObserver:self forKeyPath:@"target"];
-        [self.barButtonItem removeObserver:self forKeyPath:@"action"];
         [self.barButtonItem removeObserver:self forKeyPath:@"enabled"];
         self.observing = NO;
     }
@@ -59,7 +55,7 @@
     if(self.barButtonItem.image){
         [self setImage:self.barButtonItem.image forState:UIControlStateNormal];
     }
-    [self addTarget:self.barButtonItem.target action:self.barButtonItem.action forControlEvents:UIControlEventTouchUpInside];
+    [self addTarget:self action:@selector(execute:) forControlEvents:UIControlEventTouchUpInside];
     self.enabled = self.barButtonItem.enabled;
     
     CGFloat height = self.bounds.size.height;
@@ -79,8 +75,6 @@
     
     [theBarButtonItem addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
     [theBarButtonItem addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
-    [theBarButtonItem addObserver:self forKeyPath:@"target" options:NSKeyValueObservingOptionNew context:nil];
-    [theBarButtonItem addObserver:self forKeyPath:@"action" options:NSKeyValueObservingOptionNew context:nil];
     [theBarButtonItem addObserver:self forKeyPath:@"enabled" options:NSKeyValueObservingOptionNew context:nil];
     
     return self;
@@ -88,6 +82,12 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     [self update];
+}
+
+- (void)execute:(id)sender{
+    if(self.barButtonItem.target && self.barButtonItem.action){
+        [self.barButtonItem.target performSelector:self.barButtonItem.action withObject:sender];
+    }
 }
 
 @end
