@@ -47,7 +47,6 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 @implementation NSObject (CKBindingContext)
 
 
-
 + (id)currentBindingContext{
 	if(CKBindingsContextStack && [CKBindingsContextStack count] > 0){
 		return [[CKBindingsContextStack lastObject]objectForKey:@"context"];
@@ -107,6 +106,10 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 
 
 + (void)validateCurrentBindingsContext{
+    if(![NSThread isMainThread]){
+        NSAssert(NO,@"AppCoreKit : Creating Bindings MUST be done on the Main Thread.");
+    }
+    
 //#ifdef DEBUG
     if(![[CKConfiguration sharedInstance]assertForBindingsOutOfContext])
         return;
@@ -123,6 +126,11 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 }
 
 - (void)beginBindingsContextUsingPolicy:(CKBindingsContextPolicy)policy options:(CKBindingsContextOptions)options{
+    if(![NSThread isMainThread]){
+        NSAssert(NO,@"AppCoreKit : Opening Bindings Context MUST be done on the Main Thread.");
+    }
+    
+    
     CKWeakRef* weakRef = [self weakRefBindingsContext];
     if(weakRef == nil){
         weakRef = [CKWeakRef weakRefWithObject:self block:^(CKWeakRef* ref){

@@ -27,7 +27,7 @@ typedef enum CKBindingsContextOptions{
 } CKBindingsContextOptions;
 
 
-/** 
+/** Creating bindings and opening context MUST be done on the main thread yet or it will assert.
  */
 @interface NSObject(CKBindingContext)
 
@@ -108,7 +108,7 @@ typedef enum CKBindingsContextOptions{
 
 
 
-/** 
+/** Creating bindings and opening context MUST be done on the main thread yet or it will assert.
  */
 @interface NSObject (CKBindings)
 
@@ -143,7 +143,7 @@ typedef enum CKBindingsContextOptions{
 
 
 
-/** 
+/** Creating bindings and opening context MUST be done on the main thread yet or it will assert.
  */
 @interface UIControl (CKBindings)
 
@@ -168,7 +168,7 @@ typedef enum CKBindingsContextOptions{
 //
 
 
-/** 
+/** Creating bindings and opening context MUST be done on the main thread yet or it will assert.
  */
 @interface NSNotificationCenter (CKBindings)
 
@@ -218,7 +218,7 @@ typedef enum CKCollectionBindingEvents{
 }CKCollectionBindingEvents;
 
 
-/** 
+/** Creating bindings and opening context MUST be done on the main thread yet or it will assert.
  */
 @interface CKCollection (CKBindings)
 
