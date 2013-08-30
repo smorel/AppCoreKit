@@ -6,6 +6,8 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
+#import "Reachability.h"
+
 #import "CKImageLoader.h"
 #import "CKNetworkActivityManager.h"
 #import "NSURLRequest+Upload.h"
