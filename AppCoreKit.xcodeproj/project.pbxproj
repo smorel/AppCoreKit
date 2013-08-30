@@ -555,9 +555,9 @@
 		96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */; };
 		96D4B83515125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D4B83615125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */; };
-		96D5D09B17D0CD00001A4534 /* UIButton+FlatDesign.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D5D09717D0CD00001A4534 /* UIButton+FlatDesign.h */; };
+		96D5D09B17D0CD00001A4534 /* UIButton+FlatDesign.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D5D09717D0CD00001A4534 /* UIButton+FlatDesign.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D5D09C17D0CD00001A4534 /* UIButton+FlatDesign.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96D5D09817D0CD00001A4534 /* UIButton+FlatDesign.mm */; };
-		96D5D09D17D0CD00001A4534 /* UISlider+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D5D09917D0CD00001A4534 /* UISlider+Style.h */; };
+		96D5D09D17D0CD00001A4534 /* UISlider+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D5D09917D0CD00001A4534 /* UISlider+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D5D09E17D0CD00001A4534 /* UISlider+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D5D09A17D0CD00001A4534 /* UISlider+Style.m */; };
 		96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96DAFCF514F8161600D71FEB /* CKFilteredCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */; };
