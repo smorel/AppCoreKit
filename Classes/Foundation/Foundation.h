@@ -15,6 +15,7 @@
 #import <objc/runtime.h>
 //libstdc++, libz, crypto, JSONKit
 
+#import "CXMLDocument.h"
 
 
 #import "CKConfiguration.h"
