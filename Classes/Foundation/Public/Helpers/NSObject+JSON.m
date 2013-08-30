@@ -50,7 +50,7 @@
 	return [NSObject objectFromJSONData:data error:nil];
 }
 + (id)objectFromJSONData:(NSData *)data error:(NSError **)error {
-	return [data objectFromJSONDataWithParseOptions:JKParseOptionNone error:error];
+	return [data objectFromJSONDataWithParseOptions:JKParseOptionValidFlags error:error];
 }
 
 @end
