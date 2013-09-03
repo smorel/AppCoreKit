@@ -15,6 +15,10 @@
 #import <objc/runtime.h>
 //libstdc++, libz, crypto, JSONKit
 
+#import "CXMLDocument.h"
+#import "CXMLNode.h"
+#import "CXMLElement.h"
+#import "CXMLNode_XPathExtensions.h"
 
 
 #import "CKConfiguration.h"
@@ -99,6 +103,7 @@
 #import "NSTimer+BlockBaseInterface.h"
 #import "UIView+Name.h"
 #import "UIView+AutoresizingMasks.h"
+#import "UIColor+Additions.h"
 
 
 //ResourceManager

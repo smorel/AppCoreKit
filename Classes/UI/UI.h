@@ -18,6 +18,8 @@
 #import "CKTextView.h"
 #import "UIBarButtonItem+BlockBasedInterface.h"
 #import "UIKeyboard+Information.h"
+#import "UIButton+FlatDesign.h"
+#import "UISlider+Style.h"
 
 
 #import "CKContainerViewController.h"

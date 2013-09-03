@@ -542,19 +542,23 @@
 		96CADE351486B6F6008A23E4 /* NSObject+Runtime_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE341486B6F6008A23E4 /* NSObject+Runtime_private.h */; };
 		96CADE381486BDFF008A23E4 /* NSObject+Validation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE361486BDFC008A23E4 /* NSObject+Validation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CADE391486BDFF008A23E4 /* NSObject+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CADE371486BDFD008A23E4 /* NSObject+Validation.m */; };
-		96CC498117CBFE710017A6E7 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC497D17CBFE710017A6E7 /* JSONKit.h */; };
+		96CC498117CBFE710017A6E7 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC497D17CBFE710017A6E7 /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CC498217CBFE710017A6E7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC497E17CBFE710017A6E7 /* JSONKit.m */; };
-		96CC498317CBFE710017A6E7 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC497F17CBFE710017A6E7 /* Reachability.h */; };
+		96CC498317CBFE710017A6E7 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC497F17CBFE710017A6E7 /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CC498417CBFE710017A6E7 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC498017CBFE710017A6E7 /* Reachability.m */; };
-		96CC498A17CBFE780017A6E7 /* SVPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498517CBFE780017A6E7 /* SVPullToRefresh.h */; };
-		96CC498B17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498617CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h */; };
+		96CC498A17CBFE780017A6E7 /* SVPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498517CBFE780017A6E7 /* SVPullToRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96CC498B17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498617CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CC498C17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC498717CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		96CC498D17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498817CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h */; };
+		96CC498D17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CC498817CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CC498E17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CC498917CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		96D2674215923B7700840A7F /* NSTimer+BlockBaseInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */; };
 		96D4B83515125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D4B83615125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */; };
+		96D5D09B17D0CD00001A4534 /* UIButton+FlatDesign.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D5D09717D0CD00001A4534 /* UIButton+FlatDesign.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96D5D09C17D0CD00001A4534 /* UIButton+FlatDesign.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96D5D09817D0CD00001A4534 /* UIButton+FlatDesign.mm */; };
+		96D5D09D17D0CD00001A4534 /* UISlider+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D5D09917D0CD00001A4534 /* UISlider+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96D5D09E17D0CD00001A4534 /* UISlider+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D5D09A17D0CD00001A4534 /* UISlider+Style.m */; };
 		96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96DAFCF514F8161600D71FEB /* CKFilteredCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */; };
 		96E4D3EE15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h */; };
@@ -1168,6 +1172,10 @@
 		96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTimer+BlockBaseInterface.m"; path = "Classes/Foundation/Public/Helpers/NSTimer+BlockBaseInterface.m"; sourceTree = "<group>"; };
 		96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+BlockBasedInterface.h"; path = "Classes/UI/Public/Views/UIBarButtonItem+BlockBasedInterface.h"; sourceTree = "<group>"; };
 		96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIBarButtonItem+BlockBasedInterface.mm"; path = "Classes/UI/Public/Views/UIBarButtonItem+BlockBasedInterface.mm"; sourceTree = "<group>"; };
+		96D5D09717D0CD00001A4534 /* UIButton+FlatDesign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+FlatDesign.h"; path = "Classes/UI/Public/Views/UIButton+FlatDesign.h"; sourceTree = "<group>"; };
+		96D5D09817D0CD00001A4534 /* UIButton+FlatDesign.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIButton+FlatDesign.mm"; path = "Classes/UI/Public/Views/UIButton+FlatDesign.mm"; sourceTree = "<group>"; };
+		96D5D09917D0CD00001A4534 /* UISlider+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UISlider+Style.h"; path = "Classes/UI/Public/Views/UISlider+Style.h"; sourceTree = "<group>"; };
+		96D5D09A17D0CD00001A4534 /* UISlider+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UISlider+Style.m"; path = "Classes/UI/Public/Views/UISlider+Style.m"; sourceTree = "<group>"; };
 		96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFilteredCollection.h; path = Classes/Foundation/Public/Document/Collection/CKFilteredCollection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKFilteredCollection.m; path = Classes/Foundation/Public/Document/Collection/CKFilteredCollection.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMultilineNSStringPropertyCellController+DynamicLayout.h"; path = "Classes/UI/Private/CKMultilineNSStringPropertyCellController+DynamicLayout.h"; sourceTree = "<group>"; };
@@ -1498,6 +1506,10 @@
 				96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */,
 				7560DC3213B8ED3600268D13 /* UIKeyboard+Information.h */,
 				7560DC3313B8ED3600268D13 /* UIKeyboard+Information.m */,
+				96D5D09717D0CD00001A4534 /* UIButton+FlatDesign.h */,
+				96D5D09817D0CD00001A4534 /* UIButton+FlatDesign.mm */,
+				96D5D09917D0CD00001A4534 /* UISlider+Style.h */,
+				96D5D09A17D0CD00001A4534 /* UISlider+Style.m */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
 			name = Views;
@@ -2632,6 +2644,8 @@
 				9687145117CD0C9400DB747C /* Location.h in Headers */,
 				9686227917CE76180081248D /* CKObject+CKStore_Private.h in Headers */,
 				9686227C17CE7D4B0081248D /* CKLocalizationManager_Private.h in Headers */,
+				96D5D09B17D0CD00001A4534 /* UIButton+FlatDesign.h in Headers */,
+				96D5D09D17D0CD00001A4534 /* UISlider+Style.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3023,6 +3037,8 @@
 				96CC498417CBFE710017A6E7 /* Reachability.m in Sources */,
 				96CC498C17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				96CC498E17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.m in Sources */,
+				96D5D09C17D0CD00001A4534 /* UIButton+FlatDesign.mm in Sources */,
+				96D5D09E17D0CD00001A4534 /* UISlider+Style.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

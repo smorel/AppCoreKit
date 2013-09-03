@@ -278,7 +278,10 @@
 			[self.layer removeAnimationForKey:[NSString stringWithFormat:@"CKImageView<%p>",self]];
             
 			[self.imageView removeFromSuperview];
-			[self.button removeFromSuperview];
+            
+            if(!self.interactive){
+                [self.button removeFromSuperview];
+            }
 			
 			if(self.imageLoader){
 				if(self.activityIndicator){
@@ -299,7 +302,10 @@
         [self createsDefaultImageView];
         
         [self.imageView removeFromSuperview];
-        [self.button removeFromSuperview];
+        
+        if(!self.interactive){
+            [self.button removeFromSuperview];
+        }
         [self.activityIndicator stopAnimating];
         [self.activityIndicator removeFromSuperview];
         
@@ -334,8 +340,11 @@
                         [self.imageView removeFromSuperview];
                     }
                     else{
-                        if(self.button)
-                            [self.button removeFromSuperview];
+                        
+                        if(!self.interactive){
+                            if(self.button)
+                                [self.button removeFromSuperview];
+                        }
                     }
                 }];
             }
@@ -351,8 +360,11 @@
                 [self addSubview:self.button];
             }
             else{
-                if(self.button)
-                    [self.button removeFromSuperview];
+                
+                if(!self.interactive){
+                    if(self.button)
+                        [self.button removeFromSuperview];
+                }
                 self.imageView.frame = self.bounds;
                 [self addSubview:self.imageView];
             }
