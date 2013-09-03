@@ -43,6 +43,7 @@
         [self.barButtonItem removeObserver:self forKeyPath:@"action"];
         [self.barButtonItem removeObserver:self forKeyPath:@"enabled"];
     }
+    [_barButtonItemWeakRef release];
     _barButtonItemWeakRef = nil;
     [super dealloc];
 }
