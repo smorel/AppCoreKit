@@ -1247,15 +1247,17 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     if (_resizeOnKeyboardNotification == YES && _orientation == CKTableViewOrientationPortrait){
-        _modalViewCount = 1;
-        NSDictionary *info = [notification userInfo];
-        CGRect keyboardEndFrame;
-        NSTimeInterval animationDuration;
-        UIViewAnimationCurve animationCurve;
-        [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
-        [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-        [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-        [self stretchTableDownUsingRect:keyboardEndFrame animationCurve:animationCurve duration:animationDuration];
+        if(_modalViewCount == 0){
+            _modalViewCount = 1;
+            NSDictionary *info = [notification userInfo];
+            CGRect keyboardEndFrame;
+            NSTimeInterval animationDuration;
+            UIViewAnimationCurve animationCurve;
+            [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+            [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+            [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+            [self stretchTableDownUsingRect:keyboardEndFrame animationCurve:animationCurve duration:animationDuration];
+        }
     }
 }
 
@@ -1275,12 +1277,14 @@
 
 - (void)sheetWillShow:(NSNotification *)notification {
     if (_resizeOnKeyboardNotification == YES && _orientation == CKTableViewOrientationPortrait){
-        _modalViewCount = 2;
-        NSDictionary *info = [notification userInfo];
-        CGRect keyboardEndFrame = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue];
-        UIViewAnimationCurve animationCurve = (UIViewAnimationCurve)[[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
-        NSTimeInterval animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
-        [self stretchTableDownUsingRect:keyboardEndFrame animationCurve:animationCurve duration:animationDuration];
+        if(_modalViewCount == 0){
+            _modalViewCount = 2;
+            NSDictionary *info = [notification userInfo];
+            CGRect keyboardEndFrame = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue];
+            UIViewAnimationCurve animationCurve = (UIViewAnimationCurve)[[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
+            NSTimeInterval animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
+            [self stretchTableDownUsingRect:keyboardEndFrame animationCurve:animationCurve duration:animationDuration];
+        }
     }
 }
 
