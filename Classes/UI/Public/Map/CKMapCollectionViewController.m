@@ -109,7 +109,16 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
         if(customView.calloutViewControllerCreationBlock){
             delayedCallToSuper = YES;
             self.annotationToSelectAfterScrolling = annotation;
-            [self setCenterCoordinate:annotation.coordinate animated:YES];
+            
+            CGSize calloutSize = [customView calloutViewControllerSize];
+            
+            CLLocationCoordinate2D centerCoordinate = customView.annotation.coordinate;
+            CGPoint pointFromCenterCoordinate = [self convertCoordinate:centerCoordinate toPointToView:self];
+            
+            CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x, pointFromCenterCoordinate.y - (calloutSize.height / 2));
+            CLLocationCoordinate2D coordinate = [self convertPoint:calloutcenter toCoordinateFromView:self];
+            
+            [self setCenterCoordinate:coordinate animated:YES];
         }
     }
     
