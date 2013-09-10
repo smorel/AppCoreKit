@@ -677,19 +677,19 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     
     self.annotationToSelect = nil;
     
-    NSArray* allAnnotations = self.mapView.annotations ;
-    [self.mapView  removeAnnotations:allAnnotations];
-    
-    /*
-    while([self.mapView.annotations count] > 0){
-        id <MKAnnotation> annotation = [self.mapView.annotations lastObject];
-        [self.mapView removeAnnotation:annotation];
+    int i =0;
+    int count = [self.mapView.annotations count];
+    int indexToRemove = 0;
+    while(i < count){
+        id <MKAnnotation> annotation = [self.mapView.annotations objectAtIndex:indexToRemove];
+        if(annotation != self.mapView.userLocation){
+            [self.mapView removeAnnotation:annotation];
+        }else{
+            ++indexToRemove;
+        }
+        ++i;
     }
-     */
     
-    if(self.mapView.userLocation && [self.mapView.annotations indexOfObjectIdenticalTo:self.mapView.userLocation] == NSNotFound){
-        [self.mapView addAnnotation:self.mapView.userLocation];
-    }
     
 	NSArray* objects = [self objectsForSection:0];
 	[self addAnnotations:objects];
