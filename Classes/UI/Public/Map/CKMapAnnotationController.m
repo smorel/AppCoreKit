@@ -132,9 +132,61 @@
             [_calloutViewController.view removeFromSuperview];
             [_calloutViewController viewDidDisappear:YES];
             
+            [self clearBindingsContext];
             self.calloutViewController = nil;
         }
     }
+}
+
+- (UIViewController*)calloutViewController{
+    if(_calloutViewController == NULL){
+        _calloutViewController = [_calloutViewControllerCreationBlock(self.annotationController,self) retain];
+        UIView* view = _calloutViewController.view;//force to load the view here !
+        view.autoresizingMask = UIViewAutoresizingNone;
+        
+        CGSize size = _calloutViewController.contentSizeForViewInPopover;
+        if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+            UINavigationController* nav = (UINavigationController*)_calloutViewController;
+            size = nav.topViewController.contentSizeForViewInPopover;
+        }
+        view.width = size.width;
+        view.height = size.height;
+        
+        [self beginBindingsContextByRemovingPreviousBindings];
+        if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+            UINavigationController* nav = (UINavigationController*)_calloutViewController;
+            [nav bind:@"contentSizeForViewInPopover" withBlock:^(id value) {
+                CGSize size = _calloutViewController.contentSizeForViewInPopover;
+                if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+                    UINavigationController* nav = (UINavigationController*)_calloutViewController;
+                    size = nav.topViewController.contentSizeForViewInPopover;
+                }
+                
+                view.width = size.width;
+                view.height = size.height;
+            }];
+        }else{
+            [_calloutViewController bind:@"contentSizeForViewInPopover" withBlock:^(id value) {
+                CGSize size = _calloutViewController.contentSizeForViewInPopover;
+                
+                view.width = size.width;
+                view.height = size.height;
+            }];
+        }
+        [self endBindingsContext];
+        
+        [_calloutViewController viewWillAppear:YES];
+    }
+    return _calloutViewController;
+}
+
+- (CGSize)calloutViewControllerSize{
+    CGSize size = self.calloutViewController.contentSizeForViewInPopover;
+    if([self.calloutViewController isKindOfClass:[UINavigationController class]]){
+        UINavigationController* nav = (UINavigationController*)_calloutViewController;
+        size = nav.topViewController.contentSizeForViewInPopover;
+    }
+    return size;
 }
 
 - (void)didAddSubview:(UIView *)subview{
@@ -144,46 +196,12 @@
             
             CKCalloutView* v = (CKCalloutView*)subview;
             
-            self.calloutViewController = _calloutViewControllerCreationBlock(self.annotationController,self);
-            if(_calloutViewController){
+            if(self.calloutViewController){//view will appear has already been called !
                 
                 UIView* view = [_calloutViewController view];
-                view.autoresizingMask = UIViewAutoresizingNone;
-                
-                CGSize size = _calloutViewController.contentSizeForViewInPopover;
-                if([_calloutViewController isKindOfClass:[UINavigationController class]]){
-                    UINavigationController* nav = (UINavigationController*)_calloutViewController;
-                    size = nav.topViewController.contentSizeForViewInPopover;
-                }
-                view.width = size.width;
-                view.height = size.height;
                 
                 v.calloutView = view;
-                
-                [self beginBindingsContextByRemovingPreviousBindings];
-                if([_calloutViewController isKindOfClass:[UINavigationController class]]){
-                    UINavigationController* nav = (UINavigationController*)_calloutViewController;
-                    [nav bind:@"contentSizeForViewInPopover" withBlock:^(id value) {
-                        CGSize size = _calloutViewController.contentSizeForViewInPopover;
-                        if([_calloutViewController isKindOfClass:[UINavigationController class]]){
-                            UINavigationController* nav = (UINavigationController*)_calloutViewController;
-                            size = nav.topViewController.contentSizeForViewInPopover;
-                        }
-                        
-                        view.width = size.width;
-                        view.height = size.height;
-                    }];
-                }else{
-                    [_calloutViewController bind:@"contentSizeForViewInPopover" withBlock:^(id value) {
-                        CGSize size = _calloutViewController.contentSizeForViewInPopover;
-                        
-                        view.width = size.width;
-                        view.height = size.height;
-                    }];
-                }
-                [self endBindingsContext];
-                
-                [_calloutViewController viewWillAppear:YES];
+                                
                 [subview addSubview:view];
                 [_calloutViewController viewDidAppear:YES];
             }

@@ -20,6 +20,12 @@
 
 #import "CKResourceManager.h"
 
+
+@interface CKAnnotationView()
+@property(nonatomic,retain)UIViewController* calloutViewController;
+- (CGSize)calloutViewControllerSize;
+@end
+
 CGFloat distance(MKMapPoint p1, MKMapPoint p2){
     return sqrt(pow(p1.x-p2.x,2)+pow(p1.y-p2.y,2));
 }
@@ -103,7 +109,16 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
         if(customView.calloutViewControllerCreationBlock){
             delayedCallToSuper = YES;
             self.annotationToSelectAfterScrolling = annotation;
-            [self setCenterCoordinate:annotation.coordinate animated:YES];
+            
+            CGSize calloutSize = [customView calloutViewControllerSize];
+            
+            CLLocationCoordinate2D centerCoordinate = customView.annotation.coordinate;
+            CGPoint pointFromCenterCoordinate = [self convertCoordinate:centerCoordinate toPointToView:self];
+            
+            CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x, pointFromCenterCoordinate.y - (calloutSize.height / 2));
+            CLLocationCoordinate2D coordinate = [self convertPoint:calloutcenter toCoordinateFromView:self];
+            
+            [self setCenterCoordinate:coordinate animated:YES];
         }
     }
     
@@ -608,9 +623,18 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     if([view isKindOfClass:[CKAnnotationView class]]){
         CKAnnotationView* customView = (CKAnnotationView*)view;
         if(customView.calloutViewControllerCreationBlock){
+            CGSize calloutSize = [customView calloutViewControllerSize];
+            
+            CLLocationCoordinate2D centerCoordinate = customView.annotation.coordinate;
+            CGPoint pointFromCenterCoordinate = [mapView convertCoordinate:centerCoordinate toPointToView:mapView];
+            
+            CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x, pointFromCenterCoordinate.y - (calloutSize.height / 2));
+            CLLocationCoordinate2D coordinate = [mapView convertPoint:calloutcenter toCoordinateFromView:mapView];
+            
             CKMapView* ckMapView = (CKMapView*)mapView;
             ckMapView.annotationToSelectAfterScrolling = customView.annotation;
-            [self.mapView setCenterCoordinate:customView.annotation.coordinate animated:YES];
+            [self.mapView setCenterCoordinate:coordinate animated:YES];
+            return;
         }
     }
 
@@ -677,19 +701,19 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     
     self.annotationToSelect = nil;
     
-    NSArray* allAnnotations = self.mapView.annotations ;
-    [self.mapView  removeAnnotations:allAnnotations];
-    
-    /*
-    while([self.mapView.annotations count] > 0){
-        id <MKAnnotation> annotation = [self.mapView.annotations lastObject];
-        [self.mapView removeAnnotation:annotation];
+    int i =0;
+    int count = [self.mapView.annotations count];
+    int indexToRemove = 0;
+    while(i < count){
+        id <MKAnnotation> annotation = [self.mapView.annotations objectAtIndex:indexToRemove];
+        if(annotation != self.mapView.userLocation){
+            [self.mapView removeAnnotation:annotation];
+        }else{
+            ++indexToRemove;
+        }
+        ++i;
     }
-     */
     
-    if(self.mapView.userLocation && [self.mapView.annotations indexOfObjectIdenticalTo:self.mapView.userLocation] == NSNotFound){
-        [self.mapView addAnnotation:self.mapView.userLocation];
-    }
     
 	NSArray* objects = [self objectsForSection:0];
 	[self addAnnotations:objects];
