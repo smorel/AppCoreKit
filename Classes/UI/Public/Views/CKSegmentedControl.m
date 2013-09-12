@@ -255,7 +255,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
         }
         else{
             theSegment.position = CKSegmentedControlButtonPositionLast;
-            for(int i = segment - 1; i >= 1; --i){
+            for(NSInteger i = segment - 1; i >= 1; --i){
                 CKSegmentedControlButton* middleSegment = [self segmentAtIndex:i];
                 middleSegment.position = CKSegmentedControlButtonPositionMiddle;
             }

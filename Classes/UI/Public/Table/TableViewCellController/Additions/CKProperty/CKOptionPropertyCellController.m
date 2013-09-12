@@ -131,7 +131,7 @@
 	}
 	else{
 		NSInteger index = intValue;
-        NSString* str = (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%d", intValue];
+        NSString* str = (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%ld", (long)intValue];
 		return _(str);
 	}
 	return nil;
@@ -287,7 +287,7 @@
             }
             
             bself.detailText = [bself labelForValue:v];
-            [bself setValueInObjectProperty:[NSNumber numberWithInt:v]];
+            [bself setValueInObjectProperty:[NSNumber numberWithInteger:v]];
         }
         else{
             NSInteger index = tableViewController.selectedIndex;

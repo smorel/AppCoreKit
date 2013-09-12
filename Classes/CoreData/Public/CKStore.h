@@ -10,10 +10,10 @@
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKStoreResultType) {
 	CKStoreAttributeResultType = 0,
 	CKStoreNSDictionaryResultType
-} CKStoreResultType;
+} ;
 
 @class CKCoreDataManager;
 @class CKDomain;

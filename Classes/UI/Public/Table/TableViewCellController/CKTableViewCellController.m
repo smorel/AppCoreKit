@@ -337,7 +337,7 @@
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){
             UITableViewCell* lastCell = nil;
-            for(int i = [[s subviews]count] - 1; i >= 0; --i){
+            for(NSInteger i = [[s subviews]count] - 1; i >= 0; --i){
                 UIView* v = [[s subviews]objectAtIndex:i];
                 if([v isKindOfClass:[UITableViewCell class]]){
                     lastCell = (UITableViewCell*)v;
@@ -365,7 +365,7 @@
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){
             UITableViewCell* lastCell = nil;
-            for(int i = [[s subviews]count] - 1; i >= 0; --i){
+            for(NSInteger i = [[s subviews]count] - 1; i >= 0; --i){
                 UIView* v = [[s subviews]objectAtIndex:i];
                 if([v isKindOfClass:[UITableViewCell class]]){
                     lastCell = (UITableViewCell*)v;
@@ -808,7 +808,7 @@
         }
         
         [_identifier release];
-        _identifier =  [[NSString stringWithFormat:@"%@-<%p>-[%@]-<%d>",[[self class] description],controllerStyle,self.name ? self.name : @"", self.cellStyle]retain];
+        _identifier =  [[NSString stringWithFormat:@"%@-<%p>-[%@]-<%ld>",[[self class] description],controllerStyle,self.name ? self.name : @"", (long)self.cellStyle]retain];
     }
     return _identifier;
 }

@@ -12,13 +12,13 @@
 
 /**
  */
-typedef enum CKDatePickerMode{
+typedef NS_ENUM(NSInteger, CKDatePickerMode){
     CKDatePickerModeTime = UIDatePickerModeTime,   
     CKDatePickerModeDate = UIDatePickerModeDate,
     CKDatePickerModeDateAndTime = UIDatePickerModeDateAndTime,   
     CKDatePickerModeCountDownTime = UIDatePickerModeCountDownTimer,
     CKDatePickerModeCreditCardExpirationDate
-} CKDatePickerMode;
+} ;
 
 
 /**

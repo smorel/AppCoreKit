@@ -32,10 +32,10 @@
 	NSMutableString* str = [NSMutableString string];
 	for(int i =0;i<[indexPath length];++i){
 		if(i < [indexPath length] - 1){
-			[str appendFormat:@"%d ",[indexPath indexAtPosition:i]];
+			[str appendFormat:@"%lu ",(unsigned long)[indexPath indexAtPosition:i]];
 		}
 		else{
-			[str appendFormat:@"%d",[indexPath indexAtPosition:i]];
+			[str appendFormat:@"%lu",(unsigned long)[indexPath indexAtPosition:i]];
 		}
 	}
 	return str;

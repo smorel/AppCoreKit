@@ -10,42 +10,42 @@
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSUInteger, CKStyleViewCornerType) {
 	CKStyleViewCornerTypeNone = 0,
 	CKStyleViewCornerTypeTop,
 	CKStyleViewCornerTypeBottom,
 	CKStyleViewCornerTypeAll
-} CKStyleViewCornerType;
+} ;
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKStyleViewBorderLocation){
 	CKStyleViewBorderLocationNone = 0,
 	CKStyleViewBorderLocationTop = 1 << 1,
 	CKStyleViewBorderLocationBottom = 1 << 2,
 	CKStyleViewBorderLocationRight = 1 << 3,
 	CKStyleViewBorderLocationLeft = 1 << 4,
 	CKStyleViewBorderLocationAll = CKStyleViewBorderLocationTop | CKStyleViewBorderLocationBottom | CKStyleViewBorderLocationRight | CKStyleViewBorderLocationLeft
-} CKStyleViewBorderLocation;
+} ;
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKStyleViewSeparatorLocation) {
 	CKStyleViewSeparatorLocationNone = CKStyleViewBorderLocationNone,
 	CKStyleViewSeparatorLocationTop = CKStyleViewBorderLocationTop,
 	CKStyleViewSeparatorLocationBottom = CKStyleViewBorderLocationBottom,
 	CKStyleViewSeparatorLocationRight = CKStyleViewBorderLocationRight,
 	CKStyleViewSeparatorLocationLeft = CKStyleViewBorderLocationLeft,
 	CKStyleViewSeparatorLocationAll = CKStyleViewBorderLocationAll
-} CKStyleViewSeparatorLocation;
+} ;
 
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 	CKStyleViewGradientStyleVertical,
     CKStyleViewGradientStyleHorizontal
-} CKStyleViewGradientStyle;
+} ;
 
 /**
  */

@@ -87,7 +87,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 		return [object intValue];
 	}
 	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor bitMask:enumDescriptor.isBitMask];
-	[self setObject:[NSNumber numberWithInt:result] forKey:key];
+	[self setObject:[NSNumber numberWithInteger:result] forKey:key];
 	return result;
 }
 
@@ -98,7 +98,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 		return [object intValue];
 	}
 	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor bitMask:YES];
-	[self setObject:[NSNumber numberWithInt:result] forKey:key];
+	[self setObject:[NSNumber numberWithInteger:result] forKey:key];
 	return result;
 }
 
@@ -162,7 +162,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 		return [object intValue];
 	}
 	NSInteger result = [NSValueTransformer convertIntegerFromObject:object];
-	[self setObject:[NSNumber numberWithInt:result] forKey:key];
+	[self setObject:[NSNumber numberWithInteger:result] forKey:key];
 	return result;	
 }
 

@@ -75,7 +75,7 @@
 	
 	if([value isKindOfClass:[CKCollection class]]
 	   || [value isKindOfClass:[NSArray class]]){
-		self.detailText = [NSString stringWithFormat:@"%d",[value count]];
+		self.detailText = [NSString stringWithFormat:@"%lu",(unsigned long)[value count]];
 		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 		self.accessoryView = nil;

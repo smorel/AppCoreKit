@@ -12,19 +12,19 @@
 
 /**
  */
-typedef enum{
+typedef NS_ENUM(NSInteger, CKViewCornerStyle){
 	CKViewCornerStyleTableViewCell,//in this case, we set the corner style of the parent controller (table plain or grouped)
 	//in the following case, we force the corner style of the cell and bypass the parent controller style
 	CKViewCornerStyleRounded,
 	CKViewCornerStyleRoundedTop,
 	CKViewCornerStyleRoundedBottom,
 	CKViewCornerStylePlain
-}CKViewCornerStyle;
+};
 
 
 /**
  */
-typedef enum{
+typedef NS_ENUM(NSInteger, CKViewBorderStyle){
 	CKViewBorderStyleNone          = 0,
 	CKViewBorderStyleTableViewCell = 1 << 1,
 	CKViewBorderStyleLeft          = 1 << 2,
@@ -32,15 +32,15 @@ typedef enum{
 	CKViewBorderStyleTop           = 1 << 4,
 	CKViewBorderStyleBottom        = 1 << 5,
 	CKViewBorderStyleAll = CKViewBorderStyleLeft | CKViewBorderStyleRight | CKViewBorderStyleTop | CKViewBorderStyleBottom
-}CKViewBorderStyle;
+};
 
-typedef enum{
+typedef NS_ENUM(NSInteger, CKViewSeparatorStyle){
 	CKViewSeparatorStyleTableViewCell,
 	CKViewSeparatorStyleTop,
 	CKViewSeparatorStyleBottom,
 	CKViewSeparatorStyleLeft,
 	CKViewSeparatorStyleRight
-}CKViewSeparatorStyle;
+};
 
 
 /**

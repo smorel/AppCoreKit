@@ -12,12 +12,12 @@
 
 /**
  */
-typedef enum CKSegmentedViewControllerPosition{
+typedef NS_ENUM(NSInteger, CKSegmentedViewControllerPosition){
     CKSegmentedViewControllerPositionTop,
     CKSegmentedViewControllerPositionBottom,
     CKSegmentedViewControllerPositionNavigationBar,
     CKSegmentedViewControllerPositionToolBar
-}CKSegmentedViewControllerPosition;
+};
 
 
 /**

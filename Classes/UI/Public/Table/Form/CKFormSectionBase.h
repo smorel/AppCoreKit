@@ -82,7 +82,7 @@
 
 /**
  */
-- (NSInteger)numberOfObjects;
+- (NSUInteger)numberOfObjects;
 
 /**
  */

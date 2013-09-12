@@ -43,7 +43,7 @@
         if([string length] > 0){
             [string insertString:@"/" atIndex:0];
         }
-        [string insertString:[NSString stringWithFormat:@"%d",index] atIndex:0];
+        [string insertString:[NSString stringWithFormat:@"%ld",(long)index] atIndex:0];
         
         [UIControl createsPathRecursivelyForView:parentView inString:string];
     }

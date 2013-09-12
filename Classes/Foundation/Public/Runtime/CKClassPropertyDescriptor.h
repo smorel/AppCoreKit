@@ -12,7 +12,7 @@
 
 /**
  */
-typedef enum{
+typedef NS_ENUM(NSInteger, CKClassPropertyDescriptorType){
 	CKClassPropertyDescriptorTypeChar,
 	CKClassPropertyDescriptorTypeInt,
 	CKClassPropertyDescriptorTypeShort,
@@ -34,17 +34,17 @@ typedef enum{
 	CKClassPropertyDescriptorTypeStruct,
 	CKClassPropertyDescriptorTypeStructPointer,
 	CKClassPropertyDescriptorTypeUnknown
-}CKClassPropertyDescriptorType;
+};
 
 
 /**
  */
-typedef enum{
+typedef NS_ENUM(NSInteger, CKClassPropertyDescriptorAssignementType){
 	CKClassPropertyDescriptorAssignementTypeCopy,
 	CKClassPropertyDescriptorAssignementTypeRetain,
 	CKClassPropertyDescriptorAssignementTypeWeak,
 	CKClassPropertyDescriptorAssignementTypeAssign
-}CKClassPropertyDescriptorAssignementType;
+};
 
 
 /**

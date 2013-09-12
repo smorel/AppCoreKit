@@ -39,7 +39,7 @@
 	// Finds the first occurrence of the pattern in the sequence.
 	
 	j = 0;
-	for (int i = searchRange.location; i < (searchRange.location + searchRange.length); i++) {
+	for (NSInteger i = searchRange.location; i < (searchRange.location + searchRange.length); i++) {
 		while (j > 0 && pattern[j] != buffer[i]) {
 			j = failure[j - 1];
 		}

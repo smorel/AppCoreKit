@@ -13,10 +13,10 @@
 
 /**
  */
-typedef enum CKMapAnnotationStyle{
+typedef NS_ENUM(NSInteger, CKMapAnnotationStyle){
 	CKMapAnnotationCustom,
 	CKMapAnnotationPin
-}CKMapAnnotationStyle;
+};
 
 @class CKMapAnnotationController;
 @class CKAnnotationView;

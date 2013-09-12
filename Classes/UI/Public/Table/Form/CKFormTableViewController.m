@@ -62,14 +62,14 @@
 	return self;
 }
 
-- (NSInteger)numberOfSections{
-	NSInteger count = [self.parentController numberOfVisibleSections];
+- (NSUInteger)numberOfSections{
+	NSUInteger count = [self.parentController numberOfVisibleSections];
 	return count;
 }
 
-- (NSInteger)numberOfObjectsForSection:(NSInteger)section{
+- (NSUInteger)numberOfObjectsForSection:(NSInteger)section{
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	NSInteger count = formSection.collapsed ? 0 : [formSection numberOfObjects];
+	NSUInteger count = formSection.collapsed ? 0 : [formSection numberOfObjects];
 	return count;
 }
 
@@ -124,7 +124,7 @@
 	return [formSection removeObjectAtIndex:indexPath.row];
 }
 
-- (void)fetchRange:(NSRange)range forSection:(int)section{
+- (void)fetchRange:(NSRange)range forSection:(NSInteger)section{
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
 	[formSection fetchRange:range];
 }
@@ -363,7 +363,7 @@
 }
 
 
-- (NSInteger)numberOfVisibleSections{
+- (NSUInteger)numberOfVisibleSections{
 	NSInteger count = 0;
 	for(CKFormSectionBase* section in _sections){
 		if(!section.hidden){
@@ -406,7 +406,7 @@
         for(CKFormSectionBase* section in sections){
             if(hidden && section.hidden == NO){
                 NSInteger index = section.sectionVisibleIndex;
-                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInt:index]];
+                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInteger:index]];
             }
         }
         
@@ -436,7 +436,7 @@
         for(CKFormSectionBase* section in sections){
             if(!hidden && section.hidden == YES){
                 section.hidden = NO;
-                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInt:section.sectionVisibleIndex]];
+                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInteger:section.sectionVisibleIndex]];
             }
         }
         

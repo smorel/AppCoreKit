@@ -166,7 +166,7 @@
 		created = NO;
 		object = [fetchResults objectAtIndex:0]; 
 	} else {
-		NSAssert3(fetchResults.count > 1, @"Expected 1 object of type %@ but got %d [%@]", entityName, fetchResults.count, predicate);
+		NSAssert3(fetchResults.count > 1, @"Expected 1 object of type %@ but got %lu [%@]", entityName, (unsigned long)fetchResults.count, predicate);
 	}
 	
 	if (wasCreated) { *wasCreated = created; }

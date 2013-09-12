@@ -13,18 +13,18 @@
 
 /** 
  */
-typedef enum CKBindingsContextPolicy{
+typedef NS_ENUM(NSInteger, CKBindingsContextPolicy){
 	CKBindingsContextPolicyAdd,
 	CKBindingsContextPolicyRemovePreviousBindings
-} CKBindingsContextPolicy;
+} ;
 
 /** 
  */
-typedef enum CKBindingsContextOptions{
+typedef NS_ENUM(NSInteger, CKBindingsContextOptions){
 	CKBindingsContextPerformOnMainThread           = 1 << 0,
 	CKBindingsContextPerformOnCurrentThread        = 1 << 2,
     CKBindingsContextWaitUntilDone                 = 1 << 4
-} CKBindingsContextOptions;
+} ;
 
 
 /** Creating bindings and opening context MUST be done on the main thread yet or it will assert.
@@ -211,11 +211,11 @@ typedef enum CKBindingsContextOptions{
 @end
 
 
-typedef enum CKCollectionBindingEvents{
+typedef NS_ENUM(NSInteger, CKCollectionBindingEvents){
     CKCollectionBindingEventInsertion   = 1 << 0,
     CKCollectionBindingEventRemoval     = 1 << 1,
     CKCollectionBindingEventAll = CKCollectionBindingEventInsertion | CKCollectionBindingEventRemoval
-}CKCollectionBindingEvents;
+};
 
 
 /** Creating bindings and opening context MUST be done on the main thread yet or it will assert.

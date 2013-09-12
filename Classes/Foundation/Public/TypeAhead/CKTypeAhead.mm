@@ -96,7 +96,7 @@ struct CKTypeAheadStreamReader{
 			unsigned int count = 0;
 			indexesFile.read((char*)&count, (sizeof(unsigned int)));
 			
-			seekOffset = indexesFile.tellg();
+			seekOffset = (unsigned int)indexesFile.tellg();
             
             
 			return count;
@@ -281,7 +281,7 @@ static NSMutableCharacterSet* CKTypeAheadFormatingStringCharacterSet = nil;
 	CKTypeAheadStreamReader* streamer = [[CKTypeAheadStreamReaderManager defaultManager] readerForName:self.name];
 	
 	std::vector<std::string> words;
-	(*streamer).getWordsForText([search UTF8String],words,range.location,range.length);
+	(*streamer).getWordsForText([search UTF8String],words,(int)range.location,(int)range.length);
 								
 	NSMutableArray* results = [NSMutableArray array];
 	for(int i=0;i<words.size();++i){

@@ -71,7 +71,7 @@
 	[_objectController unlock];
 }
 
-- (NSInteger)numberOfObjects{
+- (NSUInteger)numberOfObjects{
 	NSInteger count = 0;
 	count += [_headerCellControllers count];
 	if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
@@ -85,14 +85,14 @@
     if(index < 0)
         return nil;
     
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
 	if((NSInteger)index < (NSInteger)headerCount){
 		CKTableViewCellController* controller = [_headerCellControllers objectAtIndex:index];
 		id object =  controller.value;
 		return object;
 	}
 	
-	int count = [_objectController numberOfObjectsForSection:0];
+	NSUInteger count = [_objectController numberOfObjectsForSection:0];
 	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 			id object = [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
@@ -101,7 +101,7 @@
 	}
 	
 	
-	int footerCount = [_footerCellControllers count];
+	NSUInteger footerCount = [_footerCellControllers count];
 	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
 		CKTableViewCellController* controller = [_footerCellControllers objectAtIndex:index - (count + headerCount)];
 		id object =  controller.value;
@@ -113,7 +113,7 @@
 
 
 - (void)fetchRange:(NSRange)range{
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
     
     NSInteger displaySpinner = (NSInteger)self.objectController.appendSpinnerAsFooterCell;
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
@@ -126,18 +126,18 @@
     if(index < 0)
         return nil;
     
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
 	if((NSInteger)index < (NSInteger)headerCount){
 		CKTableViewCellController* controller = [_headerCellControllers objectAtIndex:index];
 		return controller;
 	}
 	
-	int count = [_objectController numberOfObjectsForSection:0];
+	NSUInteger count = [_objectController numberOfObjectsForSection:0];
 	if((NSInteger)index < (NSInteger)(count + headerCount)){
         return [_controllerFactory controllerForObject:object atIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 	}
 	
-	int footerCount = [_footerCellControllers count];
+	NSUInteger footerCount = [_footerCellControllers count];
 	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
 		CKTableViewCellController* controller = [_footerCellControllers objectAtIndex:index - (count + headerCount)];
 		return controller;
@@ -150,19 +150,19 @@
     if(index < 0)
         return;
     
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
 	if((NSInteger)index < (NSInteger)headerCount){
 		CKAssert(NO,@"NOT IMPLEMENTED");
 	}
 	
-	int count = [_objectController numberOfObjectsForSection:0];
+	NSUInteger count = [_objectController numberOfObjectsForSection:0];
 	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 			return [_objectController removeObjectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 		}
 	}
 	
-	int footerCount = [_footerCellControllers count];
+	NSUInteger footerCount = [_footerCellControllers count];
 	if((NSInteger)index < (NSInteger)(count + headerCount + footerCount)){
 		CKAssert(NO,@"NOT IMPLEMENTED");
 	}
@@ -207,7 +207,7 @@
 		return;
 	}
 	
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
     
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
@@ -219,7 +219,7 @@
 		return;
 	}
 	
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
 	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
                                withObjects:[NSArray arrayWithObjects:self.objectController,object ? object : [NSNull null],theIndexPath,nil]];
@@ -230,7 +230,7 @@
 	if(_sectionUpdate || self.hidden || self.collapsed){
 		return;
 	}
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
 	NSMutableArray* newIndexPaths = [NSMutableArray array];
 	for(int i=0;i<[indexPaths count];++i){
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
@@ -245,7 +245,7 @@
 	if(_sectionUpdate || self.hidden || self.collapsed){
 		return;
 	}
-	int headerCount = [_headerCellControllers count];
+	NSUInteger headerCount = [_headerCellControllers count];
 	NSMutableArray* newIndexPaths = [NSMutableArray array];
 	for(int i=0;i<[indexPaths count];++i){
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
@@ -261,10 +261,10 @@
 
 
 - (void)addFooterCellController:(CKTableViewCellController*)cellController{
-	int headerCount = [_headerCellControllers count];
-	int count = [_objectController numberOfObjectsForSection:0];
-	int footerCount = [_footerCellControllers count];
-	int index = headerCount + count + footerCount;
+	NSUInteger headerCount = [_headerCellControllers count];
+	NSUInteger count = [_objectController numberOfObjectsForSection:0];
+	NSUInteger footerCount = [_footerCellControllers count];
+	NSInteger index = headerCount + count + footerCount;
 	
 	[self.footerCellControllers addObject:cellController];
 	
@@ -276,8 +276,8 @@
 }
 
 - (void)addHeaderCellController:(CKTableViewCellController*)cellController{
-	int headerCount = [_headerCellControllers count];
-	int index = headerCount;
+	NSUInteger headerCount = [_headerCellControllers count];
+	NSInteger index = headerCount;
 	
 	[self.headerCellControllers addObject:cellController];
 	
@@ -292,9 +292,9 @@
     NSInteger footerIndex = [_footerCellControllers indexOfObjectIdenticalTo:cellController];
     CKAssert(footerIndex != NSNotFound,@"cannot find %@",cellController);
     
-    int headerCount = [_headerCellControllers count];
-	int count = [_objectController numberOfObjectsForSection:0];
-	int index = headerCount + count + footerIndex;
+    NSUInteger headerCount = [_headerCellControllers count];
+	NSUInteger count = [_objectController numberOfObjectsForSection:0];
+	NSInteger index = headerCount + count + footerIndex;
 	
     [cellController retain];
 	[self.footerCellControllers removeObjectAtIndex:footerIndex];
@@ -309,7 +309,7 @@
 
 - (void)removeHeaderCellController:(CKTableViewCellController*)cellController{
     NSInteger headerIndex = [_headerCellControllers indexOfObjectIdenticalTo:cellController];
-	int index = headerIndex;
+	NSInteger index = headerIndex;
 	
     [cellController retain];
 	[self.headerCellControllers removeObjectAtIndex:headerIndex];

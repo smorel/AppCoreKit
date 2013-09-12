@@ -109,7 +109,7 @@
         view = [cell.contentView viewWithTag:viewTag];
     }
     
-    for(int i =_numberOfColumns - 1;i<=totalViews; ++i){
+    for(NSInteger i =_numberOfColumns - 1;i<=totalViews; ++i){
         viewTag = ControllerViewBaseTag + i;
         view = [cell.contentView viewWithTag:viewTag];
         if(view)view.hidden = YES;

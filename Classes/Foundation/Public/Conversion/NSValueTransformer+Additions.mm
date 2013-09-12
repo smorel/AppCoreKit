@@ -95,8 +95,8 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 			else{
 				i = [NSValueTransformer convertIntegerFromObject:object];
 			}
-			[property setValue:[NSNumber numberWithInt:i]];
-			return [NSNumber numberWithInt:i];
+			[property setValue:[NSNumber numberWithInteger:i]];
+			return [NSNumber numberWithInteger:i];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeShort:{
@@ -133,8 +133,8 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 				i = [NSValueTransformer convertUnsignedIntFromObject:object];
 			}
         
-			[property setValue:[NSNumber numberWithUnsignedInt:i]];
-			return [NSNumber numberWithUnsignedInt:i];
+			[property setValue:[NSNumber numberWithUnsignedInteger:i]];
+			return [NSNumber numberWithUnsignedInteger:i];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedShort:{

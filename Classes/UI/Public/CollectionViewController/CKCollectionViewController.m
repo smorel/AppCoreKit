@@ -357,19 +357,19 @@
 		NSInteger section = indexPath.section;
 		if(section < minVisibleSectionIndex) minVisibleSectionIndex = section;
 		if(section > maxVisibleSectionIndex) maxVisibleSectionIndex = section;
-		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInt:section]];
+		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInteger:section]];
 		if(maxForSection != nil){
 			if(indexPath.row > [maxForSection intValue]){
-				[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:section]];
+				[maxIndexPaths setObject:[NSNumber numberWithInteger:indexPath.row] forKey:[NSNumber numberWithInteger:section]];
 			}
 		}
 		else{
-			[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:section]];
+			[maxIndexPaths setObject:[NSNumber numberWithInteger:indexPath.row] forKey:[NSNumber numberWithInteger:section]];
 		}
 	}
 	
 	for(NSInteger i = minVisibleSectionIndex; i <= maxVisibleSectionIndex; ++i){
-		NSNumber* sectionNumber = [NSNumber numberWithInt:i];
+		NSNumber* sectionNumber = [NSNumber numberWithInteger:i];
 		id maxRowNumber = [maxIndexPaths objectForKey:sectionNumber];
 		NSInteger maxRow = maxRowNumber ? [maxRowNumber intValue] : 0;
 		[self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:maxRow inSection:i]];
@@ -381,7 +381,7 @@
     if([_objectController respondsToSelector:@selector(appendSpinnerAsFooterCell)]){
         appendSpinnerAsFooterCell = [_objectController appendSpinnerAsFooterCell];
     }
-	int numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (appendSpinnerAsFooterCell ? 1 : 0);
+	NSInteger numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (appendSpinnerAsFooterCell ? 1 : 0);
 	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
 		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 	}
@@ -812,10 +812,10 @@
     NSMutableDictionary* indexsToRemove = [NSMutableDictionary dictionary];
     for(NSInteger i = 0; i<[indexPaths count];++i){
         NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
-        NSMutableIndexSet* indexSet = [indexsToRemove objectForKey:[NSNumber numberWithInt:[indexPath section]]];
+        NSMutableIndexSet* indexSet = [indexsToRemove objectForKey:[NSNumber numberWithInteger:[indexPath section]]];
         if(!indexSet){
             indexSet = [NSMutableIndexSet indexSet];
-            [indexsToRemove setObject:indexSet forKey:[NSNumber numberWithInt:[indexPath section]]];
+            [indexsToRemove setObject:indexSet forKey:[NSNumber numberWithInteger:[indexPath section]]];
         }
         
         if([self.sectionsToControllers count] > [indexPath section]){

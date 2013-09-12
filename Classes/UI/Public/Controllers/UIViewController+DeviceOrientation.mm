@@ -16,7 +16,7 @@ NSString* CKUIDeviceOrientationWillChangeNotification = @"CKUIDeviceOrientationW
 - (void)swizzle_UIViewController_willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     UIViewController* rootViewController = [self.view.window rootViewController];
     if(rootViewController == self){
-        NSDictionary* infos = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:toInterfaceOrientation],@"orientation",[NSNumber numberWithFloat:duration],@"duration", nil];
+        NSDictionary* infos = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:toInterfaceOrientation],@"orientation",[NSNumber numberWithFloat:duration],@"duration", nil];
         [[NSNotificationCenter defaultCenter]postNotificationName:CKUIDeviceOrientationWillChangeNotification object:self userInfo:infos];
     }
     [self swizzle_UIViewController_willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];

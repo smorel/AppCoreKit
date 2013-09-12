@@ -18,18 +18,18 @@
 
 /**
  */
-typedef enum CKMapCollectionViewControllerZoomStrategy{
+typedef NS_ENUM(NSInteger, CKMapCollectionViewControllerZoomStrategy){
     CKMapCollectionViewControllerZoomStrategyManual,
 	CKMapCollectionViewControllerZoomStrategyEnclosing,
 	CKMapCollectionViewControllerZoomStrategySmart
-}CKMapCollectionViewControllerZoomStrategy;
+};
 
 /**
  */
-typedef enum CKMapCollectionViewControllerSelectionStrategy{
+typedef NS_ENUM(NSInteger, CKMapCollectionViewControllerSelectionStrategy){
     CKMapCollectionViewControllerSelectionStrategyManual,
     CKMapCollectionViewControllerSelectionStrategyAutoSelectAloneAnnotations
-}CKMapCollectionViewControllerSelectionStrategy;
+};
 
 
 @class CKMapCollectionViewController;

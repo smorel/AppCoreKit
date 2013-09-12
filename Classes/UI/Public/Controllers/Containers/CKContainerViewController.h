@@ -10,7 +10,7 @@
 
 /**
  */
-typedef enum CKTransitionType{
+typedef NS_ENUM(NSInteger, CKTransitionType){
     CKTransitionNone = UIViewAnimationOptionTransitionNone,
     CKTransitionFlipFromLeft    = UIViewAnimationOptionTransitionFlipFromLeft,
     CKTransitionFlipFromRight   = UIViewAnimationOptionTransitionFlipFromRight,
@@ -21,7 +21,7 @@ typedef enum CKTransitionType{
     CKTransitionFlipFromBottom  = UIViewAnimationOptionTransitionFlipFromBottom,
     CKTransitionPush            = 8 << 20,
     CKTransitionPop             = 9 << 20,
-}CKTransitionType;
+};
 
 /**
  */

@@ -30,11 +30,11 @@
 
 /**
  */
-- (NSInteger)numberOfSections;
+- (NSUInteger)numberOfSections;
 
 /**
  */
-- (NSInteger)numberOfObjectsForSection:(NSInteger)section;
+- (NSUInteger)numberOfObjectsForSection:(NSInteger)section;
 
 /**
  */
@@ -78,7 +78,7 @@
 
 /**
  */
-- (void)fetchRange:(NSRange)range forSection:(int)section;
+- (void)fetchRange:(NSRange)range forSection:(NSInteger)section;
 
 //FIXME : this should stay private !!!
 //For multithreading purpose all incoming event while locked should be ignored !!!

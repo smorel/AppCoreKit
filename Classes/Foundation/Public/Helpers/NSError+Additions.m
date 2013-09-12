@@ -18,7 +18,7 @@ NSError* aggregateError(NSError* error,NSString* domain,NSInteger code,NSString*
     }
     
     NSMutableArray* array = (NSMutableArray*)[[error userInfo]objectForKey:CKErrorsKey];
-    [array addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:code],CKErrorCodeKey,
+    [array addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:code],CKErrorCodeKey,
                       str,CKErrorDetailsKey,nil]];
     return error;
 }

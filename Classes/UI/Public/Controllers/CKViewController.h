@@ -23,7 +23,7 @@ typedef void(^CKViewControllerEditingBlock)(BOOL editing);
 
 /** 
  */
-typedef enum CKInterfaceOrientation{
+typedef NS_ENUM(NSInteger, CKInterfaceOrientation){
 #ifdef __IPHONE_6_0
     CKInterfaceOrientationPortrait  = UIInterfaceOrientationMaskPortrait,
     CKInterfaceOrientationLandscape = UIInterfaceOrientationMaskLandscape,
@@ -32,12 +32,12 @@ typedef enum CKInterfaceOrientation{
     CKInterfaceOrientationLandscape = 1 << 1,
 #endif
     CKInterfaceOrientationAll       = CKInterfaceOrientationPortrait | CKInterfaceOrientationLandscape
-}CKInterfaceOrientation;
+};
 
 
 /**
  */
-typedef enum CKViewControllerState{
+typedef NS_ENUM(NSInteger, CKViewControllerState){
     CKViewControllerStateNone           = 1 << 0,
     CKViewControllerStateWillAppear     = 1 << 1,
     CKViewControllerStateDidAppear      = 1 << 2,
@@ -45,7 +45,7 @@ typedef enum CKViewControllerState{
     CKViewControllerStateDidDisappear   = 1 << 4,
     CKViewControllerStateDidUnload      = 1 << 5,
     CKViewControllerStateDidLoad        = 1 << 6
-}CKViewControllerState;
+};
 
 /** 
  CKViewController is the base class providing helpers to build a view controller and manage customization with stylesheet.

@@ -16,26 +16,26 @@
 
 /**
  */
-typedef enum CKTableCollectionViewControllerEditingType{
+typedef NS_ENUM(NSInteger, CKTableCollectionViewControllerEditingType){
     CKTableCollectionViewControllerEditingTypeNone    = 0,
     CKTableCollectionViewControllerEditingTypeLeft    = 1 << 1,
     CKTableCollectionViewControllerEditingTypeRight   = 1 << 2,
     CKTableCollectionViewControllerEditingTypeAnimateTransition = 1 << 3
-}CKTableCollectionViewControllerEditingType;
+};
 
 /**
  */
-typedef enum CKTableCollectionViewControllerScrollingPolicy{
+typedef NS_ENUM(NSInteger, CKTableCollectionViewControllerScrollingPolicy){
     CKTableCollectionViewControllerScrollingPolicyNone,
     CKTableCollectionViewControllerScrollingPolicyResignResponder
-}CKTableCollectionViewControllerScrollingPolicy;
+};
 
 /**
  */
-typedef enum CKTableCollectionViewControllerSnappingPolicy{
+typedef NS_ENUM(NSInteger, CKTableCollectionViewControllerSnappingPolicy){
     CKTableCollectionViewControllerSnappingPolicyNone,
     CKTableCollectionViewControllerSnappingPolicyCenter
-}CKTableCollectionViewControllerSnappingPolicy;
+};
 
 typedef void(^CKTableCollectionViewControllerSearchBlock)(NSString* filter);
 

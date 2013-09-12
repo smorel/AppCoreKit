@@ -202,11 +202,12 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     switch(self.datePickerMode){
         case CKDatePickerModeCreditCardExpirationDate:{
             if(component == 0){//month
-                return [NSString stringWithFormat:@"%d",row + 1]; 
+                NSInteger index = row + (NSInteger)1;
+                return [NSString stringWithFormat:@"%ld",(long)index];
             }
             else if(component == 1){//year
                 NSDateComponents* comp = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear fromDate:[NSDate date]];
-                return [NSString stringWithFormat:@"%d",[comp year] + row]; 
+                return [NSString stringWithFormat:@"%ld",(long)([comp year] + row)];
             }
             break;
         }
@@ -431,7 +432,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 }
 
 - (void)resignFirstResponder{
-    NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
+    NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%ld>-<%d>",(long)self.datePickerMode,_enableAccessoryView];
     CKSheetController*  sheetController = [CKNSDateSheetControllersSingleton objectForKey:dateSheetControllerKey];
     if(sheetController && sheetController.visible){
         [sheetController dismissSheetAnimated:YES];
@@ -451,7 +452,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 	}
     
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
+        NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%ld>-<%d>",(long)self.datePickerMode,_enableAccessoryView];
         CKSheetController*  sheetController = [CKNSDateSheetControllersSingleton objectForKey:dateSheetControllerKey];
         if(sheetController == nil){
             CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.objectProperty mode:self.datePickerMode]autorelease];
@@ -560,7 +561,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 }
 
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
-    NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
+    NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%ld>-<%d>",(long)self.datePickerMode,_enableAccessoryView];
     [CKNSDateSheetControllersSingleton removeObjectForKey:dateSheetControllerKey];
 }
 

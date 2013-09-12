@@ -286,7 +286,7 @@
 }
 
 - (void)setMinimumLength:(NSInteger)minimumLength{
-    [self.attributes setObject:[NSNumber numberWithInt:minimumLength] forKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_minimumLength"];
+    [self.attributes setObject:[NSNumber numberWithInteger:minimumLength] forKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_minimumLength"];
 }
 
 - (NSInteger)minimumLength{
@@ -296,7 +296,7 @@
 }
 
 - (void)setMaximumLength:(NSInteger)maximumLength{
-    [self.attributes setObject:[NSNumber numberWithInt:maximumLength] forKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_maximumLength"];
+    [self.attributes setObject:[NSNumber numberWithInteger:maximumLength] forKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_maximumLength"];
 }
 
 - (NSInteger)maximumLength{

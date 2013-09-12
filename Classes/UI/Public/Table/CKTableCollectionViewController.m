@@ -1332,7 +1332,7 @@
         }
     }
     
-	int page = intTmp;
+	NSInteger page = intTmp;
 	if(page < 0) 
 		page = 0;
 	

@@ -55,8 +55,8 @@
 }
 
 - (NSString*)description{
-	return [NSString stringWithFormat:@"<CKUIControlBlockBinder : %p>{\ncontrolRef = %@\ncontrolEvents = %d}",
-			self,self.control ? self.control : @"(null)",controlEvents];
+	return [NSString stringWithFormat:@"<CKUIControlBlockBinder : %p>{\ncontrolRef = %@\ncontrolEvents = %lu}",
+			self,self.control ? self.control : @"(null)",(unsigned long)controlEvents];
 }
 
 - (void)reset{

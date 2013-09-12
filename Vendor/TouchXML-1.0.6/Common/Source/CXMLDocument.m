@@ -111,7 +111,9 @@ if ((self = [super init]) != NULL)
 			CFStringEncoding cfenc = CFStringConvertNSStringEncodingToEncoding(encoding);
 			CFStringRef cfencstr = CFStringConvertEncodingToIANACharSetName(cfenc);
 			const char *enc = CFStringGetCStringPtr(cfencstr, 0);
-			theDoc = xmlReadMemory([inData bytes], [inData length], NULL, enc, XML_PARSE_RECOVER | XML_PARSE_NOWARNING);
+                
+            //ARM64 : verify the following casts is valid
+			theDoc = xmlReadMemory([inData bytes], (int)[inData length], NULL, enc, XML_PARSE_RECOVER | XML_PARSE_NOWARNING);
 			}
 		
 		if (theDoc != NULL)

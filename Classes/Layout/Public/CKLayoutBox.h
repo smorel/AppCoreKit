@@ -11,17 +11,17 @@
 
 //CKLayoutBox
 
-typedef enum CKLayoutVerticalAlignment{
+typedef NS_ENUM(NSInteger, CKLayoutVerticalAlignment){
     CKLayoutVerticalAlignmentTop,
     CKLayoutVerticalAlignmentCenter,
     CKLayoutVerticalAlignmentBottom
-}CKLayoutVerticalAlignment;
+};
 
-typedef enum CKLayoutHorizontalAlignment{
+typedef NS_ENUM(NSInteger, CKLayoutHorizontalAlignment){
     CKLayoutHorizontalAlignmentLeft,
     CKLayoutHorizontalAlignmentCenter,
     CKLayoutHorizontalAlignmentRight
-}CKLayoutHorizontalAlignment;
+};
 
 
 /** CKLayoutBox is the base class for the various layout algorithms.

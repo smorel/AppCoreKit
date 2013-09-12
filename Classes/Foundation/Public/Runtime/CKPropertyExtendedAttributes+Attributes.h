@@ -166,12 +166,12 @@ typedef BOOL(^CKInputTextFormatterBlock)(id textInputView,NSRange range, NSStrin
 
 typedef NSComparisonResult(^CKOptionPropertyCellControllerSortingBlock)(id value1, NSString* label1,id value2, NSString* label2);
 
-typedef enum CKOptionPropertyCellControllerPresentationStyle{
+typedef NS_ENUM(NSInteger, CKOptionPropertyCellControllerPresentationStyle){
     CKOptionPropertyCellControllerPresentationStyleDefault,
     CKOptionPropertyCellControllerPresentationStylePush,
     CKOptionPropertyCellControllerPresentationStylePopover,
     CKOptionPropertyCellControllerPresentationStyleModal
-}CKOptionPropertyCellControllerPresentationStyle;
+};
 
 /**
  */

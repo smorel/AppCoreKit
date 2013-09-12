@@ -149,7 +149,7 @@
             [cellControllers addObject:cellController];
         }
         else{
-            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%d",[attribute.itemReferences count]] action:^(CKTableViewCellController* controller){
+            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%lu",(unsigned long)[attribute.itemReferences count]] action:^(CKTableViewCellController* controller){
                 CKStoreDomainExplorer* domainController = [[[CKStoreDomainExplorer alloc]initWithItems:[NSMutableArray arrayWithArray:attribute.items]]autorelease];
                 domainController.title = attribute.name;
                 [self.navigationController pushViewController:domainController animated:YES];

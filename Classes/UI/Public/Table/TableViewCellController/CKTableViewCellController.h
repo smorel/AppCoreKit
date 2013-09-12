@@ -97,7 +97,7 @@
 
 /**
  */
-enum{
+typedef NS_ENUM(NSInteger, CKTableViewCellFlags){
 	CKTableViewCellFlagNone = CKItemViewFlagNone,
 	CKTableViewCellFlagSelectable = CKItemViewFlagSelectable,
 	CKTableViewCellFlagEditable = CKItemViewFlagEditable,
@@ -105,12 +105,11 @@ enum{
 	CKTableViewCellFlagMovable = CKItemViewFlagMovable,
 	CKTableViewCellFlagAll = CKItemViewFlagAll
 };
-typedef NSUInteger CKTableViewCellFlags;
 
 
 /**
  */
-typedef enum CKTableViewCellStyle {
+typedef NS_ENUM(NSInteger, CKTableViewCellStyle) {
     CKTableViewCellStyleDefault = UITableViewCellStyleDefault,	
     CKTableViewCellStyleValue1 = UITableViewCellStyleValue1,		
     CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
@@ -121,7 +120,7 @@ typedef enum CKTableViewCellStyle {
 	CKTableViewCellStyleSubtitle2,
     
 	CKTableViewCellStyleCustomLayout
-} CKTableViewCellStyle;           
+} ;
 
 
 typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* controller);

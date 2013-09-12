@@ -112,7 +112,7 @@
 	}
 }
 
-- (void)fetchRange:(NSRange)range forSection:(int)section{
+- (void)fetchRange:(NSRange)range forSection:(NSInteger)section{
 	CKAssert(section == 0,@"Invalid section");
 	/*if(_collection && _collection.feedSource){
 		range.location--;
@@ -127,11 +127,11 @@
 	[_collection fetchRange:range];
 }
 
-- (NSInteger)numberOfSections{
+- (NSUInteger)numberOfSections{
 	return 1;
 }
 
-- (NSInteger)numberOfObjectsForSection:(NSInteger)section{
+- (NSUInteger)numberOfObjectsForSection:(NSInteger)section{
 	NSInteger count = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay,[_collection count]) : [_collection count];
 	if(appendSpinnerAsFooterCell && _collection.feedSource){
 		return count + 1;
@@ -228,8 +228,8 @@
     }
     //}
     
-    int count = 0;
-    unsigned currentIndex = [indexs firstIndex];
+    NSInteger count = 0;
+    NSUInteger currentIndex = [indexs firstIndex];
     NSMutableArray* indexPaths = [NSMutableArray array];
     while (currentIndex != NSNotFound) {
         //Do not notify add if currentIndex > limit

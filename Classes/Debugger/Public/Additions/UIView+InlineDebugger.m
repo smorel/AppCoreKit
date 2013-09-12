@@ -80,7 +80,7 @@
         [subTitle appendFormat:@"(hidden)"];
     }
     if(view.tag != 0){
-        [subTitle appendFormat:@"%@(tag:%d)",([subTitle length] > 0) ? @"," : @"",view.tag];
+        [subTitle appendFormat:@"%@(tag:%ld)",([subTitle length] > 0) ? @"," : @"",(long)view.tag];
     }
     [subTitle appendFormat:@"%@(frame:%@)",([subTitle length] > 0) ? @"," : @"",NSStringFromCGRect(view.frame)];
     

@@ -9,11 +9,11 @@
 #import "CKFilteredCollection.h"
 #import "CKDebug.h"
 
-typedef enum CKFilteredCollectionUpdateType{
+typedef NS_ENUM(NSInteger, CKFilteredCollectionUpdateType){
     CKFilteredCollectionUpdateTypeReload,
     CKFilteredCollectionUpdateTypeInsertion,
     CKFilteredCollectionUpdateTypeRemoval
-}CKFilteredCollectionUpdateType;
+};
 
 @interface CKCollection()
 @property (nonatomic,assign,readwrite) NSInteger count;

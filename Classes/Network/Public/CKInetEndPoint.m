@@ -32,7 +32,7 @@
 //
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"%@:%d", self.inetAddressRepresentation, self.port];
+	return [NSString stringWithFormat:@"%@:%ld", self.inetAddressRepresentation, (unsigned long)self.port];
 }
 
 @end

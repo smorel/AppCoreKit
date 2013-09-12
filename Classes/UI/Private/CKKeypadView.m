@@ -27,10 +27,10 @@
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKLayoutAlignment) {
 	CKLayoutAlignmentNone = 0,
 	CKLayoutAlignmentJustify
-} CKLayoutAlignment;
+} ;
 
 
 /**
@@ -259,7 +259,7 @@ typedef enum {
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	button.frame = CGRectMake(0, 0, 10, 10);
 	button.tag = key;
-	if (key < 1000) [button setTitle:[NSString stringWithFormat:@"%d",key] forState:UIControlStateNormal];
+	if (key < 1000) [button setTitle:[NSString stringWithFormat:@"%ld",(long)key] forState:UIControlStateNormal];
 	[button addTarget:self action:@selector(keyPressed:) forControlEvents:UIControlEventTouchUpInside];
 
 	// Theming
@@ -319,7 +319,7 @@ typedef enum {
 			if ([(NSObject *)self.delegate respondsToSelector:@selector(keypadView:shouldSelectKey:)] &&
 				[self.delegate keypadView:self shouldSelectKey:button.tag] == NO)
 				return;
-			self.value = [NSString stringWithFormat:@"%@%d", self.value, button.tag];
+			self.value = [NSString stringWithFormat:@"%@%ld", self.value, (long)button.tag];
 			break;
 	}
 

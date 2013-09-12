@@ -194,7 +194,7 @@
 #pragma mark CKCarouselViewDelegate
 
 - (UIView*) carouselView:(CKCarouselView*)carouselView viewForHeaderInSection:(NSInteger)section{
-	UIView* view = _headerViewsForSections ? [_headerViewsForSections objectForKey:[NSNumber numberWithInt:section]] : nil;
+	UIView* view = _headerViewsForSections ? [_headerViewsForSections objectForKey:[NSNumber numberWithInteger:section]] : nil;
 	if(view){
 		return view;
 	}
@@ -206,7 +206,7 @@
 			self.headerViewsForSections = [NSMutableDictionary dictionary];
 		}
 		if(view != nil){
-			[_headerViewsForSections setObject:view forKey:[NSNumber numberWithInt:section]];
+			[_headerViewsForSections setObject:view forKey:[NSNumber numberWithInteger:section]];
 		}
 	}
 	//}

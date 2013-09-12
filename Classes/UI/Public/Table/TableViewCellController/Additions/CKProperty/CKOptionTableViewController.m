@@ -121,21 +121,21 @@
 
 - (id)selectCell:(id)controller{
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
-	int i = standardController.indexPath.row;
+	NSInteger i = standardController.indexPath.row;
 	if(self.multiSelectionEnabled){
 		if([standardController.value intValue] == 1){
 			standardController.value = [NSNumber numberWithInt:0];
 			standardController.accessoryType = UITableViewCellAccessoryNone;
-			[self.selectedIndexes removeObject:[NSNumber numberWithInt:i]];
+			[self.selectedIndexes removeObject:[NSNumber numberWithInteger:i]];
 		}
 		else{
 			standardController.value = [NSNumber numberWithInt:1];
 			standardController.accessoryType = UITableViewCellAccessoryCheckmark;
-			[self.selectedIndexes addObject:[NSNumber numberWithInt:i]];
+			[self.selectedIndexes addObject:[NSNumber numberWithInteger:i]];
 		}
 	}
 	else{
-		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:i]];
+		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInteger:i]];
 	}
     
     

@@ -10,10 +10,10 @@
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
 	CKTableViewOrientationPortrait,
 	CKTableViewOrientationLandscape
-} CKTableViewOrientation;
+} ;
 
 // From UITableViewController:
 // Creates a table view with the correct dimensions and autoresizing, setting the datasource and delegate to self.

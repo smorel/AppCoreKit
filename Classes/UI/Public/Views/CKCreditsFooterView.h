@@ -11,10 +11,10 @@
 
 /** 
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKCreditsViewStyle) {
 	CKCreditsViewStyleLight = 0,
 	CKCreditsViewStyleDark
-} CKCreditsViewStyle;
+} ;
 
 /** 
  */

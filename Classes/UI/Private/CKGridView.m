@@ -174,7 +174,7 @@
 
 
 - (void)insertViewAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
-	int index = [self indexForIndexPath:indexPath];
+	NSInteger index = [self indexForIndexPath:indexPath];
 	UIView* previousView = (index < [self.views count]) ? [self.views objectAtIndex:index] : [NSNull null];
 	UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
 	if (view) {
@@ -229,8 +229,8 @@
 	return (indexPath.row * _columns) + indexPath.column;
 }
 - (NSIndexPath *)indexPathForIndex:(NSInteger)index {
-	int r = index / _columns;
-	int c = index - r * _columns;
+	NSInteger r = index / _columns;
+	NSInteger c = index - r * _columns;
 	CKAssert(r>= 0 && r<_rows && c>=0 && c<_columns,@"invalid row column");
 	return [NSIndexPath indexPathForRow:r column:c];
 }

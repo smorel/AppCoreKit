@@ -37,8 +37,8 @@
 //will get call when acting in property grids or table views ...
 - (void)insertSubviewsObjects:(NSArray *)views atIndexes:(NSIndexSet*)indexes{
 	
-	int i = 0;
-	unsigned currentIndex = [indexes firstIndex];
+	NSInteger i = 0;
+	NSUInteger currentIndex = [indexes firstIndex];
 	while (currentIndex != NSNotFound) {
 		UIView* view = [views objectAtIndex:i];
 		[self insertSubview:view atIndex:currentIndex];

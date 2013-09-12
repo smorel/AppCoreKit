@@ -338,7 +338,7 @@ static BOOL UIControlSwizzlingDone = NO;
     [UIView executeSwizzling];
     objc_setAssociatedObject(self, 
                              &UIViewIndexInParentBeforeDraggingKey,
-                             [NSNumber numberWithInt:index],
+                             [NSNumber numberWithInteger:index],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     [self didChangeValueForKey:@"indexInParentBeforeDragging"];
 }
@@ -459,8 +459,8 @@ typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents ev
 }
 
 - (NSString*)description{
-	return [NSString stringWithFormat:@"<UIViewDragDropBlockBinder : %p>{\ncontrolRef = %@\ndragEvents = %d}",
-			self,viewRef ? viewRef.object : @"(null)",dragEvents];
+	return [NSString stringWithFormat:@"<UIViewDragDropBlockBinder : %p>{\ncontrolRef = %@\ndragEvents = %ld}",
+			self,viewRef ? viewRef.object : @"(null)",(long)dragEvents];
 }
 
 - (void)reset{

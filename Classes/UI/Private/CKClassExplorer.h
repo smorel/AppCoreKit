@@ -15,10 +15,10 @@
 
 /**
  */
-typedef enum CKClassExplorerType{
+typedef NS_ENUM(NSInteger, CKClassExplorerType){
 	CKClassExplorerTypeClasses,
 	CKClassExplorerTypeInstances
-}CKClassExplorerType;
+};
 
 
 /**

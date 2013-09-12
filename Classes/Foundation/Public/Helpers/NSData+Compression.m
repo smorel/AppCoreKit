@@ -14,8 +14,8 @@
 - (NSData *)inflatedData {
 	if ([self length] == 0) return self;
 	
-	unsigned fullLength = [self length];
-	unsigned halfLength = [self length] / 2;
+	NSUInteger fullLength = [self length];
+	NSUInteger halfLength = [self length] / 2;
 	
 	NSMutableData *decompressed = [NSMutableData dataWithLength:(fullLength + halfLength)];
 	BOOL done = NO;
@@ -23,7 +23,10 @@
 	
 	z_stream strm;
 	strm.next_in = (Bytef *)[self bytes];
-	strm.avail_in = [self length];
+    
+    //ARM64 : Verify the following cast is correct !
+	strm.avail_in = (uInt)[self length];
+    
 	strm.total_out = 0;
 	strm.zalloc = Z_NULL;
 	strm.zfree = Z_NULL;
@@ -39,7 +42,9 @@
 			[decompressed increaseLengthBy:halfLength];
 		
 		strm.next_out = [decompressed mutableBytes] + strm.total_out;
-		strm.avail_out = [decompressed length] - strm.total_out;
+        
+        //ARM64 : Verify the following cast is correct !
+		strm.avail_out = (uInt)([decompressed length] - strm.total_out);
 		
 		// Inflate another chunk.
 		status = inflate(&strm, Z_SYNC_FLUSH);

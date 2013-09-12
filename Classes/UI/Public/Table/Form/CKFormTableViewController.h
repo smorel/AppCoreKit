@@ -86,7 +86,7 @@
 
 /**
  */
-- (NSInteger)numberOfVisibleSections;
+- (NSUInteger)numberOfVisibleSections;
 
 /**
  */

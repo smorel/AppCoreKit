@@ -15,7 +15,10 @@
 	UInt8 bytes[20];
 	
 	CC_SHA1_Init(&sha1);
-	CC_SHA1_Update(&sha1, [string UTF8String], [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    
+    //ARM64 : Verify the following cast (CC_LONG) is correct !
+	CC_SHA1_Update(&sha1, [string UTF8String], (CC_LONG)[string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    
 	CC_SHA1_Final(&(bytes[0]), &sha1);
 	
 	return [NSData dataWithBytes:&bytes length:20];
@@ -26,7 +29,10 @@
 	UInt8 digest[CC_MD5_DIGEST_LENGTH];
 	
 	CC_MD5_Init(&md5);
-	CC_MD5_Update(&md5, [string UTF8String], [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    
+    //ARM64 : Verify the following cast (CC_LONG) is correct !
+	CC_MD5_Update(&md5, [string UTF8String], (CC_LONG)[string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+    
 	CC_MD5_Final(digest, &md5);
 	
 	return [NSData dataWithBytes:&digest length:CC_MD5_DIGEST_LENGTH];

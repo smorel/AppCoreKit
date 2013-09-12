@@ -122,7 +122,7 @@ NSString* CKObjectGraphVariableKey  = @"@var";
 - (void)registerReferenceForCollectionProperty:(CKProperty*)property index:(NSInteger)index withUniqueId:(NSString*)uniqueId forDictionary:(NSMutableDictionary*)dico{
     NSDictionary* propertyDico = [NSDictionary dictionaryWithObjectsAndKeys:
                                          [NSValue valueWithNonretainedObject:[property retain]],@"property",
-                                         [NSNumber numberWithInt:index],@"index",
+                                         [NSNumber numberWithInteger:index],@"index",
                                          nil];
     
     NSMutableDictionary* refDico = [NSMutableDictionary dictionary];

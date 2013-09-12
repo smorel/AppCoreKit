@@ -502,7 +502,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             NSInteger numberOfLines = 0;
             [invocation getReturnValue:&numberOfLines];
             
-            [style setObject:[NSNumber numberWithInt:numberOfLines] forKey:CKDynamicLayoutNumberOfLines];
+            [style setObject:[NSNumber numberWithInteger:numberOfLines] forKey:CKDynamicLayoutNumberOfLines];
         }
         
         return style;
@@ -547,13 +547,13 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                                                                                                                      UITextAlignmentLeft,
                                                                                                                      UITextAlignmentCenter,
                                                                                                                      UITextAlignmentRight)];
-                [style setObject:[NSNumber numberWithInt:value] forKey:CKDynamicLayoutTextAlignment];
+                [style setObject:[NSNumber numberWithInteger:value] forKey:CKDynamicLayoutTextAlignment];
             }
             
             //numberOfLines
             if([currentStyle containsObjectForKey:@"numberOfLines"]){
                 NSInteger value = [currentStyle integerForKey:@"numberOfLines"];
-                [style setObject:[NSNumber numberWithInt:value] forKey:CKDynamicLayoutNumberOfLines];
+                [style setObject:[NSNumber numberWithInteger:value] forKey:CKDynamicLayoutNumberOfLines];
             }
             
             //lineBreakMode
@@ -565,7 +565,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                                                                                                                      UILineBreakModeHeadTruncation,          
                                                                                                                      UILineBreakModeTailTruncation,
                                                                                                                      UILineBreakModeMiddleTruncation)];
-                [style setObject:[NSNumber numberWithInt:value] forKey:CKDynamicLayoutLineBreakMode];
+                [style setObject:[NSNumber numberWithInteger:value] forKey:CKDynamicLayoutLineBreakMode];
             }
         }
     }

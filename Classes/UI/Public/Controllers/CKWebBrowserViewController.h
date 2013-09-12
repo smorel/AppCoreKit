@@ -11,12 +11,12 @@
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKWebViewControllerButtonItemType) {
 	CKWebViewControllerButtonItemBack,
 	CKWebViewControllerButtonItemForward,
 	CKWebViewControllerButtonItemRefresh,
 	CKWebViewControllerButtonItemAction
-} CKWebViewControllerButtonItemType;
+} ;
 
 
 /**

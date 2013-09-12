@@ -28,17 +28,17 @@ NSString* cleanString(NSString* str){
         if(!systemColor){
             const CGFloat *comps = CGColorGetComponents([view.backgroundColor CGColor]);
             const CGFloat alpha = CGColorGetAlpha([view.backgroundColor CGColor]);
-            [str appendFormat:@"%@+- %@(name:%@,tag:%d,bck:%g %g %g %g)\n",  
-                indentString, viewDescription, view.name, view.tag, comps[0],comps[1],comps[2],alpha];
+            [str appendFormat:@"%@+- %@(name:%@,tag:%ld,bck:%g %g %g %g)\n",
+                indentString, viewDescription, view.name, (long)view.tag, comps[0],comps[1],comps[2],alpha];
         }
         else{
-            [str appendFormat:@"%@+- %@(name:%@,tag:%d,bck:%@)\n",  
-                indentString, viewDescription, view.name, view.tag, systemColor];
+            [str appendFormat:@"%@+- %@(name:%@,tag:%ld,bck:%@)\n",
+                indentString, viewDescription, view.name, (long)view.tag, systemColor];
         }
     }
     else{
-        [str appendFormat:@"%@+- %@(name:%@,tag:%d)\n",  
-                indentString, viewDescription, view.name, view.tag];
+        [str appendFormat:@"%@+- %@(name:%@,tag:%ld)\n",
+                indentString, viewDescription, view.name, (long)view.tag];
     }
 
 	if (view.subviews) {

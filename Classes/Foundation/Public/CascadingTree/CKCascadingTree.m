@@ -420,14 +420,14 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
             NSInteger indexObj2 = [allKeys indexOfObject:obj2];
             
             if(dependencyObj1Index != NSNotFound && dependencyObj2Index != NSNotFound){
-                return [[NSNumber numberWithInt:dependencyObj1Index]compare:[NSNumber numberWithInt:dependencyObj2Index]];
+                return [[NSNumber numberWithInteger:dependencyObj1Index]compare:[NSNumber numberWithInteger:dependencyObj2Index]];
             }else if(dependencyObj1Index != NSNotFound && dependencyObj2Index == NSNotFound){
                 return NSOrderedAscending;
             }else if(dependencyObj1Index == NSNotFound && dependencyObj2Index != NSNotFound){
                 return NSOrderedDescending;
             }
             
-            return [[NSNumber numberWithInt:indexObj1]compare:[NSNumber numberWithInt:indexObj2]];
+            return [[NSNumber numberWithInteger:indexObj1]compare:[NSNumber numberWithInteger:indexObj2]];
         }];
     }else{
         sortedKeys = [self allKeys];

@@ -71,7 +71,7 @@ void insertText(TreeStruct* tree,const std::string& txt, unsigned int index, uns
 }
 
 void save(TreeNodeStruct* node,std::ofstream& stream){
-	unsigned int count = node->indexes.size();
+	unsigned int count = (unsigned int)node->indexes.size();
 	stream.write((char*)&count, (sizeof(unsigned int)));
     
     
@@ -99,7 +99,7 @@ typedef hash_map<unsigned long,unsigned int> FatType;
 	
 	NSString* name = [NSString stringWithFormat:@"%@%c",baseName,node->key];
 	
-	unsigned int indexesIndex = (*indexesFile).tellp();
+	unsigned int indexesIndex = (unsigned int)(*indexesFile).tellp();
 	std::string str = [name UTF8String];
 	unsigned long strHash = computeHash(str);
 	(*fat)[strHash] = indexesIndex;
@@ -130,7 +130,7 @@ typedef hash_map<unsigned long,unsigned int> FatType;
 	std::ofstream fatFile;
 	fatFile.open([fatPath UTF8String], std::ios_base::binary | std::ios_base::out | std::ios_base::trunc);
 	if(fatFile.is_open()){
-		unsigned int count = fat.size();
+		unsigned int count = (unsigned int)fat.size();
 		fatFile.write((char*)&count,sizeof(unsigned int));
         
         
@@ -171,14 +171,14 @@ typedef hash_map<unsigned long,unsigned int> FatType;
 				char buffer[1024] = "\0";
 				wordsFile.getline(buffer,1024);
 				
-				unsigned int seekIndex = exportWordsFile.tellp();
-				unsigned int wordSize = strlen(buffer);
+				unsigned int seekIndex = (unsigned int)exportWordsFile.tellp();
+				unsigned int wordSize = (unsigned int)strlen(buffer);
 				exportWordsFile.write((char*)&wordSize, (sizeof(unsigned int)));
 				exportWordsFile.write((char*)buffer, wordSize);
                 
 				
 				NSString* stringToIndex = [CKTypeAhead formatStringForIndexation:[NSString stringWithUTF8String:buffer]];
-				insertText(tree,[stringToIndex UTF8String],seekIndex,indexLimit);
+				insertText(tree,[stringToIndex UTF8String],seekIndex,(unsigned int)indexLimit);
 			}
 			exportWordsFile.close();
 			

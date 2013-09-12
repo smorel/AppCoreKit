@@ -127,7 +127,7 @@
                 }
                 
                 NSMutableString* propertyKeyPath = [NSMutableString string];
-                for(int j= i; j < [viewPropertyKeyPathComponents count]; ++j){
+                for(NSInteger j= i; j < [viewPropertyKeyPathComponents count]; ++j){
                     if(j > i){
                         [propertyKeyPath appendString:@"."];
                     }

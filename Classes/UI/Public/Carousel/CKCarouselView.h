@@ -33,9 +33,9 @@
 
 /**
  */
-typedef enum{
+typedef NS_ENUM(NSInteger, CKCarouselViewDisplayType){
 	CKCarouselViewDisplayTypeHorizontal
-}CKCarouselViewDisplayType;
+};
 
 
 /**

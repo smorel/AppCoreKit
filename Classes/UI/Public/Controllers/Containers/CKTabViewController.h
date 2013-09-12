@@ -13,12 +13,12 @@
 
 /**
  */
-typedef enum CKTabViewStyle{
+typedef NS_ENUM(NSInteger, CKTabViewStyle){
     CKTabViewStyleFill,
     CKTabViewStyleCenter,
     CKTabViewStyleAlignLeft,
     CKTabViewStyleAlignRight
-}CKTabViewStyle;
+};
 
 /**
  */
@@ -86,12 +86,12 @@ typedef enum CKTabViewStyle{
 
 /**
  */
-typedef enum CKTabViewItemPosition{
+typedef NS_ENUM(NSInteger, CKTabViewItemPosition){
     CKTabViewItemPositionFirst  = 1 << 0,
     CKTabViewItemPositionMiddle = 1 << 1,
     CKTabViewItemPositionLast   = 1 << 2,
     CKTabViewItemPositionAlone  = 1 << 3
-}CKTabViewItemPosition;
+};
 
 
 /**
@@ -115,10 +115,10 @@ typedef void(^CKTabViewControllerSelectionBlock)(CKTabViewController* controller
 
 /**
  */
-typedef enum CKTabViewControllerStyle{
+typedef NS_ENUM(NSInteger, CKTabViewControllerStyle){
     CKTabViewControllerStyleBottom,
     CKTabViewControllerStyleTop
-}CKTabViewControllerStyle;
+};
 
 
 /**

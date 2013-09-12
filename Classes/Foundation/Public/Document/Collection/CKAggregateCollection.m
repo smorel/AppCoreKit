@@ -131,7 +131,7 @@
             if(offset == 0){
                 [offsetedIndexes addIndexes:indexs];
             }else{
-                unsigned currentIndex = [indexs firstIndex];
+                NSUInteger currentIndex = [indexs firstIndex];
                 while (currentIndex != NSNotFound) {
                     [offsetedIndexes addIndex:offset+currentIndex];
                     currentIndex = [indexs indexGreaterThanIndex: currentIndex];

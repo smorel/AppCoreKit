@@ -37,21 +37,21 @@
 
 /** 
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKImageViewState){
 	CKImageViewStateNone,
 	CKImageViewStateSpinner,
 	CKImageViewStateDefaultImage,
 	CKImageViewStateImage
-}CKImageViewState;
+};
 
 /** 
  */
-typedef enum{
+typedef NS_ENUM(NSInteger, CKImageViewSpinnerStyle){
 	CKImageViewSpinnerStyleWhiteLarge = UIActivityIndicatorViewStyleWhiteLarge,
     CKImageViewSpinnerStyleWhite = UIActivityIndicatorViewStyleWhite,
     CKImageViewSpinnerStyleGray = UIActivityIndicatorViewStyleGray,
 	CKImageViewSpinnerStyleNone
-}CKImageViewSpinnerStyle;
+};
 
 
 /* COMMENT :

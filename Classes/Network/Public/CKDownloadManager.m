@@ -196,7 +196,7 @@ static CKDownloadManager *CKSharedDownloadManager;
 // NCDownloader Delegate
 
 - (void)downloader:(CKWebRequest *)downloader didReceiveResponse:(NSHTTPURLResponse *)response {
-    CKDebugLog(@"didReceiveResponse %d <%lld bytes>", [response statusCode], [response expectedContentLength]);
+    CKDebugLog(@"didReceiveResponse %ld <%lld bytes>", (long)[response statusCode], [response expectedContentLength]);
     
     if ([self metadataExistsForName:downloader.downloadName] == NO) {
         NSMutableDictionary *md = [NSMutableDictionary dictionary];

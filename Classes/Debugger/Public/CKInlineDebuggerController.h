@@ -11,10 +11,10 @@
 
 #define CKInlineDebuggerControllerHighlightViewTag   -5647839
 
-typedef enum CKInlineDebuggerControllerState{
+typedef NS_ENUM(NSInteger, CKInlineDebuggerControllerState){
     CKInlineDebuggerControllerStatePending,
     CKInlineDebuggerControllerStateDebugging
-}CKInlineDebuggerControllerState;
+};
 
 /**
  */

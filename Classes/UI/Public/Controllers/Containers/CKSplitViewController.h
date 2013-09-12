@@ -12,11 +12,11 @@
 //CKSplitViewConstraints
 
 
-typedef enum CKSplitViewConstraintsType{
+typedef NS_ENUM(NSInteger, CKSplitViewConstraintsType){
     CKSplitViewConstraintsTypeFlexibleSize,
     CKSplitViewConstraintsTypeFixedSizeInPixels,
     CKSplitViewConstraintsTypeFixedSizeRatio
-}CKSplitViewConstraintsType;
+};
 
 /**
  */
@@ -75,10 +75,10 @@ typedef enum CKSplitViewConstraintsType{
 
 /**
  */
-typedef enum CKSplitViewOrientation{
+typedef NS_ENUM(NSInteger, CKSplitViewOrientation){
     CKSplitViewOrientationHorizontal,
     CKSplitViewOrientationVertical
-}CKSplitViewOrientation;
+};
 
 
 /**
@@ -111,11 +111,11 @@ typedef enum CKSplitViewOrientation{
 
 @end
 
-typedef enum CKSplitViewControllerAnimationState{
+typedef NS_ENUM(NSInteger, CKSplitViewControllerAnimationState){
     CKSplitViewControllerAnimationStateRemoving,
     CKSplitViewControllerAnimationStateAdding,
     CKSplitViewControllerAnimationStateMoving
-}CKSplitViewControllerAnimationState;
+};
 
 //CKSplitViewController
 

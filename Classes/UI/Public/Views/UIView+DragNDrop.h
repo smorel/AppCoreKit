@@ -11,22 +11,22 @@
 
 /**
  */
-typedef enum CKDragEvents{
+typedef NS_ENUM(NSInteger, CKDragEvents){
     CKDragEventNone      = 0,
     CKDragEventBegin     = 1 << 1,
     CKDragEventDrop      = 1 << 2,
     CKDragEventCancelled = 1 << 3,
     CKDragEventDragging  = 1 << 4,
     CKDragEventAll = CKDragEventBegin | CKDragEventDrop | CKDragEventCancelled | CKDragEventDragging
-}CKDragEvents;
+};
 
 /**
  */
-typedef enum CKDragType{
+typedef NS_ENUM(NSInteger, CKDragType){
     CKDragTypeNone,
     CKDragTypeMove,
     CKDragTypeGhost
-}CKDragType;
+};
 
 /**
  */

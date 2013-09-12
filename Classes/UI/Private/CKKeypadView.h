@@ -11,7 +11,7 @@
 
 /**
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, CKKeypadViewKey) {
 	CKKeypadViewKeyZero = 0,
 	CKKeypadViewKeyOne = 1,
 	CKKeypadViewKeyTwo = 2,
@@ -24,7 +24,7 @@ typedef enum {
 	CKKeypadViewKeyNine = 9,
 	CKKeypadViewKeyNone = 1000,
 	CKKeypadViewKeyBackspace = 1001
-} CKKeypadViewKey;
+} ;
 
 
 @class CKKeypadView;

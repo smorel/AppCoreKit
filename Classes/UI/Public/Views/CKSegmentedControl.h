@@ -33,12 +33,12 @@
  
 /**
  */
-typedef enum CKSegmentedControlButtonPosition{
+typedef NS_ENUM(NSInteger, CKSegmentedControlButtonPosition){
     CKSegmentedControlButtonPositionFirst  = 1 << 0,
     CKSegmentedControlButtonPositionMiddle = 1 << 1,
     CKSegmentedControlButtonPositionLast   = 1 << 2,
     CKSegmentedControlButtonPositionAlone  = 1 << 3
-}CKSegmentedControlButtonPosition;
+};
 
 /**
  */

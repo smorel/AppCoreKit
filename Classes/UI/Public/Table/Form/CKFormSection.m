@@ -132,7 +132,7 @@
         }
         
         NSMutableArray* indexPaths = [NSMutableArray array];
-        unsigned currentIndex = [indexes firstIndex];
+        NSUInteger currentIndex = [indexes firstIndex];
         while (currentIndex != NSNotFound) {
             NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:currentIndex inSection:self.sectionVisibleIndex];
             [indexPaths addObject:theIndexPath];
@@ -173,7 +173,7 @@
         
         NSMutableArray* objects = [NSMutableArray array];
         NSMutableArray* indexPaths = [NSMutableArray array];
-        unsigned currentIndex = [indexes firstIndex];
+        NSUInteger currentIndex = [indexes firstIndex];
         while (currentIndex != NSNotFound) {
             CKTableViewCellController* cellController = [_cellControllers objectAtIndex:currentIndex];
             [objects addObject:cellController.value ? cellController.value : [NSNull null]];
@@ -234,7 +234,7 @@
 	return [[[CKFormSection alloc]initWithCellControllers:cellcontrollers footerView:view]autorelease];
 }
 
-- (NSInteger)numberOfObjects{
+- (NSUInteger)numberOfObjects{
 	return [_cellControllers count];
 }
 

@@ -62,7 +62,7 @@
 	return [_parentController indexOfSection:self];
 }
 
-- (NSInteger)numberOfObjects{
+- (NSUInteger)numberOfObjects{
 	CKAssert(NO,@"Base Implementation");
 	return 0;
 }

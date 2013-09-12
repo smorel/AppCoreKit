@@ -83,7 +83,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 		CKBindingsContextStack = [[NSMutableArray alloc]init];
 	}
 	
-	[CKBindingsContextStack addObject:[NSDictionary dictionaryWithObjectsAndKeys:context,@"context",[NSNumber numberWithInt:options],@"options",nil]];
+	[CKBindingsContextStack addObject:[NSDictionary dictionaryWithObjectsAndKeys:context,@"context",[NSNumber numberWithInteger:options],@"options",nil]];
 	
 	if(policy == CKBindingsContextPolicyRemovePreviousBindings){
 		[[CKBindingsManager defaultManager] unbindAllBindingsWithContext:context doNotUnbindBecauseObjectIsDeallocated:NO];
