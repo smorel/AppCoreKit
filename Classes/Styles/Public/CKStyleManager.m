@@ -49,9 +49,14 @@ static NSInteger kLogEnabled = -1;
         [super reloadAfterFileUpdate];
         [CKResourceManager setHudTitle:nil];
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:CKStyleManagerDidReloadNotification object:self];
+        //Using self here to retain it until the the task finishes its execution
+        [self performSelectorOnMainThread:@selector(notifyStyleManagerDidReload) withObject:nil waitUntilDone:NO];
     });
     
+}
+
+- (void)notifyStyleManagerDidReload{
+    [[NSNotificationCenter defaultCenter]postNotificationName:CKStyleManagerDidReloadNotification object:self];
 }
 
 - (void)reloadAfterFileUpdate{
