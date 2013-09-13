@@ -206,6 +206,11 @@
     return NO;
 }
 
+- (CGFloat)additionalTopContentOffset{
+    return 0;
+}
+
+
 - (void)sizeToFit{
     BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
     
@@ -214,15 +219,15 @@
     
     BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
     
-    CGFloat toolbarHeight = (self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height;
-    self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
+    CGFloat toolbarHeight = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
+    self.tableView.contentInset = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
     
     CGRect frame = self.view.bounds;
     CGFloat height = frame.size.height + (toolbarTransulcent ? 0 : toolbarHeight);
     if(height > (self.view.bounds.size.height + toolbarHeight)){
         height = self.view.bounds.size.height + toolbarHeight;
     }
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake((([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,toolbarHeight,0);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(([self additionalTopContentOffset] + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0)),0,toolbarHeight,0);
     
     
     self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,

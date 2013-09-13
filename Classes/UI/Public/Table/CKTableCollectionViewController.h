@@ -105,10 +105,7 @@ typedef UITableViewRowAnimation(^CKTableCollectionViewControllerSectionAnimation
  Specify if the table should resize itself on keyboard or sheet notifications
  */
 @property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
-/** 
- Specify a maximum width for the table to center it easilly if the parent view is bigger.
- */
-@property (nonatomic, assign) CGFloat tableMaximumWidth;
+
 
 ///-----------------------------------
 /// @name Animating

@@ -109,8 +109,6 @@
 	
     int _modalViewCount;
     
-	
-	CGFloat _tableMaximumWidth;
     
     id _storedTableDelegate;
     id _storedTableDataSource;
@@ -132,7 +130,6 @@
 @synthesize segmentedControl = _segmentedControl;
 @synthesize searchScopeDefinition = _searchScopeDefinition;
 @synthesize defaultSearchScope = _defaultSearchScope;
-@synthesize tableMaximumWidth = _tableMaximumWidth;
 @synthesize scrollingPolicy = _scrollingPolicy;
 @synthesize editableType = _editableType;
 @synthesize searchBlock = _searchBlock;
@@ -204,7 +201,6 @@
 	_editableType = CKTableCollectionViewControllerEditingTypeNone;
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
-	_tableMaximumWidth = 0;
     _scrollingPolicy = CKTableCollectionViewControllerScrollingPolicyNone;
     _snapPolicy = CKTableCollectionViewControllerSnappingPolicyNone;
     _registeredToContentSize = NO;
@@ -293,6 +289,18 @@
     [super viewDidUnload];
 }
 
+- (UIEdgeInsets)_noSearchTableViewTopContentInsets{
+    BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
+    
+    CGFloat statusBarHeight = navBarTransulcent ? [[UIApplication sharedApplication]statusBarFrame].size.height : 0;
+    CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
+    
+    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
+    
+    CGFloat toolbarHeight = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
+    return UIEdgeInsetsMake(self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     CKViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
     self.viewWillAppearEndBlock = nil;
@@ -307,17 +315,9 @@
     
     [super viewWillAppear:animated];
 	
-    if([CKOSVersion() floatValue] < 7){
+  //  if([CKOSVersion() floatValue] < 7){
         //apply width constraint
-        if(_tableMaximumWidth > 0){
-            CGFloat tableWidth = MIN(_tableMaximumWidth, self.view.bounds.size.width);
-            CGFloat viewHeight = self.view.bounds.size.height;
-            CGFloat viewWidth = self.view.bounds.size.width;
-            CGFloat centerX = viewWidth / 2.0f;
-            
-            self.tableViewContainer.frame = CGRectIntegral(CGRectMake(centerX - tableWidth/2.0f,0 ,tableWidth,viewHeight));
-            self.tableViewContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin ;
-        }
+
         
         //Adds searchbars if needed
         CGFloat tableViewOffset = 0;
@@ -343,7 +343,9 @@
                 }
             }
             
-            self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
+            UIEdgeInsets tableInsets = [self _noSearchTableViewTopContentInsets];
+            
+            self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,tableInsets.top,self.tableView.frame.size.width,tableViewOffset)]autorelease];
             _searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             _searchBar.delegate = self;
             //self.tableView.tableHeaderView = _searchBar;
@@ -375,11 +377,12 @@
             tableViewOffset += 44;
         }
         
-        if(self.tableViewContainer.frame.origin.y < tableViewOffset){
-            self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
-                                                       self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
-        }
-	}
+      //  if(self.tableViewContainer.frame.origin.y < tableViewOffset){
+       //     self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
+       //                                                self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
+       // }
+	//}
+    [self sizeToFit];
     
     NSMutableDictionary* controllerStyle = [self controllerStyle];
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
@@ -472,39 +475,37 @@
     
 }
 
-- (void)sizeToFit{
-    [super sizeToFit];
-    
-    if([CKOSVersion() floatValue] < 7){
-        CGFloat tableViewOffset = 0;
-        if(self.searchEnabled && _searchBar != nil){
-            UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
-            BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
-            BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-            if(!isIpad){
-                if(_searchScopeDefinition && isPortrait){
-                    tableViewOffset = 88;
-                }
-                else{
-                    tableViewOffset = 44;
-                }
+
+- (CGFloat)additionalTopContentOffset{
+    CGFloat tableViewOffset = 0;
+    if(self.searchEnabled && _searchBar != nil){
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+        BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
+        BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+        if(!isIpad){
+            if(_searchScopeDefinition && isPortrait){
+                tableViewOffset = 88;
             }
             else{
-                BOOL tooSmall = self.view.bounds.size.width <= 320;
-                if(_searchScopeDefinition && tooSmall){
-                    tableViewOffset = 88;
-                }
-                else{
-                    tableViewOffset = 44;
-                }
+                tableViewOffset = 44;
             }
         }
-        
-        if(self.tableViewContainer.frame.origin.y < tableViewOffset){
-            self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
-                                                       self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
+        else{
+            BOOL tooSmall = self.view.bounds.size.width <= 320;
+            if(_searchScopeDefinition && tooSmall){
+                tableViewOffset = 88;
+            }
+            else{
+                tableViewOffset = 44;
+            }
         }
     }
+    
+    return tableViewOffset;
+}
+
+- (void)sizeToFit{
+    [super sizeToFit];
 }
 
 - (void)tableViewVisibilityChanged:(NSNumber*)hidden{
