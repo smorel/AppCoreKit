@@ -824,9 +824,11 @@
 	if(view){
         return nil;
     }
+    
     if([self.objectController respondsToSelector:@selector(headerTitleForSection:)]){
         return [self.objectController headerTitleForSection:section];
     }
+    
 	return nil;
 }
 
@@ -840,7 +842,7 @@
 	if(height <= 0){
         if([self.objectController respondsToSelector:@selector(headerTitleForSection:)]){
             NSString* title = [self.objectController headerTitleForSection:section];
-            if( title != nil ){
+            if( title != nil && [title length] > 0 ){
                 return -1;
             }
         }
@@ -885,7 +887,7 @@
 	if(height <= 0){
         if([self.objectController respondsToSelector:@selector(footerTitleForSection:)]){
             NSString* title = [self.objectController footerTitleForSection:section];
-            if( title != nil ){
+            if( title != nil && [title length] > 0 ){
                 return -1;
             }
         }

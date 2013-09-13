@@ -120,6 +120,14 @@
     [_headerTitle release];
     _headerTitle = [headerTitle retain];
     
+    if(headerTitle == nil || [headerTitle length] <= 0){
+        if(_headerView){
+            [self setHeaderView:nil];
+            [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        return;
+    }
+    
     if(!_headerView){
         CKSectionHeaderView* v = [[[CKSectionHeaderView alloc]init]autorelease];
         v.text = _headerTitle;
@@ -148,6 +156,14 @@
 - (void)setFooterTitle:(NSString *)footerTitle{
     [_footerTitle release];
     _footerTitle = [footerTitle retain];
+    
+    if(footerTitle == nil || [footerTitle length] <= 0){
+        if(_headerView){
+            [self setFooterView:nil];
+            [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        return;
+    }
     
     if(!_footerView){
         CKSectionFooterView* v = [[[CKSectionFooterView alloc]init]autorelease];
