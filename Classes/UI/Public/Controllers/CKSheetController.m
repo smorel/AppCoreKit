@@ -8,6 +8,7 @@
 
 #import "CKSheetController.h"
 #import "CKWeakRef.h"
+#import "CKVersion.h"
 
 NSString *const CKSheetResignNotification           = @"CKSheetResignNotification";
 NSString *const CKSheetWillShowNotification         = @"CKSheetWillShowNotification";
@@ -81,6 +82,13 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     
     
     UIView* contentView = self.contentViewController.view;
+    if([CKOSVersion() floatValue] >= 7){
+        //contentView.backgroundColor = [UIColor whiteColor];
+        UIToolbar* blurView = [[UIToolbar alloc]initWithFrame:contentView.bounds];
+        blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [contentView insertSubview:blurView atIndex:0];
+    }
+    
     UIView* toolbar = self.contentViewController.navigationItem.titleView;
     
     CGSize size = self.contentViewController.contentSizeForViewInPopover;
