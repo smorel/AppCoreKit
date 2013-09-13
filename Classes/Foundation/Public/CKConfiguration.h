@@ -10,7 +10,7 @@
 #import "NSObject+Singleton.h"
 #import "CKCascadingTree.h"
 
-//#define ENABLE_XCODE5
+#define ENABLE_XCODE5
 
 typedef NS_ENUM(NSInteger, CKConfigurationType){
     CKConfigurationTypeDebug,
