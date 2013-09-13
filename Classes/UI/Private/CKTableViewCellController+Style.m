@@ -319,6 +319,10 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 	if([object isKindOfClass:[UITableViewCell class]]){
 		if(([descriptor.name isEqual:@"backgroundView"]
 			|| [descriptor.name isEqual:@"selectedBackgroundView"]) && [style isEmpty] == NO){
+            if([CKOSVersion() floatValue] >= 7){
+                UITableViewCell* cell = (UITableViewCell*)object;
+                cell.backgroundColor = [UIColor clearColor];
+            }
 			return YES;
 		}
 	}
