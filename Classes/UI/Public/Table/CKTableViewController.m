@@ -131,6 +131,7 @@
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @property (nonatomic, assign) BOOL sizeIsAlreadyInvalidated;
 @property (nonatomic, assign) BOOL lockSizeChange;
+@property (nonatomic, assign) UIEdgeInsets scrollIndicatorInsetsAfterStylesheet;
 @property (nonatomic, assign) BOOL isReloading;
 
 - (void)sizeToFit;
@@ -169,6 +170,7 @@
     self.sizeIsAlreadyInvalidated = NO;
     self.lockSizeChange = NO;
     self.isReloading = NO;
+    self.scrollIndicatorInsetsAfterStylesheet = UIEdgeInsetsMake(MAXFLOAT, MAXFLOAT, MAXFLOAT, MAXFLOAT);
 }
 
 - (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -227,7 +229,21 @@
     if(height > (self.view.bounds.size.height + toolbarHeight)){
         height = self.view.bounds.size.height + toolbarHeight;
     }
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(([self additionalTopContentOffset] + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0)),0,toolbarHeight,0);
+    
+    UIEdgeInsets additionalScrollIndicatorInsets = UIEdgeInsetsZero;
+    
+    NSMutableDictionary* controllerStyle = [self controllerStyle];
+    if(controllerStyle && ![controllerStyle isEmpty]){
+        NSMutableDictionary* tableViewStyle = [controllerStyle styleForObject:self.tableView propertyName:@"tableView"];
+        if([tableViewStyle containsObjectForKey:@"scrollIndicatorInsets"]){
+            additionalScrollIndicatorInsets = [tableViewStyle edgeInsetsForKey:@"scrollIndicatorInsets"];
+        }
+    }
+    
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(([self additionalTopContentOffset] + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0)) + additionalScrollIndicatorInsets.top ,
+                                                            additionalScrollIndicatorInsets.left,
+                                                            toolbarHeight + additionalScrollIndicatorInsets.bottom,
+                                                            additionalScrollIndicatorInsets.right);
     
     
     self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,
@@ -324,6 +340,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+    
     [self sizeToFit];
     
     if(self.tableViewHasBeenReloaded == NO){
