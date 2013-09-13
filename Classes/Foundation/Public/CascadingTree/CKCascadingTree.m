@@ -15,6 +15,7 @@
 #import <objc/runtime.h>
 #import "CKConfiguration.h"
 #import "CKResourceManager.h"
+#import "CKVersion.h"
 
 //CKCascadingTreeItemFormat
 
@@ -189,15 +190,17 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 
 //Constants
 
-NSString* const CKCascadingTreePrefix   = @"CKCascadingTree";
-NSString* const CKCascadingTreeFormats  = @"CKCascadingTreeFormats";
-NSString* const CKCascadingTreeParent   = @"CKCascadingTreeParent";
-NSString* const CKCascadingTreeEmpty    = @"CKCascadingTreeEmpty";
-NSString* const CKCascadingTreeNode     = @"CKCascadingTreeNode";
-NSString* const CKCascadingTreeInherits = @"@inherits";
-NSString* const CKCascadingTreeImport   = @"@import";
-NSString* const CKCascadingTreeIPad     = @"@ipad";
-NSString* const CKCascadingTreeIPhone   = @"@iphone";
+NSString* const CKCascadingTreePrefix    = @"CKCascadingTree";
+NSString* const CKCascadingTreeFormats   = @"CKCascadingTreeFormats";
+NSString* const CKCascadingTreeParent    = @"CKCascadingTreeParent";
+NSString* const CKCascadingTreeEmpty     = @"CKCascadingTreeEmpty";
+NSString* const CKCascadingTreeNode      = @"CKCascadingTreeNode";
+NSString* const CKCascadingTreeInherits  = @"@inherits";
+NSString* const CKCascadingTreeImport    = @"@import";
+NSString* const CKCascadingTreeIPad      = @"@ipad";
+NSString* const CKCascadingTreeIPhone    = @"@iphone";
+NSString* const CKCascadingTreeIPhone5   = @"@iphone5";
+NSString* const CKCascadingTreeOSVersion = @"@ios";
 
 @interface NSObject (CKCascadingTree)
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
@@ -309,18 +312,81 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (void)makeAllPlatformSpecific{
+    if(![self containsObjectForKey:CKCascadingTreeIPad]
+       && ![self containsObjectForKey:CKCascadingTreeIPhone]
+       && ![self containsObjectForKey:CKCascadingTreeIPhone5])
+        return;
+    
     BOOL isIphone = [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
     if(isIphone){
         [self removeObjectForKey:CKCascadingTreeIPad];
-        NSDictionary* iphoneDico = [self objectForKey:CKCascadingTreeIPhone];
-        [self addEntriesFromDictionary:iphoneDico];
-        [self removeObjectForKey:CKCascadingTreeIPhone];
+        
+        BOOL isIphone5 = [UIScreen mainScreen].scale == 2.f && [[UIScreen mainScreen] bounds].size.height == 568.0f;
+        if(isIphone5){
+            [self removeObjectForKey:CKCascadingTreeIPhone];
+            NSDictionary* iphoneDico = [self objectForKey:CKCascadingTreeIPhone5];
+            [self addEntriesFromDictionary:iphoneDico];
+            [self removeObjectForKey:CKCascadingTreeIPhone5];
+        }else{
+            [self removeObjectForKey:CKCascadingTreeIPhone5];
+            NSDictionary* iphoneDico = [self objectForKey:CKCascadingTreeIPhone];
+            [self addEntriesFromDictionary:iphoneDico];
+            [self removeObjectForKey:CKCascadingTreeIPhone];
+        }
     }
     else{
         [self removeObjectForKey:CKCascadingTreeIPhone];
+        [self removeObjectForKey:CKCascadingTreeIPhone5];
         NSDictionary* ipadDico = [self objectForKey:CKCascadingTreeIPad];
         [self addEntriesFromDictionary:ipadDico];
         [self removeObjectForKey:CKCascadingTreeIPad];
+    }
+}
+
+- (void)makeAllOSVersionSpecific{
+    CGFloat osVersion = [CKOSVersion() floatValue];
+    
+    NSArray* keys = [self allKeys];
+    for(NSString* key in keys){
+        NSString* trimmedKey = [key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if([trimmedKey hasPrefix:CKCascadingTreeOSVersion]){
+            NSArray* components = [trimmedKey componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            if([components count] != 3){
+                NSLog(@"Invalid syntax for os version selector : %@",key);
+                [self removeObjectForKey:key];
+                continue;
+            }
+            
+            NSString* operatorString = [[components objectAtIndex:1]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            NSString* versionString = [[components objectAtIndex:2]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            
+            CGFloat version = [versionString floatValue];
+            
+            bool keepIt = NO;
+            if([operatorString isEqualToString:@"<"]){
+                keepIt = (osVersion < version);
+            }else if([operatorString isEqualToString:@"<="]){
+                keepIt = (osVersion <= version);
+            }else if([operatorString isEqualToString:@">"]){
+                keepIt = (osVersion > version);
+            }else if([operatorString isEqualToString:@">="]){
+                keepIt = (osVersion >= version);
+            }else if([operatorString isEqualToString:@"=="] || [operatorString isEqualToString:@"="]){
+                keepIt = (osVersion == version);
+            }else if([operatorString isEqualToString:@"!="]){
+                keepIt = (osVersion != version);
+            }
+            
+            if(keepIt){
+                NSMutableDictionary* versionDico = [NSMutableDictionary dictionaryWithDictionary:[self objectForKey:key]];
+                [versionDico makeAllPlatformSpecific];
+                
+                [self addEntriesFromDictionary:versionDico];
+                [self removeObjectForKey:CKCascadingTreeIPad];
+            }
+            
+            [self removeObjectForKey:key];
+        }
     }
 }
 
@@ -577,6 +643,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 
 - (void)initAfterLoading{
     [self makeAllPlatformSpecific];
+    [self makeAllOSVersionSpecific];
     
     for(id key in [self allKeys]){
 		id object = [[self objectForKey:key]retain];
