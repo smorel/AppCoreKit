@@ -707,7 +707,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             height = MAX(height,imageHeight);
         }    
         
-        return CGSizeMake(320,height);
+        return CGSizeMake([self tableViewCellWidth],height);
     }
     
     return self.size;

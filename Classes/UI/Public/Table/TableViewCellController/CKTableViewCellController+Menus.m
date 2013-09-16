@@ -142,7 +142,7 @@
                 image = [image imageThatFits:imageSize crop:NO];
             }
             remoteImage = image;
-            bself.image = remoteImage;
+            cellController.image = remoteImage;
             
             UITableViewCell* cell = [bself tableViewCell];
             if(cell){
@@ -150,14 +150,19 @@
                 [activityIndicator stopAnimating];
                 [activityIndicator removeFromSuperview];
             }
+            
+            //reset completionBlock to release cellController
+            imageLoader.completionBlock = nil;
         };
     }
     
     [cellController setDeallocBlock:^(CKTableViewCellController *controller) {
+        imageLoader.completionBlock = nil;
         [imageLoader cancel];
     }];
     
     [cellController setViewDidDisappearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+        imageLoader.completionBlock = nil;
         [imageLoader cancel];
     }];
     
