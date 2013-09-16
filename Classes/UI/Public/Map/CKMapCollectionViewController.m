@@ -19,6 +19,7 @@
 #import "CKArrayCollection.h"
 
 #import "CKResourceManager.h"
+#import "CKVersion.h"
 
 
 @interface CKAnnotationView()
@@ -83,46 +84,50 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)selectAnnotation:(id<MKAnnotation>)annotation animated:(BOOL)animated{
-    MKAnnotationView* view = [self viewForAnnotation:annotation];
-    if(self.annotationToSelectAfterScrolling == annotation){
-        BOOL hasCalloutView = NO;
-        for(UIView* v in [view subviews]){
-            if([[[v class]description] isEqualToString:@"UICalloutView"]
-               ||[[[v class]description] isEqualToString:@"CKCalloutView"]){
-                hasCalloutView = YES;
-                break;
+    if([CKOSVersion() floatValue] < 7){
+        MKAnnotationView* view = [self viewForAnnotation:annotation];
+        if(self.annotationToSelectAfterScrolling == annotation){
+            BOOL hasCalloutView = NO;
+            for(UIView* v in [view subviews]){
+                if([[[v class]description] isEqualToString:@"UICalloutView"]
+                   || [[[v class]description] isEqualToString:@"CKCalloutView"]){
+                    hasCalloutView = YES;
+                    break;
+                }
+            }
+            //if no calloutview in view && view is selected, select nil non animated !
+            if(view.selected && !hasCalloutView){
+                [super deselectAnnotation:annotation animated:NO];
+            }
+            
+            [super selectAnnotation:annotation animated:animated];
+            self.annotationToSelectAfterScrolling = nil;
+            return;
+        }
+        
+        BOOL delayedCallToSuper = NO;
+        if([view isKindOfClass:[CKAnnotationView class]]){
+            CKAnnotationView* customView = (CKAnnotationView*)view;
+            if(customView.calloutViewControllerCreationBlock){
+                delayedCallToSuper = YES;
+                self.annotationToSelectAfterScrolling = annotation;
+                
+                CGSize calloutSize = [customView calloutViewControllerSize];
+                
+                CLLocationCoordinate2D centerCoordinate = customView.annotation.coordinate;
+                CGPoint pointFromCenterCoordinate = [self convertCoordinate:centerCoordinate toPointToView:self];
+                
+                CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x, pointFromCenterCoordinate.y - (calloutSize.height / 2));
+                CLLocationCoordinate2D coordinate = [self convertPoint:calloutcenter toCoordinateFromView:self];
+                
+                [self setCenterCoordinate:coordinate animated:YES];
             }
         }
-        //if no calloutview in view && view is selected, select nil non animated !
-        if(view.selected && !hasCalloutView){
-            [super deselectAnnotation:annotation animated:NO];
+        
+        if(!delayedCallToSuper){
+            [super selectAnnotation:annotation animated:animated];
         }
-                             
-        [super selectAnnotation:annotation animated:animated];
-        self.annotationToSelectAfterScrolling = nil;
-        return;
-    }
-    
-    BOOL delayedCallToSuper = NO;
-    if([view isKindOfClass:[CKAnnotationView class]]){
-        CKAnnotationView* customView = (CKAnnotationView*)view;
-        if(customView.calloutViewControllerCreationBlock){
-            delayedCallToSuper = YES;
-            self.annotationToSelectAfterScrolling = annotation;
-            
-            CGSize calloutSize = [customView calloutViewControllerSize];
-            
-            CLLocationCoordinate2D centerCoordinate = customView.annotation.coordinate;
-            CGPoint pointFromCenterCoordinate = [self convertCoordinate:centerCoordinate toPointToView:self];
-            
-            CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x, pointFromCenterCoordinate.y - (calloutSize.height / 2));
-            CLLocationCoordinate2D coordinate = [self convertPoint:calloutcenter toCoordinateFromView:self];
-            
-            [self setCenterCoordinate:coordinate animated:YES];
-        }
-    }
-    
-    if(!delayedCallToSuper){
+    }else{
         [super selectAnnotation:annotation animated:animated];
     }
 }
@@ -381,23 +386,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
         bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude);
     }
     
-    /*
-    MKMapPoint topLeftPoint = MKMapPointForCoordinate(topLeftCoord);
-    MKMapPoint bottomRightPoint = MKMapPointForCoordinate(bottomRightCoord);
-    
-	MKMapPoint centerPoint = MKMapPointMake(topLeftPoint.x + ((bottomRightPoint.x - topLeftPoint.x) / 2), topLeftPoint.y + ((bottomRightPoint.y - topLeftPoint.y) / 2));
-    CGFloat width = (bottomRightPoint.x - topLeftPoint.x);
-    CGFloat height = (bottomRightPoint.y - topLeftPoint.y);
-    
-    
-    CGFloat mapMetersPerPoints = MKMetersPerMapPointAtLatitude((bottomRightCoord.latitude - topLeftCoord.latitude)/2.0f);
-    CGFloat offset = 500 / mapMetersPerPoints;
-    
-    MKMapRect zoomRect = MKMapRectMake(centerPoint.x, centerPoint.y, width + offset, height + offset);
-    [self.mapView setVisibleMapRect:zoomRect animated:animated];
-*/
-    
-    
     MKCoordinateRegion region;
     region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5;
     region.center.longitude = topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5;
@@ -620,23 +608,31 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 	 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
-    if([view isKindOfClass:[CKAnnotationView class]]){
-        CKAnnotationView* customView = (CKAnnotationView*)view;
-        if(customView.calloutViewControllerCreationBlock){
-            CGSize calloutSize = [customView calloutViewControllerSize];
+    
+    if([CKOSVersion() floatValue] < 7){
+        if([view isKindOfClass:[CKAnnotationView class]]){
+            CKAnnotationView* customView = (CKAnnotationView*)view;
+            if(customView.calloutViewControllerCreationBlock){
+                CGSize calloutSize = [customView calloutViewControllerSize];
+                
+                CLLocationCoordinate2D centerCoordinate = customView.annotation.coordinate;
+                CGPoint pointFromCenterCoordinate = [mapView convertCoordinate:centerCoordinate toPointToView:mapView];
+                
+                CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x, pointFromCenterCoordinate.y - (calloutSize.height / 2));
+                CLLocationCoordinate2D coordinate = [mapView convertPoint:calloutcenter toCoordinateFromView:mapView];
+                
+                    
+                CKMapView* ckMapView = (CKMapView*)mapView;
+                ckMapView.annotationToSelectAfterScrolling = customView.annotation;
             
-            CLLocationCoordinate2D centerCoordinate = customView.annotation.coordinate;
-            CGPoint pointFromCenterCoordinate = [mapView convertCoordinate:centerCoordinate toPointToView:mapView];
-            
-            CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x, pointFromCenterCoordinate.y - (calloutSize.height / 2));
-            CLLocationCoordinate2D coordinate = [mapView convertPoint:calloutcenter toCoordinateFromView:mapView];
-            
-            CKMapView* ckMapView = (CKMapView*)mapView;
-            ckMapView.annotationToSelectAfterScrolling = customView.annotation;
-            [self.mapView setCenterCoordinate:coordinate animated:YES];
-            return;
+                [self.mapView setCenterCoordinate:coordinate animated:YES];
+                
+                return;
+            }
         }
     }
+    
+
 
     NSIndexPath* indexPath = [self indexPathForView:view];
 	[self didSelectViewAtIndexPath:indexPath];

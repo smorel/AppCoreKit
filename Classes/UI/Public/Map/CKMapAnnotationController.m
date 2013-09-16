@@ -16,74 +16,137 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKMapCollectionViewController.h"
 #import "NSObject+Bindings.h"
+#import "CKVersion.h"
+
+static char CKCalloutViewCalloutViewKey;
+static char CKCalloutViewCalloutSizeKey;
+static char CKCalloutViewCalloutCoordinateKey;
+static char CKCalloutViewCalloutMapViewKey;
 
 @interface CKCalloutView : UIView
-@property (nonatomic,retain) UIView* calloutView;
 @end
 
 @implementation CKCalloutView
-@synthesize calloutView = _calloutView;
 
 + (void)load{
-    Class c = NSClassFromString(@"UICalloutView");
-    class_setSuperclass([CKCalloutView class], c);
+    if([CKOSVersion() floatValue] < 7){
+        Class c = NSClassFromString(@"UICalloutView");
+        class_setSuperclass([CKCalloutView class], c);
+    }else{
+        Class c = NSClassFromString(@"MKSmallCalloutView");
+        class_setSuperclass([CKCalloutView class], c);
+    }
 }
 
-- (void)dealloc{
-    [_calloutView release];
-    _calloutView = nil;
-    [super dealloc];
+- (void)setCalloutView:(UIView *)calloutView{
+    objc_setAssociatedObject(self, &CKCalloutViewCalloutViewKey, calloutView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIView*)calloutView{
+    return objc_getAssociatedObject(self, &CKCalloutViewCalloutViewKey);
+}
+
+- (void)setCalloutSize:(CGSize)size{
+    objc_setAssociatedObject(self, &CKCalloutViewCalloutSizeKey, [NSValue valueWithCGSize:size], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self setNeedsUpdateConstraints];
+    [self setNeedsLayout];
+}
+
+- (CGSize)calloutSize{
+    id obj = objc_getAssociatedObject(self, &CKCalloutViewCalloutSizeKey);
+    return obj ? [obj CGSizeValue] : CGSizeZero;
+}
+
+- (void)setCoordinate:(CLLocationCoordinate2D)c{
+    objc_setAssociatedObject(self, &CKCalloutViewCalloutCoordinateKey, [NSValue valueWithMKCoordinate:c], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CLLocationCoordinate2D)coordinate{
+    id obj = objc_getAssociatedObject(self, &CKCalloutViewCalloutCoordinateKey);
+    return obj ? [obj MKCoordinateValue] : CLLocationCoordinate2DMake(0, 0);
+}
+
+//do not retain mapview here
+- (void)setMapView:(MKMapView*)view{
+    objc_setAssociatedObject(self, &CKCalloutViewCalloutMapViewKey, view, OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (MKMapView*)mapView{
+    return objc_getAssociatedObject(self, &CKCalloutViewCalloutMapViewKey);
 }
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    if(_calloutView){
-        self.clipsToBounds = NO;
+    
+    UIView* _calloutView = [self calloutView];
+    
+    if([CKOSVersion() floatValue] < 7){
         
-        for(int i =4; i< 8; ++i){
-            UIView* view = [[self subviews]objectAtIndex:i];
-            view.hidden = YES;
+        if(_calloutView){
+            self.clipsToBounds = NO;
+            
+            for(int i =4; i< 8; ++i){
+                UIView* view = [[self subviews]objectAtIndex:i];
+                view.hidden = YES;
+            }
+            
+            UIImageView* arrowTop = (UIImageView*)[[self subviews]objectAtIndex:2];
+            arrowTop.hidden = YES;
+            
+            UIImageView* arrowBottom = (UIImageView*)[[self subviews]objectAtIndex:3];
+            
+            _calloutView.y = floorf(- _calloutView.height + self.height - 36);
+            _calloutView.x = floorf(arrowBottom.x + (arrowBottom.width / 2) - (_calloutView.width / 2));
+            _calloutView.autoresizingMask = UIViewAutoresizingNone;
+            _calloutView.layer.cornerRadius = 5;
+            _calloutView.clipsToBounds = YES;
+            
+            arrowBottom.image = [arrowBottom.image stretchableImageWithLeftCapWidth:2 topCapHeight:19];
+            arrowBottom.x = _calloutView.x + (_calloutView.width / 2) - 20;
+            arrowBottom.y = _calloutView.y - 6;
+            arrowBottom.width = 41;
+            arrowBottom.height = _calloutView.height + 6 + 29;
+            
+            
+            UIImageView* leftBorderView = (UIImageView*)[[self subviews]objectAtIndex:0];
+            leftBorderView.image = [leftBorderView.image stretchableImageWithLeftCapWidth:16 topCapHeight:20];
+            leftBorderView.x = _calloutView.x - 10;
+            leftBorderView.y = _calloutView.y - 6;
+            leftBorderView.width = arrowBottom.x - leftBorderView.x;
+            
+            UIImageView* rightBorderView = (UIImageView*)[[self subviews]objectAtIndex:1];
+            rightBorderView.image = [rightBorderView.image stretchableImageWithLeftCapWidth:1 topCapHeight:20];
+            rightBorderView.x = arrowBottom.x + arrowBottom.width;
+            rightBorderView.y = _calloutView.y - 6;
+            rightBorderView.width = leftBorderView.width;
+            
+            rightBorderView.height = leftBorderView.height = arrowBottom.height - 13;
         }
-        
-        UIImageView* arrowTop = (UIImageView*)[[self subviews]objectAtIndex:2];
-        arrowTop.hidden = YES;
-        
-        UIImageView* arrowBottom = (UIImageView*)[[self subviews]objectAtIndex:3];
-        
-        _calloutView.y = floorf(- _calloutView.height + self.height - 36);
-        _calloutView.x = floorf(arrowBottom.x + (arrowBottom.width / 2) - (_calloutView.width / 2));
-        _calloutView.autoresizingMask = UIViewAutoresizingNone;
-        _calloutView.layer.cornerRadius = 5;
+    }else if(_calloutView){
+        _calloutView.frame = CGRectMake(1,1,self.width-1,self.height - 13 - 1);
+        _calloutView.layer.cornerRadius = 10;
         _calloutView.clipsToBounds = YES;
+        self.clipsToBounds = YES;
         
-        arrowBottom.image = [arrowBottom.image stretchableImageWithLeftCapWidth:2 topCapHeight:19];
-        arrowBottom.x = _calloutView.x + (_calloutView.width / 2) - 20;
-        arrowBottom.y = _calloutView.y - 6;
-        arrowBottom.width = 41;
-        arrowBottom.height = _calloutView.height + 6 + 29;
-        
-        
-        UIImageView* leftBorderView = (UIImageView*)[[self subviews]objectAtIndex:0];
-        leftBorderView.image = [leftBorderView.image stretchableImageWithLeftCapWidth:16 topCapHeight:20];
-        leftBorderView.x = _calloutView.x - 10;
-        leftBorderView.y = _calloutView.y - 6;
-        leftBorderView.width = arrowBottom.x - leftBorderView.x;
-        
-        UIImageView* rightBorderView = (UIImageView*)[[self subviews]objectAtIndex:1];
-        rightBorderView.image = [rightBorderView.image stretchableImageWithLeftCapWidth:1 topCapHeight:20];
-        rightBorderView.x = arrowBottom.x + arrowBottom.width;
-        rightBorderView.y = _calloutView.y - 6;
-        rightBorderView.width = leftBorderView.width;
-        
-        rightBorderView.height = leftBorderView.height = arrowBottom.height - 13;
+        for(UIView* subview in self.subviews){
+            if([subview isKindOfClass:[UILabel class]]){
+                subview.hidden = YES;
+            }
+        }
     }
 }
 
+//ios6 and before ---------------------
+
 - (CGFloat)UICalloutViewMinimumWidth{
-    return _calloutView ? (_calloutView.height + 6) : 43;
+    UIView* _calloutView = [self calloutView];
+    
+    return _calloutView ? ([self calloutSize].height + 6) : 43;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    UIView* _calloutView = [self calloutView];
+    
     CGPoint a = [self convertPoint:point toView:_calloutView];
     UIView* v = [_calloutView hitTest:a withEvent:event];
     if(v){
@@ -91,11 +154,79 @@
     }
     return [super hitTest:point withEvent:event];
 }
+//----------------------------
 
+
+
+
+//ios7 ---------------------
+
+- (CGSize)_preferredContentSize{
+    return CGSizeMake([self calloutSize].width + 2,[self calloutSize].height+13 + 2);
+}
+
+
+- (UIView*)detailView{
+    UIView* _calloutView = [self calloutView];
+    return _calloutView;
+}
+
+- (void)setCalloutTitle:(NSString*)title{
+    //DO NOTHING !
+}
+
+- (void)setCalloutSubtitle:(NSString*)title{
+    //DO NOTHING !
+}
+
+- (NSString*)calloutTitle{
+    return nil;
+}
+
+- (NSString*)calloutSubtitle{
+    return nil;
+}
+//-------------------------
+
+
+- (void)willMoveToSuperview:(UIView *)newSuperview{
+    [super willMoveToSuperview:newSuperview];
+    
+    if(!newSuperview || [CKOSVersion() floatValue] < 7 || !self.calloutView){
+        return;
+    }
+    
+    
+    CGSize calloutSize = [self _preferredContentSize];
+    
+    UIView* popoverView = [newSuperview superview];
+    
+    
+    CLLocationCoordinate2D centerCoordinate = self.coordinate;
+    CGPoint pointFromCenterCoordinate = [self.mapView convertCoordinate:centerCoordinate toPointToView:self.mapView];
+    
+    CGFloat xOffset = (calloutSize.width / 2) -  (popoverView.width + popoverView.x);
+    CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x - xOffset, pointFromCenterCoordinate.y - (calloutSize.height / 2));
+    CLLocationCoordinate2D coordinate = [self.mapView convertPoint:calloutcenter toCoordinateFromView:self.mapView];
+    
+    MKCoordinateRegion region = MKCoordinateRegionMake(coordinate, self.mapView.region.span);
+    [self.mapView setRegion:region animated:YES];
+}
+
+@end
+
+@interface CKMapEmptyAnnotation : NSObject<MKAnnotation>
+@property (nonatomic, assign, readwrite) CLLocationCoordinate2D coordinate;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *subtitle;
+@end
+
+@implementation CKMapEmptyAnnotation
 @end
 
 @interface CKAnnotationView()
 @property(nonatomic,retain)UIViewController* calloutViewController;
+@property(nonatomic,retain)CKCalloutView* calloutView;
 @end
 
 @implementation CKAnnotationView
@@ -104,11 +235,14 @@
 @synthesize calloutViewControllerCreationBlock = _calloutViewControllerCreationBlock;
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"CKAnnotationView_ios7_<%p>",self]];
     [self clearBindingsContext];
     [_calloutViewController release];
     _calloutViewController = nil;
     [_calloutViewControllerCreationBlock release];
     _calloutViewControllerCreationBlock = nil;
+    [_calloutView release];
+    _calloutView = nil;
     [super dealloc];
 }
 
@@ -123,17 +257,17 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+    
     if(_calloutViewController){
         if(selected){
-        }
-        else{
-            [super setSelected:selected animated:animated];
+        }else{
             [_calloutViewController viewWillDisappear:YES];
             [_calloutViewController.view removeFromSuperview];
             [_calloutViewController viewDidDisappear:YES];
             
             [self clearBindingsContext];
             self.calloutViewController = nil;
+            self.calloutView = nil;
         }
     }
 }
@@ -142,7 +276,12 @@
     if(_calloutViewController == NULL){
         _calloutViewController = [_calloutViewControllerCreationBlock(self.annotationController,self) retain];
         UIView* view = _calloutViewController.view;//force to load the view here !
-        view.autoresizingMask = UIViewAutoresizingNone;
+        
+        //if([CKOSVersion() floatValue] < 7){
+            view.autoresizingMask = UIViewAutoresizingNone;
+       // }else{
+       //     view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+       // }
         
         CGSize size = _calloutViewController.contentSizeForViewInPopover;
         if([_calloutViewController isKindOfClass:[UINavigationController class]]){
@@ -151,6 +290,8 @@
         }
         view.width = size.width;
         view.height = size.height;
+        
+        __unsafe_unretained CKAnnotationView* bself = self;
         
         [self beginBindingsContextByRemovingPreviousBindings];
         if([_calloutViewController isKindOfClass:[UINavigationController class]]){
@@ -164,6 +305,10 @@
                 
                 view.width = size.width;
                 view.height = size.height;
+                
+                if(bself.calloutView){
+                    [bself.calloutView setCalloutSize:size];
+                }
             }];
         }else{
             [_calloutViewController bind:@"contentSizeForViewInPopover" withBlock:^(id value) {
@@ -171,9 +316,14 @@
                 
                 view.width = size.width;
                 view.height = size.height;
+                
+                if(bself.calloutView){
+                    [bself.calloutView setCalloutSize:size];
+                }
             }];
         }
         [self endBindingsContext];
+        
         
         [_calloutViewController viewWillAppear:YES];
     }
@@ -190,20 +340,73 @@
 }
 
 - (void)didAddSubview:(UIView *)subview{
-    if(_calloutViewControllerCreationBlock){
-        if ([[[subview class] description] isEqualToString:@"UICalloutView"]) {
-            object_setClass(subview,[CKCalloutView class]);
-            
-            CKCalloutView* v = (CKCalloutView*)subview;
-            
-            if(self.calloutViewController){//view will appear has already been called !
+    if([CKOSVersion() floatValue] >= 7){
+        if(_calloutViewControllerCreationBlock){
+            __unsafe_unretained CKAnnotationView* bself = self;
+            for(UIView* subsubview in subview.subviews){
+                if ([[[subsubview class] description] isEqualToString:@"_MKPopoverEmbeddingView"]) {
+                    
+                    [NSObject beginBindingsContext:[NSString stringWithFormat:@"CKAnnotationView_ios7_<%p>",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+                    [subsubview bind:@"windowDelegate" withBlock:^(id value) {
+                        if(!value)
+                            return;
+                        
+                        id windowdelegate = value;
+                        if(windowdelegate){
+                            id popoverController = [windowdelegate valueForKey:@"popoverController"];
+                            if(popoverController){
+                                id contentViewController = [popoverController valueForKey:@"contentViewController"];
+                                if(contentViewController){
+                                    UIView* smallCalloutView = [contentViewController valueForKey:@"view"];
+                                    object_setClass(smallCalloutView,[CKCalloutView class]);
+                                    
+                                    CKCalloutView* v = (CKCalloutView*)smallCalloutView;
+                                    bself.calloutView = v;
+                                    
+                                    if(self.calloutViewController){//view will appear has already been called !
+                                        
+                                        UIView* view = [_calloutViewController view];
+                                        
+                                        v.mapView = [self mapView];
+                                        v.coordinate = self.annotation.coordinate;
+                                        v.calloutSize = _calloutViewController.contentSizeForViewInPopover;
+                                        v.calloutView = view;
+                                        
+                                        [smallCalloutView addSubview:view];
+                                        [_calloutViewController viewDidAppear:YES];
+                                    
+                                    }
+                                }
+                            }
+                        }
+                        
+                        [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"CKAnnotationView_ios7_<%p>",self]];
+                    }];
+                }
+            }
+        }
+    }else{
+        
+        if(_calloutViewControllerCreationBlock){
+            if ([[[subview class] description] isEqualToString:@"UICalloutView"]) {
+                object_setClass(subview,[CKCalloutView class]);
                 
-                UIView* view = [_calloutViewController view];
+                CKCalloutView* v = (CKCalloutView*)subview;
+                self.calloutView = v;
                 
-                v.calloutView = view;
-                                
-                [subview addSubview:view];
-                [_calloutViewController viewDidAppear:YES];
+                if(self.calloutViewController){//view will appear has already been called !
+                    
+                    UIView* view = [_calloutViewController view];
+                    
+                    v.mapView = [self mapView];
+                    v.coordinate = self.annotation.coordinate;
+                    v.calloutSize = _calloutViewController.contentSizeForViewInPopover;
+                    v.calloutView = view;
+                    
+                    [subview addSubview:view];
+                    [_calloutViewController viewDidAppear:YES];
+            
+                }
             }
         }
     }
