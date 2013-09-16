@@ -97,6 +97,7 @@
     [cell clearBindingsContext];
     
     self.textView = (CKTextView*)[cell.contentView viewWithTag:TEXTVIEW_TAG];
+    self.textView.inputAccessoryView = [self navigationToolbar];
     
     CKProperty* property = (CKProperty*)self.objectProperty;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
@@ -154,6 +155,7 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    
     _textView.frameChangeDelegate = self;
 	[self scrollToRow];
     
