@@ -420,7 +420,13 @@
     
     [super setLayoutBoxes:layoutBoxes];
     
-    UITableViewCell* cell = (UITableViewCell*)[contentView superview];
+    UITableViewCell* cell = nil;
+    if([CKOSVersion() floatValue] < 7){
+        cell = (UITableViewCell*)[contentView superview];
+    }else{
+        cell = (UITableViewCell*)[[contentView superview]superview];
+    }
+    
     if([cell isKindOfClass:[CKUITableViewCell class]]){
         __block CKUITableViewCell* bcell = (CKUITableViewCell*)cell;
         self.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
