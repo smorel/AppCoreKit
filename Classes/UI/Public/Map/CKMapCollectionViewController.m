@@ -132,6 +132,31 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     }
 }
 
+
+- (void)setVisibleMapRect:(MKMapRect)mapRect animated:(BOOL)animate{
+    [super setVisibleMapRect:mapRect animated:animate];
+}
+
+- (void)setVisibleMapRect:(MKMapRect)mapRect edgePadding:(UIEdgeInsets)insets animated:(BOOL)animate{
+    [super setVisibleMapRect:mapRect edgePadding:insets animated:animate];
+}
+
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated{
+    [super setCenterCoordinate:coordinate animated:animated];
+    
+}
+
+- (void)setRegion:(MKCoordinateRegion)region animated:(BOOL)animated{
+    [super setRegion:region animated:animated];
+}
+
+- (void)showAnnotations:(NSArray *)annotations animated:(BOOL)animated{
+    [super showAnnotations:annotations animated:animated];
+}
+
+- (void)setCamera:(MKMapCamera *)camera animated:(BOOL)animated{
+    [super setCamera:camera animated:animated];
+}
 @end
 
 
@@ -552,6 +577,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     if(_didScrollBlock){
         _didScrollBlock(self,animated);
     }
+}
+
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated{
+    int i =3;
 }
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{

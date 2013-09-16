@@ -123,8 +123,10 @@ static char CKCalloutViewCalloutMapViewKey;
             rightBorderView.height = leftBorderView.height = arrowBottom.height - 13;
         }
     }else if(_calloutView){
-        _calloutView.frame = CGRectMake(1,1,self.width-1,self.height - 13 - 1);
-        _calloutView.layer.cornerRadius = 10;
+        _calloutView.x = 1;
+        _calloutView.y = 1;
+        //_calloutView.frame = CGRectMake(1,1,self.width-1,self.height - 13 - 1);
+        _calloutView.layer.cornerRadius = 7;
         _calloutView.clipsToBounds = YES;
         self.clipsToBounds = YES;
         
@@ -196,10 +198,9 @@ static char CKCalloutViewCalloutMapViewKey;
         return;
     }
     
+    CGSize calloutSize = [self calloutSize];
     
-    CGSize calloutSize = [self _preferredContentSize];
-    
-    UIView* popoverView = [newSuperview superview];
+     UIView* popoverView = [newSuperview superview];
     
     
     CLLocationCoordinate2D centerCoordinate = self.coordinate;
@@ -258,8 +259,25 @@ static char CKCalloutViewCalloutMapViewKey;
 {
     [super setSelected:selected animated:animated];
     
-    if(_calloutViewController){
+    if(_calloutViewControllerCreationBlock){
         if(selected){
+            if([CKOSVersion() floatValue] >= 7){
+                CGSize calloutSize = [self calloutViewControllerSize];
+                
+    
+                
+                CLLocationCoordinate2D centerCoordinate = self.annotation.coordinate;
+                CGPoint pointFromCenterCoordinate = [self.mapView convertCoordinate:centerCoordinate toPointToView:self.mapView];
+                
+                CGFloat xOffset = 0;//(calloutSize.width / 2) -  (popoverView.width + popoverView.x);
+                CGPoint calloutcenter = CGPointMake(pointFromCenterCoordinate.x - xOffset, pointFromCenterCoordinate.y - (calloutSize.height / 2));
+                CLLocationCoordinate2D coordinate = [self.mapView convertPoint:calloutcenter toCoordinateFromView:self.mapView];
+                
+                MKCoordinateRegion region = MKCoordinateRegionMake(coordinate, self.mapView.region.span);
+                [self.mapView setRegion:region animated:YES];
+
+            }
+            
         }else{
             [_calloutViewController viewWillDisappear:YES];
             [_calloutViewController.view removeFromSuperview];
@@ -277,10 +295,10 @@ static char CKCalloutViewCalloutMapViewKey;
         _calloutViewController = [_calloutViewControllerCreationBlock(self.annotationController,self) retain];
         UIView* view = _calloutViewController.view;//force to load the view here !
         
-        //if([CKOSVersion() floatValue] < 7){
+      // if([CKOSVersion() floatValue] < 7){
             view.autoresizingMask = UIViewAutoresizingNone;
-       // }else{
-       //     view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+       //}else{
+           // view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
        // }
         
         CGSize size = _calloutViewController.contentSizeForViewInPopover;
@@ -290,6 +308,7 @@ static char CKCalloutViewCalloutMapViewKey;
         }
         view.width = size.width;
         view.height = size.height;
+        [view layoutSubviews];
         
         __unsafe_unretained CKAnnotationView* bself = self;
         
@@ -305,6 +324,7 @@ static char CKCalloutViewCalloutMapViewKey;
                 
                 view.width = size.width;
                 view.height = size.height;
+                [view layoutSubviews];
                 
                 if(bself.calloutView){
                     [bself.calloutView setCalloutSize:size];
@@ -316,6 +336,7 @@ static char CKCalloutViewCalloutMapViewKey;
                 
                 view.width = size.width;
                 view.height = size.height;
+                [view layoutSubviews];
                 
                 if(bself.calloutView){
                     [bself.calloutView setCalloutSize:size];
@@ -326,6 +347,16 @@ static char CKCalloutViewCalloutMapViewKey;
         
         
         [_calloutViewController viewWillAppear:YES];
+        
+        //In case size changes in viewWillAppear
+        size = _calloutViewController.contentSizeForViewInPopover;
+        if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+            UINavigationController* nav = (UINavigationController*)_calloutViewController;
+            size = nav.topViewController.contentSizeForViewInPopover;
+        }
+        view.width = size.width;
+        view.height = size.height;
+        [view layoutSubviews];
     }
     return _calloutViewController;
 }
@@ -355,8 +386,14 @@ static char CKCalloutViewCalloutMapViewKey;
                         if(windowdelegate){
                             id popoverController = [windowdelegate valueForKey:@"popoverController"];
                             if(popoverController){
+                                CGSize size = [bself calloutViewControllerSize];
+                                CGSize popoverContentSize = CGSizeMake(size.width + 2, size.height + 2);
+                                [popoverController setValue:[NSValue valueWithCGSize:popoverContentSize] forKey:@"popoverContentSize"];
+                                
                                 id contentViewController = [popoverController valueForKey:@"contentViewController"];
                                 if(contentViewController){
+                                    [contentViewController setValue:[NSValue valueWithCGSize:popoverContentSize] forKey:@"contentSizeForViewInPopover"];
+                                    
                                     UIView* smallCalloutView = [contentViewController valueForKey:@"view"];
                                     object_setClass(smallCalloutView,[CKCalloutView class]);
                                     
