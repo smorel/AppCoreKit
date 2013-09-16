@@ -35,11 +35,7 @@ A sample repository with binary versions of the framework is available at https:
 
 ## Minimum system requirements
 
-AppCoreKit supports all iOS versions 4.3 and higher.
-
-The <b>iOS 7</b> integration is in process. You can build your app and start using the framework on iOS7 without any problem.
-As we are in transition between XCode4 and <b>XCode5</b> and we must support build with or without the iOS7 SDK, we added a <b>ENABLE_XCODE5</b> pre-processor macro defined in <b>CKConfiguration.h</b> that enables iOS7 features that are not available while working in XCode4.
-You must uncomment this preprocessor macro while working in XCode5 to profit of the full integration with iOS7.
+AppCoreKit supports all iOS versions 4.3 and higher. XCode5 is requiered as we integrated support for iOS7.
 
 ## Additional dependencies
 
