@@ -395,8 +395,8 @@
 	if (self.viewControllers) {
 		NSMutableArray *items = [NSMutableArray arrayWithCapacity:[self.viewControllers count]];
         
-      //  NSMutableDictionary* controllerStyle = [self.styleManager styleForObject:self  propertyName:nil];
-      //  NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
+        NSMutableDictionary* controllerStyle = [self.styleManager styleForObject:self  propertyName:nil];
+        NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
         
         int i =0;
 		for (UIViewController *vc in self.viewControllers) {
@@ -413,12 +413,12 @@
                 item.position = CKTabViewItemPositionMiddle;
             }
             
-            /*
+            
             if(self.isViewDisplayed){
                 NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
                 [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
                 [item sizeToFit];
-            }*/
+            }
 
 			[items addObject:item];
             ++i;
