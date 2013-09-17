@@ -13,6 +13,7 @@
 #import "CKConfiguration.h"
 
 #import "CKVersion.h"
+#import "UIImage+Transformations.h"
 
 
 @implementation UINavigationBar (CKStyleManager)
@@ -47,6 +48,7 @@
                 if([style containsObjectForKey:CKStyleBackgroundImage]){
                     UIImage* image = [style backgroundImage];
                     [navBar setBackgroundImage:image forBarPosition:UIBarPositionTop barMetrics:UIBarMetricsDefault];
+                    [navBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(navBar.bounds.size.width, 1)]];
                 }
                 [appliedStack addObject:view];
                 [view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
