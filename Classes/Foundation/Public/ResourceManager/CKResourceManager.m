@@ -122,7 +122,7 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return path;
     }
     
-    NSLog(@"You should not the method [CKResourceManager pathForImageNamed] without the ResourceManager framework linked to your app or it will return nil !!!");
+    NSLog(@"You should not use the method [CKResourceManager pathForImageNamed] without the ResourceManager framework linked to your app or it will return nil !!!");
     
     return nil;
 }

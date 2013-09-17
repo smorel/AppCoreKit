@@ -348,6 +348,7 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
     
     NSArray* keys = [self allKeys];
     for(NSString* key in keys){
+
         NSString* trimmedKey = [key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if([trimmedKey hasPrefix:CKCascadingTreeOSVersion]){
             NSArray* components = [trimmedKey componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -660,6 +661,8 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
                         [object insertObject:dico atIndex:index];
                         [dico initAfterLoading];
                         [subObject release];
+                    }else{
+                        [dico initAfterLoading];
                     }
                     [dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                 }
