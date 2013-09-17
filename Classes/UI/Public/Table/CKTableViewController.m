@@ -160,6 +160,7 @@
 @synthesize sizeIsAlreadyInvalidated;
 @synthesize lockSizeChange;
 @synthesize isReloading;
+@synthesize didAdjustInsetsBlock = _didAdjustInsetsBlock;
 
 - (void)postInit {
 	[super postInit];
@@ -198,6 +199,8 @@
     }
 	[_tableViewContainer release];
     _tableViewContainer = nil;
+    [_didAdjustInsetsBlock release];
+    _didAdjustInsetsBlock = nil;
 	[super dealloc];
 }
 
@@ -250,6 +253,10 @@
                                                               0,
                                                               self.view.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
                                                               height));
+    
+    if(self.didAdjustInsetsBlock){
+        self.didAdjustInsetsBlock(self);
+    }
      
 }
 

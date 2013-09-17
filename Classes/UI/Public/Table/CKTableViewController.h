@@ -63,6 +63,10 @@ typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
  */
 @property (nonatomic, assign) UIEdgeInsets tableViewInsets;
 
+/**
+ */
+@property (nonatomic, copy) void(^didAdjustInsetsBlock)(CKTableViewController* controller);
+
 
 ///-----------------------------------
 /// @name Managing Selection
