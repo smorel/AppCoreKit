@@ -521,6 +521,7 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 				//Apply inheritedStyle to self
 				for(NSString* obj in sortedKeys){
 					if(![obj hasPrefix:CKCascadingTreePrefix] || [obj isEqualToString:CKCascadingTreeNode]){
+                        
 						id inheritedObject = [deepCopy objectForKey:obj];
                         if([inheritedObject isKindOfClass:[NSMutableDictionary class]]){
                             [inheritedObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
@@ -583,8 +584,14 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
                             [selfObject postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"self %@ in %@",key,objectKey]];
 							result = [self applyHierarchically:inheritedObject toDictionary:selfObject];
                             [result setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
-						}
-                        [self setObject:result forKey:obj];
+                            [self setObject:result forKey:obj];
+						}else if([inheritedObject isKindOfClass:[NSArray class]]){
+                            [self setObject:result forKey:obj];
+                        }else if(![self containsObjectForKey:obj]){
+                            [self setObject:result forKey:obj];
+                        }else{
+                            //ignore as the key is overloaded here compared to the inherited object
+                        }
 					}
 				}
 			}
