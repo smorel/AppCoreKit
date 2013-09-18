@@ -53,10 +53,7 @@ typedef NS_ENUM(NSInteger, CKFilteredCollectionUpdateType){
 - (id)initWithCollection:(CKCollection*)theCollection  usingPredicate:(NSPredicate*)thepredicate{
     self = [super init];
     _predicate = [thepredicate retain];
-    _collection = [theCollection retain];
-    [_collection addObserver:self];
-    
-    [self updateFilteredArray:CKFilteredCollectionUpdateTypeReload];
+    self.collection = [theCollection retain];
     
     BOOL bo = [theCollection isFetching];
     self.isFetching =  bo;

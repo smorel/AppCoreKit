@@ -52,8 +52,6 @@
     self = [super init];
     self.collections = thecollections;
     
-    [self updateArray];
-    
     return self; 
 }
 
