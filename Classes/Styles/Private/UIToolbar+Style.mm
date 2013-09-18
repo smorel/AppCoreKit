@@ -23,7 +23,7 @@
         if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
             for(UIBarButtonItem* item in toolbar.items){
                 NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
-                [item applyStyle:itemStyle];
+                [[item class] applyStyle:itemStyle toObject:item appliedStack:appliedStack delegate:nil];
                 
                 if([CKOSVersion() floatValue] < 4.2){
                     //Handle this manually here as there is a bug in the framework for versions < 4.2
@@ -49,9 +49,9 @@
                 
                 for(UIBarButtonItem* item in toolbar.items){
                     NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
-                    [item applyStyle:itemStyle];
+                    
+                    [[item class] applyStyle:itemStyle toObject:item appliedStack:appliedStack delegate:nil];
                 }
-                
                 
                 //[view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
                 return YES;
@@ -69,6 +69,8 @@
     }
     [super insertSubview:view atIndex:index];
 }
+
+
 /*
 
 - (void)UIToolbar_CKStyleManager_setItems:(NSArray *)items{
