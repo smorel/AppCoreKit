@@ -82,12 +82,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     
     
     UIView* contentView = self.contentViewController.view;
-    if([CKOSVersion() floatValue] >= 7){
-        //contentView.backgroundColor = [UIColor whiteColor];
-        UIToolbar* blurView = [[UIToolbar alloc]initWithFrame:contentView.bounds];
-        blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [contentView insertSubview:blurView atIndex:0];
-    }
+    
     
     UIView* toolbar = self.contentViewController.navigationItem.titleView;
     
@@ -110,6 +105,14 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     contentView.frame = CGRectMake(0,y,contentEndRect.size.width,contentEndRect.size.height - y);
     contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.sheetView addSubview:contentView];
+    
+    if([CKOSVersion() floatValue] >= 7){
+        //contentView.backgroundColor = [UIColor whiteColor];
+        UIToolbar* blurView = [[UIToolbar alloc]initWithFrame:self.sheetView.bounds];
+        blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.sheetView.backgroundColor = [UIColor clearColor];
+        [self.sheetView insertSubview:blurView atIndex:0];
+    }
     //add toolbar 
     //add contentview
     
