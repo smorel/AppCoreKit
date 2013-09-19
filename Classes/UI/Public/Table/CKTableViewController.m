@@ -223,7 +223,7 @@
     CGFloat statusBarHeight = navBarTransulcent ? ( UIInterfaceOrientationIsLandscape(statusBarOrientation) ?[[UIApplication sharedApplication]statusBarFrame].size.width : [[UIApplication sharedApplication]statusBarFrame].size.height) : 0;
     
     //Check if the navigation view controller is beside the status bar
-    CGRect navigationbarRectInWindow = [self.navigationController.navigationBar convertRect:self.navigationController.navigationBar.frame toView:self.navigationController.navigationBar.window];
+    CGRect navigationbarRectInWindow = [self.navigationController.view convertRect:self.navigationController.view.frame toView:self.navigationController.view.window];
     if(navigationbarRectInWindow.origin.y != 0){
         statusBarHeight = 0;
     }
@@ -244,7 +244,7 @@
     CGFloat statusBarHeight = navBarTransulcent ? ( UIInterfaceOrientationIsLandscape(statusBarOrientation) ?[[UIApplication sharedApplication]statusBarFrame].size.width : [[UIApplication sharedApplication]statusBarFrame].size.height) : 0;
    
     //Check if the navigation view controller is beside the status bar
-    CGRect navigationbarRectInWindow = [self.navigationController.navigationBar convertRect:self.navigationController.navigationBar.frame toView:self.navigationController.navigationBar.window];
+    CGRect navigationbarRectInWindow = [self.navigationController.view convertRect:self.navigationController.view.frame toView:self.navigationController.view.window];
     if(navigationbarRectInWindow.origin.y != 0){
         statusBarHeight = 0;
     }
