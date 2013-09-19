@@ -215,11 +215,40 @@
     return 0;
 }
 
+- (UIEdgeInsets)navigationControllerTransparencyInsets{
+    BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
+    
+    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication]statusBarOrientation];
+    
+    CGFloat statusBarHeight = navBarTransulcent ? ( UIInterfaceOrientationIsLandscape(statusBarOrientation) ?[[UIApplication sharedApplication]statusBarFrame].size.width : [[UIApplication sharedApplication]statusBarFrame].size.height) : 0;
+    
+    //Check if the navigation view controller is beside the status bar
+    CGRect navigationbarRectInWindow = [self.navigationController.navigationBar convertRect:self.navigationController.navigationBar.frame toView:self.navigationController.navigationBar.window];
+    if(navigationbarRectInWindow.origin.y != 0){
+        statusBarHeight = 0;
+    }
+    
+    CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
+    
+    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
+    
+    CGFloat toolbarHeight = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
+    return UIEdgeInsetsMake(self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
+}
 
 - (void)sizeToFit{
     BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
     
-    CGFloat statusBarHeight = navBarTransulcent ? [[UIApplication sharedApplication]statusBarFrame].size.height : 0;
+    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication]statusBarOrientation];
+    
+    CGFloat statusBarHeight = navBarTransulcent ? ( UIInterfaceOrientationIsLandscape(statusBarOrientation) ?[[UIApplication sharedApplication]statusBarFrame].size.width : [[UIApplication sharedApplication]statusBarFrame].size.height) : 0;
+   
+    //Check if the navigation view controller is beside the status bar
+    CGRect navigationbarRectInWindow = [self.navigationController.navigationBar convertRect:self.navigationController.navigationBar.frame toView:self.navigationController.navigationBar.window];
+    if(navigationbarRectInWindow.origin.y != 0){
+        statusBarHeight = 0;
+    }
+    
     CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
     
     BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;

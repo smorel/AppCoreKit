@@ -63,6 +63,11 @@ typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
  */
 @property (nonatomic, assign) UIEdgeInsets tableViewInsets;
 
+
+/** Computes the insets that will get applied to the table view and scroll indicators taking care of navigation's controller (navigationBar, toolBar) ans status bar transparency.
+ */
+@property (nonatomic, readonly) UIEdgeInsets navigationControllerTransparencyInsets;
+
 /**
  */
 @property (nonatomic, copy) void(^didAdjustInsetsBlock)(CKTableViewController* controller);

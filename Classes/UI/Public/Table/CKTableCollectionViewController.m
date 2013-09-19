@@ -289,17 +289,7 @@
     [super viewDidUnload];
 }
 
-- (UIEdgeInsets)_noSearchTableViewTopContentInsets{
-    BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
-    
-    CGFloat statusBarHeight = navBarTransulcent ? [[UIApplication sharedApplication]statusBarFrame].size.height : 0;
-    CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
-    
-    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
-    
-    CGFloat toolbarHeight = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
-    return UIEdgeInsetsMake(self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
-}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     CKViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
@@ -343,7 +333,7 @@
                 }
             }
             
-            UIEdgeInsets tableInsets = [self _noSearchTableViewTopContentInsets];
+            UIEdgeInsets tableInsets = [self navigationControllerTransparencyInsets];
             
             self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,tableInsets.top,self.tableView.frame.size.width,tableViewOffset)]autorelease];
             _searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;

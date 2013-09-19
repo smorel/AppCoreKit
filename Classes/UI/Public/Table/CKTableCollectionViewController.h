@@ -107,6 +107,7 @@ typedef UITableViewRowAnimation(^CKTableCollectionViewControllerSectionAnimation
 @property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
 
 
+
 ///-----------------------------------
 /// @name Animating
 ///-----------------------------------
