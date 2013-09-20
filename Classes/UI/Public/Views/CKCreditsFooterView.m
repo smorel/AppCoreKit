@@ -93,11 +93,8 @@
 }
 
 - (id)initWithStyle:(CKCreditsViewStyle)style {
+    _style = style;
 	self = [super init];
-	if (self) {
-		_style = style;
-        [self setupView];
-	}
 	return self;
 }
 
@@ -169,6 +166,7 @@
             break;
     }
     
+   
     self.versionLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
     _versionLabel.backgroundColor = [UIColor clearColor];
     _versionLabel.textAlignment = UITextAlignmentCenter;
