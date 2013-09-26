@@ -219,6 +219,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     
     dispatch_group_async(self.operationsGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         NSError* converterError = nil;
+        
+        if(self.handle){
+            [self.handle closeFile];
+        }
+        
         id object = self.isCancelled ? nil : [CKWebDataConverter convertData:self.data fromResponse:self.response error:&converterError];
         
         if(converterError != nil){

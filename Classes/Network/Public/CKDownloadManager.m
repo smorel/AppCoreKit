@@ -118,8 +118,18 @@ static CKDownloadManager *CKSharedDownloadManager;
 }
 
 - (CKWebRequest*)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name {
-    if ([self fileURLForName:name])
+    if ([self fileURLForName:name]){
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        [userInfo setObject:name forKey:@"name"];
+        [userInfo setObject:URL forKey:@"url"];
+        [userInfo setObject:[self fileURLForName:name] forKey:@"file"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:CKDownloadManagerDownloadDidFinishNotification
+                                                            object:self
+                                                          userInfo:userInfo];
+
         return nil;
+    }
     
     if ([self downloaderForName:name])
         return nil;
