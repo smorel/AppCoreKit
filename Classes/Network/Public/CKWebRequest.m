@@ -217,6 +217,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
     self.progress = 1.0;
     
+    
     dispatch_group_async(self.operationsGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         NSError* converterError = nil;
         
@@ -250,8 +251,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
                 if (!self.isCancelled) {
                     self.cancelled = YES;
                     
-                    if (aConnection == nil)
-                        self.response = nil;
+                   // if (aConnection == nil)
+                   //     self.response = nil;
                     
                     if (self.completionBlock)
                         self.completionBlock(object, self.response, nil);
