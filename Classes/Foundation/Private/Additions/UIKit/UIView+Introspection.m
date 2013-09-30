@@ -121,11 +121,7 @@
 																			readOnly:NO]];
     
     NSString *appliedStyleDescription = nil;
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        appliedStyleDescription = @"debugAppliedStyle";
-    }else{
-        appliedStyleDescription = @"appliedStyle";
-    }
+    appliedStyleDescription = @"appliedStyle";
     
 	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:appliedStyleDescription
 																		   withClass:[NSMutableDictionary class]

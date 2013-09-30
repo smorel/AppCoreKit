@@ -171,7 +171,6 @@ extern NSString* CKStyleAutoLayoutCompression;
  */
 @interface NSObject (CKStyle)
 @property(nonatomic,retain)NSMutableDictionary* appliedStyle;
-@property(nonatomic,retain)NSMutableDictionary* debugAppliedStyle;
 
 - (NSString*)appliedStylePath;
 - (NSString*)appliedStyleDescription;

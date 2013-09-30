@@ -153,6 +153,13 @@
 
 #pragma mark - Item Management
 
+- (void)setAppliedStyle:(NSMutableDictionary *)appliedStyle{
+    if(appliedStyle == nil || [appliedStyle isEmpty]){
+        int i =3;
+    }
+    [super setAppliedStyle:appliedStyle];
+}
+
 // Add the items
 
 - (void)setItems:(NSArray *)items {

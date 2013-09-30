@@ -15,8 +15,6 @@
 
 @interface CKConfiguration()
 @property(nonatomic,assign,readwrite) CKConfigurationType type;
-@property(nonatomic,retain,readwrite) NSString* sourceTreeDirectory;
-@property(nonatomic,assign,readwrite) BOOL resourcesLiveUpdateEnabled;
 
 - (void)updateConfig;
 @end
@@ -24,7 +22,7 @@
  
 
 @implementation CKConfiguration
-@synthesize type,inlineDebuggerEnabled,checkViewControllerCopyInBlocks,assertForBindingsOutOfContext,sourceTreeDirectory,resourcesLiveUpdateEnabled,usingARC;
+@synthesize type,inlineDebuggerEnabled,checkViewControllerCopyInBlocks,assertForBindingsOutOfContext,usingARC;
 
 - (id)init{
     self = [super init];
@@ -69,10 +67,6 @@
     if(dico){
         [NSValueTransformer transform:dico toObject:self];
     }
-    
-    BOOL simu = [CKConfiguration isSimulator];
-    self.sourceTreeDirectory = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SRC_ROOT"];//[[[NSProcessInfo processInfo] environment] objectForKey:@"SRC_ROOT"];
-    self.resourcesLiveUpdateEnabled = simu && self.sourceTreeDirectory != nil;
     
     if([CKOSVersion() floatValue] >= 5){
         self.checkViewControllerCopyInBlocks = NO;

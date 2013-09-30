@@ -646,49 +646,25 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 
 
 static char NSObjectAppliedStyleObjectKey;
-static char NSObjectDebugAppliedStyleObjectKey;
 
 @implementation NSObject (CKStyle)
 @dynamic appliedStyle;
-@dynamic debugAppliedStyle;
 
 - (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
-    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
         objc_setAssociatedObject(self, 
                                  &NSObjectAppliedStyleObjectKey,
                                  appliedStyle,
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    else{
-        objc_setAssociatedObject(self, 
-                                 &NSObjectDebugAppliedStyleObjectKey,
-                                 appliedStyle,
-                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
 }
 
 - (NSMutableDictionary*)appliedStyle{
     return objc_getAssociatedObject(self, &NSObjectAppliedStyleObjectKey);
 }
 
-- (void)setDebugAppliedStyle:(NSMutableDictionary *)debugAppliedStyle {
-    objc_setAssociatedObject(self, 
-                             &NSObjectDebugAppliedStyleObjectKey,
-                             debugAppliedStyle,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (NSMutableDictionary *)debugAppliedStyle {
-    return objc_getAssociatedObject(self, &NSObjectDebugAppliedStyleObjectKey);
-}
-
 - (NSString*)appliedStylePath{
     NSMutableDictionary* style = nil;
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        style = [self debugAppliedStyle];
-    }else{
-       style = [self appliedStyle];
-    }
+    style = [self appliedStyle];
+
     return [style path];
 }
 
@@ -837,7 +813,7 @@ static char NSObjectDebugAppliedStyleObjectKey;
 	}
 	
     
-    if(![self isKindOfClass:[UITableView class]]){
+    if(![self isKindOfClass:[UITableView class]] && ![self isKindOfClass:[UIWindow class]]){
         //Style are applyed by cell controllers and header/footer view insertion for tables ...
         
         if([self isKindOfClass:[UIView class]] == YES){

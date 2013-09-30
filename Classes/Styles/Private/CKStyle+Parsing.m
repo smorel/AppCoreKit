@@ -72,10 +72,8 @@ static NSSet* CKStyleResourceTypeSet = nil;
 		return object;
 	}
 	id result = [NSValueTransformer transform:object toClass:[UIImage class]];
-    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        if(result){
-            [self setObject:result forKey:key];
-        }
+    if(result){
+        [self setObject:result forKey:key];
     }
     return result;
 }

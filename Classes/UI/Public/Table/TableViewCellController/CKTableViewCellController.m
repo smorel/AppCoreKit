@@ -36,6 +36,7 @@
 #import "CKStyle+Parsing.h"
 
 #import "CKVersion.h"
+#import "CKResourceManager.h"
 
 //#import <objc/runtime.h>
 
@@ -810,7 +811,7 @@
 }
 
 - (NSString *)identifier {
-    if(_identifier == nil || [[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+    if(_identifier == nil || [CKResourceManager isResourceManagerConnected]){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         if(self.createCallback){
             [self.createCallback execute:self];

@@ -85,12 +85,8 @@
     [subTitle appendFormat:@"%@(frame:%@)",([subTitle length] > 0) ? @"," : @"",NSStringFromCGRect(view.frame)];
     
     BOOL hasNoStylesheet = NO;
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        hasNoStylesheet = [view debugAppliedStyle] == nil || [[view debugAppliedStyle]isEmpty];
-    }
-    else{
-        hasNoStylesheet = [view appliedStyle] == nil || [[view appliedStyle]isEmpty];
-    }
+
+    hasNoStylesheet = [view appliedStyle] == nil || [[view appliedStyle]isEmpty];
     
     if(hasNoStylesheet){
         [subTitle appendFormat:@"%@(No Stylesheet)",([subTitle length] > 0) ? @"," : @""];

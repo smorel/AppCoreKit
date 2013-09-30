@@ -119,12 +119,8 @@
 
 + (CKTableViewCellController*)cellControllerForStylesheetInObject:(id)object{
     NSMutableDictionary* styleSheet = nil;
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        styleSheet = [object debugAppliedStyle];
-    }
-    else{
-        styleSheet = [object appliedStyle];
-    }
+    styleSheet = [object appliedStyle];
+
     if(styleSheet){
         NSString* title = [[[object appliedStylePath]componentsSeparatedByString:@"/"]componentsJoinedByString:@"\n"];
         CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:nil subtitle:title action:^(CKTableViewCellController* controller){
@@ -158,12 +154,8 @@
     
     //SECTION FOR STYLESHEET
     NSMutableDictionary* styleSheet = nil;
-    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
-        styleSheet = [object debugAppliedStyle];
-    }
-    else{
-        styleSheet = [object appliedStyle];
-    }
+    styleSheet = [object appliedStyle];
+    
     CKFormSection* styleSection = styleSheet ? [CKFormSection sectionWithCellControllers:
                                                            [NSArray arrayWithObject:[[object class]cellControllerForStylesheetInObject:object]] headerTitle:@"StyleSheet"] : nil;
     

@@ -118,11 +118,7 @@ static NSInteger kLogEnabled = -1;
 @implementation NSObject (CKStyleManager)
 
 - (NSMutableDictionary*)stylesheet{
-#if !TARGET_IPHONE_SIMULATOR
     return [self appliedStyle];
-#else
-    return [self debugAppliedStyle];
-#endif
 }
 
 - (void)findAndApplyStyleFromStylesheet:(NSMutableDictionary*)parentStylesheet  propertyName:(NSString*)propertyName{

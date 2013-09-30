@@ -72,18 +72,6 @@ typedef NS_ENUM(NSInteger, CKConfigurationType){
  */
 @property(nonatomic,assign,readwrite) BOOL assertForBindingsOutOfContext;
 
-/** Resources files such as cascading trees (Stylesheet, Mock, Mappings, Configuration, Object graphs), strings and images are compatible with our live update system. This system reload and apply changes in those files when they are saved by a tierce editor (XCode, textEdit or whatever).
-    By default we always enable this system on simulator as the app is not sandboxed if the following key is defined in your application.plist:
-         SRC_ROOT = $SRCROOT
- */
-@property(nonatomic,assign,readonly) BOOL resourcesLiveUpdateEnabled;
-
-/** The source tree directory allow the live update system for resources files to use the files in your source tree instead of the files copiued in the .app.
- You must define the foillowing key in your application.plist to enable the live update system for resource files:
-         SRC_ROOT = $SRCROOT
- */
-@property(nonatomic,retain,readonly) NSString* sourceTreeDirectory;
-
 /** This flag specify if the application is compiled using ARC. This will bypass some automatic deallocation in AppCoreKit objects.
  */
 @property(nonatomic,assign,readwrite) BOOL usingARC;
