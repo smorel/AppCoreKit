@@ -86,6 +86,14 @@ typedef NS_ENUM(NSInteger, CKTransitionType){
  */
 - (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition;
 
+/**
+ */
+- (BOOL)containerControlAjustsInsetsForNavigationTransparency;
+
+/**
+ */
+- (UIEdgeInsets)navigationControllerTransparencyInsets;
+
 @end
 
 

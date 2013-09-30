@@ -97,10 +97,7 @@ typedef UITableViewRowAnimation(^CKTableCollectionViewControllerSectionAnimation
 ///-----------------------------------
 /// @name Customizing the Appearance
 ///-----------------------------------
-/** 
- Specify if the scrolling interactions should be horizontal or vertical
-*/
-@property (nonatomic, assign) CKTableViewOrientation orientation;
+
 /** 
  Specify if the table should resize itself on keyboard or sheet notifications
  */

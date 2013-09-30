@@ -396,6 +396,33 @@ typedef void(^CKTransitionBlock)();
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods{ return NO; }
  */
 
+
+- (BOOL)containerControlAjustsInsetsForNavigationTransparency{
+    return NO;
+}
+
+//ios 7
+- (UIEdgeInsets)navigationControllerTransparencyInsets{
+    BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
+    
+    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication]statusBarOrientation];
+    
+    CGFloat statusBarHeight = navBarTransulcent ? ( UIInterfaceOrientationIsLandscape(statusBarOrientation) ?[[UIApplication sharedApplication]statusBarFrame].size.width : [[UIApplication sharedApplication]statusBarFrame].size.height) : 0;
+    
+    //Check if the navigation view controller is beside the status bar
+    CGRect navigationbarRectInWindow = [self.navigationController.view convertRect:self.navigationController.view.frame toView:self.navigationController.view.window];
+    if(navigationbarRectInWindow.origin.y != 0){
+        statusBarHeight = 0;
+    }
+    
+    CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
+    
+    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
+    
+    CGFloat toolbarHeight = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
+    return UIEdgeInsetsMake((([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,toolbarHeight,0);
+}
+
 @end
 
 #pragma mark - UIViewController Additions

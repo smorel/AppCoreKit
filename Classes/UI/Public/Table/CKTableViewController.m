@@ -16,6 +16,7 @@
 #import "CKVersion.h"
 #import "CKResourceManager.h"
 #import "UIViewController+Style.h"
+#import "CKContainerViewController.h"
 
 @interface CKViewController()
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
@@ -216,6 +217,17 @@
 }
 
 - (UIEdgeInsets)navigationControllerTransparencyInsets{
+    id container = [self containerViewController];
+    if(container && [container respondsToSelector:@selector(containerControlAjustsInsetsForNavigationTransparency)]){
+        BOOL bypass = [container containerControlAjustsInsetsForNavigationTransparency];
+        if(bypass){
+            return UIEdgeInsetsMake(0,0,0,0);
+        }
+    }
+    
+    if(self.orientation == CKTableViewOrientationLandscape)
+        return UIEdgeInsetsMake(0,0,0,0);
+    
     BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
     
     UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication]statusBarOrientation];
@@ -237,6 +249,17 @@
 }
 
 - (void)sizeToFit{
+    id container = [self containerViewController];
+    if(container && [container respondsToSelector:@selector(containerControlAjustsInsetsForNavigationTransparency)]){
+        BOOL bypass = [container containerControlAjustsInsetsForNavigationTransparency];
+        if(bypass){
+            return;
+        }
+    }
+    
+    if(self.orientation == CKTableViewOrientationLandscape)
+        return;
+    
     BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
     
     UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication]statusBarOrientation];

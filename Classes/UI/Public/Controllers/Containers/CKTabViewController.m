@@ -17,6 +17,7 @@
 #import "CKDebug.h"
 #import "UIView+Positioning.h"
 #import "UIView+Style.h"
+#import "CKVersion.h"
 
 //CKTabViewItem
 @interface CKTabViewItem()
@@ -152,13 +153,6 @@
 }
 
 #pragma mark - Item Management
-
-- (void)setAppliedStyle:(NSMutableDictionary *)appliedStyle{
-    if(appliedStyle == nil || [appliedStyle isEmpty]){
-        int i =3;
-    }
-    [super setAppliedStyle:appliedStyle];
-}
 
 // Add the items
 
@@ -321,17 +315,20 @@
 
 - (void)setStyle:(CKTabViewControllerStyle)theStyle{
     _style = theStyle;
+    
+    UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
+    
     switch(theStyle){
         case CKTabViewControllerStyleBottom:{
             if(_tabBar){
-                CGRect frame = CGRectMake(0,self.view.bounds.size.height - _tabBar.frame.size.height,
+                CGRect frame = CGRectMake(0,self.view.bounds.size.height - _tabBar.frame.size.height - insets.bottom,
                                           self.view.bounds.size.width,_tabBar.frame.size.height);
                 _tabBar.frame = frame;
                 _tabBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
             }
             if(self.containerView){
-                CGRect frame = CGRectMake(0,0,self.view.bounds.size.width,
-                                          self.view.bounds.size.height - _tabBar.frame.size.height);
+                CGRect frame = CGRectMake(0,insets.top,self.view.bounds.size.width,
+                                          self.view.bounds.size.height - _tabBar.frame.size.height - insets.top - insets.bottom);
                 self.containerView.frame = frame;
                 self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             }
@@ -339,15 +336,15 @@
         }
         case CKTabViewControllerStyleTop:{
             if(_tabBar){
-                CGRect frame = CGRectMake(0,0,self.view.bounds.size.width,_tabBar.frame.size.height);
+                CGRect frame = CGRectMake(0,insets.top,self.view.bounds.size.width,_tabBar.frame.size.height);
                 _tabBar.frame = frame;
                 _tabBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
             }
             
             if(self.containerView){
-                CGRect frame = CGRectMake(0,_tabBar.frame.size.height,
+                CGRect frame = CGRectMake(0,insets.top + _tabBar.frame.size.height,
                                           self.view.bounds.size.width,
-                                          self.view.bounds.size.height - _tabBar.frame.size.height);
+                                          self.view.bounds.size.height - _tabBar.frame.size.height - insets.top - insets.bottom);
                 self.containerView.frame = frame;
                 self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             }
@@ -355,6 +352,10 @@
             break;
         }
     }
+}
+
+- (BOOL)containerControlAjustsInsetsForNavigationTransparency{
+    return YES;
 }
 
 - (void)viewDidUnload{

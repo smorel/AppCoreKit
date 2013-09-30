@@ -79,8 +79,15 @@
     [self updateSegmentUsingViewControllers:viewControllers];
 }
 
+
+- (BOOL)containerControlAjustsInsetsForNavigationTransparency{
+    return self.segmentPosition == CKSegmentedViewControllerPositionTop || self.segmentPosition == CKSegmentedViewControllerPositionBottom;
+}
+
 - (void)updateSegmentPositionUsingPosition:(CKSegmentedViewControllerPosition)position{
     //place the controller's view as if no segmented control
+    UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
+    
     if([_segmentedControl superview]){
         switch(self.segmentPosition){
             case CKSegmentedViewControllerPositionTop:
@@ -99,13 +106,14 @@
         }
     }
     
+    
     //place the segmented control
     switch(self.segmentPosition){
         case CKSegmentedViewControllerPositionTop:{
             self.segmentedControl.autoResizeToFitContent = NO;
-            self.containerView.y = self.segmentedControl.height;
-            self.containerView.height = [self.view height] - self.segmentedControl.height;
-            self.segmentedControl.y = 0;
+            self.containerView.y = self.segmentedControl.height + insets.top;
+            self.containerView.height = [self.view height] - self.segmentedControl.height - insets.top - insets.bottom;
+            self.segmentedControl.y = insets.top;
             self.segmentedControl.x = 0;
             self.segmentedControl.width = self.view.width;
             self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
@@ -114,8 +122,8 @@
         }
         case CKSegmentedViewControllerPositionBottom:{
             self.segmentedControl.autoResizeToFitContent = NO;
-            self.containerView.height = [self.view height] - self.segmentedControl.height;
-            self.segmentedControl.y = self.containerView.height;
+            self.containerView.height = [self.view height] - self.segmentedControl.height - insets.top - insets.bottom;
+            self.segmentedControl.y = self.containerView.height - insets.bottom;
             self.segmentedControl.x = 0;
             self.segmentedControl.width = self.view.width;
             self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;

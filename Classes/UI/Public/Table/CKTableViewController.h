@@ -60,6 +60,11 @@ typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
 @property (nonatomic, assign) UITableViewStyle style;
 
 /**
+ Specify if the scrolling interactions should be horizontal or vertical
+ */
+@property (nonatomic, assign) CKTableViewOrientation orientation;
+
+/**
  */
 @property (nonatomic, assign) UIEdgeInsets tableViewInsets;
 
