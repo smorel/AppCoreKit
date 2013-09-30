@@ -141,6 +141,12 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
+    if([CKOSVersion() floatValue] >= 7){
+        if(self.backgroundView){
+            self.backgroundView.frame = self.bounds;
+        }
+    }
+    
     if(self.contentView.layoutBoxes && !self.contentView.containerLayoutBox){
         [self.contentView performLayoutWithFrame:self.contentView.bounds];
     }

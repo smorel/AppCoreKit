@@ -392,9 +392,13 @@
             }
         }
         
-        // [self.tableView reloadData];
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
+        if([CKOSVersion() floatValue] >= 7){
+            [self reload];
+        }else{
+            // [self.tableView reloadData];
+            [self.tableView beginUpdates];
+            [self.tableView endUpdates];
+        }
     }
     
 	if (self.stickySelectionEnabled == NO){
