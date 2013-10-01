@@ -269,14 +269,22 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 }
 
 - (id)findObjectInHierarchy:(NSString*)keyPath{
+    NSString* normalizedKeyPath = [CKCascadingTreeItemFormat normalizeFormat:keyPath];
+    
 	NSMutableDictionary* dico = self;
 	while(dico != nil){
 		id foundObject = [dico valueForKeyPath:keyPath];
 		if(foundObject && foundObject != self){
 			return foundObject;
 		}
+		id foundNormalizedObject = [dico valueForKeyPath:normalizedKeyPath];
+        if(foundNormalizedObject && foundNormalizedObject != self){
+			return foundNormalizedObject;
+		}
+        
         dico = [dico parentDictionary];
 	}
+    
 	return nil;
 }
 
@@ -508,8 +516,11 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
-			NSString* normalizedKey = [CKCascadingTreeItemFormat normalizeFormat:key];
-			NSMutableDictionary* inheritedDico = [self findObjectInHierarchy:normalizedKey];
+			NSMutableDictionary* inheritedDico = [self findObjectInHierarchy:key];
+            
+            if(!inheritedDico){
+                NSLog(@"CKCascadingTree Inheritance - Could Not find object with keypath : '%@'",key);
+            }
             
             NSMutableDictionary* deepCopy = inheritedDico ? [self deepCleanCopy:inheritedDico] : nil;
             [deepCopy setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
