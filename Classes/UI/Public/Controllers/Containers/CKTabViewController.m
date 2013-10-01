@@ -313,10 +313,14 @@
                                                  CKTabViewControllerStyleTop);
 }
 
+- (UIRectEdge)edgesForExtendedLayout{
+    return UIRectEdgeNone;
+}
+
 - (void)setStyle:(CKTabViewControllerStyle)theStyle{
     _style = theStyle;
     
-    UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
+    UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, 0, 0);//[self navigationControllerTransparencyInsets];
     
     switch(theStyle){
         case CKTabViewControllerStyleBottom:{
@@ -354,6 +358,12 @@
     }
 }
 
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    
+    [self setStyle:self.style];//Apply layout ...
+}
+
 - (BOOL)containerControlAjustsInsetsForNavigationTransparency{
     return YES;
 }
@@ -362,6 +372,11 @@
     [super viewDidUnload];
     [_tabBar setDelegate : nil];
 	self.tabBar = nil;
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self setStyle:self.style];//Apply layout ...
 }
 
 - (void)viewWillAppear:(BOOL)animated {

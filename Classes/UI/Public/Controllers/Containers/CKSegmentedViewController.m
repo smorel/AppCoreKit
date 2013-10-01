@@ -84,9 +84,20 @@
     return self.segmentPosition == CKSegmentedViewControllerPositionTop || self.segmentPosition == CKSegmentedViewControllerPositionBottom;
 }
 
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    
+    [self updateSegmentPositionUsingPosition:self.segmentPosition];//Apply layout ...
+}
+
+- (UIRectEdge)edgesForExtendedLayout{
+    return UIRectEdgeNone;
+}
+
 - (void)updateSegmentPositionUsingPosition:(CKSegmentedViewControllerPosition)position{
     //place the controller's view as if no segmented control
-    UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
+    UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, 0, 0);
+   // UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     
     if([_segmentedControl superview]){
         switch(self.segmentPosition){

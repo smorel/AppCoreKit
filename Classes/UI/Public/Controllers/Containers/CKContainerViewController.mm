@@ -528,20 +528,24 @@ static char CKViewControllerContainerViewControllerKey;
 @implementation UINavigationController (CKContainerViewController)
 
 - (BOOL)UINavigationController_CKContainerViewController_wantsFullScreenLayout{
-    //FIXME :
-    //here we should return no when in container but this method is called too early by the nav controller itself ...
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-        return NO;
+    if([CKOSVersion() floatValue] < 7){
+        //FIXME :
+        //here we should return no when in container but this method is called too early by the nav controller itself ...
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+            return NO;
+        }
     }
     return [self UINavigationController_CKContainerViewController_wantsFullScreenLayout ];
 }
 
 - (void)setContainerViewController:(UIViewController *)containerViewController{
     [super setContainerViewController:containerViewController];
-    if(containerViewController){
-        [self setWantsFullScreenLayout:NO];
-        self.navigationBar.y = 0;
-    }
+     if([CKOSVersion() floatValue] < 7){
+         if(containerViewController){
+             [self setWantsFullScreenLayout:NO];
+             self.navigationBar.y = 0;
+         }
+     }
 }
 
 @end
