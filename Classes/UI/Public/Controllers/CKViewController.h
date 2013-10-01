@@ -226,6 +226,24 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
  */
 - (NSMutableDictionary*)stylesheet;
 
+
+///-----------------------------------
+/// @name Customizing status bar (since iOS7)
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,assign) UIStatusBarStyle preferredStatusBarStyle;
+
+/**
+ */
+@property(nonatomic,assign) BOOL prefersStatusBarHidden;
+
+/**
+ */
+@property(nonatomic,assign) UIStatusBarAnimation preferredStatusBarUpdateAnimation;
+
+
 ///-----------------------------------
 /// @name Private
 ///-----------------------------------

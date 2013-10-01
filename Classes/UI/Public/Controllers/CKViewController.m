@@ -28,6 +28,7 @@
 #import "CKResourceDependencyContext.h"
 
 
+
 @interface CKViewController()
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
 @property(nonatomic,retain) NSString* navigationTitleBindingContext;
@@ -101,8 +102,27 @@
                                                  CKViewControllerStateDidLoad);
 }
 
+- (void)preferredStatusBarStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UIStatusBarStyle",
+                                                 UIStatusBarStyleDefault,
+                                                 UIStatusBarStyleLightContent,
+                                                 UIStatusBarStyleBlackTranslucent,
+                                                 UIStatusBarStyleBlackOpaque );
+}
+
+- (void)preferredStatusBarUpdateAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UIStatusBarAnimation",
+                                                 UIStatusBarAnimationNone,
+                                                 UIStatusBarAnimationFade,
+                                                 UIStatusBarAnimationSlide );
+}
+
+
 - (void)postInit {	
     self.styleHasBeenApplied = NO;
+    self.preferredStatusBarStyle = UIStatusBarStyleDefault;
+    self.prefersStatusBarHidden = NO;
+    self.preferredStatusBarUpdateAnimation = UIStatusBarAnimationFade;
     
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.navigationTitleBindingContext = [NSString stringWithFormat:@"<%p>_navigationTitle",self];
