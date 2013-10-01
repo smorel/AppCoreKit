@@ -99,7 +99,6 @@
     
     if([view respondsToSelector:@selector(setAppliedStyle:)]){
         [view performSelector:@selector(setAppliedStyle:) withObject:nil];
-        [view performSelector:@selector(setDebugAppliedStyle:) withObject:nil];
     }
     
     for(UIView* v in view.subviews){
