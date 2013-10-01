@@ -411,7 +411,7 @@ typedef void(^CKTransitionBlock)();
     
     //Check if the navigation view controller is beside the status bar
     CGRect navigationbarRectInWindow = [self.navigationController.view convertRect:self.navigationController.view.frame toView:self.navigationController.view.window.rootViewController.view];
-    if(navigationbarRectInWindow.origin.y != 0 && navigationbarRectInWindow.origin.y != statusBarHeight){
+    if(navigationbarRectInWindow.origin.y != 0 /*&& navigationbarRectInWindow.origin.y != statusBarHeight*/){
         statusBarHeight = 0;
     }
     
