@@ -90,6 +90,25 @@
     }
 }
 
+//IOS 7 Support for aligning bar button items properly !
+//http://stackoverflow.com/questions/18861201/uibarbuttonitem-with-custom-view-not-properly-aligned-on-ios-7-when-used-as-left
+- (UIEdgeInsets)alignmentRectInsets {
+    
+    UINavigationBar* navBar = (UINavigationBar*)[self superview];
+    if(!navBar)
+        return UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    UINavigationItem* topItem = [navBar topItem];
+   
+    if(topItem.leftBarButtonItem == self.barButtonItem)
+        return UIEdgeInsetsMake(0, 9.0f, 0, 0);
+    
+    if(topItem.rightBarButtonItem == self.barButtonItem)
+        return UIEdgeInsetsMake(0, 0, 0, 9.0f);
+    
+    return UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
 @end
 
 @implementation UIBarButtonItem (CKStyle)

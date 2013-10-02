@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 
 @interface CKBarButtonItemButton : UIButton
+
 @property (nonatomic,assign)UIBarButtonItem* barButtonItem;
 - (id)initWithBarButtonItem:(UIBarButtonItem*)barButtonItem;
 
