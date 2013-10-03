@@ -42,6 +42,10 @@
  */
 - (void)becomeFirstResponder;
 
+/**
+ */
+- (void)resignFirstResponder;
+
 /** If you override CKTableViewCellController, you should implement this method if you need integration with the responder chain.
  */
 - (UIView*)nextResponder:(UIView*)view;

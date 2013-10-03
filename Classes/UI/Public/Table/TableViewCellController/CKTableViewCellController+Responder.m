@@ -162,6 +162,11 @@
     }
 }
 
+
+- (void)resignFirstResponder{
+    
+}
+
 - (UIView*)nextResponder:(UIView*)view{
     return nil;
 }

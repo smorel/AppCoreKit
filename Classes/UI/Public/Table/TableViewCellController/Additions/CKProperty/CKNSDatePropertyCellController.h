@@ -98,6 +98,10 @@ typedef NS_ENUM(NSInteger, CKDatePickerMode){
  */
 - (void)onEndEditing;
 
+/**
+ */
+- (void)resignFirstResponder;
+
 ///-----------------------------------
 /// @name Customizing the appearance
 ///-----------------------------------
