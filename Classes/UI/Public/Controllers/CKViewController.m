@@ -29,7 +29,7 @@
 
 
 
-@interface CKViewController()
+@interface CKViewController()<UIGestureRecognizerDelegate>
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
 @property(nonatomic,retain) NSString* navigationTitleBindingContext;
 @property(nonatomic,assign) BOOL styleHasBeenApplied;
@@ -577,6 +577,12 @@
     
     
     [self observerNavigationChanges:YES];
+    
+    //ios7
+    //http://stackoverflow.com/questions/19054625/changing-back-button-in-ios-7-disables-swipe-to-navigate-back
+    if([CKOSVersion() floatValue] >= 7){
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
 }
 
 #pragma mark - View lifecycle
