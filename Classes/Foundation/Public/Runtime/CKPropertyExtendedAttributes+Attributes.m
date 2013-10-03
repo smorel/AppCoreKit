@@ -251,7 +251,7 @@
 
 
 @implementation CKPropertyExtendedAttributes (CKNSDateViewController)
-@dynamic minimumDate,maximumDate;
+@dynamic minimumDate,maximumDate,minuteInterval;
 
 - (void)setMinimumDate:(NSDate *)minimumDate{
     [self.attributes setObject:minimumDate forKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minimumDate"];
@@ -267,6 +267,14 @@
 
 - (NSDate*)maximumDate{
     return [self.attributes valueForKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_maximumDate"];
+}
+- (void)setMinuteInterval:(NSInteger)minuteInterval{
+    [self.attributes setObject:[NSNumber numberWithInteger:minuteInterval] forKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minuteInterval"];
+}
+
+- (NSInteger)minuteInterval{
+    id obj = [self.attributes valueForKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minuteInterval"];
+    return obj ? [obj integerValue] : -1;
 }
 
 @end

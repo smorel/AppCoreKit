@@ -216,4 +216,8 @@ typedef NS_ENUM(NSInteger, CKOptionPropertyCellControllerPresentationStyle){
  */
 @property (nonatomic, retain) NSDate* maximumDate;
 
+/**
+ */
+@property (nonatomic, assign) NSInteger minuteInterval;
+
 @end
