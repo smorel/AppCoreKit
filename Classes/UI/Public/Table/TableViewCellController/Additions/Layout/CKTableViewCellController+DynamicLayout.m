@@ -30,7 +30,7 @@
 #import "NSObject+Singleton.h"
 #import "CKStyle+Parsing.h"
 #import "CKVersion.h"
-
+#import "CKStringHelper.h"
 #import "CKTableViewCellCache.h"
 
 
@@ -230,9 +230,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     NSInteger numberOfLines = [[style objectForKey:CKDynamicLayoutNumberOfLines]intValue];
     CGFloat maxHeight = (numberOfLines <= 0) ? CGFLOAT_MAX : numberOfLines * font.lineHeight;
     
-    CGSize size = [text  sizeWithFont: font
-                    constrainedToSize:CGSizeMake( width , maxHeight) 
-                        lineBreakMode:[[style objectForKey:CKDynamicLayoutLineBreakMode]intValue]];
+    CGSize size = [CKStringHelper sizeForText:text font:font constrainedToSize:CGSizeMake(width , maxHeight) lineBreakMode:[[style objectForKey:CKDynamicLayoutLineBreakMode]intValue]];
     return size;
 }
 

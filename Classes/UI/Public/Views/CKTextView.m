@@ -10,6 +10,7 @@
 
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
+#import "CKStringHelper.h"
 
 @interface CKTextView ()
 
@@ -96,8 +97,9 @@
     
     width = width - 2 * topMargin;
     NSString* str = ([self.text length] <= 0 ) ? @"a" : self.text;
-    CGSize size = [str sizeWithFont:self.font 
-                  constrainedToSize:CGSizeMake( width  , CGFLOAT_MAX)];
+    
+    CGSize size = [CKStringHelper sizeForText:str font:self.font constrainedToSize:CGSizeMake(width  , CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    
     size.height += _numberOfExtraLines * self.font.lineHeight;
     CGFloat newheight = size.height + insets.top + insets.bottom + topMargin + 5;
     newFrame.size.height = MIN(self.maxStretchableHeight, newheight);

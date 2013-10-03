@@ -10,6 +10,7 @@
 #import "UIView+CKLayout.h"
 #import "CKVerticalBoxLayout.h"
 #import "CKRuntime.h"
+#import "CKStringHelper.h"
 
 @interface CKLayoutBox()
 
@@ -29,7 +30,8 @@
     size.height -= self.padding.top + self.padding.bottom;
     
     CGSize maxSize = CGSizeMake(size.width, MAXFLOAT);
-    CGSize ret = [self.text sizeWithFont:self.font constrainedToSize:maxSize];
+    
+    CGSize ret = [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;

@@ -27,7 +27,13 @@
 											   UILineBreakModeClip,
 											   UILineBreakModeHeadTruncation,
 											   UILineBreakModeTailTruncation,
-											   UILineBreakModeMiddleTruncation);
+											   UILineBreakModeMiddleTruncation,
+                                                 NSLineBreakByWordWrapping,
+                                                 NSLineBreakByCharWrapping,
+                                                 NSLineBreakByClipping,
+                                                 NSLineBreakByTruncatingHead,
+                                                 NSLineBreakByTruncatingTail,
+                                                 NSLineBreakByTruncatingMiddle);
 }
 
 - (void)baselineAdjustmentExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -40,5 +46,6 @@
 - (void)textExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.multiLineEnabled = YES;
 }
+
 
 @end

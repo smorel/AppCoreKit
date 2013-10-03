@@ -11,6 +11,7 @@
 #import "UIView+CKLayout.h"
 #import "CKVerticalBoxLayout.h"
 #import "CKRuntime.h"
+#import "CKStringHelper.h"
 
 @interface CKLayoutBox()
 
@@ -87,7 +88,7 @@ static char UITextViewRegisteredOnTextNotificationKey;
         [str appendString:@"a"];
     }
     
-    CGSize ret = [str sizeWithFont:self.font constrainedToSize:maxSize];
+    CGSize ret = [CKStringHelper sizeForText:str font:self.font constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;

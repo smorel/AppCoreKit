@@ -443,6 +443,8 @@
 		96063592159A60E6007F3F2F /* Sample-template.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 96063591159A60E6007F3F2F /* Sample-template.markdown */; };
 		960CAED6157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 960CAED4157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		960CAED7157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 960CAED5157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m */; };
+		961B3AD017FDD04900F92D5F /* CKStringHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 961B3ACE17FDD04900F92D5F /* CKStringHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		961B3AD117FDD04900F92D5F /* CKStringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 961B3ACF17FDD04900F92D5F /* CKStringHelper.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+DragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+DragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+DragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */; };
 		962347D01577FF5B0036002C /* CKSectionViews.h in Headers */ = {isa = PBXBuildFile; fileRef = 962347CE1577FF5B0036002C /* CKSectionViews.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1056,6 +1058,8 @@
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.html; };
 		960CAED4157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIGestureRecognizer+BlockBasedInterface.h"; path = "Classes/UI/Public/Gestures/UIGestureRecognizer+BlockBasedInterface.h"; sourceTree = "<group>"; };
 		960CAED5157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIGestureRecognizer+BlockBasedInterface.m"; path = "Classes/UI/Public/Gestures/UIGestureRecognizer+BlockBasedInterface.m"; sourceTree = "<group>"; };
+		961B3ACE17FDD04900F92D5F /* CKStringHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStringHelper.h; path = Classes/Foundation/Public/Helpers/CKStringHelper.h; sourceTree = "<group>"; };
+		961B3ACF17FDD04900F92D5F /* CKStringHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStringHelper.m; path = Classes/Foundation/Public/Helpers/CKStringHelper.m; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+DragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+DragNDrop.h"; path = "Classes/UI/Public/Views/UIView+DragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+DragNDrop.m"; path = "Classes/UI/Public/Views/UIView+DragNDrop.m"; sourceTree = "<group>"; };
 		962347CE1577FF5B0036002C /* CKSectionViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSectionViews.h; path = Classes/UI/Public/Table/Form/CKSectionViews.h; sourceTree = "<group>"; };
@@ -2350,6 +2354,8 @@
 				7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */,
 				96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */,
 				96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */,
+				961B3ACE17FDD04900F92D5F /* CKStringHelper.h */,
+				961B3ACF17FDD04900F92D5F /* CKStringHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2564,6 +2570,7 @@
 				755CEE1E146C8C7E0052B1FF /* CKLocalizedString.h in Headers */,
 				963826541484011700A9C98B /* CKFormSectionBase.h in Headers */,
 				963826581484012B00A9C98B /* CKFormSection.h in Headers */,
+				961B3AD017FDD04900F92D5F /* CKStringHelper.h in Headers */,
 				9638265C1484013B00A9C98B /* CKFormBindedCollectionSection.h in Headers */,
 				96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */,
 				96A642851484125600C06A85 /* CKFormBindedCollectionSection_private.h in Headers */,
@@ -2898,6 +2905,7 @@
 				7560DD9A13B8ED3600268D13 /* UIViewController+Style.m in Sources */,
 				7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */,
 				7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */,
+				961B3AD117FDD04900F92D5F /* CKStringHelper.m in Sources */,
 				7560DDA813B8ED3600268D13 /* CKWeakRef.mm in Sources */,
 				7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */,
 				7560DDB013B8ED3600268D13 /* CKWebService.m in Sources */,

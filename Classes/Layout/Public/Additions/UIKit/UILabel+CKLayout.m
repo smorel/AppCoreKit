@@ -11,6 +11,7 @@
 #import "CKVerticalBoxLayout.h"
 #import "CKRuntime.h"
 #import <objc/runtime.h>
+#import "CKStringHelper.h"
 
 @interface CKLayoutBox()
 
@@ -68,7 +69,8 @@ static char UILabelFlexibleHeightKey;
     size.height -= self.padding.top + self.padding.bottom;
     
     CGSize maxSize = CGSizeMake(size.width, (self.numberOfLines > 0) ? self.numberOfLines * self.font.lineHeight : MAXFLOAT);
-    CGSize ret = [self.text sizeWithFont:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
+    
+    CGSize ret = [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
     
     //Backward Compatibility
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){
