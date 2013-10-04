@@ -11,6 +11,7 @@
 #import "CKStyle+Parsing.h"
 #import "UIView+Style.h"
 #import "CKWeakRef.h"
+#import "CKVersion.h"
 
 @interface CKBarButtonItemButton()
 @property(nonatomic,retain) CKWeakRef* barButtonItemWeakRef;
@@ -95,6 +96,10 @@
 //IOS 7 Support for aligning bar button items properly !
 //http://stackoverflow.com/questions/18861201/uibarbuttonitem-with-custom-view-not-properly-aligned-on-ios-7-when-used-as-left
 - (UIEdgeInsets)alignmentRectInsets {
+    if([CKOSVersion() floatValue] < 7){
+        return UIEdgeInsetsMake(0, 0, 0, 0);
+    }
+    
     if(!UIEdgeInsetsEqualToEdgeInsets(self.computedAlignmentRectInsets, UIEdgeInsetsMake(MAXFLOAT, MAXFLOAT, MAXFLOAT, MAXFLOAT))){
         return self.computedAlignmentRectInsets;
     }
