@@ -128,7 +128,6 @@
 
 @interface CKTableViewController ()
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
-@property (nonatomic, assign) BOOL insetsApplied;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @property (nonatomic, assign) BOOL sizeIsAlreadyInvalidated;
 @property (nonatomic, assign) BOOL lockSizeChange;
@@ -156,7 +155,6 @@
 @synthesize selectedIndexPath = _selectedIndexPath;
 @synthesize tableViewContainer = _tableViewContainer;
 @synthesize tableViewInsets = _tableViewInsets;
-@synthesize insetsApplied;
 @synthesize tableViewHasBeenReloaded;
 @synthesize sizeIsAlreadyInvalidated;
 @synthesize lockSizeChange;
@@ -166,7 +164,6 @@
 - (void)postInit {
 	[super postInit];
     self.tableViewHasBeenReloaded = NO;
-    self.insetsApplied = NO;
 	self.style = UITableViewStylePlain;
     self.tableViewInsets = UIEdgeInsetsMake(0,0,0,0);
     self.sizeIsAlreadyInvalidated = NO;
@@ -216,73 +213,33 @@
     return 0;
 }
 
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    [self sizeToFit];
+}
+
 - (UIEdgeInsets)navigationControllerTransparencyInsets{
-    id container = [self containerViewController];
-    if(container && [container respondsToSelector:@selector(containerControlAjustsInsetsForNavigationTransparency)]){
-        BOOL bypass = [container containerControlAjustsInsetsForNavigationTransparency];
-        if(bypass){
-            return UIEdgeInsetsMake(0,0,0,0);
-        }
-    }
-    
     if(self.orientation == CKTableViewOrientationLandscape)
         return UIEdgeInsetsMake(0,0,0,0);
     
-    BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
-    
-    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication]statusBarOrientation];
-    
-    CGFloat statusBarHeight = navBarTransulcent ? ( UIInterfaceOrientationIsLandscape(statusBarOrientation) ?[[UIApplication sharedApplication]statusBarFrame].size.width : [[UIApplication sharedApplication]statusBarFrame].size.height) : 0;
-    
-    //Check if the navigation view controller is beside the status bar
-    CGRect navigationbarRectInWindow = [self.navigationController.view convertRect:self.navigationController.view.frame toView:self.navigationController.view.window.rootViewController.view];
-    if(navigationbarRectInWindow.origin.y != 0 /*&& navigationbarRectInWindow.origin.y != statusBarHeight*/){
-        statusBarHeight = 0;
-    }
-    
-    CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
-    
-    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
-    
-    CGFloat toolbarHeight = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
-    return UIEdgeInsetsMake(self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
+    return [super navigationControllerTransparencyInsets];
 }
 
 - (void)sizeToFit{
-    id container = [self containerViewController];
-    if(container && [container respondsToSelector:@selector(containerControlAjustsInsetsForNavigationTransparency)]){
-        BOOL bypass = [container containerControlAjustsInsetsForNavigationTransparency];
-        if(bypass){
-            return;
-        }
-    }
+    if(self.view.window == nil)
+        return;
     
     if(self.orientation == CKTableViewOrientationLandscape)
         return;
     
-    BOOL navBarTransulcent = self.navigationController.navigationBar.translucent;
+    UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     
-    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication]statusBarOrientation];
-    
-    CGFloat statusBarHeight = navBarTransulcent ? ( UIInterfaceOrientationIsLandscape(statusBarOrientation) ?[[UIApplication sharedApplication]statusBarFrame].size.width : [[UIApplication sharedApplication]statusBarFrame].size.height) : 0;
-   
-    //Check if the navigation view controller is beside the status bar
-    CGRect navigationbarRectInWindow = [self.navigationController.view convertRect:self.navigationController.view.frame toView:self.navigationController.view.window.rootViewController.view];
-    if(navigationbarRectInWindow.origin.y != 0 /*&& navigationbarRectInWindow.origin.y != statusBarHeight*/){
-        statusBarHeight = 0;
-    }
-    
-    CGFloat navigationbarHeight = navBarTransulcent ? (self.navigationController.isNavigationBarHidden ? 0 : self.navigationController.navigationBar.bounds.size.height) : 0;
-    
-    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
-    
-    CGFloat toolbarHeight = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
-    self.tableView.contentInset = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0),0,self.tableViewInsets.bottom+toolbarHeight,0);
+    self.tableView.contentInset = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom,0);
     
     CGRect frame = self.view.bounds;
-    CGFloat height = frame.size.height + (toolbarTransulcent ? 0 : toolbarHeight);
-    if(height > (self.view.bounds.size.height + toolbarHeight)){
-        height = self.view.bounds.size.height + toolbarHeight;
+    CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
+    if(height > (self.view.bounds.size.height + insets.bottom)){
+        height = self.view.bounds.size.height + insets.bottom;
     }
     
     UIEdgeInsets additionalScrollIndicatorInsets = UIEdgeInsetsZero;
@@ -295,9 +252,9 @@
         }
     }
     
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(([self additionalTopContentOffset] + (([CKOSVersion() floatValue] >= 7) ? (navigationbarHeight + statusBarHeight) : 0)) + additionalScrollIndicatorInsets.top ,
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake([self additionalTopContentOffset] + insets.top + additionalScrollIndicatorInsets.top ,
                                                             additionalScrollIndicatorInsets.left,
-                                                            toolbarHeight + additionalScrollIndicatorInsets.bottom,
+                                                            insets.bottom + additionalScrollIndicatorInsets.bottom,
                                                             additionalScrollIndicatorInsets.right);
     
     
@@ -316,7 +273,6 @@
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated{
     [super adjustStyleViewWithToolbarHidden:hidden animated:animated];
     if(self.isViewDisplayed){
-        self.insetsApplied = NO;
         [self sizeToFit];
     }
 }
@@ -366,8 +322,7 @@
     theTableView.name = @"tableView";
     theTableView.delegate = self;
     theTableView.dataSource = self;
-        
-    self.insetsApplied = NO;
+    
     self.tableViewHasBeenReloaded = NO;
     
     

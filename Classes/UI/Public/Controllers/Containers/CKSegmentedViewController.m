@@ -80,10 +80,6 @@
 }
 
 
-- (BOOL)containerControlAjustsInsetsForNavigationTransparency{
-    return self.segmentPosition == CKSegmentedViewControllerPositionTop || self.segmentPosition == CKSegmentedViewControllerPositionBottom;
-}
-
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     

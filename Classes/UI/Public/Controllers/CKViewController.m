@@ -881,5 +881,21 @@
     }
 }
 
+//ios 7
+- (UIEdgeInsets)navigationControllerTransparencyInsets{
+    if(self.view.window == nil)
+        return UIEdgeInsetsMake(0,0,0,0);
+    
+    CGRect navigationbarRectInWindow = [self.navigationController.navigationBar convertRect:self.navigationController.navigationBar.bounds toView:self.navigationController.view];
+    CGRect viewRectInWindow = [self.view convertRect:self.view.bounds toView:self.navigationController.view];
+    CGFloat insetTop = MAX(0,(navigationbarRectInWindow.origin.y + navigationbarRectInWindow.size.height) - viewRectInWindow.origin.y);
+    
+    BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
+    CGFloat insetBottom = ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
+    
+    return UIEdgeInsetsMake(insetTop,0,insetBottom,0);
+}
+
+
 @end
 

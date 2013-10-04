@@ -290,6 +290,43 @@
 }
 
 
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    
+    //Adds searchbars if needed
+    CGFloat tableViewOffset = 0;
+    if(self.searchBar){
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+        BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
+        BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+        if(!isIpad){
+            if(_searchScopeDefinition && isPortrait){
+                tableViewOffset = 88;
+            }
+            else{
+                tableViewOffset = 44;
+            }
+        }
+        else{
+            BOOL tooSmall = self.view.bounds.size.width <= 320;
+            if(_searchScopeDefinition && tooSmall){
+                tableViewOffset = 88;
+            }
+            else{
+                tableViewOffset = 44;
+            }
+        }
+        
+        UIEdgeInsets tableInsets = [self navigationControllerTransparencyInsets];
+        
+        self.searchBar.frame = CGRectMake(0,tableInsets.top,self.tableView.frame.size.width,tableViewOffset);
+    }
+    
+    if(_segmentedControl){
+        _segmentedControl.frame = CGRectMake(0,tableViewOffset,self.tableView.frame.size.width,44);
+    }
+
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     CKViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];

@@ -364,10 +364,6 @@
     [self setStyle:self.style];//Apply layout ...
 }
 
-- (BOOL)containerControlAjustsInsetsForNavigationTransparency{
-    return YES;
-}
-
 - (void)viewDidUnload{
     [super viewDidUnload];
     [_tabBar setDelegate : nil];

@@ -243,6 +243,10 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
  */
 @property(nonatomic,assign) UIStatusBarAnimation preferredStatusBarUpdateAnimation;
 
+/**
+ */
+- (UIEdgeInsets)navigationControllerTransparencyInsets;
+
 
 ///-----------------------------------
 /// @name Private

@@ -256,6 +256,7 @@
     [super postInit];
     self.hasBeenReloaded = NO;
     self.orientation = CKSplitViewOrientationHorizontal;
+    self.automaticallyAdjustInsetsToMatchNavigationControllerTransparency = NO;
 }
 
 - (void)dealloc{
@@ -495,6 +496,18 @@
                 }
             }
         }
+    }
+}
+
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    
+    if(self.automaticallyAdjustInsetsToMatchNavigationControllerTransparency){
+        UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
+        self.splitView.frame = CGRectMake(insets.left,
+                                          insets.top,
+                                          self.view.bounds.size.width - (insets.left + insets.right),
+                                          self.view.bounds.size.height - (insets.top + insets.bottom));
     }
 }
 
