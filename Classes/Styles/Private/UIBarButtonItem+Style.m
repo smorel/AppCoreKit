@@ -15,6 +15,7 @@
 @interface CKBarButtonItemButton()
 @property(nonatomic,retain) CKWeakRef* barButtonItemWeakRef;
 @property(nonatomic,assign) BOOL observing;
+@property(nonatomic,assign) UIEdgeInsets computedAlignmentRectInsets;
 @end
 
 @implementation CKBarButtonItemButton
@@ -70,6 +71,7 @@
     [self update];
     
     self.observing = YES;
+    self.computedAlignmentRectInsets = UIEdgeInsetsMake(MAXFLOAT, MAXFLOAT, MAXFLOAT, MAXFLOAT);
     
     theBarButtonItem.customView = self;
     
@@ -93,21 +95,35 @@
 //IOS 7 Support for aligning bar button items properly !
 //http://stackoverflow.com/questions/18861201/uibarbuttonitem-with-custom-view-not-properly-aligned-on-ios-7-when-used-as-left
 - (UIEdgeInsets)alignmentRectInsets {
+    if(!UIEdgeInsetsEqualToEdgeInsets(self.computedAlignmentRectInsets, UIEdgeInsetsMake(MAXFLOAT, MAXFLOAT, MAXFLOAT, MAXFLOAT))){
+        return self.computedAlignmentRectInsets;
+    }
     
     UINavigationBar* navBar = (UINavigationBar*)[self superview];
     if(!navBar)
         return UIEdgeInsetsMake(0, 0, 0, 0);
     
-    UINavigationItem* topItem = [navBar topItem];
-   
-    if(topItem.leftBarButtonItem == self.barButtonItem)
-        return UIEdgeInsetsMake(0, 9.0f, 0, 0);
-    
-    if(topItem.rightBarButtonItem == self.barButtonItem)
-        return UIEdgeInsetsMake(0, 0, 0, 9.0f);
+    for( UINavigationItem* item in [navBar items]){
+        if(item.leftBarButtonItem == self.barButtonItem){
+            self.computedAlignmentRectInsets = UIEdgeInsetsMake(0, 9.0f, 0, 0);
+            return self.computedAlignmentRectInsets;
+        }
+        
+        if(item.rightBarButtonItem == self.barButtonItem){
+            self.computedAlignmentRectInsets = UIEdgeInsetsMake(0, 0, 0, 9.0f);
+            return self.computedAlignmentRectInsets;
+        }
+    }
     
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
+
+- (void)didMoveToSuperview{
+    [super didMoveToSuperview];
+    [[self superview]setNeedsUpdateConstraints];
+    [[self superview]setNeedsLayout];
+}
+//------------------------------------------------------
 
 @end
 
