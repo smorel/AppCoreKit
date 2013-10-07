@@ -35,8 +35,8 @@ A sample repository with binary versions of the framework is available at https:
 
 ## Documentation
 
-* [Bindings - Synchronizing The UI and models](https://github.com/wherecloud/AppCoreKit/blob/master/Documentation/AppCoreKit%20-%20Bindings.pdf)
-* [Mappings - Converting JSON to native Models](https://github.com/wherecloud/AppCoreKit/blob/master/Documentation/AppCoreKit%20-%20Mappings.pdf)
+* [Bindings - Synchronizing The UI and models](https://speakerdeck.com/smorel/appcorekit-bindings-for-ios)
+* [Mappings - Converting JSON to native Models](https://speakerdeck.com/smorel/appcorekit-mappings)
 
 * Coming : Network, Conversion, Cascading Tree, Runtime, Models & Collections, Feed Sources, Mock, User Defaults, Automatic Model Serialization using CoreData, UI Extensions, Collection View Controllers, Stylesheets, Layout
 
