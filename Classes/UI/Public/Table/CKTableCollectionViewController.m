@@ -968,6 +968,8 @@
     }
 	
    [self.tableView endUpdates];
+    
+    [self sizeToFit];
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
