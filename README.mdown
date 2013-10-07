@@ -33,6 +33,14 @@ Lets go to http://www.wherecloud.com/apps.html to get an idea of some of the app
 
 A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples
 
+## Documentation
+
+* [Bindings - Synchronizing The UI and models](https://github.com/wherecloud/AppCoreKit/blob/master/Documentation/AppCoreKit%20-%20Bindings.pdf)
+* [Mappings - Converting JSON to native Models](https://github.com/wherecloud/AppCoreKit/blob/master/Documentation/AppCoreKit%20-%20Mappings.pdf)
+
+* Coming : Network, Conversion, Cascading Tree, Runtime, Models & Collections, Feed Sources, Mock, User Defaults, Automatic Model Serialization using CoreData, UI Extensions, Collection View Controllers, Stylesheets, Layout
+
+
 ## Minimum system requirements
 
 AppCoreKit supports all iOS versions 4.3 and higher. XCode5 is requiered as we integrated support for iOS7.
