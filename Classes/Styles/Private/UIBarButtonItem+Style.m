@@ -104,6 +104,9 @@
         return self.computedAlignmentRectInsets;
     }
     
+    if(![[self superview]isKindOfClass:[UINavigationBar class]])
+        return UIEdgeInsetsMake(0, 0, 0, 0);
+        
     UINavigationBar* navBar = (UINavigationBar*)[self superview];
     if(!navBar)
         return UIEdgeInsetsMake(0, 0, 0, 0);
