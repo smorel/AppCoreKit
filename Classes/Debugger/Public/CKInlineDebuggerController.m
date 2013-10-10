@@ -21,6 +21,7 @@
 #import "CKPopoverController.h"
 #import "NSObject+Singleton.h"
 #import "CKConfiguration.h"
+#import "CKVersion.h"
 
 
 
@@ -180,6 +181,8 @@
 @property(nonatomic,retain)UITapGestureRecognizer* mainGesture;
 @property(nonatomic,retain)UIBarButtonItem* oldRightButtonItem;
 @property(nonatomic,retain)UIBarButtonItem* oldLeftButtonItem;
+@property(nonatomic,retain)NSArray* oldRightButtonItems;
+@property(nonatomic,retain)NSArray* oldLeftButtonItems;
 @property(nonatomic,assign)BOOL started;
 @property(nonatomic,retain) NSString* configCheckBindingContext;
 
@@ -239,10 +242,18 @@
         [self.viewController.navigationController.navigationBar addGestureRecognizer:_mainGesture];
         
         if(self.state == CKInlineDebuggerControllerStateDebugging){
-            self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
-            self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
-            self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
-            self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
+            if([CKOSVersion() floatValue] >= 7){
+                self.oldRightButtonItems = self.viewController.navigationItem.rightBarButtonItems;
+                self.oldLeftButtonItems = self.viewController.navigationItem.leftBarButtonItems;
+                
+                self.viewController.navigationItem.rightBarButtonItems = @[[[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease]];
+                self.viewController.navigationItem.leftBarButtonItems = @[[[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease]];
+            }else{
+                self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
+                self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
+                self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
+                self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
+            }
             
             for(UIGestureRecognizer* gesture in self.customGestures){
                 [self.viewController.view addGestureRecognizer:gesture];
@@ -258,10 +269,17 @@
     }
 
     if(self.state == CKInlineDebuggerControllerStateDebugging){
-        self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
-        self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
-        self.oldRightButtonItem = nil;
-        self.oldLeftButtonItem = nil;
+        if([CKOSVersion() floatValue] >= 7){
+            self.viewController.navigationItem.rightBarButtonItems = self.oldRightButtonItems;
+            self.viewController.navigationItem.leftBarButtonItems = self.oldLeftButtonItems;
+            self.oldRightButtonItems = nil;
+            self.oldLeftButtonItems = nil;
+        }else{
+            self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
+            self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
+            self.oldRightButtonItem = nil;
+            self.oldLeftButtonItem = nil;
+        }
         self.state = CKInlineDebuggerControllerStatePending;
     }
     self.started = NO;
@@ -299,6 +317,10 @@
     _oldLeftButtonItem = nil;
     [_configCheckBindingContext release];
     _configCheckBindingContext = nil;
+    [_oldRightButtonItems release];
+    _oldRightButtonItems = nil;
+    [_oldLeftButtonItems release];
+    _oldLeftButtonItems = nil;
     [super dealloc];
 }
 
@@ -618,15 +640,34 @@
         }
 
         [self highlightView:nil];
-        self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
-        self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
+        
+        if([CKOSVersion() floatValue] >= 7){
+            self.viewController.navigationItem.rightBarButtonItems = self.oldRightButtonItems;
+            self.viewController.navigationItem.leftBarButtonItems = self.oldLeftButtonItems;
+            self.oldRightButtonItems = nil;
+            self.oldLeftButtonItems = nil;
+        }else{
+            self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
+            self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
+            self.oldRightButtonItems = nil;
+            self.oldLeftButtonItems = nil;
+        }
     }
     else{
         self.state = CKInlineDebuggerControllerStateDebugging;
-        self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
-        self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
-        self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
-        self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
+        
+        if([CKOSVersion() floatValue] >= 7){
+            self.oldRightButtonItems = self.viewController.navigationItem.rightBarButtonItems;
+            self.oldLeftButtonItems = self.viewController.navigationItem.leftBarButtonItems;
+            
+            self.viewController.navigationItem.rightBarButtonItems = @[[[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease]];
+            self.viewController.navigationItem.leftBarButtonItems = @[[[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease]];
+        }else{
+            self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
+            self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
+            self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
+            self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
+        }
         
         UITapGestureRecognizer* tapGesture = [[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)]autorelease];
         tapGesture.numberOfTapsRequired = 1;
