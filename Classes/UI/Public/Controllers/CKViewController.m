@@ -875,7 +875,16 @@
 - (void)setLeftButton:(UIBarButtonItem *)theleftButton{
     [_leftButton release];
     _leftButton = [theleftButton retain];
-    [self.navigationItem setLeftBarButtonItem:theleftButton animated:self.isViewDisplayed];
+    
+    if([CKOSVersion() floatValue] >= 7){
+        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                        target:nil action:nil];
+        negativeSpacer.width = -9;
+        [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theleftButton, nil] animated:self.isViewDisplayed];
+    }else{
+        [self.navigationItem setLeftBarButtonItem:theleftButton animated:self.isViewDisplayed];
+    }
+
     if(self.isViewDisplayed){
         [self applyStyleForLeftBarButtonItem];
         
@@ -891,7 +900,15 @@
     [_rightButton release];
     _rightButton = [theRightButton retain];
     
-    [self.navigationItem setRightBarButtonItem:theRightButton animated:(self.isViewDisplayed)];
+    if([CKOSVersion() floatValue] >= 7){
+        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                        target:nil action:nil];
+        negativeSpacer.width = -9;
+        [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theRightButton, nil] animated:self.isViewDisplayed];
+    }else{
+        [self.navigationItem setRightBarButtonItem:theRightButton animated:self.isViewDisplayed];
+    }
+    
     if(self.isViewDisplayed){
         [self applyStyleForRightBarButtonItem];
         
