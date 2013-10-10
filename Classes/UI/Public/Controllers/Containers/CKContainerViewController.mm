@@ -222,12 +222,37 @@ typedef void(^CKTransitionBlock)();
             bContainer.title = bViewController.title;
         }];
         
+        
+        [viewController.navigationItem bind:@"leftBarButtonItems" executeBlockImmediatly:YES withBlock:^(id value) {
+            if([bViewController.navigationItem.leftBarButtonItems count] > 0){
+                bContainer.navigationItem.leftBarButtonItems = bViewController.navigationItem.leftBarButtonItems;
+            }else{
+                bContainer.navigationItem.leftBarButtonItem = bViewController.navigationItem.leftBarButtonItem;
+            }
+        }];
+        
         [viewController.navigationItem bind:@"leftBarButtonItem" executeBlockImmediatly:YES withBlock:^(id value) {
-            bContainer.navigationItem.leftBarButtonItem = bViewController.navigationItem.leftBarButtonItem;
+            if([bViewController.navigationItem.leftBarButtonItems count] > 0){
+                bContainer.navigationItem.leftBarButtonItems = bViewController.navigationItem.leftBarButtonItems;
+            }else{
+                bContainer.navigationItem.leftBarButtonItem = bViewController.navigationItem.leftBarButtonItem;
+            }
+        }];
+        
+        [viewController.navigationItem bind:@"rightBarButtonItems" executeBlockImmediatly:YES withBlock:^(id value) {
+            if([bViewController.navigationItem.rightBarButtonItems count] > 0){
+                bContainer.navigationItem.rightBarButtonItems = bViewController.navigationItem.rightBarButtonItems;
+            }else{
+                bContainer.navigationItem.rightBarButtonItem = bViewController.navigationItem.rightBarButtonItem;
+            }
         }];
         
         [viewController.navigationItem bind:@"rightBarButtonItem" executeBlockImmediatly:YES withBlock:^(id value) {
-            bContainer.navigationItem.rightBarButtonItem = bViewController.navigationItem.rightBarButtonItem;
+            if([bViewController.navigationItem.rightBarButtonItems count] > 0){
+                bContainer.navigationItem.rightBarButtonItems = bViewController.navigationItem.rightBarButtonItems;
+            }else{
+                bContainer.navigationItem.rightBarButtonItem = bViewController.navigationItem.rightBarButtonItem;
+            }
         }];
         
         [viewController.navigationItem bind:@"backBarButtonItem" executeBlockImmediatly:YES withBlock:^(id value) {
