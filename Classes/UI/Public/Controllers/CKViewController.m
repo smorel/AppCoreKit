@@ -272,7 +272,19 @@
         return;
     
     [self observerNavigationChanges:NO];
-    if(self.navigationItem.leftBarButtonItem){
+    
+    UIBarButtonItem* leftBarButtonItem = self.navigationItem.leftBarButtonItem ;
+    if([CKOSVersion() floatValue] >= 7){
+        for(UIBarButtonItem* item in self.navigationItem.leftBarButtonItems){
+            if(item.width == -9)//negative spacer
+            continue;
+            leftBarButtonItem = item;
+            break;
+        }
+    }
+    
+    
+    if(leftBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
@@ -280,10 +292,23 @@
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
-        UIBarButtonItem* item = self.navigationItem.leftBarButtonItem;
+        UIBarButtonItem* item = leftBarButtonItem;
+        
         self.navigationItem.leftBarButtonItem = nil;
+        if([CKOSVersion() floatValue] >= 7){
+            self.navigationItem.leftBarButtonItems = @[];
+        }
+        
         [item applyStyle:barItemStyle];
-        self.navigationItem.leftBarButtonItem = item;
+        
+        if([CKOSVersion() floatValue] >= 7){
+            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil];
+            negativeSpacer.width = -9;
+            [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
+        }else{
+            self.navigationItem.leftBarButtonItem = item;
+        }
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
@@ -300,7 +325,18 @@
         return;
     
     [self observerNavigationChanges:NO];
-    if(self.navigationItem.rightBarButtonItem){
+    
+    UIBarButtonItem* rightBarButtonItem = self.navigationItem.rightBarButtonItem ;
+    if([CKOSVersion() floatValue] >= 7){
+        for(UIBarButtonItem* item in self.navigationItem.rightBarButtonItems){
+            if(item.width == -9)//negative spacer
+            continue;
+            rightBarButtonItem = item;
+            break;
+        }
+    }
+    
+    if(rightBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
@@ -308,11 +344,23 @@
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
-        UIBarButtonItem* item = self.navigationItem.rightBarButtonItem;
+        UIBarButtonItem* item = rightBarButtonItem;
         
         self.navigationItem.rightBarButtonItem = nil;
+        if([CKOSVersion() floatValue] >= 7){
+            self.navigationItem.rightBarButtonItems = @[];
+        }
+        
         [item applyStyle:barItemStyle];
-        self.navigationItem.rightBarButtonItem = item;
+        
+        if([CKOSVersion() floatValue] >= 7){
+            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil];
+            negativeSpacer.width = -9;
+            [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
+        }else{
+            self.navigationItem.rightBarButtonItem = item;
+        }
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
