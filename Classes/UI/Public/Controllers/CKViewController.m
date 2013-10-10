@@ -440,19 +440,42 @@
         self.styleHasBeenApplied = YES;
     }
     
+    UIBarButtonItem* leftBarButtonItem = self.navigationItem.leftBarButtonItem ;
+    if([CKOSVersion() floatValue] >= 7){
+        for(UIBarButtonItem* item in self.navigationItem.leftBarButtonItems){
+            if(item.width == -9)//negative spacer
+                continue;
+            leftBarButtonItem = item;
+            break;
+        }
+    }
+    
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
     
     UIViewController* topStackController = self;
-    if(self.navigationItem.leftBarButtonItem 
-       && self.navigationItem.leftBarButtonItem != self.navigationItem.backBarButtonItem){
+    if(leftBarButtonItem
+       && leftBarButtonItem != self.navigationItem.backBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
-        UIBarButtonItem* item = self.navigationItem.leftBarButtonItem;
+        UIBarButtonItem* item = leftBarButtonItem;
+        
         self.navigationItem.leftBarButtonItem = nil;
+        if([CKOSVersion() floatValue] >= 7){
+            self.navigationItem.leftBarButtonItems = @[];
+        }
+        
         [item applyStyle:barItemStyle];
-        self.navigationItem.leftBarButtonItem = item;
+        
+        if([CKOSVersion() floatValue] >= 7){
+            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil];
+            negativeSpacer.width = -9;
+            [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
+        }else{
+            self.navigationItem.leftBarButtonItem = item;
+        }
         
         if(item.customView && [[item.customView layoutBoxes]count] > 0){
             CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
@@ -464,6 +487,9 @@
     //Back button
     if(self.navigationItem.hidesBackButton){
         self.navigationItem.backBarButtonItem = self.navigationItem.leftBarButtonItem = nil;
+        if([CKOSVersion() floatValue] >= 7){
+            self.navigationItem.leftBarButtonItems = @[];
+        }
     }
     else if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
@@ -480,7 +506,7 @@
             item.customView.height = preferedSize.height;
         }
     }
-    else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == topStackController){
+    else if(!leftBarButtonItem && [self.navigationController.viewControllers lastObject] == topStackController){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         if(backBarItemStyle && ![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
             UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
@@ -490,6 +516,9 @@
             UIBarButtonItem* item = self.navigationItem.backBarButtonItem;
             self.navigationItem.backBarButtonItem = nil;
             self.navigationItem.leftBarButtonItem = nil;
+            if([CKOSVersion() floatValue] >= 7){
+                self.navigationItem.leftBarButtonItems = @[];
+            }
             [item applyStyle:backBarItemStyle];
             self.navigationItem.backBarButtonItem = item;
             
@@ -500,18 +529,47 @@
                 item.customView.height = preferedSize.height;
             }
             
-            self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
+            if([CKOSVersion() floatValue] >= 7){
+                UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                                                                target:nil action:nil];
+                negativeSpacer.width = -9;
+                [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, self.navigationItem.backBarButtonItem, nil]];
+            }else{
+                self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
+            }
         }
     }
     
-    if(self.navigationItem.rightBarButtonItem){
+    UIBarButtonItem* rightBarButtonItem = self.navigationItem.rightBarButtonItem ;
+    if([CKOSVersion() floatValue] >= 7){
+        for(UIBarButtonItem* item in self.navigationItem.rightBarButtonItems){
+            if(item.width == -9)//negative spacer
+                continue;
+            rightBarButtonItem = item;
+            break;
+        }
+    }
+    
+    if(rightBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
-        UIBarButtonItem* item = self.navigationItem.rightBarButtonItem;
+        UIBarButtonItem* item = rightBarButtonItem;
         self.navigationItem.rightBarButtonItem = nil;
+        if([CKOSVersion() floatValue] >= 7){
+            self.navigationItem.rightBarButtonItems = @[];
+        }
+        
         [item applyStyle:barItemStyle];
-        self.navigationItem.rightBarButtonItem = item;
+        
+        if([CKOSVersion() floatValue] >= 7){
+            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil];
+            negativeSpacer.width = -9;
+            [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
+        }else{
+            self.navigationItem.rightBarButtonItem = item;
+        }
         
         
         if(item.customView && [[item.customView layoutBoxes]count] > 0){
