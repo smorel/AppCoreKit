@@ -330,7 +330,7 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
         [self removeObjectForKey:CKCascadingTreeIPad];
         
         BOOL isIphone5 = [UIScreen mainScreen].scale == 2.f && [[UIScreen mainScreen] bounds].size.height == 568.0f;
-        if(isIphone5){
+        if(isIphone5 && [self containsObjectForKey:CKCascadingTreeIPhone5]){
             [self removeObjectForKey:CKCascadingTreeIPhone];
             NSDictionary* iphoneDico = [self objectForKey:CKCascadingTreeIPhone5];
             [self addEntriesFromDictionary:iphoneDico];
