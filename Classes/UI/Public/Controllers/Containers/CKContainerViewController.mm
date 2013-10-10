@@ -255,9 +255,11 @@ typedef void(^CKTransitionBlock)();
             }
         }];
         
+        
         [viewController.navigationItem bind:@"backBarButtonItem" executeBlockImmediatly:YES withBlock:^(id value) {
             bContainer.navigationItem.backBarButtonItem = bViewController.navigationItem.backBarButtonItem;
         }];
+         
         
         [viewController.navigationItem bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {
             bContainer.navigationItem.title = bViewController.navigationItem.title;

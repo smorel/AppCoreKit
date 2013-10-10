@@ -554,7 +554,7 @@
             item.customView.height = preferedSize.height;
         }
     }
-    else if(!leftBarButtonItem && [self.navigationController.viewControllers lastObject] == topStackController){
+    else if(!leftBarButtonItem /*&& [self.navigationController.viewControllers lastObject] == topStackController*/){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         if(backBarItemStyle && ![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
             UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
