@@ -110,12 +110,18 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 //				CKDebugLog(@"register <%p> of type <%@> as observer on <%p,%@>",self,[self class],self,property.name);
 			}
 			else if([NSObject isClass:property.type kindOfClass:[NSArray class]] 
-					|| [NSObject isClass:property.type kindOfClass:[NSSet class]]){
+					|| [NSObject isClass:property.type kindOfClass:[NSSet class]]
+					|| [NSObject isClass:property.type kindOfClass:[CKCollection class]]){
 				SEL addsSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsAdded:atIndexes:"];
 				SEL removeSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsRemoved:atIndexes:"];
 				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
 				if([self respondsToSelector:addsSelector] || [self respondsToSelector:removeSelector] || [self respondsToSelector:replaceSelector]){
-					[self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+                    if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                        CKCollection* collection = [self valueForKey:property.name];
+                        [collection addObserver:self];
+                    }else{
+                        [self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+                    }
 				}
 			}
 		}
@@ -153,12 +159,18 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 			}
 			
 			else if([NSObject isClass:property.type kindOfClass:[NSArray class]] 
-					|| [NSObject isClass:property.type kindOfClass:[NSSet class]]){
+					|| [NSObject isClass:property.type kindOfClass:[NSSet class]]
+					|| [NSObject isClass:property.type kindOfClass:[CKCollection class]]){
 				SEL addsSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsAdded:atIndexes:"];
 				SEL removeSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsRemoved:atIndexes:"];
 				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
 				if([self respondsToSelector:addsSelector] || [self respondsToSelector:removeSelector] || [self respondsToSelector:replaceSelector]){
-					[self removeObserver:self forKeyPath:property.name];
+                    if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                        CKCollection* collection = [self valueForKey:property.name];
+                        [collection removeObserver:self];
+                    }else{
+                        [self removeObserver:self forKeyPath:property.name];
+                    }
 				}
 			}
 		}
@@ -318,6 +330,21 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
+
+    if([object isKindOfClass:[CKCollection class]]){
+        for(CKClassPropertyDescriptor* descriptor in [self allPropertyDescriptors]){
+            if([NSObject isClass:descriptor.type kindOfClass:[CKCollection class]] ){
+                id value = [self valueForKey:descriptor.name ];
+                if(value == object){
+                    theKeyPath = descriptor.name;
+                    object = self;
+                    context = self;
+                    break;
+                }
+            }
+        }
+    }
+    
 	if(object == context && object == self){
 		NSIndexSet* indexes = [change objectForKey: NSKeyValueChangeIndexesKey];
 		NSArray *oldModels =  [change objectForKey: NSKeyValueChangeOldKey];
