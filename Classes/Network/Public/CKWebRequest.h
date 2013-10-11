@@ -44,6 +44,10 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
  */
 @property (nonatomic, retain) NSURLCredential *credential;
 
+/**
+ */
+- (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)field;
+
 
 ///-----------------------------------
 /// @name Reacting to WebRequest Events

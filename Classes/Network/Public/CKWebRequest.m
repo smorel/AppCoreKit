@@ -21,7 +21,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @interface CKWebRequest () <NSURLConnectionDataDelegate, NSURLConnectionDelegate>
 
 @property (nonatomic, retain) NSURLConnection *connection;
-@property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, retain, readwrite) NSMutableURLRequest *request;
 @property (nonatomic, retain) NSHTTPURLResponse *response;
 
 @property (nonatomic, retain) NSMutableData *data;
@@ -92,6 +92,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         self.operationsGroup = dispatch_group_create();
     }
     return self;
+}
+
+- (void)setValue:(NSString*)value forHTTPHeaderField:(NSString *)field{
+    [self.request setValue:value forHTTPHeaderField:field];
 }
 
 - (void)dealloc {
