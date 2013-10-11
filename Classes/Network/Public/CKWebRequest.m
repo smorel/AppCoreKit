@@ -49,6 +49,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters transform:(id (^)(id value))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
     if (self = [super init]) {
         NSMutableURLRequest *mutableRequest = aRequest.mutableCopy;
+        [mutableRequest setCachePolicy:NSURLRequestReloadRevalidatingCacheData];
         if (parameters) {
             NSURL *newURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", aRequest.URL.absoluteString, [NSString stringWithQueryDictionary:parameters]]];
             [mutableRequest setURL:newURL];
@@ -130,21 +131,24 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         self.progress = 0.0;
         self.cancelled = NO;
         
-        NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
+       /* NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
 
         if (cachedResponse && [(NSHTTPURLResponse*)[cachedResponse response] statusCode] < 400 ) {
+            if(![[[(NSHTTPURLResponse*)[cachedResponse response]allHeaderFields]objectForKey:@"Content-Type"]hasPrefix:@"image"]){
+                int i =3;
+            }
             [self connection:nil didReceiveResponse:cachedResponse.response];
             [self connection:nil didReceiveData:cachedResponse.data];
             [self connectionDidFinishLoading:nil];
         }
-        else {
+        else {*/
             self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
             
             [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
             [self.connection start];
             
             [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:self];
-        }
+        //}
     });
 }
 
@@ -264,17 +268,19 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         }
     });
 }
+    
+    /*
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
     if ([(NSHTTPURLResponse*)[cachedResponse response] statusCode] >= 400)
         return nil;
     
-    NSCachedURLResponse *onDiskCachedResponse = [[[NSCachedURLResponse alloc] initWithResponse:cachedResponse.response data:cachedResponse.data] autorelease];
-    [[NSURLCache sharedURLCache] storeCachedResponse:onDiskCachedResponse forRequest:self.request];
-    
-    return nil;
+    NSCachedURLResponse *newCachedResponse = [[NSCachedURLResponse alloc] initWithResponse:[cachedResponse response] data:[cachedResponse data] userInfo:[cachedResponse userInfo] storagePolicy:[cachedResponse storagePolicy]];
+    return newCachedResponse;
 }
 
+     */
+    
 #pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
