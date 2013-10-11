@@ -76,6 +76,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             NSString* bytesStr = [NSString stringWithFormat:@"bytes=%qu-", existingDataLenght];
             
             NSMutableURLRequest *mutableRequest = self.request.mutableCopy;
+            [mutableRequest setCachePolicy:NSURLRequestReloadRevalidatingCacheData];
             [mutableRequest addValue:bytesStr forHTTPHeaderField:@"Range"];
             self.request = mutableRequest;
             [mutableRequest release];
