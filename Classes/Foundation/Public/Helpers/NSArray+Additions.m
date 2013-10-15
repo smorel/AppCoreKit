@@ -10,15 +10,15 @@
 @implementation NSArray (CKNSArrayAdditions)
 
 - (id)first {
-	return [self objectAtIndex:0];
+	return self.count > 0 ? [self objectAtIndex:0] : nil;
 }
 
 - (id)second {
-	return [self objectAtIndex:1];
+	return self.count > 1 ? [self objectAtIndex:1] : nil;
 }
 
 - (id)last {
-	return [self lastObject];
+	return self.count > 0 ? [self lastObject] : nil;
 }
 
 - (NSArray *)rest {
