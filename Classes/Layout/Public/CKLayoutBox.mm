@@ -293,6 +293,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     if(_layoutBoxes){
         [CKLayoutBox addLayoutBoxes:_layoutBoxes toBox:self];
     }
+    
+    [self invalidateLayout];
 }
 
 - (void)setFixedSize:(CGSize)size{

@@ -415,6 +415,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
     if(m){
         [CKLayoutBox addLayoutBoxes:m toBox:self];
     }
+    
     [self invalidateLayout];
 }
 
@@ -495,6 +496,23 @@ static char UIViewSizeToFitLayoutBoxesKey;
     }
 }
 
+/*- (BOOL)UIView_Layout_isHidden{
+    BOOL selfHidden = [self UIView_Layout_isHidden];
+    if(selfHidden)
+        return YES;
+    
+    if(self.containerLayoutBox){
+        id container = [self containerLayoutBox];
+        while(container){
+            if([container isHidden])
+                return YES;
+            container = [container containerLayoutBox];
+        }
+    }
+    
+    return NO;
+}*/
+
 - (void)UIView_Layout_setTransform:(CGAffineTransform)theTransform{
     if(!CGAffineTransformEqualToTransform(theTransform, self.transform)){
         [self UIView_Layout_setTransform:theTransform];
@@ -507,6 +525,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
     CKSwizzleSelector([UIView class], @selector(init), @selector(UIView_Layout_init));
     CKSwizzleSelector([UIView class], @selector(initWithFrame:), @selector(UIView_Layout_initWithFrame:));
     CKSwizzleSelector([UIView class], @selector(setHidden:), @selector(UIView_Layout_setHidden:));
+  //  CKSwizzleSelector([UIView class], @selector(isHidden), @selector(UIView_Layout_isHidden));
     CKSwizzleSelector([UIView class], @selector(setTransform:), @selector(UIView_Layout_setTransform:));
 }
 
