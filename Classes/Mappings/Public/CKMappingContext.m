@@ -263,7 +263,11 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     
     id value = other;
     if(otherKeyPath != nil && [otherKeyPath length] > 0){
-        value = [other valueForKeyPath:otherKeyPath];
+        value = other;
+        NSArray* components = [otherKeyPath componentsSeparatedByString:@"."];
+        for(NSString* key in components){
+            value = [value valueForKey:key];
+        }
     }
     
     //Source value validation
