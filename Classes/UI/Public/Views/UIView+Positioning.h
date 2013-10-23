@@ -43,3 +43,13 @@
 - (UIImage*)snapshot;
 
 @end
+
+/**
+ */
+@interface UIScrollView(Snaphot)
+
+/**
+ */
+- (UIImage*)snapshot;
+
+@end
