@@ -117,8 +117,12 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
 				if([self respondsToSelector:addsSelector] || [self respondsToSelector:removeSelector] || [self respondsToSelector:replaceSelector]){
                     if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                        //Watches the content updates
                         CKCollection* collection = [self valueForKey:property.name];
                         [collection addObserver:self];
+                        
+                        //watches the property update itself
+                        [self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
                     }else{
                         [self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
                     }
@@ -168,6 +172,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
                     if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
                         CKCollection* collection = [self valueForKey:property.name];
                         [collection removeObserver:self];
+                        [self removeObserver:self forKeyPath:property.name];
                     }else{
                         [self removeObserver:self forKeyPath:property.name];
                     }
@@ -340,6 +345,25 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
                     object = self;
                     context = self;
                     break;
+                }
+            }
+        }
+    }else{
+		NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
+        if(kind == NSKeyValueChangeSetting){
+            CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:theKeyPath];
+            if([NSObject isClass: descriptor.type kindOfClass:[CKCollection class]]){
+                SEL addsSelector =  [NSObject selectorForProperty:descriptor.name suffix:@"ObjectsAdded:atIndexes:"];
+                SEL removeSelector =  [NSObject selectorForProperty:descriptor.name suffix:@"ObjectsRemoved:atIndexes:"];
+                SEL replaceSelector =  [NSObject selectorForProperty:descriptor.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
+                if([object respondsToSelector:addsSelector] || [object respondsToSelector:removeSelector] || [object respondsToSelector:replaceSelector]){
+                    //Check if the collection property itself has been mutated and register to the new instance and unregister from the old instance
+                    
+                    CKCollection* oldCollection =  [change objectForKey: NSKeyValueChangeOldKey];
+                    CKCollection* newCollection =  [change objectForKey: NSKeyValueChangeNewKey];
+                    
+                    [oldCollection removeObserver:self];
+                    [newCollection addObserver:self];
                 }
             }
         }
