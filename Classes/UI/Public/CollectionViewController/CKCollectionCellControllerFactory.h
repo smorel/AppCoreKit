@@ -30,6 +30,7 @@ typedef CKCollectionCellController*(^CKCollectionCellControllerCreationBlock)(id
  */
 + (CKCollectionCellControllerFactoryItem*)itemForObjectOfClass:(Class)type 
                                    withControllerCreationBlock:(CKCollectionCellController*(^)(id object, NSIndexPath* indexPath))block;
+
 ///-----------------------------------
 /// @name Configuring the object
 ///-----------------------------------

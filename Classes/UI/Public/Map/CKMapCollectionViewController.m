@@ -586,7 +586,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
 }
 
-- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier forIndexPath:(NSIndexPath*)indexPath{
 	return [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
 }
 

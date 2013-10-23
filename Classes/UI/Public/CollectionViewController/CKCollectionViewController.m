@@ -377,6 +377,10 @@
 }
 
 - (void)fetchMoreIfNeededFromIndexPath:(NSIndexPath*)indexPath{
+    if(indexPath == nil){
+        indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    }
+    
     BOOL appendSpinnerAsFooterCell = NO;
     if([_objectController respondsToSelector:@selector(appendSpinnerAsFooterCell)]){
         appendSpinnerAsFooterCell = [_objectController appendSpinnerAsFooterCell];
@@ -409,7 +413,7 @@
 }
 
 
-- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier forIndexPath:(NSIndexPath*)indexPath{
 	CKAssert(NO,@"Implement in inheriting class");
 	return nil;
 }
@@ -458,7 +462,7 @@
         CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
         
         NSString* identifier = [controller identifier];
-        UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
+        UIView *view = [self dequeueReusableViewWithIdentifier:identifier forIndexPath:indexPath];
         
         if(!_sectionsToControllers){
             self.sectionsToControllers = [NSMutableArray array];
@@ -735,6 +739,13 @@
     CKAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
     
     NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
+    
+    //this iterativelly create all controllers between the requested one and the last one created
+    //If the order they are requested is not linearily respected
+    while([indexPath row] > controllers.count){
+        [self itemViewControllerAtIndexPath:[NSIndexPath indexPathForRow:controllers.count inSection:[indexPath section]]];
+    }
+    
     [controllers insertObject:controller atIndex:[indexPath row]];
     
     [controller performSelector:@selector(setContainerController:) withObject:self];

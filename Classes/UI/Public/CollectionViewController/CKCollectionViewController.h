@@ -111,7 +111,7 @@
 
 /**
  */
-- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier;
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier forIndexPath:(NSIndexPath*)indexPath;
 
 /**
  */

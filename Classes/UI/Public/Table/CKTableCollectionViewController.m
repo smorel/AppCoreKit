@@ -1088,7 +1088,7 @@
 	}
 }
 
-- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier forIndexPath:(NSIndexPath*)indexPath{
 	return [self.tableView dequeueReusableCellWithIdentifier:identifier];
 }
 

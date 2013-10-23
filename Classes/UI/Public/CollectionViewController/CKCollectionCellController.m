@@ -245,7 +245,7 @@
 	if(_viewInitCallback != nil){
 		[_viewInitCallback execute:self];
 	}
-    
+    self.view = view;
 	[self applyStyleToView:view];
 }
 
