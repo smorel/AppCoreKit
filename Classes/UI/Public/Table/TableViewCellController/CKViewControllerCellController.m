@@ -62,6 +62,11 @@
     controllerView.frame = CGRectIntegral(frame);
     [cell.contentView addSubview:controllerView];
     
+    //Clips to bounds avoiding the view controllers content to get displayed out of the
+    //cells bounds
+    cell.contentView.clipsToBounds = YES;
+    cell.clipsToBounds = YES;
+    
     [self setupViewControllerView:controllerView];
     
     if(!self.controllerHasBeenInitialized){
