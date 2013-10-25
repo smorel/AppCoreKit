@@ -1009,7 +1009,7 @@
     if(self.view.window == nil)
         return UIEdgeInsetsMake(0,0,0,0);
     
-    CGRect navigationbarRectInWindow = self.navigationController ? [self.navigationController.navigationBar convertRect:self.navigationController.navigationBar.bounds toView:self.navigationController.view] : CGRectMake(0,0,0,0);
+    CGRect navigationbarRectInWindow = (self.navigationController && ![self.navigationController isNavigationBarHidden]) ? [self.navigationController.navigationBar convertRect:self.navigationController.navigationBar.bounds toView:self.navigationController.view] : CGRectMake(0,0,0,0);
     CGRect tabbarRectInWindow        = self.tabBarController ? [self.tabBarController.tabBar convertRect:self.tabBarController.tabBar.bounds toView:self.navigationController.view] : CGRectMake(0,0,0,0);
     
     CGRect viewRectInWindow = [self.view convertRect:self.view.bounds toView:self.navigationController.view];
