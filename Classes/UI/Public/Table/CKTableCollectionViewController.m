@@ -695,8 +695,6 @@
 		[self adjustTableView];
 	}
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
-    
-    [self viewDidLayoutSubviews];
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{

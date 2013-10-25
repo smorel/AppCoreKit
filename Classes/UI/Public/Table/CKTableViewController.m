@@ -239,10 +239,15 @@
     UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     
     UIEdgeInsets oldInsets = self.tableView.contentInset;
-    self.tableView.contentInset = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom,0);
-    
     CGPoint oldOffset = self.tableView.contentOffset;
-    self.tableView.contentOffset = CGPointMake(oldOffset.x, oldOffset.y - (self.tableView.contentInset.top - oldInsets.top));
+    
+    CGFloat oldOffsetFromTop =  oldInsets.top + oldOffset.y;
+    
+    UIEdgeInsets newInsets = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom,0);
+    self.tableView.contentInset = newInsets;
+    
+    CGPoint newOffset = CGPointMake(oldOffset.x, oldOffsetFromTop - self.tableView.contentInset.top);
+    self.tableView.contentOffset = newOffset;
     
     CGRect frame = self.view.bounds;
     CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
@@ -276,7 +281,17 @@
     }
      
 }
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
+	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+    
+    [self viewDidLayoutSubviews];
+}
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    
+   // [self viewDidLayoutSubviews];
+}
 
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated{
     [super adjustStyleViewWithToolbarHidden:hidden animated:animated];
