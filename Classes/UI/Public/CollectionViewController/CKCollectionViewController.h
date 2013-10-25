@@ -33,6 +33,7 @@
      - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath
      - (NSIndexPath*)indexPathForView:(UIView*)view
      - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier
+     - (UIView*)contentView;
  
    you SHOULD implement :
  
@@ -60,6 +61,12 @@
 /**
  */
 - (void)setupWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
+
+/** UITableView
+    MKMapView
+    UICollectionView
+ */
+@property(nonatomic,readonly) UIView* contentView;
 
 ///-----------------------------------
 /// @name Managing the delegate

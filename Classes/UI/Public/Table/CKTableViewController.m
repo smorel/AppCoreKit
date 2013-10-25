@@ -172,6 +172,10 @@
     self.scrollIndicatorInsetsAfterStylesheet = UIEdgeInsetsMake(MAXFLOAT, MAXFLOAT, MAXFLOAT, MAXFLOAT);
 }
 
+- (UIView*)contentView{
+    return self.tableView;
+}
+
 - (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"UITableViewStyle",
                                                  UITableViewStylePlain,
@@ -234,7 +238,11 @@
     
     UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     
+    UIEdgeInsets oldInsets = self.tableView.contentInset;
     self.tableView.contentInset = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom,0);
+    
+    CGPoint oldOffset = self.tableView.contentOffset;
+    self.tableView.contentOffset = CGPointMake(oldOffset.x, oldOffset.y - (self.tableView.contentInset.top - oldInsets.top));
     
     CGRect frame = self.view.bounds;
     CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
@@ -272,9 +280,9 @@
 
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated{
     [super adjustStyleViewWithToolbarHidden:hidden animated:animated];
-    if(self.isViewDisplayed){
-        [self sizeToFit];
-    }
+    //if(self.isViewDisplayed){
+      //  [self sizeToFit];
+   // }
 }
 
 
@@ -355,7 +363,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     
-    [self sizeToFit];
+  //  [self sizeToFit];
     
     if(self.tableViewHasBeenReloaded == NO){
         self.tableViewHasBeenReloaded = YES;

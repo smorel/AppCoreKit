@@ -69,6 +69,10 @@
 	[super dealloc];
 }
 
+- (UIView*)contentView{
+    return self.carouselView;
+}
+
 - (void)loadView {
 	[super loadView];
 	if (self.view == nil) {

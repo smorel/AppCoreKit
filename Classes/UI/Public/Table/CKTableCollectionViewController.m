@@ -409,7 +409,7 @@
        //                                                self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
        // }
 	//}
-    [self sizeToFit];
+  //  [self sizeToFit];
     
     NSMutableDictionary* controllerStyle = [self controllerStyle];
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
@@ -695,6 +695,8 @@
 		[self adjustTableView];
 	}
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+    
+    [self viewDidLayoutSubviews];
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
@@ -969,7 +971,7 @@
 	
    [self.tableView endUpdates];
     
-    [self sizeToFit];
+  //  [self sizeToFit];
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -1270,7 +1272,7 @@
             [UIView beginAnimations:nil context:nil];
             [UIView setAnimationDuration:animationDuration];
             [UIView setAnimationCurve:animationCurve];
-            [self sizeToFit];
+            [self viewDidLayoutSubviews];
             
             [UIView commitAnimations];
         }

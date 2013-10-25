@@ -154,16 +154,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (UIView*)parentControllerView{
-	UIView* view = nil;
-	if([self.containerController isKindOfClass:[CKCarouselCollectionViewController class]] == YES) 
-		view = (UIView*)((CKCarouselCollectionViewController*)self.containerController).carouselView;
-	else if([self.containerController isKindOfClass:[CKTableViewController class]] == YES) 
-		view = (UIView*)((CKTableViewController*)self.containerController).tableView;
-	else if([self.containerController isKindOfClass:[CKMapCollectionViewController class]] == YES) 
-		view = (UIView*)((CKMapCollectionViewController*)self.containerController).mapView;
-	else if([[[self.containerController class]description]isEqualToString:@"CKCollectionViewLayoutController"] == YES)
-		view = (UIView*)[self.containerController valueForKey:@"collectionView"];
-	return view;
+	return [self.containerController contentView];
 }
 
 @end

@@ -232,6 +232,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     }
 }
 
+
+- (UIView*)contentView{
+    return self.mapView;
+}
+
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate {
 	self = [super init];
     if (self) {

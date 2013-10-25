@@ -116,6 +116,11 @@
     self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
+- (UIView*)contentView{
+    NSAssert(NO,@"Implemnts in subclass and return the content view (table/map/...)");
+    return nil;
+}
+
 - (void)dealloc {
     if([_objectController respondsToSelector:@selector(setDelegate:)]){
         [_objectController performSelector:@selector(setDelegate:) withObject:nil];
