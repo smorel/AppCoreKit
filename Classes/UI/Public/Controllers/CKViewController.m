@@ -1014,7 +1014,7 @@
     
     CGRect viewRectInWindow = [self.view convertRect:self.view.bounds toView:self.navigationController.view];
     CGFloat insetTop = MAX(0,(navigationbarRectInWindow.origin.y + navigationbarRectInWindow.size.height) - viewRectInWindow.origin.y);
-    CGFloat insetBottom = MAX(0,(viewRectInWindow.origin.y + viewRectInWindow.size.height) - tabbarRectInWindow.origin.y);
+    CGFloat insetBottom = self.tabBarController ? MAX(0,(viewRectInWindow.origin.y + viewRectInWindow.size.height) - tabbarRectInWindow.origin.y) : 0;
     
     BOOL toolbarTransulcent = self.navigationController.toolbar.translucent;
     insetBottom += ((self.navigationController.isToolbarHidden || !toolbarTransulcent) ? 0 : self.navigationController.toolbar.bounds.size.height);
