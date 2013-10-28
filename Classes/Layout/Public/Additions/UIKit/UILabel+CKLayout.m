@@ -61,8 +61,19 @@ static char UILabelFlexibleHeightKey;
 
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
-    if(CGSizeEqualToSize(size, self.lastComputedSize))
+    if(CGSizeEqualToSize(size, self.lastComputedSize)){
         return self.lastPreferedSize;
+    }
+    
+    CGFloat numberOfLines = self.font.lineHeight > 0 ? self.bounds.size.height / self.font.lineHeight : 0;
+    
+    if(   (self.lastPreferedSize.width > 0 && self.lastPreferedSize.height > 0)
+       && ((self.lastComputedSize.width == size.width && self.lastPreferedSize.height <= size.height)
+           || (self.lastPreferedSize.width <= size.width && numberOfLines < 2) )){
+        self.lastComputedSize = size;
+        return self.lastPreferedSize;
+    }
+    
     self.lastComputedSize = size;
     
     size.width -= self.padding.left + self.padding.right;
@@ -70,7 +81,7 @@ static char UILabelFlexibleHeightKey;
     
     CGSize maxSize = CGSizeMake(size.width, (self.numberOfLines > 0) ? self.numberOfLines * self.font.lineHeight : MAXFLOAT);
     
-    CGSize ret = [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
+    CGSize ret = (self.text == nil || ([self.text length] <= 0) || self.font.lineHeight == 0) ? CGSizeMake(0,0) : [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
     
     //Backward Compatibility
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){

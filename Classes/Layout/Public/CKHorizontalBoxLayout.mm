@@ -37,13 +37,12 @@ namespace __gnu_cxx{
     if([self.layoutBoxes count] <= 0)
         return CGSizeMake(0,0);
     
-    size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
-    size = CGSizeMake(size.width - self.padding.left - self.padding.right,size.height - self.padding.top - self.padding.bottom);
-    
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
+    size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    size = CGSizeMake(size.width - self.padding.left - self.padding.right,size.height - self.padding.top - self.padding.bottom);
     
     BOOL includesFlexispaces = (size.width < MAXFLOAT);
     

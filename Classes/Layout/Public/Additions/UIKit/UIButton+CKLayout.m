@@ -67,6 +67,17 @@ static char UIButtonFlexibleHeightKey;
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
+    
+    if(   self.lastPreferedSize.width > 0
+       && self.lastPreferedSize.height > 0
+       && size.width >= self.lastComputedSize.width
+       && size.height >= self.lastComputedSize.height
+       && self.lastPreferedSize.width <= self.lastComputedSize.width
+       && self.lastPreferedSize.height <= self.lastComputedSize.height
+       && !self.flexibleWidth && !self.flexibleHeight){
+        return self.lastPreferedSize;
+    }
+    
     self.lastComputedSize = size;
     
     size.width -= self.padding.left + self.padding.right;

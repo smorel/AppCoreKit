@@ -381,6 +381,9 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 }
 
 - (void)setBoxFrameTakingCareOfTransform:(CGRect)rect{
+    if( CGRectEqualToRect(self.frame, rect))
+        return;
+    
     self.frame = rect;
 }
 

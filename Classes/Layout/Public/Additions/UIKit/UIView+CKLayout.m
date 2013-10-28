@@ -220,8 +220,13 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 }
 
 - (void)setBoxFrameTakingCareOfTransform:(CGRect)rect{
+    
+    if( CGRectEqualToRect(self.frame, rect))
+        return;
+    
     //    rect = CGRectApplyAffineTransform(rect, self.transform);
     self.frame = rect;
+    
     //self.bounds = CGRectMake(0,0,rect.size.width,rect.size.height);
     //self.center = CGPointMake(rect.origin.x + (rect.size.width / 2),rect.origin.y + (rect.size.height /2));
 }
@@ -278,10 +283,15 @@ static char UIViewSizeToFitLayoutBoxesKey;
 }
 
 - (BOOL)sizeToFitLayoutBoxes{
-    Class c = NSClassFromString(@"UITableViewCellContentView");
+    static Class c = nil;
+    if(c == nil){
+        c = NSClassFromString(@"UITableViewCellContentView");
+    }
+    
     if([self isKindOfClass:c]){
         return NO;
     }
+    
     id value = objc_getAssociatedObject(self, &UIViewSizeToFitLayoutBoxesKey);
     return value ? [value boolValue] : YES;
 }
