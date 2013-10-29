@@ -454,6 +454,8 @@
 		96243226155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96243224155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96243227155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96243225155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.m */; };
 		962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
+		962C08931820131B00A6E439 /* CKStackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 962C08911820131B00A6E439 /* CKStackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		962C08941820131B00A6E439 /* CKStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962C08921820131B00A6E439 /* CKStackViewController.m */; };
 		962C6C5B16E7DBD100852D21 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962C6C5A16E7DBD100852D21 /* AdSupport.framework */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		963826551484011700A9C98B /* CKFormSectionBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826531484011700A9C98B /* CKFormSectionBase.m */; };
@@ -1068,6 +1070,8 @@
 		96234818157D6A760036002C /* UIViewController+DeviceOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIViewController+DeviceOrientation.mm"; path = "Classes/UI/Public/Controllers/UIViewController+DeviceOrientation.mm"; sourceTree = "<group>"; };
 		96243224155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMapAnnotationController+BlockBasedInterface.h"; path = "Classes/UI/Public/Map/CKMapAnnotationController+BlockBasedInterface.h"; sourceTree = "<group>"; };
 		96243225155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKMapAnnotationController+BlockBasedInterface.m"; path = "Classes/UI/Public/Map/CKMapAnnotationController+BlockBasedInterface.m"; sourceTree = "<group>"; };
+		962C08911820131B00A6E439 /* CKStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStackViewController.h; path = Classes/UI/Public/Controllers/Containers/CKStackViewController.h; sourceTree = "<group>"; };
+		962C08921820131B00A6E439 /* CKStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStackViewController.m; path = Classes/UI/Public/Controllers/Containers/CKStackViewController.m; sourceTree = "<group>"; };
 		962C6C5A16E7DBD100852D21 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormSectionBase.h; path = Classes/UI/Public/Table/Form/CKFormSectionBase.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		963826531484011700A9C98B /* CKFormSectionBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSectionBase.m; path = Classes/UI/Public/Table/Form/CKFormSectionBase.m; sourceTree = "<group>"; };
@@ -2046,6 +2050,8 @@
 				9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */,
 				9600B8E61545CD1D00F07C5A /* CKSegmentedViewController.h */,
 				9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */,
+				962C08911820131B00A6E439 /* CKStackViewController.h */,
+				962C08921820131B00A6E439 /* CKStackViewController.m */,
 			);
 			name = Containers;
 			sourceTree = "<group>";
@@ -2474,6 +2480,7 @@
 				7560DD6113B8ED3600268D13 /* CKTableViewCellController+Responder.h in Headers */,
 				7560DD6313B8ED3600268D13 /* CKTableViewController.h in Headers */,
 				7560DD6713B8ED3600268D13 /* CKTextView.h in Headers */,
+				962C08931820131B00A6E439 /* CKStackViewController.h in Headers */,
 				7560DD6F13B8ED3600268D13 /* UIButton+Style.h in Headers */,
 				7560DD7113B8ED3600268D13 /* UIColor+Additions.h in Headers */,
 				7560DD7313B8ED3600268D13 /* CKUIColorPropertyCellController.h in Headers */,
@@ -3005,6 +3012,7 @@
 				96243227155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.m in Sources */,
 				96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */,
 				969AFE6C1561506B00CFE27A /* CKGridCollectionViewController.m in Sources */,
+				962C08941820131B00A6E439 /* CKStackViewController.m in Sources */,
 				969AFE70156151D700CFE27A /* CKGridTableViewCellController.m in Sources */,
 				B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */,
 				B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */,

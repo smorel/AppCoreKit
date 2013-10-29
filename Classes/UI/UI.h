@@ -35,6 +35,7 @@
 #import "CKSlideShowViewController.h"
 #import "UINavigationController+BlockBasedDelegate.h"
 #import "UIViewController+DeviceOrientation.h"
+#import "CKStackViewController.h"
 
 #import "UIGestureRecognizer+BlockBasedInterface.h"
 
