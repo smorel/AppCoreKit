@@ -136,24 +136,23 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         self.progress = 0.0;
         self.cancelled = NO;
         
-       /* NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
+        NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
 
-        if (cachedResponse && [(NSHTTPURLResponse*)[cachedResponse response] statusCode] < 400 ) {
-            if(![[[(NSHTTPURLResponse*)[cachedResponse response]allHeaderFields]objectForKey:@"Content-Type"]hasPrefix:@"image"]){
-                int i =3;
-            }
+        //FIXME : Until we implement the full cache process, we allow caching for images only !
+        if (cachedResponse && [(NSHTTPURLResponse*)[cachedResponse response] statusCode] == 200
+            && [[[(NSHTTPURLResponse*)[cachedResponse response]allHeaderFields]objectForKey:@"Content-Type"]hasPrefix:@"image"]) {
             [self connection:nil didReceiveResponse:cachedResponse.response];
             [self connection:nil didReceiveData:cachedResponse.data];
             [self connectionDidFinishLoading:nil];
         }
-        else {*/
+        else {
             self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
             
             [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
             [self.connection start];
             
             [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:self];
-        //}
+        }
     });
 }
 
@@ -273,7 +272,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         }
     });
 }
-    
+
+
     /*
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
