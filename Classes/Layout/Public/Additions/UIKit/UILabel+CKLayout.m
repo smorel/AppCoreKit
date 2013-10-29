@@ -117,6 +117,10 @@ static char UILabelFlexibleHeightKey;
 - (void)UILabel_Layout_setText:(NSString*)text{
     if(![text isEqualToString:self.text]){
         [self UILabel_Layout_setText:text];
+        
+        if(self.numberOfLines == 1 && !CGSizeEqualToSize(self.fixedSize, CGSizeMake(MAXFLOAT, MAXFLOAT)) )
+            return;
+        
         [self invalidateLayout];
     }
 }
@@ -124,6 +128,10 @@ static char UILabelFlexibleHeightKey;
 - (void)UILabel_Layout_setFont:(UIFont*)font{
     if(![font isEqual:self.font]){
         [self UILabel_Layout_setFont:font];
+        
+        if(self.numberOfLines == 1 && !CGSizeEqualToSize(self.fixedSize, CGSizeMake(MAXFLOAT, MAXFLOAT)) )
+            return;
+        
         [self invalidateLayout];
     }
 }

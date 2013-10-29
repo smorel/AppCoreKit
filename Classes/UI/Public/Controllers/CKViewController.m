@@ -923,7 +923,7 @@
 
 //#ifdef DEBUG
 - (void)CheckForBlockCopy{
-   if(![[CKConfiguration sharedInstance]checkViewControllerCopyInBlocks])
+  /* if(![[CKConfiguration sharedInstance]checkViewControllerCopyInBlocks])
        return;
     
     void *frames[128];
@@ -937,6 +937,7 @@
         }
     }
     free(symbols);
+   */
 }
 
 
