@@ -394,7 +394,8 @@
         }
         
         if([CKOSVersion() floatValue] >= 7){
-            [self reload];
+            [self.tableView reloadData];
+            //[self reload];
         }else{
             // [self.tableView reloadData];
             [self.tableView beginUpdates];
