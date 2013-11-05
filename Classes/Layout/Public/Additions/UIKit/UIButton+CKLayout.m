@@ -68,7 +68,7 @@ static char UIButtonFlexibleHeightKey;
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     
-    if(   self.lastPreferedSize.width > 0
+   /* if(   self.lastPreferedSize.width > 0
        && self.lastPreferedSize.height > 0
        && size.width >= self.lastComputedSize.width
        && size.height >= self.lastComputedSize.height
@@ -77,6 +77,7 @@ static char UIButtonFlexibleHeightKey;
        && !self.flexibleWidth && !self.flexibleHeight){
         return self.lastPreferedSize;
     }
+    */
     
     self.lastComputedSize = size;
     

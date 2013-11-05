@@ -65,6 +65,7 @@ static char UILabelFlexibleHeightKey;
         return self.lastPreferedSize;
     }
     
+    /* Temporarily removes this optimization as it doesn't handle all the cases correctly.
     CGFloat numberOfLines = self.font.lineHeight > 0 ? self.bounds.size.height / self.font.lineHeight : 0;
     
     if(   (self.lastPreferedSize.width > 0 && self.lastPreferedSize.height > 0)
@@ -72,7 +73,7 @@ static char UILabelFlexibleHeightKey;
            || (self.lastPreferedSize.width <= size.width && numberOfLines < 2) )){
         self.lastComputedSize = size;
         return self.lastPreferedSize;
-    }
+    }*/
     
     self.lastComputedSize = size;
     

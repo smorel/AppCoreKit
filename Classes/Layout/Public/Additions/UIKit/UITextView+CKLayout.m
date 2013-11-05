@@ -76,7 +76,7 @@ static char UITextViewRegisteredOnTextNotificationKey;
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     
-    if(   self.lastPreferedSize.width > 0
+    /*if(   self.lastPreferedSize.width > 0
        && self.lastPreferedSize.height > 0
        && size.width >= self.lastComputedSize.width
        && size.height >= self.lastComputedSize.height
@@ -84,7 +84,7 @@ static char UITextViewRegisteredOnTextNotificationKey;
        && self.lastPreferedSize.height <= self.lastComputedSize.height){
         return self.lastPreferedSize;
     }
-    
+    */
     self.lastComputedSize = size;
     
     size.width -= self.padding.left + self.padding.right;
