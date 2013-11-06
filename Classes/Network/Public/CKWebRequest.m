@@ -209,11 +209,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
     if (!self.isCancelled) {
         if (self.handle) {
-            self.progress = self.handle.offsetInFile / self.response.expectedContentLength;
+            self.progress = self.handle.offsetInFile / (CGFloat)self.response.expectedContentLength;
             [self.handle writeData:someData];
         }
         else {
-            self.progress = self.data.length / self.response.expectedContentLength;
+            self.progress = self.data.length / (CGFloat)self.response.expectedContentLength;
             [self.data appendData:someData];
         }
         
