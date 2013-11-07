@@ -501,7 +501,7 @@
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
     
-    UIViewController* topStackController = self;
+   // UIViewController* topStackController = self;
     if(leftBarButtonItem
        && leftBarButtonItem != self.navigationItem.backBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];

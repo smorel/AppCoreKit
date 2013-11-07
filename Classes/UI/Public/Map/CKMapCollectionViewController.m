@@ -585,7 +585,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated{
-    int i =3;
+   // int i =3;
 }
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
