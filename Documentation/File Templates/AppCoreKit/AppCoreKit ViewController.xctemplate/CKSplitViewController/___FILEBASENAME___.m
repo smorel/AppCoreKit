@@ -25,7 +25,7 @@
     [super viewWillAppear:animated];
     
     [self beginBindingsContextByRemovingPreviousBindings];
-    [self setupViewController];
+    [self setupBindings];
     [self endBindingsContext];
 }
 
@@ -46,7 +46,7 @@
 
 #pragma mark Setup MVC and bindings
 
-- (void)setupViewController{
+- (void)setupBindings{
     //TODO : Setup Views and bindings
 }
 
