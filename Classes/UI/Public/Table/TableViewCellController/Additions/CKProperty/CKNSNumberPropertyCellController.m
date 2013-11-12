@@ -215,6 +215,9 @@
             if(!theSwitch){
                 theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
                 theSwitch.tag = 500002;
+                
+                NSMutableDictionary* controllerStyle = [self stylesheet];
+                [theSwitch findAndApplyStyleFromStylesheet:controllerStyle propertyName:@"toggleSwitch"];
             }
             
             self.toggleSwitch = theSwitch;
