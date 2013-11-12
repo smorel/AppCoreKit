@@ -298,6 +298,7 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	
 	CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 	if(attributes.contentType != nil){
+        
 		CKNSValueTransformerIdentifier converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:attributes.contentType];
 		NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
 		
@@ -308,6 +309,12 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 		
 		if(selector == nil){
 			selector = [type convertFromObjectWithContentClassNameSelector:source];
+            if(!selector){
+                selector = [attributes.contentType convertFromObjectSelector:source];
+                if(selector){
+                    type = attributes.contentType;
+                }
+            }
 			[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:type selector:selector];
 		}
 		
@@ -323,6 +330,16 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 			return result;
 		}
 	}
+    
+    if(attributes.valuesAndLabels){
+        id result = [attributes.valuesAndLabels objectForKey:source];
+        if(result){
+            if(property != nil){
+                [property setValue:result];
+            }
+            return result;
+        }
+    }
 	
 	//special case for date
 	if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSDate class]]

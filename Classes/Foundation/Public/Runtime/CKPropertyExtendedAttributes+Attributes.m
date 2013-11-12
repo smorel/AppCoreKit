@@ -83,11 +83,12 @@
 }
 
 -(void)setContentType:(Class)contentType{
-    //TODO
+    [self.attributes setObject:[NSValue valueWithPointer:contentType] forKey:@"CKPropertyExtendedAttributes_CKObject_contentType"];
 }
 
 - (Class)contentType{
-    //TODO
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKObject_contentType"];
+    if(value) return [value pointerValue];
     return nil;
 }
 
