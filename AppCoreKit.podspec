@@ -127,4 +127,17 @@ Pod::Spec.new do |s|
     al.dependency 'AppCoreKit/UI'
   end
 
+  s.preserve_path = "Documentation/CodeSnippets/*", "Documentation/File Templates/*"
+  
+  s.pre_install do |pod, target_definition|
+      `echo "Installing AppCoreKit Templates and Code Snipets"`
+      `sudo mkdir -p "$HOME/Library/Developer/Xcode/Templates/File Templates/"`
+      `sudo mkdir -p "$HOME/Library/Developer/Xcode/UserData/CodeSnippets/"`
+
+      Dir.chdir(pod.root){ 
+        `sudo cp -rf "Documentation/File Templates/" "$HOME/Library/Developer/Xcode/Templates/File Templates/"`
+        `sudo cp -rf "Documentation/CodeSnippets/" "$HOME/Library/Developer/Xcode/UserData/CodeSnippets/"`
+      }
+  end
+
 end
