@@ -72,6 +72,8 @@ The templates are available in the "Documentation/File Templates/" folder.
 
 Copy the "File Templates/" directory into your "~/Library/Developer/Xcode/Templates/" directory to get ready using these templates.
 
+If you're using cocoa pods, File templates are automatically installed when executing the <pre>pod update</pre> command line.
+
 ### Code Snippets
 
 We defined plenty of code snipers for helping you define your stylesheets and layout quickly by reducing time to check which format are supported for each properties you want to customize.
@@ -83,6 +85,7 @@ Code snipers are available in the "Documentation/CodeSnippets/" folder.
 
 Copy the "CodeSnippets/" directory into your "~/Library/Developer/Xcode/UserData/CodeSnippets/" directory to get ready using these snippets.
 
+If you're using cocoa pods, Code snippets are automatically installed when executing the <pre>pod update</pre> command line.
 
 ## Installation
 
