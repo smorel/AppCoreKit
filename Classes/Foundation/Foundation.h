@@ -105,6 +105,7 @@
 #import "UIView+AutoresizingMasks.h"
 #import "UIColor+Additions.h"
 #import "CKStringHelper.h"
+#import "UIImage+FastLoading.h"
 
 
 //ResourceManager

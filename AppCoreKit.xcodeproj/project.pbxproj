@@ -596,6 +596,14 @@
 		96E4D3F815406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3F615406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m */; };
 		96E4D3FB1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h */; };
 		96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m */; };
+		96E6FA22182D1F8B001F1E6A /* UIImage+FastLoading.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E6FA20182D1F8B001F1E6A /* UIImage+FastLoading.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96E6FA23182D1F8B001F1E6A /* UIImage+FastLoading.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E6FA21182D1F8B001F1E6A /* UIImage+FastLoading.m */; };
+		96E6FA2B182D29DC001F1E6A /* CALayer+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E6FA29182D29DC001F1E6A /* CALayer+Introspection.h */; };
+		96E6FA2C182D29DC001F1E6A /* CALayer+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E6FA2A182D29DC001F1E6A /* CALayer+Introspection.m */; };
+		96E6FA2F182D29F4001F1E6A /* CAEmitterCell+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E6FA2D182D29F4001F1E6A /* CAEmitterCell+Introspection.h */; };
+		96E6FA30182D29F4001F1E6A /* CAEmitterCell+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E6FA2E182D29F4001F1E6A /* CAEmitterCell+Introspection.m */; };
+		96E6FA33182D2A0C001F1E6A /* CAEmitterLayer+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E6FA31182D2A0C001F1E6A /* CAEmitterLayer+Introspection.h */; };
+		96E6FA34182D2A0C001F1E6A /* CAEmitterLayer+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E6FA32182D2A0C001F1E6A /* CAEmitterLayer+Introspection.m */; };
 		96EBE433159A43AB00E0F209 /* UIView+Name.h in Headers */ = {isa = PBXBuildFile; fileRef = 96EBE431159A43AB00E0F209 /* UIView+Name.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96EBE434159A43AB00E0F209 /* UIView+Name.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EBE432159A43AB00E0F209 /* UIView+Name.m */; };
 		96EFE7D3179700BE0034F935 /* CKResourceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 96EFE7D1179700BE0034F935 /* CKResourceManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1241,6 +1249,14 @@
 		96E4D3F615406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKPropertyTableViewCellController+DynamicLayout.m"; path = "Classes/UI/Private/CKPropertyTableViewCellController+DynamicLayout.m"; sourceTree = "<group>"; };
 		96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSNumberPropertyCellController+DynamicLayout.h"; path = "Classes/UI/Private/CKNSNumberPropertyCellController+DynamicLayout.h"; sourceTree = "<group>"; };
 		96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSNumberPropertyCellController+DynamicLayout.m"; path = "Classes/UI/Private/CKNSNumberPropertyCellController+DynamicLayout.m"; sourceTree = "<group>"; };
+		96E6FA20182D1F8B001F1E6A /* UIImage+FastLoading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+FastLoading.h"; path = "Classes/Foundation/Public/Helpers/UIImage+FastLoading.h"; sourceTree = "<group>"; };
+		96E6FA21182D1F8B001F1E6A /* UIImage+FastLoading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+FastLoading.m"; path = "Classes/Foundation/Public/Helpers/UIImage+FastLoading.m"; sourceTree = "<group>"; };
+		96E6FA29182D29DC001F1E6A /* CALayer+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+Introspection.h"; path = "Classes/Foundation/Private/Additions/CoreAnimation/CALayer+Introspection.h"; sourceTree = "<group>"; };
+		96E6FA2A182D29DC001F1E6A /* CALayer+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+Introspection.m"; path = "Classes/Foundation/Private/Additions/CoreAnimation/CALayer+Introspection.m"; sourceTree = "<group>"; };
+		96E6FA2D182D29F4001F1E6A /* CAEmitterCell+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CAEmitterCell+Introspection.h"; path = "Classes/Foundation/Private/Additions/CoreAnimation/CAEmitterCell+Introspection.h"; sourceTree = "<group>"; };
+		96E6FA2E182D29F4001F1E6A /* CAEmitterCell+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CAEmitterCell+Introspection.m"; path = "Classes/Foundation/Private/Additions/CoreAnimation/CAEmitterCell+Introspection.m"; sourceTree = "<group>"; };
+		96E6FA31182D2A0C001F1E6A /* CAEmitterLayer+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CAEmitterLayer+Introspection.h"; path = "Classes/Foundation/Private/Additions/CoreAnimation/CAEmitterLayer+Introspection.h"; sourceTree = "<group>"; };
+		96E6FA32182D2A0C001F1E6A /* CAEmitterLayer+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CAEmitterLayer+Introspection.m"; path = "Classes/Foundation/Private/Additions/CoreAnimation/CAEmitterLayer+Introspection.m"; sourceTree = "<group>"; };
 		96EBE431159A43AB00E0F209 /* UIView+Name.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Name.h"; path = "Classes/Foundation/Public/Helpers/UIView+Name.h"; sourceTree = "<group>"; };
 		96EBE432159A43AB00E0F209 /* UIView+Name.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Name.m"; path = "Classes/Foundation/Public/Helpers/UIView+Name.m"; sourceTree = "<group>"; };
 		96EFE7D1179700BE0034F935 /* CKResourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKResourceManager.h; path = Classes/Foundation/Public/ResourceManager/CKResourceManager.h; sourceTree = "<group>"; };
@@ -1447,6 +1463,7 @@
 		7506E3F813B8FD1300EE1471 /* Additions */ = {
 			isa = PBXGroup;
 			children = (
+				96E6FA28182D2990001F1E6A /* CoreAnimation */,
 				759CB89713BA639F006261B1 /* UIKit */,
 				759CB89513BA6391006261B1 /* MapKit */,
 			);
@@ -2481,8 +2498,23 @@
 				96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */,
 				961B3ACE17FDD04900F92D5F /* CKStringHelper.h */,
 				961B3ACF17FDD04900F92D5F /* CKStringHelper.m */,
+				96E6FA20182D1F8B001F1E6A /* UIImage+FastLoading.h */,
+				96E6FA21182D1F8B001F1E6A /* UIImage+FastLoading.m */,
 			);
 			name = Helpers;
+			sourceTree = "<group>";
+		};
+		96E6FA28182D2990001F1E6A /* CoreAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				96E6FA29182D29DC001F1E6A /* CALayer+Introspection.h */,
+				96E6FA2A182D29DC001F1E6A /* CALayer+Introspection.m */,
+				96E6FA2D182D29F4001F1E6A /* CAEmitterCell+Introspection.h */,
+				96E6FA2E182D29F4001F1E6A /* CAEmitterCell+Introspection.m */,
+				96E6FA31182D2A0C001F1E6A /* CAEmitterLayer+Introspection.h */,
+				96E6FA32182D2A0C001F1E6A /* CAEmitterLayer+Introspection.m */,
+			);
+			name = CoreAnimation;
 			sourceTree = "<group>";
 		};
 		96EFE7D01797009D0034F935 /* ResourceManager */ = {
@@ -2522,6 +2554,7 @@
 				7560DC8B13B8ED3600268D13 /* UIView+AutoresizingMasks.h in Headers */,
 				7560DC8C13B8ED3600268D13 /* CKCoreDataManager.h in Headers */,
 				7560DC8E13B8ED3600268D13 /* CoreGraphics+Additions.h in Headers */,
+				96E6FA2F182D29F4001F1E6A /* CAEmitterCell+Introspection.h in Headers */,
 				7560DC9013B8ED3600268D13 /* CKCreditsFooterView.h in Headers */,
 				96B3BCEE182BED9800978B85 /* CKCollectionViewGridLayout.h in Headers */,
 				7560DC9213B8ED3600268D13 /* CKDataBinder.h in Headers */,
@@ -2653,6 +2686,7 @@
 				75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */,
 				75CC170113F46E3900835FE3 /* UIColor+ValueTransformer.h in Headers */,
 				75CC170513F46E5500835FE3 /* UIImage+ValueTransformer.h in Headers */,
+				96E6FA33182D2A0C001F1E6A /* CAEmitterLayer+Introspection.h in Headers */,
 				75CC170913F46E6C00835FE3 /* NSNumber+ValueTransformer.h in Headers */,
 				75CC170D13F46E8200835FE3 /* NSURL+ValueTransformer.h in Headers */,
 				75CC171113F46E9800835FE3 /* NSDate+ValueTransformer.h in Headers */,
@@ -2771,6 +2805,7 @@
 				96B9D2B0177B23DA00455BE8 /* UIButton+CKLayout.h in Headers */,
 				96B9D2B4177B248500455BE8 /* UIViewController+CKLayout.h in Headers */,
 				96B9D2B8177B24D300455BE8 /* UILabel+CKLayout.h in Headers */,
+				96E6FA2B182D29DC001F1E6A /* CALayer+Introspection.h in Headers */,
 				96B9D2BC177B24F600455BE8 /* UIImageView+CKLayout.h in Headers */,
 				96B9D2C0177B251F00455BE8 /* UITextField+CKLayout.h in Headers */,
 				96B9D2C4177B254400455BE8 /* UITextView+CKLayout.h in Headers */,
@@ -2778,6 +2813,7 @@
 				96EFE7D3179700BE0034F935 /* CKResourceManager.h in Headers */,
 				96FEFDF517978D620001CC4A /* CKResourceManager+UIUpdate.h in Headers */,
 				963AB796179881110076925C /* CKResourceDependencyContext.h in Headers */,
+				96E6FA22182D1F8B001F1E6A /* UIImage+FastLoading.h in Headers */,
 				96CC498117CBFE710017A6E7 /* JSONKit.h in Headers */,
 				96CC498317CBFE710017A6E7 /* Reachability.h in Headers */,
 				96CC498A17CBFE780017A6E7 /* SVPullToRefresh.h in Headers */,
@@ -3002,6 +3038,7 @@
 				7560DD0B13B8ED3600268D13 /* CKNSNumberPropertyCellController.m in Sources */,
 				7560DD0D13B8ED3600268D13 /* NSObject+Bindings.mm in Sources */,
 				7560DD0F13B8ED3600268D13 /* NSObject+Runtime.m in Sources */,
+				96E6FA30182D29F4001F1E6A /* CAEmitterCell+Introspection.m in Sources */,
 				7560DD1113B8ED3600268D13 /* NSObject+Invocation.m in Sources */,
 				7560DD1313B8ED3600268D13 /* NSObject+JSON.m in Sources */,
 				7560DD1513B8ED3600268D13 /* NSObject+Notifications.m in Sources */,
@@ -3090,6 +3127,7 @@
 				75CC172613F472BB00835FE3 /* NSValueTransformer+NativeTypes.m in Sources */,
 				75CC172A13F4757700835FE3 /* NSValueTransformer+CGTypes.m in Sources */,
 				75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.mm in Sources */,
+				96E6FA2C182D29DC001F1E6A /* CALayer+Introspection.m in Sources */,
 				758E5C5E13F9652200A07F49 /* CKOptionPropertyCellController.m in Sources */,
 				758523EC13FAEF7E00EE75CE /* UIFont+ValueTransformer.m in Sources */,
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
@@ -3114,10 +3152,12 @@
 				75AD5D9D144C71740008F53A /* UIView+InlineDebugger.m in Sources */,
 				75AD5DA1144C72960008F53A /* UIViewController+InlineDebugger.m in Sources */,
 				75AD5DA5144C73290008F53A /* CKCollectionViewController+InlineDebugger.m in Sources */,
+				96E6FA34182D2A0C001F1E6A /* CAEmitterLayer+Introspection.m in Sources */,
 				757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */,
 				755CEE1A146C8C2E0052B1FF /* CKLocalizationManager.m in Sources */,
 				755CEE1F146C8C7E0052B1FF /* CKLocalizedString.m in Sources */,
 				963826551484011700A9C98B /* CKFormSectionBase.m in Sources */,
+				96E6FA23182D1F8B001F1E6A /* UIImage+FastLoading.m in Sources */,
 				963826591484012B00A9C98B /* CKFormSection.m in Sources */,
 				96B3BCE7182BED9800978B85 /* CKCollectionCellContentViewController.m in Sources */,
 				9638265D1484013B00A9C98B /* CKFormBindedCollectionSection.m in Sources */,
