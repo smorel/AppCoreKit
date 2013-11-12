@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDECodeSnippetCompletionPrefix</key>
+	<string>st-property-coordinate-2d</string>
+	<key>IDECodeSnippetCompletionScopes</key>
+	<array>
+		<string>All</string>
+	</array>
+	<key>IDECodeSnippetContents</key>
+	<string>"&lt;#coordinate-2d-property#&gt;" : "&lt;#latitude#&gt; &lt;#longitude#&gt;"</string>
+	<key>IDECodeSnippetIdentifier</key>
+	<string>1F8F730D-EFD8-4566-99FE-77BE47322E47</string>
+	<key>IDECodeSnippetLanguage</key>
+	<string>Xcode.SourceCodeLanguage.JSON</string>
+	<key>IDECodeSnippetSummary</key>
+	<string>Property Coordinate 2D</string>
+	<key>IDECodeSnippetTitle</key>
+	<string>AppCoreKit Stylesheet Property Coordinate 2D</string>
+	<key>IDECodeSnippetUserSnippet</key>
+	<true/>
+	<key>IDECodeSnippetVersion</key>
+	<integer>0</integer>
+</dict>
+</plist>

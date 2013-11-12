@@ -64,11 +64,25 @@ ResourceManager is also available as CocoaPods:
 
 ## XCode Integration
 
+### File Templates
+
 We propose file templates for creating view controllers inheriting the AppCoreKit's view controllers classes. This will generates for you the .h, .m and .style files for your view controller. The implementation and stylesheet are adapted to the type of controller you select as a base class to help you quickly quick start with your implementation without any additional setup.
 
 The templates are available in the "Documentation/File Templates/" folder.
 
 Copy the "File Templates/" directory into your "~/Library/Developer/Xcode/Templates/" directory to get ready using these templates.
+
+### Code Snippets
+
+We defined plenty of code snipers for helping you define your stylesheets and layout quickly by reducing time to check which format are supported for each properties you want to customize.
+
+Stylesheet Code Snippets shortcut begins with "st-". just type "st" in your .style file and completion will appear with the provided code snippets.
+Layout Code Snippets shortcut begins with "la-". just type "la" in your .style file and completion will appear with the provided code snippets.
+
+Code snipers are available in the "Documentation/CodeSnippets/" folder.
+
+Copy the "CodeSnippets/" directory into your "~/Library/Developer/Xcode/UserData/CodeSnippets/" directory to get ready using these snippets.
+
 
 ## Installation
 
