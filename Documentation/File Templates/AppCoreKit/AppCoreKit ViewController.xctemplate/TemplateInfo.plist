@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowedTypes</key>
+	<array>
+		<string>public.objective-c-source</string>
+		<string>public.objective-c-plus-plus-source</string>
+	</array>
+	<key>DefaultCompletionName</key>
+	<string>MyViewController</string>
+	<key>Description</key>
+	<string>An AppCoreKit ViewController class with implementation, header and stylesheet files.</string>
+	<key>Kind</key>
+	<string>Xcode.IDEKit.TextSubstitutionFileTemplateKind</string>
+	<key>MainTemplateFile</key>
+	<string>___FILEBASENAME___.m</string>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Description</key>
+			<string>The name of the class to create</string>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Name</key>
+			<string>Class</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Required</key>
+			<true/>
+			<key>Type</key>
+			<string>text</string>
+		</dict>
+		<dict>
+			<key>Default</key>
+			<string>CKViewController</string>
+			<key>Description</key>
+			<string>What class to subclass in the new file</string>
+			<key>FallbackHeader</key>
+			<string>#import &lt;AppCoreKit/AppCoreKit.h&gt;</string>
+			<key>Identifier</key>
+			<string>cocoaTouchSubclass</string>
+			<key>Name</key>
+			<string>Subclass of</string>
+			<key>Required</key>
+			<string>YES</string>
+			<key>Suffixes</key>
+			<dict>
+				<key>CKSegmentedViewController</key>
+				<string>ViewController</string>
+				<key>CKBreadCrumbViewController</key>
+				<string>ViewController</string>
+				<key>CKStackViewController</key>
+				<string>ViewController</string>
+				<key>CKTabViewController</key>
+				<string>ViewController</string>
+				<key>CKSplitViewController</key>
+				<string>ViewController</string>
+				<key>CKContainerViewController</key>
+				<string>ViewController</string>
+				<key>CKCollectionViewLayoutController</key>
+				<string>ViewController</string>
+				<key>CKGridCollectionViewController</key>
+				<string>ViewController</string>
+				<key>CKMapCollectionViewController</key>
+				<string>ViewController</string>
+				<key>CKFormTableViewController</key>
+				<string>ViewController</string>
+				<key>CKViewController</key>
+				<string>ViewController</string>
+			</dict>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Values</key>
+			<array>
+				<string>CKViewController</string>
+				<string>CKFormTableViewController</string>
+				<string>CKMapCollectionViewController</string>
+				<string>CKGridCollectionViewController</string>
+				<string>CKCollectionViewLayoutController</string>
+				<string>CKContainerViewController</string>
+				<string>CKSplitViewController</string>
+				<string>CKTabViewController</string>
+				<string>CKStackViewController</string>
+				<string>CKBreadCrumbViewController</string>
+				<string>CKSegmentedViewController</string>
+			</array>
+		</dict>
+	</array>
+	<key>Platforms</key>
+	<array>
+		<string>com.apple.platform.iphoneos</string>
+	</array>
+	<key>SortOrder</key>
+	<string>1</string>
+	<key>Summary</key>
+	<string>An AppCoreKit ViewController class with a header and stylesheet</string>
+</dict>
+</plist>

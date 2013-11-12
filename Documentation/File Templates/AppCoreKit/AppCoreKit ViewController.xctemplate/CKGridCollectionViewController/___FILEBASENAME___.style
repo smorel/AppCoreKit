@@ -1,0 +1,46 @@
+{
+
+    "@import" : [
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___" : {
+
+        "view" : {
+            "backgroundColor" : "grayColor"
+        },
+
+        "tableViewContainer" : {
+            "backgroundColor" : "clearColor"
+        },
+
+        "tableView" : {
+             "backgroundColor" : "clearColor"
+        },
+
+        "CKGridTableViewCellController" : {
+
+            //TODO : Customize insets and spacing between grid cells in a row
+
+            "contentInsets" : "10 0 0 0",
+            "horizontalSpace" : 10
+        },
+
+        "CKTableViewCellController" : {
+            "UITableViewCell" : {
+                "contentView" : {
+                },
+                "backgroundView" : {
+                },
+                "selectedBackgroundView" : {
+                },
+                "textLabel" : {
+                },
+                "detailTextLabel" : {
+                },
+                "imageView" : {
+                }
+            }
+        }
+    }
+
+}

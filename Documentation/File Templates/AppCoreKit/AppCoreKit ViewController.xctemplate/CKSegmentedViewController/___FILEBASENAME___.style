@@ -1,0 +1,60 @@
+{
+
+    "@import" : [
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___" : {
+        "view" : {
+        },
+
+        "segmentedControl" : {
+            "height" : 44,
+
+            //TODO : Customize segmented control appearance here
+
+            "$CKSegmentedControlButtonTemplate" : {
+                "height" : "30",
+                "width" : 200
+
+                //TODO : Customize common segmented item buttons appearance here
+            }, 
+
+            "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionMiddle]" : {
+                "@inherits" : ["$CKSegmentedControlButtonTemplate"]
+
+                //"defaultBackgroundImage" : ["segmented-middle","5 0"],
+                //"highlightedBackgroundImage" : ["segmented-middle-highlight","5 0"],
+                //"selectedBackgroundImage" : ["segmented-middle-highlight","5 0"],
+                //"disabledBackgroundImage" : ["segmented-middle-highlight","5 0"]
+            },
+
+            "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionAlone]" : {
+                "@inherits" : ["$CKSegmentedControlButtonTemplate"]
+
+                //"defaultBackgroundImage" : ["segmented-alone","5 0"],
+                //"highlightedBackgroundImage" : ["segmented-alone-highlight","5 0"],
+                //"selectedBackgroundImage" : ["segmented-alone-highlight","5 0"],
+                //"disabledBackgroundImage" : ["segmented-alone-highlight","5 0"]
+            },
+
+            "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionFirst]" : {
+                "@inherits" : ["$CKSegmentedControlButtonTemplate"]
+
+                //"defaultBackgroundImage" : ["segmented-left","5 0"],
+                //"highlightedBackgroundImage" : ["segmented-left-highlight","5 0"],
+                //"selectedBackgroundImage" : ["segmented-left-highlight","5 0"],
+                //"disabledBackgroundImage" : ["segmented-left-highlight","5 0"]
+            },
+
+            "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionLast]" : {
+                "@inherits" : ["$CKSegmentedControlButtonTemplate"]
+
+                //"defaultBackgroundImage" : ["segmented-right","5 0"],
+                //"highlightedBackgroundImage" : ["segmented-right-highlight","5 0"],
+                //"selectedBackgroundImage" : ["segmented-right-highlight","5 0"],
+                //"disabledBackgroundImage" : ["segmented-right-highlight","5 0"]
+            }
+        }
+    }
+
+}

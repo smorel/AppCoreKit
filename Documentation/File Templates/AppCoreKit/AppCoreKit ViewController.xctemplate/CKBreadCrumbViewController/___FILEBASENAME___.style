@@ -1,0 +1,25 @@
+{
+
+    "@import" : [
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___" : {
+        "view" : {
+        },
+
+        "tabBar" : {
+            "height" : 44,
+            "itemsSpace" : 2,
+            "contentInsets" : "2 0 2 0",
+
+            //TODO : Customize tab bar appearance here
+
+            "UIButton" : {
+
+                 //TODO : Customize tab bar buttons here
+
+            }
+        }
+    }
+
+}

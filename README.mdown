@@ -62,6 +62,14 @@ ResourceManager is also available as CocoaPods:
 <pre>pod 'ResourceManager'</pre>
 
 
+## XCode Integration
+
+We propose file templates for creating view controllers inheriting the AppCoreKit's view controllers classes. This will generates for you the .h, .m and .style files for your view controller. The implementation and stylesheet are adapted to the type of controller you select as a base class to help you quickly quick start with your implementation without any additional setup.
+
+The templates are available in the "Documentation/File Templates/" folder.
+
+Copy the "File Templates/" directory into your "~/Library/Developer/Xcode/Templates/" directory to get ready using these templates.
+
 ## Installation
 
 The recommended approach for installing AppCoreKit is via the [CocoaPods](http://cocoapods.org/) package manager, as it provides flexible dependency management and dead simple installation. For best results, it is recommended that you install via CocoaPods **>= 0.19.1** using Git **>= 1.8.0** installed via Homebrew.

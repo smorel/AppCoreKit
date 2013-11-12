@@ -1,0 +1,39 @@
+{
+
+    "@import" : [
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___" : {
+
+        "view" : {
+            "backgroundColor" : "grayColor"
+        },
+
+        "tableViewContainer" : {
+            "backgroundColor" : "clearColor"
+        },
+
+        "tableView" : {
+             "backgroundColor" : "clearColor"
+        },
+
+
+        "CKTableViewCellController" : {
+            "UITableViewCell" : {
+                "contentView" : {
+                },
+                "backgroundView" : {
+                },
+                "selectedBackgroundView" : {
+                },
+                "textLabel" : {
+                },
+                "detailTextLabel" : {
+                },
+                "imageView" : {
+                }
+            }
+        }
+    }
+
+}

@@ -1,0 +1,22 @@
+{
+
+    "@import" : [
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___" : {
+
+        "view" : {
+        },
+
+        "mapView" : {
+        },
+
+
+        "CKMapAnnotationController" : {
+            "MKAnnotationView" : {
+            }
+        }
+
+    }
+
+}

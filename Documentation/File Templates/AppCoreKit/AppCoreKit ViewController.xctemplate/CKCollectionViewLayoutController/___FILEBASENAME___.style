@@ -1,0 +1,28 @@
+{
+
+    "@import" : [
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___" : {
+
+        "view" : {
+        },
+
+        "collectionView" : {
+        },
+
+
+        "CKCollectionContentCellController" : {
+            "UICollectionViewCell" : {
+                "contentView" : {
+                },
+                "backgroundView" : {
+                },
+                "selectedBackgroundView" : {
+                }
+            }
+        }
+
+    }
+
+}
