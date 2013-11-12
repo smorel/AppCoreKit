@@ -330,7 +330,7 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
 }
 
 
-- (void)morphToRatio:(CGFloat)ratio centerItem:(NSIndexPath*)indexPath animated:(BOOL)animated{
+- (void)morphToRatio:(CGFloat)ratio centerItem:(NSIndexPath*)indexPath animated:(BOOL)animated completion:(void(^)())completion{
     if(indexPath){
         CGRect frame = [self frameForViewAtIndexPath:indexPath];
         CGPoint center = CGPointMake(frame.origin.x + (frame.size.width / 2),frame.origin.y + (frame.size.height / 2));
@@ -341,11 +341,11 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
         [self startTransitionUsingCentralPoint:center];
     }
     
-    [self morphToRatio:ratio centerItem:indexPath animationDuration:animated ? .3 : 0];
+    [self morphToRatio:ratio centerItem:indexPath animationDuration:animated ? .3 : 0 completion:completion];
 }
 
 
-- (void)morphToRatio:(CGFloat)ratio centerItem:(NSIndexPath*)indexPath animationDuration:(NSTimeInterval)animationDuration{
+- (void)morphToRatio:(CGFloat)ratio centerItem:(NSIndexPath*)indexPath animationDuration:(NSTimeInterval)animationDuration  completion:(void(^)())completion{
     if(!self.isMorphing){
         self.isMorphing = YES;
         self.startMorphRatioForDelegate = self.morphRatio;
@@ -382,6 +382,10 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
              
              if(self.delegate){
                  [self.delegate morphableLayout:self didMorphFormRatio:self.startMorphRatioForDelegate toRatio:self.endMorphRatioForDelegate];
+             }
+             
+             if(completion){
+                 completion();
              }
          }
      };
@@ -432,7 +436,7 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
             bself.startMorphRatioForDelegate = floorRatio;
             bself.endMorphRatioForDelegate = target;
             
-            [bself morphToRatio:target centerItem:focusItem animationDuration:duration];
+            [bself morphToRatio:target centerItem:focusItem animationDuration:duration completion:nil];
             
             bself.viewOfInterest = nil;
             lastPinchDirection = 0;

@@ -14,6 +14,8 @@
 
 - (id)initWithLayout:(CKCollectionViewLayout*)layout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 
+- (void)setupWithLayout:(CKCollectionViewLayout*)layout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
+
 @property(nonatomic,retain,readonly) UICollectionView* collectionView;
 
 @end

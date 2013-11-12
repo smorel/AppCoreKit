@@ -74,7 +74,7 @@
 
 /**
  */
-- (void)morphToRatio:(CGFloat)ratio centerItem:(NSIndexPath*)indexPath animated:(BOOL)animated;
+- (void)morphToRatio:(CGFloat)ratio centerItem:(NSIndexPath*)indexPath animated:(BOOL)animated completion:(void(^)())completion;
 
 
 /**

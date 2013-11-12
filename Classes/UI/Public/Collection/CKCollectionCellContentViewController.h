@@ -62,6 +62,10 @@
  */
 @property(nonatomic,readonly) NSIndexPath* indexPath;
 
+/** Identifying the controller by a name
+ */
+@property(nonatomic,readonly) NSString* name;
+
 
 
 /** Ensure you call the super implementation !

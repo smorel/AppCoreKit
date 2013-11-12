@@ -53,6 +53,26 @@
 }
 
 
+- (void)setupWithLayout:(CKCollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
+    if([self.layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
+        CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)self.layout;
+        morphableLayout.delegate = nil;
+    }
+    
+    self.layout = theLayout;
+    
+    if([self.layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
+        CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)self.layout;
+        morphableLayout.delegate = self;
+    }
+    
+    if([self isViewLoaded]){
+        [self.collectionView setCollectionViewLayout:self.layout animated:YES];
+    }
+    
+    [self setupWithCollection:collection factory:factory];
+}
+
 - (void)dealloc{
     if([self.layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
         CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)self.layout;
