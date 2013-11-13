@@ -90,6 +90,8 @@
     _highlightedDisclosureIndicatorImage = nil;
     [_highlightedCheckMarkImage release];
     _highlightedCheckMarkImage = nil;
+    [_checkMarkImage release];
+    _checkMarkImage = nil;
     [_delegateRef release];
     _delegateRef = nil;
     [super dealloc];
