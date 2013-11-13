@@ -7,7 +7,6 @@
 //
 
 #import "CKCollectionCellContentViewController.h"
-#import "CKCollectionCellMorphableContentViewController.h"
 #import "NSObject+Bindings.h"
 #import "UIView+Positioning.h"
 #import "UIView+Style.h"
