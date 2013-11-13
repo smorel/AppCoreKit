@@ -26,13 +26,13 @@
 
 - (void)setObjects:(NSMutableArray *)theobjects{
     [_collectionObjects release];
-    _collectionObjects = [[NSMutableArray arrayWithArray:theobjects]retain];
+    _collectionObjects = [[NSMutableArray alloc]initWithArray:theobjects];
 	self.property = [CKProperty weakPropertyWithObject:self keyPath:@"collectionObjects"];
 }
 
 - (void)setCollectionObjects:(NSMutableArray *)collectionObjects{
     [_collectionObjects release];
-    _collectionObjects = [[collectionObjects mutableCopy]retain];
+    _collectionObjects = [collectionObjects mutableCopy];
 }
 
 - (id) copyWithZone:(NSZone *)zone {
