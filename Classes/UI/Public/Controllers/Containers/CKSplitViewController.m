@@ -334,7 +334,7 @@
         NSMutableArray* endConstraints = [NSMutableArray array];
         NSMutableArray* states = [NSMutableArray array];
         
-        CKSplitViewConstraints* zeroConstraint = [[CKSplitViewConstraints alloc]init];
+        CKSplitViewConstraints* zeroConstraint = [[[CKSplitViewConstraints alloc]init]autorelease];
         zeroConstraint.type = CKSplitViewConstraintsTypeFixedSizeInPixels;
         zeroConstraint.size = 0;
         
