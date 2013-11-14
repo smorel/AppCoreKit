@@ -12,6 +12,7 @@
 #import "UIView+Style.h"
 #import "CKWeakRef.h"
 #import "CKVersion.h"
+#import "CKLocalization.h"
 
 @interface CKBarButtonItemButton()
 @property(nonatomic,retain) CKWeakRef* barButtonItemWeakRef;
@@ -53,7 +54,7 @@
 
 - (void)update{
     [self setTitle:self.barButtonItem.title forState:UIControlStateNormal];
-
+    
     if(self.barButtonItem.image){
         [self setImage:self.barButtonItem.image forState:UIControlStateNormal];
     }
@@ -158,8 +159,8 @@
         
         if(button){
             if([style containsObjectForKey:@"title"]){
-                barButtonItem.title = [style objectForKey:@"title"];
-                [button setTitle:[style objectForKey:@"title"] forState:UIControlStateNormal];
+                barButtonItem.title = _([style objectForKey:@"title"]);
+                [button setTitle:barButtonItem.title forState:UIControlStateNormal];
             }
             
             if([UIButton applyStyle:style toView:button appliedStack:appliedStack delegate:delegate]){
