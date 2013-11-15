@@ -67,4 +67,48 @@
     }
 }
 
+- (void)contentsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.contentType = [UIImage class];
+}
+
+
+- (void)contentsGravityExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.valuesAndLabels = @{ @"kCAGravityCenter" : kCAGravityCenter,
+                                    @"kCAGravityTop" : kCAGravityTop,
+                                    @"kCAGravityBottom" : kCAGravityBottom,
+                                    @"kCAGravityLeft" : kCAGravityLeft,
+                                    @"kCAGravityTopLeft" : kCAGravityTopLeft,
+                                    @"kCAGravityTopRight" : kCAGravityTopRight,
+                                    @"kCAGravityBottomLeft" : kCAGravityBottomLeft,
+                                    @"kCAGravityBottomRight" : kCAGravityBottomRight,
+                                    @"kCAGravityResize" : kCAGravityResize,
+                                    @"kCAGravityResizeAspect" : kCAGravityResizeAspect,
+                                    @"kCAGravityResizeAspectFill" : kCAGravityResizeAspectFill};
+}
+
+
+- (void)minificationFilterExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.valuesAndLabels = @{ @"kCAFilterNearest" : kCAFilterNearest,
+                                    @"kCAFilterLinear" : kCAFilterLinear,
+                                    @"kCAFilterTrilinear" : kCAFilterTrilinear};
+}
+
+- (void)magnificationFilterExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.valuesAndLabels = @{ @"kCAFilterNearest" : kCAFilterNearest,
+                                    @"kCAFilterLinear" : kCAFilterLinear,
+                                    @"kCAFilterTrilinear" : kCAFilterTrilinear};
+}
+
+- (void)compositingFilterExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.contentType = [CIFilter class];
+}
+
+- (void)filtersExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.contentType = [CIFilter class];
+}
+
+- (void)backgroundFiltersExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.contentType = [CIFilter class];
+}
+
 @end
