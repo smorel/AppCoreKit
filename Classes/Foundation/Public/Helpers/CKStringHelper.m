@@ -17,7 +17,7 @@
     }
     
     if([CKOSVersion() floatValue] >= 7){
-        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{ NSFontAttributeName: font }];
+        NSAttributedString *attributedText = [[[NSAttributedString alloc] initWithString:text attributes:@{ NSFontAttributeName: font }]autorelease];
         return [self sizeForAttributedText:attributedText constrainedToSize:size];
     }
     return [text sizeWithFont:font constrainedToSize:size lineBreakMode:lineBreakMode];
