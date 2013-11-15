@@ -181,6 +181,43 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     }
 }
 
+
+- (void)addLayoutBox:(id<CKLayoutBoxProtocol>)box{
+    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    if(!mm){
+        self.layoutBoxes = [NSMutableArray array];
+        mm = (NSMutableArray*)[self layoutBoxes];
+    }
+    
+    [mm addObject:box];
+    
+    [CKLayoutBox addLayoutBoxes:@[box] toBox:self];
+    [self invalidateLayout];
+}
+
+
+- (void)insertLayoutBox:(id<CKLayoutBoxProtocol>)box atIndex:(NSInteger)index{
+    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    if(!mm){
+        self.layoutBoxes = [NSMutableArray array];
+        mm = (NSMutableArray*)[self layoutBoxes];
+    }
+    
+    [mm insertObject:box atIndex:index];
+    
+    [CKLayoutBox addLayoutBoxes:@[box] toBox:self];
+    [self invalidateLayout];
+
+}
+
+- (void)removeLayoutBox:(id<CKLayoutBoxProtocol>)box{
+    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    [mm removeObject:box];
+    
+    [CKLayoutBox removeLayoutBoxes:@[box] fromBox:self];
+    [self invalidateLayout];
+}
+
 + (void)addLayoutBoxes:(NSArray*)boxes toBox:(NSObject<CKLayoutBoxProtocol>*)box{
     
 #ifdef LAYOUT_DEBUG_ENABLED
@@ -287,8 +324,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
         [CKLayoutBox removeLayoutBoxes:_layoutBoxes fromBox:self];
     }
     
+    NSMutableArray* mm = [NSMutableArray arrayWithArray:boxes];
+    
     [_layoutBoxes release];
-    _layoutBoxes = [boxes retain];
+    _layoutBoxes = [mm retain];
     
     if(_layoutBoxes){
         [CKLayoutBox addLayoutBoxes:_layoutBoxes toBox:self];
