@@ -302,8 +302,8 @@
         [item applyStyle:barItemStyle];
         
         if([CKOSVersion() floatValue] >= 7){
-            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                            target:nil action:nil];
+            UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil]autorelease];
             negativeSpacer.width = -9;
             [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
         }else{
@@ -354,8 +354,8 @@
         [item applyStyle:barItemStyle];
         
         if([CKOSVersion() floatValue] >= 7){
-            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                            target:nil action:nil];
+            UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil]autorelease];
             negativeSpacer.width = -9;
             [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
         }else{
@@ -517,8 +517,8 @@
         [item applyStyle:barItemStyle];
         
         if([CKOSVersion() floatValue] >= 7){
-            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                            target:nil action:nil];
+            UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil]autorelease];
             negativeSpacer.width = -9;
             [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
         }else{
@@ -578,8 +578,8 @@
             }
             
             if([CKOSVersion() floatValue] >= 7){
-                UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                                                                target:nil action:nil];
+                UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                                                                target:nil action:nil]autorelease];
                 negativeSpacer.width = -9;
                 [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, self.navigationItem.backBarButtonItem, nil]];
             }else{
@@ -611,8 +611,8 @@
         [item applyStyle:barItemStyle];
         
         if([CKOSVersion() floatValue] >= 7){
-            UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                            target:nil action:nil];
+            UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                            target:nil action:nil]autorelease];
             negativeSpacer.width = -9;
             [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, item, nil]];
         }else{
@@ -877,8 +877,8 @@
     _leftButton = [theleftButton retain];
     
     if([CKOSVersion() floatValue] >= 7){
-        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                        target:nil action:nil];
+        UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                        target:nil action:nil]autorelease];
         negativeSpacer.width = -9;
         [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theleftButton, nil] animated:self.isViewDisplayed];
     }else{
@@ -901,8 +901,8 @@
     _rightButton = [theRightButton retain];
     
     if([CKOSVersion() floatValue] >= 7){
-        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                        target:nil action:nil];
+        UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                        target:nil action:nil]autorelease];
         negativeSpacer.width = -9;
         [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theRightButton, nil] animated:self.isViewDisplayed];
     }else{

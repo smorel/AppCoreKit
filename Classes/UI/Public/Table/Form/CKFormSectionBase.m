@@ -55,6 +55,10 @@
 
 - (void)dealloc{
     [self clearBindingsContext];
+    [_headerTitle release];
+    [_headerView release];
+    [_footerTitle release];
+    [_footerView release];
     [super dealloc];
 }
 
