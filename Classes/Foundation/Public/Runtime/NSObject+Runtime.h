@@ -27,6 +27,10 @@
 
 /**
  */
++ (NSArray*)allClassesConformToProtocol:(Protocol*)protocol;
+
+/**
+ */
 + (NSArray*)superClassesForClass:(Class)c;
 
 ///-----------------------------------

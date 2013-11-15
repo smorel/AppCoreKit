@@ -284,6 +284,48 @@ void introspectTextInputsProperties(){
     return nil;
 }
 
+
++ (NSArray*)allClassesConformToProtocol:(Protocol*)filter{
+    int numClasses;
+    Class * classes = NULL;
+    
+    classes = NULL;
+    numClasses = objc_getClassList(NULL, 0);
+    
+    if (numClasses > 0 )
+    {
+        classes = malloc(sizeof(Class) * numClasses);
+        numClasses = objc_getClassList(classes, numClasses);
+        
+        NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numClasses];
+        for(int i =0;i<numClasses; ++i){
+            Class theClass = classes[i];
+            NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
+            if([className hasPrefix:@"NSKVONotifying_"]){
+                //IGNORE
+            }
+            else{
+                if(filter){
+                    if([NSObject isClass:theClass kindOfClass:[NSObject class]]){
+                        if([theClass conformsToProtocol:filter]){
+                            [ret addObject:(id)theClass];
+                        }
+                    }
+                }
+                else{
+                    [ret addObject:(id)theClass];
+                }
+            }
+        }
+        
+        free(classes);
+        
+        return ret;
+    }
+    
+    return nil;
+}
+
 - (BOOL)hasPropertyNamed:(NSString*)propertyName{
     objc_property_t property = class_getProperty([self class],[propertyName UTF8String]);
     return property != nil;
