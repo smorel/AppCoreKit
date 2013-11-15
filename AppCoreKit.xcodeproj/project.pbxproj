@@ -478,6 +478,8 @@
 		964DAF7D153F2A2A0024C08F /* CKFormSection+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */; };
 		9659E34415E274FF00D43C33 /* CKConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9659E34215E274FF00D43C33 /* CKConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9659E34515E274FF00D43C33 /* CKConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9659E34315E274FF00D43C33 /* CKConfiguration.m */; };
+		9667136E18354643007218D2 /* CIFilter+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9667136F18354643007218D2 /* CIFilter+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */; };
 		9668B94E15DAFF7100C57715 /* CKLayoutBoxProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9668B94C15DAFF7100C57715 /* CKLayoutBoxProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96691E1215DD3BE500D73510 /* CKTableViewCellController+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 96691E1015DD3BE400D73510 /* CKTableViewCellController+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96691E1315DD3BE500D73510 /* CKTableViewCellController+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 96691E1115DD3BE500D73510 /* CKTableViewCellController+Factory.m */; };
@@ -1125,6 +1127,8 @@
 		964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormSection+PropertyGrid.m"; path = "Classes/UI/Public/Table/Form/CKFormSection+PropertyGrid.m"; sourceTree = "<group>"; };
 		9659E34215E274FF00D43C33 /* CKConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKConfiguration.h; path = Classes/Foundation/Public/CKConfiguration.h; sourceTree = "<group>"; };
 		9659E34315E274FF00D43C33 /* CKConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKConfiguration.m; path = Classes/Foundation/Public/CKConfiguration.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CIFilter+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/CIFilter+ValueTransformer.h"; sourceTree = "<group>"; };
+		9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CIFilter+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/CIFilter+ValueTransformer.m"; sourceTree = "<group>"; };
 		9668B94C15DAFF7100C57715 /* CKLayoutBoxProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBoxProtocol.h; path = Classes/Layout/Public/CKLayoutBoxProtocol.h; sourceTree = "<group>"; };
 		96691E1015DD3BE400D73510 /* CKTableViewCellController+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+Factory.h"; path = "Classes/UI/Public/Table/TableViewCellController/CKTableViewCellController+Factory.h"; sourceTree = "<group>"; };
 		96691E1115DD3BE500D73510 /* CKTableViewCellController+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+Factory.m"; path = "Classes/UI/Public/Table/TableViewCellController/CKTableViewCellController+Factory.m"; sourceTree = "<group>"; };
@@ -2053,6 +2057,8 @@
 				75CC172013F4705700835FE3 /* NSObject+ValueTransformer.m */,
 				758523E913FAEF7700EE75CE /* UIFont+ValueTransformer.h */,
 				758523EA13FAEF7900EE75CE /* UIFont+ValueTransformer.m */,
+				9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */,
+				9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -2642,6 +2648,7 @@
 				7560DD7913B8ED3600268D13 /* UIImage+Transformations.h in Headers */,
 				7560DD7B13B8ED3600268D13 /* CKUIImagePropertyCellController.h in Headers */,
 				7560DD7F13B8ED3600268D13 /* UIKeyboard+Information.h in Headers */,
+				9667136E18354643007218D2 /* CIFilter+ValueTransformer.h in Headers */,
 				7560DD8113B8ED3600268D13 /* UILabel+Style.h in Headers */,
 				96B3BD05182BEF1C00978B85 /* CKAnimationInterpolator.h in Headers */,
 				7560DD8513B8ED3600268D13 /* UITableView+Introspection.h in Headers */,
@@ -2977,6 +2984,7 @@
 				7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */,
 				7560DC6D13B8ED3600268D13 /* CKAlertView.m in Sources */,
 				7560DC6F13B8ED3600268D13 /* CKAttribute.m in Sources */,
+				9667136F18354643007218D2 /* CIFilter+ValueTransformer.m in Sources */,
 				7560DC7113B8ED3600268D13 /* CKAttributesDictionary.m in Sources */,
 				7560DC7413B8ED3600268D13 /* CKBindingsManager.mm in Sources */,
 				7560DC7613B8ED3600268D13 /* CKBonjourResolver.m in Sources */,

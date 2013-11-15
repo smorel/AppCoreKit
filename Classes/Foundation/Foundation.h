@@ -52,6 +52,7 @@
 #import "NSIndexPath+ValueTransformer.h"
 #import "NSObject+ValueTransformer.h"
 #import "UIFont+ValueTransformer.h"
+#import "CIFilter+ValueTransformer.h"
 
 //Cascading Tree
 #import "CKCascadingTree.h"
