@@ -40,10 +40,11 @@
 @synthesize maximumNumberOfObjectsToDisplay;
 
 - (void)dealloc{
-    [_objectController release];
-    [_controllerFactory release];
+    //CKObject does it
+ /*   [_controllerFactory release];
     [_headerCellControllers release];
     [_footerCellControllers release];
+  */
     [super dealloc];
 }
 

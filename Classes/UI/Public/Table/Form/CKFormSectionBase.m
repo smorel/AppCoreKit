@@ -55,10 +55,12 @@
 
 - (void)dealloc{
     [self clearBindingsContext];
-    [_headerTitle release];
+    //CKObject does it !
+   /* [_headerTitle release];
     [_headerView release];
     [_footerTitle release];
     [_footerView release];
+    */
     [super dealloc];
 }
 
