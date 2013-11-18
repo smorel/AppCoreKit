@@ -39,7 +39,7 @@ namespace __gnu_cxx{
 
 - (id)init{
     self = [super init];
-    self.sizeToFitLayoutBoxes = NO;
+    self.sizeToFitLayoutBoxes = YES;
     return self;
 }
 
