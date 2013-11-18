@@ -424,7 +424,7 @@
 
 //Invalidating size when contentView layout boxes are invalidated !
 
-- (void)setLayoutBoxes:(NSArray *)layoutBoxes{
+- (void)setLayoutBoxes:(CKArrayCollection *)layoutBoxes{
     UIView* contentView = (UIView*)self;
     
     contentView.invalidatedLayoutBlock = nil;

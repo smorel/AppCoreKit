@@ -38,7 +38,7 @@ namespace __gnu_cxx{
 @end
 
 @implementation CKLayoutBox
-@synthesize maximumSize, minimumSize, margins, padding, layoutBoxes = _layoutBoxes,frame,containerLayoutBox,containerLayoutView = _containerLayoutView,verticalAlignment,horizontalAlignment,fixedSize,hidden,
+@synthesize maximumSize = _maximumSize, minimumSize = _minimumSize, margins = _margins, padding = _padding, layoutBoxes = _layoutBoxes,frame,containerLayoutBox,containerLayoutView = _containerLayoutView,verticalAlignment,horizontalAlignment,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
 lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock, name;
 
@@ -56,9 +56,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 #ifdef LAYOUT_DEBUG_ENABLED
     self.debugView = [[[UIView alloc]initWithFrame:CGRectMake(0,0,1,1)]autorelease];
     self.debugView.alpha = 0.4;
-    self.debugView.backgroundColor = [UIColor redColor];
-    self.debugView.layer.borderColor = [[UIColor redColor]CGColor];
-    self.debugView.layer.borderWidth = 1;
+    self.debugView.backgroundColor = [UIColor blueColor];
+    self.debugView.layer.borderColor = [[UIColor blueColor]CGColor];
+    self.debugView.layer.borderWidth = 2;
+    self.debugView.userInteractionEnabled = NO;
 #endif
     
     /*
@@ -183,10 +184,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 
 
 - (void)addLayoutBox:(id<CKLayoutBoxProtocol>)box{
-    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
     if(!mm){
-        self.layoutBoxes = [NSMutableArray array];
-        mm = (NSMutableArray*)[self layoutBoxes];
+        self.layoutBoxes = [CKArrayCollection collection];
+        mm = (CKArrayCollection*)[self layoutBoxes];
     }
     
     [mm addObject:box];
@@ -197,10 +198,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 
 
 - (void)insertLayoutBox:(id<CKLayoutBoxProtocol>)box atIndex:(NSInteger)index{
-    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
     if(!mm){
-        self.layoutBoxes = [NSMutableArray array];
-        mm = (NSMutableArray*)[self layoutBoxes];
+        self.layoutBoxes = [CKArrayCollection collection];
+        mm = (CKArrayCollection*)[self layoutBoxes];
     }
     
     [mm insertObject:box atIndex:index];
@@ -211,7 +212,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 }
 
 - (void)removeLayoutBox:(id<CKLayoutBoxProtocol>)box{
-    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
     [mm removeObject:box];
     
     [CKLayoutBox removeLayoutBoxes:@[box] fromBox:self];
@@ -252,18 +253,19 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     }
 #endif
     
+    if([box isKindOfClass:[UIView class]]){
+        UIView* view = (UIView*)box;
+        [view removeFromSuperview];
+    }
+    
     for(NSObject<CKLayoutBoxProtocol>* subBox in [box layoutBoxes]){
-        if([subBox isKindOfClass:[CKLayoutBox class]]){
-            [CKLayoutBox removeViewsFromBox:subBox recursively:YES];
-        }else if([subBox isKindOfClass:[UIView class]]){
-            UIView* view = (UIView*)subBox;
-            [view removeFromSuperview];
-        }
+        [self removeViewsFromBox:subBox recursively:YES];
     }
 }
 
 + (void)removeLayoutBoxes:(NSArray*)boxes fromBox:(NSObject<CKLayoutBoxProtocol>*)box{
     for(NSObject<CKLayoutBoxProtocol>* subBox in boxes){
+        [CKLayoutBox removeViewsFromBox:subBox recursively:YES];
         if(subBox.containerLayoutBox == box){
             subBox.containerLayoutBox = nil;
             if([subBox isKindOfClass:[CKLayoutBox class]]){
@@ -271,7 +273,6 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
             }
         }
     }
-    [CKLayoutBox removeViewsFromBox:box recursively:YES];
 }
 
 - (void)setContainerLayoutView:(UIView*)view{
@@ -313,24 +314,18 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
     [CKLayoutBox performLayoutWithFrame:self.frame forBox:self];
-    
-#ifdef LAYOUT_DEBUG_ENABLED
-    self.debugView.frame = self.frame;
-#endif
 }
 
-- (void)setLayoutBoxes:(NSArray*)boxes{
+- (void)setLayoutBoxes:(CKArrayCollection*)boxes{
     if(_layoutBoxes){
-        [CKLayoutBox removeLayoutBoxes:_layoutBoxes fromBox:self];
+        [CKLayoutBox removeLayoutBoxes:[_layoutBoxes allObjects] fromBox:self];
     }
     
-    NSMutableArray* mm = [NSMutableArray arrayWithArray:boxes];
-    
     [_layoutBoxes release];
-    _layoutBoxes = [mm retain];
+    _layoutBoxes = [boxes retain];
     
     if(_layoutBoxes){
-        [CKLayoutBox addLayoutBoxes:_layoutBoxes toBox:self];
+        [CKLayoutBox addLayoutBoxes:[_layoutBoxes allObjects] toBox:self];
     }
     
     [self invalidateLayout];
@@ -348,10 +343,14 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     return CGSizeMake(MAXFLOAT, MAXFLOAT);
 }
 
+- (void)setMaximumSize:(CGSize)s   { _maximumSize = s; [self invalidateLayout]; }
+- (void)setMinimumSize:(CGSize)s   { _minimumSize = s; [self invalidateLayout]; }
+- (void)setMargins:(UIEdgeInsets)m { _margins = m; [self invalidateLayout]; }
+- (void)setPadding:(UIEdgeInsets)p { _padding = p; [self invalidateLayout]; }
 
-- (void)setMaximumWidth:(CGFloat)f  { self.maximumSize = CGSizeMake(f,self.maximumSize.height); }
+- (void)setMaximumWidth:(CGFloat)f  { self.maximumSize = CGSizeMake(f,self.maximumSize.height);  }
 - (void)setMaximumHeight:(CGFloat)f { self.maximumSize = CGSizeMake(self.maximumSize.width,f); }
-- (void)setMinimumWidth:(CGFloat)f  { self.minimumSize = CGSizeMake(f,self.minimumSize.height); }
+- (void)setMinimumWidth:(CGFloat)f  { self.minimumSize = CGSizeMake(f,self.minimumSize.height);}
 - (void)setMinimumHeight:(CGFloat)f { self.minimumSize = CGSizeMake(self.minimumSize.width,f); }
 - (void)setFixedWidth:(CGFloat)f    { self.maximumWidth = f; self.minimumWidth = f; }
 - (void)setFixedHeight:(CGFloat)f   { self.maximumHeight = f; self.minimumHeight = f; }
@@ -424,6 +423,9 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
         return;
     
     self.frame = rect;
+    
+#ifdef LAYOUT_DEBUG_ENABLED
+    self.debugView.frame = self.frame;
+#endif
 }
-
 @end

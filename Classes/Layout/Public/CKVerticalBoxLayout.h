@@ -12,4 +12,9 @@
 /** CKVerticalBoxLayout layouts children layoutBoxes vertically.
  */
 @interface CKVerticalBoxLayout : CKLayoutBox
+
+/** default value is YES
+ */
+@property(nonatomic,assign) BOOL sizeToFitLayoutBoxes;
+
 @end

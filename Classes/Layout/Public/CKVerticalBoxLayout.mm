@@ -28,16 +28,26 @@ namespace __gnu_cxx{
 + (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
 
+#ifdef LAYOUT_DEBUG_ENABLED
+@property(nonatomic,assign,readwrite) UIView* debugView;
+#endif
+
 @end
 
 
 @implementation CKVerticalBoxLayout
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
-    if([self.layoutBoxes count] <= 0)
-        return CGSizeMake(0,0);
+- (id)init{
+    self = [super init];
+    self.sizeToFitLayoutBoxes = NO;
+    return self;
+}
+
+- (CGSize)preferedSizeConstraintToSize:(CGSize)constraintSize{
+    if([self.layoutBoxes count] <= 0 && self.sizeToFitLayoutBoxes)
+    return CGSizeMake(0,0);
     
-    size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    CGSize size = [CKLayoutBox preferedSizeConstraintToSize:constraintSize forBox:self];
     size = CGSizeMake(size.width - self.padding.left - self.padding.right,size.height - self.padding.top - self.padding.bottom);
     
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -60,7 +70,7 @@ namespace __gnu_cxx{
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
                 if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
-                else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+                //else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
                     if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                         numberOfFlexiSpaces++;
@@ -108,7 +118,7 @@ namespace __gnu_cxx{
             if(!box.hidden){
                 if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                 }
-                else if([box isKindOfClass:[CKLayoutBox class]] && [[box layoutBoxes]count] <= 0){}
+                //else if([box isKindOfClass:[CKLayoutBox class]] && [[box layoutBoxes]count] <= 0){}
                 else{
                     CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
                     
@@ -140,7 +150,7 @@ namespace __gnu_cxx{
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
                 if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
-                else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+               // else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
                     if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                         CGFloat topMargin = 0;
@@ -184,10 +194,15 @@ namespace __gnu_cxx{
         }
     }
     
-    CGSize ret = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
-                                                                                 ret.height + self.padding.bottom + self.padding.top)
-                                                               forBox:self];
+    if(self.sizeToFitLayoutBoxes){
+        CGSize ret = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+        self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
+                                                                                     ret.height + self.padding.bottom + self.padding.top)
+                                                                   forBox:self];
+
+    }else{
+        self.lastPreferedSize = constraintSize;
+    }
     return self.lastPreferedSize;
 }
 
@@ -208,8 +223,8 @@ namespace __gnu_cxx{
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
-                else{
+                //if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+                //else{
                     if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                         CGFloat topMargin = 0;
                         if(i > 0){
@@ -232,7 +247,7 @@ namespace __gnu_cxx{
                     [box setBoxFrameTakingCareOfTransform:boxframe];
                     
                     y += subsize.height;
-                }
+               // }
             }
         }
         
@@ -245,8 +260,8 @@ namespace __gnu_cxx{
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
-                else{
+                //if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+               // else{
                     CGFloat offsetX = self.frame.origin.x + self.padding.left;
                     CGFloat offsetY = 0;
                     switch(self.horizontalAlignment){
@@ -266,7 +281,7 @@ namespace __gnu_cxx{
                     CGRect boxFrame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
                     [box setBoxFrameTakingCareOfTransform:boxFrame];
                     [box performLayoutWithFrame:box.frame];
-                }
+                //}
             }
         }
     }

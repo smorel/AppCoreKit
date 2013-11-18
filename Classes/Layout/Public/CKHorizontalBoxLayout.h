@@ -12,4 +12,9 @@
 /** CKHorizontalBoxLayout layouts children layoutBoxes horizontally.
  */
 @interface CKHorizontalBoxLayout : CKLayoutBox
+
+/** default value is YES
+ */
+@property(nonatomic,assign) BOOL sizeToFitLayoutBoxes;
+
 @end

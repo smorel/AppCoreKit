@@ -11,6 +11,14 @@
 #import "CKVerticalBoxLayout.h"
 
 @interface CKLayoutBox()
+@property(nonatomic,assign,readwrite) UIView* containerLayoutView;
+#ifdef LAYOUT_DEBUG_ENABLED
+@property(nonatomic,assign,readwrite) UIView* debugView;
+#endif
+
+@end
+
+@interface CKLayoutBox()
 
 + (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
@@ -24,9 +32,9 @@
     self = [super init];
     
 #ifdef LAYOUT_DEBUG_ENABLED
-    self.debugView.backgroundColor = [UIColor blueColor];
-    self.debugView.layer.borderColor = [[UIColor blueColor]CGColor];
-    self.debugView.layer.borderWidth = 1;
+    self.debugView.backgroundColor = [UIColor greenColor];
+    self.debugView.layer.borderColor = [[UIColor greenColor]CGColor];
+    self.debugView.layer.borderWidth = 2;
 #endif
     
     return self;
@@ -49,7 +57,7 @@
     [self setBoxFrameTakingCareOfTransform:theframe];
     
 #ifdef LAYOUT_DEBUG_ENABLED
-    [self.debugView.frame = self.frame;
+    self.debugView.frame = theframe;
 #endif
 }
      

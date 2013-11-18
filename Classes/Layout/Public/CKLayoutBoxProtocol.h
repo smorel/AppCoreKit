@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CKArrayCollection.h"
 
 //#define LAYOUT_DEBUG_ENABLED
 
@@ -40,7 +41,7 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 
 /** The children layoutBox that will get layouted by the current layout box.
  */
-@property(nonatomic,retain) NSArray* layoutBoxes;
+@property(nonatomic,retain) CKArrayCollection* layoutBoxes;
 
 /**
  */

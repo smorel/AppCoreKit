@@ -254,10 +254,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 }
 
 - (void)addLayoutBox:(id<CKLayoutBoxProtocol>)box{
-    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
     if(!mm){
-        self.layoutBoxes = [NSMutableArray array];
-        mm = (NSMutableArray*)[self layoutBoxes];
+        self.layoutBoxes = [CKArrayCollection collection];
+        mm = (CKArrayCollection*)[self layoutBoxes];
     }
     
     [mm addObject:box];
@@ -267,10 +267,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 }
 
 - (void)insertLayoutBox:(id<CKLayoutBoxProtocol>)box atIndex:(NSInteger)index{
-    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
     if(!mm){
-        self.layoutBoxes = [NSMutableArray array];
-        mm = (NSMutableArray*)[self layoutBoxes];
+        self.layoutBoxes = [CKArrayCollection collection];
+        mm = (CKArrayCollection*)[self layoutBoxes];
     }
     
     [mm insertObject:box atIndex:index];
@@ -281,7 +281,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 }
 
 - (void)removeLayoutBox:(id<CKLayoutBoxProtocol>)box{
-    NSMutableArray* mm = (NSMutableArray*)[self layoutBoxes];
+    CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
     [mm removeObject:box];
     
     [CKLayoutBox removeLayoutBoxes:@[box] fromBox:self];
@@ -387,6 +387,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
                              &UIViewMaximumSizeKey,
                              [NSValue valueWithCGSize:s],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self invalidateLayout];
 }
 
 - (CGSize)maximumSize{
@@ -407,6 +408,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
                              &UIViewMinimumSizeKey,
                              [NSValue valueWithCGSize:s],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self invalidateLayout];
 }
 
 - (CGSize)minimumSize{
@@ -428,6 +430,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
                              &UIViewMarginsKey,
                              [NSValue valueWithUIEdgeInsets:m],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self invalidateLayout];
 }
 
 - (UIEdgeInsets)margins{
@@ -440,6 +443,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
                              &UIViewPaddingKey,
                              [NSValue valueWithUIEdgeInsets:m],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self invalidateLayout];
 }
 
 - (UIEdgeInsets)padding{
@@ -447,26 +451,24 @@ static char UIViewSizeToFitLayoutBoxesKey;
     return value ? [value UIEdgeInsetsValue] : UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
-- (void)setLayoutBoxes:(NSArray*)m{
+- (void)setLayoutBoxes:(CKArrayCollection*)boxes{
     if(self.layoutBoxes){
-        [CKLayoutBox removeLayoutBoxes:self.layoutBoxes fromBox:self];
+        [CKLayoutBox removeLayoutBoxes:[self.layoutBoxes allObjects] fromBox:self];
     }
-    
-    NSMutableArray* mm = [NSMutableArray arrayWithArray:m];
     
     objc_setAssociatedObject(self,
                              &UIViewLayoutBoxesKey,
-                             mm,
+                             boxes,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    if(m){
-        [CKLayoutBox addLayoutBoxes:m toBox:self];
+    if(self.layoutBoxes){
+        [CKLayoutBox addLayoutBoxes:[self.layoutBoxes allObjects] toBox:self];
     }
     
     [self invalidateLayout];
 }
 
-- (NSArray*)layoutBoxes{
+- (CKArrayCollection*)layoutBoxes{
     return objc_getAssociatedObject(self, &UIViewLayoutBoxesKey);
 }
 
