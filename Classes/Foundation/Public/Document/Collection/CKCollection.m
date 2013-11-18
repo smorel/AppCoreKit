@@ -164,6 +164,10 @@
 	CKAssert(NO,@"Abstract Implementation");
 }
 
+- (void)insertObject:(id)object atIndex:(NSInteger)index{
+    [self insertObjects:@[object] atIndexes:[NSIndexSet indexSetWithIndex:index]];
+}
+
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
 	CKAssert(NO,@"Abstract Implementation");
 }
@@ -172,6 +176,21 @@
 	CKAssert(NO,@"Abstract Implementation");
 }
 
+
+- (void)removeObjectAtIndex:(NSInteger)index{
+    [self removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+}
+
+- (void)removeObject:(id)object{
+    NSInteger index = [self indexOfObjectIdenticalTo:object];
+    if(index != NSNotFound){
+        [self removeObjectAtIndex:index];
+    }
+}
+
+- (NSInteger)indexOfObjectIdenticalTo:(id)object{
+    return [[self allObjects]indexOfObjectIdenticalTo:object];
+}
 
 - (void)addObserver:(id)object{
 	CKAssert(NO,@"Abstract Implementation");

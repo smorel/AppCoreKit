@@ -124,6 +124,10 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
  */
 - (NSArray*)objectsMatchingPredicate:(NSPredicate*)predicate;
 
+/**
+ */
+- (NSInteger)indexOfObjectIdenticalTo:(id)object;
+
 ///-----------------------------------
 /// @name Adding Objects
 ///-----------------------------------
@@ -140,6 +144,10 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
  */
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes;
 
+/**
+ */
+- (void)insertObject:(id)object atIndex:(NSInteger)index;
+
 ///-----------------------------------
 /// @name Removing Objects
 ///-----------------------------------
@@ -147,6 +155,14 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 /**
  */
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet;
+
+/**
+ */
+- (void)removeObjectAtIndex:(NSInteger)index;
+
+/**
+*/
+- (void)removeObject:(id)object;
 
 /**
  */
