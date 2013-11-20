@@ -466,7 +466,7 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	}
 	
 	[NSValueTransformer transform:source toObject:target];
-	if(property != nil){
+	if(property != nil && [property value] != target){
 		[property setValue:target];
 	}
 	return target;
