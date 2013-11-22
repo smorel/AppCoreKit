@@ -32,6 +32,10 @@
  */
 @property(nonatomic,assign)CGFloat height;
 
+/**
+ */
+- (BOOL)hasSuperviewWithClass:(Class)type;
+
 @end
 
 /**

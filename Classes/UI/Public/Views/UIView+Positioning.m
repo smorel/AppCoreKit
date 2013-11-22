@@ -69,6 +69,17 @@
     }
 }
 
+
+- (BOOL)hasSuperviewWithClass:(Class)type{
+    UIView* currentView = self;
+    while(currentView){
+        if([currentView isKindOfClass:type])
+            return YES;
+        currentView = [currentView superview];
+    }
+    return NO;
+}
+
 @end
 
 
