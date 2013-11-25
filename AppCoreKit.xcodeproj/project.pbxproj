@@ -498,6 +498,8 @@
 		9687145117CD0C9400DB747C /* Location.h in Headers */ = {isa = PBXBuildFile; fileRef = 9687142217CD06EB00DB747C /* Location.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9691A53B1582575900E4E6E8 /* CKWebRequest+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */; };
+		9691DC161843A47C00D3EDD7 /* UILabel+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9691DC141843A47C00D3EDD7 /* UILabel+ValueTransformer.h */; };
+		9691DC171843A47C00D3EDD7 /* UILabel+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9691DC151843A47C00D3EDD7 /* UILabel+ValueTransformer.m */; };
 		969AFE6B1561506B00CFE27A /* CKGridCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE691561506B00CFE27A /* CKGridCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		969AFE6C1561506B00CFE27A /* CKGridCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AFE6A1561506B00CFE27A /* CKGridCollectionViewController.m */; };
 		969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1148,6 +1150,8 @@
 		9687146C17CD106C00DB747C /* AppCoreKit-Framework-Overview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AppCoreKit-Framework-Overview.png"; path = "Documentation/AppCoreKit-Framework-Overview.png"; sourceTree = "<group>"; };
 		9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKWebRequest+Mapping.h"; path = "Classes/Network/Public/CKWebRequest+Mapping.h"; sourceTree = "<group>"; };
 		9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKWebRequest+Mapping.m"; path = "Classes/Network/Public/CKWebRequest+Mapping.m"; sourceTree = "<group>"; };
+		9691DC141843A47C00D3EDD7 /* UILabel+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/UILabel+ValueTransformer.h"; sourceTree = "<group>"; };
+		9691DC151843A47C00D3EDD7 /* UILabel+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/UILabel+ValueTransformer.m"; sourceTree = "<group>"; };
 		969AFE691561506B00CFE27A /* CKGridCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKGridCollectionViewController.h; path = Classes/UI/Public/Grid/CKGridCollectionViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		969AFE6A1561506B00CFE27A /* CKGridCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKGridCollectionViewController.m; path = Classes/UI/Public/Grid/CKGridCollectionViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKGridTableViewCellController.h; path = Classes/UI/Public/Grid/CKGridTableViewCellController.h; sourceTree = "<group>"; };
@@ -2059,6 +2063,8 @@
 				758523EA13FAEF7900EE75CE /* UIFont+ValueTransformer.m */,
 				9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */,
 				9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */,
+				9691DC141843A47C00D3EDD7 /* UILabel+ValueTransformer.h */,
+				9691DC151843A47C00D3EDD7 /* UILabel+ValueTransformer.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -2744,6 +2750,7 @@
 				755CEE1E146C8C7E0052B1FF /* CKLocalizedString.h in Headers */,
 				963826541484011700A9C98B /* CKFormSectionBase.h in Headers */,
 				963826581484012B00A9C98B /* CKFormSection.h in Headers */,
+				9691DC161843A47C00D3EDD7 /* UILabel+ValueTransformer.h in Headers */,
 				961B3AD017FDD04900F92D5F /* CKStringHelper.h in Headers */,
 				9638265C1484013B00A9C98B /* CKFormBindedCollectionSection.h in Headers */,
 				96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */,
@@ -3164,6 +3171,7 @@
 				757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */,
 				755CEE1A146C8C2E0052B1FF /* CKLocalizationManager.m in Sources */,
 				755CEE1F146C8C7E0052B1FF /* CKLocalizedString.m in Sources */,
+				9691DC171843A47C00D3EDD7 /* UILabel+ValueTransformer.m in Sources */,
 				963826551484011700A9C98B /* CKFormSectionBase.m in Sources */,
 				96E6FA23182D1F8B001F1E6A /* UIImage+FastLoading.m in Sources */,
 				963826591484012B00A9C98B /* CKFormSection.m in Sources */,

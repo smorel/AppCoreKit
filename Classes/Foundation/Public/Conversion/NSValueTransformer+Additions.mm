@@ -434,6 +434,7 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
     if (![source isKindOfClass:[NSDictionary class]])
         [NSException raise:NSGenericException format:@"object of type '%@' can only be set from dictionary",[type description]];
     
+    BOOL justCreated = YES;
 	if(target == nil){
 		Class typeToCreate = type;
 		NSString* sourceClassName = [source objectForKey:CKSerializerClassTag];
@@ -463,9 +464,16 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 		else{
 			target = [[[typeToCreate alloc]init]autorelease];
 		}
+        
+        justCreated = YES;
 	}
 	
 	[NSValueTransformer transform:source toObject:target];
+    
+    if(justCreated){
+        [target postProcessAfterConversion];
+    }
+    
 	if(property != nil && [property value] != target){
 		[property setValue:target];
 	}
@@ -607,4 +615,12 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 
 @end
 
+@implementation NSObject(NSValueTransformer)
+
+
+- (void)postProcessAfterConversion{
+    
+}
+
+@end
 

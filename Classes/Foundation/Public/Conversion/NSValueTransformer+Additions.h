@@ -35,3 +35,16 @@
 + (void)transform:(NSDictionary*)source toObject:(id)target;
 
 @end
+
+
+/**
+ */
+@interface NSObject(NSValueTransformer)
+
+/** This method is invoked after NSValueTransformer has created a new instance of this object and converted
+    the input to its properties.
+    This can be used to adjust the converted values for exemple localizing values or anything else.
+ */
+- (void)postProcessAfterConversion;
+
+@end
