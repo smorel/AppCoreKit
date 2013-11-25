@@ -54,7 +54,7 @@
     
     request.completionBlock = ^(id value, NSHTTPURLResponse* response, NSError* error){
         CKDebugLog(@"%@", [NSString stringWithFormat:@"%@", bRequest.URL]);
-        if(error){
+        if(error || response.statusCode >= 400){
             if(errorBlock){
                 errorBlock(value, response, error);
             }
@@ -116,7 +116,7 @@
     
     request.completionBlock = ^(id value, NSHTTPURLResponse* response, NSError* error){
         if(error){
-            if(errorBlock){
+            if(errorBlock || response.statusCode >= 400){
                 errorBlock(value, response, error);
             }
         }
