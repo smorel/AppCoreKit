@@ -37,6 +37,8 @@
 		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
+		709C71CC1843BE8C006BB1DD /* UIControl+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 709C71CA1843BE8C006BB1DD /* UIControl+Introspection.h */; };
+		709C71CD1843BE8C006BB1DD /* UIControl+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 709C71CB1843BE8C006BB1DD /* UIControl+Introspection.m */; };
 		75043E651404327500C7685D /* CKPropertyExtendedAttributes+Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75043E631404327500C7685D /* CKPropertyExtendedAttributes+Attributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75043E661404327500C7685D /* CKPropertyExtendedAttributes+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75043E641404327500C7685D /* CKPropertyExtendedAttributes+Attributes.m */; };
 		750A157613FD50E7008BC41F /* CKBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 750A157513FD50E6008BC41F /* CKBinding.m */; };
@@ -679,6 +681,8 @@
 		4F4F052D13C5F5410009DE31 /* CKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKActionSheet.h; path = Classes/UI/Public/Views/CKActionSheet.h; sourceTree = "<group>"; };
 		4F4F052E13C5F5410009DE31 /* CKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKActionSheet.m; path = Classes/UI/Public/Views/CKActionSheet.m; sourceTree = "<group>"; };
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKDebug.m; path = Classes/Foundation/Public/CKDebug.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		709C71CA1843BE8C006BB1DD /* UIControl+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIControl+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UIControl+Introspection.h"; sourceTree = "<group>"; };
+		709C71CB1843BE8C006BB1DD /* UIControl+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIControl+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UIControl+Introspection.m"; sourceTree = "<group>"; };
 		75043E631404327500C7685D /* CKPropertyExtendedAttributes+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKPropertyExtendedAttributes+Attributes.h"; path = "Classes/Foundation/Public/Runtime/CKPropertyExtendedAttributes+Attributes.h"; sourceTree = "<group>"; };
 		75043E641404327500C7685D /* CKPropertyExtendedAttributes+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKPropertyExtendedAttributes+Attributes.m"; path = "Classes/Foundation/Public/Runtime/CKPropertyExtendedAttributes+Attributes.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7506E3E913B8FA0500EE1471 /* AppCoreKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = AppCoreKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2009,6 +2013,8 @@
 				759569681444E9FD0092F317 /* UISegmentedControl+Introspection.m */,
 				96F9F36A173182D900AF4276 /* UIActivityIndicatorView+Introspection.h */,
 				96F9F36B173182D900AF4276 /* UIActivityIndicatorView+Introspection.m */,
+				709C71CA1843BE8C006BB1DD /* UIControl+Introspection.h */,
+				709C71CB1843BE8C006BB1DD /* UIControl+Introspection.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2623,6 +2629,7 @@
 				7560DD1413B8ED3600268D13 /* NSObject+Notifications.h in Headers */,
 				7560DD1613B8ED3600268D13 /* CKNSObjectPropertyCellController.h in Headers */,
 				7560DD1813B8ED3600268D13 /* NSSet+Additions.h in Headers */,
+				709C71CC1843BE8C006BB1DD /* UIControl+Introspection.h in Headers */,
 				7560DD1A13B8ED3600268D13 /* NSString+Parsing.h in Headers */,
 				7560DD1C13B8ED3600268D13 /* NSString+URIQuery.h in Headers */,
 				7560DD1E13B8ED3600268D13 /* NSString+Validations.h in Headers */,
@@ -3215,6 +3222,7 @@
 				B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */,
 				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
 				96B3BCEB182BED9800978B85 /* CKCollectionContentCellController.m in Sources */,
+				709C71CD1843BE8C006BB1DD /* UIControl+Introspection.m in Sources */,
 				B0EA78A7156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm in Sources */,
 				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
 				962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */,
