@@ -41,7 +41,7 @@
         }
         
         if(![value isKindOfClass:[NSArray class]]){
-            return [NSArray array];
+            return value;
         }
         
         CKMappingContext* context = [CKMappingContext contextWithIdentifier:mappingIdentifier];
@@ -54,7 +54,7 @@
     
     request.completionBlock = ^(id value, NSHTTPURLResponse* response, NSError* error){
         CKDebugLog(@"%@", [NSString stringWithFormat:@"%@", bRequest.URL]);
-        if(error || response.statusCode >= 400){
+        if(error || response.statusCode >= 400 || ![value isKindOfClass:[NSArray class]]){
             if(errorBlock){
                 errorBlock(value, response, error);
             }
@@ -103,6 +103,7 @@
         
         if(![value isKindOfClass:[NSDictionary class]]){
             CKDebugLog(@"standardGetRequestForObject error (Invalid result type): %@", value);
+            return value;
         }
         else if (value) {
             CKMappingContext* context = [CKMappingContext contextWithIdentifier:identifier];
