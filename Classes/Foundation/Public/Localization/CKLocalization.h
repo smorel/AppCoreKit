@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "CKLocalizationManager.h"
 
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /**
  */
 NSString *CKLocalizationCurrentLocalization(void);
@@ -29,7 +35,10 @@ CKLocalizedString* CKLocalizedStringWithString(NSString* string);
 /**
  */
 UIImage* CKLocalizedImageNamed(NSString* imageNamed);
-
+    
+#ifdef __cplusplus
+}
+#endif
 
 /**
  */

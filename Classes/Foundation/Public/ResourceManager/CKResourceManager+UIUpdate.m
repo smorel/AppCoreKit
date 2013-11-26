@@ -14,7 +14,7 @@
 
 
 + (void)reloadViewController:(UIViewController*)controller controllerStack:(NSMutableSet*)controllerStack viewStack:(NSMutableSet*)viewStack{
-    if(controller == nil || [controllerStack containsObject:controller])
+    if(controller == nil || [controllerStack containsObject:controller] || ![controller isViewLoaded])
         return;
     
     [controllerStack addObject:controller];

@@ -273,4 +273,9 @@
 	return [self.carouselView visibleIndexPaths];
 }
 
+
+- (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index{
+    
+}
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "CKBreadCrumbViewController.h"
+#import "NSObject+Bindings.h"
 
 @interface CKTabViewController ()
 @property (nonatomic, retain, readwrite) CKTabView *tabBar;
