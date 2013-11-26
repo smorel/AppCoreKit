@@ -115,8 +115,8 @@
     };
     
     request.completionBlock = ^(id value, NSHTTPURLResponse* response, NSError* error){
-        if(error){
-            if(errorBlock || response.statusCode >= 400){
+        if(error || response.statusCode >= 400){
+            if(errorBlock){
                 errorBlock(value, response, error);
             }
         }
