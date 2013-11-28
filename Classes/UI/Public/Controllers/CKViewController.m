@@ -749,6 +749,9 @@
 }
 
 - (void)reapplyStylesheet{
+    if(!self.isViewLoaded)
+        return;
+    
     self.styleHasBeenApplied = NO;
     [self applyStylesheet:NO];
 }
