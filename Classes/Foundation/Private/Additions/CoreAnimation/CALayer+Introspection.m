@@ -111,4 +111,15 @@
     attributes.contentType = [CIFilter class];
 }
 
+
+- (void)postProcessAfterConversion{
+    if([self.contents isKindOfClass:[UIImage class]]){
+        self.contents = (id)[(UIImage*)self.contents CGImage];
+    }
+    
+    if(self.mask && CGRectEqualToRect( self.mask.frame, CGRectZero) ){
+        self.mask.frame = self.bounds;
+    }
+}
+
 @end

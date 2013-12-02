@@ -299,7 +299,7 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 	if(attributes.contentType != nil){
         
-		CKNSValueTransformerIdentifier converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:attributes.contentType];
+		CKNSValueTransformerIdentifier converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type ? type : attributes.contentType contentClass:attributes.contentType];
 		NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
 		
 		SEL selector = nil;
@@ -308,18 +308,18 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 		}
 		
 		if(selector == nil){
-			selector = [type convertFromObjectWithContentClassNameSelector:source];
+			selector = [(type ? type : attributes.contentType) convertFromObjectWithContentClassNameSelector:source];
             if(!selector){
                 selector = [attributes.contentType convertFromObjectSelector:source];
                 if(selector){
                     type = attributes.contentType;
                 }
             }
-			[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:type selector:selector];
+			[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:(type ? type : attributes.contentType) selector:selector];
 		}
 		
 		if(selector != nil){
-			id result = [type performSelector:selector withObject:source withObject:[attributes.contentType description]];
+			id result = [(type ? type : attributes.contentType) performSelector:selector withObject:source withObject:[attributes.contentType description]];
 			if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 				result = _(result);
 			}

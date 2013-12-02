@@ -16,4 +16,10 @@
     attributes.contentType = [UIImage class];
 }
 
+- (void)postProcessAfterConversion{
+    if([self.contents isKindOfClass:[UIImage class]]){
+        self.contents = (id)[(UIImage*)self.contents CGImage];
+    }
+}
+
 @end
