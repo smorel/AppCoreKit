@@ -20,6 +20,7 @@
 
 #import "CKResourceManager.h"
 #import "CKVersion.h"
+#import "UIView+CKLayout.h"
 
 
 @interface CKAnnotationView()
@@ -157,6 +158,18 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)setCamera:(MKMapCamera *)camera animated:(BOOL)animated{
     [super setCamera:camera animated:animated];
 }
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    
+    //Because on ios 6 and earlier MKMapView layoutSubViews seems not to call the super implementation
+    if([CKOSVersion() floatValue] < 7){
+        if(self.layoutBoxes && !self.containerLayoutBox){
+            [self performLayoutWithFrame:self.bounds];
+        }
+    }
+}
+
 @end
 
 
