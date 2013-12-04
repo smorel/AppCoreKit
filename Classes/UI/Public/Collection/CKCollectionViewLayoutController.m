@@ -34,9 +34,15 @@
 @property(nonatomic,retain,readwrite) UIImageView* beforeRotationImageView;
 @property(nonatomic,retain,readwrite) UIImageView* afterRotationImageView;
 @property(nonatomic,retain,readwrite) NSIndexPath* indexPathToReachAfterRotation;
+@property(nonatomic,assign) BOOL collectionViewHasBeenReloaded;
 @end
 
 @implementation CKCollectionViewLayoutController
+
+- (void)postInit{
+    [super postInit];
+    self.collectionViewHasBeenReloaded = NO;
+}
 
 #pragma Manages initialization
 
@@ -124,6 +130,11 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    if(!self.collectionViewHasBeenReloaded){
+        [self reload];
+        self.collectionViewHasBeenReloaded = YES;
+    }
     
     [self fetchMoreIfNeededFromIndexPath:nil];
 }
@@ -273,6 +284,9 @@
 #pragma mark CKObjectControllerDelegate
 
 - (void)didReload{
+    if(self.collectionView.window == nil)
+        return;
+    
    /* if(!self.isViewDisplayed){
         self.mapViewHasBeenReloaded = NO;
 		return;
@@ -282,13 +296,19 @@
 }
 
 - (void)didBeginUpdates{
+    if(self.collectionView.window == nil)
+        return;
 	//To implement in inherited class
 }
 
 - (void)didEndUpdates{
+    if(self.collectionView.window == nil)
+        return;
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(self.collectionView.window == nil)
+        return;
     /*if(!self.isViewDisplayed){
         self.mapViewHasBeenReloaded = NO;
 		return;
@@ -298,6 +318,8 @@
 }
 
 - (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(self.collectionView.window == nil)
+        return;
     /*if(!self.isViewDisplayed){
         self.mapViewHasBeenReloaded = NO;
 		return;
