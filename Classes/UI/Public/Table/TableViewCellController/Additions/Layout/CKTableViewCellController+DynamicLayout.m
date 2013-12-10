@@ -91,7 +91,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             if(parentController && parentController.orientation == CKTableViewOrientationPortrait){
                 CGFloat height = [(CKUITableViewCell*)self.tableViewCell preferedHeightConstraintToWidth:self.tableViewCell.contentView.width];
                 self.sizeHasBeenQueriedByTableView = NO;
-                return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
+                return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : (height + ((parentController.tableView.separatorStyle != UITableViewCellSeparatorStyleNone) ? 1 : 0)));
             }else if(parentController){
                 CGFloat width = [(CKUITableViewCell*)self.tableViewCell preferedWidthConstraintToHeight:self.tableViewCell.contentView.height];
                 self.sizeHasBeenQueriedByTableView = NO;
@@ -129,7 +129,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                 
                 CGFloat height = [view preferedHeightConstraintToWidth:view.contentView.width];
                 self.sizeHasBeenQueriedByTableView = NO;
-                return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
+                return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : (height + ((parentController.tableView.separatorStyle != UITableViewCellSeparatorStyleNone) ? 1 : 0)));
             }else if(parentController){
                 view.contentView.height = [self contentViewWidth];
                 view.contentView.width = 100;
