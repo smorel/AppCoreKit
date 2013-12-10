@@ -22,6 +22,7 @@
 
 static char UILabelFlexibleWidthKey;
 static char UILabelFlexibleHeightKey;
+static char UILabelUsesAttributedStringKey;
 
 @implementation UILabel (CKLayout)
 @dynamic flexibleWidth,flexibleHeight,flexibleSize;
@@ -80,9 +81,18 @@ static char UILabelFlexibleHeightKey;
     size.width -= self.padding.left + self.padding.right;
     size.height -= self.padding.top + self.padding.bottom;
     
-    CGSize maxSize = CGSizeMake(size.width, (self.numberOfLines > 0) ? self.numberOfLines * self.font.lineHeight : MAXFLOAT);
+    CGFloat theWidth = (self.maximumSize.width != MAXFLOAT) ? MIN(self.maximumSize.width,size.width) : size.width;
+    theWidth = (self.minimumSize.width != -MAXFLOAT) ? MAX(self.minimumSize.width,theWidth) : theWidth;
     
-    CGSize ret = (self.text == nil || ([self.text length] <= 0) || self.font.lineHeight == 0) ? CGSizeMake(0,0) : [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
+    CGSize maxSize = CGSizeMake(theWidth, (self.numberOfLines > 0) ? self.numberOfLines * self.font.lineHeight : MAXFLOAT);
+    
+    CGSize ret = CGSizeZero;
+    
+    if(![self usesAttributedString] && self.text && [self.text length] > 0){
+        ret = (self.font.lineHeight == 0) ? CGSizeMake(0,0) : [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
+    }else if(self.attributedText){
+        ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
+    }
     
     //Backward Compatibility
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){
@@ -115,8 +125,23 @@ static char UILabelFlexibleHeightKey;
     [super invalidateLayout];
 }
 
+
+- (void)setUsesAttributedString:(BOOL)bo{
+    objc_setAssociatedObject(self,
+                             &UILabelUsesAttributedStringKey,
+                             [NSNumber numberWithBool:bo],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)usesAttributedString{
+    id value = objc_getAssociatedObject(self, &UILabelUsesAttributedStringKey);
+    return value ? [value boolValue] : NO;
+}
+
 - (void)UILabel_Layout_setText:(NSString*)text{
     if(![text isEqualToString:self.text]){
+        [self setUsesAttributedString:NO];
+        
         [self UILabel_Layout_setText:text];
         
         if(self.numberOfLines == 1 && !CGSizeEqualToSize(self.fixedSize, CGSizeMake(MAXFLOAT, MAXFLOAT)) )
@@ -136,9 +161,22 @@ static char UILabelFlexibleHeightKey;
         [self invalidateLayout];
     }
 }
+- (void)UILabel_Layout_setAttributedText:(NSAttributedString*)attributedText{
+    if(![attributedText isEqualToAttributedString:self.attributedText]){
+        [self setUsesAttributedString:YES];
+        
+        [self UILabel_Layout_setAttributedText:attributedText];
+        
+        if(self.numberOfLines == 1 && !CGSizeEqualToSize(self.fixedSize, CGSizeMake(MAXFLOAT, MAXFLOAT)) )
+            return;
+        
+        [self invalidateLayout];
+    }
+}
 
 + (void)load{
     CKSwizzleSelector([UILabel class], @selector(setText:), @selector(UILabel_Layout_setText:));
+    CKSwizzleSelector([UILabel class], @selector(setAttributedText:), @selector(UILabel_Layout_setAttributedText:));
     CKSwizzleSelector([UILabel class], @selector(setFont:), @selector(UILabel_Layout_setFont:));
 }
 

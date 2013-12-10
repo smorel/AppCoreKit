@@ -10,6 +10,7 @@
 #import "UIView+CKLayout.h"
 #import "CKVerticalBoxLayout.h"
 #import "CKRuntime.h"
+#import <objc/runtime.h>
 #import "CKStringHelper.h"
 
 @interface CKLayoutBox()
@@ -18,6 +19,7 @@
 
 @end
 
+static char UITextFieldUsesAttributedStringKey;
 
 @implementation UITextField (CKLayout)
 
@@ -39,9 +41,17 @@
     size.width -= self.padding.left + self.padding.right;
     size.height -= self.padding.top + self.padding.bottom;
     
-    CGSize maxSize = CGSizeMake(size.width, MAXFLOAT);
+    CGFloat theWidth = (self.maximumSize.width != MAXFLOAT) ? MIN(self.maximumSize.width,size.width) : size.width;
+    theWidth = (self.minimumSize.width != -MAXFLOAT) ? MAX(self.minimumSize.width,theWidth) : theWidth;
     
-    CGSize ret = [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize maxSize = CGSizeMake(theWidth, MAXFLOAT);
+    
+    CGSize ret = CGSizeZero;
+    if(![self usesAttributedString] && self.text){
+        ret = [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
+    }else if(self.attributedText){
+        ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
+    }
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
@@ -62,6 +72,7 @@
 
 - (void)UITextField_Layout_setText:(NSString*)text{
     if(![text isEqualToString:self.text]){
+        [self setUsesAttributedString:NO];
         [self UITextField_Layout_setText:text];
         [self invalidateLayout];
     }
@@ -73,9 +84,30 @@
         [self invalidateLayout];
     }
 }
+- (void)UITextField_Layout_setAttributedText:(NSAttributedString*)attributedText{
+    if(![attributedText isEqualToAttributedString:self.attributedText]){
+        [self setUsesAttributedString:YES];
+        
+        [self UITextField_Layout_setAttributedText:attributedText];
+        
+        [self invalidateLayout];
+    }
+}
+- (void)setUsesAttributedString:(BOOL)bo{
+    objc_setAssociatedObject(self,
+                             &UITextFieldUsesAttributedStringKey,
+                             [NSNumber numberWithBool:bo],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)usesAttributedString{
+    id value = objc_getAssociatedObject(self, &UITextFieldUsesAttributedStringKey);
+    return value ? [value boolValue] : NO;
+}
 
 + (void)load{
     CKSwizzleSelector([UITextField class], @selector(setText:), @selector(UITextField_Layout_setText:));
+    CKSwizzleSelector([UITextField class], @selector(setAttributedText:), @selector(UITextField_Layout_setAttributedText:));
     CKSwizzleSelector([UITextField class], @selector(setFont:), @selector(UITextField_Layout_setFont:));
 }
 

@@ -43,6 +43,7 @@ static char UITextViewRegisteredOnTextNotificationKey;
 
 
 
+static char UITextViewUsesAttributedStringKey;
 
 @implementation UITextView (CKLayout)
 
@@ -90,15 +91,22 @@ static char UITextViewRegisteredOnTextNotificationKey;
     size.width -= self.padding.left + self.padding.right;
     size.height -= self.padding.top + self.padding.bottom;
     
-    CGSize maxSize = CGSizeMake(size.width, MAXFLOAT);
+    CGFloat theWidth = (self.maximumSize.width != MAXFLOAT) ? MIN(self.maximumSize.width,size.width) : size.width;
+    theWidth = (self.minimumSize.width != -MAXFLOAT) ? MAX(self.minimumSize.width,theWidth) : theWidth;
     
-    NSMutableString* str = [NSMutableString stringWithString:self.text];
-    //If ends by new line, adds an extra character for sizeWithFont to take this new line into account.
-    if([str length] > 0 && [str characterAtIndex:[str length] -1] == '\n'){
-        [str appendString:@"a"];
+    CGSize maxSize = CGSizeMake(theWidth, MAXFLOAT);
+    
+    CGSize ret = CGSizeZero;
+    if(![self usesAttributedString] && self.text){
+        NSMutableString* str = [NSMutableString stringWithString:self.text];
+        //If ends by new line, adds an extra character for sizeWithFont to take this new line into account.
+        if([str length] > 0 && [str characterAtIndex:[str length] -1] == '\n'){
+            [str appendString:@"a"];
+        }
+        ret = [CKStringHelper sizeForText:str font:self.font constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
+    }else if(self.attributedText){
+        ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
     }
-    
-    CGSize ret = [CKStringHelper sizeForText:str font:self.font constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
@@ -120,6 +128,7 @@ static char UITextViewRegisteredOnTextNotificationKey;
 
 - (void)UITextView_Layout_setText:(NSString*)text{
     if(![text isEqualToString:self.text]){
+        [self setUsesAttributedString:NO];
         [self UITextView_Layout_setText:text];
         [self invalidateLayout];
     }
@@ -131,9 +140,30 @@ static char UITextViewRegisteredOnTextNotificationKey;
         [self invalidateLayout];
     }
 }
+- (void)UITextView_Layout_setAttributedText:(NSAttributedString*)attributedText{
+    if(![attributedText isEqualToAttributedString:self.attributedText]){
+        [self setUsesAttributedString:YES];
+        
+        [self UITextView_Layout_setAttributedText:attributedText];
+        
+        [self invalidateLayout];
+    }
+}
+- (void)setUsesAttributedString:(BOOL)bo{
+    objc_setAssociatedObject(self,
+                             &UITextViewUsesAttributedStringKey,
+                             [NSNumber numberWithBool:bo],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)usesAttributedString{
+    id value = objc_getAssociatedObject(self, &UITextViewUsesAttributedStringKey);
+    return value ? [value boolValue] : NO;
+}
 
 + (void)load{
     CKSwizzleSelector([UITextView class], @selector(setText:), @selector(UITextView_Layout_setText:));
+    CKSwizzleSelector([UITextView class], @selector(setAttributedText:), @selector(UITextView_Layout_setAttributedText:));
     CKSwizzleSelector([UITextView class], @selector(setFont:), @selector(UITextView_Layout_setFont:));
     CKSwizzleSelector([UITextView class], @selector(setContentOffset:), @selector(UITextView_Layout_setContentOffset:));
     CKSwizzleSelector([UITextView class], @selector(dealloc),  @selector(UITextView_Layout_dealloc));
