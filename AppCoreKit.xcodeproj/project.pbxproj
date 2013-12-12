@@ -3384,6 +3384,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
@@ -3405,6 +3406,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "i386 armv7 armv7s";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -3413,6 +3415,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
@@ -3434,6 +3437,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "i386 armv7 armv7s";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
