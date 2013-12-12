@@ -370,26 +370,40 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
     // self.pinchGestureRecognizer.enabled = NO;
      
      //[[VARApplication sharedInstance]setSearchSelectedItem:focus ? (floorf(item) + 0.5) : -1];
-     
-     CKAnimationPropertyInterpolator* interpolator = [CKAnimationPropertyInterpolator animationWithObject:self keyPath:@"morphRatio"];
-     interpolator.values = @[[NSNumber numberWithFloat:self.morphRatio],[NSNumber numberWithFloat:ratio]];
-    interpolator.duration = animationDuration * (self.toggleSlowAnimations ? 10 : 1);
-     interpolator.options = CKAnimationOptionForwards;
-     interpolator.eventBlock = ^(CKAnimation* animation, CKAnimationEvents event){
-         if(event == CKAnimationEventEnd){
-             self.viewOfInterest = nil;
-             self.isMorphing = NO;
-             
-             if(self.delegate){
-                 [self.delegate morphableLayout:self didMorphFormRatio:self.startMorphRatioForDelegate toRatio:self.endMorphRatioForDelegate];
-             }
-             
-             if(completion){
-                 completion();
-             }
-         }
-     };
-     [interpolator startInManager:self.animationManager];
+    if(animationDuration != 0){
+        CKAnimationPropertyInterpolator* interpolator = [CKAnimationPropertyInterpolator animationWithObject:self keyPath:@"morphRatio"];
+        interpolator.values = @[[NSNumber numberWithFloat:self.morphRatio],[NSNumber numberWithFloat:ratio]];
+        interpolator.duration = animationDuration * (self.toggleSlowAnimations ? 10 : 1);
+        interpolator.options = CKAnimationOptionForwards;
+        interpolator.eventBlock = ^(CKAnimation* animation, CKAnimationEvents event){
+            if(event == CKAnimationEventEnd){
+                self.viewOfInterest = nil;
+                self.isMorphing = NO;
+                
+                if(self.delegate){
+                    [self.delegate morphableLayout:self didMorphFormRatio:self.startMorphRatioForDelegate toRatio:self.endMorphRatioForDelegate];
+                }
+                
+                if(completion){
+                    completion();
+                }
+            }
+        };
+        [interpolator startInManager:self.animationManager];
+    }else{
+        self.morphRatio = ratio;
+        
+        self.viewOfInterest = nil;
+        self.isMorphing = NO;
+        
+        if(self.delegate){
+            [self.delegate morphableLayout:self didMorphFormRatio:self.startMorphRatioForDelegate toRatio:self.endMorphRatioForDelegate];
+        }
+        
+        if(completion){
+            completion();
+        }
+    }
 }
 
 

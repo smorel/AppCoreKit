@@ -18,4 +18,9 @@
 
 @property(nonatomic,retain,readonly) UICollectionView* collectionView;
 
+/** Default value is YES.
+    Enabling this flag will optimize device orientation changes by taking a snapshot of the collectionView before and after rotation, hidding the collection view and cross fading between the 2 snapshots.
+ */
+@property(nonatomic,assign) BOOL optimizedOrientationChangedEnabled;
+
 @end

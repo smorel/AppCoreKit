@@ -42,6 +42,7 @@
 - (void)postInit{
     [super postInit];
     self.collectionViewHasBeenReloaded = NO;
+    self.optimizedOrientationChangedEnabled = YES;
 }
 
 #pragma Manages initialization
@@ -149,11 +150,14 @@
     CKCollectionViewLayout* myLayout = (CKCollectionViewLayout*)[[self collectionView] collectionViewLayout];
     self.indexPathToReachAfterRotation = [myLayout indexPathForViewOfInterest];
     
-    UIImage* image = [self.collectionView snapshot];
-    self.beforeRotationImageView.hidden = NO;
-    self.beforeRotationImageView.alpha = 1;
-    self.afterRotationImageView.alpha = 0;
-    self.beforeRotationImageView.image = image;
+    if(self.optimizedOrientationChangedEnabled){
+        UIImage* image = [self.collectionView snapshot];
+        self.beforeRotationImageView.hidden = NO;
+        self.beforeRotationImageView.alpha = 1;
+        self.afterRotationImageView.alpha = 0;
+        self.beforeRotationImageView.image = image;
+    }
+    
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
@@ -170,28 +174,30 @@
     
     [self.collectionView layoutSubviews];
     
-    
     CGPoint p = [myLayout contentOffsetForViewAtIndexPath:self.indexPathToReachAfterRotation];
     [self.collectionView setContentOffset:p animated:NO];
     
-    self.beforeRotationImageView.hidden = YES;
     
-    UIImage* image = [self.collectionView snapshot];
-    self.afterRotationImageView.hidden = NO;
-    self.afterRotationImageView.image = image;
-    
-    self.beforeRotationImageView.hidden = NO;
-    
-    self.collectionView.hidden = YES;
-    
-    [UIView animateWithDuration:.3 animations:^{
-        self.afterRotationImageView.alpha = 0;
-        self.afterRotationImageView.alpha = 1;
-    }completion:^(BOOL finished) {
+    if(self.optimizedOrientationChangedEnabled){
         self.beforeRotationImageView.hidden = YES;
-        self.afterRotationImageView.hidden = YES;
-        self.collectionView.hidden = NO;
-    }];
+        
+        UIImage* image = [self.collectionView snapshot];
+        self.afterRotationImageView.hidden = NO;
+        self.afterRotationImageView.image = image;
+        
+        self.beforeRotationImageView.hidden = NO;
+        
+        self.collectionView.hidden = YES;
+        
+        [UIView animateWithDuration:.3 animations:^{
+            self.afterRotationImageView.alpha = 0;
+            self.afterRotationImageView.alpha = 1;
+        }completion:^(BOOL finished) {
+            self.beforeRotationImageView.hidden = YES;
+            self.afterRotationImageView.hidden = YES;
+            self.collectionView.hidden = NO;
+        }];
+    }
 }
 
 #pragma Managing DataSource and cells
@@ -212,7 +218,6 @@
     if([self.collectionView.collectionViewLayout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
         CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)self.collectionView.collectionViewLayout;
         if(morphableLayout.isMorphing){
-            
             CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
             //TODO : Removes this check when CKCollectionContentCellController will be merged with CKCollectionCellController
             if([controller isKindOfClass:[CKCollectionContentCellController class]]){
@@ -223,6 +228,17 @@
                     
                     id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
                     [morphableDelegate morphableLayout:morphableLayout willMorphFormRatio:morphableLayout.startMorphRatioForDelegate toRatio:morphableLayout.endMorphRatioForDelegate];
+                }
+            }
+        }else{
+            CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
+            //TODO : Removes this check when CKCollectionContentCellController will be merged with CKCollectionCellController
+            if([controller isKindOfClass:[CKCollectionContentCellController class]]){
+                CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
+                CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
+                if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
+                    id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
+                    [morphableDelegate morphableLayout:morphableLayout didMorphFormRatio:morphableLayout.morphRatio toRatio:morphableLayout.morphRatio];
                 }
             }
         }
@@ -325,7 +341,15 @@
 		return;
     }*/
     
-    [self.collectionView deleteItemsAtIndexPaths:indexPaths];
+    @try {
+        [self.collectionView deleteItemsAtIndexPaths:indexPaths];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception.description);
+    }
+    @finally {
+        
+    }
 }
 
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
@@ -370,9 +394,11 @@
         if([controller isKindOfClass:[CKCollectionContentCellController class]]){
             CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
             CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
-            if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
-                id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
-                [morphableDelegate morphableLayout:morphableLayout willMorphFormRatio:ratio toRatio:toRatio];
+            if(contentViewController.contentViewCell != nil){
+                if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
+                    id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
+                    [morphableDelegate morphableLayout:morphableLayout willMorphFormRatio:ratio toRatio:toRatio];
+                }
             }
         }
     }
@@ -386,9 +412,11 @@
         if([controller isKindOfClass:[CKCollectionContentCellController class]]){
             CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
             CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
-            if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
-                id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
-                [morphableDelegate morphableLayout:morphableLayout didMorphFormRatio:ratio toRatio:toRatio];
+            if(contentViewController.contentViewCell != nil){
+                if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
+                    id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
+                    [morphableDelegate morphableLayout:morphableLayout didMorphFormRatio:ratio toRatio:toRatio];
+                }
             }
         }
     }
@@ -402,9 +430,11 @@
         if([controller isKindOfClass:[CKCollectionContentCellController class]]){
             CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
             CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
-            if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
-                id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
-                [morphableDelegate morphableLayout:morphableLayout isMorphingWithRatio:ratio velocity:velocity];
+            if(contentViewController.contentViewCell != nil){
+                if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
+                    id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
+                    [morphableDelegate morphableLayout:morphableLayout isMorphingWithRatio:ratio velocity:velocity];
+                }
             }
         }
     }
