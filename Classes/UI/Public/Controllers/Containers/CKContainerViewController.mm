@@ -338,6 +338,11 @@ typedef void(^CKTransitionBlock)();
                     if([CKOSVersion() floatValue] < 5){
                         [bOldController viewDidDisappear:YES];
                     }
+                    
+                    if(oldController){
+                        [oldController.view removeFromSuperview];
+                    }
+                    
                     [bOldController release];
                 }
                 if(bNewController){
@@ -348,10 +353,11 @@ typedef void(^CKTransitionBlock)();
                 }
             };
             
+            
             if(oldController){
                 [bOldController retain];
-                [oldController.view removeFromSuperview];
             }
+            
             if(newController){
                 [bNewController retain];
                 [containerView addSubview:newController.view];
@@ -361,9 +367,6 @@ typedef void(^CKTransitionBlock)();
             [bNewController retain];
             [bOldController retain];
             
-            if(bOldController){
-                [bOldController.view removeFromSuperview];
-            }
             if(bNewController){
                 [containerView addSubview:bNewController.view];
             }
@@ -377,6 +380,11 @@ typedef void(^CKTransitionBlock)();
                                     if([CKOSVersion() floatValue] < 5){
                                         [bOldController viewDidDisappear:YES];
                                     }
+                                    
+                                    if(bOldController){
+                                        [bOldController.view removeFromSuperview];
+                                    }
+                                    
                                     [bOldController release];
                                 }
                                 if(bNewController){

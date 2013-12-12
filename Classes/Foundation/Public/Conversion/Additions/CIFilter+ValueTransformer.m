@@ -17,41 +17,40 @@
 + (NSDictionary*)predefinedKeysDictionary{
     static NSMutableDictionary* keys = nil;
     if(!keys){
-        
         if([CKOSVersion() floatValue] >= 5){
             [keys addEntriesFromDictionary:@{
-                @"kCIInputImageKey" : kCIInputImageKey,
-                @"kCIInputBackgroundImageKey" : kCIInputBackgroundImageKey,
-                @"kCIOutputImageKey" : kCIOutputImageKey
+                @"kCIInputImageKey" : @"inputImage",
+                @"kCIInputBackgroundImageKey" : @"inputBackgroundImage",
+                @"kCIOutputImageKey" : @"outputImage"
             }];
         }
         
         if([CKOSVersion() floatValue] >= 6){
             [keys addEntriesFromDictionary:@{
-                @"kCIInputVersionKey" : kCIInputVersionKey
+                @"kCIInputVersionKey" : @"InputVersion"
             }];
         }
         
         if([CKOSVersion() floatValue] >= 7){
             [keys addEntriesFromDictionary:@{
-                @"kCIInputExtentKey" : kCIInputExtentKey,
-                @"kCIInputTargetImageKey" : kCIInputTargetImageKey,
-                @"kCIInputMaskImageKey" : kCIInputMaskImageKey,
-                @"kCIInputContrastKey" : kCIInputContrastKey,
-                @"kCIInputBrightnessKey" : kCIInputBrightnessKey,
-                @"kCIInputColorKey" : kCIInputColorKey,
-                @"kCIInputSaturationKey" : kCIInputSaturationKey,
-                @"kCIInputEVKey" : kCIInputEVKey,
-                @"kCIInputIntensityKey" : kCIInputIntensityKey,
-                @"kCIInputSharpnessKey" : kCIInputSharpnessKey,
-                @"kCIInputWidthKey" : kCIInputWidthKey,
-                @"kCIInputAngleKey" : kCIInputAngleKey,
-                @"kCIInputRadiusKey" : kCIInputRadiusKey,
-                @"kCIInputCenterKey" : kCIInputCenterKey,
-                @"kCIInputAspectRatioKey" : kCIInputAspectRatioKey,
-                @"kCIInputScaleKey" : kCIInputScaleKey,
-                @"kCIInputTransformKey" : kCIInputTransformKey,
-                @"kCIInputTimeKey" : kCIInputTimeKey
+                @"kCIInputExtentKey" : @"inputExtent",
+                @"kCIInputTargetImageKey" : @"inputTargetImage",
+                @"kCIInputMaskImageKey" : @"inputMaskImage",
+                @"kCIInputContrastKey" : @"inputContrast",
+                @"kCIInputBrightnessKey" : @"inputBrightness",
+                @"kCIInputColorKey" : @"inputColor",
+                @"kCIInputSaturationKey" : @"inputSaturation",
+                @"kCIInputEVKey" : @"inputEV",
+                @"kCIInputIntensityKey" : @"inputIntensity",
+                @"kCIInputSharpnessKey" : @"inputSharpness",
+                @"kCIInputWidthKey" : @"inputWidth",
+                @"kCIInputAngleKey" : @"inputAngle",
+                @"kCIInputRadiusKey" : @"inputRadius",
+                @"kCIInputCenterKey" : @"inputCenter",
+                @"kCIInputAspectRatioKey" : @"inputAspectRatio",
+                @"kCIInputScaleKey" : @"inputScale",
+                @"kCIInputTransformKey" : @"inputTransform",
+                @"kCIInputTimeKey" : @"inputTime"
             }];
         }
     }

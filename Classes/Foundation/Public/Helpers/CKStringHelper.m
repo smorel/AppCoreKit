@@ -17,7 +17,7 @@
     }
     
     if([CKOSVersion() floatValue] >= 7){
-        NSAttributedString *attributedText = [[[NSAttributedString alloc] initWithString:text attributes:@{ NSFontAttributeName: font }]autorelease];
+        NSAttributedString *attributedText = [[[NSAttributedString alloc] initWithString:text attributes:@{ @"NSFont" /*NSFontAttributeName*/ : font }]autorelease];
         return [self sizeForAttributedText:attributedText constrainedToSize:size];
     }
     return [text sizeWithFont:font constrainedToSize:size lineBreakMode:lineBreakMode];
@@ -29,7 +29,7 @@
     }
     
     CGRect rect = [attributedText boundingRectWithSize:size
-                                               options:NSStringDrawingUsesLineFragmentOrigin
+                                               options:(1 << 0) //NSStringDrawingUsesLineFragmentOrigin
                                                context:nil];
     
     CGFloat floorWidth  = floor(rect.size.width);

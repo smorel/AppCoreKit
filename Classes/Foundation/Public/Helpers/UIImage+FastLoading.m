@@ -73,6 +73,8 @@ typedef struct
                                                        cs,
                                                        info.bitmapInfo
                                                        );
+    if(!bitmapContext)
+        return nil;
     
     void * targetData = CGBitmapContextGetData(bitmapContext);
     fread(targetData,1,length,f);
