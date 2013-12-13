@@ -300,13 +300,13 @@
 #pragma mark CKObjectControllerDelegate
 
 - (void)didReload{
-    if(self.collectionView.window == nil)
-        return;
-    
-   /* if(!self.isViewDisplayed){
-        self.mapViewHasBeenReloaded = NO;
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
 		return;
-    }*/
+    }
+    
+   // if(self.collectionView.window == nil)
+    //    return;
     
     [self.collectionView reloadData];
 }
@@ -323,23 +323,25 @@
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
     if(self.collectionView.window == nil)
         return;
-    /*if(!self.isViewDisplayed){
-        self.mapViewHasBeenReloaded = NO;
-		return;
-    }*/
     
 	[self.collectionView insertItemsAtIndexPaths:indexPaths];
 }
 
 - (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
     if(self.collectionView.window == nil)
         return;
-    /*if(!self.isViewDisplayed){
-        self.mapViewHasBeenReloaded = NO;
-		return;
-    }*/
     
     @try {
         [self.collectionView deleteItemsAtIndexPaths:indexPaths];

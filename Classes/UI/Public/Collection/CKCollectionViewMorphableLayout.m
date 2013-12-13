@@ -46,6 +46,9 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
 @property(nonatomic,retain,readwrite) NSIndexPath* viewOfInterest;
 @property(nonatomic,assign) CGFloat startMorphRatioForDelegate;
 @property(nonatomic,assign) CGFloat endMorphRatioForDelegate;
+
+@property(nonatomic,retain) NSMutableArray* deleteIndexPaths;
+@property(nonatomic,retain) NSMutableArray* insertIndexPaths;
 @end
 
 @implementation CKCollectionViewMorphableLayout
@@ -240,10 +243,6 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
 
 //For pinch gesture management
 
-
-- (void)prepareForCollectionViewUpdates:(NSArray *)updateItems{
-}
-
 - (void)prepareLayout{
     if(!self.animationManager){
         if(self.collectionView.window){
@@ -279,10 +278,12 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
     
     UICollectionViewLayoutAttributes *attributes =  [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     attributes.frame = frame;
+    attributes.alpha = 1;
     attributes.zIndex = MAX(attributeFirst.zIndex,attributeSecond.zIndex);
     
     return attributes;
 }
+
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect{
     NSMutableArray* array = [NSMutableArray array];
@@ -587,6 +588,59 @@ CGPoint CGPointInterpolate(CGPoint from, CGPoint to, CGFloat ratio){
     CKCollectionViewLayout* l = [self currentLayout];
     [l invalidateLayoutWithContext:context];
 }*/
+
+- (void)prepareForCollectionViewUpdates:(NSArray *)updateItems
+{
+    // Keep track of insert and delete index paths
+    [super prepareForCollectionViewUpdates:updateItems];
+    
+    self.deleteIndexPaths = [NSMutableArray array];
+    self.insertIndexPaths = [NSMutableArray array];
+    
+    for (UICollectionViewUpdateItem *update in updateItems)
+    {
+        if (update.updateAction == UICollectionUpdateActionDelete)
+        {
+            [self.deleteIndexPaths addObject:update.indexPathBeforeUpdate];
+        }
+        else if (update.updateAction == UICollectionUpdateActionInsert)
+        {
+            [self.insertIndexPaths addObject:update.indexPathAfterUpdate];
+        }
+    }
+}
+
+- (void)finalizeCollectionViewUpdates
+{
+    [super finalizeCollectionViewUpdates];
+    // release the insert and delete index paths
+    self.deleteIndexPaths = nil;
+    self.insertIndexPaths = nil;
+}
+
+- (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
+{
+    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:itemIndexPath];
+    
+    if ([self.insertIndexPaths containsObject:itemIndexPath])
+    {
+        attributes.alpha = 0.0;
+    }
+    
+    return attributes;
+}
+
+- (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
+{
+    UICollectionViewLayoutAttributes *attributes =  [self layoutAttributesForItemAtIndexPath:itemIndexPath];
+    
+    if ([self.deleteIndexPaths containsObject:itemIndexPath])
+    {
+        attributes.alpha = 0.0;
+    }
+    
+    return attributes;
+}
 
 @end
 
