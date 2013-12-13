@@ -1072,9 +1072,9 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 
 - (void)processImportsForDictionary:(NSMutableDictionary*)dictionary withMainExtension:(NSString*)mainExtension{
 	NSArray* importArray = [dictionary objectForKey:CKCascadingTreeImport];
-	for(NSString* import in importArray){
+	for(NSString* importString in importArray){
         //TODO
-        NSString* fileAndExtension = [import lastPathComponent];
+        NSString* fileAndExtension = [importString lastPathComponent];
         NSRange dotRange = [fileAndExtension rangeOfString:@"."];
         NSString* importFileName = (dotRange.location != NSNotFound) ? [fileAndExtension substringWithRange:NSMakeRange(0,dotRange.location)] : fileAndExtension;
         NSString* importFileExtension = (dotRange.location != NSNotFound) ? [fileAndExtension substringFromIndex:dotRange.location+1] : nil;

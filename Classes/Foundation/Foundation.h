@@ -58,8 +58,8 @@
 #import "CKCascadingTree.h"
 
 //Type Ahead
-#import "CKTypeAhead.h"
-#import "CKTypeAhead+Generator.h"
+//#import "CKTypeAhead.h"
+//#import "CKTypeAhead+Generator.h"
 
 //Object Graph
 #import "CKObjectGraph.h"
