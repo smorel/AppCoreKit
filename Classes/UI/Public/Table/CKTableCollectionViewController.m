@@ -50,6 +50,8 @@
 
 - (void)sizeToFit;
 
+- (void)adjustTableViewInsets;
+
 @end
 
 /********************************* CKTableCollectionViewController  *********************************
@@ -1270,7 +1272,7 @@
             [UIView beginAnimations:nil context:nil];
             [UIView setAnimationDuration:animationDuration];
             [UIView setAnimationCurve:animationCurve];
-            [self viewDidLayoutSubviews];
+            [self adjustTableViewInsets];
             
             [UIView commitAnimations];
         }

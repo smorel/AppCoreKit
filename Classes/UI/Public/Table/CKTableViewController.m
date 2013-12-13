@@ -229,25 +229,13 @@
     return [super navigationControllerTransparencyInsets];
 }
 
-- (void)sizeToFit{
-    if(self.view.window == nil)
-        return;
-    
-    if(self.orientation == CKTableViewOrientationLandscape)
-        return;
-    
+- (void)adjustTableViewInsets{
     UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     
-    UIEdgeInsets oldInsets = self.tableView.contentInset;
-    CGPoint oldOffset = self.tableView.contentOffset;
-    
-    CGFloat oldOffsetFromTop =  oldInsets.top + oldOffset.y;
     
     UIEdgeInsets newInsets = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom,0);
     self.tableView.contentInset = newInsets;
     
-    CGPoint newOffset = CGPointMake(oldOffset.x, oldOffsetFromTop - self.tableView.contentInset.top);
-    self.tableView.contentOffset = newOffset;
     
     CGRect frame = self.view.bounds;
     CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
@@ -269,7 +257,33 @@
                                                             additionalScrollIndicatorInsets.left,
                                                             insets.bottom + additionalScrollIndicatorInsets.bottom,
                                                             additionalScrollIndicatorInsets.right);
+
+}
+
+- (void)sizeToFit{
+    if(self.view.window == nil)
+        return;
     
+    if(self.orientation == CKTableViewOrientationLandscape)
+        return;
+    
+    [self adjustTableViewInsets];
+    
+    UIEdgeInsets oldInsets = self.tableView.contentInset;
+    CGPoint oldOffset = self.tableView.contentOffset;
+    
+    CGFloat oldOffsetFromTop =  oldInsets.top + oldOffset.y;
+    
+    CGPoint newOffset = CGPointMake(oldOffset.x, oldOffsetFromTop - self.tableView.contentInset.top);
+    self.tableView.contentOffset = newOffset;
+    
+    UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
+    
+    CGRect frame = self.view.bounds;
+    CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
+    if(height > (self.view.bounds.size.height + insets.bottom)){
+        height = self.view.bounds.size.height + insets.bottom;
+    }
     
     self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,
                                                               0,

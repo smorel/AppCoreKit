@@ -1180,7 +1180,7 @@
     CKAssert([self.containerController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
     CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
     [tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
-                                         atScrollPosition:UITableViewScrollPositionTop 
+                                         atScrollPosition:UITableViewScrollPositionMiddle 
                                                  animated:YES];
 }
 
