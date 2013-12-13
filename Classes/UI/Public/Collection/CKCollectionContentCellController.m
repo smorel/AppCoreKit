@@ -22,7 +22,7 @@
 @end
 
 @implementation CKCollectionContentCellController
-@synthesize deselectionCallback;
+@synthesize deselectionCallback = _deselectionCallback;
 
 - (id)initWithContentViewController:(CKCollectionCellContentViewController*)contentViewController{
     self = [super init];
@@ -33,7 +33,7 @@
 
 - (void)dealloc{
     [_contentViewController release];
-    [_contentViewController release];
+    [_deselectionCallback release];
     [super dealloc];
 }
 

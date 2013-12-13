@@ -817,6 +817,7 @@
         CKAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
         
         NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
+        
         [controllers insertObject:controller atIndex:[indexPath row]];
         
         [controller performSelector:@selector(setContainerController:) withObject:self];
