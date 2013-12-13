@@ -762,6 +762,11 @@
 
 - (void) createsItemViewControllers{
     self.sectionsToControllers = [NSMutableArray array];
+    self.viewsToControllers = [NSMutableDictionary dictionary];
+    self.viewsToIndexPath = [NSMutableDictionary dictionary];
+    self.indexPathToViews = [NSMutableDictionary dictionary];
+    self.weakViews = [NSMutableArray array];
+    
     
     //creates all viewControllers
     NSInteger sectionCount = [self numberOfSections];
