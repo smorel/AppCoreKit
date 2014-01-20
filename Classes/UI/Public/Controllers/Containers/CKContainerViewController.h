@@ -86,6 +86,10 @@ typedef NS_ENUM(NSInteger, CKTransitionType){
  */
 - (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition;
 
+/**
+ */
+- (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition completion:(void (^)())completion;
+
 @end
 
 
