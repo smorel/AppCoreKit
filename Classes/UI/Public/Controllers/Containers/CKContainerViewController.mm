@@ -292,7 +292,7 @@ typedef void(^CKTransitionBlock)();
 
 //
 
-- (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
+- (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition completion:(void (^)())completion {
     if([self isViewLoaded]){
 	//CKAssert(index < [self.viewControllers count], @"No viewController at index: %d", index);
         if(index >= [self.viewControllers count] )
@@ -351,6 +351,9 @@ typedef void(^CKTransitionBlock)();
                     }
                     [bNewController release];
                 }
+                if (completion) {
+                    completion();
+                }
             };
             
             
@@ -393,11 +396,18 @@ typedef void(^CKTransitionBlock)();
                                     }
                                     [bNewController release];
                                 }
+                                if (completion) {
+                                    completion();
+                                }
                             }];
         }
         [self setNavigationItemFromViewController:newController];
     }
 	_selectedIndex = index;
+}
+
+- (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
+    [self presentViewControllerAtIndex:index withTransition:transition completion:nil];
 }
 
 
