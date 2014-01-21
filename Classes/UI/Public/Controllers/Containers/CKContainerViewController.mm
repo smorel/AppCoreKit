@@ -351,6 +351,9 @@ typedef void(^CKTransitionBlock)();
                     }
                     [bNewController release];
                 }
+                if (completion) {
+                    completion();
+                }
             };
             
             
