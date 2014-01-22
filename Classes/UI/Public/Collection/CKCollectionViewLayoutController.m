@@ -29,12 +29,13 @@
 @end
 
 @interface CKCollectionViewLayoutController ()
-@property(nonatomic,retain,readwrite) CKCollectionViewLayout* layout;
+//@property(nonatomic,retain,readwrite) CKCollectionViewLayout* layout;
 @property(nonatomic,retain,readwrite) UICollectionView* collectionView;
 @property(nonatomic,retain,readwrite) UIImageView* beforeRotationImageView;
 @property(nonatomic,retain,readwrite) UIImageView* afterRotationImageView;
 @property(nonatomic,retain,readwrite) NSIndexPath* indexPathToReachAfterRotation;
 @property(nonatomic,assign) BOOL collectionViewHasBeenReloaded;
+@property (nonatomic, assign, readwrite) BOOL scrolling;
 @end
 
 @implementation CKCollectionViewLayoutController
@@ -61,23 +62,31 @@
 
 
 - (void)setupWithLayout:(CKCollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
-    if([self.layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
-        CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)self.layout;
+    self.layout = theLayout;
+    [self setupWithCollection:collection factory:factory];
+}
+
+- (void)setLayout:(CKCollectionViewLayout *)theLayout{
+    [self willChangeValueForKey:@"layout"];
+    
+    if([_layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
+        CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)_layout;
         morphableLayout.delegate = nil;
     }
     
-    self.layout = theLayout;
+    [_layout release];
+    _layout = [theLayout retain];
     
-    if([self.layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
-        CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)self.layout;
+    if([theLayout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
+        CKCollectionViewMorphableLayout* morphableLayout = (CKCollectionViewMorphableLayout*)theLayout;
         morphableLayout.delegate = self;
     }
     
     if([self isViewLoaded]){
-        [self.collectionView setCollectionViewLayout:self.layout animated:YES];
+        [self.collectionView setCollectionViewLayout:theLayout animated:YES];
     }
     
-    [self setupWithCollection:collection factory:factory];
+    [self didChangeValueForKey:@"layout"];
 }
 
 - (void)dealloc{
@@ -368,23 +377,27 @@
     if(self.autoFetchCollections){
         [self fetchMoreData];
     }
+    self.scrolling = NO;
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
 	if(self.autoFetchCollections){
         [self fetchMoreData];
     }
+    self.scrolling = NO;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 	if(self.autoFetchCollections){
         [self fetchMoreData];
     }
+    self.scrolling = NO;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    self.scrolling = YES;
 }
+
 
 #pragma mark CKCollectionViewMorphableLayoutDelegate
 

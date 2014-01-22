@@ -18,9 +18,20 @@
 
 @property(nonatomic,retain,readonly) UICollectionView* collectionView;
 
+@property(nonatomic,retain) CKCollectionViewLayout* layout;
+
 /** Default value is YES.
     Enabling this flag will optimize device orientation changes by taking a snapshot of the collectionView before and after rotation, hidding the collection view and cross fading between the 2 snapshots.
  */
 @property(nonatomic,assign) BOOL optimizedOrientationChangedEnabled;
+
+
+///-----------------------------------
+/// @name Scrolling
+///-----------------------------------
+/**
+ Returns the scrolling state of the table. Somebody can bind himself on this property to act depending on the scrolling state for example.
+ */
+@property (nonatomic, assign, readonly) BOOL scrolling;
 
 @end
