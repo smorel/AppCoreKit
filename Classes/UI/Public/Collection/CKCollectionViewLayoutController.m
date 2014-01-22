@@ -308,6 +308,80 @@
 
 #pragma mark CKObjectControllerDelegate
 
+/*
+- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
+    if(self.collectionView.window == nil)
+        return;
+    
+	[super objectController:controller insertObject:object atIndexPath:indexPath ];
+}
+
+- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
+    if(self.collectionView.window == nil)
+        return;
+    
+	[super objectController:controller removeObject:object atIndexPath:indexPath ];
+}*/
+
+- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
+    if(self.collectionView.window == nil)
+        return;
+    
+	[super objectController:controller insertObjects:objects atIndexPaths:indexPaths ];
+}
+
+- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
+    if(self.collectionView.window == nil)
+        return;
+    
+	[super objectController:controller removeObjects:objects atIndexPaths:indexPaths ];
+}
+
+- (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
+    if(self.collectionView.window == nil)
+        return;
+    
+	[super objectController:controller removeSectionAtIndex:index];
+}
+
+- (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index{
+    if(!self.isViewDisplayed){
+        self.collectionViewHasBeenReloaded = NO;
+		return;
+    }
+    
+    if(self.collectionView.window == nil)
+        return;
+    
+	[super objectController:controller removeSectionAtIndex:index];
+}
+
+
 - (void)didReload{
     if(!self.isViewDisplayed){
         self.collectionViewHasBeenReloaded = NO;
