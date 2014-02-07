@@ -128,6 +128,10 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
  */
 - (NSInteger)indexOfObjectIdenticalTo:(id)object;
 
+/**
+ */
+- (NSInteger)indexOfObject:(id)object;
+
 ///-----------------------------------
 /// @name Adding Objects
 ///-----------------------------------

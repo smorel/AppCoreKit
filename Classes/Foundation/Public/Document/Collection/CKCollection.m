@@ -192,6 +192,10 @@
     return [[self allObjects]indexOfObjectIdenticalTo:object];
 }
 
+- (NSInteger)indexOfObject:(id)object{
+    return [[self allObjects]indexOfObject:object];
+}
+
 - (void)addObserver:(id)object{
 	CKAssert(NO,@"Abstract Implementation");
 }
