@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+typedef enum CKActionSheetImageAlignment{
+    CKActionSheetImageAlignmentLeft,
+    CKActionSheetImageAlignmentRight
+}CKActionSheetImageAlignment;
+
 typedef void (^CKActionSheetActionBlock)();
 
 /** Simplified interface for the UIActionSheet.
@@ -55,6 +60,18 @@ typedef void (^CKActionSheetActionBlock)();
  */
 - (void)addButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock;
 
+
+/**
+ Adds a button.
+ @param title The title of the new button.
+ @param image The image of the new button.
+ @param imageAlignment The alignment of the image in the new button.
+ @param actionBlock The block to be executed when the button it pressed. Pass `nil` if you do not want any action to be executed.
+ @see addCancelButtonWithTitle:action:
+ @see addDestructiveButtonWithTitle:action:
+ */
+- (void)addButtonWithTitle:(NSString *)title image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment action:(void (^)(void))actionBlock;
+
 /** 
  Adds a button with the Cancel style.
  @warning This method can be called only once per instance of CKActionSheet. Calling this method more times will generate an assertion.
@@ -65,6 +82,18 @@ typedef void (^CKActionSheetActionBlock)();
  */
 - (void)addCancelButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock;
 
+/**
+ Adds a button with the Cancel style.
+ @warning This method can be called only once per instance of CKActionSheet. Calling this method more times will generate an assertion.
+ @param title The title of the new button.
+ @param image The image of the new button.
+ @param imageAlignment The alignment of the image in the new button.
+ @param actionBlock The block to be executed when the button it pressed. Pass `nil` if you do not want any action to be executed.
+ @see addButtonWithTitle:action:
+ @see addDestructiveButtonWithTitle:action:
+ */
+- (void)addCancelButtonWithTitle:(NSString *)title image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment action:(void (^)(void))actionBlock;
+
 /** 
  Adds a button with the Destructive style.
  @warning This method can be called only once per instance of CKActionSheet. Calling this method more times will generate an assertion.
@@ -74,6 +103,18 @@ typedef void (^CKActionSheetActionBlock)();
  @see addCancelButtonWithTitle:action:
  */
 - (void)addDestructiveButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock;
+
+/**
+ Adds a button with the Destructive style.
+ @warning This method can be called only once per instance of CKActionSheet. Calling this method more times will generate an assertion.
+ @param title The title of the new button.
+ @param image The image of the new button.
+ @param imageAlignment The alignment of the image in the new button.
+ @param actionBlock The block to be executed when the button it pressed. Pass `nil` if you do not want any action to be executed.
+ @see addButtonWithTitle:action:
+ @see addCancelButtonWithTitle:action:
+ */
+- (void)addDestructiveButtonWithTitle:(NSString *)title image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment action:(void (^)(void))actionBlock;
 
 ///-----------------------------------
 /// @name Presenting the Action Sheet

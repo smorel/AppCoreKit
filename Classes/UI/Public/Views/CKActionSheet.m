@@ -14,10 +14,12 @@
 }
 
 @property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) UIImage *image;
+@property (nonatomic, assign) CKActionSheetImageAlignment imageAlignment;
 @property (nonatomic, copy) CKActionSheetActionBlock actionBlock;
 
-- (id)initWithTitle:(NSString *)title actionBlock:(CKActionSheetActionBlock)actionBlock;
-+ (id)actionWithTitle:(NSString *)title actionBlock:(CKActionSheetActionBlock)actionBlock;
+- (id)initWithTitle:(NSString *)title image:(UIImage*)image  imageAlignment:(CKActionSheetImageAlignment)imageAlignment actionBlock:(CKActionSheetActionBlock)actionBlock;
++ (id)actionWithTitle:(NSString *)title image:(UIImage*)image  imageAlignment:(CKActionSheetImageAlignment)imageAlignment actionBlock:(CKActionSheetActionBlock)actionBlock;
 
 @end
 
@@ -84,18 +86,30 @@
 #pragma mark - Buttons
 
 - (void)addButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock {
-	[self.actions addObject:[CKActionSheetAction actionWithTitle:title actionBlock:actionBlock]];
+	[self addButtonWithTitle:title image:nil imageAlignment:CKActionSheetImageAlignmentLeft action:actionBlock];
 }
 
 - (void)addCancelButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock {
-	CKAssert((self.cancelButtonIndex == -1), @"The cancel action is already set.");
-	[self addButtonWithTitle:title action:actionBlock];
-	self.cancelButtonIndex = [self.actions count] - 1;
+	[self addCancelButtonWithTitle:title image:nil imageAlignment:CKActionSheetImageAlignmentLeft action:actionBlock];
 }
 
 - (void)addDestructiveButtonWithTitle:(NSString *)title action:(void (^)(void))actionBlock {
+	[self addDestructiveButtonWithTitle:title image:nil imageAlignment:CKActionSheetImageAlignmentLeft action:actionBlock];
+}
+
+- (void)addButtonWithTitle:(NSString *)title image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment  action:(void (^)(void))actionBlock {
+	[self.actions addObject:[CKActionSheetAction actionWithTitle:title image:image imageAlignment:imageAlignment actionBlock:actionBlock]];
+}
+
+- (void)addCancelButtonWithTitle:(NSString *)title image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment  action:(void (^)(void))actionBlock {
+	CKAssert((self.cancelButtonIndex == -1), @"The cancel action is already set.");
+	[self addButtonWithTitle:title image:image imageAlignment:imageAlignment action:actionBlock];
+	self.cancelButtonIndex = [self.actions count] - 1;
+}
+
+- (void)addDestructiveButtonWithTitle:(NSString *)title image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment action:(void (^)(void))actionBlock {
 	CKAssert((self.destructiveButtonIndex == -1), @"The desctructive action is already set.");
-	[self addButtonWithTitle:title action:actionBlock];
+	[self addButtonWithTitle:title image:image imageAlignment:imageAlignment action:actionBlock];
 	self.destructiveButtonIndex = [self.actions count] - 1;
 }
 
@@ -108,7 +122,29 @@
 	self.actionSheet.actionSheetStyle = self.actionSheetStyle;
 
 	for (CKActionSheetAction *action in self.actions) {
-		[self.actionSheet addButtonWithTitle:action.title];
+		NSInteger index = [self.actionSheet addButtonWithTitle:action.title];
+        if(action.image){
+            UIButton* button = [[self.actionSheet valueForKey:@"_buttons"] objectAtIndex:index];
+            UIImageView* img = [[UIImageView alloc]initWithImage:action.image];
+            switch(action.imageAlignment){
+                case CKActionSheetImageAlignmentLeft:{
+                    
+                    img.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+                    img.frame = CGRectMake(10, (button.bounds.size.height / 2) - (action.image.size.height / 2),
+                                           action.image.size.width,action.image.size.height);
+                    break;
+                }
+                case CKActionSheetImageAlignmentRight:{
+                    
+                    img.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+                    img.frame = CGRectMake(button.bounds.size.width - 10 - action.image.size.width, (button.bounds.size.height / 2) - (action.image.size.height / 2),
+                                           action.image.size.width,action.image.size.height);
+                    break;
+                }
+            }
+            
+            [button addSubview:img];
+        }
 	}
 
 	if (self.cancelButtonIndex >= 0) self.actionSheet.cancelButtonIndex = self.cancelButtonIndex;
@@ -179,17 +215,19 @@
 @synthesize title = _title;
 @synthesize actionBlock = _actionBlock;
 
-- (id)initWithTitle:(NSString *)title actionBlock:(CKActionSheetActionBlock)actionBlock {
+- (id)initWithTitle:(NSString *)title  image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment actionBlock:(CKActionSheetActionBlock)actionBlock {
 	self = [super init];
 	if (self) {
 		self.title = title;
+		self.image = image;
+		self.imageAlignment = imageAlignment;
 		self.actionBlock = actionBlock;
 	}
 	return self;
 }
 
-+ (id)actionWithTitle:(NSString *)title actionBlock:(CKActionSheetActionBlock)actionBlock {
-	return [[[CKActionSheetAction alloc] initWithTitle:title actionBlock:actionBlock] autorelease];
++ (id)actionWithTitle:(NSString *)title  image:(UIImage*)image imageAlignment:(CKActionSheetImageAlignment)imageAlignment actionBlock:(CKActionSheetActionBlock)actionBlock {
+	return [[[CKActionSheetAction alloc] initWithTitle:title image:image imageAlignment:imageAlignment actionBlock:actionBlock] autorelease];
 }
 
 - (void)dealloc {
