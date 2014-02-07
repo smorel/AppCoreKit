@@ -219,6 +219,14 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     [self invalidateLayout];
 }
 
+- (void)removeAllLayoutBoxes{
+    NSArray* boxes = [[self layoutBoxes]allObjects];
+    [[self layoutBoxes]removeAllObjects];
+    
+    [CKLayoutBox removeLayoutBoxes:boxes fromBox:self];
+    [self invalidateLayout];
+}
+
 + (void)addLayoutBoxes:(NSArray*)boxes toBox:(NSObject<CKLayoutBoxProtocol>*)box{
     
 #ifdef LAYOUT_DEBUG_ENABLED

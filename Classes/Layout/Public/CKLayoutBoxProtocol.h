@@ -57,6 +57,10 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 
 /**
  */
+- (void)removeAllLayoutBoxes;
+
+/**
+ */
 @property(nonatomic,assign) CGSize maximumSize;
 /**
  */

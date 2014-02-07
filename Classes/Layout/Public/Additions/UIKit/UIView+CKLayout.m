@@ -288,6 +288,14 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     [self invalidateLayout];
 }
 
+- (void)removeAllLayoutBoxes{
+    NSArray* boxes = [[self layoutBoxes]allObjects];
+    [[self layoutBoxes]removeAllObjects];
+    
+    [CKLayoutBox removeLayoutBoxes:boxes fromBox:self];
+    [self invalidateLayout];
+}
+
 @end
 
 
