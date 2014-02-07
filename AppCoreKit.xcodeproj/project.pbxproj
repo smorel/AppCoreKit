@@ -459,6 +459,8 @@
 		962C08931820131B00A6E439 /* CKStackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 962C08911820131B00A6E439 /* CKStackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		962C08941820131B00A6E439 /* CKStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962C08921820131B00A6E439 /* CKStackViewController.m */; };
 		962C6C5B16E7DBD100852D21 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962C6C5A16E7DBD100852D21 /* AdSupport.framework */; };
+		962FE4C518996D6900D5A449 /* UIPickerView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */; };
+		962FE4C618996D6900D5A449 /* UIPickerView+CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 962FE4C418996D6900D5A449 /* UIPickerView+CKLayout.m */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		963826551484011700A9C98B /* CKFormSectionBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826531484011700A9C98B /* CKFormSectionBase.m */; };
 		963826581484012B00A9C98B /* CKFormSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826561484012A00A9C98B /* CKFormSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1112,6 +1114,8 @@
 		962C08911820131B00A6E439 /* CKStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStackViewController.h; path = Classes/UI/Public/Controllers/Containers/CKStackViewController.h; sourceTree = "<group>"; };
 		962C08921820131B00A6E439 /* CKStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStackViewController.m; path = Classes/UI/Public/Controllers/Containers/CKStackViewController.m; sourceTree = "<group>"; };
 		962C6C5A16E7DBD100852D21 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIPickerView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIPickerView+CKLayout.h"; sourceTree = "<group>"; };
+		962FE4C418996D6900D5A449 /* UIPickerView+CKLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIPickerView+CKLayout.m"; path = "Classes/Layout/Public/Additions/UIKit/UIPickerView+CKLayout.m"; sourceTree = "<group>"; };
 		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormSectionBase.h; path = Classes/UI/Public/Table/Form/CKFormSectionBase.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		963826531484011700A9C98B /* CKFormSectionBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSectionBase.m; path = Classes/UI/Public/Table/Form/CKFormSectionBase.m; sourceTree = "<group>"; };
 		963826561484012A00A9C98B /* CKFormSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSection.h; path = Classes/UI/Public/Table/Form/CKFormSection.h; sourceTree = "<group>"; };
@@ -2436,6 +2440,8 @@
 				96B9D2BF177B251D00455BE8 /* UITextField+CKLayout.m */,
 				96B9D2C2177B253F00455BE8 /* UITextView+CKLayout.h */,
 				96B9D2C3177B254000455BE8 /* UITextView+CKLayout.m */,
+				962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */,
+				962FE4C418996D6900D5A449 /* UIPickerView+CKLayout.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2842,6 +2848,7 @@
 				96CC498D17CBFE780017A6E7 /* UIScrollView+SVPullToRefresh.h in Headers */,
 				9687144E17CD0C8400DB747C /* Mock.h in Headers */,
 				9687144F17CD0C8A00DB747C /* Debugger.h in Headers */,
+				962FE4C518996D6900D5A449 /* UIPickerView+CKLayout.h in Headers */,
 				9687145017CD0C8F00DB747C /* AddressBook.h in Headers */,
 				9687145117CD0C9400DB747C /* Location.h in Headers */,
 				9686227917CE76180081248D /* CKObject+CKStore_Private.h in Headers */,
@@ -3090,6 +3097,7 @@
 				7560DD6813B8ED3600268D13 /* CKTextView.m in Sources */,
 				7560DD7013B8ED3600268D13 /* UIButton+Style.m in Sources */,
 				7560DD7213B8ED3600268D13 /* UIColor+Additions.m in Sources */,
+				962FE4C618996D6900D5A449 /* UIPickerView+CKLayout.m in Sources */,
 				7560DD7413B8ED3600268D13 /* CKUIColorPropertyCellController.m in Sources */,
 				7560DD7613B8ED3600268D13 /* CKUIControlBlockBinder.m in Sources */,
 				7560DD7A13B8ED3600268D13 /* UIImage+Transformations.m in Sources */,
