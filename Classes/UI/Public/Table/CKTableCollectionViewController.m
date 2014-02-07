@@ -734,6 +734,7 @@
         }
         [controller setSize:size notifyingContainerForUpdate:NO];
     }
+    controller.sizeHasBeenQueriedByTableView = NO;
     return controller.size;
 }
 

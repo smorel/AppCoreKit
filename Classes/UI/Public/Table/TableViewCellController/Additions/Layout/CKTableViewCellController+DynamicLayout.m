@@ -656,7 +656,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         
         //When tableView will wuery for the first time the size, it will set sizeHasBeenQueriedByTableView to YES and call invalidateSize for a first computation
         //after what, each time invalidateSize is called, the size will get recomputed.
-        if(!self.sizeHasBeenQueriedByTableView)
+        if(self.sizeHasBeenQueriedByTableView)
             return;
         
         CGSize s;
