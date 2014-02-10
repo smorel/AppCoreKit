@@ -164,7 +164,9 @@
     }
 }
 
-
+- (void)addCellControllers:(NSArray*)cells{
+    [self insertCellControllers:cells atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.cellControllers.count, cells.count)]];
+}
 
 - (void)removeCellControllersAtIndexes:(NSIndexSet*)indexes{
     
@@ -198,6 +200,10 @@
     [self removeCellControllersAtIndexes:[NSIndexSet indexSetWithIndex:index]];
 }
 
+
+- (void)removeAllCellControllers{
+    [self removeCellControllers:self.cellControllers];
+}
 
 - (void)removeCellControllers:(NSArray *)controllers{
     NSMutableIndexSet* indexes = [NSMutableIndexSet indexSet];

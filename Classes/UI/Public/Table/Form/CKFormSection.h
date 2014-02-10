@@ -116,9 +116,17 @@
  */
 - (void)addCellController:(CKTableViewCellController *)controller;
 
+/**
+ */
+- (void)addCellControllers:(NSArray*)cellControllers;
+
 ///-----------------------------------
 /// @name Removing Cell Controllers
 ///-----------------------------------
+
+/**
+ */
+- (void)removeAllCellControllers;
 
 /**
  */
