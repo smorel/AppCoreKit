@@ -296,92 +296,161 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
         if([NSObject isClass:targetType kindOfClass:[NSArray class]] || [NSObject isClass:targetType kindOfClass:[CKCollection class]]){
             NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
             
-            CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-            Class contentType = [self objectClass:subObjectDefinition defaultClass:[attributes contentType]];
             
-            id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
-            if(!subObjectMappings && contentType != nil){
-                subObjectMappings = [options dictionaryForClass:contentType];
-            }
-            else if((contentType == nil || contentType == [attributes contentType]) && subObjectMappings){
-                NSString* className = [subObjectMappings objectForKey:CKMappingClassKey];
-                if(className){
-                    contentType = NSClassFromString(className);
+            //REFACTOR THE FOLLOWING TRANSFORM CODE AS IT IS A COPY OF THE SAME CODE FOR SINGLE OBJECT ...
+            //FIXME regroup the error for requiered and optional in a method not to repeet code !
+            SEL transformSelector = [self transformSelector:options];
+            CKCallback* callback = [self transformCallback:options];
+            if(callback){
+                id transformUserData = [self transformUserData:options];
+                if(transformUserData){
+                    NSString* details = [NSString stringWithFormat:@"Transform selectors are not supported for value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                    *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeTransformNotSupported,details);
+                }
+                
+                id transformedValue = [callback execute:value];
+                if(!transformedValue){
+                    if([self isRequired:options]){
+                        NSString* details = [NSString stringWithFormat:@"Transform problem for requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeMissingRequieredValue,details);
+                        return NO;
+                    }
+                    else if([options containsObjectForKey:CKMappingDefaultValueKey]){
+                        [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
+                    }
+                }
+                else{
+                    [property setValue:transformedValue];
                 }
             }
-            
-            if(contentType == nil){
-                NSString* details = [NSString stringWithFormat:@"Could not find any valid class to create an object in property : %@",property];
-                NSString* details2 = [NSString stringWithFormat:@"The class could be defined in JSON object definition using '%@' or in property attributes",CKMappingClassKey];
-                *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidObjectClass,[NSString stringWithFormat:@"%@\n%@",details,details2]);
-                return NO;
-            }
-			
-			if([NSObject isClass:targetType kindOfClass:[NSArray class]]){
-				id propertyArray = [property value];
-				if(!propertyArray){
-					[property setValue:[NSMutableArray array]];
-				}
-				else if(![propertyArray isKindOfClass:[NSMutableArray class]]){
-					NSString* details = [NSString stringWithFormat:@"The property %@ must inherit NSMutableArray",property];
-                    *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
-					return NO;
+            else if(transformSelector){
+                id transformUserData = [self transformUserData:options];
+                Class transformSelectorClass = [self transformClass:options defaultClass:targetType];
+                id transformedValue = nil;
+                if(transformUserData){
+                    NSMethodSignature *signature = [transformSelectorClass methodSignatureForSelector:transformSelector];
                     
-				}
-			}
-			else{
-				id propertyCollection = [property value];
-				if(!propertyCollection){
-					NSString* details = [NSString stringWithFormat:@"The property %@ is a nil collection and must be instanciated. \nYou should set its attributes as creatable or set the property in the postInit method of its object.",property];
-                    *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
-					return NO;
-				}
-			}
-            
-            if([self needsToBeCleared:options]){
-                [property removeAllObjects];
-            }
-            
-            NSArray* ar = nil;
-            if([value isKindOfClass:[NSArray class]]){
-                ar = value;
-            }
-            else if([value isKindOfClass:[CKCollection class]]){
-                CKCollection* collection = (CKCollection*)value;
-                ar = [collection allObjects];
-            }
-            
-            NSArray* results = nil;
-            if(subObjectMappings){
-                NSMutableArray* createdObjects = [NSMutableArray array];
-                for(id sourceSubObject in ar){
-                    //create sub object
-                    id targetSubObject = [[[contentType alloc]init]autorelease];
-                    //map sub object
-                    [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed) error:error];
-                    //adds sub object
-                    [createdObjects addObject:targetSubObject];
+                    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                    [invocation setSelector:transformSelector];
+                    [invocation setTarget:transformSelectorClass];
+                    [invocation setArgument:&value
+                                    atIndex:2];
+                    [invocation setArgument:&transformUserData
+                                    atIndex:3];
+                    [invocation setArgument:&error
+                                    atIndex:4];
+                    [invocation invoke];
+                    
+                    void* returnValue = nil;
+                    [invocation getReturnValue:&returnValue];
+                    transformedValue = (id)returnValue;
                 }
-                results = createdObjects;
-            }
-            else if(contentType){
-                NSMutableArray* createdObjects = [NSMutableArray array];
-                for(id sourceSubObject in ar){
-                    id targetSubObject = [NSValueTransformer transform:sourceSubObject toClass:contentType];
-                    [createdObjects addObject:targetSubObject];
+                else{
+                    transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value withObject:(id)error];
                 }
-                results = createdObjects;
-            }
-            else{
-                results = ar;
-            }
-            
-            //feed the collection with results
-            if([self insertAtBegin:options]){
-                [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[results count])]];
-            }
-            else{
-                [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([property count],[results count])]];
+                
+                if(!transformedValue){
+                    if([self isRequired:options]){
+                        NSString* details = [NSString stringWithFormat:@"Transform problem for requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeMissingRequieredValue,details);
+                        return NO;
+                    }
+                    else if([options containsObjectForKey:CKMappingDefaultValueKey]){
+                        [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
+                    }
+                }
+                else{
+                    [property setValue:transformedValue];
+                }
+            }else{
+                
+                CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+                Class contentType = [self objectClass:subObjectDefinition defaultClass:[attributes contentType]];
+                
+                id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
+                if(!subObjectMappings && contentType != nil){
+                    subObjectMappings = [options dictionaryForClass:contentType];
+                }
+                else if((contentType == nil || contentType == [attributes contentType]) && subObjectMappings){
+                    NSString* className = [subObjectMappings objectForKey:CKMappingClassKey];
+                    if(className){
+                        contentType = NSClassFromString(className);
+                    }
+                }
+                
+                if(contentType == nil){
+                    NSString* details = [NSString stringWithFormat:@"Could not find any valid class to create an object in property : %@",property];
+                    NSString* details2 = [NSString stringWithFormat:@"The class could be defined in JSON object definition using '%@' or in property attributes",CKMappingClassKey];
+                    *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidObjectClass,[NSString stringWithFormat:@"%@\n%@",details,details2]);
+                    return NO;
+                }
+                
+                if([NSObject isClass:targetType kindOfClass:[NSArray class]]){
+                    id propertyArray = [property value];
+                    if(!propertyArray){
+                        [property setValue:[NSMutableArray array]];
+                    }
+                    else if(![propertyArray isKindOfClass:[NSMutableArray class]]){
+                        NSString* details = [NSString stringWithFormat:@"The property %@ must inherit NSMutableArray",property];
+                        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
+                        return NO;
+                        
+                    }
+                }
+                else{
+                    id propertyCollection = [property value];
+                    if(!propertyCollection){
+                        NSString* details = [NSString stringWithFormat:@"The property %@ is a nil collection and must be instanciated. \nYou should set its attributes as creatable or set the property in the postInit method of its object.",property];
+                        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
+                        return NO;
+                    }
+                }
+                
+                if([self needsToBeCleared:options]){
+                    [property removeAllObjects];
+                }
+                
+                NSArray* ar = nil;
+                if([value isKindOfClass:[NSArray class]]){
+                    ar = value;
+                }
+                else if([value isKindOfClass:[CKCollection class]]){
+                    CKCollection* collection = (CKCollection*)value;
+                    ar = [collection allObjects];
+                }
+                
+                NSArray* results = nil;
+                if(subObjectMappings){
+                    NSMutableArray* createdObjects = [NSMutableArray array];
+                    for(id sourceSubObject in ar){
+                        //create sub object
+                        id targetSubObject = [[[contentType alloc]init]autorelease];
+                        //map sub object
+                        [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed) error:error];
+                        //adds sub object
+                        [createdObjects addObject:targetSubObject];
+                    }
+                    results = createdObjects;
+                }
+                else if(contentType){
+                    NSMutableArray* createdObjects = [NSMutableArray array];
+                    for(id sourceSubObject in ar){
+                        id targetSubObject = [NSValueTransformer transform:sourceSubObject toClass:contentType];
+                        [createdObjects addObject:targetSubObject];
+                    }
+                    results = createdObjects;
+                }
+                else{
+                    results = ar;
+                }
+                
+                //feed the collection with results
+                if([self insertAtBegin:options]){
+                    [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[results count])]];
+                }
+                else{
+                    [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([property count],[results count])]];
+                }
             }
             
         }
