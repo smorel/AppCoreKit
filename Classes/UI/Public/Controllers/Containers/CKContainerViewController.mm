@@ -318,8 +318,12 @@ typedef void(^CKTransitionBlock)();
         __block UIViewController *bNewController = newController;
         
         if(transition == CKTransitionPush ||
-           transition == CKTransitionPop){
+           transition == CKTransitionPop ||
+           transition == CKTransitionSlideInFromTop ||
+           transition == CKTransitionSlideAwayFromTop) {
+            
             CKTransition *animation = [[[CKTransition alloc] init]autorelease];
+            
             if(transition == CKTransitionPush){
                 animation.type = kCATransitionPush;
                 animation.subtype = kCATransitionFromRight;
@@ -328,6 +332,15 @@ typedef void(^CKTransitionBlock)();
                 animation.type = kCATransitionPush;
                 animation.subtype = kCATransitionFromLeft;
             }
+            else if(transition == CKTransitionSlideInFromTop){
+                animation.type = kCATransitionMoveIn;
+                animation.subtype = kCATransitionFromBottom;
+            }
+            else  if(transition == CKTransitionSlideAwayFromTop){
+                animation.type = kCATransitionReveal;
+                animation.subtype = kCATransitionFromTop;
+            }
+            
             animation.duration = 0.4f;
             animation.removedOnCompletion = YES;
             [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
