@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, CKTransitionType){
     CKTransitionFlipFromBottom  = UIViewAnimationOptionTransitionFlipFromBottom,
     CKTransitionPush            = 8 << 20,
     CKTransitionPop             = 9 << 20,
+    CKTransitionSlideInFromTop   = 10 << 20,
+    CKTransitionSlideAwayFromTop = 11 << 20,
 };
 
 /**
