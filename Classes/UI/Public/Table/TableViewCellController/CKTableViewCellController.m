@@ -396,18 +396,30 @@
 }
 
 - (CGFloat)preferedHeightConstraintToWidth:(CGFloat)width{
+    Class CKTableViewContentCellControllerClass = NSClassFromString(@"CKTableViewContentCellController");
+    if([self.delegate isKindOfClass:CKTableViewContentCellControllerClass]){
+        CGSize size = [self.delegate preferredSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
+        return size.height;
+    }
+    
     if(self.contentView.layoutBoxes){
         [self.contentView invalidateLayout];
-        CGSize size = [self.contentView preferedSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
+        CGSize size = [self.contentView preferredSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
         return size.height;
     }
     return MAXFLOAT;
 }
 
 - (CGFloat)preferedWidthConstraintToHeight:(CGFloat)height{
+    Class CKTableViewContentCellControllerClass = NSClassFromString(@"CKTableViewContentCellController");
+    if([self.delegate isKindOfClass:CKTableViewContentCellControllerClass]){
+        CGSize size = [self.delegate preferredSizeConstraintToSize:CGSizeMake(MAXFLOAT,height)];
+        return size.height;
+    }
+    
     if(self.contentView.layoutBoxes){
         [self.contentView invalidateLayout];
-        CGSize size = [self.contentView preferedSizeConstraintToSize:CGSizeMake(MAXFLOAT,height)];
+        CGSize size = [self.contentView preferredSizeConstraintToSize:CGSizeMake(MAXFLOAT,height)];
         return size.width;
     }
     return MAXFLOAT;

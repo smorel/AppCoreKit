@@ -25,7 +25,7 @@ namespace __gnu_cxx{
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
 
 #ifdef LAYOUT_DEBUG_ENABLED
@@ -43,11 +43,11 @@ namespace __gnu_cxx{
     return self;
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)constraintSize{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)constraintSize{
     if([self.layoutBoxes count] <= 0 && self.sizeToFitLayoutBoxes)
         return CGSizeMake(0,0);
     
-    CGSize size = [CKLayoutBox preferedSizeConstraintToSize:constraintSize forBox:self];
+    CGSize size = [CKLayoutBox preferredSizeConstraintToSize:constraintSize forBox:self];
     size = CGSizeMake(size.width - self.padding.left - self.padding.right,size.height - self.padding.top - self.padding.bottom);
     
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -128,7 +128,7 @@ namespace __gnu_cxx{
                         precomputedSize[box] = CGSizeMake(box.minimumSize.width,height);
                     }else{
                         CGFloat preferedWidth = flexiblewidth / (flexibleCount - numberOfFlexiSpaces);
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(size.width,/*(NSInteger)preferedWidth*/ /*MAXFLOAT,*/height)];
+                        subsize = [box preferredSizeConstraintToSize:CGSizeMake(size.width,/*(NSInteger)preferedWidth*/ /*MAXFLOAT,*/height)];
                         
                         if( numberOfFlexiSpaces > 0
                            || (subsize.width < preferedWidth && box.maximumSize.width == MAXFLOAT)
@@ -182,7 +182,7 @@ namespace __gnu_cxx{
                         CGFloat height = MIN(size.height - box.margins.top - box.margins.bottom,box.maximumSize.height);
                         
                         CGFloat preferedWidth = flexiblewidth / flexibleCount;
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake((NSInteger)preferedWidth,height)];
+                        subsize = [box preferredSizeConstraintToSize:CGSizeMake((NSInteger)preferedWidth,height)];
                         flexiblewidth -= subsize.width;
                         flexibleCount--;
                     }
@@ -199,8 +199,8 @@ namespace __gnu_cxx{
     }
     
     if(self.sizeToFitLayoutBoxes){
-        CGSize ret = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
-        self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
+        CGSize ret = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+        self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
                                                                                  ret.height + self.padding.bottom + self.padding.top)
                                                                forBox:self];
     }else{
@@ -211,7 +211,7 @@ namespace __gnu_cxx{
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
-    CGSize size = [self preferedSizeConstraintToSize:theframe.size];
+    CGSize size = [self preferredSizeConstraintToSize:theframe.size];
     [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
 #ifdef LAYOUT_DEBUG_ENABLED

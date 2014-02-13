@@ -32,7 +32,7 @@ CGSize CKSizeThatFitsRatio(CGSize size, CGFloat ratio){
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
 @end
 
@@ -85,7 +85,7 @@ static char UIImageViewFlexibleHeightKey;
     [super invalidateLayout];
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     self.lastComputedSize = size;
@@ -115,7 +115,7 @@ static char UIImageViewFlexibleHeightKey;
         ret.height = size.height;
     }
     
-    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
     
     self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);

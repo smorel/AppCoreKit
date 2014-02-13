@@ -19,3 +19,5 @@
 #import "UIImageView+CKLayout.h"
 #import "UITextField+CKLayout.h"
 #import "UITextView+CKLayout.h"
+#import "UIPickerView+CKLayout.h"
+#import "UIScrollView+CKLayout.h"

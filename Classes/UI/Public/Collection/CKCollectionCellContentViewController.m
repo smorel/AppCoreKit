@@ -83,7 +83,7 @@
         
         //Support for CKLayout
         if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
-            return [view preferedSizeConstraintToSize:size];
+            return [view preferredSizeConstraintToSize:size];
         }
         //TODO : Auto layout support !
         else{

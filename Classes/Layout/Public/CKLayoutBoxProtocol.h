@@ -154,7 +154,7 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 
 /** This method computes the prefered size for the layout box including padding.
  */
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size;
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size;
 
 /** This method performs the layout on the box and its sub boxes
  */

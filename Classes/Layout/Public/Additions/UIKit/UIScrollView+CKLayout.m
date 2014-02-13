@@ -15,7 +15,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
 + (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly;
 + (void)performLayoutWithFrame:(CGRect)theframe forBox:(NSObject<CKLayoutBoxProtocol>*)box;
@@ -28,7 +28,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
 @end
 
@@ -63,7 +63,7 @@ static char UIScrollViewFlexibleContentHeightKey;
     return value ? [value boolValue] : YES;
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     CGSize subBoxesSize = CGSizeMake(self.flexibleContentWidth  ? MAXFLOAT : size.width,
                                      self.flexibleContentHeight ? MAXFLOAT : size.height);
     
@@ -81,7 +81,7 @@ static char UIScrollViewFlexibleContentHeightKey;
         for(NSObject<CKLayoutBoxProtocol>* box in self.layoutBoxes){
             CGSize constraint = subBoxesSize;
             
-            CGSize s = [box preferedSizeConstraintToSize:constraint];
+            CGSize s = [box preferredSizeConstraintToSize:constraint];
             
             if(s.width > maxWidth && s.width < MAXFLOAT)   maxWidth = s.width;
             if(s.height > maxHeight && s.height < MAXFLOAT) maxHeight = s.height;
@@ -105,9 +105,9 @@ static char UIScrollViewFlexibleContentHeightKey;
     
     //Takes contentInset into account here !
     if(self.sizeToFitLayoutBoxes && self.layoutBoxes && [self.layoutBoxes count] > 0){
-        size = [CKLayoutBox preferedSizeConstraintToSize:subBoxesSize forBox:self];
+        size = [CKLayoutBox preferredSizeConstraintToSize:subBoxesSize forBox:self];
     }else if([self.containerLayoutBox isKindOfClass:[UIView class]]){
-        size = [CKLayoutBox preferedSizeConstraintToSize: size forBox:self];
+        size = [CKLayoutBox preferredSizeConstraintToSize: size forBox:self];
     }
 
     size = CGSizeMake(size.width - (self.padding.left + self.padding.right), size.height - (self.padding.top + self.padding.bottom));
@@ -123,7 +123,7 @@ static char UIScrollViewFlexibleContentHeightKey;
         constraint.height = MAXFLOAT;
     }
     
-    CGSize size = [self preferedSizeConstraintToSize:constraint];
+    CGSize size = [self preferredSizeConstraintToSize:constraint];
     
     CGRect frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
     

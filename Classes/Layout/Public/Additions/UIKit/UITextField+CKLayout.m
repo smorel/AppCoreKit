@@ -15,7 +15,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
 @end
 
@@ -23,7 +23,7 @@ static char UITextFieldUsesAttributedStringKey;
 
 @implementation UITextField (CKLayout)
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     
@@ -56,7 +56,7 @@ static char UITextFieldUsesAttributedStringKey;
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
     
-    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
     if(ret.height < self.font.lineHeight){
         ret.height = self.font.lineHeight;
