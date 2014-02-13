@@ -60,6 +60,18 @@
     }
 }
 
+- (void)initView:(UIView *)view{
+    [super initView:view];
+    
+    if([self contentViewController]){
+        UIView* contentView = [view valueForKey:@"contentView"];
+        if(contentView == nil){ contentView = view; }
+        
+        [[self contentViewController]prepareForReuseUsingContentView:contentView contentViewCell:view];
+        [[self contentViewController]viewDidLoad];
+    }
+}
+
 - (void)setupView:(UIView*)view{
     if([self contentViewController]){
         UIView* contentView = [view valueForKey:@"contentView"];
