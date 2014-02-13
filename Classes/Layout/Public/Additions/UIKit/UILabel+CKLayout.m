@@ -94,11 +94,14 @@ static char UILabelUsesAttributedStringKey;
         ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
     }
     
-    //Backward Compatibility
+    //Backward Compatibility : Flexible width when in vertical layout to be able to handle textAlignment property
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){
         id value = objc_getAssociatedObject(self, &UILabelFlexibleWidthKey);
         if(!value){
-            ret.width = size.width;
+            //If vertical layout in scroll view, constraint is infinite
+            if(size.width < MAXFLOAT){
+                ret.width = size.width;
+            }
         }
     }
     

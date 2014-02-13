@@ -485,6 +485,8 @@
 		9667136E18354643007218D2 /* CIFilter+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9667136F18354643007218D2 /* CIFilter+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */; };
 		9668B94E15DAFF7100C57715 /* CKLayoutBoxProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9668B94C15DAFF7100C57715 /* CKLayoutBoxProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9668EF0818AD076900E72444 /* UIScrollView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 9668EF0618AD076900E72444 /* UIScrollView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9668EF0918AD076900E72444 /* UIScrollView+CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9668EF0718AD076900E72444 /* UIScrollView+CKLayout.m */; };
 		96691E1215DD3BE500D73510 /* CKTableViewCellController+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 96691E1015DD3BE400D73510 /* CKTableViewCellController+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96691E1315DD3BE500D73510 /* CKTableViewCellController+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 96691E1115DD3BE500D73510 /* CKTableViewCellController+Factory.m */; };
 		967C51811538BD4E00B3F785 /* NSObject+Singleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1140,6 +1142,8 @@
 		9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CIFilter+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/CIFilter+ValueTransformer.h"; sourceTree = "<group>"; };
 		9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CIFilter+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/CIFilter+ValueTransformer.m"; sourceTree = "<group>"; };
 		9668B94C15DAFF7100C57715 /* CKLayoutBoxProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBoxProtocol.h; path = Classes/Layout/Public/CKLayoutBoxProtocol.h; sourceTree = "<group>"; };
+		9668EF0618AD076900E72444 /* UIScrollView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIScrollView+CKLayout.h"; sourceTree = "<group>"; };
+		9668EF0718AD076900E72444 /* UIScrollView+CKLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+CKLayout.m"; path = "Classes/Layout/Public/Additions/UIKit/UIScrollView+CKLayout.m"; sourceTree = "<group>"; };
 		96691E1015DD3BE400D73510 /* CKTableViewCellController+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+Factory.h"; path = "Classes/UI/Public/Table/TableViewCellController/CKTableViewCellController+Factory.h"; sourceTree = "<group>"; };
 		96691E1115DD3BE500D73510 /* CKTableViewCellController+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+Factory.m"; path = "Classes/UI/Public/Table/TableViewCellController/CKTableViewCellController+Factory.m"; sourceTree = "<group>"; };
 		966B51E51593CD8300311735 /* CKObject+CKStore_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKStore_Private.h"; path = "Classes/CoreData/Private/CKObject+CKStore_Private.h"; sourceTree = "<group>"; };
@@ -2442,6 +2446,8 @@
 				96B9D2C3177B254000455BE8 /* UITextView+CKLayout.m */,
 				962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */,
 				962FE4C418996D6900D5A449 /* UIPickerView+CKLayout.m */,
+				9668EF0618AD076900E72444 /* UIScrollView+CKLayout.h */,
+				9668EF0718AD076900E72444 /* UIScrollView+CKLayout.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2712,6 +2718,7 @@
 				75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */,
 				75CC170113F46E3900835FE3 /* UIColor+ValueTransformer.h in Headers */,
 				75CC170513F46E5500835FE3 /* UIImage+ValueTransformer.h in Headers */,
+				9668EF0818AD076900E72444 /* UIScrollView+CKLayout.h in Headers */,
 				96E6FA33182D2A0C001F1E6A /* CAEmitterLayer+Introspection.h in Headers */,
 				75CC170913F46E6C00835FE3 /* NSNumber+ValueTransformer.h in Headers */,
 				75CC170D13F46E8200835FE3 /* NSURL+ValueTransformer.h in Headers */,
@@ -3035,6 +3042,7 @@
 				7560DCB313B8ED3600268D13 /* CKGridView+NSIndexPath.m in Sources */,
 				7560DCB513B8ED3600268D13 /* CKHost.m in Sources */,
 				7560DCB913B8ED3600268D13 /* CKImageLoader.m in Sources */,
+				9668EF0918AD076900E72444 /* UIScrollView+CKLayout.m in Sources */,
 				7560DCBD13B8ED3600268D13 /* CKImageView.m in Sources */,
 				7560DCBF13B8ED3600268D13 /* CKInetEndPoint.m in Sources */,
 				7560DCC113B8ED3600268D13 /* CKItem.m in Sources */,

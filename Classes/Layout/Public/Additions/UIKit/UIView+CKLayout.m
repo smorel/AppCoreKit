@@ -336,7 +336,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
     }
     
     id value = objc_getAssociatedObject(self, &UIViewSizeToFitLayoutBoxesKey);
-    return value ? [value boolValue] : YES;
+    return value ? [value boolValue] : ( [self isKindOfClass:[UIScrollView class]] ? NO : YES );
 }
 
 - (void)setInvalidatedLayoutBlock:(CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{
