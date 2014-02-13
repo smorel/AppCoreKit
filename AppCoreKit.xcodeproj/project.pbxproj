@@ -459,7 +459,7 @@
 		962C08931820131B00A6E439 /* CKStackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 962C08911820131B00A6E439 /* CKStackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		962C08941820131B00A6E439 /* CKStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962C08921820131B00A6E439 /* CKStackViewController.m */; };
 		962C6C5B16E7DBD100852D21 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962C6C5A16E7DBD100852D21 /* AdSupport.framework */; };
-		962FE4C518996D6900D5A449 /* UIPickerView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */; };
+		962FE4C518996D6900D5A449 /* UIPickerView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		962FE4C618996D6900D5A449 /* UIPickerView+CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 962FE4C418996D6900D5A449 /* UIPickerView+CKLayout.m */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		963826551484011700A9C98B /* CKFormSectionBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826531484011700A9C98B /* CKFormSectionBase.m */; };
