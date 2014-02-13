@@ -35,9 +35,10 @@
 
 static char UIScrollViewFlexibleContentWidthKey;
 static char UIScrollViewFlexibleContentHeightKey;
+static char UIScrollViewManuallyManagesContentSizeKey;
 
 @implementation UIScrollView (CKLayout)
-@dynamic flexibleContentWidth, flexibleContentHeight;
+@dynamic flexibleContentWidth, flexibleContentHeight, manuallyManagesContentSize;
 
 - (void)setFlexibleContentWidth:(BOOL)enabled{
     objc_setAssociatedObject(self,
@@ -63,6 +64,18 @@ static char UIScrollViewFlexibleContentHeightKey;
     return value ? [value boolValue] : YES;
 }
 
+- (void)setManuallyManagesContentSize:(BOOL)enabled{
+    objc_setAssociatedObject(self,
+                             &UIScrollViewManuallyManagesContentSizeKey,
+                             [NSNumber numberWithBool:enabled],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)manuallyManagesContentSize{
+    id value = objc_getAssociatedObject(self, &UIScrollViewManuallyManagesContentSizeKey);
+    return value ? [value boolValue] : YES;
+}
+
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     CGSize subBoxesSize = CGSizeMake(self.flexibleContentWidth  ? MAXFLOAT : size.width,
                                      self.flexibleContentHeight ? MAXFLOAT : size.height);
@@ -75,8 +88,8 @@ static char UIScrollViewFlexibleContentHeightKey;
         CGFloat maxWidth = 0;
         CGFloat maxHeight = 0;
         
-        subBoxesSize.width  -= self.padding.left + self.padding.right  + self.contentInset.left + self.contentInset.right;
-        subBoxesSize.height -= self.padding.top + self.padding.bottom  + self.contentInset.top + self.contentInset.bottom;
+        subBoxesSize.width  -= self.padding.left + self.padding.right /*+ self.contentInset.left + self.contentInset.right*/;
+        subBoxesSize.height -= self.padding.top + self.padding.bottom  /*+ self.contentInset.top + self.contentInset.bottom*/;
         
         for(NSObject<CKLayoutBoxProtocol>* box in self.layoutBoxes){
             CGSize constraint = subBoxesSize;
@@ -89,17 +102,17 @@ static char UIScrollViewFlexibleContentHeightKey;
         
         subBoxesSize = CGSizeMake(maxWidth,maxHeight);
         
-        subBoxesSize.width  += self.padding.left + self.padding.right + self.contentInset.left + self.contentInset.right;
-        subBoxesSize.height += self.padding.top + self.padding.bottom + self.contentInset.top + self.contentInset.bottom;
+        subBoxesSize.width  += self.padding.left + self.padding.right /*+ self.contentInset.left + self.contentInset.right*/;
+        subBoxesSize.height += self.padding.top + self.padding.bottom /*+ self.contentInset.top + self.contentInset.bottom*/;
     }else{
         if([self isKindOfClass:[UIControl class]]){
-            subBoxesSize.width -= self.padding.left + self.padding.right + self.contentInset.left + self.contentInset.right;
+            subBoxesSize.width -= self.padding.left + self.padding.right /*+ self.contentInset.left + self.contentInset.right*/;
             subBoxesSize.height -= self.padding.top + self.padding.bottom;
             
             subBoxesSize = [self sizeThatFits:subBoxesSize];
             
-            subBoxesSize.width += self.padding.left + self.padding.right + self.contentInset.left + self.contentInset.right;
-            subBoxesSize.height += self.padding.top + self.padding.bottom + self.contentInset.top + self.contentInset.bottom;
+            subBoxesSize.width += self.padding.left + self.padding.right /*+ self.contentInset.left + self.contentInset.right*/;
+            subBoxesSize.height += self.padding.top + self.padding.bottom /*+ self.contentInset.top + self.contentInset.bottom*/;
         }
     }
     
@@ -139,8 +152,8 @@ static char UIScrollViewFlexibleContentHeightKey;
     //Apply padding
     subBoxesFrame = CGRectMake(subBoxesFrame.origin.x + self.padding.left,
                                subBoxesFrame.origin.y + self.padding.top,
-                               subBoxesFrame.size.width  - (self.padding.left + self.padding.right) - (self.contentInset.left + self.contentInset.right),
-                               subBoxesFrame.size.height - (self.padding.top + self.padding.bottom) - (self.contentInset.top + self.contentInset.bottom));
+                               subBoxesFrame.size.width  - (self.padding.left + self.padding.right) /*- (self.contentInset.left + self.contentInset.right)*/,
+                               subBoxesFrame.size.height - (self.padding.top + self.padding.bottom) /*- (self.contentInset.top + self.contentInset.bottom)*/);
     
     CGSize adjustedSize = CGSizeMake(self.flexibleContentWidth    ? MAXFLOAT : subBoxesFrame.size.width,
                                      self.flexibleContentHeight   ? MAXFLOAT : subBoxesFrame.size.height);
@@ -163,16 +176,20 @@ static char UIScrollViewFlexibleContentHeightKey;
                                  boundingBox.height + (self.padding.top + self.padding.bottom) );
     
     if(self.sizeToFitLayoutBoxes && self.layoutBoxes && [self.layoutBoxes count] > 0){
-        CGRect frameWithInsets = CGRectMake(newFrame.origin.x, newFrame.origin.y, newFrame.size.width + self.contentInset.left + self.contentInset.right, newFrame.size.height +self.contentInset.top +  self.contentInset.bottom);
+        CGRect frameWithInsets = CGRectMake(newFrame.origin.x, newFrame.origin.y,
+                                            newFrame.size.width /*+ self.contentInset.left + self.contentInset.right*/,
+                                            newFrame.size.height /*+self.contentInset.top +  self.contentInset.bottom*/);
         [self setBoxFrameTakingCareOfTransform:frameWithInsets];
     }else if([self.containerLayoutBox isKindOfClass:[UIView class]]){
         [self setBoxFrameTakingCareOfTransform:frame];
     }
     
-    self.contentSize = newFrame.size;
+    if(!self.manuallyManagesContentSize){
+        self.contentSize = newFrame.size;
+    }
 }
 
-- (void)UIScrollView_Layout_setContentInset:(UIEdgeInsets)insets{
+/*- (void)UIScrollView_Layout_setContentInset:(UIEdgeInsets)insets{
     if(!UIEdgeInsetsEqualToEdgeInsets(insets, self.contentInset)){
         [self UIScrollView_Layout_setContentInset:insets];
         [self invalidateLayout];
@@ -181,6 +198,6 @@ static char UIScrollViewFlexibleContentHeightKey;
 
 + (void)load{
     CKSwizzleSelector([UIScrollView class], @selector(setContentInset:), @selector(UIScrollView_Layout_setContentInset:));
-}
+}*/
 
 @end

@@ -20,4 +20,9 @@
  */
 @property(nonatomic,assign) BOOL flexibleContentHeight;
 
+/** This attribute specify whether the scrollView should automatically compute its content size using layoutboxes or not
+ Default value is NO
+ */
+@property(nonatomic,assign) BOOL manuallyManagesContentSize;
+
 @end
