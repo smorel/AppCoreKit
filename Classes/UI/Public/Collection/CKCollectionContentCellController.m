@@ -11,6 +11,10 @@
 #import "CKStyleManager.h"
 #import "UIView+Style.h"
 #import "UIView+CKLayout.h"
+#import "CKCollectionViewLayoutController.h"
+#import "CKCollectionViewCell.h"
+#import "UIView+Positioning.h"
+#import "CKViewCellCache.h"
 
 @interface CKCollectionCellContentViewController ()
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
@@ -94,6 +98,36 @@
     
     [[self contentViewController]viewWillDisappear:NO];
     [[self contentViewController]viewDidDisappear:NO];
+}
+
+
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
+    if(self.view){
+        return [[self contentViewController] preferredSizeConstraintToSize:size];
+    }else{
+        CKCollectionViewCell* view = (CKCollectionViewCell*)[[CKViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
+        
+        if(!view){
+            view = [[[CKCollectionViewCell alloc]init]autorelease];
+            view.height = size.height;
+            view.width  = size.width;
+            
+            UIView* original = self.view; //For styles to apply correctly on view.
+            self.view = view;
+            
+            [self initView:view];
+            self.view = original;
+            [[CKViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
+        }
+        
+        UIView* original = self.view; //For styles to apply correctly on view.
+        self.view = view;
+        [self setupView:view];
+        self.view = original;
+        
+        return [[self contentViewController] preferredSizeConstraintToSize:size];
+    }
+
 }
 
 @end

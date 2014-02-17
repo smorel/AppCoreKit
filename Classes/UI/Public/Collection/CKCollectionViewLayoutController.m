@@ -11,6 +11,8 @@
 #import "CKCollectionContentCellController.h"
 #import "UIView+AutoresizingMasks.h"
 #import "UIView+Positioning.h"
+#import "CKCollectionViewFlowLayout.h"
+#import "CKCollectionContentCellController.h"
 
 /*
  TODO : implement CKCollectionLayoutViewController with layout, managing cell controllers
@@ -28,7 +30,7 @@
 @property(nonatomic,assign) CGFloat endMorphRatioForDelegate;
 @end
 
-@interface CKCollectionViewLayoutController ()
+@interface CKCollectionViewLayoutController () <UICollectionViewDelegateFlowLayout>
 //@property(nonatomic,retain,readwrite) CKCollectionViewLayout* layout;
 @property(nonatomic,retain,readwrite) UICollectionView* collectionView;
 @property(nonatomic,retain,readwrite) UIImageView* beforeRotationImageView;
@@ -527,6 +529,46 @@
             }
         }
     }
+}
+
+#pragma mark Flow Layout Management
+
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    UICollectionViewFlowLayout* flowLayout = (UICollectionViewFlowLayout*)collectionViewLayout;
+    
+    CKCollectionContentCellController* controller = (CKCollectionContentCellController*)[self controllerAtIndexPath:indexPath];
+    CGSize constraints = (flowLayout.scrollDirection == UICollectionViewScrollDirectionVertical) ? CGSizeMake(self.collectionView.width,MAXFLOAT) : CGSizeMake(MAXFLOAT,self.collectionView.height);
+    return [controller preferredSizeConstraintToSize:constraints];
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    return UIEdgeInsetsZero;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
+    return 0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
+    return 0;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
+    return CGSizeZero;
+}
+
+- (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(invalidateLayoutAfterDelay:) object:self];
+    [self performSelector:@selector(invalidateLayoutAfterDelay:) withObject:self afterDelay:.1];
+}
+
+- (void)invalidateLayoutAfterDelay:(id)sender{
+    [self.collectionView performBatchUpdates:^(){} completion:^(BOOL finished){}];
 }
 
 @end

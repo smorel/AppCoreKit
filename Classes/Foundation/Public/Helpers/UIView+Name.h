@@ -46,6 +46,10 @@
  */
 - (id)viewWithKeyPath:(NSString*)keyPath;
 
+/**
+ */
+- (id)viewWithName:(NSString*)name;
+
 @end
 
 

@@ -31,5 +31,8 @@
  */
 - (void)didDeselect;
 
+/**
+ */
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size;
 
 @end

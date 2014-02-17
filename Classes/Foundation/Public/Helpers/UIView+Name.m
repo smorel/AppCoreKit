@@ -70,6 +70,20 @@ static char kUIViewNameKey;
 }
 
 
+- (id)viewWithName:(NSString*)name{
+    if([self.name isEqualToString:name])
+        return self;
+    
+    for(UIView* v in self.subviews){
+        UIView* result = [v viewWithName:name];
+        if(result)
+            return result;
+    }
+    
+    return nil;
+}
+
+
 @end
 
 

@@ -97,3 +97,4 @@
 #import "CKCollectionViewMorphableLayout.h"
 #import "CKCollectionViewGridLayout.h"
 #import "CKCollectionViewPageLayout.h"
+#import "CKCollectionViewFlowLayout.h"

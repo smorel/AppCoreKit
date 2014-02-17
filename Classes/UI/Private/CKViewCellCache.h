@@ -1,5 +1,5 @@
 //
-//  CKTableViewCellCache.h
+//  CKViewCellCache.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CKTableViewCellCache : NSObject
+@interface CKViewCellCache : NSObject
 
 - (UIView*)reusableViewWithIdentifier:(NSString*)identifier;
 - (void)setReusableView:(UIView*)view forIdentifier:(NSString*)identifier;
