@@ -98,6 +98,11 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    
+    if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
+        [self applyStyle];
+    }
+    
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
         [self applyStyleToSubViews];
     }
