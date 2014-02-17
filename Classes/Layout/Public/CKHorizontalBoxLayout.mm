@@ -219,6 +219,9 @@ namespace __gnu_cxx{
 #endif
     
     if([self.layoutBoxes count] > 0){
+        
+        hash_map<id, CGRect> framePerBox;
+        
         //Compute layout
         CGFloat x =  self.frame.origin.x + self.padding.left;
         hash_set<id> appliedMargins;
@@ -247,7 +250,8 @@ namespace __gnu_cxx{
                     CGSize subsize = box.lastPreferedSize;
                     
                     CGRect boxframe = CGRectMake(x,box.margins.top,MAX(0,subsize.width),MAX(0,subsize.height));
-                    [box setBoxFrameTakingCareOfTransform:CGRectIntegral(boxframe)];
+                    framePerBox[box] = boxframe;
+                    //[box setBoxFrameTakingCareOfTransform:CGRectIntegral(boxframe)];
                     
                     x += subsize.width;
                // }
@@ -266,13 +270,16 @@ namespace __gnu_cxx{
             if(!box.hidden){
               //  if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
               //  else{
+                
+                hash_map<id, CGRect>::iterator it = framePerBox.find(box);
+                CGRect boxFrame = it->second;
                     
                     CGFloat offsetX = 0;
                     CGFloat offsetY = self.frame.origin.y + self.padding.top;
                     switch(self.verticalAlignment){
                         case CKLayoutVerticalAlignmentTop:break; //this is already computed
-                        case CKLayoutVerticalAlignmentBottom: offsetY += totalHeight - box.frame.size.height; break; //this is already computed
-                        case CKLayoutVerticalAlignmentCenter: offsetY += (totalHeight  / 2) - (box.frame.size.height / 2); break; //this is already computed
+                        case CKLayoutVerticalAlignmentBottom: offsetY += totalHeight - boxFrame.size.height; break; //this is already computed
+                        case CKLayoutVerticalAlignmentCenter: offsetY += (totalHeight  / 2) - (boxFrame.size.height / 2); break; //this is already computed
                     }
                     
                     
@@ -284,9 +291,9 @@ namespace __gnu_cxx{
                         }
                     }
                     
-                    CGRect boxFrame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
-                    [box setBoxFrameTakingCareOfTransform:boxFrame];
-                    [box performLayoutWithFrame:box.frame];
+                    CGRect newboxFrame = CGRectIntegral(CGRectMake(boxFrame.origin.x + offsetX,boxFrame.origin.y + offsetY,boxFrame.size.width,boxFrame.size.height));
+                    [box setBoxFrameTakingCareOfTransform:newboxFrame];
+                    [box performLayoutWithFrame:newboxFrame];
                // }
             }
         }
