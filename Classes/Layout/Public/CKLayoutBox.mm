@@ -89,7 +89,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     
     if(recursivelly){
         for(NSObject<CKLayoutBoxProtocol>* subbox in box.layoutBoxes){
-            [CKLayoutBox invalidateLayoutBox:subbox recursivelly:YES];
+            [[subbox class] invalidateLayoutBox:subbox recursivelly:YES];
         }
     }
 }

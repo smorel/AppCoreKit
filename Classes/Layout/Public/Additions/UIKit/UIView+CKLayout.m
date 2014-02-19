@@ -296,6 +296,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     [self invalidateLayout];
 }
 
++ (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly{
+    [CKLayoutBox invalidateLayoutBox:box recursivelly:recursivelly];
+}
+
 @end
 
 
