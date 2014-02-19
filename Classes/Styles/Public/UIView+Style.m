@@ -617,6 +617,9 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 					backgroundView.backgroundColor = [UIColor redColor];
 				}*/
 			}
+            
+            
+            [view setAppliedStyle:myViewStyle];
 		}
         
         if(appliedStack != nil){
@@ -650,10 +653,10 @@ static char NSObjectAppliedStyleObjectKey;
 @implementation NSObject (CKStyle)
 @dynamic appliedStyle;
 
-- (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
+- (void)setAppliedStyle:(NSMutableDictionary*)s{
         objc_setAssociatedObject(self, 
                                  &NSObjectAppliedStyleObjectKey,
-                                 appliedStyle,
+                                 s,
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -789,6 +792,8 @@ static char NSObjectAppliedStyleObjectKey;
             }
         }
         
+        if(([view appliedStyle] == nil || [[view appliedStyle]isEmpty])){
+        
 		//if(![myViewStyle isEmpty]){
 			BOOL shouldReplaceView = NO;
 			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){
@@ -808,6 +813,7 @@ static char NSObjectAppliedStyleObjectKey;
 				[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
 			}
 		//}
+        }
         
         [view setNeedsDisplay];
 	}
@@ -819,9 +825,11 @@ static char NSObjectAppliedStyleObjectKey;
         if([self isKindOfClass:[UIView class]] == YES){
             UIView* selfView = (UIView*)self;
             for(UIView* view in [selfView subviews]){
-                if(![appliedStack containsObject:view]){
+                if(([view appliedStyle] == nil || [[view appliedStyle]isEmpty]) && ![appliedStack containsObject:view]){
                     NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:nil];
                     [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+                }else{
+                    [appliedStack addObject:view];
                 }
             }
         }
