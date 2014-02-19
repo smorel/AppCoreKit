@@ -40,10 +40,7 @@
     
     __unsafe_unretained CKCollectionViewCell* bself = self;
     
-    self.contentView.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
-        UICollectionView* collectionView = [bself parentCollectionView];
-        [collectionView.collectionViewLayout invalidateLayout];
-    };
+    
 }
 
 - (UICollectionView*)parentCollectionView{

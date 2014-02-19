@@ -15,10 +15,15 @@
 #import "UIView+CKLayout.h"
 #import "CKContainerViewController.h"
 
+@interface CKCollectionViewController () 
+- (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
+@end
+
 @interface CKCollectionCellContentViewController ()
 @property(nonatomic,retain) CKWeakRef* collectionCellControllerWeakRef;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @property(nonatomic,retain) UIView* reusableView;
+@property(nonatomic,assign) BOOL isComputingSize;
 @end
 
 @interface CKCollectionCellController()
@@ -78,6 +83,7 @@
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
+    self.isComputingSize = YES;
     if(self.isViewLoaded || self.reusableView){
         UIView* view = [self view];
         
@@ -89,9 +95,14 @@
         else{
         }
         
+        self.isComputingSize = NO;
+        
         //Support for nibs
         return CGSizeMake(MIN(size.width,self.view.width),MIN(size.height,self.view.height));
     }
+    
+    self.isComputingSize = NO;
+    
     return CGSizeMake(0,0);
 }
 
@@ -106,16 +117,25 @@
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
         [self applyStyleToSubViews];
     }
+    
+    __unsafe_unretained CKCollectionCellContentViewController* bself = self;
+    
+    self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+        if(bself.view.window == nil || bself.isComputingSize)
+            return;
+        
+        [bself.collectionViewController updateSizeForControllerAtIndexPath:bself.indexPath];
+    };
 }
 
 - (void)applyStyleToSubViews{
-    [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
-    
     //Allows the CKCollectionCellContentViewController to specify style for the contentViewCell
     if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
         [self.contentViewCell setAppliedStyle:nil];
         [self.contentViewCell findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"contentViewCell"];
     }
+    
+    [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
 }
 
 @end

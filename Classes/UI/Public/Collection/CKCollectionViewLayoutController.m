@@ -13,6 +13,8 @@
 #import "UIView+Positioning.h"
 #import "CKCollectionViewFlowLayout.h"
 #import "CKCollectionContentCellController.h"
+#import "NSObject+Invocation.h"
+#import "Layout.h"
 
 /*
  TODO : implement CKCollectionLayoutViewController with layout, managing cell controllers
@@ -89,6 +91,8 @@
     }
     
     [self didChangeValueForKey:@"layout"];
+    
+  //  [self cancelPeformBlock];//Cancel invalidate size calls
 }
 
 - (void)dealloc{
@@ -535,11 +539,9 @@
 
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    UICollectionViewFlowLayout* flowLayout = (UICollectionViewFlowLayout*)collectionViewLayout;
-    
     CKCollectionContentCellController* controller = (CKCollectionContentCellController*)[self controllerAtIndexPath:indexPath];
-    CGSize constraints = (flowLayout.scrollDirection == UICollectionViewScrollDirectionVertical) ? CGSizeMake(self.collectionView.width,MAXFLOAT) : CGSizeMake(MAXFLOAT,self.collectionView.height);
-    return [controller preferredSizeConstraintToSize:constraints];
+    CGSize result = [controller preferredSizeConstraintToSize:CGSizeMake(self.collectionView.width,self.collectionView.height)];
+    return result;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
@@ -563,11 +565,6 @@
 }
 
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index{
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(invalidateLayoutAfterDelay:) object:self];
-    [self performSelector:@selector(invalidateLayoutAfterDelay:) withObject:self afterDelay:.1];
-}
-
-- (void)invalidateLayoutAfterDelay:(id)sender{
     [self.collectionView performBatchUpdates:^(){} completion:^(BOOL finished){}];
 }
 

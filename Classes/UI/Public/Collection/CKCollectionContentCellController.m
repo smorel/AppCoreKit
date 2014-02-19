@@ -15,6 +15,9 @@
 #import "CKCollectionViewCell.h"
 #import "UIView+Positioning.h"
 #import "CKViewCellCache.h"
+#import "NSObject+Bindings.h"
+
+
 
 @interface CKCollectionCellContentViewController ()
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
@@ -103,6 +106,9 @@
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(self.view){
+        //TODO : CHECK IF REQUIERED OR WHY ITS REQUIERED ?
+        //ARE SOME VIEWS STILL ATTACHED TO CONTROLLER AND THEY SHOULD NOT ?
+        [self setupView:self.view];
         return [[self contentViewController] preferredSizeConstraintToSize:size];
     }else{
         CKCollectionViewCell* view = (CKCollectionViewCell*)[[CKViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
@@ -123,10 +129,13 @@
         UIView* original = self.view; //For styles to apply correctly on view.
         self.view = view;
         [self setupView:view];
-        self.view = original;
+        CGSize result = [[self contentViewController] preferredSizeConstraintToSize:size];
         
-        return [[self contentViewController] preferredSizeConstraintToSize:size];
-    }
+        [self viewDidDisappear];
+    
+        self.view = original;
+        return result;
+   }
 
 }
 
