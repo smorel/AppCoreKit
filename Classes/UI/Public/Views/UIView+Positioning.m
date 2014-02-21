@@ -86,10 +86,22 @@
 @implementation UIView(Snaphot)
 
 - (UIImage*)snapshot{
-    UIGraphicsBeginImageContext(self.frame.size);
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, scale);
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    
+    CGContextClearRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
+    [[UIColor clearColor]setFill];
+    CGContextFillRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
+    
     [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
+    if(scale != 1){
+        return [[[UIImage alloc]initWithCGImage:resultingImage.CGImage scale:scale orientation:resultingImage.imageOrientation]autorelease];
+    }
     
     return resultingImage;
 }
@@ -104,14 +116,27 @@
     UIScrollView *renderedView = (UIScrollView *)self;
     CGPoint offset = renderedView.contentOffset;
     
-    UIGraphicsBeginImageContext(self.frame.size);
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, scale);
     CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    
+    CGContextClearRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
+    [[UIColor clearColor]setFill];
+    CGContextFillRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
+    
     CGContextSaveGState(contextRef);
     CGContextTranslateCTM(contextRef, -offset.x, -offset.y);
+    
     [self.layer renderInContext:contextRef];
     UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
     CGContextRestoreGState(contextRef);
     UIGraphicsEndImageContext();
+    
+    
+    if(scale != 1){
+        return [[[UIImage alloc]initWithCGImage:resultingImage.CGImage scale:scale orientation:resultingImage.imageOrientation]autorelease];
+    }
     
     return resultingImage;
 }

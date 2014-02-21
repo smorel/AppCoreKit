@@ -163,4 +163,21 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
     return image;
 }
 
+- (UIImage*)imageInRect:(CGRect)rect{
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    
+    CGRect r = CGRectMake(rect.origin.x * scale,rect.origin.y * scale,rect.size.width * scale, rect.size.height * scale);
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], r);
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    
+    if(scale != 1){
+        return [[UIImage alloc]initWithCGImage:cropped.CGImage scale:scale orientation:cropped.imageOrientation];
+    }
+    
+    return cropped;
+    
+}
+
 @end

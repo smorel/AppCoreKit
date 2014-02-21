@@ -565,7 +565,7 @@
 }
 
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index{
-    [self.collectionView performBatchUpdates:^(){} completion:^(BOOL finished){}];
+    //[self.collectionView performBatchUpdates:^(){} completion:^(BOOL finished){}];
 }
 
 @end
