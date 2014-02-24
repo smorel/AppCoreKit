@@ -26,6 +26,7 @@
 
 @interface CKCollectionContentCellController()
 @property(nonatomic,retain) CKCollectionCellContentViewController* contentViewController;
+@property(nonatomic,assign) BOOL isContentViewDidAppear;
 @end
 
 @implementation CKCollectionContentCellController
@@ -35,6 +36,7 @@
     self = [super init];
     [self setContentViewController:contentViewController];
     [contentViewController setCollectionCellController:self];
+    self.isContentViewDidAppear = NO;
     return self;
 }
 
@@ -93,14 +95,30 @@
     if([self contentViewController]){
         [[self contentViewController]viewDidAppear:NO];
     }
+    
+    self.isContentViewDidAppear = YES;
+}
+
+- (void)viewDidAppear:(UIView *)view{
+    [super viewDidAppear:view];
+    
+    if(![self contentViewController] || self.isContentViewDidAppear)
+        return;
+    
+    [[self contentViewController]viewWillAppear:NO];
+    [[self contentViewController]viewDidAppear:NO];
 }
 
 - (void)viewDidDisappear{
-    if(![self contentViewController])
+    [super viewDidDisappear];
+    
+    if(![self contentViewController] || !self.isContentViewDidAppear)
         return;
     
     [[self contentViewController]viewWillDisappear:NO];
     [[self contentViewController]viewDidDisappear:NO];
+    
+    self.isContentViewDidAppear = NO;
 }
 
 
