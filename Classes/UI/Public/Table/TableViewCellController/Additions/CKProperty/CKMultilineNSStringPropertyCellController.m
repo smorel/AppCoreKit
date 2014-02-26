@@ -97,7 +97,11 @@
     [cell clearBindingsContext];
     
     self.textView = (CKTextView*)[cell.contentView viewWithTag:TEXTVIEW_TAG];
-    self.textView.inputAccessoryView = [self navigationToolbar];
+    
+    UIToolbar* toolbar = [self navigationToolbar];
+    if(toolbar){
+        self.textView.inputAccessoryView = toolbar;
+    }
     
     CKProperty* property = (CKProperty*)self.objectProperty;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
