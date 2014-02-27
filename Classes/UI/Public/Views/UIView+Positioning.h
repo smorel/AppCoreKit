@@ -57,3 +57,14 @@
 - (UIImage*)snapshot;
 
 @end
+
+
+/**
+ */
+@interface UIScreen(Snaphot)
+
+/** Only works on ios7 and more
+ */
+- (UIImage*)snapshot;
+
+@end

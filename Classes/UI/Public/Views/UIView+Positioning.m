@@ -142,3 +142,29 @@
 }
 
 @end
+
+@implementation UIScreen(Snaphot)
+
+- (UIImage*)snapshot{
+    UIView* view = [[UIScreen mainScreen]snapshotViewAfterScreenUpdates:YES];
+    
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, scale);
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    
+    CGContextClearRect(contextRef, CGRectMake(0,0,view.bounds.size.width,view.bounds.size.height));
+    [[UIColor clearColor]setFill];
+    CGContextFillRect(contextRef, CGRectMake(0,0,view.bounds.size.width,view.bounds.size.height));
+    
+    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
+    UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    if(scale != 1){
+        return  [[UIImage alloc]initWithCGImage:resultingImage.CGImage scale:scale orientation:resultingImage.imageOrientation];
+    }
+    
+    return resultingImage;
+}
+
+@end
