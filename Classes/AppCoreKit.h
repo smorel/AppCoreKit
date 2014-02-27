@@ -13,6 +13,7 @@
 #import "Layout.h"
 #import "UI.h"
 #import "Mock.h"
+#import "Animation.h"
 #import "CoreData.h"
 #import "Network.h"
 #import "Debugger.h"

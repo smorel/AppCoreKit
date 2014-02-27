@@ -491,6 +491,7 @@
 		9668EF0918AD076900E72444 /* UIScrollView+CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9668EF0718AD076900E72444 /* UIScrollView+CKLayout.m */; };
 		96691E1215DD3BE500D73510 /* CKTableViewCellController+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 96691E1015DD3BE400D73510 /* CKTableViewCellController+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96691E1315DD3BE500D73510 /* CKTableViewCellController+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 96691E1115DD3BE500D73510 /* CKTableViewCellController+Factory.m */; };
+		966AAE7818BF7C420046D17E /* Animation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B3BD0B182BEF3700978B85 /* Animation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51811538BD4E00B3F785 /* NSObject+Singleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51821538BD4E00B3F785 /* NSObject+Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51801538BD4E00B3F785 /* NSObject+Singleton.m */; };
 		967C51851538BE8200B3F785 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C51831538BE8100B3F785 /* CKDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2653,6 +2654,7 @@
 				7560DD1C13B8ED3600268D13 /* NSString+URIQuery.h in Headers */,
 				7560DD1E13B8ED3600268D13 /* NSString+Validations.h in Headers */,
 				7560DD2013B8ED3600268D13 /* NSString+Additions.h in Headers */,
+				966AAE7818BF7C420046D17E /* Animation.h in Headers */,
 				7560DD2213B8ED3600268D13 /* CKNSStringPropertyCellController.h in Headers */,
 				7560DD2413B8ED3600268D13 /* NSValueTransformer+Additions.h in Headers */,
 				7560DD2613B8ED3600268D13 /* CKCarouselCollectionViewController.h in Headers */,
