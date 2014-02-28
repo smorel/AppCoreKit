@@ -7,6 +7,7 @@
 //
 
 #import "UIView+Snapshot.h"
+#import "CKVersion.h"
 
 @implementation UIView(Snaphot)
 
@@ -20,12 +21,7 @@
     [[UIColor clearColor]setFill];
     CGContextFillRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
     
-    if([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]){
-        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
-    }
-    else{
-        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    }
+    [self.layer renderInContext:contextRef];
     
     UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -59,12 +55,7 @@
     CGContextSaveGState(contextRef);
     CGContextTranslateCTM(contextRef, -offset.x, -offset.y);
     
-    if([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]){
-        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
-    }
-    else{
-        [self.layer renderInContext:contextRef];
-    }
+    [self.layer renderInContext:contextRef];
     
     CGContextRestoreGState(contextRef);
     
@@ -81,23 +72,52 @@
 
 @end
 
+CGImageRef UIGetScreenImage(void);
 
-//WORKS PEFECTLY IN SIMULATOR, RETURNS A BLACK IMAGE ON DEVICE
 @implementation UIScreen(Snaphot)
 
 - (UIImage*)snapshot{
-    UIView* view = [[UIScreen mainScreen]snapshotViewAfterScreenUpdates:YES];
+    /* Private API
+    CGImageRef screen = UIGetScreenImage();
+    UIImage *image = [UIImage imageWithCGImage:screen];
+    CGImageRelease(screen);
+    
+    return image;
+     */
     
     CGFloat scale = [[UIScreen mainScreen]scale];
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, scale);
-    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, NO, scale);
     
-    CGContextClearRect(contextRef, CGRectMake(0,0,view.bounds.size.width,view.bounds.size.height));
-    [[UIColor clearColor]setFill];
-    CGContextFillRect(contextRef, CGRectMake(0,0,view.bounds.size.width,view.bounds.size.height));
+    CGContextRef context = UIGraphicsGetCurrentContext();
     
-    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
+    // Iterate over every window from back to front
+    for (UIWindow *window in [[UIApplication sharedApplication] windows])
+    {
+        if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen])
+        {
+            // -renderInContext: renders in the coordinate space of the layer,
+            // so we must first apply the layer's geometry to the graphics context
+            CGContextSaveGState(context);
+            // Center the context around the window's anchor point
+            CGContextTranslateCTM(context, [window center].x, [window center].y);
+            // Apply the window's transform about the anchor point
+            CGContextConcatCTM(context, [window transform]);
+            // Offset by the portion of the bounds left of and above the anchor point
+            CGContextTranslateCTM(context,
+                                  -[window bounds].size.width * [[window layer] anchorPoint].x,
+                                  -[window bounds].size.height * [[window layer] anchorPoint].y);
+            
+
+            [window.layer renderInContext:context];
+            
+            // Restore the context
+            CGContextRestoreGState(context);
+        }
+    }
+    
+    // Retrieve the screenshot image
     UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    
     UIGraphicsEndImageContext();
     
     if(scale != 1){
