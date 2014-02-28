@@ -38,33 +38,3 @@
 
 @end
 
-/**
- */
-@interface UIView(Snaphot)
-
-/**
- */
-- (UIImage*)snapshot;
-
-@end
-
-/**
- */
-@interface UIScrollView(Snaphot)
-
-/**
- */
-- (UIImage*)snapshot;
-
-@end
-
-
-/**
- */
-@interface UIScreen(Snaphot)
-
-/** Only works on ios7 and more
- */
-- (UIImage*)snapshot;
-
-@end

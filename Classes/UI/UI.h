@@ -20,6 +20,7 @@
 #import "UIKeyboard+Information.h"
 #import "UIButton+FlatDesign.h"
 #import "UISlider+Style.h"
+#import "UIView+Snapshot.h"
 
 
 #import "CKContainerViewController.h"
