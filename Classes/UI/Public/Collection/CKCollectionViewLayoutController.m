@@ -11,6 +11,7 @@
 #import "CKCollectionContentCellController.h"
 #import "UIView+AutoresizingMasks.h"
 #import "UIView+Positioning.h"
+#import "UIView+Snapshot.h"
 #import "CKCollectionViewFlowLayout.h"
 #import "CKCollectionContentCellController.h"
 #import "NSObject+Invocation.h"
