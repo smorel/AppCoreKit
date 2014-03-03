@@ -48,15 +48,23 @@ static char kUIViewNameKey;
     for(NSString* key in ar){
         id oldCurrentView = currentView;
         
-        NSArray* propertyNames = [currentView allPropertyNames];
-        if([propertyNames indexOfObject:key] != NSNotFound){
-            currentView = [currentView valueForKey:key];
-        }else if([currentView isKindOfClass:[UIView class]]){
+        //Search for sub view with name first
+        BOOL found = NO;
+        if([currentView isKindOfClass:[UIView class]]){
             for(UIView* view in [currentView subviews]){
                 if([[view name]isEqualToString:key]){
                     currentView = view;
+                    found = YES;
                     break;
                 }
+            }
+        }
+        
+        //Search for sub view with property name second
+        if(!found){
+            NSArray* propertyNames = [currentView allPropertyNames];
+            if([propertyNames indexOfObject:key] != NSNotFound){
+                currentView = [currentView valueForKey:key];
             }
         }
         
