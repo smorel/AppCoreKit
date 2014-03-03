@@ -17,9 +17,8 @@
 #import "CKViewCellCache.h"
 #import "NSObject+Bindings.h"
 
-
-
 @interface CKCollectionCellContentViewController ()
+@property(nonatomic,assign) BOOL isComputingSize;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @end
 
@@ -107,6 +106,14 @@
     
     [[self contentViewController]viewWillAppear:NO];
     [[self contentViewController]viewDidAppear:NO];
+    [[self contentViewController]setView:nil];
+}
+
+- (void)setView:(UIView *)view{
+    [super setView:view];
+    if(view == nil){
+        [[self contentViewController]setView:nil];
+    }
 }
 
 - (void)viewDidDisappear{
@@ -123,12 +130,17 @@
 
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
+    [self contentViewController].isComputingSize = YES;
     if(self.view){
         //TODO : CHECK IF REQUIERED OR WHY ITS REQUIERED ?
         //ARE SOME VIEWS STILL ATTACHED TO CONTROLLER AND THEY SHOULD NOT ?
         [self setupView:self.view];
-        return [[self contentViewController] preferredSizeConstraintToSize:size];
+        CGSize result =  [[self contentViewController] preferredSizeConstraintToSize:size];
+        [self contentViewController].isComputingSize = NO;
+        
+        return result;
     }else{
+        
         CKCollectionViewCell* view = (CKCollectionViewCell*)[[CKViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
         
         if(!view){
@@ -152,6 +164,8 @@
         [self viewDidDisappear];
     
         self.view = original;
+        [self contentViewController].isComputingSize = NO;
+        
         return result;
    }
 
