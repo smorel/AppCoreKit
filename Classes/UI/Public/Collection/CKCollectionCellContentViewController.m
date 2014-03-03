@@ -129,9 +129,11 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    
+    //HERE we do not apply style on sub views as we have reuse
     if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
-        [self applyStyle];
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
+        NSMutableSet* appliedStack = [NSMutableSet set];
+        [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
     }
     
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
