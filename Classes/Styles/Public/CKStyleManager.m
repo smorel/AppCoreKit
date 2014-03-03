@@ -9,8 +9,17 @@
 #import "CKStyleManager.h"
 #import "UIView+Style.h"
 #import "CKResourceManager.h"
+#import "NSObject+Singleton.h"
+#import "CKWeakRef.h"
 
 NSString* CKStyleManagerDidReloadNotification = @"CKStyleManagerDidReloadNotification";
+
+@interface CKStyleManagerCache : NSObject
+@property(nonatomic,retain) NSMutableDictionary* cache;
+
+- (CKStyleManager*)styleManagerWithContentOfFileNamed:(NSString*)fileName;
+
+@end
 
 static CKStyleManager* CKStyleManagerDefault = nil;
 static NSInteger kLogEnabled = -1;
@@ -26,6 +35,10 @@ static NSInteger kLogEnabled = -1;
 	return CKStyleManagerDefault;
 }
 
+
++ (CKStyleManager*)styleManagerWithContentOfFileNamed:(NSString*)fileName{
+    return [[CKStyleManagerCache sharedInstance]styleManagerWithContentOfFileNamed:fileName];
+}
 
 - (void)registerOnDependencies:(NSSet*)dependencies{
     __unsafe_unretained CKStyleManager* bself = self;
@@ -131,6 +144,38 @@ static NSInteger kLogEnabled = -1;
     }else{
         [self applyStyle:style];
     }
+}
+
+@end
+
+
+@implementation CKStyleManagerCache
+
+- (void)dealloc{
+    [_cache release];
+    [super dealloc];
+}
+
+- (CKStyleManager*)styleManagerWithContentOfFileNamed:(NSString*)fileName{
+    CKWeakRef* styleManagerRef = [self.cache objectForKey:fileName];
+    if(styleManagerRef){
+        return styleManagerRef.object;
+    }
+    
+    if(!self.cache){
+        self.cache = [NSMutableDictionary dictionary];
+    }
+    
+    CKStyleManager* manager = [[[CKStyleManager alloc]init]autorelease];
+    [manager loadContentOfFileNamed:fileName];
+    
+    styleManagerRef = [CKWeakRef weakRefWithObject:manager block:^(CKWeakRef *weakRef) {
+        [self.cache removeObjectForKey:fileName];
+    }];
+    
+    [self.cache setObject:styleManagerRef forKey:fileName];
+    
+    return manager;
 }
 
 @end

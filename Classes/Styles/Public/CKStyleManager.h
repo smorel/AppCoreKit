@@ -23,6 +23,12 @@ extern NSString* CKStyleManagerDidReloadNotification;
  */
 + (CKStyleManager*)defaultManager;
 
+/** This returns a style manager initialized with the content of the specified file name.
+    This stylemanager is store in a cache so that the next time we query a stylemanager with the same file name, an existing instance is returned.
+    The cache version of this stylemanager is released when all the stylemanager instances for the specified file named are released.
+ */
++ (CKStyleManager*)styleManagerWithContentOfFileNamed:(NSString*)fileName;
+
 ///-----------------------------------
 /// @name Importing .style files content
 ///-----------------------------------

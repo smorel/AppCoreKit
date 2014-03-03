@@ -14,6 +14,9 @@
 #import "CKLayoutBox.h"
 #import "UIView+CKLayout.h"
 #import "CKContainerViewController.h"
+#import "CKStyleManager.h"
+#import "CKResourceManager.h"
+#import "CKResourceDependencyContext.h"
 
 @interface CKCollectionViewController () 
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
@@ -38,7 +41,24 @@
     [_collectionCellControllerWeakRef release];
     [_reusableView release];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
+    
     [super dealloc];
+}
+
+- (id)init{
+    self = [super init];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
+    return self;
+}
+
+- (void)styleManagerDidUpdate:(NSNotification*)notification{
+    if(!self.view)
+        return;
+    
+    if(notification.object == [self styleManager]){
+        [self resourceManagerReloadUI];
+    }
 }
 
 - (void)setCollectionCellController:(CKCollectionCellController *)c{
