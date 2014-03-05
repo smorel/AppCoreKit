@@ -113,4 +113,13 @@
 	return [formatter stringFromDate:self];
 }
 
+
+- (NSString *)stringWithISO8601TimePointFormat {
+	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	formatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+	formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+	formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+	return [formatter stringFromDate:self];
+}
+
 @end
