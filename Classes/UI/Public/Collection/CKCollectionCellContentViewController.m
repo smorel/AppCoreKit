@@ -134,6 +134,7 @@
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableSet* appliedStack = [NSMutableSet set];
         [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
+        [self setAppliedStyle:controllerStyle];
     }
     
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
