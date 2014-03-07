@@ -34,7 +34,7 @@
 @end
 
 @interface CKCollectionViewLayoutController () <UICollectionViewDelegateFlowLayout>
-//@property(nonatomic,retain,readwrite) CKCollectionViewLayout* layout;
+//@property(nonatomic,retain,readwrite) UICollectionViewLayout* layout;
 @property(nonatomic,retain,readwrite) UICollectionView* collectionView;
 @property(nonatomic,retain,readwrite) UIImageView* beforeRotationImageView;
 @property(nonatomic,retain,readwrite) UIImageView* afterRotationImageView;
@@ -53,7 +53,7 @@
 
 #pragma Manages initialization
 
-- (id)initWithLayout:(CKCollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
+- (id)initWithLayout:(UICollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
     self = [super initWithCollection:collection factory:factory];
     self.layout = theLayout;
     
@@ -66,12 +66,12 @@
 }
 
 
-- (void)setupWithLayout:(CKCollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
+- (void)setupWithLayout:(UICollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
     self.layout = theLayout;
     [self setupWithCollection:collection factory:factory];
 }
 
-- (void)setLayout:(CKCollectionViewLayout *)theLayout{
+- (void)setLayout:(UICollectionViewLayout *)theLayout{
     [self willChangeValueForKey:@"layout"];
     
     if([_layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
@@ -163,8 +163,12 @@
     
     [self.collectionView setContentOffset:self.collectionView.contentOffset animated:NO];
     
-    CKCollectionViewLayout* myLayout = (CKCollectionViewLayout*)[[self collectionView] collectionViewLayout];
-    self.indexPathToReachAfterRotation = [myLayout indexPathForViewOfInterest];
+    UICollectionViewLayout* myLayout = (UICollectionViewLayout*)[[self collectionView] collectionViewLayout];
+    if([myLayout isKindOfClass:[CKCollectionViewLayout class]]){
+        self.indexPathToReachAfterRotation = [(CKCollectionViewLayout*)myLayout indexPathForViewOfInterest];
+    }else{
+        self.indexPathToReachAfterRotation = [[self.collectionView indexPathsForSelectedItems]firstObject];
+    }
     
     if(self.optimizedOrientationChangedEnabled){
         UIImage* image = [self.collectionView snapshot];
@@ -185,14 +189,19 @@
 - (void)updateRotationWithOrientation:(UIInterfaceOrientation)orientation{
     //Updates and snapshot new view !
     
-    CKCollectionViewLayout* myLayout = (CKCollectionViewLayout*)[[self collectionView] collectionViewLayout];
+    UICollectionViewLayout* myLayout = (UICollectionViewLayout*)[[self collectionView] collectionViewLayout];
     [myLayout invalidateLayout];
     
     [self.collectionView layoutSubviews];
     
-    CGPoint p = [myLayout contentOffsetForViewAtIndexPath:self.indexPathToReachAfterRotation];
-    [self.collectionView setContentOffset:p animated:NO];
-    
+    if([myLayout isKindOfClass:[CKCollectionViewLayout class]]){
+        CGPoint p = [(CKCollectionViewLayout*)myLayout contentOffsetForViewAtIndexPath:self.indexPathToReachAfterRotation];
+        [self.collectionView setContentOffset:p animated:NO];
+    }else{
+        if(self.indexPathToReachAfterRotation){
+            [self.collectionView scrollToItemAtIndexPath:self.indexPathToReachAfterRotation atScrollPosition:UICollectionViewScrollPositionCenteredVertically | UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        }
+    }
     
     if(self.optimizedOrientationChangedEnabled){
         self.beforeRotationImageView.hidden = YES;
