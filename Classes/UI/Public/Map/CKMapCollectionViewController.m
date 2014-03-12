@@ -288,8 +288,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-	
 	self.view.backgroundColor = [UIColor colorWithRGBValue:0xc1bfbb];	
 	
 	if (self.mapView == nil) {
@@ -308,6 +306,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
         [self.mapView setVisibleMapRect:MKMapRectWorld];
     }
      */
+    [super viewDidLoad];
 }
 
 - (void)viewDidUnload {

@@ -31,7 +31,7 @@
 #import "CKStyle+Parsing.h"
 #import "CKVersion.h"
 #import "CKStringHelper.h"
-#import "CKTableViewCellCache.h"
+#import "CKViewCellCache.h"
 
 
 #import "CKNSStringPropertyCellController.h"
@@ -103,7 +103,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                 return CGSizeMake((width >= MAXFLOAT) ? 0 : width, self.containerController.view.height);
             }
         }else{
-            CKUITableViewCell* view = (CKUITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
+            CKUITableViewCell* view = (CKUITableViewCell*)[[CKViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
             
             if(!view){
                 view = [[[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[self identifier]]autorelease];
@@ -114,7 +114,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                 
                 [self initView:view];
                 self.view = original;
-                [[CKTableViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
+                [[CKViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
             }
             
             UIView* original = self.view; //For styles to apply correctly on view.

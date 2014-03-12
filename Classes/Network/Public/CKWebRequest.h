@@ -87,7 +87,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 /// @name Executing the WebRequest
 ///-----------------------------------
 
-/** Start on the currentRunLoop. Recommended to schedule with CKWebRequestManager
+/** Schedule in default CKWebRequestManager
  */
 - (void)start;
 

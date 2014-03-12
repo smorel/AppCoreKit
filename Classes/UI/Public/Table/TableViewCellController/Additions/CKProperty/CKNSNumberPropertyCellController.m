@@ -249,7 +249,10 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    self.textField.inputAccessoryView = [self navigationToolbar];
+    UIToolbar* toolbar = [self navigationToolbar];
+    if(toolbar){
+        self.textField.inputAccessoryView = toolbar;
+    }
     if([self hasNextResponder] == YES){
         self.textField.returnKeyType = UIReturnKeyNext;
     }

@@ -25,7 +25,7 @@ namespace __gnu_cxx{
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
 
 #ifdef LAYOUT_DEBUG_ENABLED
@@ -43,11 +43,11 @@ namespace __gnu_cxx{
     return self;
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)constraintSize{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)constraintSize{
     if([self.layoutBoxes count] <= 0 && self.sizeToFitLayoutBoxes)
     return CGSizeMake(0,0);
     
-    CGSize size = [CKLayoutBox preferedSizeConstraintToSize:constraintSize forBox:self];
+    CGSize size = [CKLayoutBox preferredSizeConstraintToSize:constraintSize forBox:self];
     size = CGSizeMake(size.width - self.padding.left - self.padding.right,size.height - self.padding.top - self.padding.bottom);
     
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -124,10 +124,11 @@ namespace __gnu_cxx{
                     
                     CGSize subsize = CGSizeMake(0,0);
                     if(box.maximumSize.height == box.minimumSize.height){ //fixed size
-                        precomputedSize[box] = CGSizeMake(width,box.minimumSize.height);
+                        CGSize constrainedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,box.minimumSize.height)];
+                        precomputedSize[box] = CGSizeMake(constrainedSize.width,box.minimumSize.height);
                     }else{
                         CGFloat preferedHeight = flexibleHeight / (flexibleCount - numberOfFlexiSpaces);
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(width,size.height/*(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)*/ /*MAXFLOAT*/)];
+                        subsize = [box preferredSizeConstraintToSize:CGSizeMake(width,size.height/*(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)*/ /*MAXFLOAT*/)];
                         if( numberOfFlexiSpaces > 0
                            || (subsize.height < preferedHeight && box.maximumSize.height == MAXFLOAT)
                            || (subsize.height <= preferedHeight && box.maximumSize.height == subsize.height)){
@@ -178,7 +179,7 @@ namespace __gnu_cxx{
                         CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
                         
                         CGFloat preferedHeight = flexibleHeight / flexibleCount;
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(width,(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)];
+                        subsize = [box preferredSizeConstraintToSize:CGSizeMake(width,(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)];
                         flexibleHeight -= subsize.height;
                         flexibleCount--;
                     }
@@ -195,8 +196,8 @@ namespace __gnu_cxx{
     }
     
     if(self.sizeToFitLayoutBoxes){
-        CGSize ret = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
-        self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
+        CGSize ret = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+        self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
                                                                                      ret.height + self.padding.bottom + self.padding.top)
                                                                    forBox:self];
 
@@ -207,7 +208,7 @@ namespace __gnu_cxx{
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
-    CGSize size = [self preferedSizeConstraintToSize:theframe.size];
+    CGSize size = [self preferredSizeConstraintToSize:theframe.size];
     [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
     
@@ -216,6 +217,8 @@ namespace __gnu_cxx{
 #endif
     
     if([self.layoutBoxes count] > 0){
+        
+        hash_map<id, CGRect> framePerBox;
         
         //Compute layout
         CGFloat y = self.frame.origin.y + self.padding.top;
@@ -244,7 +247,8 @@ namespace __gnu_cxx{
                     CGSize subsize = box.lastPreferedSize;
                     
                     CGRect boxframe = CGRectMake(box.margins.left,y,MAX(0,subsize.width),MAX(0,subsize.height));
-                    [box setBoxFrameTakingCareOfTransform:boxframe];
+                    framePerBox[box] = boxframe;
+                   // [box setBoxFrameTakingCareOfTransform:boxframe];
                     
                     y += subsize.height;
                // }
@@ -260,14 +264,18 @@ namespace __gnu_cxx{
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
+                
+                hash_map<id, CGRect>::iterator it = framePerBox.find(box);
+                CGRect boxFrame = it->second;
+                
                 //if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                // else{
                     CGFloat offsetX = self.frame.origin.x + self.padding.left;
                     CGFloat offsetY = 0;
                     switch(self.horizontalAlignment){
                         case CKLayoutHorizontalAlignmentLeft:break; //this is already computed
-                        case CKLayoutHorizontalAlignmentRight: offsetX += totalWidth - box.frame.size.width; break;
-                        case CKLayoutVerticalAlignmentCenter:  offsetX += (totalWidth / 2) - (box.frame.size.width / 2); break;
+                        case CKLayoutHorizontalAlignmentRight: offsetX += totalWidth - boxFrame.size.width; break;
+                        case CKLayoutVerticalAlignmentCenter:  offsetX += (totalWidth / 2) - (boxFrame.size.width / 2); break;
                     }
                     
                     if(totalHeight < (size.height - self.padding.top - self.padding.bottom)){
@@ -278,9 +286,9 @@ namespace __gnu_cxx{
                         }
                     }
                     
-                    CGRect boxFrame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
-                    [box setBoxFrameTakingCareOfTransform:boxFrame];
-                    [box performLayoutWithFrame:box.frame];
+                    CGRect newboxFrame = CGRectIntegral(CGRectMake(boxFrame.origin.x + offsetX,boxFrame.origin.y + offsetY,boxFrame.size.width,boxFrame.size.height));
+                    [box setBoxFrameTakingCareOfTransform:newboxFrame];
+                    [box performLayoutWithFrame:newboxFrame];
                 //}
             }
         }

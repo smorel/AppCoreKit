@@ -15,7 +15,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
 @end
 
@@ -66,7 +66,7 @@ static char UITextViewUsesAttributedStringKey;
     [self UITextView_Layout_setContentOffset:offset];
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(![self registeredOnTextNotification]){
         [[NSNotificationCenter defaultCenter]addObserverForName:UITextViewTextDidChangeNotification object:self queue:nil usingBlock:^(NSNotification *note) {
             [(UITextView*)note.object invalidateLayout];
@@ -118,7 +118,7 @@ static char UITextViewUsesAttributedStringKey;
         ret.height = MAX(self.contentSize.height,self.font.lineHeight + 16);
     }
     
-    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
     CGFloat width = MAX(size.width,ret.width) + self.padding.left + self.padding.right;
     CGFloat height = ret.height + self.padding.top + self.padding.bottom;

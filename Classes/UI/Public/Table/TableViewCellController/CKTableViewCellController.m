@@ -55,6 +55,38 @@
 @property (nonatomic, retain) NSString* syncControllerViewBindingContextId;
 @end
 
+
+
+
+
+
+@interface CKTableViewCellController ()
+
+@property (nonatomic, retain) NSString* cacheLayoutBindingContextId;
+
+@property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
+@property (nonatomic, retain) CKWeakRef* parentCellControllerRef;//In case of grids, ...
+
+@property (nonatomic, assign) BOOL invalidatedSize;
+@property (nonatomic, assign) BOOL isInSetup;
+@property (nonatomic, retain) NSString* identifier;
+@property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
+
+@property (nonatomic, assign) BOOL hasCheckedStyleToReapply;
+@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForBackgroundView;
+@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForSelectedBackgroundView;
+
+@property (nonatomic, retain) NSMutableDictionary* textLabelStyle;
+@property (nonatomic, retain) NSMutableDictionary* detailTextLabelStyle;
+
+- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
+- (UITableViewCell *)loadCell;
+
+
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size;
+
+@end
+
 @implementation CKUITableViewCell
 @synthesize delegate;
 @synthesize delegateRef = _delegateRef;
@@ -395,19 +427,34 @@
     //[self.delegate restoreViews];
 }
 
+//CKTableViewContentCellController is part of a future refactoring
+//and is developped outside of this project yet
+
 - (CGFloat)preferedHeightConstraintToWidth:(CGFloat)width{
+    Class CKTableViewContentCellControllerClass = NSClassFromString(@"CKTableViewContentCellController");
+    if([self.delegate isKindOfClass:CKTableViewContentCellControllerClass]){
+        CGSize size = [self.delegate preferredSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
+        return size.height;
+    }
+    
     if(self.contentView.layoutBoxes){
         [self.contentView invalidateLayout];
-        CGSize size = [self.contentView preferedSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
+        CGSize size = [self.contentView preferredSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
         return size.height;
     }
     return MAXFLOAT;
 }
 
 - (CGFloat)preferedWidthConstraintToHeight:(CGFloat)height{
+    Class CKTableViewContentCellControllerClass = NSClassFromString(@"CKTableViewContentCellController");
+    if([self.delegate isKindOfClass:CKTableViewContentCellControllerClass]){
+        CGSize size = [self.delegate preferredSizeConstraintToSize:CGSizeMake(MAXFLOAT,height)];
+        return size.height;
+    }
+    
     if(self.contentView.layoutBoxes){
         [self.contentView invalidateLayout];
-        CGSize size = [self.contentView preferedSizeConstraintToSize:CGSizeMake(MAXFLOAT,height)];
+        CGSize size = [self.contentView preferredSizeConstraintToSize:CGSizeMake(MAXFLOAT,height)];
         return size.width;
     }
     return MAXFLOAT;
@@ -458,32 +505,6 @@
 
 
 
-
-
-@interface CKTableViewCellController ()
-
-@property (nonatomic, retain) NSString* cacheLayoutBindingContextId;
-
-@property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
-@property (nonatomic, retain) CKWeakRef* parentCellControllerRef;//In case of grids, ...
-
-@property (nonatomic, assign) BOOL invalidatedSize;
-@property (nonatomic, assign) BOOL isInSetup;
-@property (nonatomic, retain) NSString* identifier;
-@property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
-
-@property (nonatomic, assign) BOOL hasCheckedStyleToReapply;
-@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForBackgroundView;
-@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForSelectedBackgroundView;
-
-@property (nonatomic, retain) NSMutableDictionary* textLabelStyle;
-@property (nonatomic, retain) NSMutableDictionary* detailTextLabelStyle;
-
-- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
-- (UITableViewCell *)loadCell;
-
-@end
-
 @implementation CKTableViewCellController
 @synthesize cellStyle = _cellStyle;
 @synthesize componentsRatio = _componentsRatio;
@@ -511,6 +532,11 @@
 @synthesize hasCheckedStyleToReapply = _hasCheckedStyleToReapply;
 @synthesize textLabelStyle = _textLabelStyle;
 @synthesize detailTextLabelStyle = _detailTextLabelStyle;
+
+
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
+    return CGSizeMake(0,0); //This method is not used yet and is restricted for controller of type CKTableViewContentCellController
+}
 
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;

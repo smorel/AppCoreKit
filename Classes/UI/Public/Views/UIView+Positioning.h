@@ -38,22 +38,3 @@
 
 @end
 
-/**
- */
-@interface UIView(Snaphot)
-
-/**
- */
-- (UIImage*)snapshot;
-
-@end
-
-/**
- */
-@interface UIScrollView(Snaphot)
-
-/**
- */
-- (UIImage*)snapshot;
-
-@end

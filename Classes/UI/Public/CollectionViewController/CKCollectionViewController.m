@@ -27,6 +27,7 @@
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
 @property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
 @property (nonatomic, retain) NSMutableArray* weakViews;
+@property (nonatomic, retain) NSMutableArray* oldVisibleIndexPaths;
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
 
 @property (nonatomic, retain) id objectController;
@@ -140,6 +141,8 @@
 	_weakViews = nil;
     [_sectionsToControllers release];
     _sectionsToControllers = nil;
+    [_oldVisibleIndexPaths release];
+    _oldVisibleIndexPaths = nil;
 	
 	[super dealloc];
 }
@@ -908,6 +911,23 @@
             }
         }
 	}
+    
+    if(visible){
+        for(NSIndexPath* indexPath in self.oldVisibleIndexPaths){
+            BOOL isNowHidden = ([visibleIndexPaths indexOfObject:indexPath] == NSNotFound);
+            if(isNowHidden){
+                if([indexPath section] < [self.sectionsToControllers count]){
+                    NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
+                    if([indexPath row] < [controllers count]){
+                        CKCollectionCellController* controller = [controllers objectAtIndex:[indexPath row]];
+                        [controller viewDidDisappear];
+                    }
+                }
+            }
+        }
+    }
+    
+    self.oldVisibleIndexPaths = visibleIndexPaths ? [NSMutableArray arrayWithArray:visibleIndexPaths] : nil;
 }
 
 @end

@@ -12,13 +12,13 @@
 
 @interface CKCollectionViewLayoutController : CKCollectionViewController <UICollectionViewDataSource,UICollectionViewDelegate,CKCollectionViewMorphableLayoutDelegate>
 
-- (id)initWithLayout:(CKCollectionViewLayout*)layout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
+- (id)initWithLayout:(UICollectionViewLayout*)layout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 
-- (void)setupWithLayout:(CKCollectionViewLayout*)layout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
+- (void)setupWithLayout:(UICollectionViewLayout*)layout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 
 @property(nonatomic,retain,readonly) UICollectionView* collectionView;
 
-@property(nonatomic,retain) CKCollectionViewLayout* layout;
+@property(nonatomic,retain) UICollectionViewLayout* layout;
 
 /** Default value is YES.
     Enabling this flag will optimize device orientation changes by taking a snapshot of the collectionView before and after rotation, hidding the collection view and cross fading between the 2 snapshots.

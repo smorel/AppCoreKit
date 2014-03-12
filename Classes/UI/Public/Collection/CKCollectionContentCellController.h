@@ -13,6 +13,9 @@
 //THIS SHOULD BE PART OF TE BASE MECHANISM FOR CKCollectionCellController !!!!
 //CKTableViewCellController should only offer extra attributes for managing UITableViewCell specific stuff as well as CKMapAnnotationController
 
+/** This allows to define a collection view cell controller displaying a CKCollectionCellContentViewController in collectionViewCell's contentView with reuse capability.
+ This is the equivalent of CKTableViewContentCellController for table view controller.
+ */
 @interface CKCollectionContentCellController : CKCollectionCellController
 
 /**
@@ -31,5 +34,8 @@
  */
 - (void)didDeselect;
 
+/**
+ */
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size;
 
 @end

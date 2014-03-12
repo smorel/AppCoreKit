@@ -60,6 +60,10 @@
  */
 - (NSString *)stringWithISO8601TimePointMinimalFormat;
 
+/** Formats the date as a ISO8601 UTC "time point" minimal string (yyyy-MM-dd'T'HH:mm:ss'Z')
+ */
+- (NSString *)stringWithISO8601TimePointFormat;
+
 ///-----------------------------------
 /// @name Getting Date using TimeZone
 ///-----------------------------------

@@ -526,7 +526,7 @@
         }
         
         if(item.customView && [[item.customView layoutBoxes]count] > 0){
-            CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             item.customView.width = preferedSize.width;
             item.customView.height = preferedSize.height;
         }
@@ -549,7 +549,7 @@
         self.navigationItem.backBarButtonItem = item;
         
         if(item.customView && [[item.customView layoutBoxes]count] > 0){
-            CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             item.customView.width = preferedSize.width;
             item.customView.height = preferedSize.height;
         }
@@ -572,7 +572,7 @@
             
             
             if(item.customView && [[item.customView layoutBoxes]count] > 0){
-                CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+                CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
                 item.customView.width = preferedSize.width;
                 item.customView.height = preferedSize.height;
             }
@@ -621,7 +621,7 @@
         
         
         if(item.customView && [[item.customView layoutBoxes]count] > 0){
-            CGSize preferedSize = [item.customView preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             item.customView.width = preferedSize.width;
             item.customView.height = preferedSize.height;
         }
@@ -649,7 +649,7 @@
             }];
             [NSObject endBindingsContext];
         }else if([[view layoutBoxes]count] > 0){
-            CGSize preferedSize = [view preferedSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
+            CGSize preferedSize = [view preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             view.width = preferedSize.width;
             view.height = preferedSize.height;
         }

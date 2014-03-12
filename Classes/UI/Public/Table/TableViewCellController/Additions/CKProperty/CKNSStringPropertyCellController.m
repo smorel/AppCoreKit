@@ -165,7 +165,11 @@
 
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    self.textField.inputAccessoryView = [self navigationToolbar];
+    UIToolbar* toolbar = [self navigationToolbar];
+    if(toolbar){
+        self.textField.inputAccessoryView = toolbar;
+    }
+    
 
     if([self hasNextResponder]){
         self.textField.returnKeyType = UIReturnKeyNext;
@@ -186,8 +190,14 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	if([self activateNextResponder] == NO){
-		[textField resignFirstResponder];
+    if(textField.returnKeyType == UIReturnKeyNext ){
+        [self activateNextResponder];
+    }else{
+        if(self.returnKeyBlock){
+            self.returnKeyBlock(self);
+        }else{
+            [textField resignFirstResponder];
+        }
 	}
 	return YES;
 }

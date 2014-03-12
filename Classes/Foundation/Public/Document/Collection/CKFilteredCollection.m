@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, CKFilteredCollectionUpdateType){
         int i=0;
         for(;i<[source count];++i){
             id src_object = [source objectAtIndex:i];
-            id target_object = [target objectAtIndex:j];
+            id target_object = (j < target.count) ? [target objectAtIndex:j] : nil;
             if([src_object isEqual:target_object]){ ++j; }
             else{
                 [indexSetToRemove addIndex:i];

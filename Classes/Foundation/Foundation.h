@@ -108,6 +108,10 @@
 #import "CKStringHelper.h"
 #import "UIImage+FastLoading.h"
 
+#import "NSArray+Compare.h"
+#import "UIColor+Components.h"
+#import "UIImage+ImageEffects.h"
+
 
 //ResourceManager
 #import "CKResourceManager.h"

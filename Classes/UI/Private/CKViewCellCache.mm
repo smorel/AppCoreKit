@@ -1,12 +1,12 @@
 //
-//  CKTableViewCellCache.m
+//  CKViewCellCache.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKTableViewCellCache.h"
+#import "CKViewCellCache.h"
 #include <ext/hash_map>
 
 using namespace __gnu_cxx;
@@ -24,7 +24,7 @@ typedef hash_map<std::string, UIView* > CKTableViewCellCacheMap;
 static CKTableViewCellCacheMap kCache;
 
  
-@implementation CKTableViewCellCache
+@implementation CKViewCellCache
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];

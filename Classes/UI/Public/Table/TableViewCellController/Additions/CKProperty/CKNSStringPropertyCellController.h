@@ -25,6 +25,12 @@
  */
 @property (nonatomic,retain,readonly) UITextField* textField;
 
+/** This block will get called when the user hits the done button in the keyboard.
+    If no block is set, the keyboard will get resigned automatically.
+    If a block is set, this is your responsability to resign the keyboard as follow : [cellController.textField resignFirstResponder];
+ */
+@property (nonatomic,copy) void(^returnKeyBlock)(CKNSStringPropertyCellController* cellController);
+
 /**
  */
 @property (nonatomic,copy) CKInputTextFormatterBlock textInputFormatterBlock;

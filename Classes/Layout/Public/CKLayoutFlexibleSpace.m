@@ -20,7 +20,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
 
 @end
@@ -40,15 +40,15 @@
     return self;
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
     if([self.containerLayoutBox isKindOfClass:[CKHorizontalBoxLayout class]])
-        self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(size.width,1) forBox:self];
+        self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(size.width,1) forBox:self];
     else if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
-        self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(1,size.height) forBox:self];
+        self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(1,size.height) forBox:self];
     
     return self.lastPreferedSize;
 }

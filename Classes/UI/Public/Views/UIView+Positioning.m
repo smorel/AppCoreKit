@@ -83,37 +83,5 @@
 @end
 
 
-@implementation UIView(Snaphot)
-
-- (UIImage*)snapshot{
-    UIGraphicsBeginImageContext(self.frame.size);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return resultingImage;
-}
-
-@end
 
 
-
-@implementation UIScrollView(Snaphot)
-
-- (UIImage*)snapshot{
-    UIScrollView *renderedView = (UIScrollView *)self;
-    CGPoint offset = renderedView.contentOffset;
-    
-    UIGraphicsBeginImageContext(self.frame.size);
-    CGContextRef contextRef = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(contextRef);
-    CGContextTranslateCTM(contextRef, -offset.x, -offset.y);
-    [self.layer renderInContext:contextRef];
-    UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-    CGContextRestoreGState(contextRef);
-    UIGraphicsEndImageContext();
-    
-    return resultingImage;
-}
-
-@end

@@ -20,7 +20,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
 + (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly;
 + (void)performLayoutWithFrame:(CGRect)theframe forBox:(NSObject<CKLayoutBoxProtocol>*)box;
@@ -39,7 +39,7 @@
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
 lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,name;
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     self.lastComputedSize = size;
@@ -54,7 +54,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         for(NSObject<CKLayoutBoxProtocol>* box in self.layoutBoxes){
             CGSize constraint = size;
             
-            CGSize s = [box preferedSizeConstraintToSize:constraint];
+            CGSize s = [box preferredSizeConstraintToSize:constraint];
             
             if(s.width > maxWidth && s.width < MAXFLOAT)   maxWidth = s.width;
             if(s.height > maxHeight && s.height < MAXFLOAT) maxHeight = s.height;
@@ -76,7 +76,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         }
     }
     
-    size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    size = [CKLayoutBox preferredSizeConstraintToSize:size forBox:self];
     size = CGSizeMake(size.width - (self.padding.left + self.padding.right), size.height - (self.padding.top + self.padding.bottom));
     
     self.lastPreferedSize = CGSizeMake(size.width + self.padding.left + self.padding.right,size.height + self.padding.top + self.padding.bottom);
@@ -90,7 +90,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     }
     
     CGSize lastComputedSize = self.lastPreferedSize;
-    CGSize size = [self preferedSizeConstraintToSize:constraint];
+    CGSize size = [self preferredSizeConstraintToSize:constraint];
     
     //We hitted a special case in navigation bar subviews. Especially titleView
     //We possibly try to set a frame in this method that will trigger setNeedsLayout on the navigation bar.
@@ -296,6 +296,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     [self invalidateLayout];
 }
 
++ (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly{
+    [CKLayoutBox invalidateLayoutBox:box recursivelly:recursivelly];
+}
+
 @end
 
 
@@ -336,7 +340,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
     }
     
     id value = objc_getAssociatedObject(self, &UIViewSizeToFitLayoutBoxesKey);
-    return value ? [value boolValue] : YES;
+    return value ? [value boolValue] : ( [self isKindOfClass:[UIScrollView class]] ? NO : YES );
 }
 
 - (void)setInvalidatedLayoutBlock:(CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{

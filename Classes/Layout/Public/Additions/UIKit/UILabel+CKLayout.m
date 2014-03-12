@@ -15,7 +15,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
 @end
 
@@ -61,7 +61,7 @@ static char UILabelUsesAttributedStringKey;
 }
 
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize)){
         return self.lastPreferedSize;
     }
@@ -94,11 +94,14 @@ static char UILabelUsesAttributedStringKey;
         ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
     }
     
-    //Backward Compatibility
+    //Backward Compatibility : Flexible width when in vertical layout to be able to handle textAlignment property
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){
         id value = objc_getAssociatedObject(self, &UILabelFlexibleWidthKey);
         if(!value){
-            ret.width = size.width;
+            //If vertical layout in scroll view, constraint is infinite
+            if(size.width < MAXFLOAT){
+                ret.width = size.width;
+            }
         }
     }
     
@@ -109,7 +112,7 @@ static char UILabelUsesAttributedStringKey;
         ret.height = size.height;
     }
     
-    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
     self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;

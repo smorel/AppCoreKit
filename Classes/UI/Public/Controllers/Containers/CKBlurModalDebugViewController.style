@@ -1,0 +1,65 @@
+{
+
+    "@import" : [
+    ],
+    
+    "$SliderTemplate" : {
+        "@class" : "CKVerticalBoxLayout", "horizontalAlignment" : "CKLayoutHorizontalAlignmentLeft",
+        "layoutBoxes" : [
+                         {"@class" : "CKHorizontalBoxLayout",
+                         "layoutBoxes" : [
+                                          { "@class" : "UILabel", "name" : "#name", "text" : "#name" , "textColor" : "whiteColor" , "marginRight" : 5, "font" : ["Helvetica-Bold", 12] },
+                                          { "@class" : "UILabel", "name" : "#labelName",  "textAlignment" : "UITextAlignmentRight", "textColor" : "whiteColor", "font" : ["Helvetica", 12]  }
+                            ]
+                         },
+                         { "@class" : "UISlider", "name" : "#sliderName", "minmumValue" : "#minimumValue", "maximumValue" : "#maximumValue" }
+                         
+        ]
+    },
+
+    "CKBlurModalDebugViewController" : {
+        "view" : {
+            "backgroundColor" : "clearColor",
+            "layoutBoxes" : [
+                             { "@class" : "CKVerticalBoxLayout", "padding" : "20 20 20 20", "sizeToFitLayoutBoxes" : 0,"horizontalAlignment" : "CKLayoutHorizontalAlignmentCenter",
+                             "layoutBoxes" : [
+                                    { "@class" : "UISegmentedControl", "name" : "StyleSegmentedControl" },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "radius:", "#sliderName" : "radiusSlider", "#labelName" : "radiusLabel", "#minimumValue" : 0, "#maximumValue" : 40 },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "scale:", "#sliderName" : "scaleSlider", "#labelName" : "scaleLabel","#minimumValue" : 0, "#maximumValue" : 10 },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "duration:", "#sliderName" : "durationSlider", "#labelName" : "durationLabel","#minimumValue" : 0, "#maximumValue" : 10 },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "red:", "#sliderName" : "redSlider", "#labelName" : "redLabel","#minimumValue" : 0, "#maximumValue" : 1 },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "green:", "#sliderName" : "greenSlider", "#labelName" : "greenLabel","#minimumValue" : 0, "#maximumValue" : 1 },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "blue:", "#sliderName" : "blueSlider", "#labelName" : "blueLabel","#minimumValue" : 0, "#maximumValue" : 1 },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "alpha:", "#sliderName" : "alphaSlider", "#labelName" : "alphaLabel","#minimumValue" : 0, "#maximumValue" : 1 },
+                                    { "@inherits" : ["$SliderTemplate"], "#name" : "saturationDelta:", "#sliderName" : "saturationDeltaSlider", "#labelName" : "saturationDeltaLabel","#minimumValue" : 0, "#maximumValue" : 5 },
+                                    {"@class" : "CKLayoutFlexibleSpace" },
+                                    { "@class" : "UIButton", "name" : "DimissButton" }
+                             ]
+                             }
+            ]
+        },
+        
+        "UIButton[name=DimissButton]" : {
+            "defaultTitle" : "Dismiss",
+            "defaultBackgroundColor" : "darkGrayColor",
+            "highlightedBackgroundColor" : "whiteColor",
+            "defaultTextColor" : "whiteColor",
+            "highlightedTextColor" : "darkGrayColor",
+            "contentEdgeInsets" : "20 20 20 20",
+            "layer" : {
+                "cornerRadius" : 4
+            },
+            
+            "titleLabel" : {
+                "font" : ["Helvetica-Bold" , 20]
+            }
+        },
+        
+        "UIButton[name=FreezeButton]" : {
+            "@inherits" : [ "UIButton[name=DimissButton]" ],
+            "contentEdgeInsets" : "10 10 10 10",
+            "defaultTitle" : "Freeze this deal"
+        }
+    }
+
+}

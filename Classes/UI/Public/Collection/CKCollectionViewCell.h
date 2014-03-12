@@ -10,4 +10,8 @@
 
 @interface CKCollectionViewCell : UICollectionViewCell
 
+- (UICollectionView*)parentCollectionView;
+
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size;
+
 @end

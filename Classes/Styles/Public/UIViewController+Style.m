@@ -79,8 +79,7 @@ static char UIViewControllerStylesheetFileNameKey;
     //If this file or one of its dependencies refreshes, only update this view controller.
     
     if(self.stylesheetFileName){
-        manager = [[[CKStyleManager alloc]init]autorelease];
-        [manager loadContentOfFileNamed:self.stylesheetFileName];
+        manager = [CKStyleManager styleManagerWithContentOfFileNamed:self.stylesheetFileName];
     }else{
         NSString* filePath = [CKResourceManager pathForResource:[[self class]description] ofType:@".style"];
         if(!filePath){
@@ -123,8 +122,7 @@ static char UIViewControllerStylesheetFileNameKey;
             }
         }else{
             self.stylesheetFileName = [[self class]description];
-            manager = [[[CKStyleManager alloc]init]autorelease];
-            [manager loadContentOfFileNamed:[[self class]description]];
+            manager = [CKStyleManager styleManagerWithContentOfFileNamed:[[self class]description]];
         }
     }
     

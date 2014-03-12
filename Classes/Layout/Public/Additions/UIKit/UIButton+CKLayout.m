@@ -21,7 +21,7 @@
 
 @interface CKLayoutBox()
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
 @end
 
@@ -64,7 +64,7 @@ static char UIButtonFlexibleHeightKey;
     return self.flexibleHeight && self.flexibleWidth;
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     
@@ -93,7 +93,7 @@ static char UIButtonFlexibleHeightKey;
     if(self.flexibleHeight){
         ret.height = size.height;
     }
-    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
     self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;

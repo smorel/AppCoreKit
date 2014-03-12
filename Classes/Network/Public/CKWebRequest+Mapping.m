@@ -116,14 +116,13 @@
     };
     
     request.completionBlock = ^(id value, NSHTTPURLResponse* response, NSError* error){
-        if(error || response.statusCode >= 400){
+        if(error || response.statusCode >= 400 || value != object){
             if(errorBlock){
                 errorBlock(value, response, error);
             }
         }
         else{
             if(completionBlock){
-                CKAssert(value == object,@"Invalid request transformation");
                 completionBlock(value);
             }
         }

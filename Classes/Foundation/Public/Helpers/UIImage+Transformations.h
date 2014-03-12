@@ -34,4 +34,8 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
  */
 + (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
 
+/**
+ */
+- (UIImage*)imageInRect:(CGRect)rect;
+
 @end

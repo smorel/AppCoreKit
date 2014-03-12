@@ -120,7 +120,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 #pragma mark - LifeCycle
 
 - (void)start {
-    [self startOnRunLoop:[NSRunLoop currentRunLoop]];
+    [[CKWebRequestManager sharedManager] scheduleRequest:self];
+  //  dispatch_async(dispatch_get_main_queue(), ^{
+   //     [self startOnRunLoop:[NSRunLoop currentRunLoop]];
+   // });
 }
 
 - (void)startOnRunLoop:(NSRunLoop *)runLoop {

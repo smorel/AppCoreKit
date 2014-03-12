@@ -11,6 +11,11 @@
 #import "CKCollectionContentCellController.h"
 #import "UIView+AutoresizingMasks.h"
 #import "UIView+Positioning.h"
+#import "UIView+Snapshot.h"
+#import "CKCollectionViewFlowLayout.h"
+#import "CKCollectionContentCellController.h"
+#import "NSObject+Invocation.h"
+#import "Layout.h"
 
 /*
  TODO : implement CKCollectionLayoutViewController with layout, managing cell controllers
@@ -28,8 +33,8 @@
 @property(nonatomic,assign) CGFloat endMorphRatioForDelegate;
 @end
 
-@interface CKCollectionViewLayoutController ()
-//@property(nonatomic,retain,readwrite) CKCollectionViewLayout* layout;
+@interface CKCollectionViewLayoutController () <UICollectionViewDelegateFlowLayout>
+//@property(nonatomic,retain,readwrite) UICollectionViewLayout* layout;
 @property(nonatomic,retain,readwrite) UICollectionView* collectionView;
 @property(nonatomic,retain,readwrite) UIImageView* beforeRotationImageView;
 @property(nonatomic,retain,readwrite) UIImageView* afterRotationImageView;
@@ -48,7 +53,7 @@
 
 #pragma Manages initialization
 
-- (id)initWithLayout:(CKCollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
+- (id)initWithLayout:(UICollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
     self = [super initWithCollection:collection factory:factory];
     self.layout = theLayout;
     
@@ -61,12 +66,12 @@
 }
 
 
-- (void)setupWithLayout:(CKCollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
+- (void)setupWithLayout:(UICollectionViewLayout*)theLayout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
     self.layout = theLayout;
     [self setupWithCollection:collection factory:factory];
 }
 
-- (void)setLayout:(CKCollectionViewLayout *)theLayout{
+- (void)setLayout:(UICollectionViewLayout *)theLayout{
     [self willChangeValueForKey:@"layout"];
     
     if([_layout isKindOfClass:[CKCollectionViewMorphableLayout class]]){
@@ -87,6 +92,8 @@
     }
     
     [self didChangeValueForKey:@"layout"];
+    
+  //  [self cancelPeformBlock];//Cancel invalidate size calls
 }
 
 - (void)dealloc{
@@ -156,8 +163,12 @@
     
     [self.collectionView setContentOffset:self.collectionView.contentOffset animated:NO];
     
-    CKCollectionViewLayout* myLayout = (CKCollectionViewLayout*)[[self collectionView] collectionViewLayout];
-    self.indexPathToReachAfterRotation = [myLayout indexPathForViewOfInterest];
+    UICollectionViewLayout* myLayout = (UICollectionViewLayout*)[[self collectionView] collectionViewLayout];
+    if([myLayout isKindOfClass:[CKCollectionViewLayout class]]){
+        self.indexPathToReachAfterRotation = [(CKCollectionViewLayout*)myLayout indexPathForViewOfInterest];
+    }else{
+        self.indexPathToReachAfterRotation = [[self.collectionView indexPathsForSelectedItems]firstObject];
+    }
     
     if(self.optimizedOrientationChangedEnabled){
         UIImage* image = [self.collectionView snapshot];
@@ -178,14 +189,19 @@
 - (void)updateRotationWithOrientation:(UIInterfaceOrientation)orientation{
     //Updates and snapshot new view !
     
-    CKCollectionViewLayout* myLayout = (CKCollectionViewLayout*)[[self collectionView] collectionViewLayout];
+    UICollectionViewLayout* myLayout = (UICollectionViewLayout*)[[self collectionView] collectionViewLayout];
     [myLayout invalidateLayout];
     
     [self.collectionView layoutSubviews];
     
-    CGPoint p = [myLayout contentOffsetForViewAtIndexPath:self.indexPathToReachAfterRotation];
-    [self.collectionView setContentOffset:p animated:NO];
-    
+    if([myLayout isKindOfClass:[CKCollectionViewLayout class]]){
+        CGPoint p = [(CKCollectionViewLayout*)myLayout contentOffsetForViewAtIndexPath:self.indexPathToReachAfterRotation];
+        [self.collectionView setContentOffset:p animated:NO];
+    }else{
+        if(self.indexPathToReachAfterRotation){
+            [self.collectionView scrollToItemAtIndexPath:self.indexPathToReachAfterRotation atScrollPosition:UICollectionViewScrollPositionCenteredVertically | UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        }
+    }
     
     if(self.optimizedOrientationChangedEnabled){
         self.beforeRotationImageView.hidden = YES;
@@ -527,6 +543,39 @@
             }
         }
     }
+}
+
+#pragma mark Flow Layout Management
+
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    CKCollectionContentCellController* controller = (CKCollectionContentCellController*)[self controllerAtIndexPath:indexPath];
+    CGSize result = [controller preferredSizeConstraintToSize:CGSizeMake(self.collectionView.width,self.collectionView.height)];
+    return result;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    return UIEdgeInsetsZero;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
+    return 0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
+    return 0;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
+    return CGSizeZero;
+}
+
+- (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index{
+    //[self.collectionView performBatchUpdates:^(){} completion:^(BOOL finished){}];
 }
 
 @end

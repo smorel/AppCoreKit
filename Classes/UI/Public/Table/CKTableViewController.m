@@ -275,7 +275,9 @@
     CGFloat oldOffsetFromTop =  oldInsets.top + oldOffset.y;
     
     CGPoint newOffset = CGPointMake(oldOffset.x, oldOffsetFromTop - self.tableView.contentInset.top);
-    self.tableView.contentOffset = newOffset;
+    if(!CGPointEqualToPoint(oldOffset, newOffset)){
+        self.tableView.contentOffset = newOffset;
+    }
     
     UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     

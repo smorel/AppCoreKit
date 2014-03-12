@@ -14,11 +14,19 @@
 #import "CKLayoutBox.h"
 #import "UIView+CKLayout.h"
 #import "CKContainerViewController.h"
+#import "CKStyleManager.h"
+#import "CKResourceManager.h"
+#import "CKResourceDependencyContext.h"
+
+@interface CKCollectionViewController () 
+- (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
+@end
 
 @interface CKCollectionCellContentViewController ()
 @property(nonatomic,retain) CKWeakRef* collectionCellControllerWeakRef;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @property(nonatomic,retain) UIView* reusableView;
+@property(nonatomic,assign) BOOL isComputingSize;
 @end
 
 @interface CKCollectionCellController()
@@ -33,7 +41,24 @@
     [_collectionCellControllerWeakRef release];
     [_reusableView release];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
+    
     [super dealloc];
+}
+
+- (id)init{
+    self = [super init];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
+    return self;
+}
+
+- (void)styleManagerDidUpdate:(NSNotification*)notification{
+    if(!self.view)
+        return;
+    
+    if(notification.object == [self styleManager]){
+        [self resourceManagerReloadUI];
+    }
 }
 
 - (void)setCollectionCellController:(CKCollectionCellController *)c{
@@ -78,39 +103,62 @@
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
+    self.isComputingSize = YES;
     if(self.isViewLoaded || self.reusableView){
         UIView* view = [self view];
         
         //Support for CKLayout
         if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
-            return [view preferedSizeConstraintToSize:size];
+            return [view preferredSizeConstraintToSize:size];
         }
         //TODO : Auto layout support !
         else{
         }
         
+        self.isComputingSize = NO;
+        
         //Support for nibs
         return CGSizeMake(MIN(size.width,self.view.width),MIN(size.height,self.view.height));
     }
+    
+    self.isComputingSize = NO;
+    
     return CGSizeMake(0,0);
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    //HERE we do not apply style on sub views as we have reuse
+    if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
+        NSMutableSet* appliedStack = [NSMutableSet set];
+        [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
+        [self setAppliedStyle:controllerStyle];
+    }
+    
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
         [self applyStyleToSubViews];
     }
+    
+    __unsafe_unretained CKCollectionCellContentViewController* bself = self;
+    
+    self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+        if(bself.view.window == nil || bself.isComputingSize)
+            return;
+        
+        [bself.collectionViewController updateSizeForControllerAtIndexPath:bself.indexPath];
+    };
 }
 
 - (void)applyStyleToSubViews{
-    [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
-    
     //Allows the CKCollectionCellContentViewController to specify style for the contentViewCell
     if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
         [self.contentViewCell setAppliedStyle:nil];
         [self.contentViewCell findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"contentViewCell"];
     }
+    
+    [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
 }
 
 @end

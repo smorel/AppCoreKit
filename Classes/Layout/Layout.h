@@ -11,6 +11,8 @@
 #import "CKVerticalBoxLayout.h"
 #import "CKHorizontalBoxLayout.h"
 #import "CKLayoutFlexibleSpace.h"
+#import "CKLayoutViewProxy.h"
+#import "CKLayoutDescription.h"
 
 #import "UIView+CKLayout.h"
 #import "UIViewController+CKLayout.h"
@@ -19,3 +21,5 @@
 #import "UIImageView+CKLayout.h"
 #import "UITextField+CKLayout.h"
 #import "UITextView+CKLayout.h"
+#import "UIPickerView+CKLayout.h"
+#import "UIScrollView+CKLayout.h"

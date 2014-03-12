@@ -89,7 +89,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     
     if(recursivelly){
         for(NSObject<CKLayoutBoxProtocol>* subbox in box.layoutBoxes){
-            [CKLayoutBox invalidateLayoutBox:subbox recursivelly:YES];
+            [[subbox class] invalidateLayoutBox:subbox recursivelly:YES];
         }
     }
 }
@@ -152,7 +152,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     box.padding = UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
-+ (CGSize)preferedSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box{
++ (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box{
     CGSize ret = size;
     
     if(box.minimumSize.width  > ret.width) {
@@ -308,17 +308,17 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     }
 }
 
-- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+- (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:size forBox:self];
     return self.lastPreferedSize;
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
-    CGSize size = [self preferedSizeConstraintToSize:theframe.size];
+    CGSize size = [self preferredSizeConstraintToSize:theframe.size];
     [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
     [CKLayoutBox performLayoutWithFrame:self.frame forBox:self];
