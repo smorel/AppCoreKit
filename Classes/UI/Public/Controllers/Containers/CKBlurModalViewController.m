@@ -105,7 +105,7 @@
     //self.renderScreenImage = [self.presentedInWindow snapshot];
     self.renderScreenImage = [[UIScreen mainScreen]snapshot];
      
-    self.blurView = [[UIImageView alloc]initWithFrame:self.presentedInWindow.bounds];
+    self.blurView = [[[UIImageView alloc]initWithFrame:self.presentedInWindow.bounds]autorelease];
     
     [self.view addSubview:self.blurView];
     
@@ -135,12 +135,12 @@
         }
     }];
     
-    self.animationManager = [[CKAnimationManager alloc]init];
+    self.animationManager = [[[CKAnimationManager alloc]init]autorelease];
     [self.animationManager registerInScreen:[UIScreen mainScreen]];
     
     __unsafe_unretained CKBlurModalViewController* bself = self;
     
-    CKAnimationInterpolator* interpolator = [[CKAnimationInterpolator alloc]init];
+    CKAnimationInterpolator* interpolator = [[[CKAnimationInterpolator alloc]init]autorelease];
     interpolator.duration = self.animationDuration;
     interpolator.values = @[ @(0.0), @(1.0)];
     interpolator.updateBlock = ^(CKAnimation* animation,id value){
@@ -176,7 +176,7 @@
     }];
     
     
-    CKAnimationInterpolator* interpolator = [[CKAnimationInterpolator alloc]init];
+    CKAnimationInterpolator* interpolator = [[[CKAnimationInterpolator alloc]init]autorelease];
     interpolator.duration = self.animationDuration;
     interpolator.values = @[ @(1.0), @(0.0)];
     interpolator.updateBlock = ^(CKAnimation* animation,id value){

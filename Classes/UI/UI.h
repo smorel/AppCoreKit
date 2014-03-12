@@ -24,6 +24,7 @@
 #import "CKMapViewBlockDelegate.h"
 #import "CKRangeSelectorView.h"
 #import "CKBlurModalViewController.h"
+#import "CKSnapshotController.h"
 
 
 #import "CKContainerViewController.h"
