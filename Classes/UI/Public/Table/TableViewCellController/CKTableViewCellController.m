@@ -807,6 +807,9 @@
 
 - (UITableViewCell *)tableViewCell {
 	if(self.view){
+        if(![self.view isKindOfClass:[UITableViewCell class]]){
+            int i =3;
+        }
 		CKAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 		return (UITableViewCell*)self.view;
 	}
