@@ -9,8 +9,8 @@
 #import "CKAnimation.h"
 #import "CKAnimationPrivate.h"
 #import "CKAnimationManager.h"
+#import "CKWeakRef.h"
 
-#import <AppCoreKit/AppCoreKit.h>
 
 @interface CKAnimation()
 @property(nonatomic,retain)CKWeakRef* animationManagerRef;

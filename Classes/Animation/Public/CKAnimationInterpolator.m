@@ -7,7 +7,7 @@
 //
 
 #import "CKAnimationInterpolator.h"
-#import <AppCoreKit/AppCoreKit.h>
+#import "CoreGraphics+Additions.h"
 
 typedef enum CKAnimationInterpolatorType{
     CKAnimationInterpolatorTypeInvalid,

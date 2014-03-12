@@ -48,6 +48,10 @@
     return self;
 }
 
+- (NSString*)identifier{
+    return [NSString stringWithFormat:@"%@_%@",[self.contentViewController class],[self.contentViewController name]];
+}
+
 - (void)dealloc{
     [_contentViewController release];
     [super dealloc];
