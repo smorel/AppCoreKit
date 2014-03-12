@@ -577,6 +577,7 @@
 		96B4516E18D09DC000D58489 /* CKBlurModalDebugViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4516B18D09DC000D58489 /* CKBlurModalDebugViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B4516F18D09DC000D58489 /* CKBlurModalDebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516C18D09DC000D58489 /* CKBlurModalDebugViewController.m */; };
 		96B4517018D09DC000D58489 /* CKBlurModalDebugViewController.style in Resources */ = {isa = PBXBuildFile; fileRef = 96B4516D18D09DC000D58489 /* CKBlurModalDebugViewController.style */; };
+		96B4517218D0A04100D58489 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96B4517118D0A04100D58489 /* Accelerate.framework */; };
 		96B9D29C177B228300455BE8 /* CKLayoutBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29A177B228200455BE8 /* CKLayoutBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B9D29D177B228300455BE8 /* CKLayoutBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96B9D29B177B228300455BE8 /* CKLayoutBox.mm */; };
 		96B9D2A0177B22EA00455BE8 /* UIView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1268,6 +1269,7 @@
 		96B4516B18D09DC000D58489 /* CKBlurModalDebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBlurModalDebugViewController.h; path = Classes/UI/Public/Controllers/Containers/CKBlurModalDebugViewController.h; sourceTree = "<group>"; };
 		96B4516C18D09DC000D58489 /* CKBlurModalDebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBlurModalDebugViewController.m; path = Classes/UI/Public/Controllers/Containers/CKBlurModalDebugViewController.m; sourceTree = "<group>"; };
 		96B4516D18D09DC000D58489 /* CKBlurModalDebugViewController.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CKBlurModalDebugViewController.style; path = Classes/UI/Public/Controllers/Containers/CKBlurModalDebugViewController.style; sourceTree = "<group>"; };
+		96B4517118D0A04100D58489 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		96B9D29A177B228200455BE8 /* CKLayoutBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBox.h; path = Classes/Layout/Public/CKLayoutBox.h; sourceTree = "<group>"; };
 		96B9D29B177B228300455BE8 /* CKLayoutBox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKLayoutBox.mm; path = Classes/Layout/Public/CKLayoutBox.mm; sourceTree = "<group>"; };
 		96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIView+CKLayout.h"; sourceTree = "<group>"; };
@@ -1368,6 +1370,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96B4517218D0A04100D58489 /* Accelerate.framework in Frameworks */,
 				962C6C5B16E7DBD100852D21 /* AdSupport.framework in Frameworks */,
 				7560DE5213B8F00F00268D13 /* MediaPlayer.framework in Frameworks */,
 				7560DE5313B8F00F00268D13 /* QuartzCore.framework in Frameworks */,
@@ -1906,6 +1909,7 @@
 		7550153213B8EA08002DAE8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				96B4517118D0A04100D58489 /* Accelerate.framework */,
 				7560DDB813B8EDB700268D13 /* Vendor */,
 				962C6C5A16E7DBD100852D21 /* AdSupport.framework */,
 				7560DE4213B8F00F00268D13 /* MediaPlayer.framework */,
