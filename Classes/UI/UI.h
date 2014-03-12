@@ -21,6 +21,7 @@
 #import "UIButton+FlatDesign.h"
 #import "UISlider+Style.h"
 #import "UIView+Snapshot.h"
+#import "CKMapViewBlockDelegate.h"
 
 
 #import "CKContainerViewController.h"

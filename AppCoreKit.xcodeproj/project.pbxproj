@@ -562,6 +562,8 @@
 		96B4514A18D08F9100D58489 /* UIColor+Components.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4514818D08F9100D58489 /* UIColor+Components.m */; };
 		96B4514D18D08F9900D58489 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4514B18D08F9900D58489 /* UIImage+ImageEffects.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B4514E18D08F9900D58489 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4514C18D08F9900D58489 /* UIImage+ImageEffects.m */; };
+		96B4515118D0908100D58489 /* CKMapViewBlockDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4514F18D0908100D58489 /* CKMapViewBlockDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96B4515218D0908100D58489 /* CKMapViewBlockDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */; };
 		96B9D29C177B228300455BE8 /* CKLayoutBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29A177B228200455BE8 /* CKLayoutBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B9D29D177B228300455BE8 /* CKLayoutBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96B9D29B177B228300455BE8 /* CKLayoutBox.mm */; };
 		96B9D2A0177B22EA00455BE8 /* UIView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1238,6 +1240,8 @@
 		96B4514818D08F9100D58489 /* UIColor+Components.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Components.m"; path = "Classes/Foundation/Public/Helpers/UIColor+Components.m"; sourceTree = "<group>"; };
 		96B4514B18D08F9900D58489 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "Classes/Foundation/Public/Helpers/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		96B4514C18D08F9900D58489 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "Classes/Foundation/Public/Helpers/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		96B4514F18D0908100D58489 /* CKMapViewBlockDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapViewBlockDelegate.h; path = Classes/UI/Public/Views/CKMapViewBlockDelegate.h; sourceTree = "<group>"; };
+		96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapViewBlockDelegate.m; path = Classes/UI/Public/Views/CKMapViewBlockDelegate.m; sourceTree = "<group>"; };
 		96B9D29A177B228200455BE8 /* CKLayoutBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBox.h; path = Classes/Layout/Public/CKLayoutBox.h; sourceTree = "<group>"; };
 		96B9D29B177B228300455BE8 /* CKLayoutBox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKLayoutBox.mm; path = Classes/Layout/Public/CKLayoutBox.mm; sourceTree = "<group>"; };
 		96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIView+CKLayout.h"; sourceTree = "<group>"; };
@@ -1634,6 +1638,8 @@
 				96D5D09817D0CD00001A4534 /* UIButton+FlatDesign.mm */,
 				96D5D09917D0CD00001A4534 /* UISlider+Style.h */,
 				96D5D09A17D0CD00001A4534 /* UISlider+Style.m */,
+				96B4514F18D0908100D58489 /* CKMapViewBlockDelegate.h */,
+				96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
 			name = Views;
@@ -2637,6 +2643,7 @@
 				7560DC9B13B8ED3600268D13 /* CKArrayCollection.h in Headers */,
 				B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */,
 				7560DC9D13B8ED3600268D13 /* CKCollection.h in Headers */,
+				96B4515118D0908100D58489 /* CKMapViewBlockDelegate.h in Headers */,
 				7560DC9F13B8ED3600268D13 /* CKCollectionTableViewCellController.h in Headers */,
 				7560DCA113B8ED3600268D13 /* CKCollectionTableViewCellController+Style.h in Headers */,
 				7560DCA313B8ED3600268D13 /* CKCollectionController.h in Headers */,
@@ -3124,6 +3131,7 @@
 				7560DD0113B8ED3600268D13 /* CKNSDatePropertyCellController.m in Sources */,
 				7560DD0713B8ED3600268D13 /* NSManagedObjectContext+Requests.m in Sources */,
 				7560DD0B13B8ED3600268D13 /* CKNSNumberPropertyCellController.m in Sources */,
+				96B4515218D0908100D58489 /* CKMapViewBlockDelegate.m in Sources */,
 				7560DD0D13B8ED3600268D13 /* NSObject+Bindings.mm in Sources */,
 				7560DD0F13B8ED3600268D13 /* NSObject+Runtime.m in Sources */,
 				96E6FA30182D29F4001F1E6A /* CAEmitterCell+Introspection.m in Sources */,
