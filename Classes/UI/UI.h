@@ -22,6 +22,7 @@
 #import "UISlider+Style.h"
 #import "UIView+Snapshot.h"
 #import "CKMapViewBlockDelegate.h"
+#import "CKRangeSelectorView.h"
 
 
 #import "CKContainerViewController.h"
