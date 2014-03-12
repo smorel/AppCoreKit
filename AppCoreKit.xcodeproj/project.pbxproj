@@ -566,6 +566,8 @@
 		96B4515218D0908100D58489 /* CKMapViewBlockDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */; };
 		96B4515518D0924100D58489 /* CKRangeSelectorView.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4515318D0924100D58489 /* CKRangeSelectorView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B4515618D0924100D58489 /* CKRangeSelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4515418D0924100D58489 /* CKRangeSelectorView.m */; };
+		96B4515918D093A400D58489 /* CKBlurModalViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4515718D093A400D58489 /* CKBlurModalViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96B4515A18D093A400D58489 /* CKBlurModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4515818D093A400D58489 /* CKBlurModalViewController.m */; };
 		96B9D29C177B228300455BE8 /* CKLayoutBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29A177B228200455BE8 /* CKLayoutBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B9D29D177B228300455BE8 /* CKLayoutBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96B9D29B177B228300455BE8 /* CKLayoutBox.mm */; };
 		96B9D2A0177B22EA00455BE8 /* UIView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1246,6 +1248,8 @@
 		96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapViewBlockDelegate.m; path = Classes/UI/Public/Views/CKMapViewBlockDelegate.m; sourceTree = "<group>"; };
 		96B4515318D0924100D58489 /* CKRangeSelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRangeSelectorView.h; path = Classes/UI/Public/Views/CKRangeSelectorView.h; sourceTree = "<group>"; };
 		96B4515418D0924100D58489 /* CKRangeSelectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRangeSelectorView.m; path = Classes/UI/Public/Views/CKRangeSelectorView.m; sourceTree = "<group>"; };
+		96B4515718D093A400D58489 /* CKBlurModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBlurModalViewController.h; path = Classes/UI/Public/Controllers/Containers/CKBlurModalViewController.h; sourceTree = "<group>"; };
+		96B4515818D093A400D58489 /* CKBlurModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBlurModalViewController.m; path = Classes/UI/Public/Controllers/Containers/CKBlurModalViewController.m; sourceTree = "<group>"; };
 		96B9D29A177B228200455BE8 /* CKLayoutBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBox.h; path = Classes/Layout/Public/CKLayoutBox.h; sourceTree = "<group>"; };
 		96B9D29B177B228300455BE8 /* CKLayoutBox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKLayoutBox.mm; path = Classes/Layout/Public/CKLayoutBox.mm; sourceTree = "<group>"; };
 		96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIView+CKLayout.h"; sourceTree = "<group>"; };
@@ -2187,6 +2191,8 @@
 				9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */,
 				962C08911820131B00A6E439 /* CKStackViewController.h */,
 				962C08921820131B00A6E439 /* CKStackViewController.m */,
+				96B4515718D093A400D58489 /* CKBlurModalViewController.h */,
+				96B4515818D093A400D58489 /* CKBlurModalViewController.m */,
 			);
 			name = Containers;
 			sourceTree = "<group>";
@@ -2862,6 +2868,7 @@
 				9600B8C31545C41400F07C5A /* CKTypeAhead+Generator.h in Headers */,
 				9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */,
 				9600B8D31545C6B000F07C5A /* CKSlideShowViewController.h in Headers */,
+				96B4515918D093A400D58489 /* CKBlurModalViewController.h in Headers */,
 				96B3BD07182BEF1C00978B85 /* CKAnimationManager.h in Headers */,
 				9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */,
 				9600B8DF1545CAFF00F07C5A /* CKContainerViewController.h in Headers */,
@@ -3161,6 +3168,7 @@
 				7560DD2A13B8ED3600268D13 /* CKProperty.m in Sources */,
 				7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */,
 				7560DD2E13B8ED3600268D13 /* CKTableCollectionViewController.m in Sources */,
+				96B4515A18D093A400D58489 /* CKBlurModalViewController.m in Sources */,
 				7560DD3013B8ED3600268D13 /* CKCollectionCellControllerFactory.m in Sources */,
 				7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */,
 				7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */,

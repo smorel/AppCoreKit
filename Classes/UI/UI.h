@@ -23,6 +23,7 @@
 #import "UIView+Snapshot.h"
 #import "CKMapViewBlockDelegate.h"
 #import "CKRangeSelectorView.h"
+#import "CKBlurModalViewController.h"
 
 
 #import "CKContainerViewController.h"

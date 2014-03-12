@@ -7,6 +7,8 @@
 //
 
 #import "CKRangeSelectorView.h"
+#import "UIView+Positioning.h"
+#import "UIGestureRecognizer+BlockBasedInterface.h"
 
 
 @interface CKRangeSelectorView()
