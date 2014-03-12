@@ -35,14 +35,6 @@
 
 @implementation CKCollectionViewCell
 
-- (void)prepareForReuse{
-    [super prepareForReuse];
-    
-    __unsafe_unretained CKCollectionViewCell* bself = self;
-    
-    
-}
-
 - (UICollectionView*)parentCollectionView{
     UIView* v = [self superview];
     while(v){

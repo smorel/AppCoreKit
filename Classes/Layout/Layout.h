@@ -11,6 +11,8 @@
 #import "CKVerticalBoxLayout.h"
 #import "CKHorizontalBoxLayout.h"
 #import "CKLayoutFlexibleSpace.h"
+#import "CKLayoutViewProxy.h"
+#import "CKLayoutDescription.h"
 
 #import "UIView+CKLayout.h"
 #import "UIViewController+CKLayout.h"
