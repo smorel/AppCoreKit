@@ -103,3 +103,4 @@
 #import "CKCollectionViewGridLayout.h"
 #import "CKCollectionViewPageLayout.h"
 #import "CKCollectionViewFlowLayout.h"
+#import "CKSwipableCollectionCellContentViewController.h"

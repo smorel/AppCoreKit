@@ -570,6 +570,8 @@
 		96B4515A18D093A400D58489 /* CKBlurModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4515818D093A400D58489 /* CKBlurModalViewController.m */; };
 		96B4516118D0958300D58489 /* CKSnapshotController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4515F18D0958300D58489 /* CKSnapshotController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B4516218D0958300D58489 /* CKSnapshotController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516018D0958300D58489 /* CKSnapshotController.m */; };
+		96B4516518D099F800D58489 /* CKSwipableCollectionCellContentViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96B4516618D099F800D58489 /* CKSwipableCollectionCellContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */; };
 		96B9D29C177B228300455BE8 /* CKLayoutBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29A177B228200455BE8 /* CKLayoutBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B9D29D177B228300455BE8 /* CKLayoutBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96B9D29B177B228300455BE8 /* CKLayoutBox.mm */; };
 		96B9D2A0177B22EA00455BE8 /* UIView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1254,6 +1256,8 @@
 		96B4515818D093A400D58489 /* CKBlurModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBlurModalViewController.m; path = Classes/UI/Public/Controllers/Containers/CKBlurModalViewController.m; sourceTree = "<group>"; };
 		96B4515F18D0958300D58489 /* CKSnapshotController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSnapshotController.h; path = Classes/Foundation/Public/Helpers/CKSnapshotController.h; sourceTree = "<group>"; };
 		96B4516018D0958300D58489 /* CKSnapshotController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSnapshotController.m; path = Classes/Foundation/Public/Helpers/CKSnapshotController.m; sourceTree = "<group>"; };
+		96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSwipableCollectionCellContentViewController.h; path = Classes/UI/Public/Collection/CKSwipableCollectionCellContentViewController.h; sourceTree = "<group>"; };
+		96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSwipableCollectionCellContentViewController.m; path = Classes/UI/Public/Collection/CKSwipableCollectionCellContentViewController.m; sourceTree = "<group>"; };
 		96B9D29A177B228200455BE8 /* CKLayoutBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBox.h; path = Classes/Layout/Public/CKLayoutBox.h; sourceTree = "<group>"; };
 		96B9D29B177B228300455BE8 /* CKLayoutBox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKLayoutBox.mm; path = Classes/Layout/Public/CKLayoutBox.mm; sourceTree = "<group>"; };
 		96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIView+CKLayout.h"; sourceTree = "<group>"; };
@@ -2449,6 +2453,8 @@
 			children = (
 				96B3BCD4182BED9800978B85 /* CKCollectionCellContentViewController.h */,
 				96B3BCD5182BED9800978B85 /* CKCollectionCellContentViewController.m */,
+				96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */,
+				96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */,
 			);
 			name = "Content View Controller";
 			sourceTree = "<group>";
@@ -2834,6 +2840,7 @@
 				75956970144626550092F317 /* CKSegmentedControl.h in Headers */,
 				B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */,
 				75956976144626960092F317 /* UIBarButtonItem+Style.h in Headers */,
+				96B4516518D099F800D58489 /* CKSwipableCollectionCellContentViewController.h in Headers */,
 				7566AF8B14476A5C00748BB1 /* UIView+Positioning.h in Headers */,
 				75AD5D8E144C68BA0008F53A /* NSObject+InlineDebugger.h in Headers */,
 				75AD5D9C144C71740008F53A /* UIView+InlineDebugger.h in Headers */,
@@ -3333,6 +3340,7 @@
 				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
 				962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */,
 				962347D11577FF5B0036002C /* CKSectionViews.m in Sources */,
+				96B4516618D099F800D58489 /* CKSwipableCollectionCellContentViewController.m in Sources */,
 				9623481A157D6A770036002C /* UIViewController+DeviceOrientation.mm in Sources */,
 				960CAED7157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m in Sources */,
 				967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */,
