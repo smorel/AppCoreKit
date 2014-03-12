@@ -572,6 +572,11 @@
 		96B4516218D0958300D58489 /* CKSnapshotController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516018D0958300D58489 /* CKSnapshotController.m */; };
 		96B4516518D099F800D58489 /* CKSwipableCollectionCellContentViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B4516618D099F800D58489 /* CKSwipableCollectionCellContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */; };
+		96B4516918D09C2E00D58489 /* CKTableViewContentCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4516718D09C2E00D58489 /* CKTableViewContentCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96B4516A18D09C2E00D58489 /* CKTableViewContentCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516818D09C2E00D58489 /* CKTableViewContentCellController.m */; };
+		96B4516E18D09DC000D58489 /* CKBlurModalDebugViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4516B18D09DC000D58489 /* CKBlurModalDebugViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96B4516F18D09DC000D58489 /* CKBlurModalDebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516C18D09DC000D58489 /* CKBlurModalDebugViewController.m */; };
+		96B4517018D09DC000D58489 /* CKBlurModalDebugViewController.style in Resources */ = {isa = PBXBuildFile; fileRef = 96B4516D18D09DC000D58489 /* CKBlurModalDebugViewController.style */; };
 		96B9D29C177B228300455BE8 /* CKLayoutBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29A177B228200455BE8 /* CKLayoutBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B9D29D177B228300455BE8 /* CKLayoutBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96B9D29B177B228300455BE8 /* CKLayoutBox.mm */; };
 		96B9D2A0177B22EA00455BE8 /* UIView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1258,6 +1263,11 @@
 		96B4516018D0958300D58489 /* CKSnapshotController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSnapshotController.m; path = Classes/Foundation/Public/Helpers/CKSnapshotController.m; sourceTree = "<group>"; };
 		96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSwipableCollectionCellContentViewController.h; path = Classes/UI/Public/Collection/CKSwipableCollectionCellContentViewController.h; sourceTree = "<group>"; };
 		96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSwipableCollectionCellContentViewController.m; path = Classes/UI/Public/Collection/CKSwipableCollectionCellContentViewController.m; sourceTree = "<group>"; };
+		96B4516718D09C2E00D58489 /* CKTableViewContentCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewContentCellController.h; path = Classes/UI/Public/Table/TableViewCellController/CKTableViewContentCellController.h; sourceTree = "<group>"; };
+		96B4516818D09C2E00D58489 /* CKTableViewContentCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewContentCellController.m; path = Classes/UI/Public/Table/TableViewCellController/CKTableViewContentCellController.m; sourceTree = "<group>"; };
+		96B4516B18D09DC000D58489 /* CKBlurModalDebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBlurModalDebugViewController.h; path = Classes/UI/Public/Controllers/Containers/CKBlurModalDebugViewController.h; sourceTree = "<group>"; };
+		96B4516C18D09DC000D58489 /* CKBlurModalDebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBlurModalDebugViewController.m; path = Classes/UI/Public/Controllers/Containers/CKBlurModalDebugViewController.m; sourceTree = "<group>"; };
+		96B4516D18D09DC000D58489 /* CKBlurModalDebugViewController.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CKBlurModalDebugViewController.style; path = Classes/UI/Public/Controllers/Containers/CKBlurModalDebugViewController.style; sourceTree = "<group>"; };
 		96B9D29A177B228200455BE8 /* CKLayoutBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBox.h; path = Classes/Layout/Public/CKLayoutBox.h; sourceTree = "<group>"; };
 		96B9D29B177B228300455BE8 /* CKLayoutBox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKLayoutBox.mm; path = Classes/Layout/Public/CKLayoutBox.mm; sourceTree = "<group>"; };
 		96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIView+CKLayout.h"; sourceTree = "<group>"; };
@@ -1823,6 +1833,8 @@
 				96691E1115DD3BE500D73510 /* CKTableViewCellController+Factory.m */,
 				96445941154869170054F907 /* CKViewControllerCellController.h */,
 				96445942154869170054F907 /* CKViewControllerCellController.m */,
+				96B4516718D09C2E00D58489 /* CKTableViewContentCellController.h */,
+				96B4516818D09C2E00D58489 /* CKTableViewContentCellController.m */,
 				7560DC1013B8ED3600268D13 /* CKTableViewCellController+Style.h */,
 				7560DC1113B8ED3600268D13 /* CKTableViewCellController+Style.m */,
 				964DAF7F153F2E970024C08F /* CKCollection CellControllers */,
@@ -2203,6 +2215,9 @@
 				962C08921820131B00A6E439 /* CKStackViewController.m */,
 				96B4515718D093A400D58489 /* CKBlurModalViewController.h */,
 				96B4515818D093A400D58489 /* CKBlurModalViewController.m */,
+				96B4516D18D09DC000D58489 /* CKBlurModalDebugViewController.style */,
+				96B4516B18D09DC000D58489 /* CKBlurModalDebugViewController.h */,
+				96B4516C18D09DC000D58489 /* CKBlurModalDebugViewController.m */,
 			);
 			name = Containers;
 			sourceTree = "<group>";
@@ -2669,6 +2684,7 @@
 				B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */,
 				7560DC9D13B8ED3600268D13 /* CKCollection.h in Headers */,
 				96B4515118D0908100D58489 /* CKMapViewBlockDelegate.h in Headers */,
+				96B4516918D09C2E00D58489 /* CKTableViewContentCellController.h in Headers */,
 				7560DC9F13B8ED3600268D13 /* CKCollectionTableViewCellController.h in Headers */,
 				7560DCA113B8ED3600268D13 /* CKCollectionTableViewCellController+Style.h in Headers */,
 				7560DCA313B8ED3600268D13 /* CKCollectionController.h in Headers */,
@@ -2731,6 +2747,7 @@
 				7560DD2613B8ED3600268D13 /* CKCarouselCollectionViewController.h in Headers */,
 				7560DD2813B8ED3600268D13 /* CKObjectController.h in Headers */,
 				96FDD48718C0D48600F230A5 /* UIView+Snapshot.h in Headers */,
+				96B4516E18D09DC000D58489 /* CKBlurModalDebugViewController.h in Headers */,
 				7560DD2913B8ED3600268D13 /* CKProperty.h in Headers */,
 				7560DD2B13B8ED3600268D13 /* CKArrayProxyCollection.h in Headers */,
 				7560DD2D13B8ED3600268D13 /* CKTableCollectionViewController.h in Headers */,
@@ -3033,6 +3050,7 @@
 				7536F9E613CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png in Resources */,
 				7536F9E713CE0BE900720C17 /* CKKeypadViewButtonBackground.png in Resources */,
 				7536F9E813CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png in Resources */,
+				96B4517018D09DC000D58489 /* CKBlurModalDebugViewController.style in Resources */,
 				7536F9E913CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png in Resources */,
 				7536F9EA13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png in Resources */,
 				7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */,
@@ -3123,6 +3141,7 @@
 				7560DCAC13B8ED3600268D13 /* CKFeedSource.m in Sources */,
 				7560DCAE13B8ED3600268D13 /* CKFormTableViewController.m in Sources */,
 				7560DCB013B8ED3600268D13 /* CKStyleView.m in Sources */,
+				96B4516F18D09DC000D58489 /* CKBlurModalDebugViewController.m in Sources */,
 				96B3BCF5182BED9800978B85 /* CKCollectionViewMorphableLayout.m in Sources */,
 				7560DCB213B8ED3600268D13 /* CKGridView.m in Sources */,
 				7560DCB313B8ED3600268D13 /* CKGridView+NSIndexPath.m in Sources */,
@@ -3271,6 +3290,7 @@
 				753178261417E64C009310A8 /* UIToolbar+introspection.m in Sources */,
 				7531782A1417E9E3009310A8 /* UIBarButtonItem+Introspection.m in Sources */,
 				75305B7414228D0E0003EBB6 /* UITextInputTraits+Introspection.m in Sources */,
+				96B4516A18D09C2E00D58489 /* CKTableViewContentCellController.m in Sources */,
 				75305B7914228EC20003EBB6 /* UITextView+Introspection.m in Sources */,
 				7539FF93142CE94700688E2D /* NSError+Additions.m in Sources */,
 				96B3BCF7182BED9800978B85 /* CKCollectionViewPageLayout.m in Sources */,

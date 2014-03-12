@@ -24,6 +24,7 @@
 #import "CKMapViewBlockDelegate.h"
 #import "CKRangeSelectorView.h"
 #import "CKBlurModalViewController.h"
+#import "CKBlurModalDebugViewController.h"
 #import "CKSnapshotController.h"
 
 
@@ -63,6 +64,7 @@
 #import "CKTableViewCellController+Menus.h"
 #import "CKTableViewCellController+Factory.h"
 #import "CKViewControllerCellController.h"
+#import "CKTableViewContentCellController.h"
 #import "CKCollectionTableViewCellController.h"
 #import "CKMultiFloatPropertyCellController.h"
 #import "CKCGPropertyCellControllers.h"
