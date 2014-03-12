@@ -33,6 +33,7 @@
     [_blurView release];
     [_presentedInWindow release];
     [_selfRetain release];
+    [_blurTintColor release];
     [_animationManager release];
     
     [super dealloc];
@@ -62,7 +63,9 @@
 }
 
 - (void)setBlurTintColor:(UIColor *)blurTintColor{
-    _blurTintColor = blurTintColor;
+    [_blurTintColor release];
+    
+    _blurTintColor = [blurTintColor retain];;
     
     if(self.isPresented){
         [self renderBlurWithRatio:1];
