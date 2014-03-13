@@ -16,17 +16,12 @@
 
 #import "CKDebug.h"
 
-typedef struct CKStructParsedAttributes{
-	NSString* className;
-	NSString* encoding;
-	NSInteger size;
-    BOOL pointer;
-}CKStructParsedAttributes;
 
 CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 	CKStructParsedAttributes results;
 	NSRange rangeForClassName = [attributes rangeOfString:@"="];
 	results.className = [attributes substringWithRange:NSMakeRange(2,rangeForClassName.location - 2)];
+    results.structFormat = [attributes substringWithRange:NSMakeRange(rangeForClassName.location +1,attributes.length - 1 - (rangeForClassName.location +1) )];
 	
 	//FIXME : later do it properly by registering descriptors for structs, ...
 	if([results.className isEqual:@"CGSize"]){

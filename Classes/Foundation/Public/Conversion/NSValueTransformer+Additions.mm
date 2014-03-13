@@ -23,6 +23,7 @@
 #import "NSObject+ValueTransformer.h"
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
+#import "CKClassPropertyDescriptor_private.h"
 
 
 #define AUTO_LOCALIZATION 0
@@ -388,7 +389,8 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 			return result;
 		}
 	}
-	
+    
+   
 	SEL selector = [type convertFromObjectSelector:source];
 	if(selector != nil){
 		[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:type selector:selector];
