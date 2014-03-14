@@ -46,6 +46,11 @@
     [super dealloc];
 }
 
+- (NSString*)reuseIdentifier{
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
+	return [NSString stringWithFormat:@"%@-<%p>",[[self class] description],controllerStyle];
+}
+
 - (id)init{
     self = [super init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];

@@ -40,7 +40,7 @@
 }
 
 - (NSString*)identifier{
-    return [NSString stringWithFormat:@"%@_%@_%@",[super identifier],[self.contentViewController class],[self.contentViewController name]];
+    return [NSString stringWithFormat:@"%@_%@",[super identifier],[self.contentViewController reuseIdentifier]];
 }
 
 - (void)dealloc{

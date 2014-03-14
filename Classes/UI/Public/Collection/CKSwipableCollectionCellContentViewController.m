@@ -73,6 +73,11 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     [super dealloc];
 }
 
+
+- (NSString*)reuseIdentifier{
+	return [NSString stringWithFormat:@"%@-%@",[super reuseIdentifier],[self.contentViewController reuseIdentifier]];
+}
+
 #pragma Content View Controller And Layout Updates Management
 
 - (id)initWithContentViewController:(CKCollectionCellContentViewController*)contentViewController{

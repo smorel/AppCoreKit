@@ -66,7 +66,9 @@
  */
 @property(nonatomic,readonly) NSString* name;
 
-
+/**
+ */
+- (NSString*)reuseIdentifier;
 
 /** Ensure you call the super implementation !
  */
