@@ -19,28 +19,31 @@
         formattersPerThread = [[NSMutableDictionary alloc] init];
     }
     
-    NSThread* currentThread = [NSThread currentThread];
-
-	NSMutableDictionary *formatters = [formattersPerThread objectForKey:[NSValue valueWithNonretainedObject:currentThread]];
-	if (formatters == nil) { 
-        formatters = [NSMutableDictionary dictionary]; 
-        [formattersPerThread setObject:formatters forKey:[NSValue valueWithNonretainedObject:currentThread]];
-    }
-	
-	NSLocale *locale = localeIdentifier 
+    NSDateFormatter *formatter = nil;
+    @synchronized(formattersPerThread){
+        NSThread* currentThread = [NSThread currentThread];
+        
+        NSMutableDictionary *formatters = [formattersPerThread objectForKey:[NSValue valueWithNonretainedObject:currentThread]];
+        if (formatters == nil) {
+            formatters = [NSMutableDictionary dictionary];
+            [formattersPerThread setObject:formatters forKey:[NSValue valueWithNonretainedObject:currentThread]];
+        }
+        
+        NSLocale *locale = localeIdentifier
 	    ? [[[NSLocale alloc] initWithLocaleIdentifier:localeIdentifier] autorelease]
 	    : [NSLocale currentLocale];
-	
-	NSString *key = [NSString stringWithFormat:@"%@-%@", dateFormat, locale.localeIdentifier];
-	NSDateFormatter *formatter = [formatters objectForKey:key];
-	
-	if (formatter == nil) { 
-		formatter = [[[NSDateFormatter alloc] init] autorelease];
-		formatter.formatterBehavior = NSDateFormatterBehavior10_4;
-		formatter.dateFormat = dateFormat;
-		formatter.locale = locale;
-		[formatters setObject:formatter forKey:key];
-	}
+        
+        NSString *key = [NSString stringWithFormat:@"%@-%@", dateFormat, locale.localeIdentifier];
+        formatter = [formatters objectForKey:key];
+        
+        if (formatter == nil) {
+            formatter = [[[NSDateFormatter alloc] init] autorelease];
+            formatter.formatterBehavior = NSDateFormatterBehavior10_4;
+            formatter.dateFormat = dateFormat;
+            formatter.locale = locale;
+            [formatters setObject:formatter forKey:key];
+        }
+    }
 	
 	return formatter;
 }

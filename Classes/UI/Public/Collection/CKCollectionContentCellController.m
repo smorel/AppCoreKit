@@ -39,6 +39,10 @@
     return self;
 }
 
+- (NSString*)identifier{
+    return [NSString stringWithFormat:@"%@_%@",[super identifier],[self.contentViewController reuseIdentifier]];
+}
+
 - (void)dealloc{
     [_contentViewController release];
     [_deselectionCallback release];

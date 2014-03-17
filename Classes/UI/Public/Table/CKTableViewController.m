@@ -172,6 +172,11 @@
     self.scrollIndicatorInsetsAfterStylesheet = UIEdgeInsetsMake(MAXFLOAT, MAXFLOAT, MAXFLOAT, MAXFLOAT);
 }
 
+
+- (Class)tableViewClass{
+    return [CKTableView class];
+}
+
 - (UIView*)contentView{
     return self.tableView;
 }
@@ -330,7 +335,7 @@
     if([self.view isKindOfClass:[CKTableView class]]){
         theTableView = (CKTableView*)self.view;
 
-		UIView *theView = [[[CKTableView alloc] initWithFrame:self.view.bounds] autorelease];
+		UIView *theView = [[[[self tableViewClass] alloc] initWithFrame:self.view.bounds] autorelease];
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         theView.name = @"view";
 		self.view = theView;
@@ -349,7 +354,7 @@
     }
     
     if(!theTableView){
-        theTableView = [[[CKTableView alloc] initWithFrame:containerView.bounds style:self.style] autorelease];
+        theTableView = [[[[self tableViewClass] alloc] initWithFrame:containerView.bounds style:self.style] autorelease];
     }else{
         theTableView.frame = containerView.bounds;
     }

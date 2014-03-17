@@ -39,6 +39,12 @@ typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
  */
 - (id)initWithStyle:(UITableViewStyle)style;
 
+/** Allow to specify the class for the table view that will be created in the controller.
+ Sometimes you need to override touches or other stuff by implementing your own tableView class.
+ This must inherit CKTableView.
+ */
+- (Class)tableViewClass;
+
 ///-----------------------------------
 /// @name Getting the Table View
 ///-----------------------------------

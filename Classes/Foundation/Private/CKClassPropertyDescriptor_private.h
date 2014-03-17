@@ -9,6 +9,28 @@
 
 #import "CKClassPropertyDescriptor.h"
 
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
+typedef struct CKStructParsedAttributes{
+	NSString* className;
+	NSString* encoding;
+	NSString* structFormat;
+	NSInteger size;
+    BOOL pointer;
+}CKStructParsedAttributes;
+
+CKStructParsedAttributes parseStructAttributes(NSString* attributes);
+    
+#ifdef __cplusplus
+}
+#endif
+
+
+
 /**
  */
 @interface CKClassPropertyDescriptorManager : NSObject

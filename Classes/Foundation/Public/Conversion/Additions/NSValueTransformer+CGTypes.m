@@ -191,6 +191,12 @@
 	return transform;
 }
 
++ (CGAffineTransform)parseStringToCGAffineTransform:(NSString*)str{
+    NSArray* components = [str componentsSeparatedByString:@" "];
+	CKAssert([components count] == 6,@"invalid size format");
+	return CGAffineTransformMake([components[0]floatValue], [components[1]floatValue], [components[2]floatValue], [components[3]floatValue], [components[4]floatValue], [components[5]floatValue]);
+}
+
 + (CGAffineTransform)convertCGAffineTransformFromObject:(id)object{
     if([object isKindOfClass:[NSDictionary class]]){
 		CGAffineTransform t = [NSValueTransformer parseDictionaryToCGAffineTransform:object];
@@ -200,6 +206,9 @@
         CGAffineTransform t;
         [object getValue:&t];
         return t;
+    }else if([object isKindOfClass:[NSString class]]){
+		CGAffineTransform t = [NSValueTransformer parseStringToCGAffineTransform:object];
+		return t;
     }
 	return CGAffineTransformIdentity;
 }

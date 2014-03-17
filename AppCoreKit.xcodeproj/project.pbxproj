@@ -442,6 +442,8 @@
 		9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */; };
 		9601521C15892CBE00333DC4 /* CKViewCellCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 9601521A15892CBE00333DC4 /* CKViewCellCache.h */; };
 		9601521D15892CBE00333DC4 /* CKViewCellCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9601521B15892CBE00333DC4 /* CKViewCellCache.mm */; };
+		9603F22518D22B130095B128 /* NSValue+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9603F22318D22B130095B128 /* NSValue+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9603F22618D22B130095B128 /* NSValue+ValueTransformer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9603F22418D22B130095B128 /* NSValue+ValueTransformer.mm */; };
 		96063592159A60E6007F3F2F /* Sample-template.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 96063591159A60E6007F3F2F /* Sample-template.markdown */; };
 		960CAED6157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 960CAED4157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		960CAED7157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 960CAED5157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m */; };
@@ -474,6 +476,8 @@
 		963AB7B41799E1280076925C /* README.mdown in Resources */ = {isa = PBXBuildFile; fileRef = 963AB7B31799E1280076925C /* README.mdown */; };
 		96445943154869170054F907 /* CKViewControllerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96445941154869170054F907 /* CKViewControllerCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96445944154869170054F907 /* CKViewControllerCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96445942154869170054F907 /* CKViewControllerCellController.m */; };
+		9649969E18D0D8EB002E03F4 /* CKSnapshotController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9649969C18D0D8EB002E03F4 /* CKSnapshotController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9649969F18D0D8EB002E03F4 /* CKSnapshotController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9649969D18D0D8EB002E03F4 /* CKSnapshotController.m */; };
 		964C2080153DD82800398E0F /* CKTableViewCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C207E153DD82600398E0F /* CKTableViewCellController+DynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964C2081153DD82800398E0F /* CKTableViewCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C207F153DD82700398E0F /* CKTableViewCellController+DynamicLayout.m */; };
 		964C2084153DD93200398E0F /* CKTableViewCellController+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C2082153DD92B00398E0F /* CKTableViewCellController+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -568,8 +572,6 @@
 		96B4515618D0924100D58489 /* CKRangeSelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4515418D0924100D58489 /* CKRangeSelectorView.m */; };
 		96B4515918D093A400D58489 /* CKBlurModalViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4515718D093A400D58489 /* CKBlurModalViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B4515A18D093A400D58489 /* CKBlurModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4515818D093A400D58489 /* CKBlurModalViewController.m */; };
-		96B4516118D0958300D58489 /* CKSnapshotController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4515F18D0958300D58489 /* CKSnapshotController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		96B4516218D0958300D58489 /* CKSnapshotController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516018D0958300D58489 /* CKSnapshotController.m */; };
 		96B4516518D099F800D58489 /* CKSwipableCollectionCellContentViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B4516618D099F800D58489 /* CKSwipableCollectionCellContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */; };
 		96B4516918D09C2E00D58489 /* CKTableViewContentCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B4516718D09C2E00D58489 /* CKTableViewContentCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1128,6 +1130,8 @@
 		9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKDownloadManager.m; path = Classes/Network/Public/CKDownloadManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9601521A15892CBE00333DC4 /* CKViewCellCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKViewCellCache.h; path = Classes/UI/Private/CKViewCellCache.h; sourceTree = "<group>"; };
 		9601521B15892CBE00333DC4 /* CKViewCellCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = CKViewCellCache.mm; path = Classes/UI/Private/CKViewCellCache.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		9603F22318D22B130095B128 /* NSValue+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSValue+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/NSValue+ValueTransformer.h"; sourceTree = "<group>"; };
+		9603F22418D22B130095B128 /* NSValue+ValueTransformer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSValue+ValueTransformer.mm"; path = "Classes/Foundation/Public/Conversion/Additions/NSValue+ValueTransformer.mm"; sourceTree = "<group>"; };
 		9606358B159A532F007F3F2F /* CloudKitArchitecture102011.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CloudKitArchitecture102011.png; path = Documentation/CloudKitArchitecture102011.png; sourceTree = "<group>"; };
 		9606358D159A5876007F3F2F /* CloudKitApplicationArchitecture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CloudKitApplicationArchitecture.png; path = Documentation/CloudKitApplicationArchitecture.png; sourceTree = "<group>"; };
 		96063591159A60E6007F3F2F /* Sample-template.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Sample-template.markdown"; path = "Documentation/Sample-template.markdown"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.html; };
@@ -1162,6 +1166,8 @@
 		963AB7B31799E1280076925C /* README.mdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.mdown; sourceTree = "<group>"; };
 		96445941154869170054F907 /* CKViewControllerCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKViewControllerCellController.h; path = Classes/UI/Public/Table/TableViewCellController/CKViewControllerCellController.h; sourceTree = "<group>"; };
 		96445942154869170054F907 /* CKViewControllerCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKViewControllerCellController.m; path = Classes/UI/Public/Table/TableViewCellController/CKViewControllerCellController.m; sourceTree = "<group>"; };
+		9649969C18D0D8EB002E03F4 /* CKSnapshotController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSnapshotController.h; path = Classes/UI/Public/Views/CKSnapshotController.h; sourceTree = "<group>"; };
+		9649969D18D0D8EB002E03F4 /* CKSnapshotController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSnapshotController.m; path = Classes/UI/Public/Views/CKSnapshotController.m; sourceTree = "<group>"; };
 		964C207E153DD82600398E0F /* CKTableViewCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+DynamicLayout.h"; path = "Classes/UI/Public/Table/TableViewCellController/Additions/Layout/CKTableViewCellController+DynamicLayout.h"; sourceTree = "<group>"; };
 		964C207F153DD82700398E0F /* CKTableViewCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKTableViewCellController+DynamicLayout.m"; path = "Classes/UI/Public/Table/TableViewCellController/Additions/Layout/CKTableViewCellController+DynamicLayout.m"; sourceTree = "<group>"; };
 		964C2082153DD92B00398E0F /* CKTableViewCellController+BlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+BlockBasedInterface.h"; path = "Classes/UI/Public/Table/TableViewCellController/CKTableViewCellController+BlockBasedInterface.h"; sourceTree = "<group>"; };
@@ -1260,8 +1266,6 @@
 		96B4515418D0924100D58489 /* CKRangeSelectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRangeSelectorView.m; path = Classes/UI/Public/Views/CKRangeSelectorView.m; sourceTree = "<group>"; };
 		96B4515718D093A400D58489 /* CKBlurModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBlurModalViewController.h; path = Classes/UI/Public/Controllers/Containers/CKBlurModalViewController.h; sourceTree = "<group>"; };
 		96B4515818D093A400D58489 /* CKBlurModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBlurModalViewController.m; path = Classes/UI/Public/Controllers/Containers/CKBlurModalViewController.m; sourceTree = "<group>"; };
-		96B4515F18D0958300D58489 /* CKSnapshotController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSnapshotController.h; path = Classes/Foundation/Public/Helpers/CKSnapshotController.h; sourceTree = "<group>"; };
-		96B4516018D0958300D58489 /* CKSnapshotController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSnapshotController.m; path = Classes/Foundation/Public/Helpers/CKSnapshotController.m; sourceTree = "<group>"; };
 		96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSwipableCollectionCellContentViewController.h; path = Classes/UI/Public/Collection/CKSwipableCollectionCellContentViewController.h; sourceTree = "<group>"; };
 		96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSwipableCollectionCellContentViewController.m; path = Classes/UI/Public/Collection/CKSwipableCollectionCellContentViewController.m; sourceTree = "<group>"; };
 		96B4516718D09C2E00D58489 /* CKTableViewContentCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewContentCellController.h; path = Classes/UI/Public/Table/TableViewCellController/CKTableViewContentCellController.h; sourceTree = "<group>"; };
@@ -1639,8 +1643,8 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				96B4515F18D0958300D58489 /* CKSnapshotController.h */,
-				96B4516018D0958300D58489 /* CKSnapshotController.m */,
+				9649969C18D0D8EB002E03F4 /* CKSnapshotController.h */,
+				9649969D18D0D8EB002E03F4 /* CKSnapshotController.m */,
 				96FDD48518C0D48600F230A5 /* UIView+Snapshot.h */,
 				96FDD48618C0D48600F230A5 /* UIView+Snapshot.m */,
 				7595696F144626530092F317 /* CKSegmentedControl.h */,
@@ -2152,6 +2156,8 @@
 				9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */,
 				9691DC141843A47C00D3EDD7 /* UILabel+ValueTransformer.h */,
 				9691DC151843A47C00D3EDD7 /* UILabel+ValueTransformer.m */,
+				9603F22318D22B130095B128 /* NSValue+ValueTransformer.h */,
+				9603F22418D22B130095B128 /* NSValue+ValueTransformer.mm */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -2703,6 +2709,7 @@
 				7560DCBC13B8ED3600268D13 /* CKImageView.h in Headers */,
 				7560DCBE13B8ED3600268D13 /* CKInetEndPoint.h in Headers */,
 				7560DCC013B8ED3600268D13 /* CKItem.h in Headers */,
+				9649969E18D0D8EB002E03F4 /* CKSnapshotController.h in Headers */,
 				7560DCC213B8ED3600268D13 /* CKItemAttributeReference.h in Headers */,
 				7560DCC413B8ED3600268D13 /* CKCollectionViewController.h in Headers */,
 				7560DCC613B8ED3600268D13 /* CKCollectionCellController.h in Headers */,
@@ -2712,7 +2719,6 @@
 				7560DCD413B8ED3600268D13 /* CKMapAnnotationController.h in Headers */,
 				7560DCDA13B8ED3600268D13 /* CKMapCollectionViewController.h in Headers */,
 				7560DCDC13B8ED3600268D13 /* MKMapView+Introspection.h in Headers */,
-				96B4516118D0958300D58489 /* CKSnapshotController.h in Headers */,
 				7560DCDE13B8ED3600268D13 /* CKObject.h in Headers */,
 				7560DCE013B8ED3600268D13 /* CKObject+CKStore.h in Headers */,
 				7560DCE413B8ED3600268D13 /* CKMultiFloatPropertyCellController.h in Headers */,
@@ -2884,6 +2890,7 @@
 				96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */,
 				96CADE351486B6F6008A23E4 /* NSObject+Runtime_private.h in Headers */,
 				96CADE381486BDFF008A23E4 /* NSObject+Validation.h in Headers */,
+				9603F22518D22B130095B128 /* NSValue+ValueTransformer.h in Headers */,
 				969FA53F14966CD90095C61E /* UILabel+Highlight.h in Headers */,
 				969FA54114966CD90095C61E /* UITableViewCell+Highlight.h in Headers */,
 				96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */,
@@ -3163,6 +3170,7 @@
 				7560DCD113B8ED3600268D13 /* CKLocationManager.m in Sources */,
 				7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */,
 				96B3BCEF182BED9800978B85 /* CKCollectionViewGridLayout.m in Sources */,
+				9649969F18D0D8EB002E03F4 /* CKSnapshotController.m in Sources */,
 				7560DCDB13B8ED3600268D13 /* CKMapCollectionViewController.m in Sources */,
 				7560DCDD13B8ED3600268D13 /* MKMapView+Introspection.m in Sources */,
 				7560DCDF13B8ED3600268D13 /* CKObject.m in Sources */,
@@ -3300,7 +3308,6 @@
 				96B3BCF7182BED9800978B85 /* CKCollectionViewPageLayout.m in Sources */,
 				EDD9E7E41436166D00E104D9 /* UIViewController+Introspection.m in Sources */,
 				7595696A1444E9FD0092F317 /* UISegmentedControl+Introspection.m in Sources */,
-				96B4516218D0958300D58489 /* CKSnapshotController.m in Sources */,
 				96B3BCF1182BED9800978B85 /* CKCollectionViewLayout.m in Sources */,
 				75956972144626680092F317 /* CKSegmentedControl.m in Sources */,
 				759569741446268B0092F317 /* UIBarButtonItem+Style.m in Sources */,
@@ -3324,6 +3331,7 @@
 				969FA54014966CD90095C61E /* UILabel+Highlight.m in Sources */,
 				969FA54214966CD90095C61E /* UITableViewCell+Highlight.m in Sources */,
 				96DAFCF514F8161600D71FEB /* CKFilteredCollection.m in Sources */,
+				9603F22618D22B130095B128 /* NSValue+ValueTransformer.mm in Sources */,
 				96B4514218D08D0B00D58489 /* CKLayoutViewProxy.m in Sources */,
 				9622AAFC1501395E00AEF369 /* UIView+DragNDrop.m in Sources */,
 				96D4B83615125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm in Sources */,
@@ -3522,7 +3530,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					armv7s,
+					armv7,
+				);
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
@@ -3544,7 +3555,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "i386 armv7 armv7s";
+				VALID_ARCHS = "i386 armv7 armv7s x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -3553,7 +3564,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					armv7s,
+					armv7,
+				);
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
@@ -3575,7 +3589,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "i386 armv7 armv7s";
+				VALID_ARCHS = "i386 armv7 armv7s x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;

@@ -13,10 +13,6 @@
 @interface CKTableViewCellController (Factory)
 
 /**
- */
-+ (CKTableViewCellController*)cellControllerWithName:(NSString*)name;
-
-/**
  action is triggered when the user tap on the table view cell.
  */
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name 

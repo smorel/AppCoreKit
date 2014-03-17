@@ -13,10 +13,6 @@
 
 @implementation CKTableViewCellController (Factory)
 
-+ (CKTableViewCellController*)cellControllerWithName:(NSString*)name{
-    return [[self class] cellControllerWithName:name action:nil];
-}
-
 + (CKTableViewCellController*)cellControllerWithName:(NSString*)name 
                                               action:(void(^)(CKTableViewCellController* controller))action{
     return [[self class] cellControllerWithName:name value:nil bindings:nil action:action];
