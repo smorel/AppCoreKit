@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 #include <ext/hash_map>
 
 #import "NSString+Additions.h"
