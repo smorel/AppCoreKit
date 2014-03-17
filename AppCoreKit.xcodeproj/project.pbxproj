@@ -3552,7 +3552,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "i386 armv7 armv7s";
+				VALID_ARCHS = "i386 armv7 armv7s x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -3583,7 +3583,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "i386 armv7 armv7s";
+				VALID_ARCHS = "i386 armv7 armv7s x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
