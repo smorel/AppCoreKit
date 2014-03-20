@@ -13,6 +13,7 @@
 #import "CKContainerViewController.h"
 #import "UIView+Snapshot.h"
 #import "NSObject+Bindings.h"
+#import "UIView+Bounce.h"
 
 
 @interface CKBlurModalViewController ()
@@ -126,16 +127,26 @@
     
     
     [[UIApplication sharedApplication]setStatusBarHidden:YES withAnimation:self.statusBarAnimation];
-
+    
+    [contentView animateWithBounceFromFrame:CGRectMake(0,self.presentedInWindow.bounds.size.height,self.presentedInWindow.bounds.size.width,self.presentedInWindow.bounds.size.height)
+                                    toFrame:CGRectMake(0,0,self.presentedInWindow.bounds.size.width,self.presentedInWindow.bounds.size.height)
+                                   duration:(self.animationDuration * 3)
+                             numberOfBounce:4
+                              numberOfSteps:200
+                                    damping:3
+                                     update:nil
+                                 completion:^(BOOL finished){
+            [self.contentViewController viewDidAppear:animated];
+            self.isPresented = YES;
+            if(completion){
+                completion();
+            }
+    }];
+    
+    
     [UIView animateWithDuration:self.animationDuration animations:^{
         self.blurView.transform = CGAffineTransformMakeScale(self.backgroundScale, self.backgroundScale);
-        contentView.frame = CGRectMake(0,0,self.presentedInWindow.bounds.size.width,self.presentedInWindow.bounds.size.height);
     } completion:^(BOOL finished) {
-        [self.contentViewController viewDidAppear:animated];
-        self.isPresented = YES;
-        if(completion){
-            completion();
-        }
     }];
     
     self.animationManager = [[[CKAnimationManager alloc]init]autorelease];
