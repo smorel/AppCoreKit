@@ -12,6 +12,7 @@
 #import "CKRuntime.h"
 #import <objc/runtime.h>
 #import "CKStringHelper.h"
+#import "CKVersion.h"
 
 @interface CKLayoutBox()
 
@@ -49,8 +50,10 @@ static char UITextFieldUsesAttributedStringKey;
     CGSize ret = CGSizeZero;
     if(![self usesAttributedString] && self.text){
         ret = [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
-    }else if(self.attributedText){
-        ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
+    }else if([CKOSVersion() floatValue] >= 6){
+        if(self.attributedText){
+            ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
+        }
     }
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
@@ -107,7 +110,9 @@ static char UITextFieldUsesAttributedStringKey;
 
 + (void)load{
     CKSwizzleSelector([UITextField class], @selector(setText:), @selector(UITextField_Layout_setText:));
-    CKSwizzleSelector([UITextField class], @selector(setAttributedText:), @selector(UITextField_Layout_setAttributedText:));
+    if([CKOSVersion() floatValue] >= 6){
+        CKSwizzleSelector([UITextField class], @selector(setAttributedText:), @selector(UITextField_Layout_setAttributedText:));
+    }
     CKSwizzleSelector([UITextField class], @selector(setFont:), @selector(UITextField_Layout_setFont:));
 }
 
