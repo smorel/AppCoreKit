@@ -17,8 +17,13 @@
 #import "CKStyleManager.h"
 #import "CKResourceManager.h"
 #import "CKResourceDependencyContext.h"
+#import "CKViewCellCache.h"
 
 
+@interface CKCollectionCellContentViewController ()
+@property(nonatomic,assign) BOOL isComputingSize;
+@property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
+@end
 
 @interface CKTableViewCellController ()
 @property (nonatomic, retain) NSMutableDictionary* textLabelStyle;
@@ -27,12 +32,10 @@
 @property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
 @property (nonatomic, assign) BOOL invalidatedSize;
 @property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
+@property (nonatomic, assign) BOOL isComputingSize;
 @end
 
 
-@interface CKCollectionCellContentViewController ()
-@property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
-@end
 
 @interface CKTableViewContentCellController()
 @property(nonatomic,retain) CKCollectionCellContentViewController* contentViewController;
@@ -119,7 +122,46 @@
 }
  
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
-    return [self.contentViewController preferredSizeConstraintToSize:size];
+    [self contentViewController].isComputingSize = YES;
+    if(self.view){
+        //TODO : CHECK IF REQUIERED OR WHY ITS REQUIERED ?
+        //ARE SOME VIEWS STILL ATTACHED TO CONTROLLER AND THEY SHOULD NOT ?
+        [self setupView:self.view];
+        CGSize result =  [[self contentViewController] preferredSizeConstraintToSize:size];
+        [self contentViewController].isComputingSize = NO;
+        
+        return result;
+    }else{
+        
+        UITableViewCell* view = (UITableViewCell*)[[CKViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
+        
+        if(!view){
+            view = [[[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[self identifier]]autorelease];
+            view.height = size.height;
+            view.width  = size.width;
+            
+            UIView* original = self.view; //For styles to apply correctly on view.
+            self.view = view;
+            
+            [self initView:view];
+            self.view = original;
+            [[CKViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
+        }
+        
+        UIView* original = self.view; //For styles to apply correctly on view.
+        self.view = view;
+        [self setupView:view];
+        CGSize result = [[self contentViewController] preferredSizeConstraintToSize:size];
+        
+        [self viewDidDisappear];
+        [view clearBindingsContext];
+        
+        self.view = original;
+        [self contentViewController].isComputingSize = NO;
+        
+        return result;
+    }
+
 }
 
 @end

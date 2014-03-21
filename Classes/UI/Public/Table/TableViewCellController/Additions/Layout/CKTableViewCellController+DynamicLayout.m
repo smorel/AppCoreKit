@@ -122,6 +122,8 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             [self setupView:view];
             self.view = original;
             
+            [view clearBindingsContext];
+            
             CKTableCollectionViewController* parentController = (CKTableCollectionViewController*)self.parentTableViewController;
             if(parentController && parentController.orientation == CKTableViewOrientationPortrait){
                 view.contentView.height = 100;
