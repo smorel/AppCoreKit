@@ -12,6 +12,7 @@
 #import "CKRuntime.h"
 #import <objc/runtime.h>
 #import "CKStringHelper.h"
+#import "CKVersion.h"
 
 @interface CKLayoutBox()
 
@@ -90,8 +91,10 @@ static char UILabelUsesAttributedStringKey;
     
     if(![self usesAttributedString] && self.text && [self.text length] > 0){
         ret = (self.font.lineHeight == 0) ? CGSizeMake(0,0) : [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
-    }else if(self.attributedText){
-        ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
+    }else if([CKOSVersion() floatValue] >= 6){
+        if(self.attributedText){
+            ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
+        }
     }
     
     //Backward Compatibility : Flexible width when in vertical layout to be able to handle textAlignment property
@@ -179,7 +182,9 @@ static char UILabelUsesAttributedStringKey;
 
 + (void)load{
     CKSwizzleSelector([UILabel class], @selector(setText:), @selector(UILabel_Layout_setText:));
-    CKSwizzleSelector([UILabel class], @selector(setAttributedText:), @selector(UILabel_Layout_setAttributedText:));
+    if([CKOSVersion() floatValue] >= 6){
+        CKSwizzleSelector([UILabel class], @selector(setAttributedText:), @selector(UILabel_Layout_setAttributedText:));
+    }
     CKSwizzleSelector([UILabel class], @selector(setFont:), @selector(UILabel_Layout_setFont:));
 }
 

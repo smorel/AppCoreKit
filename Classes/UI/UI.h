@@ -26,6 +26,7 @@
 #import "CKBlurModalViewController.h"
 #import "CKBlurModalDebugViewController.h"
 #import "CKSnapshotController.h"
+#import "UIView+Bounce.h"
 
 
 #import "CKContainerViewController.h"

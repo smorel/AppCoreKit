@@ -194,15 +194,19 @@
     //This is positioning the labels exterior to the range or inside if their is no place outside.
     if(self.startSelectorButton.x > self.startSelectorLabel.width){
         self.startSelectorLabel.frame = CGRectMake(self.startSelectorButton.x - self.startSelectorLabel.width,(self.height - self.startSelectorLabel.height) / 2,self.startSelectorLabel.width,self.startSelectorLabel.height);
+        [self.startSelectorLabel setHighlighted:YES];
     }else{
         self.startSelectorLabel.frame = CGRectMake(self.startSelectorButton.x + self.startSelectorButton.width,(self.height - self.startSelectorLabel.height) / 2,self.startSelectorLabel.width,self.startSelectorLabel.height);
+        [self.startSelectorLabel setHighlighted:NO];
     }
     
     if(self.displayType != CKRangeSelectorDisplayTypeSingleValue){
         if((self.width - self.endSelectorButton.x ) > (self.endSelectorLabel.width + self.endSelectorButton.width)){
             self.endSelectorLabel.frame = CGRectMake(self.endSelectorButton.x + self.endSelectorButton.width,(self.height - self.endSelectorLabel.height) / 2,self.endSelectorLabel.width,self.endSelectorLabel.height);
+            [self.endSelectorLabel setHighlighted:YES];
         }else{
             self.endSelectorLabel.frame = CGRectMake(self.endSelectorButton.x - self.endSelectorLabel.width,(self.height - self.endSelectorLabel.height) / 2,self.endSelectorLabel.width,self.endSelectorLabel.height);
+            [self.endSelectorLabel setHighlighted:NO];
         }
     }
     //---------------------------------------------
@@ -224,8 +228,10 @@
             
             if((self.width - self.endSelectorButton.x ) > (self.joinedStartAndEndSelectorLabel.width + self.endSelectorButton.width)){
                 self.joinedStartAndEndSelectorLabel.frame = CGRectMake(self.endSelectorButton.x + self.endSelectorButton.width,(self.height - self.joinedStartAndEndSelectorLabel.height) / 2,self.joinedStartAndEndSelectorLabel.width,self.joinedStartAndEndSelectorLabel.height);
+                [self.joinedStartAndEndSelectorLabel setHighlighted:YES];
             }else{
                 self.joinedStartAndEndSelectorLabel.frame = CGRectMake(self.startSelectorButton.x - self.joinedStartAndEndSelectorLabel.width,(self.height - self.joinedStartAndEndSelectorLabel.height) / 2,self.joinedStartAndEndSelectorLabel.width,self.joinedStartAndEndSelectorLabel.height);
+                [self.joinedStartAndEndSelectorLabel setHighlighted:YES];
             }
             
         }else{

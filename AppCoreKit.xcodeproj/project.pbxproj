@@ -449,6 +449,8 @@
 		960CAED7157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 960CAED5157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m */; };
 		961B3AD017FDD04900F92D5F /* CKStringHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 961B3ACE17FDD04900F92D5F /* CKStringHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		961B3AD117FDD04900F92D5F /* CKStringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 961B3ACF17FDD04900F92D5F /* CKStringHelper.m */; };
+		961E782418D9D9040008EA33 /* UIView+Bounce.h in Headers */ = {isa = PBXBuildFile; fileRef = 961E782218D9D9040008EA33 /* UIView+Bounce.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		961E782518D9D9040008EA33 /* UIView+Bounce.m in Sources */ = {isa = PBXBuildFile; fileRef = 961E782318D9D9040008EA33 /* UIView+Bounce.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+DragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+DragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+DragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */; };
 		962347D01577FF5B0036002C /* CKSectionViews.h in Headers */ = {isa = PBXBuildFile; fileRef = 962347CE1577FF5B0036002C /* CKSectionViews.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1140,6 +1142,8 @@
 		960CAED5157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIGestureRecognizer+BlockBasedInterface.m"; path = "Classes/UI/Public/Gestures/UIGestureRecognizer+BlockBasedInterface.m"; sourceTree = "<group>"; };
 		961B3ACE17FDD04900F92D5F /* CKStringHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStringHelper.h; path = Classes/Foundation/Public/Helpers/CKStringHelper.h; sourceTree = "<group>"; };
 		961B3ACF17FDD04900F92D5F /* CKStringHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStringHelper.m; path = Classes/Foundation/Public/Helpers/CKStringHelper.m; sourceTree = "<group>"; };
+		961E782218D9D9040008EA33 /* UIView+Bounce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Bounce.h"; path = "Classes/UI/Public/Views/UIView+Bounce.h"; sourceTree = "<group>"; };
+		961E782318D9D9040008EA33 /* UIView+Bounce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Bounce.m"; path = "Classes/UI/Public/Views/UIView+Bounce.m"; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+DragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+DragNDrop.h"; path = "Classes/UI/Public/Views/UIView+DragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+DragNDrop.m"; path = "Classes/UI/Public/Views/UIView+DragNDrop.m"; sourceTree = "<group>"; };
 		962347CE1577FF5B0036002C /* CKSectionViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSectionViews.h; path = Classes/UI/Public/Table/Form/CKSectionViews.h; sourceTree = "<group>"; };
@@ -1677,6 +1681,8 @@
 				96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */,
 				96B4515318D0924100D58489 /* CKRangeSelectorView.h */,
 				96B4515418D0924100D58489 /* CKRangeSelectorView.m */,
+				961E782218D9D9040008EA33 /* UIView+Bounce.h */,
+				961E782318D9D9040008EA33 /* UIView+Bounce.m */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
 			name = Views;
@@ -2950,6 +2956,7 @@
 				96B9D2A8177B234E00455BE8 /* CKHorizontalBoxLayout.h in Headers */,
 				96B9D2AC177B235F00455BE8 /* CKLayoutFlexibleSpace.h in Headers */,
 				96B9D2B0177B23DA00455BE8 /* UIButton+CKLayout.h in Headers */,
+				961E782418D9D9040008EA33 /* UIView+Bounce.h in Headers */,
 				96B9D2B4177B248500455BE8 /* UIViewController+CKLayout.h in Headers */,
 				96B9D2B8177B24D300455BE8 /* UILabel+CKLayout.h in Headers */,
 				96E6FA2B182D29DC001F1E6A /* CALayer+Introspection.h in Headers */,
@@ -3274,6 +3281,7 @@
 				757578FC13E71C000082C247 /* CKSheetController.m in Sources */,
 				75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */,
 				75F295DF13EB0089009CCC70 /* CKTableViewCellController+Menus.m in Sources */,
+				961E782518D9D9040008EA33 /* UIView+Bounce.m in Sources */,
 				75F2960613F04490009CCC70 /* CKPropertyTableViewCellController.m in Sources */,
 				75F2961313F196F9009CCC70 /* NSPredicate+Additions.m in Sources */,
 				96B4515618D0924100D58489 /* CKRangeSelectorView.m in Sources */,

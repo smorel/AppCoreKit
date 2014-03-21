@@ -48,7 +48,9 @@
                 if([style containsObjectForKey:CKStyleBackgroundImage]){
                     UIImage* image = [style backgroundImage];
                     [navBar setBackgroundImage:image forBarPosition:UIBarPositionTop barMetrics:UIBarMetricsDefault];
-                    [navBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(navBar.bounds.size.width, 1)]];
+                    if([CKOSVersion() floatValue] >= 6){
+                        [navBar setShadowImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(navBar.bounds.size.width, 1)]];
+                    }
                 }
                 [appliedStack addObject:view];
                 [view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];

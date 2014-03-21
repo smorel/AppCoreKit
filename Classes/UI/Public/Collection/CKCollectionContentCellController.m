@@ -166,6 +166,7 @@
         CGSize result = [[self contentViewController] preferredSizeConstraintToSize:size];
         
         [self viewDidDisappear];
+        [view clearBindingsContext];
     
         self.view = original;
         [self contentViewController].isComputingSize = NO;
