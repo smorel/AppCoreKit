@@ -72,7 +72,7 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
 									(self.size.height - cropSize) / 2,
 									cropSize, cropSize);
 		
-		srcImage = CGImageCreateWithImageInRect(self.CGImage, srcRect);
+		srcImage = [[self imageInRect:srcRect]CGImage];
 	}
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
