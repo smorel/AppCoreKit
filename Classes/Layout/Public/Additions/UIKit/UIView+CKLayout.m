@@ -575,10 +575,11 @@ static char UIViewSizeToFitLayoutBoxesKey;
 }*/
 
 - (void)UIView_Layout_setTransform:(CGAffineTransform)theTransform{
-    if(!CGAffineTransformEqualToTransform(theTransform, self.transform)){
+  /*  if(!CGAffineTransformEqualToTransform(theTransform, self.transform)){
         [self UIView_Layout_setTransform:theTransform];
         [self invalidateLayout];
     }
+   */
 }
 
 + (void)load{
@@ -587,7 +588,7 @@ static char UIViewSizeToFitLayoutBoxesKey;
     CKSwizzleSelector([UIView class], @selector(initWithFrame:), @selector(UIView_Layout_initWithFrame:));
     CKSwizzleSelector([UIView class], @selector(setHidden:), @selector(UIView_Layout_setHidden:));
   //  CKSwizzleSelector([UIView class], @selector(isHidden), @selector(UIView_Layout_isHidden));
-    CKSwizzleSelector([UIView class], @selector(setTransform:), @selector(UIView_Layout_setTransform:));
+  //  CKSwizzleSelector([UIView class], @selector(setTransform:), @selector(UIView_Layout_setTransform:));
 }
 
 @end
