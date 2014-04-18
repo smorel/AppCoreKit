@@ -289,10 +289,13 @@
         }
         if(self.isViewDisplayed){
             if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
-                CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
-                if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
-                    [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{//Support for sections with pre-loaded content 
+                    CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
+                    if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
+                        [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                    }
+                });
+                
             }
         }
     }

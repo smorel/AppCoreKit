@@ -323,6 +323,8 @@
 
 
 - (void)viewDidLoad{
+    [super viewDidLoad];
+    
     NSMutableDictionary* controllerStyle = [self.styleManager styleForObject:self  propertyName:nil];
     if([controllerStyle containsObjectForKey:@"style"]){
         self.style = [controllerStyle enumValueForKey:@"style" 
@@ -373,7 +375,6 @@
     [theTableView.backgroundView removeFromSuperview];
     theTableView.backgroundView = nil;
     
-    [super viewDidLoad];
 }
 
 - (void)viewDidUnload {
