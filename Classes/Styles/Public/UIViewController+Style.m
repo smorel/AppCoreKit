@@ -131,6 +131,12 @@ static char UIViewControllerStylesheetFileNameKey;
 }
 
 - (NSMutableDictionary*)controllerStyle{
+    //First try to get a style in its own stylemanager
+    NSMutableDictionary* s = [[self styleManager] styleForObject:self  propertyName:nil];
+    if(s && ![s isEmpty]){
+        return s;
+    }
+    
     //Returns the more specific style taking care of navigation and container hierarchy
     NSMutableArray* controllerStack = [NSMutableArray array];
     
@@ -160,7 +166,7 @@ static char UIViewControllerStylesheetFileNameKey;
         }
     }
     
-    return [[self styleManager] styleForObject:self  propertyName:nil];
+    return nil;
 }
 
 - (NSMutableDictionary* )applyStyle{
