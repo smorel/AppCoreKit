@@ -121,7 +121,7 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 
 /**
  */
-@property (nonatomic, assign) CGFloat separatorInsets;
+@property (nonatomic, assign) UIEdgeInsets separatorInsets;
 
 /**
  */

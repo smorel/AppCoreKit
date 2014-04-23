@@ -94,7 +94,7 @@
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     self.drawFrame = CGRectMake(0,0,0,0);
-    self.separatorInsets = 0;
+    self.separatorInsets = UIEdgeInsetsMake(0,0,0,0);
     
     self.separatorDashPhase = 0;
     self.separatorDashLengths = nil;
@@ -250,8 +250,8 @@
     }
 }
 
-- (void)setSeparatorInsets:(CGFloat)theSeparatorInsets{
-    if(_separatorInsets != theSeparatorInsets){
+- (void)setSeparatorInsets:(UIEdgeInsets)theSeparatorInsets{
+    if(!UIEdgeInsetsEqualToEdgeInsets(_separatorInsets, theSeparatorInsets)){
         _separatorInsets = theSeparatorInsets;
         [self updateDisplay];
     }
@@ -862,7 +862,13 @@
 		[_separatorColor setStroke];
 		CGContextSetLineWidth(gc, self.separatorWidth);
 		CGMutablePathRef borderPath = CGPathCreateMutable();
-		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth inRect:CGRectInset(rect,self.separatorInsets,0)];
+        
+        CGRect separatorRect = CGRectMake(rect.origin.x + self.separatorInsets.left,
+                                          rect.origin.y + self.separatorInsets.top,
+                                          rect.size.width - (self.separatorInsets.left + self.separatorInsets.right),
+                                          rect.size.height - (self.separatorInsets.top + self.separatorInsets.bottom));
+        
+		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth inRect:separatorRect];
         
 		CGContextAddPath(gc, borderPath);
         
