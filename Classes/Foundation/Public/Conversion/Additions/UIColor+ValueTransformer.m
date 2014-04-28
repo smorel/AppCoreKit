@@ -22,11 +22,24 @@
     //CKResourceDependencyContext for color palettes
     
 	NSArray* components = [str componentsSeparatedByString:@" "];
-	if([components count] == 4){
-		return [UIColor colorWithRed:[[components objectAtIndex:0]floatValue] 
-							   green:[[components objectAtIndex:1]floatValue] 
-								blue:[[components objectAtIndex:2]floatValue] 
-							   alpha:[[components objectAtIndex:3]floatValue]];
+	if([components count] >= 3){
+        CGFloat r = [[components objectAtIndex:0]floatValue];
+        CGFloat g = [[components objectAtIndex:1]floatValue];
+        CGFloat b = [[components objectAtIndex:2]floatValue];
+        if(r > 1 || g > 1 || b > 1){
+            CGFloat a = [components count] == 4 ? [[components objectAtIndex:3]floatValue] : 255;
+            return [UIColor colorWithRedInt:r
+                                   greenInt:g
+                                    blueInt:b
+                                   alphaInt:a];
+        }else{
+            CGFloat a = [components count] == 4 ? [[components objectAtIndex:3]floatValue] : 1;
+            return [UIColor colorWithRed:r
+                                   green:g
+                                    blue:b
+                                   alpha:a];
+        }
+       
 	}
 	else {
 		str = [str stringByReplacingOccurrencesOfString:@"#" withString:@"0x"];
