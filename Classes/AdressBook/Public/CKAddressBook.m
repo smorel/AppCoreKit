@@ -97,6 +97,10 @@
 	return ABRecordCopyValue(_record, kABPersonLastNameProperty);
 }
 
+- (NSString *)nickName {
+	return ABRecordCopyValue(_record, kABPersonNicknameProperty);
+}
+
 - (NSString *)email {
 	if (_email) { return _email; }
 	
@@ -290,6 +294,48 @@
 		}
 		
 		CFRelease(personEmails);
+	}
+	
+	CFRelease(people);
+	
+	return match;
+}
+
+- (NSArray *)findPeopleWithFullName:(NSString *)filter{
+    NSMutableArray *match = [NSMutableArray array];
+	CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(_addressBook);
+	
+	for (CFIndex i = 0; i < CFArrayGetCount(people); i++) {
+		ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+		NSString* firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+		NSString* lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+        NSString* fullName = [NSString stringWithFormat:@"%@ %@",firstName,lastName];
+        
+        if ([fullName isEqualToString:filter]) {
+            [match addObject:[CKAddressBookPerson personWithRecord:person]];
+            break;
+		}
+		
+	}
+	
+	CFRelease(people);
+	
+	return match;
+}
+
+- (NSArray *)findPeopleWithNickName:(NSString *)nickname{
+    NSMutableArray *match = [NSMutableArray array];
+	CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(_addressBook);
+	
+	for (CFIndex i = 0; i < CFArrayGetCount(people); i++) {
+		ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+		NSString* name = ABRecordCopyValue(person, kABPersonNicknameProperty);
+        
+        if ([name isEqualToString:nickname]) {
+            [match addObject:[CKAddressBookPerson personWithRecord:person]];
+            break;
+		}
+		
 	}
 	
 	CFRelease(people);

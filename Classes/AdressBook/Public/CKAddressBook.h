@@ -42,6 +42,9 @@
 /** 
  */
 @property (nonatomic, readonly) NSString *fullName;
+/**
+ */
+@property (nonatomic, readonly) NSString *nickName;
 /** 
  */
 @property (nonatomic, readonly) NSString *email;
@@ -107,6 +110,14 @@
 /**
  */
 - (NSArray *)findPeopleWithEmails:(NSArray *)emails;
+
+/** Full name means the following format : "%@ %@",firstName,lastName
+ */
+- (NSArray *)findPeopleWithFullName:(NSString *)fullName;
+
+/**
+ */
+- (NSArray *)findPeopleWithNickName:(NSString *)nickname;
 
 /**
  */
