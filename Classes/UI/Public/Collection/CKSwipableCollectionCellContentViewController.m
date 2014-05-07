@@ -374,6 +374,9 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 
 - (void)setupActionViewsBindings{
     __unsafe_unretained CKSwipableCollectionCellContentViewController* bself = self;
+    
+    __block BOOL needsLayoutUpdate = NO;
+    
     for(CKSwipableCollectionCellAction* action in self.leftActions.actions){
         UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
         if([view isKindOfClass:[UIButton class]]){
@@ -384,7 +387,12 @@ static CGFloat bounceVsDistanceRatio = 0.1;
         
         [action bind:@"enabled" withBlock:^(id value) {
             if(bself.view){
-                [bself layoutActionViews];
+                if(bself.isAnimatingPendingAction){ needsLayoutUpdate = YES; }
+                else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [bself layoutActionViews];
+                    });
+                }
             }
         }];
     }
@@ -399,10 +407,24 @@ static CGFloat bounceVsDistanceRatio = 0.1;
         
         [action bind:@"enabled" withBlock:^(id value) {
             if(bself.view){
-                [bself layoutActionViews];
+                if(bself.isAnimatingPendingAction){ needsLayoutUpdate = YES; }
+                else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [bself layoutActionViews];
+                    });
+                }
             }
         }];
     }
+    
+    [bself bind:@"isAnimatingPendingAction" withBlock:^(id value) {
+        if(!bself.isAnimatingPendingAction && needsLayoutUpdate){
+            needsLayoutUpdate = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [bself layoutActionViews];
+            });
+        }
+    }];
 }
 
 - (void)dismissAllSingleActionsNonAnimated{
