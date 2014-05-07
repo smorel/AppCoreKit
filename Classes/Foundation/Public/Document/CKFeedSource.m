@@ -54,7 +54,7 @@
 #pragma mark Public API
 
 - (BOOL)fetchRange:(NSRange)theRange {
-    if(self.isFetching)
+    if(self.isFetching || !self.hasMore)
         return NO;
     
 	self.hasMore = NO;
