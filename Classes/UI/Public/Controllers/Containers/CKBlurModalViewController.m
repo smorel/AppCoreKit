@@ -102,7 +102,7 @@
 - (void)presentFromViewController:(UIViewController*)viewController animated:(BOOL)animated completion:(void(^)())completion{
     self.isPresented = NO;
      
-    self.presentedInWindow = viewController.view.window;
+    self.presentedInWindow = [viewController topMostPresentedViewController].view.window;
     self.selfRetain = self;
     
         

@@ -1038,3 +1038,20 @@
 
 @end
 
+
+
+
+
+
+@implementation UIViewController(CKHierarchy)
+
+- (UIViewController*)topMostPresentedViewController{
+    UIViewController* current = self;
+    while (current.presentedViewController) {
+        current = current.presentedViewController;
+    }
+    return current;
+}
+
+@end
+
