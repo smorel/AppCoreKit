@@ -289,7 +289,7 @@
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:leftBarButtonItem propertyName:@"leftBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
         UIBarButtonItem* item = leftBarButtonItem;
@@ -341,7 +341,7 @@
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:rightBarButtonItem propertyName:@"rightBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
         UIBarButtonItem* item = rightBarButtonItem;
@@ -504,7 +504,7 @@
    // UIViewController* topStackController = self;
     if(leftBarButtonItem
        && leftBarButtonItem != self.navigationItem.backBarButtonItem){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:leftBarButtonItem propertyName:@"leftBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
         UIBarButtonItem* item = leftBarButtonItem;
@@ -599,7 +599,7 @@
     }
     
     if(rightBarButtonItem){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:rightBarButtonItem propertyName:@"rightBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
         UIBarButtonItem* item = rightBarButtonItem;
@@ -876,40 +876,50 @@
 #pragma mark - Buttons Management
 
 - (void)setLeftButton:(UIBarButtonItem *)theleftButton{
+    [self setLeftButton:theleftButton animated:NO];
+}
+
+
+- (void)setLeftButton:(UIBarButtonItem*)theleftButton animated:(BOOL)animated{
     [_leftButton release];
     _leftButton = [theleftButton retain];
     
     if([CKOSVersion() floatValue] >= 7){
         UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                        target:nil action:nil]autorelease];
+                                                                                         target:nil action:nil]autorelease];
         negativeSpacer.width = -9;
-        [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theleftButton, nil] animated:self.isViewDisplayed];
+        [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theleftButton, nil] animated:animated && self.isViewDisplayed];
     }else{
-        [self.navigationItem setLeftBarButtonItem:theleftButton animated:self.isViewDisplayed];
+        [self.navigationItem setLeftBarButtonItem:theleftButton animated:animated && self.isViewDisplayed];
     }
-
+    
     if(self.isViewDisplayed){
         [self applyStyleForLeftBarButtonItem];
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
             self.navigationItem.leftBarButtonItem = nil;
-            [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
+            [self.navigationItem setLeftBarButtonItem:theleftButton animated:animated];
         }
     }
 }
 
 - (void)setRightButton:(UIBarButtonItem *)theRightButton{
+    [self setRightButton:theRightButton animated:NO];
+}
+
+
+- (void)setRightButton:(UIBarButtonItem*)theRightButton animated:(BOOL)animated{
     [_rightButton release];
     _rightButton = [theRightButton retain];
     
     if([CKOSVersion() floatValue] >= 7){
         UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                        target:nil action:nil]autorelease];
+                                                                                         target:nil action:nil]autorelease];
         negativeSpacer.width = -9;
-        [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theRightButton, nil] animated:self.isViewDisplayed];
+        [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:negativeSpacer, theRightButton, nil] animated:animated && self.isViewDisplayed];
     }else{
-        [self.navigationItem setRightBarButtonItem:theRightButton animated:self.isViewDisplayed];
+        [self.navigationItem setRightBarButtonItem:theRightButton animated:animated && self.isViewDisplayed];
     }
     
     if(self.isViewDisplayed){
@@ -918,11 +928,10 @@
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
             self.navigationItem.rightBarButtonItem = nil;
-            [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
+            [self.navigationItem setRightBarButtonItem:theRightButton animated:animated];
         }
     }
 }
-
 
 //#ifdef DEBUG
 - (void)CheckForBlockCopy{

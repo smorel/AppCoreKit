@@ -173,10 +173,18 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
  */
 @property (nonatomic, retain) UIBarButtonItem *rightButton;
 
+/**
+ */
+- (void)setRightButton:(UIBarButtonItem*)button animated:(BOOL)animated;
+
 /** 
  Specify the bar button item that should be displayed at the left of the navigation bar.
  */
 @property (nonatomic, retain) UIBarButtonItem *leftButton;
+
+/**
+ */
+- (void)setLeftButton:(UIBarButtonItem*)button animated:(BOOL)animated;
 
 
 ///-----------------------------------
