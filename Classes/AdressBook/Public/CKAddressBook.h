@@ -91,6 +91,26 @@
 
 
 
+/** This class allows to fetch and stretch the image from an addressbook person instance in background with the ability of cancelling the operation when needed.
+ */
+@interface CKAddressBookPersonImageLoader : NSObject
+
+/**
+ */
+- (id)initWithPerson:(CKAddressBookPerson*)person;
+
+/**
+ */
+- (void)loadImageWithSize:(CGSize)size completion:(void(^)(UIImage* image))completion;
+
+/**
+ */
+- (void)cancel;
+
+@end
+
+
+
 /**
  */
 @interface CKAddressBook : NSObject

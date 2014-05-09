@@ -344,3 +344,63 @@
 }
 
 @end
+
+
+
+@interface CKAddressBookPersonImageLoader()
+@property(atomic,assign) BOOL hasBeenCancelled;
+@property(nonatomic,retain) CKAddressBookPerson* person;
+@end
+
+static dispatch_queue_t CKAddressBookPersonImageLoader_queue;
+
+@implementation CKAddressBookPersonImageLoader{
+}
+
+- (id)initWithPerson:(CKAddressBookPerson*)person{
+    self = [super init];
+    self.hasBeenCancelled = NO;
+    self.person = person;
+    
+    return self;
+}
+
+- (void)loadImageWithSize:(CGSize)size completion:(void(^)(UIImage* image))completion{
+    if(!completion)
+        return;
+    
+    if(!CKAddressBookPersonImageLoader_queue){
+        CKAddressBookPersonImageLoader_queue = dispatch_queue_create("com.appcorekit.addressbookimageloader", 0);
+    }
+    
+    dispatch_async(CKAddressBookPersonImageLoader_queue, ^{
+        UIImage* image = self.person.image;
+        
+        @synchronized(self) {
+            if(self.hasBeenCancelled)
+                return;
+        }
+        
+        UIImage* resized = [image imageThatFits:size crop:NO];
+        
+        @synchronized(self) {
+            if(self.hasBeenCancelled)
+                return;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(resized);
+        });
+        
+    });
+}
+
+- (void)cancel{
+    @synchronized(self) {
+        self.hasBeenCancelled = YES;
+    }
+}
+
+@end
+
+
