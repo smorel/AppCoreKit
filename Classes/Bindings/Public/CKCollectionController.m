@@ -133,7 +133,7 @@
 
 - (NSUInteger)numberOfObjectsForSection:(NSInteger)section{
 	NSInteger count = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay,[_collection count]) : [_collection count];
-	if(appendSpinnerAsFooterCell && _collection.feedSource){
+	if(appendSpinnerAsFooterCell /*&& _collection.feedSource*/){
 		return count + 1;
 	}
 	else {
@@ -152,7 +152,7 @@
 		NSInteger index = indexPath.row;
 		return [_collection objectAtIndex:index];
 	}
-	else if(appendSpinnerAsFooterCell && _collection.feedSource){
+	else if(appendSpinnerAsFooterCell /*&& _collection.feedSource*/){
 		return _collection;
 	}
 
