@@ -54,6 +54,10 @@
 	activityIndicator.hidden = YES;
 	
 	[cell.contentView addSubview:activityIndicator];
+    
+    
+    cell.textLabel.textAlignment = UITextAlignmentCenter;
+    cell.textLabel.backgroundColor = [UIColor clearColor];
 }
 
 //FIXME : UGLY TEMPORARY HACK
@@ -96,8 +100,6 @@
         }
     }
 	
-    view.textLabel.textAlignment = UITextAlignmentCenter;
-    view.textLabel.backgroundColor = [UIColor clearColor];
     if(activityIndicator.hidden){
         switch(count){
             case 0:{
