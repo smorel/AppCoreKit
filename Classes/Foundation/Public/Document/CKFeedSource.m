@@ -57,7 +57,7 @@
     if(self.isFetching || !self.hasMore)
         return NO;
     
-	self.hasMore = NO;
+	//self.hasMore = NO;
 	self.range = theRange;
 	self.isFetching = YES;
     

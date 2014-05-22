@@ -63,6 +63,13 @@
 }
 
 - (void)stop{
+    if([_objectController respondsToSelector:@selector(collection)]){
+        CKCollection* collection = [_objectController collection];
+        if(collection.feedSource){
+            [collection.feedSource cancelFetch];
+        }
+    }
+    
 	/*if([_objectController respondsToSelector:@selector(setDelegate:)]){
      [_objectController performSelector:@selector(setDelegate:) withObject:nil];
      }*/
