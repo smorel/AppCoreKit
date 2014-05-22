@@ -85,6 +85,9 @@
 }
 
 - (void)removeAllObjects{
+    if(self.count == 0)
+        return;
+    
 	[_property removeAllObjects];
 	self.count = [[_property value] count];
 	
