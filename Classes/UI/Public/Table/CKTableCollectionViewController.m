@@ -343,6 +343,8 @@
     */
     
     [super viewWillAppear:animated];
+    
+    NSMutableDictionary* controllerStyle = [self controllerStyle];
 	
   //  if([CKOSVersion() floatValue] < 7){
         //apply width constraint
@@ -380,6 +382,8 @@
             //self.tableView.tableHeaderView = _searchBar;
             [self.view addSubview:_searchBar];
             
+            NSMutableDictionary* searchBarStyle = [controllerStyle styleForObject:self.searchBar  propertyName:@"searchBar"];
+            [self.searchBar applyStyle:searchBarStyle];
             
             if(_searchScopeDefinition){
                 _searchBar.showsScopeBar = YES;
@@ -404,6 +408,10 @@
                         forControlEvents:UIControlEventValueChanged];
             [self.view addSubview:_segmentedControl];
             tableViewOffset += 44;
+            
+            
+            NSMutableDictionary* segmentedControlStyle = [controllerStyle styleForObject:self.segmentedControl  propertyName:@"segmentedControl"];
+            [self.segmentedControl applyStyle:segmentedControlStyle];
         }
         
       //  if(self.tableViewContainer.frame.origin.y < tableViewOffset){
@@ -413,7 +421,6 @@
 	//}
   //  [self sizeToFit];
     
-    NSMutableDictionary* controllerStyle = [self controllerStyle];
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
 	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
     
