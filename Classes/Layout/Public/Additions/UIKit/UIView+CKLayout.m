@@ -76,6 +76,13 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         }
     }
     
+    if(size.width >= MAXFLOAT){
+        size.width = 0;
+    }
+    if(size.height >= MAXFLOAT){
+        size.height = 0;
+    }
+    
     size = [CKLayoutBox preferredSizeConstraintToSize:size forBox:self];
     size = CGSizeMake(size.width - (self.padding.left + self.padding.right), size.height - (self.padding.top + self.padding.bottom));
     

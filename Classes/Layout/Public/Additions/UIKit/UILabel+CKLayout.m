@@ -90,11 +90,11 @@ static char UILabelUsesAttributedStringKey;
     CGSize ret = CGSizeZero;
     
     if(![self usesAttributedString] && self.text && [self.text length] > 0){
-        ret = (self.font.lineHeight == 0) ? CGSizeMake(0,0) : [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
-    }else if([CKOSVersion() floatValue] >= 6){
-        if(self.attributedText){
-            ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
-        }
+        
+            ret = (self.font.lineHeight == 0) ? CGSizeMake(0,0) : [CKStringHelper sizeForText:self.text font:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
+        
+    }else if([CKOSVersion() floatValue] >= 6 && self.attributedText && [self.attributedText length] > 0){
+        ret = [CKStringHelper sizeForAttributedText:self.attributedText constrainedToSize:maxSize];
     }
     
     //Backward Compatibility : Flexible width when in vertical layout to be able to handle textAlignment property
