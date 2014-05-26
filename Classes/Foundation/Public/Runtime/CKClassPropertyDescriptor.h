@@ -148,6 +148,18 @@ typedef NS_ENUM(NSInteger, CKClassPropertyDescriptorAssignementType){
 @end
 
 
+
+
+@interface CKStructDescriptor : NSObject{}
+@property(nonatomic,retain)NSString* className;
+@property(nonatomic,retain)NSString* encoding;
+@property(nonatomic,retain)NSString* structFormat;
+@property(nonatomic,assign)NSInteger size;
+@property(nonatomic,assign)BOOL pointer;
+@end
+
+
+
 @interface CKEnumDescriptor : NSObject{}
 @property(nonatomic,assign)BOOL isBitMask;
 @property(nonatomic,retain)NSString* name;
@@ -158,9 +170,13 @@ typedef NS_ENUM(NSInteger, CKClassPropertyDescriptorAssignementType){
 extern "C" {
 #endif
     
-/**
- */
-CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
+    /**
+     */
+    CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
+    
+    /**
+     */
+    CKStructDescriptor* CKStructDescriptorFromEncoding(NSString* encoding);
     
 #ifdef __cplusplus
 }

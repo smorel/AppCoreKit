@@ -80,6 +80,24 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 }
 
 
+CKStructDescriptor* CKStructDescriptorFromEncoding(NSString* encoding){
+    CKStructParsedAttributes attrs = parseStructAttributes(encoding);
+    
+    CKStructDescriptor* desc = [[[CKStructDescriptor alloc]init]autorelease];
+    desc.className = attrs.className;
+    desc.encoding = attrs.encoding;
+    desc.structFormat = attrs.structFormat;
+    desc.size = attrs.size;
+    desc.pointer = attrs.pointer;
+    
+    return desc;
+}
+
+
+@implementation CKStructDescriptor
+@end
+
+
 @implementation CKClassPropertyDescriptor{
 	NSString* name;
 	NSString* className;

@@ -33,6 +33,10 @@
  */
 + (NSArray*)superClassesForClass:(Class)c;
 
+/**
+ */
++ (NSArray*)allClassesWithPrefix:(NSString*)prefix;
+
 ///-----------------------------------
 /// @name Identifying Classes
 ///-----------------------------------
@@ -93,6 +97,43 @@
 
 /**
  */
++ (NSArray*)allViewsPropertyDescriptorsForClass:(Class)c;
+
+/**
+ */
++ (NSArray*)allPropertyDescriptorsForClass:(Class)c;
+
+/**
+ */
++ (NSArray*)allPropertyNamesForClass:(Class)c;
+
+/**
+ */
 - (BOOL)hasPropertyNamed:(NSString*)propertyName;
+
+
+///-----------------------------------
+/// @name Accessing Methods
+///-----------------------------------
+
+/** returns an NSArray containing:
+     NSValue* v = [NSValue valueWithBytes:&theMethod objCType:@encode(Method)];
+ 
+ To get the Method struct do as follow:
+     Method method;
+     [v getValue:&method];
+ 
+ */
++ (NSArray*)allMethodsForClass:(Class)c;
+
+/** returns an NSArray containing:
+ NSValue* v = [NSValue valueWithBytes:&theMethod objCType:@encode(Method)];
+ 
+ To get the Method struct do as follow:
+ Method method;
+ [v getValue:&method];
+ 
+ */
+- (NSArray*)allMethods;
 
 @end

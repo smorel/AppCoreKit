@@ -173,6 +173,18 @@ void introspectTextInputsProperties(){
 	return [[CKClassPropertyDescriptorManager defaultManager]allPropertieNamesForClass:[self class]];
 }
 
++ (NSArray*)allViewsPropertyDescriptorsForClass:(Class)c{
+	return [[CKClassPropertyDescriptorManager defaultManager]allViewsPropertyForClass:c];
+}
+
++ (NSArray*)allPropertyDescriptorsForClass:(Class)c{
+	return [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:c];
+}
+
++ (NSArray*)allPropertyNamesForClass:(Class)c{
+    return [[CKClassPropertyDescriptorManager defaultManager]allPropertieNamesForClass:c];
+}
+
 - (NSString*)className{
 	return NSStringFromClass([self class]);
 }
@@ -285,6 +297,41 @@ void introspectTextInputsProperties(){
 }
 
 
++ (NSArray*)allClassesWithPrefix:(NSString*)prefix{
+    int numClasses;
+    Class * classes = NULL;
+    
+    classes = NULL;
+    numClasses = objc_getClassList(NULL, 0);
+    
+    if (numClasses > 0 )
+    {
+        classes = malloc(sizeof(Class) * numClasses);
+        numClasses = objc_getClassList(classes, numClasses);
+        
+        NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numClasses];
+        for(int i =0;i<numClasses; ++i){
+            Class theClass = classes[i];
+            NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
+            if(prefix){
+                if([className hasPrefix:prefix]){
+                    [ret addObject:(id)theClass];
+                }
+            }
+            else{
+                [ret addObject:(id)theClass];
+            }
+        }
+        
+        free(classes);
+        
+        return ret;
+    }
+    
+    return nil;
+
+}
+
 + (NSArray*)allClassesConformToProtocol:(Protocol*)filter{
     int numClasses;
     Class * classes = NULL;
@@ -331,6 +378,29 @@ void introspectTextInputsProperties(){
     return property != nil;
 }
 
+
++ (NSArray*)allMethodsForClass:(Class)c{
+    unsigned int numMethods;
+    Method * methods = class_copyMethodList(c, &numMethods);
+    if(numMethods == 0)
+        return nil;
+    
+    NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numMethods];
+    for(int i =0;i<numMethods; ++i){
+        Method theMethod = methods[i];
+        NSValue* v = [NSValue valueWithBytes:&theMethod objCType:@encode(Method)];
+        [ret addObject:v];
+    }
+    
+    free(methods);
+    
+    return ret;
+}
+
+
+- (NSArray*)allMethods{
+    return [NSObject allMethodsForClass:[self class]];
+}
 
 @end
 
