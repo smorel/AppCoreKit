@@ -178,9 +178,9 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 		case CKViewCornerStyleTableViewCell:{
             if([CKOSVersion() floatValue] < 7){
                 if(view == self.tableViewCell.backgroundView || view == self.tableViewCell.selectedBackgroundView){
-                    UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
-                    if(tableView.style == UITableViewStyleGrouped){
-                        NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                    CKTableViewController* tableViewController = ((CKTableViewController*)self.containerController);
+                    if(tableViewController.tableView.style == UITableViewStyleGrouped){
+                        NSInteger numberOfRows = [tableViewController numberOfObjectsForSection:self.indexPath.section];
                         if(self.indexPath.row == 0 && numberOfRows > 1){
                             roundedCornerType = CKStyleViewCornerTypeTop;
                         }
@@ -225,8 +225,8 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
     if(borderStyle & CKViewBorderStyleTableViewCell){
         if(view == self.tableViewCell.backgroundView
            || view == self.tableViewCell.selectedBackgroundView){
-            UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
-            NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+            CKTableViewController* tableViewController = ((CKTableViewController*)self.containerController);
+            NSInteger numberOfRows = [tableViewController numberOfObjectsForSection:self.indexPath.section];
             if(numberOfRows > 1){
                 if(self.indexPath.row == 0){
                     return  CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationTop | CKStyleViewBorderLocationRight;
@@ -275,8 +275,8 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 	switch(separatorStyle){
 		case CKViewSeparatorStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView || view == self.tableViewCell.selectedBackgroundView){
-				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
-                NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                CKTableViewController* tableViewController = ((CKTableViewController*)self.containerController);
+                NSInteger numberOfRows = [tableViewController numberOfObjectsForSection:self.indexPath.section];
                 if(numberOfRows > 1 && self.indexPath.row != numberOfRows-1){
                     return CKStyleViewSeparatorLocationBottom;
                 }
