@@ -397,6 +397,24 @@ void introspectTextInputsProperties(){
     return ret;
 }
 
++ (NSArray*)allMethodNamesForClass:(Class)c{
+    unsigned int numMethods;
+    Method * methods = class_copyMethodList(c, &numMethods);
+    if(numMethods == 0)
+        return nil;
+    
+    NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numMethods];
+    for(int i =0;i<numMethods; ++i){
+        Method theMethod = methods[i];
+        SEL sel = method_getName(theMethod);
+        [ret addObject:NSStringFromSelector(sel)];
+    }
+    
+    free(methods);
+    
+    return ret;
+}
+
 
 - (NSArray*)allMethods{
     return [NSObject allMethodsForClass:[self class]];

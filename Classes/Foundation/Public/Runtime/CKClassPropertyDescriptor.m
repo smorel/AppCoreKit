@@ -20,7 +20,8 @@
 CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 	CKStructParsedAttributes results;
 	NSRange rangeForClassName = [attributes rangeOfString:@"="];
-	results.className = [attributes substringWithRange:NSMakeRange(2,rangeForClassName.location - 2)];
+    NSRange rangeForBeginingOfClassName = [attributes rangeOfString:@"{"];
+	results.className = [attributes substringWithRange:NSMakeRange(rangeForBeginingOfClassName.location+1,rangeForClassName.location - (rangeForBeginingOfClassName.location+1))];
     results.structFormat = [attributes substringWithRange:NSMakeRange(rangeForClassName.location +1,attributes.length - 1 - (rangeForClassName.location +1) )];
 	
 	//FIXME : later do it properly by registering descriptors for structs, ...
@@ -45,10 +46,14 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.size = sizeof(UIEdgeInsets);
 	}
 	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]
-            || [attributes hasPrefix:@"T{?=dd}"]){//We assume unknown type here is a CLLocationCoordinate2D ...
+            || [attributes rangeOfString:@"{?=dd}"].location != NSNotFound){//We assume unknown type here is a CLLocationCoordinate2D ...
 		results.encoding = [NSString stringWithUTF8String:@encode(CLLocationCoordinate2D)];
 		results.size = sizeof(CLLocationCoordinate2D);
 		results.className = @"CLLocationCoordinate2D";
+	}
+    else if([results.className isEqual:@"_NSRange"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(NSRange)];
+		results.size = sizeof(NSRange);
 	}
 	else{
 		results.encoding = nil;

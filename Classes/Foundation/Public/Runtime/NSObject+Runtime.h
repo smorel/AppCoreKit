@@ -126,6 +126,10 @@
  */
 + (NSArray*)allMethodsForClass:(Class)c;
 
+/**
+ */
++ (NSArray*)allMethodNamesForClass:(Class)c;
+
 /** returns an NSArray containing:
  NSValue* v = [NSValue valueWithBytes:&theMethod objCType:@encode(Method)];
  
