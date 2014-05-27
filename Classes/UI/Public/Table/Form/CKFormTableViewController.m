@@ -201,6 +201,10 @@
 }
 
 - (void)dealloc{
+    for(CKFormSectionBase* section in _sections){
+		section.parentController = nil;
+    }
+    
 	[_sections release];
 	_sections = nil;
 	[super dealloc];
@@ -349,6 +353,8 @@
     if(section.hidden == NO && visibleIndex >= 0){
         [self objectController:self.objectController removeSectionAtIndex:visibleIndex];
     }
+    
+    section.parentController = nil;
     
 	return [section autorelease];
 }

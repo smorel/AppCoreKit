@@ -203,7 +203,9 @@
 		}
 	}
 	
-	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self.objectController];
+    if(self.parentController){
+        [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self.objectController];
+    }
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
@@ -211,7 +213,9 @@
 		_sectionUpdate = NO;
 		return;
 	}
+    if(self.parentController){
 	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self.objectController];
+    }
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -222,8 +226,10 @@
 	NSUInteger headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
     
+    if(self.parentController){
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,object ? object : [NSNull null],theIndexPath,nil]];
+    }
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -233,8 +239,10 @@
 	
 	NSUInteger headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
+    if(self.parentController){
 	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
                                withObjects:[NSArray arrayWithObjects:self.objectController,object ? object : [NSNull null],theIndexPath,nil]];
+    }
 }
 
 
@@ -249,8 +257,10 @@
 		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionVisibleIndex];
 		[newIndexPaths addObject:newIndexPath];
 	}
+    if(self.parentController){
 	[self.parentController performSelector:@selector(objectController:insertObjects:atIndexPaths:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
+    }
 }
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -264,8 +274,10 @@
 		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionVisibleIndex];
 		[newIndexPaths addObject:newIndexPath];
 	}
+    if(self.parentController){
 	[self.parentController performSelector:@selector(objectController:removeObjects:atIndexPaths:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
+    }
 }
 
 - (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)i{}
