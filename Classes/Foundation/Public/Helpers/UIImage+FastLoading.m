@@ -44,7 +44,7 @@ typedef struct
     info.scale = scale;
     
     //kCGColorSpaceGenericRGB
-    NSMutableData * fileData = [NSMutableData new];
+    NSMutableData * fileData = [NSMutableData data];
     
     [fileData appendBytes:&info length:sizeof(info)];
     [fileData appendData:pixelData];
@@ -73,8 +73,10 @@ typedef struct
                                                        cs,
                                                        info.bitmapInfo
                                                        );
-    if(!bitmapContext)
+    if(!bitmapContext){
+        CGColorSpaceRelease(cs);
         return nil;
+    }
     
     void * targetData = CGBitmapContextGetData(bitmapContext);
     fread(targetData,1,length,f);

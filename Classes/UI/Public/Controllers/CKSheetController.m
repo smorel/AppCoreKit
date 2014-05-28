@@ -108,7 +108,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     
     if([CKOSVersion() floatValue] >= 7){
         //contentView.backgroundColor = [UIColor whiteColor];
-        UIToolbar* blurView = [[UIToolbar alloc]initWithFrame:self.sheetView.bounds];
+        UIToolbar* blurView = [[[UIToolbar alloc]initWithFrame:self.sheetView.bounds]autorelease];
         blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.sheetView.backgroundColor = [UIColor clearColor];
         [self.sheetView insertSubview:blurView atIndex:0];

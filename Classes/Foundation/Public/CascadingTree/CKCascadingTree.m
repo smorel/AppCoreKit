@@ -577,7 +577,9 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
                                     }else{
                                         [deepCopy postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"inherited array object %d %@ in %@",i,obj,objectKey]];
                                         
-                                        [result addObject:deepCopy];
+                                        if(deepCopy){
+                                            [result addObject:deepCopy];
+                                        }
                                     }
                                 }
                                 

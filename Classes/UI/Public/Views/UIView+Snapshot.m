@@ -121,7 +121,7 @@ CGImageRef UIGetScreenImage(void);
     UIGraphicsEndImageContext();
     
     if(scale != 1){
-        return  [[UIImage alloc]initWithCGImage:resultingImage.CGImage scale:scale orientation:resultingImage.imageOrientation];
+        return  [[[UIImage alloc]initWithCGImage:resultingImage.CGImage scale:scale orientation:resultingImage.imageOrientation]autorelease];
     }
     
     return resultingImage;

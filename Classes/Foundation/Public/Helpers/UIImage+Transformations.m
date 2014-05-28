@@ -106,7 +106,7 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
     CGImageRelease(imageRef);
     
     if(scale != 1){
-        return [[UIImage alloc]initWithCGImage:cropped.CGImage scale:scale orientation:cropped.imageOrientation];
+        return [[[UIImage alloc]initWithCGImage:cropped.CGImage scale:scale orientation:cropped.imageOrientation]autorelease];
     }
     
     return cropped;
@@ -313,6 +313,8 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
         CGContextScaleCTM(context, scaleRatioH, -scaleRatioV);
         CGContextTranslateCTM(context, 0, -height);
     }
+    
+    CGContextConcatCTM(context, transform);
     
     CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, width, height), imgRef);
     UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();

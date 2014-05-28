@@ -68,7 +68,7 @@ static char UIViewControllerReadyForSnapshotBlockKey;
 }
 
 + (CKSnapshotController*)snapshotController{
-    return [[CKSnapshotController alloc]init];
+    return [[[CKSnapshotController alloc]init]autorelease];
 }
 
 - (void)snapshotViewController:(UIViewController*)viewController
@@ -121,7 +121,7 @@ static char UIViewControllerReadyForSnapshotBlockKey;
 - (void)startWithSize:(CGSize)size{
     self.selfRetain = self;
     
-    self.offscreenWindow = [[UIWindow alloc]initWithFrame:CGRectMake(0,0,size.width,size.height)];
+    self.offscreenWindow = [[[UIWindow alloc]initWithFrame:CGRectMake(0,0,size.width,size.height)]autorelease];
     
     self.viewController.view.frame = self.offscreenWindow.bounds;
     [self.viewController viewWillAppear:NO];

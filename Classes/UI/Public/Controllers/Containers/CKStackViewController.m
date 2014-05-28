@@ -22,7 +22,7 @@
 }
 
 + (CKStackViewController*)stackViewControllerWithViewControllers:(NSArray*)viewControllers{
-    return [[CKStackViewController alloc]initWithViewControllers:viewControllers];
+    return [[[CKStackViewController alloc]initWithViewControllers:viewControllers]autorelease];
 }
 
 - (id)initWithViewControllers:(NSArray*)theViewControllers{

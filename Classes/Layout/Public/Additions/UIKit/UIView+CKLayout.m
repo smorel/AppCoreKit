@@ -254,7 +254,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
         NSAssert(NO,@"Style with id '%@' must specify a @class attributes with a UIView subclass",styleId);
     }
     
-    UIView* view = [[c alloc]init];
+    UIView* view = [[[c alloc]init]autorelease];
 	[c applyStyle:viewLayoutTemplate toView:view appliedStack:[NSMutableSet set] delegate:nil];
     
     return view;
