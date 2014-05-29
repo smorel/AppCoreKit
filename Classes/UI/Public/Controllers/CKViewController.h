@@ -277,7 +277,7 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
 
 /**
  */
-- (UIViewController*)topMostPresentedViewController;
+- (UIViewController*)topMostRootPresentedViewController;
 
 @end
 

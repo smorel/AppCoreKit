@@ -20,7 +20,7 @@
 @property(nonatomic,retain) UIViewController* contentViewController;
 @property(nonatomic,retain) UIImage* renderScreenImage;
 @property(nonatomic,retain) UIImageView* blurView;
-@property(nonatomic,retain) UIWindow* presentedInWindow;
+@property(nonatomic,retain) UIView* presentedInView;
 @property(nonatomic,retain) CKBlurModalViewController* selfRetain;
 @property(nonatomic,retain) CKAnimationManager* animationManager;
 @property(nonatomic,assign) BOOL isPresented;
@@ -32,7 +32,7 @@
     [_contentViewController release];
     [_renderScreenImage release];
     [_blurView release];
-    [_presentedInWindow release];
+    [_presentedInView release];
     [_selfRetain release];
     [_blurTintColor release];
     [_animationManager release];
@@ -101,35 +101,36 @@
 
 - (void)presentFromViewController:(UIViewController*)viewController animated:(BOOL)animated completion:(void(^)())completion{
     self.isPresented = NO;
-     
-    self.presentedInWindow = [viewController topMostPresentedViewController].view.window;
+    
+    UIViewController* topVC = [viewController topMostRootPresentedViewController];
+    self.presentedInView = topVC.view;
     self.selfRetain = self;
     
         
     //self.renderScreenImage = [self.presentedInWindow snapshot];
     self.renderScreenImage = [[UIScreen mainScreen]snapshot];
      
-    self.blurView = [[[UIImageView alloc]initWithFrame:self.presentedInWindow.bounds]autorelease];
+    self.blurView = [[[UIImageView alloc]initWithFrame:self.presentedInView.bounds]autorelease];
     
     [self.view addSubview:self.blurView];
     
     self.view.backgroundColor = [UIColor blackColor];
     
     UIView* contentView = self.contentViewController.view;
-    contentView.frame = CGRectMake(0,self.presentedInWindow.bounds.size.height,self.presentedInWindow.bounds.size.width,self.presentedInWindow.bounds.size.height);
+    contentView.frame = CGRectMake(0,self.presentedInView.bounds.size.height,self.presentedInView.bounds.size.width,self.presentedInView.bounds.size.height);
     
     [self.contentViewController viewWillAppear:animated];
     [self.view addSubview:self.contentViewController.view];
     
-    self.view.frame = self.presentedInWindow.bounds;
+    self.view.frame = self.presentedInView.bounds;
     
-    [self.presentedInWindow addSubview:self.view];
+    [self.presentedInView addSubview:self.view];
     
     
     [[UIApplication sharedApplication]setStatusBarHidden:YES withAnimation:self.statusBarAnimation];
     
-    [contentView animateWithBounceFromFrame:CGRectMake(0,self.presentedInWindow.bounds.size.height,self.presentedInWindow.bounds.size.width,self.presentedInWindow.bounds.size.height)
-                                    toFrame:CGRectMake(0,0,self.presentedInWindow.bounds.size.width,self.presentedInWindow.bounds.size.height)
+    [contentView animateWithBounceFromFrame:CGRectMake(0,self.presentedInView.bounds.size.height,self.presentedInView.bounds.size.width,self.presentedInView.bounds.size.height)
+                                    toFrame:CGRectMake(0,0,self.presentedInView.bounds.size.width,self.presentedInView.bounds.size.height)
                                    duration:(self.animationDuration * 3)
                              numberOfBounce:4
                               numberOfSteps:200
@@ -174,7 +175,7 @@
     
     [UIView animateWithDuration:self.animationDuration animations:^{
         self.blurView.transform = CGAffineTransformMakeScale(1, 1);
-        contentView.frame = CGRectMake(0,self.presentedInWindow.bounds.size.height,self.presentedInWindow.bounds.size.width,self.presentedInWindow.bounds.size.height);
+        contentView.frame = CGRectMake(0,self.presentedInView.bounds.size.height,self.presentedInView.bounds.size.width,self.presentedInView.bounds.size.height);
     } completion:^(BOOL finished) {
         [self.contentViewController viewDidDisappear:animated];
         [self.view removeFromSuperview];

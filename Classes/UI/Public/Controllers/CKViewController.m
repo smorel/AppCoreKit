@@ -1045,10 +1045,14 @@
 
 @implementation UIViewController(CKHierarchy)
 
-- (UIViewController*)topMostPresentedViewController{
+- (UIViewController*)topMostRootPresentedViewController{
     UIViewController* current = self;
-    while (current.presentedViewController) {
-        current = current.presentedViewController;
+    while (current.presentedViewController || current.containerViewController) {
+        if(current.presentedViewController){
+            current = current.presentedViewController;
+        }else{
+            current = current.containerViewController;
+        }
     }
     return current;
 }
