@@ -302,6 +302,15 @@
     }
      
 }
+
+- (void)setTableViewInsets:(UIEdgeInsets)tableViewInsets{
+    _tableViewInsets = tableViewInsets;
+    if([self isViewDisplayed]){
+        [self sizeToFit];
+    }
+}
+
+
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
     
