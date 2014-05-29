@@ -134,8 +134,8 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 
 
 - (void)uninitializeProperties{
-   // if([[CKConfiguration sharedInstance]usingARC])
-  //      return;
+    if([[CKConfiguration sharedInstance]usingARC])
+        return;
     
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
