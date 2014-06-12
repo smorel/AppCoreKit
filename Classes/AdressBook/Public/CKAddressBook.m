@@ -7,6 +7,7 @@
 
 #import "CKAddressBook.h"
 #import <AddressBook/AddressBook.h>
+#import "UIImage+Transformations.h"
 
 #import "NSArray+Additions.h"
 
