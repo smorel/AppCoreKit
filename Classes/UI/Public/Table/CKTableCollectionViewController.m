@@ -1280,7 +1280,7 @@
             [UIView beginAnimations:nil context:nil];
             [UIView setAnimationDuration:animationDuration];
             [UIView setAnimationCurve:animationCurve];
-            [self adjustTableViewInsets];
+            [self sizeToFit];
             
             [UIView commitAnimations];
         }
