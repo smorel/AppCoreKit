@@ -1047,11 +1047,13 @@
 
 - (UIViewController*)topMostRootPresentedViewController{
     UIViewController* current = self;
-    while (current.presentedViewController || current.containerViewController) {
+    while (current.presentedViewController || current.containerViewController || current.navigationController) {
         if(current.presentedViewController){
             current = current.presentedViewController;
-        }else{
+        }else if(current.containerViewController){
             current = current.containerViewController;
+        }else if(current.navigationController){
+            current = current.navigationController;
         }
     }
     return current;
