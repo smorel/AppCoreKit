@@ -18,3 +18,16 @@
 - (UIColor *)backgroundColorForState:(UIControlState)state;
 
 @end
+
+
+
+@interface UIButton (Fonts)
+@property(nonatomic,retain) UIFont* defaultFont;
+@property(nonatomic,retain) UIFont* highlightedFont;
+@property(nonatomic,retain) UIFont* disabledFont;
+@property(nonatomic,retain) UIFont* selectedFont;
+
+- (void)setFont:(UIFont *)font forState:(UIControlState)state;
+- (UIFont *)fontForState:(UIControlState)state;
+
+@end

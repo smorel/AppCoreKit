@@ -10,6 +10,125 @@
 #import <objc/runtime.h>
 #import <AppCoreKit/AppCoreKit.h>
 
+
+
+
+
+
+
+
+
+
+static char UIButtonDefaultFontKey;
+static char UIButtonHighlightedFontKey;
+static char UIButtonDisabledFontKey;
+static char UIButtonSelectedFontKey;
+
+@implementation UIButton (Fonts)
+@dynamic defaultFont,highlightedFont,disabledFont,selectedFont;
+
+- (void)setDefaultFont:(UIFont*)font{
+    objc_setAssociatedObject(self,
+                             &UIButtonDefaultFontKey,
+                             font,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateFont];
+}
+
+- (UIColor*)defaultFont{
+    return objc_getAssociatedObject(self, &UIButtonDefaultFontKey);
+}
+
+- (void)setHighlightedFont:(UIFont*)font{
+    objc_setAssociatedObject(self,
+                             &UIButtonHighlightedFontKey,
+                             font,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateFont];
+}
+
+- (UIColor*)highlightedFont{
+    return objc_getAssociatedObject(self, &UIButtonHighlightedFontKey);
+}
+
+- (void)setDisabledFont:(UIFont*)font{
+    objc_setAssociatedObject(self,
+                             &UIButtonDisabledFontKey,
+                             font,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateFont];
+    
+}
+
+- (UIColor*)disabledFont{
+    return objc_getAssociatedObject(self, &UIButtonDisabledFontKey);
+}
+
+- (void)setSelectedFont:(UIFont*)font{
+    objc_setAssociatedObject(self,
+                             &UIButtonSelectedFontKey,
+                             font,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateFont];
+    
+}
+
+- (UIColor*)selectedFont{
+    return objc_getAssociatedObject(self, &UIButtonSelectedFontKey);
+}
+
+- (void)setFont:(UIFont *)font forState:(UIControlState)state{
+    switch(state){
+        case UIControlStateNormal:      [self setDefaultFont:font];     break;
+        case UIControlStateHighlighted: [self setHighlightedFont:font]; break;
+        case UIControlStateDisabled:    [self setDisabledFont:font];    break;
+        case UIControlStateSelected:    [self setSelectedFont:font];    break;
+        case UIControlStateApplication:
+        case UIControlStateReserved:
+            break;
+    }
+}
+
+- (UIFont *)fontForState:(UIControlState)state{
+    UIFont* font = [self defaultFont];
+    switch(state){
+        case UIControlStateNormal:      font = [self defaultFont];     break;
+        case UIControlStateHighlighted: font = [self highlightedFont]; break;
+        case UIControlStateDisabled:    font = [self disabledFont];    break;
+        case UIControlStateSelected:    font = [self selectedFont];    break;
+        case UIControlStateApplication:
+        case UIControlStateReserved:
+            break;
+    }
+    
+    return font;
+}
+
+- (void)updateFont{
+    UIFont* font = nil;
+    if(self.highlighted){
+        font = [self fontForState:UIControlStateHighlighted];
+    }else if(!self.enabled){
+        font = [self fontForState:UIControlStateDisabled];
+    }else if(self.selected){
+        font = [self fontForState:UIControlStateSelected];
+    }
+    
+    if(!font){
+        font = [self fontForState:UIControlStateNormal];
+    }
+    
+    if(font){
+        self.titleLabel.font = font;
+    }
+}
+
+@end
+
+
+
+
+
 static char UIButtonDefaultBackgroundColorKey;
 static char UIButtonHighlightedBackgroundColorKey;
 static char UIButtonDisabledBackgroundColorKey;
@@ -117,16 +236,19 @@ static char UIButtonSelectedBackgroundColorKey;
 - (void)UIButton_FlatDesign_setSelected:(BOOL)selected{
     [self UIButton_FlatDesign_setSelected:selected];
     [self updateBackgroundColor];
+    [self updateFont];
 }
 
 - (void)UIButton_FlatDesign_setHighlighted:(BOOL)selected{
     [self UIButton_FlatDesign_setHighlighted:selected];
     [self updateBackgroundColor];
+    [self updateFont];
 }
 
 - (void)UIButton_FlatDesign_setEnabled:(BOOL)selected{
     [self UIButton_FlatDesign_setEnabled:selected];
     [self updateBackgroundColor];
+    [self updateFont];
 }
 
 @end
@@ -142,3 +264,8 @@ bool swizzle_button_flat_design(){
 }
 
 static bool kSwizzle_button_flat_design = swizzle_button_flat_design();
+
+
+
+
+
