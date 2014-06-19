@@ -116,15 +116,15 @@ static CGFloat bounceVsDistanceRatio = 0.1;
    //     return;
     
     [self layoutActionViews];
-    [self updatesScrollViewContentSize];
+    self.scrollView.contentOffset = CGPointMake(0, 0);
+    [self updatesScrollViewContentSize:YES];
     
     self.scrollView.delegate = self;
     
     __unsafe_unretained CKSwipableCollectionCellContentViewController* bself = self;
     self.contentViewController.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* layoutBox){
-       [bself updatesScrollViewContentSize];
-        
-        if(!bself.viewDidAppear)
+        BOOL bo = [bself updatesScrollViewContentSize:NO];
+        if(!bself.viewDidAppear || !bo)
             return;
         
         if([[bself collectionCellController]respondsToSelector:@selector(invalidateSize)]){
@@ -141,9 +141,13 @@ static CGFloat bounceVsDistanceRatio = 0.1;
             return;
         
         if(!CGSizeEqualToSize(oldSize, bself.view.bounds.size)){
-            [bself updatesScrollViewContentSize];
+            [bself updatesScrollViewContentSize:YES];
             oldSize = bself.view.bounds.size;
         }
+    }];
+    
+    [[self scrollView]bind:@"contentOffset" withBlock:^(id value) {
+        int i =3;
     }];
     
     [self setupActionViewsBindings];
@@ -268,15 +272,19 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 
 #pragma Scroll View Updates
 
-- (void)updatesScrollViewContentSize{
+- (BOOL)updatesScrollViewContentSize:(BOOL)forced{
     CGPoint offset = self.scrollView.contentOffset;
     
     CGSize size = [self preferredSizeConstraintToSize:CGSizeMake(self.view.bounds.size.width,MAXFLOAT)];
+    if(!forced && CGSizeEqualToSize([self scrollContentView].frame.size, size))
+        return NO;
+    
     [self scrollContentView].frame = CGRectMake(0,0,size.width,size.height);
     [self scrollView].frame = [self scrollContentView].frame;
     
     [self scrollView].contentSize = CGSizeMake(size.width ,size.height);
     [self scrollView].contentOffset = offset;
+    return YES;
 }
 
 #pragma Actions Management and Layout
@@ -369,7 +377,6 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     
     self.scrollView.contentInset = UIEdgeInsetsMake(0, catchWidthLeft, 0, catchWidthRight);
-    self.scrollView.contentOffset = CGPointMake(0, 0);
 }
 
 - (void)setupActionViewsBindings{
