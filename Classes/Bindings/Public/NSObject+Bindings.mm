@@ -331,6 +331,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 + (void)bindNotificationName:(NSString *)notification object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block{
 	[[NSNotificationCenter defaultCenter]bindNotificationName:notification object:notificationSender withBlock:block];
 }
+
 + (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block{
 	[[NSNotificationCenter defaultCenter]bindNotificationName:notification withBlock:block];
 }
@@ -338,9 +339,42 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 + (void)bindNotificationName:(NSString *)notification object:(id)notificationSender target:(id)target action:(SEL)selector{
 	[[NSNotificationCenter defaultCenter]bindNotificationName:notification object:notificationSender target:target action:selector];
 }
+
 + (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector{
 	[[NSNotificationCenter defaultCenter]bindNotificationName:notification target:target action:selector];
 }
+
+
+
+/**
+ */
+- (void)bindNotificationNames:(NSArray *)notifications withBlock:(void (^)(NSNotification *notification))block{
+    for(NSString* notification in notifications){
+        [self bindNotificationName:notification withBlock:block];
+    }
+}
+
+/**
+ */
+- (void)bindNotificationNames:(NSArray *)notifications object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block{
+    for(NSString* notification in notifications){
+        [self bindNotificationName:notification object:notificationSender withBlock:block];
+    }
+}
+
+/**
+ */
++ (void)bindNotificationNames:(NSArray *)notifications withBlock:(void (^)(NSNotification *notification))block{
+	[[NSNotificationCenter defaultCenter]bindNotificationNames:notifications withBlock:block];
+}
+
+/**
+ */
++ (void)bindNotificationNames:(NSArray *)notifications object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block{
+	[[NSNotificationCenter defaultCenter]bindNotificationNames:notifications object:notificationSender withBlock:block];
+}
+
+
 
 @end
 

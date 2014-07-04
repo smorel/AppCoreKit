@@ -208,6 +208,23 @@ typedef NS_ENUM(NSInteger, CKBindingsContextOptions){
  */
 + (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector;
 
+
+/**
+ */
+- (void)bindNotificationNames:(NSArray *)notifications withBlock:(void (^)(NSNotification *notification))block;
+
+/**
+ */
+- (void)bindNotificationNames:(NSArray *)notifications object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block;
+
+/**
+ */
++ (void)bindNotificationNames:(NSArray *)notifications withBlock:(void (^)(NSNotification *notification))block;
+
+/**
+ */
++ (void)bindNotificationNames:(NSArray *)notifications object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block;
+
 @end
 
 
