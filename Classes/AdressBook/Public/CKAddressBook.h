@@ -86,6 +86,14 @@
  */
 - (void)setImage:(UIImage *)image;
 
+/*
+ */
+- (NSString*)identifierForSocialServiceNamed:(NSString*)name;
+
+/*
+ */
+- (NSString*)usernameForSocialServiceNamed:(NSString*)name;
+
 @end
 
 
@@ -126,6 +134,11 @@
 ///-----------------------------------
 /// @name Querying the address book
 ///-----------------------------------
+
+
+/**
+ */
+- (NSArray *)allPeople;
 
 /**
  */

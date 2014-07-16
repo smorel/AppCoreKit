@@ -223,6 +223,37 @@
 	ABPersonSetImageData(_record, (CFDataRef)imageData, nil);
 }
 
+- (NSString*)identifierForSocialServiceNamed:(NSString*)name{
+    ABMultiValueRef socialProfiles = ABRecordCopyValue(_record, kABPersonSocialProfileProperty);
+    
+    for (int i=0; i<ABMultiValueGetCount(socialProfiles); i++) {
+        NSDictionary *socialItem = (__bridge NSDictionary*)ABMultiValueCopyValueAtIndex(socialProfiles, i);
+        NSString* socialService = [socialItem objectForKey:(NSString *)kABPersonSocialProfileServiceKey];
+        if([[socialService lowercaseString]isEqualToString:[name lowercaseString]]){
+            NSString *identifier = ([socialItem objectForKey:(NSString *)kABPersonSocialProfileUserIdentifierKey]);
+            return identifier;
+        }
+    }
+    
+    return nil;
+}
+
+
+- (NSString*)usernameForSocialServiceNamed:(NSString*)name{
+    ABMultiValueRef socialProfiles = ABRecordCopyValue(_record, kABPersonSocialProfileProperty);
+    
+    for (int i=0; i<ABMultiValueGetCount(socialProfiles); i++) {
+        NSDictionary *socialItem = (__bridge NSDictionary*)ABMultiValueCopyValueAtIndex(socialProfiles, i);
+        NSString* socialService = [socialItem objectForKey:(NSString *)kABPersonSocialProfileServiceKey];
+        if([[socialService lowercaseString]isEqualToString:[name lowercaseString]]){
+            NSString *identifier = ([socialItem objectForKey:(NSString *)kABPersonSocialProfileUsernameKey]);
+            return identifier;
+        }
+    }
+    
+    return nil;
+}
+
 @end
 
 //
@@ -342,6 +373,22 @@
 	CFRelease(people);
 	
 	return match;
+}
+
+
+- (NSArray *)allPeople{
+    NSMutableArray *match = [NSMutableArray array];
+    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(_addressBook);
+    
+    for (CFIndex i = 0; i < CFArrayGetCount(people); i++) {
+        ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+        NSString* name = ABRecordCopyValue(person, kABPersonNicknameProperty);
+        [match addObject:[CKAddressBookPerson personWithRecord:person]];
+    }
+    
+    CFRelease(people);
+    
+    return match;
 }
 
 @end
