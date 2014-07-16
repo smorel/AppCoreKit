@@ -18,16 +18,15 @@
 
 @implementation UIViewController(CKLayout)
 
-- (UIView*)UIViewController_Layout_view{
-    UIView* v = [self UIViewController_Layout_view];
-    if(v){
-        v.sizeToFitLayoutBoxes = NO;
+- (void)UIViewController_Layout_loadView{
+    [self UIViewController_Layout_loadView];
+    if(self.view){
+        self.view.sizeToFitLayoutBoxes = NO;
     }
-    return v;
 }
 
 + (void)load{
-    CKSwizzleSelector([UIViewController class], @selector(view), @selector(UIViewController_Layout_view));
+    CKSwizzleSelector([UIViewController class], @selector(loadView), @selector(UIViewController_Layout_loadView));
 }
 
 @end
