@@ -43,7 +43,7 @@
 
 
 + (id)objectFromDictionary:(NSDictionary*)dictionary{
-	Class typeToCreate = nil;
+	Class typeToCreate = [self class];
 	NSString* sourceClassName = [dictionary objectForKey:@"@class"];
 	if(sourceClassName != nil){
 		typeToCreate = NSClassFromString(sourceClassName);
