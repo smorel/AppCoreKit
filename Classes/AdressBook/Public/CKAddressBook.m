@@ -223,35 +223,38 @@
 	ABPersonSetImageData(_record, (CFDataRef)imageData, nil);
 }
 
-- (NSString*)identifierForSocialServiceNamed:(NSString*)name{
+- (NSArray*)identifiersForSocialServiceNamed:(NSString*)name{
     ABMultiValueRef socialProfiles = ABRecordCopyValue(_record, kABPersonSocialProfileProperty);
     
+    NSMutableArray* result = [NSMutableArray array];
     for (int i=0; i<ABMultiValueGetCount(socialProfiles); i++) {
         NSDictionary *socialItem = (__bridge NSDictionary*)ABMultiValueCopyValueAtIndex(socialProfiles, i);
         NSString* socialService = [socialItem objectForKey:(NSString *)kABPersonSocialProfileServiceKey];
         if([[socialService lowercaseString]isEqualToString:[name lowercaseString]]){
             NSString *identifier = ([socialItem objectForKey:(NSString *)kABPersonSocialProfileUserIdentifierKey]);
-            return identifier;
+            [result addObject:identifier];
         }
     }
     
-    return nil;
+    return result;
 }
 
 
-- (NSString*)usernameForSocialServiceNamed:(NSString*)name{
+- (NSArray*)usernamesForSocialServiceNamed:(NSString*)name{
     ABMultiValueRef socialProfiles = ABRecordCopyValue(_record, kABPersonSocialProfileProperty);
     
+    NSMutableArray* result = [NSMutableArray array];
     for (int i=0; i<ABMultiValueGetCount(socialProfiles); i++) {
         NSDictionary *socialItem = (__bridge NSDictionary*)ABMultiValueCopyValueAtIndex(socialProfiles, i);
         NSString* socialService = [socialItem objectForKey:(NSString *)kABPersonSocialProfileServiceKey];
         if([[socialService lowercaseString]isEqualToString:[name lowercaseString]]){
             NSString *identifier = ([socialItem objectForKey:(NSString *)kABPersonSocialProfileUsernameKey]);
-            return identifier;
+            [result addObject:identifier];
         }
     }
     
-    return nil;
+    return result;
+
 }
 
 @end

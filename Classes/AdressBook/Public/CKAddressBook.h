@@ -88,11 +88,11 @@
 
 /*
  */
-- (NSString*)identifierForSocialServiceNamed:(NSString*)name;
+- (NSArray*)identifiersForSocialServiceNamed:(NSString*)name;
 
 /*
  */
-- (NSString*)usernameForSocialServiceNamed:(NSString*)name;
+- (NSArray*)usernamesForSocialServiceNamed:(NSString*)name;
 
 @end
 
