@@ -257,12 +257,12 @@
 }
 
 - (void)addUsername:(NSString*)username identifier:(NSString*)identifier forSocialServiceNamed:(NSString*)name{
-    ABMultiValueRef social = ABMultiValueCreateMutable(kABMultiDictionaryPropertyType);
+    ABMutableMultiValueRef social =  ABMultiValueCreateMutableCopy (ABRecordCopyValue(_record, kABPersonSocialProfileProperty));
     ABMultiValueAddValueAndLabel(social, (__bridge CFTypeRef)(@{ (NSString*)kABPersonSocialProfileServiceKey        : name,
                                                                  (NSString*)kABPersonSocialProfileUsernameKey       : (username ? username : @""),
                                                                  (NSString*)kABPersonSocialProfileUserIdentifierKey : (identifier ? identifier : @"")
                                                               }),
-                                 kABPersonSocialProfileServiceTwitter, NULL);
+                                         (__bridge CFStringRef)name, NULL);
     
     ABRecordSetValue(_record, kABPersonSocialProfileProperty, social, NULL);
     CFRelease(social);
