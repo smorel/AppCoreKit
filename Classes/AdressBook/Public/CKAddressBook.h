@@ -94,6 +94,10 @@
  */
 - (NSArray*)usernamesForSocialServiceNamed:(NSString*)name;
 
+/**
+ */
+- (void)addUsername:(NSString*)username identifier:(NSString*)identifier forSocialServiceNamed:(NSString*)name;
+
 @end
 
 
@@ -155,5 +159,9 @@
 /**
  */
 - (NSArray *)findAllPeopleWithAnyEmails;
+
+/**
+ */
+- (void)savePerson:(CKAddressBookPerson*)person error:(NSError**)error;
 
 @end

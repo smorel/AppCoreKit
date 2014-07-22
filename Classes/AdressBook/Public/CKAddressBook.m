@@ -254,7 +254,18 @@
     }
     
     return result;
+}
 
+- (void)addUsername:(NSString*)username identifier:(NSString*)identifier forSocialServiceNamed:(NSString*)name{
+    ABMultiValueRef social = ABMultiValueCreateMutable(kABMultiDictionaryPropertyType);
+    ABMultiValueAddValueAndLabel(social, (__bridge CFTypeRef)(@{ (NSString*)kABPersonSocialProfileServiceKey        : name,
+                                                                 (NSString*)kABPersonSocialProfileUsernameKey       : (username ? username : @""),
+                                                                 (NSString*)kABPersonSocialProfileUserIdentifierKey : (identifier ? identifier : @"")
+                                                              }),
+                                 kABPersonSocialProfileServiceTwitter, NULL);
+    
+    ABRecordSetValue(_record, kABPersonSocialProfileProperty, social, NULL);
+    CFRelease(social);
 }
 
 @end
@@ -385,13 +396,29 @@
     
     for (CFIndex i = 0; i < CFArrayGetCount(people); i++) {
         ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-        NSString* name = ABRecordCopyValue(person, kABPersonNicknameProperty);
         [match addObject:[CKAddressBookPerson personWithRecord:person]];
     }
     
     CFRelease(people);
     
     return match;
+}
+
+- (void)savePerson:(CKAddressBookPerson*)person error:(NSError**)error{
+    CFErrorRef cferror = NULL;
+    
+    // Save Address Book Person
+    ABAddressBookAddRecord(_addressBook, [person record], &cferror);
+    if(cferror){
+        *error = (NSError*)cferror;
+        return;
+    }
+    
+    ABAddressBookSave(_addressBook, &cferror);
+    if(cferror){
+        *error = (NSError*)cferror;
+        return;
+    }
 }
 
 @end
