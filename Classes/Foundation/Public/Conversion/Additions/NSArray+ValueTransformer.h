@@ -26,3 +26,18 @@
 + (id)objectArrayFromDictionaryArray:(NSArray*)array;
 
 @end
+
+/**
+ */
+@interface NSSet (CKValueTransformer)
+
+/**
+ */
++ (NSSet*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className;
+
+/**
+ */
++ (id)convertFromNSArray:(NSArray*)array;
+
+
+@end

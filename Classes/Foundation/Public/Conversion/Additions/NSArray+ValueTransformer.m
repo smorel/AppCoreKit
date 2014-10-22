@@ -73,3 +73,19 @@
 }
 
 @end
+
+
+@implementation NSSet (CKValueTransformer)
+
++ (NSSet*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className{
+    NSArray* c = [NSArray convertFromNSArray:array withContentClassName:className];
+    return [[self class]setWithArray:c];
+}
+
++ (id)convertFromNSArray:(NSArray*)array{
+    NSArray* c = [NSArray convertFromNSArray:array];
+    return [[self class]setWithArray:c];
+}
+
+
+@end
