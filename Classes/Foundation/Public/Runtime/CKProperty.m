@@ -172,6 +172,9 @@
 }
 
 - (void)setValue:(id)value{
+    if([self isReadOnly])
+        return;
+    
     if([self.object isKindOfClass:[NSDictionary class]]){
         [self.object setObject:value forKey:self.keyPath];
     }
