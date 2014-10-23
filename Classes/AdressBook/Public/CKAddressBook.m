@@ -286,6 +286,10 @@
 	return _instance;
 }
 
+- (ABAddressBookRef)addressBook{
+    return _addressBook;
+}
+
 - (id)init {
 	if (self = [super init]) {
 		_addressBook = ABAddressBookCreate();

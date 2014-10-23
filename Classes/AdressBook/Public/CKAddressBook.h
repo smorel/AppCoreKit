@@ -139,6 +139,9 @@
 /// @name Querying the address book
 ///-----------------------------------
 
+/**
+ */
+- (ABAddressBookRef)addressBook;
 
 /**
  */
