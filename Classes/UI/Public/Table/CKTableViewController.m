@@ -237,10 +237,14 @@
 - (void)adjustTableViewInsets{
     UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     
-    
+    CGPoint p = self.tableView.contentOffset;
+	CGFloat oldContentInset = self.tableView.contentInset.top;
+
     UIEdgeInsets newInsets = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom,0);
     self.tableView.contentInset = newInsets;
-    
+
+	CGFloat diff = self.tableView.contentInset.top - oldContentInset;
+	self.tableView.contentOffset = CGPointMake(p.x, p.y - diff);
     
     CGRect frame = self.view.bounds;
     CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
