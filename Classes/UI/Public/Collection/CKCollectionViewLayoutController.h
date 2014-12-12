@@ -34,4 +34,6 @@
  */
 @property (nonatomic, assign, readonly) BOOL scrolling;
 
+- (Class)collectionViewClass;
+
 @end
