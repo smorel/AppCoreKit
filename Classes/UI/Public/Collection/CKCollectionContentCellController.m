@@ -33,7 +33,7 @@
 
 - (id)initWithContentViewController:(CKCollectionCellContentViewController*)contentViewController{
     self = [super init];
-    [self setContentViewController:contentViewController];
+    self.contentViewController = contentViewController;
     [contentViewController setCollectionCellController:self];
     self.isContentViewDidAppear = NO;
     return self;

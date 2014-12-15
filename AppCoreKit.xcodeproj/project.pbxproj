@@ -3109,7 +3109,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Resources/Info.plist\" \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Resources/${PROJECT}.plist\"\nrm -f \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Resources/Info.plist\"\ntouch \"${SRCROOT}/Resources\"\n\nxcodebuild -target \"TypeAheadCrunch\" -configuration ${CONFIGURATION} CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=NO BUILD_DIR=\"${TARGET_BUILD_DIR}/../\"\n\nmkdir -p \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Tools/\"\ncp \"${TARGET_BUILD_DIR}/../${CONFIGURATION}/TypeAheadCrunch\" \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Tools/\"";
+			shellScript = "cp \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Info.plist\" \"${TARGET_BUILD_DIR}/${PROJECT}.framework/${PROJECT}.plist\"\nrm -f \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Info.plist\"\ntouch \"${SRCROOT}/Resources\"\n\nxcodebuild -target \"TypeAheadCrunch\" -configuration ${CONFIGURATION} CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=NO BUILD_DIR=\"${TARGET_BUILD_DIR}/../\"\n\nmkdir -p \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Tools/\"\ncp \"${TARGET_BUILD_DIR}/../${CONFIGURATION}/TypeAheadCrunch\" \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Tools/\"";
 		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3559,6 +3559,7 @@
 				);
 				INFOPLIST_FILE = "CloudKit/AppCoreKit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";

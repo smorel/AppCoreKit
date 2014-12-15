@@ -45,6 +45,10 @@
 
 @implementation CKCollectionViewLayoutController
 
+- (Class)collectionViewClass{
+    return [UICollectionView class];
+}
+
 - (void)postInit{
     [super postInit];
     self.collectionViewHasBeenReloaded = NO;
@@ -119,7 +123,7 @@
 {
     [super viewDidLoad];
     
-    self.collectionView = [[[UICollectionView alloc]initWithFrame:self.view.bounds collectionViewLayout:self.layout]autorelease];
+    self.collectionView = [[[[self collectionViewClass] alloc]initWithFrame:self.view.bounds collectionViewLayout:self.layout]autorelease];
     self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -128,7 +132,7 @@
     
     //Device orientation change image views
     
-    if(!self.beforeRotationImageView){
+    if(!self.beforeRotationImageView){ 
         self.beforeRotationImageView = [[[UIImageView alloc]initWithFrame:self.collectionView.bounds]autorelease];
         self.beforeRotationImageView.autoresizingMask = UIViewAutoresizingFlexibleSize;
         self.beforeRotationImageView.contentMode = UIViewContentModeScaleToFill;
