@@ -169,7 +169,7 @@
 	_items = [items copy];
     
     
-    NSMutableDictionary* tabBarStyle = [self stylesheet];
+   // NSMutableDictionary* tabBarStyle = [self stylesheet];
     
 	int index = 0;
 	for (CKTabViewItem *item in _items) {
@@ -186,8 +186,15 @@
             item.position = CKTabViewItemPositionMiddle;
         }
         
-        NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
+      /*  NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
+        if(!itemStyle){
+            UIViewController* controller = [self.viewControllers objectAtIndex:index];
+            itemStyle = [[controller stylesheet]styleForObject:item  propertyName:@"tabViewItem"];
+        }
+        
         [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
+        [item sizeToFit];
+       */
         [item sizeToFit];
         
         item.width += item.titleEdgeInsets.left + item.titleEdgeInsets.right;
@@ -391,10 +398,17 @@
     
     NSMutableDictionary* controllerStyle = [self.styleManager styleForObject:self  propertyName:nil];
 	NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
+    int i = 0;
     for(CKTabViewItem* item in self.tabBar.items){
         NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
+        if(!itemStyle || [itemStyle isEmpty]){
+            UIViewController* controller = [self.viewControllers objectAtIndex:i];
+            itemStyle = [[controller stylesheet]styleForObject:item  propertyName:@"tabViewItem"];
+        }
+        
         [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
         [item sizeToFit];
+        ++i;
     }
     
     [CATransaction commit];
@@ -433,11 +447,15 @@
             }
             
             
-            if(self.isViewDisplayed){
+            //if(self.isViewDisplayed){
                 NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
+                if(!itemStyle || [itemStyle isEmpty]){
+                    itemStyle = [[vc stylesheet]styleForObject:item  propertyName:@"tabViewItem"];
+                }
+                
                 [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
                 [item sizeToFit];
-            }
+            //}
 
 			[items addObject:item];
             ++i;
