@@ -222,6 +222,10 @@
     return 0;
 }
 
+- (CGFloat)additionalBottomContentOffset{
+    return 0;
+}
+
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     [self sizeToFit];
@@ -238,13 +242,13 @@
     UIEdgeInsets insets = [self navigationControllerTransparencyInsets];
     
     CGPoint p = self.tableView.contentOffset;
-	CGFloat oldContentInset = self.tableView.contentInset.top;
+	CGFloat oldContentInset = self.tableView.contentInset.bottom;
 
-    UIEdgeInsets newInsets = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom,0);
+    UIEdgeInsets newInsets = UIEdgeInsetsMake([self additionalTopContentOffset] + self.tableViewInsets.top + insets.top,0,self.tableViewInsets.bottom + insets.bottom + [self additionalBottomContentOffset],0);
     self.tableView.contentInset = newInsets;
 
-	CGFloat diff = self.tableView.contentInset.top - oldContentInset;
-	self.tableView.contentOffset = CGPointMake(p.x, p.y - diff);
+	CGFloat diff = self.tableView.contentInset.bottom - oldContentInset;
+	self.tableView.contentOffset = CGPointMake(p.x, p.y + diff);
     
     CGRect frame = self.view.bounds;
     CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
@@ -264,7 +268,7 @@
     
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake([self additionalTopContentOffset] + insets.top + additionalScrollIndicatorInsets.top ,
                                                             additionalScrollIndicatorInsets.left,
-                                                            insets.bottom + additionalScrollIndicatorInsets.bottom,
+                                                            insets.bottom + additionalScrollIndicatorInsets.bottom + [self additionalBottomContentOffset],
                                                             additionalScrollIndicatorInsets.right);
 
 }
@@ -285,7 +289,7 @@
     
     CGPoint newOffset = CGPointMake(oldOffset.x, oldOffsetFromTop - self.tableView.contentInset.top);
     if(!CGPointEqualToPoint(oldOffset, newOffset)){
-        self.tableView.contentOffset = newOffset;
+   //     self.tableView.contentOffset = newOffset;
     }
     
     UIEdgeInsets insets = [self navigationControllerTransparencyInsets];

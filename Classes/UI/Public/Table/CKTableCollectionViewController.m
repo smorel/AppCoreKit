@@ -67,6 +67,7 @@
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @property (nonatomic, retain) NSString *bindingContextForTableView;
 @property (nonatomic, assign, readwrite) BOOL scrolling;
+@property(nonatomic,assign) CGFloat keyboardInsets;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -176,6 +177,7 @@
 
 - (void)postInit{
 	[super postInit];
+    self.keyboardInsets = 0;
 	_rowInsertAnimation = UITableViewRowAnimationFade;
 	_rowRemoveAnimation = UITableViewRowAnimationFade;
     
@@ -1264,6 +1266,11 @@
 
 #pragma mark Keyboard Notifications
 
+
+- (CGFloat)additionalBottomContentOffset{
+    return self.keyboardInsets;
+}
+
 - (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
     if (_resizeOnKeyboardNotification == YES && _orientation == CKTableViewOrientationPortrait){
         CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:self.tableViewContainer];
@@ -1272,8 +1279,10 @@
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:animationDuration];
         [UIView setAnimationCurve:animationCurve];
-        self.tableView.contentInset =  UIEdgeInsetsMake(self.tableView.contentInset.top,0,self.tableView.contentInset.bottom + offset, 0);
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,0,self.tableView.scrollIndicatorInsets.bottom+offset, 0);
+        self.keyboardInsets = offset;
+        [self sizeToFit];
+       // self.tableView.contentInset =  UIEdgeInsetsMake(self.tableView.contentInset.top,0,self.tableView.contentInset.bottom + offset, 0);
+        //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,0,self.tableView.scrollIndicatorInsets.bottom+offset, 0);
         [UIView commitAnimations];
     }
 }
@@ -1284,6 +1293,7 @@
             [UIView beginAnimations:nil context:nil];
             [UIView setAnimationDuration:animationDuration];
             [UIView setAnimationCurve:animationCurve];
+            self.keyboardInsets = 0;
             [self sizeToFit];
             
             [UIView commitAnimations];
