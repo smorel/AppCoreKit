@@ -604,11 +604,9 @@
 
 - (void)objectControllerReloadData:(id)controller{
 	[self reload];
-	
-	//bad solution because the contentsize is updated at the end of insert animation ....
-	//could be better if we could observe or be notified that the contentSize has changed.
-	NSTimeInterval delay = 0.4;
-	[self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:delay];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateViewsVisibility:YES];
+    });
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
@@ -619,11 +617,9 @@
 - (void)objectControllerDidEndUpdating:(id)controller{
 	[self didEndUpdates];
 	[self updateVisibleViewsIndexPath];
-	
-	//bad solution because the contentsize is updated at the end of insert animation ....
-	//could be better if we could observe or be notified that the contentSize has changed.
-	NSTimeInterval delay = 0.4;
-	[self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:delay];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateViewsVisibility:YES];
+    });
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{

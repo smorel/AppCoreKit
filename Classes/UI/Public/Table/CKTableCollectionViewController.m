@@ -497,7 +497,9 @@
     [self tableViewFrameChanged:nil];
     
     if(self.tableView.hidden == NO){
-        [self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:0.4];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateViewsVisibility:YES];
+        });
     }
     [NSObject beginBindingsContext:_bindingContextForTableView policy:CKBindingsContextPolicyRemovePreviousBindings];
     [self.tableView bind:@"hidden" target:self action:@selector(tableViewVisibilityChanged:)];
@@ -546,7 +548,9 @@
 
 - (void)tableViewVisibilityChanged:(NSNumber*)hidden{
     if(![hidden boolValue]){
-        [self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:0.4];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateViewsVisibility:YES];
+        });
     }
 }
 
