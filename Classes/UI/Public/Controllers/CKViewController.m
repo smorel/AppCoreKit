@@ -502,8 +502,7 @@
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
     
    // UIViewController* topStackController = self;
-    if(leftBarButtonItem
-       && leftBarButtonItem != self.navigationItem.backBarButtonItem){
+    if(leftBarButtonItem && leftBarButtonItem != self.navigationItem.backBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:leftBarButtonItem propertyName:@"leftBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
@@ -525,7 +524,7 @@
             self.navigationItem.leftBarButtonItem = item;
         }
         
-        if(item.customView && [[item.customView layoutBoxes]count] > 0){
+        if(item.customView /*&& [[item.customView layoutBoxes]count] > 0*/){
             CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             item.customView.width = preferedSize.width;
             item.customView.height = preferedSize.height;
@@ -548,7 +547,7 @@
         [item applyStyle:backBarItemStyle];
         self.navigationItem.backBarButtonItem = item;
         
-        if(item.customView && [[item.customView layoutBoxes]count] > 0){
+        if(item.customView /*&& [[item.customView layoutBoxes]count] > 0*/){
             CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             item.customView.width = preferedSize.width;
             item.customView.height = preferedSize.height;
@@ -571,7 +570,7 @@
             self.navigationItem.backBarButtonItem = item;
             
             
-            if(item.customView && [[item.customView layoutBoxes]count] > 0){
+            if(item.customView /*&& [[item.customView layoutBoxes]count] > 0*/){
                 CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
                 item.customView.width = preferedSize.width;
                 item.customView.height = preferedSize.height;
@@ -620,7 +619,7 @@
         }
         
         
-        if(item.customView && [[item.customView layoutBoxes]count] > 0){
+        if(item.customView /*&& [[item.customView layoutBoxes]count] > 0*/){
             CGSize preferedSize = [item.customView preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             item.customView.width = preferedSize.width;
             item.customView.height = preferedSize.height;
@@ -648,7 +647,7 @@
                 [label sizeToFit];
             }];
             [NSObject endBindingsContext];
-        }else if([[view layoutBoxes]count] > 0){
+        }else {//if([[view layoutBoxes]count] > 0){
             CGSize preferedSize = [view preferredSizeConstraintToSize:self.navigationController.navigationBar.bounds.size];
             view.width = preferedSize.width;
             view.height = preferedSize.height;
