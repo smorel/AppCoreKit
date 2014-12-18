@@ -112,6 +112,12 @@
     return [super view];
 }
 
+- (BOOL)isViewLoaded{
+    if(self.reusableView)
+        return YES;
+    return [super isViewLoaded];
+}
+
 - (void)prepareForReuseUsingContentView:(UIView*)contentView contentViewCell:(UIView*)contentViewCell{
     self.reusableView = contentView;
 }
