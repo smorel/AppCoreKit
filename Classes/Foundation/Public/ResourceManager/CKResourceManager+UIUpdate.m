@@ -89,7 +89,14 @@
 }
 
 - (void)invalidateStylesheetForAllViews{
-    [self invalidateStylesheetForView:self.view];
+    for(CKClassPropertyDescriptor* descriptor in [self allViewsPropertyDescriptors]){
+        UIView* v = [self valueForKey:descriptor.name];
+        if(v){
+            [self invalidateStylesheetForView:v];
+        }
+    }
+    
+    //[self invalidateStylesheetForView:self.view];
     [self invalidateStylesheetForView:self.navigationItem.titleView];
     [self invalidateStylesheetForView:self.navigationItem.leftBarButtonItem.customView];
     [self invalidateStylesheetForView:self.navigationItem.rightBarButtonItem.customView];

@@ -54,24 +54,24 @@
 - (id)init{
     self = [super init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
-    NSLog(@"%@, Register to CKStyleManagerDidReloadNotification",[self class]);
+  //  NSLog(@"%@, Register to CKStyleManagerDidReloadNotification",[self class]);
     return self;
 }
 
 - (void)styleManagerDidUpdate:(NSNotification*)notification{
-    NSLog(@"%@, did receive style Notification",[self class]);
+    //NSLog(@"%@, did receive style Notification",[self class]);
     
     if(!self.view){
-        NSLog(@"%@, no view",[self class]);
+      //  NSLog(@"%@, no view",[self class]);
         return;
     }
     
     
     if(notification.object == [self styleManager]){
-        NSLog(@"%@, YEAHHHHH !",[self class]);
+      //  NSLog(@"%@, YEAHHHHH !",[self class]);
         [self resourceManagerReloadUI];
     }else{
-        NSLog(@"%@, not the right style manager",[self class]);
+      //  NSLog(@"%@, not the right style manager",[self class]);
     }
 }
 
@@ -145,6 +145,7 @@
     
     //HERE we do not apply style on sub views as we have reuse
     if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
+        NSLog(@"%@ apply style 1",[self class]);
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableSet* appliedStack = [NSMutableSet set];
         [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
@@ -152,6 +153,7 @@
     }
     
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
+        NSLog(@"%@ apply style 2",[self class]);
         [self applyStyleToSubViews];
     }
     
@@ -168,10 +170,12 @@
 - (void)applyStyleToSubViews{
     //Allows the CKCollectionCellContentViewController to specify style for the contentViewCell
     if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
+        NSLog(@"%@ apply style 3",[self class]);
         [self.contentViewCell setAppliedStyle:nil];
         [self.contentViewCell findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"contentViewCell"];
     }
     
+    NSLog(@"%@ apply style 4",[self class]);
     [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
 }
 
