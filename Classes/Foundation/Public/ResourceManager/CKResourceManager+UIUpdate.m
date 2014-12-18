@@ -74,7 +74,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if(![self isViewLoaded] || [self.view window] == nil){
-                NSLog(@"%@ bypass resourceManagerReloadUI isViewLoaded[%d] window [%@]",[self class],[self isViewLoaded],[self.view window]);
+                //NSLog(@"%@ bypass resourceManagerReloadUI isViewLoaded[%d] window [%@]",[self class],[self isViewLoaded],[self.view window]);
                 return;
             }
             
