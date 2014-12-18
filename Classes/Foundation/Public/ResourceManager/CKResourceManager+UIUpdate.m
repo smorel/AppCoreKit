@@ -73,8 +73,10 @@
         [CKResourceManager setHudTitle:hudTitle];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(![self isViewLoaded] || [self.view window] == nil)
+            if(![self isViewLoaded] || [self.view window] == nil){
+                NSLog(@"%@ bypass resourceManagerReloadUI isViewLoaded[%d] window [%@]",[self class],[self isViewLoaded],[self.view window]);
                 return;
+            }
             
             [self invalidateStylesheetForAllViews];
             [self viewWillDisappear:NO];
