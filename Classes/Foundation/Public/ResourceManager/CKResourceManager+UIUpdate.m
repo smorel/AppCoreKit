@@ -22,7 +22,7 @@
     [controller resourceManagerReloadUI];
     
     [self reloadViewController:[controller modalViewController] controllerStack:controllerStack viewStack:viewStack];
-    
+    [self reloadViewController:[controller presentedViewController] controllerStack:controllerStack viewStack:viewStack];
     
     if([NSObject isClass:[controller class] kindOfClassNamed:@"CKContainerViewController"]
        || [NSObject isClass:[controller class] kindOfClassNamed:@"CKSplitViewController"]
@@ -32,6 +32,10 @@
         for(UIViewController* c in controllers){
             [self reloadViewController:c controllerStack:controllerStack viewStack:viewStack];
         }
+    }
+    
+    for(UIViewController* c in controller.childViewControllers){
+        [self reloadViewController:c controllerStack:controllerStack viewStack:viewStack];
     }
 }
 

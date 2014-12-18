@@ -54,15 +54,24 @@
 - (id)init{
     self = [super init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
+    NSLog(@"%@, Register to CKStyleManagerDidReloadNotification",[self class]);
     return self;
 }
 
 - (void)styleManagerDidUpdate:(NSNotification*)notification{
-    if(!self.view)
+    NSLog(@"%@, did receive style Notification",[self class]);
+    
+    if(!self.view){
+        NSLog(@"%@, no view",[self class]);
         return;
+    }
+    
     
     if(notification.object == [self styleManager]){
+        NSLog(@"%@, YEAHHHHH !",[self class]);
         [self resourceManagerReloadUI];
+    }else{
+        NSLog(@"%@, not the right style manager",[self class]);
     }
 }
 
