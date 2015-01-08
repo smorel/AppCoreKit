@@ -34,6 +34,9 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
 
 + (void)registerBundle:(NSBundle*)bundle{
     [[self bundles] addObject:bundle];
+    if([self resourceManagerClass]){
+        return [[self resourceManagerClass]registerBundle:bundle];
+    }
 }
 
 + (BOOL)isResourceManagerConnected{
