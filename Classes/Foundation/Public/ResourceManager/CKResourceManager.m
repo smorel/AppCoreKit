@@ -18,8 +18,23 @@ NSString* CKResourceManagerMostRecentPathKey         = @"RMResourceManagerMostRe
 NSString* CKResourceManagerDidEndUpdatingResourcesNotification = @"RMResourceManagerDidEndUpdatingResourcesNotification";
 NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceManagerUpdatedResourcesPathKey";
 
+
 @implementation CKResourceManager
 
+
++ (NSMutableArray*)bundles{
+    static NSMutableArray* CKResourceManagerBundles = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKResourceManagerBundles = [[NSMutableArray alloc]init];
+        [CKResourceManagerBundles addObject:[NSBundle mainBundle]];
+    });
+    return CKResourceManagerBundles;
+}
+
++ (void)registerBundle:(NSBundle*)bundle{
+    [[self bundles] addObject:bundle];
+}
 
 + (BOOL)isResourceManagerConnected{
     if([self resourceManagerClass]){
@@ -43,7 +58,12 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return [[self resourceManagerClass]pathForResource:name ofType:ext];
     }
     
-    return [[NSBundle mainBundle]pathForResource:name ofType:ext];
+    for(NSBundle* bundle in [self bundles]){
+        NSString* path = [bundle pathForResource:name ofType:ext];
+        if(path) return path;
+    }
+    
+    return nil;
 }
 
 + (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext observer:(id)observer usingBlock:(void(^)(id observer, NSString* path))updateBlock{
@@ -51,35 +71,66 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return [[self resourceManagerClass]pathForResource:name ofType:ext observer:observer usingBlock:updateBlock];
     }
     
-    return [[NSBundle mainBundle]pathForResource:name ofType:ext];
+    
+    
+    for(NSBundle* bundle in [self bundles]){
+        NSString* path = [bundle pathForResource:name ofType:ext];
+        if(path) return path;
+    }
+    
+    return nil;
 }
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext{
     if([self resourceManagerClass]){
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext];
     }
-    return [[NSBundle mainBundle]pathsForResourcesOfType:ext inDirectory:nil];
+    
+    for(NSBundle* bundle in [self bundles]){
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext];
+        if([paths count] > 0) return paths;
+    }
+    
+    return nil;
 }
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext localization:(NSString *)localizationName{
     if([self resourceManagerClass]){
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext localization:localizationName];
     }
-    return [[NSBundle mainBundle]pathsForResourcesOfType:ext inDirectory:nil forLocalization:localizationName];
+    
+    for(NSBundle* bundle in [self bundles]){
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext forLocalization:localizationName];
+        if([paths count] > 0) return paths;
+    }
+    
+    return nil;
 }
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext observer:(id)observer usingBlock:(void(^)(id observer, NSArray* paths))updateBlock{
     if([self resourceManagerClass]){
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext observer:observer usingBlock:updateBlock];
     }
-    return [[NSBundle mainBundle]pathsForResourcesOfType:ext inDirectory:nil];
+    
+    for(NSBundle* bundle in [self bundles]){
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext];
+        if([paths count] > 0) return paths;
+    }
+    
+    return nil;
 }
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext localization:(NSString *)localizationName observer:(id)observer usingBlock:(void(^)(id observer, NSArray* paths))updateBlock{
     if([self resourceManagerClass]){
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext localization:localizationName observer:observer usingBlock:updateBlock];
     }
-    return [[NSBundle mainBundle]pathsForResourcesOfType:ext inDirectory:nil forLocalization:localizationName];
+    
+    for(NSBundle* bundle in [self bundles]){
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext forLocalization:localizationName];
+        if([paths count] > 0) return paths;
+    }
+    
+    return nil;
 }
 
 + (void)addObserverForResourcesWithExtension:(NSString*)ext object:(id)object usingBlock:(void(^)(id observer, NSArray* paths))updateBlock{
@@ -105,6 +156,9 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         NSString* path = [[UIImage class]performSelector:@selector(resoucePathForImageNamed:) withObject:name];
         return path ? [UIImage imageWithContentsOfFile:path] : nil;
     }
+    
+    //TODO : Manages bundles here
+    
     return [UIImage imageNamed:name];
 }
 
@@ -113,6 +167,8 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         NSString* path = [[UIImage class]performSelector:@selector(resoucePathForImageNamed:) withObject:name];
         return  path ? [[UIImage class]performSelector:@selector(imageWithContentsOfFile:update:) withObject:path withObject:update] : nil;
     }
+    //TODO : Manages bundles here
+    
     return [UIImage imageNamed:name];
 }
 

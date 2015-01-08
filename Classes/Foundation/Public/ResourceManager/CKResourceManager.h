@@ -57,6 +57,13 @@ extern NSString* CKResourceManagerMostRecentPathKey;
  */
 + (BOOL)isResourceManagerConnected;
 
+
+/******************************************************
+ Managing bundles
+ *****************************************************/
+
++ (void)registerBundle:(NSBundle*)bundle;
+
 /******************************************************
  Accessing resource files
  *****************************************************/
