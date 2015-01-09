@@ -157,22 +157,31 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
 + (UIImage*)imageNamed:(NSString*)name{
     if([self resourceManagerClass]){
         NSString* path = [[UIImage class]performSelector:@selector(resoucePathForImageNamed:) withObject:name];
-        return path ? [UIImage imageWithContentsOfFile:path] : nil;
+        if(path) return [UIImage imageWithContentsOfFile:path];
     }
     
-    //TODO : Manages bundles here
+    for(NSBundle* bundle in [self bundles]){
+        UIImage* image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
+        if(image)
+            return image;
+    }
     
-    return [UIImage imageNamed:name];
+    return nil;
 }
 
 + (UIImage*)imageNamed:(NSString*)name update:(void(^)(UIImage* image))update{
     if([self resourceManagerClass]){
         NSString* path = [[UIImage class]performSelector:@selector(resoucePathForImageNamed:) withObject:name];
-        return  path ? [[UIImage class]performSelector:@selector(imageWithContentsOfFile:update:) withObject:path withObject:update] : nil;
+        if(  path ) return [[UIImage class]performSelector:@selector(imageWithContentsOfFile:update:) withObject:path withObject:update];
     }
-    //TODO : Manages bundles here
     
-    return [UIImage imageNamed:name];
+    for(NSBundle* bundle in [self bundles]){
+        UIImage* image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
+        if(image)
+            return image;
+    }
+    
+    return nil;
 }
 
 + (NSString*)pathForImageNamed:(NSString*)name{

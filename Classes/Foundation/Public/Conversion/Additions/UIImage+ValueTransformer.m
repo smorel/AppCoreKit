@@ -23,7 +23,7 @@
         [CKResourceDependencyContext addDependency:imagePath];
         return [UIImage imageWithContentsOfFile:imagePath];
     }
-	return [UIImage imageNamed:str];;
+	return [CKResourceManager imageNamed:str];;
 }
 
 + (UIImage*)convertFromNSURL:(NSURL*)url{
@@ -53,7 +53,7 @@
         [CKResourceDependencyContext addDependency:imagePath];
         image = [UIImage imageWithContentsOfFile:imagePath];
     }else{
-        image = [UIImage imageNamed:name];
+        image = [CKResourceManager imageNamed:name];
     }
     
 	if(image){
