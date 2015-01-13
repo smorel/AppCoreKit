@@ -8,6 +8,7 @@
 
 #import "CKResourceManager.h"
 #import "NSObject+Invocation.h"
+#import "CKVersion.h"
 
 
 NSString* CKResourceManagerFileDidUpdateNotification = @"RMResourceManagerFileDidUpdateNotification";
@@ -160,10 +161,16 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         if(path) return [UIImage imageWithContentsOfFile:path];
     }
     
-    for(NSBundle* bundle in [self bundles]){
-        UIImage* image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
-        if(image)
-            return image;
+    if([CKOSVersion() floatValue] >= 8){
+        for(NSBundle* bundle in [self bundles]){
+            UIImage* image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
+            if(image)
+                return image;
+        }
+    }else{
+        UIImage* image = [UIImage imageNamed:name];
+        if(!image) { NSLog(@"Could not find image %@. Asset Catalogs in bundles ar not supported on ios version < 8",name); }
+        return image;
     }
     
     return nil;
@@ -175,10 +182,16 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         if(  path ) return [[UIImage class]performSelector:@selector(imageWithContentsOfFile:update:) withObject:path withObject:update];
     }
     
-    for(NSBundle* bundle in [self bundles]){
-        UIImage* image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
-        if(image)
-            return image;
+    if([CKOSVersion() floatValue] >= 8){
+        for(NSBundle* bundle in [self bundles]){
+            UIImage* image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
+            if(image)
+                return image;
+        }
+    }else{
+        UIImage* image = [UIImage imageNamed:name];
+        if(!image) { NSLog(@"Could not find image %@. Asset Catalogs in bundles ar not supported on ios version < 8",name); }
+        return image;
     }
     
     return nil;
