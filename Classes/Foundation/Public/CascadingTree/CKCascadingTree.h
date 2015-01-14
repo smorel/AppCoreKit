@@ -31,6 +31,15 @@ extern NSString* const CKCascadingTreeIPhone;
  */
 + (CKCascadingTree*)treeWithContentOfFile:(NSString*)path;
 
+/**
+ */
++ (void)registerAlias:(NSString*)alias forKey:(NSString*)key;
+
+/**
+ */
++ (void)registerTransformer:(void(^)(NSMutableDictionary* container, NSString* key, id value))transformer
+        forPredicate:(BOOL(^)(NSMutableDictionary* container, NSString* key, id value))predicate;
+
 ///-----------------------------------
 /// @name Initializing Cascading Tree Objects
 ///-----------------------------------

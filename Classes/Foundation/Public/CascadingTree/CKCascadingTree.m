@@ -27,6 +27,29 @@
 @end
 
 
+/**
+ */
+@interface CKCascadingTreeTransformer : NSObject
+@property(nonatomic,copy) void(^transformer)(NSMutableDictionary* container, NSString* key, id value);
+@property(nonatomic,copy) BOOL(^predicate)(NSMutableDictionary* container, NSString* key, id value);
+@end
+
+@implementation CKCascadingTreeTransformer
+
+- (void)dealloc{
+    [_transformer release];
+    [_predicate release];
+    [super dealloc];
+}
+
+@end
+
+
+@interface CKCascadingTree()
++ (NSMutableDictionary*)aliases;
++ (NSMutableArray*)transformers;
+@end
+
 
 
 @interface CKCascadingTreeItemFormat : NSObject{
@@ -536,7 +559,6 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 						id inheritedObject = [deepCopy objectForKey:obj];
                         if([inheritedObject isKindOfClass:[NSMutableDictionary class]]){
                             [inheritedObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
-                         //   [inheritedObject postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"inherited %@ in %@",obj,objectKey]];
                         }else if([inheritedObject isKindOfClass:[NSArray class]]){
                             NSArray* selfArray = (NSArray*)[self objectForKey:obj];
                             NSArray* inheritedArray = (NSArray*)inheritedObject;
@@ -563,19 +585,19 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
                                     
                                     if(deepCopySelf && deepCopy){
                                         
-                                        [deepCopySelf postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"array object %d %@ in %@",i,obj,objectKey]];
-                                        [deepCopy postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"inherited array object %d %@ in %@",i,obj,objectKey]];
+                                        [deepCopySelf postInitAfterLoadingForObjectWithKey:objectKey];
+                                        [deepCopy postInitAfterLoadingForObjectWithKey:objectKey];
                                         
                                         NSMutableDictionary* resultObject = [self applyHierarchically:deepCopy toDictionary:deepCopySelf];
                                         [resultObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                                         [result addObject:resultObject];
                                         
                                     }else if(deepCopySelf != nil){
-                                        [deepCopySelf postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"array object %d %@ in %@",i,obj,objectKey]];
+                                        [deepCopySelf postInitAfterLoadingForObjectWithKey:objectKey];
                                         
                                         [result addObject:deepCopySelf];
                                     }else{
-                                        [deepCopy postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"inherited array object %d %@ in %@",i,obj,objectKey]];
+                                        [deepCopy postInitAfterLoadingForObjectWithKey:objectKey];
                                         
                                         if(deepCopy){
                                             [result addObject:deepCopy];
@@ -592,9 +614,9 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
                         
                         id result = inheritedObject;
 						if([inheritedObject isKindOfClass:[NSDictionary class]]){
-                            [inheritedObject postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"inherited %@ in %@",key,objectKey]];
+                            [inheritedObject postInitAfterLoadingForObjectWithKey:objectKey];
                             NSMutableDictionary* selfObject = [self objectForKey:obj];
-                            [selfObject postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"self %@ in %@",key,objectKey]];
+                            [selfObject postInitAfterLoadingForObjectWithKey:objectKey];
 							result = [self applyHierarchically:inheritedObject toDictionary:selfObject];
                             [result setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                             [self setObject:result forKey:obj];
@@ -647,6 +669,57 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
         }
     }
 }
+
+
+
+- (void)makeAllAliasesForObjectWithKey:(NSString*)objectKey{
+    for(NSString* key in [self allKeys]){
+        if(   [key isEqualToString:CKCascadingTreePrefix]
+           || [key isEqualToString:CKCascadingTreeFormats]
+           || [key isEqualToString:CKCascadingTreeParent]
+           || [key isEqualToString:CKCascadingTreeEmpty]
+           || [key isEqualToString:CKCascadingTreeNode]
+           || [key isEqualToString:CKCascadingTreeInherits]
+           || [key isEqualToString:CKCascadingTreeImport]
+           || [key isEqualToString:CKCascadingTreeIPad]
+           || [key isEqualToString:CKCascadingTreeIPhone]){
+            continue;
+        }
+        
+        //Solve key aliases
+        NSString* alias = [[CKCascadingTree aliases]objectForKey:key];
+        if(alias != nil){
+            id value = [self objectForKey:key];
+            [value retain];
+            [self removeObjectForKey:key];
+            [self setObject:value forKey:alias];
+            [value autorelease];
+        }else{
+            alias = key;
+        }
+        
+        //Solves Value Aliases
+        id value = [self objectForKey:alias];
+        if([value isKindOfClass:[NSString class]]){
+            NSString* valueAlias = [[CKCascadingTree aliases]objectForKey:value];
+            if(valueAlias != nil){
+                [self setObject:valueAlias forKey:alias];
+            }
+        }
+        
+        //Perform transformers
+        value = [self objectForKey:alias];
+        
+        for(CKCascadingTreeTransformer* t in [CKCascadingTree transformers]){
+            if(t.predicate(self,alias,value)){
+                [value retain];
+                t.transformer(self,alias,value);
+                [value autorelease];
+            }
+        }
+    }
+}
+
 
 - (NSArray*)parseFormatGroups:(NSString*)formats{
 	NSArray* components = [formats componentsSeparatedByString:@","];
@@ -705,6 +778,8 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 }
 
 - (void)postInitAfterLoadingForObjectWithKey:(NSString*)objectKey{
+    [self makeAllAliasesForObjectWithKey:objectKey];
+    
     //Setup parent for hierarchical searchs
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
         if([object isKindOfClass:[NSArray class]]){
@@ -732,7 +807,7 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
             int i =0;
             for(id subObject in object){
                 if([subObject isKindOfClass:[NSDictionary class]]){
-                    [subObject postInitAfterLoadingForObjectWithKey:[NSString stringWithFormat:@"array object %d %@ in %@",i,key,objectKey]];
+                    [subObject postInitAfterLoadingForObjectWithKey:objectKey];
                     
                     [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                     [subObject setObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"address <%p>",subObject],@"address",nil] forKey:CKCascadingTreeNode];
@@ -988,6 +1063,38 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 	[super dealloc];
 }
 
++ (NSMutableDictionary*)aliases{
+    static NSMutableDictionary* kAliases = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        kAliases = [[NSMutableDictionary alloc]init];
+    });
+    return kAliases;
+}
+
++ (void)registerAlias:(NSString*)alias forKey:(NSString*)key{
+    [[self aliases]setObject:alias forKey:key];
+}
+
++ (NSMutableArray*)transformers{
+    static NSMutableArray* kTransformers = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        kTransformers = [[NSMutableArray alloc]init];
+    });
+    return kTransformers;
+}
+
+
++ (void)registerTransformer:(void(^)(NSMutableDictionary* container, NSString* key, id value))transformer
+               forPredicate:(BOOL(^)(NSMutableDictionary* container, NSString* key, id value))predicate{
+    CKCascadingTreeTransformer* t = [[[CKCascadingTreeTransformer alloc]init]autorelease];
+    t.transformer = transformer;
+    t.predicate = predicate;
+    
+    [[self transformers]addObject:t];
+}
+
 - (id)init{
 	if (self = [super init]) {
         self.loadedFiles = [NSMutableSet set];
@@ -1062,7 +1169,7 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
     id result = [fileData mutableObjectFromJSONDataWithParseOptions:JKParseOptionValidFlags error:&error];
     
     if (error){
-        CKDebugLog(@"**** Parsing error : invalid format in style file '%@' at line : '%@' with error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
+        NSLog(@"**** Parsing error : invalid format in file '%@' at line : '%@' with error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
               [[error userInfo]objectForKey:@"NSLocalizedDescription"]);
     }
 	

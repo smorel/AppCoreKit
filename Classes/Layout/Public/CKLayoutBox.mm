@@ -16,6 +16,7 @@
 #import "CKRuntime.h"
 #import "UIView+Name.h"
 #import "CKStyleView.h"
+#import "CKCascadingTree.h"
 
 using namespace __gnu_cxx;
 
@@ -45,6 +46,47 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 #ifdef LAYOUT_DEBUG_ENABLED
 @synthesize debugView;
 #endif
+
+
++ (void)load{
+    [CKCascadingTree registerAlias:@"layoutBoxes" forKey:@"layout"];
+    
+    [CKCascadingTree registerTransformer:^(NSMutableDictionary *container, NSString *key, id value) {
+        //We have "<view_classname>" : [ <layoutboxes> ]
+        [container removeObjectForKey:key];
+        [container setObject:key forKey:@"@class"];
+        [container setObject:[NSMutableArray arrayWithArray:value] forKey:@"layoutBoxes"];
+    } forPredicate:^BOOL(NSMutableDictionary *container, NSString *key, id value) {
+        Class type = NSClassFromString(key);
+        if(type
+           && ([NSObject isClass:type kindOfClass:[UIView class]] || [NSObject isClass:type kindOfClass:[CKLayoutBox class]])
+           && [value isKindOfClass:[NSArray class]]){
+            return YES;
+        }
+           return NO;
+    }];
+    
+    [CKCascadingTree registerTransformer:^(NSMutableDictionary *container, NSString *key, id value) {
+        //We have "<view_classname>" : "<name>"
+        [container removeObjectForKey:key];
+        [container setObject:key forKey:@"@class"];
+        [container setObject:value forKey:@"name"];
+    } forPredicate:^BOOL(NSMutableDictionary *container, NSString *key, id value) {
+        Class type = NSClassFromString(key);
+        
+        id classDefinition = [container objectForKey:@"@class"];
+        id nameDefinition  = [container objectForKey:@"name"];
+            
+        if(type
+           && ([NSObject isClass:type kindOfClass:[UIView class]] || [NSObject isClass:type kindOfClass:[CKLayoutBox class]])
+           && [value isKindOfClass:[NSString class]]
+           && classDefinition == nil
+           && nameDefinition == nil){
+            return YES;
+        }
+        return NO;
+    }];
+}
 
 - (id)init{
     self = [super init];
