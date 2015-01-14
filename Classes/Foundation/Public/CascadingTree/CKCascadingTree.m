@@ -30,8 +30,8 @@
 /**
  */
 @interface CKCascadingTreeTransformer : NSObject
-@property(nonatomic,copy) void(^transformer)(NSMutableDictionary* container, NSString* key, id value);
-@property(nonatomic,copy) BOOL(^predicate)(NSMutableDictionary* container, NSString* key, id value);
+@property(nonatomic,copy) void(^transformer)(NSString* containerKey, NSMutableDictionary* container, NSString* key, id value);
+@property(nonatomic,copy) BOOL(^predicate)(NSString* containerKey, NSMutableDictionary* container, NSString* key, id value);
 @end
 
 @implementation CKCascadingTreeTransformer
@@ -711,9 +711,9 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
         value = [self objectForKey:alias];
         
         for(CKCascadingTreeTransformer* t in [CKCascadingTree transformers]){
-            if(t.predicate(self,alias,value)){
+            if(t.predicate(objectKey,self,alias,value)){
                 [value retain];
-                t.transformer(self,alias,value);
+                t.transformer(objectKey,self,alias,value);
                 [value autorelease];
             }
         }
@@ -778,7 +778,6 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 }
 
 - (void)postInitAfterLoadingForObjectWithKey:(NSString*)objectKey{
-    [self makeAllAliasesForObjectWithKey:objectKey];
     
     //Setup parent for hierarchical searchs
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
@@ -826,6 +825,8 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
             [object setObject:[NSDictionary dictionaryWithObjectsAndKeys:key,@"name",[NSString stringWithFormat:@"address <%p>",object],@"address",nil] forKey:CKCascadingTreeNode];
 		}
 	}
+    
+    [self makeAllAliasesForObjectWithKey:objectKey];
 	
 	//set the empty style
 	NSMutableDictionary* emptyDico = [NSMutableDictionary dictionaryWithObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
@@ -1086,8 +1087,8 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 }
 
 
-+ (void)registerTransformer:(void(^)(NSMutableDictionary* container, NSString* key, id value))transformer
-               forPredicate:(BOOL(^)(NSMutableDictionary* container, NSString* key, id value))predicate{
++ (void)registerTransformer:(void(^)(NSString* containerKey, NSMutableDictionary* container, NSString* key, id value))transformer
+               forPredicate:(BOOL(^)(NSString* containerKey, NSMutableDictionary* container, NSString* key, id value))predicate{
     CKCascadingTreeTransformer* t = [[[CKCascadingTreeTransformer alloc]init]autorelease];
     t.transformer = transformer;
     t.predicate = predicate;

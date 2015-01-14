@@ -37,8 +37,8 @@ extern NSString* const CKCascadingTreeIPhone;
 
 /**
  */
-+ (void)registerTransformer:(void(^)(NSMutableDictionary* container, NSString* key, id value))transformer
-        forPredicate:(BOOL(^)(NSMutableDictionary* container, NSString* key, id value))predicate;
++ (void)registerTransformer:(void(^)(NSString* containerKey, NSMutableDictionary* container, NSString* key, id value))transformer
+        forPredicate:(BOOL(^)(NSString* containerKey, NSMutableDictionary* container, NSString* key, id value))predicate;
 
 ///-----------------------------------
 /// @name Initializing Cascading Tree Objects

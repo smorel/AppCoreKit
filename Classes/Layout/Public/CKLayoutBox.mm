@@ -51,12 +51,12 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 + (void)load{
     [CKCascadingTree registerAlias:@"layoutBoxes" forKey:@"layout"];
     
-    [CKCascadingTree registerTransformer:^(NSMutableDictionary *container, NSString *key, id value) {
+    [CKCascadingTree registerTransformer:^(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
         //We have "<view_classname>" : [ <layoutboxes> ]
         [container removeObjectForKey:key];
         [container setObject:key forKey:@"@class"];
         [container setObject:[NSMutableArray arrayWithArray:value] forKey:@"layoutBoxes"];
-    } forPredicate:^BOOL(NSMutableDictionary *container, NSString *key, id value) {
+    } forPredicate:^BOOL(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
         Class type = NSClassFromString(key);
         if(type
            && ([NSObject isClass:type kindOfClass:[UIView class]] || [NSObject isClass:type kindOfClass:[CKLayoutBox class]])
@@ -66,12 +66,12 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
            return NO;
     }];
     
-    [CKCascadingTree registerTransformer:^(NSMutableDictionary *container, NSString *key, id value) {
+    [CKCascadingTree registerTransformer:^(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
         //We have "<view_classname>" : "<name>"
         [container removeObjectForKey:key];
         [container setObject:key forKey:@"@class"];
         [container setObject:value forKey:@"name"];
-    } forPredicate:^BOOL(NSMutableDictionary *container, NSString *key, id value) {
+    } forPredicate:^BOOL(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
         Class type = NSClassFromString(key);
         
         id classDefinition = [container objectForKey:@"@class"];
