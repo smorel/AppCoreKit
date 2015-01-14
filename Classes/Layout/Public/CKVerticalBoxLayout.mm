@@ -10,6 +10,7 @@
 #include <ext/hash_map>
 #include <ext/hash_set>
 #import "CKLayoutFlexibleSpace.h"
+#import "CKCascadingTree.h"
 
 using namespace __gnu_cxx;
 
@@ -36,6 +37,10 @@ namespace __gnu_cxx{
 
 
 @implementation CKVerticalBoxLayout
+
++ (void)load{
+    [CKCascadingTree registerAlias:[[self class]description] forKey:@"VBox"];
+}
 
 - (id)init{
     self = [super init];

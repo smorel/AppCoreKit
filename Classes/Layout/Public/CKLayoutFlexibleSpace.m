@@ -9,6 +9,7 @@
 #import "CKLayoutFlexibleSpace.h"
 #import "CKHorizontalBoxLayout.h"
 #import "CKVerticalBoxLayout.h"
+#import "CKCascadingTree.h"
 
 @interface CKLayoutBox()
 @property(nonatomic,assign,readwrite) UIView* containerLayoutView;
@@ -27,6 +28,11 @@
 
 
 @implementation CKLayoutFlexibleSpace
+
+
++ (void)load{
+    [CKCascadingTree registerAlias:[[self class]description] forKey:@"FlexibleSpace"];
+}
 
 - (id)init{
     self = [super init];
