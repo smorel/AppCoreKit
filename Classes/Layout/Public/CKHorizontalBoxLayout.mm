@@ -40,6 +40,7 @@ namespace __gnu_cxx{
 
 + (void)load{
     [CKCascadingTree registerAlias:[[self class]description] forKey:@"HBox"];
+    [CKCascadingTree registerAlias:[[self class]description] forKey:@"Horizontal"];
 }
 
 - (id)init{
