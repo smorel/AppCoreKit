@@ -252,6 +252,32 @@
 @synthesize hasBeenReloaded;
 @synthesize orientation;
 
++ (void)load{
+    //FIXME: Removes this Transformer when split view controller will leverage CKLayout system
+    
+    [CKCascadingTree registerTransformer:^(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
+        id sizeValue = [container objectForKey:@"fixedHeight"];
+        if(!sizeValue){
+            sizeValue = [container objectForKey:@"fixedWidth"];
+        }
+        
+        [container removeObjectForKey:key];
+        [container setObject:@{
+                               @"type" : @(CKSplitViewConstraintsTypeFixedSizeInPixels),
+                               @"size" : sizeValue
+                               }
+                      forKey:@"splitViewConstraints"];
+    } forPredicate:^BOOL(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
+        if([key isEqualToString:@"fixedHeight"] || [key isEqualToString:@"fixedWidth"]){
+            Class containerClass = NSClassFromString(containerKey);
+            if(containerClass && [NSObject isClass:containerClass kindOfClass:[UIViewController class]]){
+                return YES;
+            }
+        }
+        return NO;
+    }];
+}
+
 - (void)postInit{
     [super postInit];
     self.hasBeenReloaded = NO;
