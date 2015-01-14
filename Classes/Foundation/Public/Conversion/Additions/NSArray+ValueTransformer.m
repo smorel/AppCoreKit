@@ -60,6 +60,14 @@
     return results;
 }
 
+
++ (id)convertFromNSDictionary:(NSDictionary*)dictionary{
+    NSMutableArray* results = [NSMutableArray array];
+    id object = [NSObject objectFromDictionary:dictionary];
+    [results addObject:object];
+    return results;
+}
+
 + (id)objectArrayFromDictionaryArray:(NSArray*)array{
 	NSMutableArray* results = [NSMutableArray array];
 	for(id o in array){
