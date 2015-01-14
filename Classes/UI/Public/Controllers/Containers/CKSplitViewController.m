@@ -262,10 +262,10 @@
         }
         
         [container removeObjectForKey:key];
-        [container setObject:@{
+        [container setObject:[NSMutableDictionary dictionaryWithDictionary:@{
                                @"type" : @(CKSplitViewConstraintsTypeFixedSizeInPixels),
                                @"size" : sizeValue
-                               }
+                               }]
                       forKey:@"splitViewConstraints"];
     } forPredicate:^BOOL(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
         if([key isEqualToString:@"fixedHeight"] || [key isEqualToString:@"fixedWidth"]){

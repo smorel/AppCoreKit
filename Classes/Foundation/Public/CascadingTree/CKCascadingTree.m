@@ -779,6 +779,8 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 
 - (void)postInitAfterLoadingForObjectWithKey:(NSString*)objectKey{
     
+    [self makeAllAliasesForObjectWithKey:objectKey];
+    
     //Setup parent for hierarchical searchs
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
         if([object isKindOfClass:[NSArray class]]){
@@ -825,8 +827,6 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
             [object setObject:[NSDictionary dictionaryWithObjectsAndKeys:key,@"name",[NSString stringWithFormat:@"address <%p>",object],@"address",nil] forKey:CKCascadingTreeNode];
 		}
 	}
-    
-    [self makeAllAliasesForObjectWithKey:objectKey];
 	
 	//set the empty style
 	NSMutableDictionary* emptyDico = [NSMutableDictionary dictionaryWithObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
@@ -1057,6 +1057,27 @@ NSString* const CKCascadingTreeOSVersion = @"@ios";
 
 @synthesize tree = _tree;
 @synthesize loadedFiles = _loadedFiles;
+
++ (void)load{
+    [CKCascadingTree registerTransformer:^(NSString *containerKey, NSMutableDictionary *container, NSString *key, id value) {
+        [container removeObjectForKey:key];
+        [container setObject:[NSMutableArray arrayWithObject:key] forKey:@"@inherits"];
+        [container setObject:value forKey:@"name"];
+    } forPredicate:^BOOL(NSString *containerKey, NSMutableDictionary *container, NSString *key, id value) {
+        if(![value isKindOfClass:[NSString class]])
+            return NO;
+        
+        NSMutableDictionary* context = [container parentDictionary];
+        while (context) {
+            id v = [context objectForKey:key];
+            if(v && [v isKindOfClass:[NSDictionary class]]){
+                return YES;
+            }
+            context = [context parentDictionary];
+        }
+        return NO;
+    }];
+}
 
 - (void)dealloc{
 	[_tree release];
