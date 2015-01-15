@@ -14,15 +14,25 @@
  */
 @interface UILabel (CKStyle)
 
+/**
+ */
 @property (nonatomic) NSString *fontName;
+/**
+ */
 @property (nonatomic) CGFloat fontSize;
 
 @end
 
 
+/**
+ */
 @interface UITextField (CKStyle)
 
+/**
+ */
 @property (nonatomic) NSString *fontName;
+/**
+ */
 @property (nonatomic) CGFloat fontSize;
 
 @end

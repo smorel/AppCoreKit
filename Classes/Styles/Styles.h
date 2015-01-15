@@ -10,3 +10,5 @@
 #import "CKStyleView.h"
 #import "UIView+Style.h"
 #import "UIViewController+Style.h"
+#import "UIButton+Style.h"
+#import "UILabel+Style.h"

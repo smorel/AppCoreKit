@@ -260,7 +260,7 @@
 		7560DD6413B8ED3600268D13 /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1713B8ED3600268D13 /* CKTableViewController.m */; };
 		7560DD6713B8ED3600268D13 /* CKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1A13B8ED3600268D13 /* CKTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD6813B8ED3600268D13 /* CKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1B13B8ED3600268D13 /* CKTextView.m */; };
-		7560DD6F13B8ED3600268D13 /* UIButton+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2213B8ED3600268D13 /* UIButton+Style.h */; settings = {ATTRIBUTES = (); }; };
+		7560DD6F13B8ED3600268D13 /* UIButton+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2213B8ED3600268D13 /* UIButton+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD7013B8ED3600268D13 /* UIButton+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2313B8ED3600268D13 /* UIButton+Style.m */; };
 		7560DD7113B8ED3600268D13 /* UIColor+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2413B8ED3600268D13 /* UIColor+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD7213B8ED3600268D13 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2513B8ED3600268D13 /* UIColor+Additions.m */; };
@@ -274,7 +274,7 @@
 		7560DD7C13B8ED3600268D13 /* CKUIImagePropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */; };
 		7560DD7F13B8ED3600268D13 /* UIKeyboard+Information.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3213B8ED3600268D13 /* UIKeyboard+Information.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD8013B8ED3600268D13 /* UIKeyboard+Information.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3313B8ED3600268D13 /* UIKeyboard+Information.m */; };
-		7560DD8113B8ED3600268D13 /* UILabel+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3413B8ED3600268D13 /* UILabel+Style.h */; settings = {ATTRIBUTES = (); }; };
+		7560DD8113B8ED3600268D13 /* UILabel+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3413B8ED3600268D13 /* UILabel+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD8213B8ED3600268D13 /* UILabel+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3513B8ED3600268D13 /* UILabel+Style.m */; };
 		7560DD8513B8ED3600268D13 /* UITableView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3813B8ED3600268D13 /* UITableView+Introspection.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD8613B8ED3600268D13 /* UITableView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3913B8ED3600268D13 /* UITableView+Introspection.m */; };
@@ -948,8 +948,8 @@
 		7560DC1713B8ED3600268D13 /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewController.m; path = Classes/UI/Public/Table/CKTableViewController.m; sourceTree = "<group>"; };
 		7560DC1A13B8ED3600268D13 /* CKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTextView.h; path = Classes/UI/Public/Views/CKTextView.h; sourceTree = "<group>"; };
 		7560DC1B13B8ED3600268D13 /* CKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTextView.m; path = Classes/UI/Public/Views/CKTextView.m; sourceTree = "<group>"; };
-		7560DC2213B8ED3600268D13 /* UIButton+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+Style.h"; path = "Classes/Styles/Private/UIButton+Style.h"; sourceTree = "<group>"; };
-		7560DC2313B8ED3600268D13 /* UIButton+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+Style.m"; path = "Classes/Styles/Private/UIButton+Style.m"; sourceTree = "<group>"; };
+		7560DC2213B8ED3600268D13 /* UIButton+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+Style.h"; path = "Classes/Styles/Public/UIButton+Style.h"; sourceTree = "<group>"; };
+		7560DC2313B8ED3600268D13 /* UIButton+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+Style.m"; path = "Classes/Styles/Public/UIButton+Style.m"; sourceTree = "<group>"; };
 		7560DC2413B8ED3600268D13 /* UIColor+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Additions.h"; path = "Classes/Foundation/Public/Helpers/UIColor+Additions.h"; sourceTree = "<group>"; };
 		7560DC2513B8ED3600268D13 /* UIColor+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Additions.m"; path = "Classes/Foundation/Public/Helpers/UIColor+Additions.m"; sourceTree = "<group>"; };
 		7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUIColorPropertyCellController.h; path = Classes/UI/Private/CKUIColorPropertyCellController.h; sourceTree = "<group>"; };
@@ -962,8 +962,8 @@
 		7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUIImagePropertyCellController.m; path = Classes/UI/Private/CKUIImagePropertyCellController.m; sourceTree = "<group>"; };
 		7560DC3213B8ED3600268D13 /* UIKeyboard+Information.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIKeyboard+Information.h"; path = "Classes/UI/Public/Views/UIKeyboard+Information.h"; sourceTree = "<group>"; };
 		7560DC3313B8ED3600268D13 /* UIKeyboard+Information.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIKeyboard+Information.m"; path = "Classes/UI/Public/Views/UIKeyboard+Information.m"; sourceTree = "<group>"; };
-		7560DC3413B8ED3600268D13 /* UILabel+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+Style.h"; path = "Classes/Styles/Private/UILabel+Style.h"; sourceTree = "<group>"; };
-		7560DC3513B8ED3600268D13 /* UILabel+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+Style.m"; path = "Classes/Styles/Private/UILabel+Style.m"; sourceTree = "<group>"; };
+		7560DC3413B8ED3600268D13 /* UILabel+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+Style.h"; path = "Classes/Styles/Public/UILabel+Style.h"; sourceTree = "<group>"; };
+		7560DC3513B8ED3600268D13 /* UILabel+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+Style.m"; path = "Classes/Styles/Public/UILabel+Style.m"; sourceTree = "<group>"; };
 		7560DC3813B8ED3600268D13 /* UITableView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableView+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UITableView+Introspection.h"; sourceTree = "<group>"; };
 		7560DC3913B8ED3600268D13 /* UITableView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableView+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UITableView+Introspection.m"; sourceTree = "<group>"; };
 		7560DC3A13B8ED3600268D13 /* UITableViewCell+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UITableViewCell+Introspection.h"; sourceTree = "<group>"; };
