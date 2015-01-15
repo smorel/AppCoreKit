@@ -672,6 +672,8 @@
 		B0EA78A7156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */; };
 		B0EA78AB156EDEAC00CD5264 /* UINavigationController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */; settings = {ATTRIBUTES = (); }; };
 		B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */; };
+		D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
 		EDD9E7E31436166D00E104D9 /* UIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* UIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* UIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -1368,6 +1370,8 @@
 		B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UINavigationController+BlockBasedDelegate.mm"; path = "Classes/UI/Public/Controllers/UINavigationController+BlockBasedDelegate.mm"; sourceTree = "<group>"; };
 		B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Style.h"; path = "Classes/Styles/Private/UINavigationController+Style.h"; sourceTree = "<group>"; };
 		B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UINavigationController+Style.mm"; path = "Classes/Styles/Private/UINavigationController+Style.mm"; sourceTree = "<group>"; };
+		D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Introspection.h"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.h"; sourceTree = "<group>"; };
+		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* UIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -2106,6 +2110,8 @@
 				96F9F36B173182D900AF4276 /* UIActivityIndicatorView+Introspection.m */,
 				709C71CA1843BE8C006BB1DD /* UIControl+Introspection.h */,
 				709C71CB1843BE8C006BB1DD /* UIControl+Introspection.m */,
+				D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */,
+				D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2791,6 +2797,7 @@
 				7560DD8113B8ED3600268D13 /* UILabel+Style.h in Headers */,
 				96B3BD05182BEF1C00978B85 /* CKAnimationInterpolator.h in Headers */,
 				7560DD8513B8ED3600268D13 /* UITableView+Introspection.h in Headers */,
+				D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */,
 				7560DD8713B8ED3600268D13 /* UITableViewCell+Introspection.h in Headers */,
 				7560DD8B13B8ED3600268D13 /* UITextField+Introspection.h in Headers */,
 				7560DD9113B8ED3600268D13 /* UIView+Introspection.h in Headers */,
@@ -3307,6 +3314,7 @@
 				7531781A1417E4F9009310A8 /* UIToolbar+Style.mm in Sources */,
 				7531781E1417E5A1009310A8 /* UILabel+Introspection.m in Sources */,
 				753178221417E61D009310A8 /* UINavigationBar+Introspection.m in Sources */,
+				D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */,
 				753178261417E64C009310A8 /* UIToolbar+introspection.m in Sources */,
 				7531782A1417E9E3009310A8 /* UIBarButtonItem+Introspection.m in Sources */,
 				75305B7414228D0E0003EBB6 /* UITextInputTraits+Introspection.m in Sources */,

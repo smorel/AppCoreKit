@@ -108,6 +108,7 @@
 #import "UIColor+Additions.h"
 #import "CKStringHelper.h"
 #import "UIImage+FastLoading.h"
+#import "UIDevice+Introspection.h"
 
 #import "NSArray+Compare.h"
 #import "UIColor+Components.h"
