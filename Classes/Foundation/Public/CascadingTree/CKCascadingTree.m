@@ -578,6 +578,10 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         if([object isKindOfClass:[NSString class]]){
             NSString* injectionPath = (NSString*)object;
             
+            if([injectionPath isEqualToString:@"#text"]){
+                int i =3;
+            }
+            
             id result = [self findObjectInHierarchy:injectionPath];
             if(result){
                 if([result isKindOfClass:[NSDictionary class]]){
@@ -845,7 +849,6 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
     }];
     
     [self makeAllInheritsForObjectWithKey:objectKey];
-    [self makeAllInjectionsForObjectWithKey:objectKey];
     
     NSArray* sortedKeys = [self sortedKeysTakingCareOfInheritanceDependenciesForObjectWithKey:objectKey];
     
@@ -875,11 +878,49 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
             [object setObject:[NSDictionary dictionaryWithObjectsAndKeys:key,@"name",[NSString stringWithFormat:@"address <%p>",object],@"address",nil] forKey:CKCascadingTreeNode];
 		}
 	}
-	
+    
 	//set the empty style
 	NSMutableDictionary* emptyDico = [NSMutableDictionary dictionaryWithObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
 	[self setObject:emptyDico forKey:CKCascadingTreeEmpty];
 }
+
+- (void)makeAllInjectionsAfterLoadingForObjectWithKey:(NSString*)objectKey{
+    [self makeAllInjectionsForObjectWithKey:objectKey];
+    
+    for(id key in [self allKeys]){
+        if(   [key isEqualToString:CKCascadingTreePrefix]
+           || [key isEqualToString:CKCascadingTreeFormats]
+           || [key isEqualToString:CKCascadingTreeParent]
+           || [key isEqualToString:CKCascadingTreeEmpty]
+           || [key isEqualToString:CKCascadingTreeNode]
+           || [key isEqualToString:CKCascadingTreeInherits]
+           || [key isEqualToString:CKCascadingTreeImport]
+           || [key isEqualToString:CKCascadingTreeDevice]){
+            continue;
+        }
+        
+        id object = [[self objectForKey:key]retain];
+        
+        if([object isKindOfClass:[NSArray class]]){
+            for(id subObject in object){
+                if([subObject isKindOfClass:[NSDictionary class]]){
+                    NSMutableDictionary* dico = subObject;
+                    [dico makeAllInjectionsAfterLoadingForObjectWithKey:@""];
+                    [dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                }
+            }
+        }
+        else if([object isKindOfClass:[NSDictionary class]]
+                && (![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode])){
+            NSMutableDictionary* dico = object;
+            [dico makeAllInjectionsAfterLoadingForObjectWithKey:key];
+            [dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+        }
+        [object release];
+    }
+
+}
+
 
 - (void)validation{
     /*    for(id key in [self allKeys]){
@@ -1200,7 +1241,8 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
 	if([self importContentOfFile:path]){
 		[_tree initAfterLoadingForObjectWithKey:@""];
         [_tree makeAllTransformRecursivellyForObjectWithKey:@""];
-		[_tree postInitAfterLoadingForObjectWithKey:@""];
+        [_tree postInitAfterLoadingForObjectWithKey:@""];
+        [_tree makeAllInjectionsAfterLoadingForObjectWithKey:@""];
 #ifdef DEBUG
         [_tree validation];
 #endif
