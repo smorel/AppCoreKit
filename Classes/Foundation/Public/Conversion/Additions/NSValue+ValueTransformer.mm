@@ -47,37 +47,37 @@
 + (NSString*)convertCGSizeToNSString:(NSValue*)value{
     CGSize size;
     [value getValue:&size];
-    return [NSString stringWithFormat:@"%f %f",size.width,size.height];
+    return [NSString stringWithFormat:@"%g %g",size.width,size.height];
 }
 
 + (NSString*)convertCGPointToNSString:(NSValue*)value{
     CGPoint point;
     [value getValue:&point];
-    return [NSString stringWithFormat:@"%f %f",point.x,point.y];
+    return [NSString stringWithFormat:@"%g %g",point.x,point.y];
 }
 
 + (NSString*)convertCGRectToNSString:(NSValue*)value{
     CGRect rect;
     [value getValue:&rect];
-    return [NSString stringWithFormat:@"%f %f %f %f",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height];
+    return [NSString stringWithFormat:@"%g %g %g %g",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height];
 }
 
 + (NSString*)convertCGAffineTransformToNSString:(NSValue*)value{
     CGAffineTransform transform;
     [value getValue:&transform];
-    return [NSString stringWithFormat:@"%f %f %f %f %f %f",transform.a,transform.b,transform.c,transform.d,transform.tx,transform.ty];
+    return [NSString stringWithFormat:@"%g %g %g %g %g %g",transform.a,transform.b,transform.c,transform.d,transform.tx,transform.ty];
 }
 
 + (NSString*)convertCLLocationCoordinate2DToNSString:(NSValue*)value{
     CLLocationCoordinate2D location;
     [value getValue:&location];
-    return [NSString stringWithFormat:@"%f %f",location.latitude,location.longitude];
+    return [NSString stringWithFormat:@"%g %g",location.latitude,location.longitude];
 }
 
 + (NSString*)convertUIEdgeInsetsToNSString:(NSValue*)value{
     UIEdgeInsets insets;
     [value getValue:&insets];
-    return [NSString stringWithFormat:@"%f %f %f %f",insets.top,insets.left,insets.bottom,insets.right];
+    return [NSString stringWithFormat:@"%g %g %g %g",insets.top,insets.left,insets.bottom,insets.right];
 }
 
 @end
