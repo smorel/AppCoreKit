@@ -1122,6 +1122,10 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         if(![value isKindOfClass:[NSString class]])
             return NO;
         
+        Class c = NSClassFromString(key);
+        if(c != nil)
+            return NO;
+        
         NSMutableDictionary* context = [container parentDictionary];
         while (context) {
             id v = [context objectForKey:key];
