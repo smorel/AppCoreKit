@@ -53,7 +53,6 @@
                     [[item class] applyStyle:itemStyle toObject:item appliedStack:appliedStack delegate:nil];
                 }
                 
-                //[view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
                 return YES;
             }
         }
@@ -71,42 +70,4 @@
 }
 
 
-/*
-
-- (void)UIToolbar_CKStyleManager_setItems:(NSArray *)items{
-    [self UIToolbar_CKStyleManager_setItems:items];
-    
-    NSMutableDictionary* style = [self appliedStyle];
-    if(style){
-        for(UIBarButtonItem* item in items){
-            NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
-            [item applyStyle:itemStyle];
-        }
-    }
-}
-
-- (void)UIToolbar_CKStyleManager_setItems:(NSArray *)items animated:(BOOL)animated{
-    [self UIToolbar_CKStyleManager_setItems:items animated:animated];
-    
-    NSMutableDictionary* style = [self appliedStyle];
-    if(style){
-        for(UIBarButtonItem* item in items){
-            NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
-            [item applyStyle:itemStyle];
-        }
-    }
-}
-*/
-
 @end
-
-/*
-
-bool swizzle_UIToolbar_CKStyleManager(){
-    CKSwizzleSelector([UIToolbar class],@selector(setItems:),@selector(UIToolbar_CKStyleManager_setItems:));
-    CKSwizzleSelector([UIToolbar class],@selector(setItems:animated:),@selector(UIToolbar_CKStyleManager_setItems:animated:));
-    return 1;
-}
-
-static bool bo_swizzle_UIToolbar_CKStyleManager = swizzle_UIToolbar_CKStyleManager();
-*/

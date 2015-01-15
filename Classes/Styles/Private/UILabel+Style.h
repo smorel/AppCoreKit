@@ -9,30 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "UIView+Style.h"
 
-/**
- */
-extern NSString* CKStyleFontSize;
-
-/**
- */
-extern NSString* CKStyleFontName;
-
-
-/**
- */
-@interface NSMutableDictionary (CKUILabelStyle)
-- (CGFloat)fontSize;
-- (NSString*)fontName;
-@end
-
 
 /**
  */
 @interface UILabel (CKStyle)
 
+@property (nonatomic) NSString *fontName;
+@property (nonatomic) CGFloat fontSize;
+
 @end
 
 
 @interface UITextField (CKStyle)
+
+@property (nonatomic) NSString *fontName;
+@property (nonatomic) CGFloat fontSize;
 
 @end

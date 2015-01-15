@@ -210,28 +210,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return str;
 }
 
-/*
-#ifdef __IPHONE_6_0
-- (NSLayoutFormatOptions)layoutFormatOption{
-    return (NSLayoutFormatOptions)[self bitMaskValueForKey:CKStyleAutoLayoutFormatOption
-                                    withEnumDescriptor:CKEnumDefinition(@"NSLayoutFormatOptions",
-                                                                        NSLayoutFormatAlignAllLeft,
-                                                                        NSLayoutFormatAlignAllRight,
-                                                                        NSLayoutFormatAlignAllTop,
-                                                                        NSLayoutFormatAlignAllBottom,
-                                                                        NSLayoutFormatAlignAllLeading,
-                                                                        NSLayoutFormatAlignAllTrailing,
-                                                                        NSLayoutFormatAlignAllCenterX,
-                                                                        NSLayoutFormatAlignAllCenterY,
-                                                                        NSLayoutFormatAlignAllBaseline,
-                                                                        NSLayoutFormatAlignmentMask,
-                                                                        NSLayoutFormatDirectionLeadingToTrailing ,
-                                                                        NSLayoutFormatDirectionLeftToRight,
-                                                                        NSLayoutFormatDirectionRightToLeft,  
-                                                                        NSLayoutFormatDirectionMask)];
-}
-#endif
- */
 
 - (NSArray*)instanceOfViews{
     //TODO
@@ -254,94 +232,9 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return nil;
 }
 
-/*
-#ifdef __IPHONE_6_0
-- (NSArray*)autoLayoutConstraintsUsingViews:(NSDictionary*)views{
-    @try{
-    if([self containsObjectForKey:CKStyleAutoLayoutConstraints]){
-        NSMutableArray* constraints = [NSMutableArray array];
-        NSArray* constraintsDefinition = [self objectForKey:CKStyleAutoLayoutConstraints];
-        for(id visualFormatObject in constraintsDefinition){
-            if([visualFormatObject isKindOfClass:[NSString class]]){
-                NSString* format = visualFormatObject;
-                NSArray* c = [NSLayoutConstraint constraintsWithVisualFormat:format options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views];
-                [constraints addObjectsFromArray:c];
-            }else if([visualFormatObject isKindOfClass:[NSDictionary class]]){
-                if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutFormat]){
-                    NSLayoutFormatOptions options = NSLayoutFormatDirectionLeadingToTrailing;
-                    NSString* format = nil;
-                    
-                    if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutFormatOption]){
-                        options = [visualFormatObject layoutFormatOption];
-                    }
-                    format = [visualFormatObject objectForKey:CKStyleAutoLayoutFormat];
-                    
-                    NSArray* c = [NSLayoutConstraint constraintsWithVisualFormat:format options:options metrics:nil views:views];
-                    [constraints addObjectsFromArray:c];
-                }else if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutHugging]){
-                    NSArray* ar = [visualFormatObject objectForKey:CKStyleAutoLayoutHugging];
-                    
-                    NSString* viewName = [ar objectAtIndex:0];
-                    UILayoutPriority priority = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:1]
-                                                                       withEnumDescriptor:CKEnumDefinition(@"UILayoutPriority",UILayoutPriorityRequired,                    UILayoutPriorityDefaultHigh,                           UILayoutPriorityDefaultLow,                          UILayoutPriorityFittingSizeLevel)
-                                                                                  bitMask:YES];
-                    
-                    UILayoutConstraintAxis axis = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:2]
-                                                                         withEnumDescriptor:CKEnumDefinition(@"UILayoutConstraintAxis",
-                                                                                                             UILayoutConstraintAxisHorizontal,UILayoutConstraintAxisVertical)
-                                                                                    bitMask:YES];
-                    [[views objectForKey:viewName] setContentHuggingPriority:priority forAxis:axis];
-                }
-                else if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutCompression]){
-                    NSArray* ar = [visualFormatObject objectForKey:CKStyleAutoLayoutCompression];
-                    
-                    NSString* viewName = [ar objectAtIndex:0];
-                    UILayoutPriority priority = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:1]
-                                                                       withEnumDescriptor:CKEnumDefinition(@"UILayoutPriority",UILayoutPriorityRequired,                    UILayoutPriorityDefaultHigh,                           UILayoutPriorityDefaultLow,                          UILayoutPriorityFittingSizeLevel)
-                                                                                  bitMask:YES];
-                    
-                    UILayoutConstraintAxis axis = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:2]
-                                                                         withEnumDescriptor:CKEnumDefinition(@"UILayoutConstraintAxis",
-                                                                                                             UILayoutConstraintAxisHorizontal,UILayoutConstraintAxisVertical)
-                                                                                    bitMask:YES];
-                    [[views objectForKey:viewName] setContentCompressionResistancePriority:priority forAxis:axis];
-                }
-            }
-            
-        }
-        
-        return constraints;
-    }
-    }
-    @catch (NSException* exception) {
-        CKDebugLog(@"%@",exception);
-    }
-    return nil;
-}
-#endif
- */
-
 @end
 
 @implementation UIView (CKStyle)
-
-/*
-- (BOOL)translatesAutoresizingMaskIntoConstraints{
-    return NO;
-}*/
-
-/*
-#ifdef __IPHONE_6_0
-- (void)setTranslatesAutoresizingMaskIntoConstraints:(BOOL)flag recursive:(BOOL)recursive{
-    [self setTranslatesAutoresizingMaskIntoConstraints:flag];
-    if(recursive){
-        for(UIView* view in [self subviews]){
-            [view setTranslatesAutoresizingMaskIntoConstraints:flag recursive:recursive];
-        }
-    }
-}
-#endif
- */
 
 
 + (CKStyleView*)gradientView:(UIView*)view{

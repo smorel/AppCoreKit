@@ -16,27 +16,6 @@
 #import "CKResourceManager.h"
 
 
-static char UIViewControllerDataDrivenViewsKey;
-
-@interface UIViewController(CKDataDriven)
-@property(nonatomic,retain) NSArray* dataDrivenViews;
-@end
-
-@implementation UIViewController (CKDataDriven)
-@dynamic dataDrivenViews;
-
-- (void)setDataDrivenViews:(NSArray*)dataDrivenViews{
-    objc_setAssociatedObject(self, 
-                             &UIViewControllerDataDrivenViewsKey,
-                             dataDrivenViews,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (NSArray*)dataDrivenViews{
-    return objc_getAssociatedObject(self, &UIViewControllerDataDrivenViewsKey);
-}
-@end
-
 static char UIViewControllerStyleManagerKey;
 static char UIViewControllerStylesheetFileNameKey;
 
@@ -171,47 +150,6 @@ static char UIViewControllerStylesheetFileNameKey;
 
 - (NSMutableDictionary* )applyStyle{
     NSMutableDictionary* controllerStyle = [self controllerStyle];
-    
-    NSMutableDictionary* style = [self controllerStyle];
-    
-    /*
-#ifdef __IPHONE_6_0
-    if([CKOSVersion() floatValue] >= 6){
-        [self.view removeConstraints:[self.view constraints]];
-    }
-#endif
-     */
-    
-    for(UIView* subview in self.dataDrivenViews){
-        [subview removeFromSuperview];
-    }
-    
-    NSArray* views = [style instanceOfViews];
-    if(views){
-        for(UIView* subview in views){
-            [self.view addSubview:subview];
-        }
-    }
-    self.dataDrivenViews = views;
-    
-    /*
-#ifdef __IPHONE_6_0
-    if([CKOSVersion() floatValue] >= 6){
-        NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
-        [self.view populateViewDictionaryForVisualFormat:viewsDictionary];
-                
-        NSArray* constraints = [style autoLayoutConstraintsUsingViews:viewsDictionary];
-        if(constraints && [constraints count] > 0){
-            for(UIView* subview in views){
-                [subview setTranslatesAutoresizingMaskIntoConstraints:NO recursive:YES];
-            }
-
-            [self.view addConstraints:constraints];
-        }
-        [self.view setNeedsUpdateConstraints];
-    }
-#endif
-     */
     
     NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:nil];

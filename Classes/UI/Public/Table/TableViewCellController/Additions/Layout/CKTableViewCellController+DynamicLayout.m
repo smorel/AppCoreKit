@@ -541,11 +541,11 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                 font = (UIFont*)[NSValueTransformer transform:[currentStyle objectForKey:@"font"] toClass:[UIFont class]];
             }else{
                 NSString* fontName = font.fontName;
-                if([currentStyle containsObjectForKey:CKStyleFontName])
-                    fontName= [currentStyle fontName];
+                if([currentStyle containsObjectForKey:@"fontName"])
+                    fontName= [currentStyle stringForKey:@"fontName"];
                 CGFloat fontSize = font.pointSize;
-                if([currentStyle containsObjectForKey:CKStyleFontSize])
-                    fontSize= [currentStyle fontSize];
+                if([currentStyle containsObjectForKey:@"fontSize"])
+                    fontSize= [currentStyle cgFloatForKey:@"fontSize"];
                 font = [UIFont fontWithName:fontName size:fontSize];
             }
             [style setObject:font forKey:CKDynamicLayoutFont];
