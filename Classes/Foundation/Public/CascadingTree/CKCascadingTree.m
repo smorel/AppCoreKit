@@ -221,11 +221,6 @@ NSString* const CKCascadingTreeNode      = @"CKCascadingTreeNode";
 NSString* const CKCascadingTreeInherits  = @"@inherits";
 NSString* const CKCascadingTreeImport    = @"@import";
 
-/*
-NSString* const CKCascadingTreeIPad      = @"@ipad";
-NSString* const CKCascadingTreeIPhone    = @"@iphone";
-NSString* const CKCascadingTreeIPhone5   = @"@iphone5";
-*/
 
 NSString* const CKCascadingTreeDevice = @"@device";
 NSString* const CKCascadingTreeOSVersion  = @"@ios";
@@ -1154,6 +1149,13 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
     [CKCascadingTree registerAlias:@"@device[mainScreen.nativeBounds='0 0 750 1334';userInterfaceIdiom='UIUserInterfaceIdiomPhone']" forKey:@"@iPhone6"];
     [CKCascadingTree registerAlias:@"@device[mainScreen.nativeBounds='0 0 1080 1920';userInterfaceIdiom='UIUserInterfaceIdiomPhone']" forKey:@"@iPhone6+"];
     [CKCascadingTree registerAlias:@"@device[userInterfaceIdiom='UIUserInterfaceIdiomPad']" forKey:@"@iPad"];
+    
+    [CKCascadingTree registerAlias:@"@device[userInterfaceIdiom='UIUserInterfaceIdiomPhone']" forKey:@"@iphone"];
+    [CKCascadingTree registerAlias:@"@device[mainScreen.nativeBounds='0 0 640 960';userInterfaceIdiom='UIUserInterfaceIdiomPhone']" forKey:@"@iphone4"];
+    [CKCascadingTree registerAlias:@"@device[mainScreen.nativeBounds='0 0 640 1136';userInterfaceIdiom='UIUserInterfaceIdiomPhone']" forKey:@"@iphone5"];
+    [CKCascadingTree registerAlias:@"@device[mainScreen.nativeBounds='0 0 750 1334';userInterfaceIdiom='UIUserInterfaceIdiomPhone']" forKey:@"@iphone6"];
+    [CKCascadingTree registerAlias:@"@device[mainScreen.nativeBounds='0 0 1080 1920';userInterfaceIdiom='UIUserInterfaceIdiomPhone']" forKey:@"@iphone6+"];
+    [CKCascadingTree registerAlias:@"@device[userInterfaceIdiom='UIUserInterfaceIdiomPad']" forKey:@"@ipad"];
     
     [CKCascadingTree registerTransformer:^(NSString *containerKey, NSMutableDictionary *container, NSString *key, id value) {
         [container removeObjectForKey:key];
