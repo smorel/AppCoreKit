@@ -73,7 +73,7 @@ static char UIScrollViewManuallyManagesContentSizeKey;
 
 - (BOOL)manuallyManagesContentSize{
     id value = objc_getAssociatedObject(self, &UIScrollViewManuallyManagesContentSizeKey);
-    return value ? [value boolValue] : YES;
+    return value ? [value boolValue] : NO;
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
