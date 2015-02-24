@@ -47,7 +47,7 @@
 @property (nonatomic, readonly) NSString *nickName;
 /** 
  */
-@property (nonatomic, readonly) NSString *email;
+@property (nonatomic, readonly) NSArray *emails;
 /** 
  */
 @property (nonatomic, readonly) UIImage *image;
@@ -121,7 +121,7 @@
 
 @end
 
-
+extern NSString* CKAddressBookHasBeenModifiedExternallyNotification;
 
 /**
  */

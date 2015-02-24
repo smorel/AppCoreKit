@@ -14,7 +14,7 @@
 @implementation CKAddressBookPerson {
 	ABRecordRef _record;
 	NSString *_fullName;
-	NSString *_email;
+	NSArray *_emails;
 	UIImage *_image;
 	NSArray *_phoneNumbers;
 }
@@ -39,7 +39,7 @@
 
 - (void)dealloc {
 	[_fullName release];
-	[_email release];
+	[_emails release];
 	[_image release];
 	[_phoneNumbers release];
 	CFRelease(_record);
@@ -77,7 +77,7 @@
 			[fullName appendString:(NSString *)companyName];
 		}
 		else {
-			[fullName appendString:self.email];
+			[fullName appendString:[self.emails componentsJoinedByString:@", "]];
 		}
 	}
 	
@@ -102,8 +102,34 @@
 	return ABRecordCopyValue(_record, kABPersonNicknameProperty);
 }
 
-- (NSString *)email {
-	if (_email) { return _email; }
+- (NSArray *)emails {
+    if (_emails) { return _emails; }
+    
+    NSMutableArray *emails = [NSMutableArray array];
+    
+    ABMultiValueRef theEmails = ABRecordCopyValue(_record, kABPersonEmailProperty);
+    if(!theEmails)
+        return @[];
+    
+    for (CFIndex i = 0; i < ABMultiValueGetCount(theEmails); i++) {
+        ABMultiValueRef personEmails = ABRecordCopyValue(_record, kABPersonEmailProperty);
+        if (ABMultiValueGetCount(personEmails) > 0) {
+            CFStringRef personEmail = ABMultiValueCopyValueAtIndex(personEmails, 0);
+            NSString* email = [(NSString *)personEmail retain];
+            [emails addObject:email];
+        } else {
+            NSString* email = [[NSString string] retain];
+            [emails addObject:email];
+        }
+    }
+    
+    _emails = [emails retain];
+    
+    CFRelease(theEmails);
+    
+    return _emails;
+    
+	/*if (_email) { return _email; }
 	
 	ABMultiValueRef personEmails = ABRecordCopyValue(_record, kABPersonEmailProperty);
 	
@@ -117,6 +143,7 @@
 	CFRelease(personEmails);
 
 	return _email;
+     */
 }
 
 //
@@ -139,6 +166,9 @@
 	NSMutableArray *phoneNumbers = [NSMutableArray array];
 	
 	ABMultiValueRef thePhoneNumbers = ABRecordCopyValue(_record, kABPersonPhoneProperty);
+    if(!thePhoneNumbers)
+        return @[];
+    
 	for (CFIndex i = 0; i < ABMultiValueGetCount(thePhoneNumbers); i++) {
 		CFStringRef aLabel = ABMultiValueCopyLabelAtIndex(thePhoneNumbers, i);
 		CFStringRef aLocalizedLabel = ABAddressBookCopyLocalizedLabel(aLabel);
@@ -270,6 +300,21 @@
 
 @end
 
+@interface CKAddressBook()
+
+- (void)reload;
+
+@end
+
+void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressbook,CFDictionaryRef info,void *context)
+{
+    CKAddressBook* ab = (CKAddressBook*)context;
+    [ab reload];
+}
+
+
+NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHasBeenModifiedExternallyNotification";
+
 //
 
 @implementation CKAddressBook {
@@ -286,6 +331,14 @@
 	return _instance;
 }
 
+- (void)reload{
+    [[NSNotificationCenter defaultCenter]postNotificationName:CKAddressBookHasBeenModifiedExternallyNotification object:self];
+    /*ABAddressBookUnregisterExternalChangeCallback(_addressBook,MyAddressBookExternalChangeCallback, self);
+    CFRelease(_addressBook);
+    
+    _addressBook = ABAddressBookCreate();*/
+}
+
 - (ABAddressBookRef)addressBook{
     return _addressBook;
 }
@@ -293,11 +346,15 @@
 - (id)init {
 	if (self = [super init]) {
 		_addressBook = ABAddressBookCreate();
+        
+        ABAddressBookRegisterExternalChangeCallback(_addressBook, MyAddressBookExternalChangeCallback, self);
 	}
 	return self;
 }
 
+
 - (void)dealloc {
+    ABAddressBookUnregisterExternalChangeCallback(_addressBook,MyAddressBookExternalChangeCallback, self);
 	CFRelease(_addressBook);
 	[super dealloc];
 }
