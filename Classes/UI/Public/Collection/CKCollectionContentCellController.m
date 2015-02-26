@@ -108,15 +108,13 @@
     if(![self contentViewController] || self.isContentViewDidAppear)
         return;
     
-    [[self contentViewController]viewWillAppear:NO];
-    [[self contentViewController]viewDidAppear:NO];
-    [[self contentViewController]setView:nil];
+    [self setupView:view];
 }
 
 - (void)setView:(UIView *)view{
     [super setView:view];
     if(view == nil){
-        [[self contentViewController]setView:nil];
+        [self viewDidDisappear];
     }
 }
 
@@ -129,6 +127,7 @@
     [[self contentViewController]viewWillDisappear:NO];
     [[self contentViewController]viewDidDisappear:NO];
     
+    [[self contentViewController]prepareForReuseUsingContentView:nil contentViewCell:nil];
     self.isContentViewDidAppear = NO;
 }
 
