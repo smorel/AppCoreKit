@@ -60,8 +60,8 @@
 @interface CKTableCollectionViewController ()
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) NSIndexPath* selectedIndexPath;
-@property (nonatomic, assign, readwrite) int currentPage;
-@property (nonatomic, assign, readwrite) int numberOfPages;
+@property (nonatomic, assign, readwrite) NSInteger currentPage;
+@property (nonatomic, assign, readwrite) NSInteger numberOfPages;
 @property (nonatomic, retain, readwrite) UISearchBar* searchBar;
 @property (nonatomic, retain, readwrite) UISegmentedControl* segmentedControl;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
@@ -84,8 +84,8 @@
 	CKTableViewOrientation _orientation;
 	BOOL _resizeOnKeyboardNotification;
 	
-	int _currentPage;
-	int _numberOfPages;
+	NSInteger _currentPage;
+	NSInteger _numberOfPages;
 	
 	BOOL _scrolling;
     CKTableCollectionViewControllerScrollingPolicy _scrollingPolicy;
@@ -1361,13 +1361,13 @@
 
 #pragma mark Paging And Snapping
 
-- (void)setCurrentPage:(int)page{
+- (void)setCurrentPage:(NSInteger)page{
 	_currentPage = page;
         //NSLog(@"currentPage = %d",_currentPage);
         //TODO : scroll to the right controller ???
 }
 
-- (void)setNumberOfPages:(int)pages{
+- (void)setNumberOfPages:(NSInteger)pages{
 	_numberOfPages = pages;
         //NSLog(@"number of pages = %d",_numberOfPages);
         //TODO : scroll to the right controller ???

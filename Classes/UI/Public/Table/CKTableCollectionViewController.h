@@ -52,11 +52,11 @@ typedef UITableViewRowAnimation(^CKTableCollectionViewControllerSectionAnimation
 /** 
  Returns the current page computed using tableView height or width depending on the orientation
  */
-@property (nonatomic, assign, readonly) int currentPage;
+@property (nonatomic, assign, readonly) NSInteger currentPage;
 /** 
  Returns the number of pages computed using tableView height or width depending on the orientation
  */
-@property (nonatomic, assign, readonly) int numberOfPages;
+@property (nonatomic, assign, readonly) NSInteger numberOfPages;
 
 ///-----------------------------------
 /// @name Scrolling

@@ -496,7 +496,7 @@
             if(previousController && [previousController view] == view){
                 [previousController setView:nil];
             }else{
-                int i =3;
+                //int i =3;
             }
             
             NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];

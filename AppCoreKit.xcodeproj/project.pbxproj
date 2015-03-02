@@ -338,8 +338,6 @@
 		7560DE5813B8F00F00268D13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4813B8F00F00268D13 /* Foundation.framework */; };
 		7560DE5913B8F00F00268D13 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4913B8F00F00268D13 /* SystemConfiguration.framework */; };
 		7560DE5A13B8F00F00268D13 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4A13B8F00F00268D13 /* CFNetwork.framework */; };
-		7560DE5C13B8F00F00268D13 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4C13B8F00F00268D13 /* libicucore.dylib */; };
-		7560DE5D13B8F00F00268D13 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4D13B8F00F00268D13 /* libxml2.dylib */; };
 		7560DE5E13B8F00F00268D13 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4E13B8F00F00268D13 /* CoreGraphics.framework */; };
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
@@ -676,7 +674,6 @@
 		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
 		EDD9E7E31436166D00E104D9 /* UIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* UIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* UIViewController+Introspection.m */; };
-		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1026,8 +1023,6 @@
 		7560DE4813B8F00F00268D13 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7560DE4913B8F00F00268D13 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7560DE4A13B8F00F00268D13 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		7560DE4C13B8F00F00268D13 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		7560DE4D13B8F00F00268D13 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7560DE4E13B8F00F00268D13 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -1374,7 +1369,6 @@
 		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* UIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UIViewController+Introspection.m"; sourceTree = "<group>"; };
-		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1393,9 +1387,6 @@
 				7560DE5813B8F00F00268D13 /* Foundation.framework in Frameworks */,
 				7560DE5913B8F00F00268D13 /* SystemConfiguration.framework in Frameworks */,
 				7560DE5A13B8F00F00268D13 /* CFNetwork.framework in Frameworks */,
-				7560DE5C13B8F00F00268D13 /* libicucore.dylib in Frameworks */,
-				7560DE5D13B8F00F00268D13 /* libxml2.dylib in Frameworks */,
-				EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */,
 				7560DE5E13B8F00F00268D13 /* CoreGraphics.framework in Frameworks */,
 				7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */,
 				7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */,
@@ -1935,9 +1926,6 @@
 				7560DE4813B8F00F00268D13 /* Foundation.framework */,
 				7560DE4913B8F00F00268D13 /* SystemConfiguration.framework */,
 				7560DE4A13B8F00F00268D13 /* CFNetwork.framework */,
-				7560DE4C13B8F00F00268D13 /* libicucore.dylib */,
-				EDF472F01446469400DBA2B5 /* libz.1.dylib */,
-				7560DE4D13B8F00F00268D13 /* libxml2.dylib */,
 				7560DE4E13B8F00F00268D13 /* CoreGraphics.framework */,
 				7560DE4F13B8F00F00268D13 /* MapKit.framework */,
 				7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */,
@@ -3548,6 +3536,7 @@
 				ARCHS = (
 					armv7,
 					armv7s,
+					arm64,
 				);
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3560,7 +3549,7 @@
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"\"${CloudKitFrameworks}/VendorsKit/1.0.0/VendorsKit.framework/Headers/\"",
@@ -3571,7 +3560,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "i386 armv7 armv7s x86_64";
+				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -3583,6 +3572,7 @@
 				ARCHS = (
 					armv7,
 					armv7s,
+					arm64,
 				);
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3605,7 +3595,7 @@
 				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "i386 armv7 armv7s x86_64";
+				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;

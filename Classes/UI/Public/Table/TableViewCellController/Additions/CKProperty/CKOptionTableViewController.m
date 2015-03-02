@@ -51,7 +51,7 @@
 		self.labels = labels;
 		self.stickySelectionEnabled = YES;
 		self.multiSelectionEnabled = NO;
-		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
+		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInteger:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
 	}
 	return self;	
@@ -79,7 +79,7 @@
 		self.labels = labels;
 		self.stickySelectionEnabled = YES;
 		self.multiSelectionEnabled = NO;
-		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
+		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInteger:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
         self.style = thestyle;
 	}
