@@ -1,15 +1,15 @@
 Pod::Spec.new do |s|
 
   s.name         = "AppCoreKit"
-  s.version      = "2.4.3"
+  s.version      = "2.5.0"
   s.summary      = "AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS."
-  s.homepage     = "https://github.com/wherecloud/AppCoreKit"
+  s.homepage     = "https://github.com/smorel/AppCoreKit"
   s.license      = { :type => 'Apache Licence 2.0', :file => 'LICENSE.txt' }
-  s.author       = { 'Wherecloud Team' => 'appcorekitsupport@wherecloud.com' }
-  s.source       = { :git => 'https://github.com/wherecloud/AppCoreKit.git', :tag => 'v2.4.3' }
-  s.platform     = :ios, '5.0'
+  s.author       = { 'Sebastien Morel' => 'morel.sebastien@gmail.com' }
+  s.source       = { :git => 'https://github.com/smorel/AppCoreKit.git', :tag => 'v2.5.0' }
+  s.platform     = :ios, '7.0'
 
-  s.description = 'AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 3 years experience at Wherecloud and is a production framework that shipped more than 20 apps. AppCoreKit does not offer out of the box UI components but the technology to help you: Manage your data, Automatic serialization (KeyValue Store, Core Data), Objective-C runtime apis, Type and data structure conversions, View controllers and containers, Ui vs. Models synchronization with bindings, Appearance customization with cascading stylesheets, Responsive view layouts with a hbox/vbox model, Non homogenous Forms, Maps, Network, And more. Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace. Screen Cast and high level description of the framework are available at http://www.appcorekit.net. A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples'
+  s.description = 'AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 4 years experience at Wherecloud and is a production framework that shipped more than 20 apps. AppCoreKit does not offer out of the box UI components but the technology to help you: Manage your data, Automatic serialization (KeyValue Store, Core Data), Objective-C runtime apis, Type and data structure conversions, View controllers and containers, Ui vs. Models synchronization with bindings, Appearance customization with cascading stylesheets, Responsive view layouts with a horizontal/vertical box model, Forms with automatic sizing and custom layouts, Maps, Network, And more. Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace. Screen Cast and high level description of the framework are available at http://www.appcorekit.net. A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples'
 
 
   s.default_subspec = 'All'
@@ -111,6 +111,11 @@ Pod::Spec.new do |s|
     n.dependency 'AppCoreKit/Mapping'
   end
 
+  s.subspec 'Media' do |n|    
+    n.source_files = 'Classes/Media/**/*.{h,m,mm}'
+    n.private_header_files = 'Classes/Media/Private/**/*.{h}'
+  end
+
   # AppCoreKit still has a dependency on debugger in CKViewController
   # therefore, we temporarilly embbed the debugger with the UI Module
   # wich adds a dependency on CoreData
@@ -130,6 +135,7 @@ Pod::Spec.new do |s|
     al.dependency 'AppCoreKit/Location'
     al.dependency 'AppCoreKit/Mock'
     al.dependency 'AppCoreKit/UI'
+    al.dependency 'AppCoreKit/Media'
   end
 
   s.preserve_path = "Documentation/CodeSnippets/*", "Documentation/File Templates/*"
