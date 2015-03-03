@@ -59,7 +59,7 @@ Or you can get the sources of this framework and more informations at : https://
 
 ResourceManager is also available as CocoaPods:
 
-<pre>pod 'ResourceManager'</pre>
+<pre>pod 'ResourceManager-smorel'</pre>
 
 
 ## XCode Integration
