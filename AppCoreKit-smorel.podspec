@@ -35,74 +35,74 @@ Pod::Spec.new do |s|
     f.private_header_files = 'Classes/Foundation/Private/**/*.{h}'
     f.exclude_files = "Classes/Foundation/Public/TypeAhead/*.{h,m,mm}"
     f.resources = 'Resources/**/*'
-    f.dependency 'AppCoreKit/JSONKit'
+    f.dependency 'AppCoreKit-smorel/JSONKit'
   end
 
 
   s.subspec 'Animation' do |ani|    
     ani.source_files = 'Classes/Animation/**/*.{h,m,mm}'
     ani.private_header_files = 'Classes/Animation/Private/**/*.{h}'
-    ani.dependency 'AppCoreKit/Foundation'
+    ani.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'AddressBook' do |a|    
     a.source_files = 'Classes/AdressBook/**/*.{h,m,mm}'
     a.private_header_files = 'Classes/AdressBook/Private/**/*.{h}'
-    a.dependency 'AppCoreKit/Foundation'
+    a.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'Location' do |l|    
     l.source_files = 'Classes/Location/**/*.{h,m,mm}'
     l.private_header_files = 'Classes/Location/Private/**/*.{h}'
-    l.dependency 'AppCoreKit/Foundation'
+    l.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'Mock' do |mo|    
     mo.source_files = 'Classes/Mock/**/*.{h,m,mm}'
     mo.private_header_files = 'Classes/Mock/Private/**/*.{h}'
-    mo.dependency 'AppCoreKit/Foundation'
+    mo.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'CoreData' do |c|    
     c.source_files = 'Classes/CoreData/**/*.{h,m,mm}'
     c.private_header_files = 'Classes/CoreData/Private/**/*.{h}'
-    c.dependency 'AppCoreKit/Foundation'
+    c.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'Binding' do |b|    
     b.source_files = 'Classes/Bindings/**/*.{h,m,mm}'
     b.private_header_files = 'Classes/Bindings/Private/**/*.{h}'
-    b.dependency 'AppCoreKit/Foundation'
+    b.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'Style' do |st|    
     st.source_files = 'Classes/Styles/**/*.{h,m,mm}'
     st.private_header_files = 'Classes/Styles/Private/**/*.{h}'
-    st.dependency 'AppCoreKit/Foundation'
+    st.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'Layout' do |la|    
     la.source_files = 'Classes/Layout/**/*.{h,m,mm}'
     la.private_header_files = 'Classes/Layout/Private/**/*.{h}'
-    la.dependency 'AppCoreKit/Style'
+    la.dependency 'AppCoreKit-smorel/Style'
   end
 
   s.subspec 'Mapping' do |ma|    
     ma.source_files = 'Classes/Mappings/**/*.{h,m,mm}'
     ma.private_header_files = 'Classes/Mappings/Private/**/*.{h}'
-    ma.dependency 'AppCoreKit/Foundation'
+    ma.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   s.subspec 'Network' do |n|    
     n.source_files = 'Classes/Network/**/*.{h,m,mm}'
     n.private_header_files = 'Classes/Network/Private/**/*.{h}'
-    n.dependency 'AppCoreKit/Mapping'
+    n.dependency 'AppCoreKit-smorel/Mapping'
   end
 
   s.subspec 'Media' do |m|    
     m.source_files = 'Classes/Media/**/*.{h,m,mm}'
     m.private_header_files = 'Classes/Media/Private/**/*.{h}'
-    m.dependency 'AppCoreKit/Foundation'
+    m.dependency 'AppCoreKit-smorel/Foundation'
   end
 
   # AppCoreKit still has a dependency on debugger in CKViewController
@@ -111,20 +111,20 @@ Pod::Spec.new do |s|
   s.subspec 'UI' do |u|    
     u.source_files = 'Classes/UI/**/*.{h,m,mm}', 'Classes/Debugger/**/*.{h,m,mm}'
     u.private_header_files = 'Classes/UI/Private/**/*.{h}', 'Classes/Debugger/Private/**/*.{h}'
-    u.dependency 'AppCoreKit/Network'
-    u.dependency 'AppCoreKit/Binding'
-    u.dependency 'AppCoreKit/Layout'
-    u.dependency 'AppCoreKit/CoreData'
-    u.dependency 'AppCoreKit/Animation'
+    u.dependency 'AppCoreKit-smorel/Network'
+    u.dependency 'AppCoreKit-smorel/Binding'
+    u.dependency 'AppCoreKit-smorel/Layout'
+    u.dependency 'AppCoreKit-smorel/CoreData'
+    u.dependency 'AppCoreKit-smorel/Animation'
   end
 
   s.subspec 'All' do |al|    
     al.source_files = 'Classes/AppCoreKit.h'
-    al.dependency 'AppCoreKit/AddressBook'
-    al.dependency 'AppCoreKit/Location'
-    al.dependency 'AppCoreKit/Mock'
-    al.dependency 'AppCoreKit/UI'
-    al.dependency 'AppCoreKit/Media'
+    al.dependency 'AppCoreKit-smorel/AddressBook'
+    al.dependency 'AppCoreKit-smorel/Location'
+    al.dependency 'AppCoreKit-smorel/Mock'
+    al.dependency 'AppCoreKit-smorel/UI'
+    al.dependency 'AppCoreKit-smorel/Media'
   end
 
   s.preserve_path = "Documentation/CodeSnippets/*", "Documentation/File Templates/*"
