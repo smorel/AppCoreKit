@@ -11,11 +11,13 @@ AppCoreKit does not offer out of the box UI components but the technology to hel
 * View controllers and containers
 * Ui vs. Models synchronization with bindings
 * Appearance customization with cascading stylesheets
-* Responsive view layouts with a hbox/vbox model
-* Non homogenous Forms
+* Responsive view layouts with a horizontal/vertical box model
+* Forms with per cell auto sizing controllers with cutom layout support
 * Maps
 * Network
 * And more.
+
+AppCoreKit supports ios version 7 and more as well as the following architectures: armv7, armv7s, arm64 and i386 for the simulator.
 
 Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace.
 The framework is splitted in several modules with the following dependencies:
