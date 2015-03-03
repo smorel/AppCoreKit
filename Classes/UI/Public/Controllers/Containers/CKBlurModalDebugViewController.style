@@ -21,7 +21,7 @@
         "view" : {
             "backgroundColor" : "clearColor",
             "layoutBoxes" : [
-                             { "@class" : "CKVerticalBoxLayout", "padding" : "20 20 20 20", "sizeToFitLayoutBoxes" : 0,"horizontalAlignment" : "CKLayoutHorizontalAlignmentCenter",
+                             { "@class" : "CKVerticalBoxLayout", "padding" : "20 20 20 20", "flexibleSize" : 1,"horizontalAlignment" : "CKLayoutHorizontalAlignmentCenter",
                              "layoutBoxes" : [
                                     { "@class" : "UISegmentedControl", "name" : "StyleSegmentedControl" },
                                     { "@inherits" : ["$SliderTemplate"], "#name" : "radius:", "#sliderName" : "radiusSlider", "#labelName" : "radiusLabel", "#minimumValue" : 0, "#maximumValue" : 40 },
