@@ -46,6 +46,8 @@
 			<string>YES</string>
 			<key>Suffixes</key>
 			<dict>
+				<key>CKCollectionCellContentViewController</key>
+				<string>CellContentViewController</string>
 				<key>CKSegmentedViewController</key>
 				<string>ViewController</string>
 				<key>CKBreadCrumbViewController</key>
@@ -78,6 +80,7 @@
 				<string>CKMapCollectionViewController</string>
 				<string>CKGridCollectionViewController</string>
 				<string>CKCollectionViewLayoutController</string>
+				<string>CKCollectionCellContentViewController</string>
 				<string>CKContainerViewController</string>
 				<string>CKSplitViewController</string>
 				<string>CKTabViewController</string>

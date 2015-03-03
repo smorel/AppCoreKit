@@ -78,5 +78,20 @@
  */
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size;
 
+/** This method is called after the cell has been selected
+ */
+- (void)didSelect;
+
+/** return YES if you manage the update of your models or NO if you want the system to remove the cell from the contentView.
+ */
+- (BOOL)didRemove;
+
+/**
+ */
+- (void)didBecomeFirstResponder;
+
+/**
+ */
+- (void)didResignFirstResponder;
 
 @end

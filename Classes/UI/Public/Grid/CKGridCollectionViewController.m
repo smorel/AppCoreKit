@@ -85,7 +85,7 @@
     int i =0;
     for(id object in [collection allObjects]){
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-        CKCollectionCellController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath];
+        CKCollectionCellController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath collectionViewController:self];
         [self.subControllers insertObject:subcontroller atIndex:indexPath.row];
         
         [subcontroller performSelector:@selector(setContainerController:) withObject:self];
@@ -354,7 +354,7 @@
         
         for(id object in objects){
             NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
-            CKCollectionCellController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath];
+            CKCollectionCellController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath collectionViewController:self];
             [self.subControllers insertObject:subcontroller atIndex:indexPath.row];
             
             [subcontroller performSelector:@selector(setContainerController:) withObject:self];

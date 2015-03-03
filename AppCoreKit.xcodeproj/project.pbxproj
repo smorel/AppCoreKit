@@ -1612,6 +1612,7 @@
 				9638264D147FE53F00A9C98B /* Controllers */,
 				960CAED2157E50DB00F6C887 /* Gestures */,
 				7506E40513B8FF7A00EE1471 /* Collection View Controller */,
+				D94CA2F91AA64AF8009EA887 /* Collection Cell Content View Controller */,
 				7506E3FD13B8FDD300EE1471 /* Carousel */,
 				7506E40213B8FE6100EE1471 /* Tables */,
 				969AFE671561504700CFE27A /* Grid */,
@@ -2456,7 +2457,6 @@
 			isa = PBXGroup;
 			children = (
 				96B3BCFB182BEE0800978B85 /* Collection View Controller */,
-				96B3BCF9182BEDA500978B85 /* Content View Controller */,
 				96B3BCFA182BEDFB00978B85 /* Cell Controller */,
 				96B3BCF8182BED9D00978B85 /* Layouts */,
 			);
@@ -2478,17 +2478,6 @@
 				965A817918B2B6D3005E8508 /* CKCollectionViewFlowLayout.m */,
 			);
 			name = Layouts;
-			sourceTree = "<group>";
-		};
-		96B3BCF9182BEDA500978B85 /* Content View Controller */ = {
-			isa = PBXGroup;
-			children = (
-				96B3BCD4182BED9800978B85 /* CKCollectionCellContentViewController.h */,
-				96B3BCD5182BED9800978B85 /* CKCollectionCellContentViewController.m */,
-				96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */,
-				96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */,
-			);
-			name = "Content View Controller";
 			sourceTree = "<group>";
 		};
 		96B3BCFA182BEDFB00978B85 /* Cell Controller */ = {
@@ -2663,6 +2652,17 @@
 				963AB795179881110076925C /* CKResourceDependencyContext.m */,
 			);
 			name = ResourceManager;
+			sourceTree = "<group>";
+		};
+		D94CA2F91AA64AF8009EA887 /* Collection Cell Content View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				96B3BCD4182BED9800978B85 /* CKCollectionCellContentViewController.h */,
+				96B3BCD5182BED9800978B85 /* CKCollectionCellContentViewController.m */,
+				96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */,
+				96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */,
+			);
+			name = "Collection Cell Content View Controller";
 			sourceTree = "<group>";
 		};
 		D96494231AA5F80000C17BB7 /* Media */ = {

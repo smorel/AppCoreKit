@@ -27,7 +27,7 @@
 
 @property (nonatomic, assign) id objectController;
 - (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
 @end
 
 //CKFormBindedCollectionSection
@@ -146,7 +146,7 @@
 	
 	NSUInteger count = [_objectController numberOfObjectsForSection:0];
 	if((NSInteger)index < (NSInteger)(count + headerCount)){
-        return [_controllerFactory controllerForObject:object atIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+        return [_controllerFactory controllerForObject:object atIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0] collectionViewController:self.parentController];
 	}
 	
 	NSUInteger footerCount = [_footerCellControllers count];

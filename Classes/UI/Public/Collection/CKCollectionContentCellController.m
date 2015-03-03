@@ -49,11 +49,6 @@
     [super dealloc];
 }
 
-- (void)didDeselect{
-	if(self.deselectionCallback != nil){
-		[self.deselectionCallback execute:self];
-	}
-}
 
 - (void)applyStyle{
     [super applyStyle];
@@ -173,6 +168,35 @@
         return result;
    }
 
+}
+
+- (void)didSelect{
+    [super didSelect];
+    [self.contentViewController didSelect];
+}
+
+- (void)didDeselect{
+    if(self.deselectionCallback != nil){
+        [self.deselectionCallback execute:self];
+    }
+}
+
+- (BOOL)didRemove{
+    if([super didRemove])
+        return YES;
+    
+    return [self.contentViewController didRemove];
+}
+
+- (void)didBecomeFirstResponder{
+    [super didBecomeFirstResponder];
+    [self.contentViewController didBecomeFirstResponder];
+}
+
+- (void)didResignFirstResponder{
+    
+    [super didResignFirstResponder];
+    [self.contentViewController didResignFirstResponder];
 }
 
 @end

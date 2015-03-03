@@ -164,6 +164,10 @@ typedef NSUInteger CKItemViewFlags;
  */
 - (void)didSelect;
 
+/** if the remove callback is set or didRemove returns YES, this is the reponsability of the implementer to update its model accordingly.
+ */
+- (BOOL)didRemove;
+
 /**
  */
 - (void)didSelectAccessoryView;

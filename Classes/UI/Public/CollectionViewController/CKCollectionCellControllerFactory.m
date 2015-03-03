@@ -15,6 +15,12 @@
 #import "CKStyleManager.h"
 #import "CKTableViewCellController+Style.h"
 
+#import "CKTableViewController.h"
+#import "CKTableViewContentCellController.h"
+
+#import "CKCollectionViewLayoutController.h"
+#import "CKCollectionContentCellController.h"
+
 //Private interface
 @interface CKCollectionCellController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
@@ -22,7 +28,7 @@
 @end
 
 @interface CKCollectionCellControllerFactoryItem() 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController;
 @end
 
 /********************************* CKCollectionCellControllerFactoryItem *********************************
@@ -32,23 +38,46 @@
 @implementation CKCollectionCellControllerFactoryItem
 @synthesize predicate = _predicate;
 @synthesize controllerCreateBlock = _controllerCreateBlock;
+@synthesize contentControllerCreateBlock = _contentControllerCreateBlock;
 
 
 - (void)dealloc{
 	[_predicate release];
 	_predicate = nil;
 	[_controllerCreateBlock release];
-	_controllerCreateBlock = nil;
+    _controllerCreateBlock = nil;
+    [_contentControllerCreateBlock release];
+    _contentControllerCreateBlock = nil;
 	[super dealloc];
 }
 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController{
     if(_controllerCreateBlock){
         CKCollectionCellController* controller = _controllerCreateBlock(object,indexPath);
         if(controller.name == nil){
             controller.name = [NSString stringWithFormat:@"<%p>",self];
         }
         return controller;
+    }else if(_contentControllerCreateBlock){
+        if([collectionViewController isKindOfClass:[CKTableViewController class]]){
+            CKCollectionCellContentViewController* content = _contentControllerCreateBlock(object,indexPath);
+            
+            CKTableViewContentCellController* cellController = [[CKTableViewContentCellController alloc]initWithContentViewController:content];
+            if(cellController.name == nil){
+                cellController.name = [NSString stringWithFormat:@"<%p>",self];
+            }
+            return cellController;
+        }else if([collectionViewController isKindOfClass:[CKCollectionViewLayoutController class]]){
+            CKCollectionCellContentViewController* content = _contentControllerCreateBlock(object,indexPath);
+            
+            CKCollectionContentCellController* cellController = [[CKCollectionContentCellController alloc]initWithContentViewController:content];
+            if(cellController.name == nil){
+                cellController.name = [NSString stringWithFormat:@"<%p>",self];
+            }
+            return cellController;
+        }else{
+            NSAssert(NO,@"Unsupported method of creation for content cell controller with collection view controller fo type %@",[collectionViewController class]);
+        }
     }
    	return nil;
 }
@@ -66,6 +95,21 @@
     }] withControllerCreationBlock:block];
 }
 
++ (CKCollectionCellControllerFactoryItem*)itemForObjectWithPredicate:(NSPredicate*)predicate
+                                  withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block{
+    CKCollectionCellControllerFactoryItem* item = [[[CKCollectionCellControllerFactoryItem alloc]init]autorelease];
+    item.contentControllerCreateBlock = block;
+    item.predicate = predicate;
+    return item;
+}
+
++ (CKCollectionCellControllerFactoryItem*)itemForObjectOfClass:(Class)type
+                            withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block{
+    return [CKCollectionCellControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [evaluatedObject isKindOfClass:type];
+    }] withContentControllerCreationBlock:block];
+}
+
 @end
 
 
@@ -76,8 +120,8 @@
 @property (nonatomic, retain) NSMutableArray* items;
 @property (nonatomic, assign) id objectController;
 
-- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
 
 @end
 
@@ -116,7 +160,7 @@
     return [predicate evaluateWithObject:object];
 }
 
-- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController{
 	for(CKCollectionCellControllerFactoryItem* item in _items){
 		if([self doesItem:item matchWithObject:object]){
 			return item;
@@ -126,13 +170,13 @@
 }
 
 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	CKCollectionCellControllerFactoryItem* item = [self factoryItemForObject:object atIndexPath:indexPath];
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController{
+    CKCollectionCellControllerFactoryItem* item = [self factoryItemForObject:object atIndexPath:indexPath collectionViewController:collectionViewController];
     if(!item){
         return nil;
     }
 	
-    return [item controllerForObject:object atIndexPath:indexPath];
+    return [item controllerForObject:object atIndexPath:indexPath collectionViewController:collectionViewController];
 }
 
 - (CKCollectionCellControllerFactoryItem*)addItem:(CKCollectionCellControllerFactoryItem*)item{
@@ -148,6 +192,20 @@
 
 - (CKCollectionCellControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate withControllerCreationBlock:(CKCollectionCellController*(^)(id object, NSIndexPath* indexPath))block{
     CKCollectionCellControllerFactoryItem* item = [CKCollectionCellControllerFactoryItem itemForObjectWithPredicate:predicate withControllerCreationBlock:block];
+    [self.items addObject:item];
+    return item;
+}
+
+- (CKCollectionCellControllerFactoryItem*)addItemForObjectOfClass:(Class)type
+                               withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block{
+    CKCollectionCellControllerFactoryItem* item = [CKCollectionCellControllerFactoryItem itemForObjectOfClass:type withContentControllerCreationBlock:block];
+    [self.items addObject:item];
+    return item;
+}
+
+- (CKCollectionCellControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate
+                                     withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block{
+    CKCollectionCellControllerFactoryItem* item = [CKCollectionCellControllerFactoryItem itemForObjectWithPredicate:predicate withContentControllerCreationBlock:block];
     [self.items addObject:item];
     return item;
 }

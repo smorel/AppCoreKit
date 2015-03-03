@@ -73,6 +73,28 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     [super dealloc];
 }
 
+- (void)didSelect{
+    [super didSelect];
+    [self.contentViewController didSelect];
+}
+
+- (BOOL)didRemove{
+    if([super didRemove])
+        return YES;
+    
+    return [self.contentViewController didRemove];
+}
+
+- (void)didBecomeFirstResponder{
+    [super didBecomeFirstResponder];
+    [self.contentViewController didBecomeFirstResponder];
+}
+
+- (void)didResignFirstResponder{
+    [super didResignFirstResponder];
+    [self.contentViewController didResignFirstResponder];
+}
+
 
 - (NSString*)reuseIdentifier{
 	return [NSString stringWithFormat:@"%@-%@",[super reuseIdentifier],[self.contentViewController reuseIdentifier]];

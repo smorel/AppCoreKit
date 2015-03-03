@@ -36,7 +36,7 @@
 - (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
 @end
 
 
@@ -153,7 +153,7 @@
 
 @implementation CKFormObjectControllerFactory
 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController{
     CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.parentController;
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController visibleSectionAtIndex:indexPath.section];

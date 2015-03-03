@@ -44,7 +44,7 @@
 @interface CKCollectionCellControllerFactory ()
 
 - (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
 
 @end
 
@@ -581,10 +581,11 @@
 
 - (void)didRemoveViewAtIndexPath:(NSIndexPath*)indexPath{
 	CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
-    if(controller.removeCallback){
-        [controller.removeCallback execute:controller];
-    }
-	else if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
+    [controller didRemove];
+    if([controller didRemove])
+        return;
+    
+	if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 		[_objectController removeObjectAtIndexPath:indexPath];
 	}
 }
@@ -712,7 +713,7 @@
 @implementation CKCollectionViewController(CKCollectionCellControllerManagement)
 
 - (CKCollectionCellController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-    CKCollectionCellController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+    CKCollectionCellController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath collectionViewController:self];
     return controller;
 }
 

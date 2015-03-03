@@ -185,4 +185,20 @@
     [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
 }
 
+- (void)didSelect{
+    
+}
+
+- (void)didBecomeFirstResponder{
+    
+}
+
+- (void)didResignFirstResponder{
+    
+}
+
+- (BOOL)didRemove{
+    return NO;
+}
+
 @end

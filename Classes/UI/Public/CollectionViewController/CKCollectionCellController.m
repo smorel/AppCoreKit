@@ -295,6 +295,14 @@
 	}
 }
 
+- (BOOL)didRemove{
+    if(_removeCallback != nil){
+        [_removeCallback execute:self];
+        return YES;
+    }
+    return NO;
+}
+
 - (void)didSelectAccessoryView{
 	if(_accessorySelectionCallback != nil){
 		[_accessorySelectionCallback execute:self];

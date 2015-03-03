@@ -164,4 +164,27 @@
 
 }
 
+- (void)didSelectRow{
+    [super didSelectRow];
+    [self.contentViewController didSelect];
+}
+
+- (BOOL)didRemove{
+    if([super didRemove])
+        return YES;
+    
+    return [self.contentViewController didRemove];
+}
+
+- (void)didBecomeFirstResponder{
+    [super didBecomeFirstResponder];
+    [self.contentViewController didBecomeFirstResponder];
+}
+
+- (void)didResignFirstResponder{
+    
+    [super didResignFirstResponder];
+    [self.contentViewController didResignFirstResponder];
+}
+
 @end

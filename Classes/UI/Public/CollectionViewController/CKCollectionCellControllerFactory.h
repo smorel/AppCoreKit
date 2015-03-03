@@ -9,9 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "CKCollectionCellController.h"
 
+@class CKCollectionViewController;
+@class CKCollectionCellContentViewController;
+
 /********************************* CKCollectionCellControllerFactoryItem *********************************/
 
 typedef CKCollectionCellController*(^CKCollectionCellControllerCreationBlock)(id object, NSIndexPath* indexPath);
+typedef CKCollectionCellContentViewController*(^CKCollectionCellContentControllerCreationBlock)(id object, NSIndexPath* indexPath);
 
 /**
  */
@@ -31,6 +35,18 @@ typedef CKCollectionCellController*(^CKCollectionCellControllerCreationBlock)(id
 + (CKCollectionCellControllerFactoryItem*)itemForObjectOfClass:(Class)type 
                                    withControllerCreationBlock:(CKCollectionCellController*(^)(id object, NSIndexPath* indexPath))block;
 
+/**
+ */
++ (CKCollectionCellControllerFactoryItem*)itemForObjectWithPredicate:(NSPredicate*)predicate
+                                  withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+
+/**
+ */
++ (CKCollectionCellControllerFactoryItem*)itemForObjectOfClass:(Class)type
+                            withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+
+
+
 ///-----------------------------------
 /// @name Configuring the object
 ///-----------------------------------
@@ -38,6 +54,11 @@ typedef CKCollectionCellController*(^CKCollectionCellControllerCreationBlock)(id
 /**
  */
 @property(nonatomic,copy)   CKCollectionCellControllerCreationBlock controllerCreateBlock;
+
+/**
+ */
+@property(nonatomic,copy)   CKCollectionCellContentControllerCreationBlock contentControllerCreateBlock;
+
 
 /**
  */
@@ -82,12 +103,22 @@ typedef CKCollectionCellController*(^CKCollectionCellControllerCreationBlock)(id
                                        withControllerCreationBlock:(CKCollectionCellController*(^)(id object, NSIndexPath* indexPath))block;
 
 
+/**
+ */
+- (CKCollectionCellControllerFactoryItem*)addItemForObjectOfClass:(Class)type
+                                      withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+
+/**
+ */
+- (CKCollectionCellControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate
+                                            withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+
 ///-----------------------------------
 /// @name Creating CKCollectionCellController
 ///-----------------------------------
 
 /**
  */
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController;
 
 @end
