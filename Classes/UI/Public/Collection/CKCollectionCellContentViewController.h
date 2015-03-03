@@ -78,6 +78,10 @@
  */
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size;
 
+/** The postInit method mimics the postInit method from CKViewController. It will be called after the content view controller has been inserted in a cell controller so that we can custom the parent cell controller if needed.
+ */
+- (void)postInit;
+
 /** This method is called after the cell has been selected
  */
 - (void)didSelect;

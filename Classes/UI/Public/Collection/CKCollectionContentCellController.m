@@ -36,6 +36,7 @@
     self.contentViewController = contentViewController;
     [contentViewController setCollectionCellController:self];
     self.isContentViewDidAppear = NO;
+    [contentViewController postInit];
     return self;
 }
 

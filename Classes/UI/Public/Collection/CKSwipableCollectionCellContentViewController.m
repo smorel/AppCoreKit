@@ -73,6 +73,12 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     [super dealloc];
 }
 
+- (void)postInit{
+    [super postInit];
+    [self.contentViewController postInit];
+}
+
+
 - (void)didSelect{
     [super didSelect];
     [self.contentViewController didSelect];

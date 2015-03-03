@@ -48,6 +48,7 @@
     self.cellStyle = CKTableViewCellStyleCustomLayout;
     [self setContentViewController:contentViewController];
     [contentViewController setCollectionCellController:self];
+    [contentViewController postInit];
     return self;
 }
 

@@ -185,6 +185,10 @@
     [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
 }
 
+- (void)postInit{
+    
+}
+
 - (void)didSelect{
     
 }
