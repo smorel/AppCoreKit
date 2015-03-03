@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 
-  s.name         = "AppCoreKit"
+  s.name         = "AppCoreKit-smorel"
   s.version      = "2.5.0"
   s.summary      = "AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS."
   s.homepage     = "https://github.com/smorel/AppCoreKit"
@@ -21,23 +21,10 @@ Pod::Spec.new do |s|
 
   s.dependency 'TouchXML'
   s.dependency 'RegexKitLite'
- # s.dependency 'JSONKit'
   s.dependency 'Reachability'
   s.dependency 'SVPullToRefresh'
   
   s.requires_arc = false
-
-  #s.documentation = {
-  #:appledoc => [
-  #  '--project-name',      'AppCoreKit',
-  #  '--project-company',   'Wherecloud Inc.',
-  #  '--docset-copyright',  'Wherecloud Inc.',
-  #  '--ignore',            '*.m,*.mm',
-  #  '--index-desc',        'Documentation/index.markdown', 
-  #  '--include',           'Documentation',
-  #  '--no-keep-undocumented-objects',
-  #  '--no-keep-undocumented-members',
-  #  ]}
 
   s.subspec 'JSONKit' do |f|    
     f.source_files = 'Vendor/JSONKit.{h,m}'
