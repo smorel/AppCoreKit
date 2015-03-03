@@ -120,7 +120,7 @@
 }
 
 - (void)execute:(NSArray*)params{
-    CKCollectionBindingEvents event = [[params objectAtIndex:0]intValue];
+    CKCollectionBindingEvents event = [[params objectAtIndex:0]integerValue];
     NSArray* objects = [params objectAtIndex:1];
     NSIndexSet* indexes = [params objectAtIndex:2];
     self.block(event,objects,indexes);

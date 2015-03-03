@@ -123,7 +123,7 @@
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
 	NSInteger i = standardController.indexPath.row;
 	if(self.multiSelectionEnabled){
-		if([standardController.value intValue] == 1){
+		if([standardController.value integerValue] == 1){
 			standardController.value = [NSNumber numberWithInt:0];
 			standardController.accessoryType = UITableViewCellAccessoryNone;
 			[self.selectedIndexes removeObject:[NSNumber numberWithInteger:i]];
@@ -211,7 +211,7 @@
 
 - (NSInteger)selectedIndex{
 	//CKAssert([self.selectedIndexes count] == 1,@"multiselection => multiple indexes");
-	return [[self.selectedIndexes lastObject]intValue];
+	return [[self.selectedIndexes lastObject]integerValue];
 }
 
 

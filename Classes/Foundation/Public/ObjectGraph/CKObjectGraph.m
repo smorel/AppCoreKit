@@ -146,7 +146,7 @@ NSString* CKObjectGraphVariableKey  = @"@var";
     
     for(NSDictionary* keyDico in [referencesForCollectionItems allKeys]){
         NSValue* propertyValue = [keyDico objectForKey:@"property"];
-        NSInteger index = [[keyDico objectForKey:@"index"]intValue];
+        NSInteger index = [[keyDico objectForKey:@"index"]integerValue];
         
         NSMutableDictionary* refDico = [referencesForCollectionItems objectForKey:keyDico];
         CKProperty* property = [propertyValue nonretainedObjectValue];

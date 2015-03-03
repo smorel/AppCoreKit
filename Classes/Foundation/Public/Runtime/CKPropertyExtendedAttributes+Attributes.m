@@ -227,7 +227,7 @@
 
 - (CKOptionPropertyCellControllerPresentationStyle)presentationStyle{
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_presentationStyle"];
-    if(value) return (CKOptionPropertyCellControllerPresentationStyle)[value intValue];
+    if(value) return (CKOptionPropertyCellControllerPresentationStyle)[value integerValue];
     return CKOptionPropertyCellControllerPresentationStyleDefault;
 }
 
@@ -300,7 +300,7 @@
 
 - (NSInteger)minimumLength{
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_minimumLength"];
-    if(value) return [value intValue];
+    if(value) return [value integerValue];
     return -1;
 }
 
@@ -310,7 +310,7 @@
 
 - (NSInteger)maximumLength{
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_maximumLength"];
-    if(value) return [value intValue];
+    if(value) return [value integerValue];
     return -1;
 }
 

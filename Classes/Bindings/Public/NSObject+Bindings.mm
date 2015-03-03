@@ -57,7 +57,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 
 + (CKBindingsContextOptions)currentBindingContextOptions{
     if(CKBindingsContextStack && [CKBindingsContextStack count] > 0){
-		return (CKBindingsContextOptions)[[[CKBindingsContextStack lastObject]objectForKey:@"options"]intValue];
+		return (CKBindingsContextOptions)[[[CKBindingsContextStack lastObject]objectForKey:@"options"]integerValue];
 	}
 	return (CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone);
 }

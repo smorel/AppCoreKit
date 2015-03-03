@@ -1,19 +1,18 @@
 //
-//  AKSound.h
-//  test_SWF
+//  CKSound.h
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-01-26.
-//  Copyright (c) 2012 WhereCloud Inc. All rights reserved.
+//  Created by Sebastien Morel on 15-03-03.
 //
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
-#define _snd(soundname) [AKSound localizedFilePathForSoundNamed:soundname]
+#define _snd(soundname) [CKSound localizedFilePathForSoundNamed:soundname]
 
 /** 
- The AKSound class represents an instance of a sound.
+ The CKSound class represents an instance of a sound.
  
  This class provides an easy way to play/stop sounds for a localized embedded file, a specified path or a binary content with callbacks at the end of this sound's playback.
  
@@ -26,9 +25,9 @@
  Creating several instances of a sound is a costly operation only if you initialize it with initWithData:fileName:
  If you need to play such a sound several time you can do it programatically using:
  
-     AKSound* sound1 = [[[AKSound alloc]initWithData:myData name:@"myName.mp3"]autorelease];
+     CKSound* sound1 = [[[CKSound alloc]initWithData:myData name:@"myName.mp3"]autorelease];
      [sound1 play];
-     AKSound* sound2 = [sound1 createInstance];
+     CKSound* sound2 = [sound1 createInstance];
      [sound2 play]; 
  
  <b>Known Performance Issue:</b> 
@@ -37,7 +36,7 @@
  
  See Also: Samples
  */
-@interface AKSound : NSObject<AVAudioPlayerDelegate>
+@interface CKSound : NSObject<AVAudioPlayerDelegate>
 
 ///-----------------------------------
 /// @name Initializing a Sound Object
@@ -48,21 +47,21 @@
  @param name The file name for the sound. This file name MUST specify the extension (ex. @"mySound.mp3")
  @return An initialized Sound object.
  */
-+ (AKSound*)soundNamed:(NSString*)name;
++ (CKSound*)soundNamed:(NSString*)name;
 
 /** Returns an autorelease Sound instance initialized with the specified file path.
  
  @param path The absolute path of the sound file.
  @return An initialized Sound object.
  */
-+ (AKSound*)soundWithContentOfFile:(NSString*)path;
++ (CKSound*)soundWithContentOfFile:(NSString*)path;
 
 /** Returns an autorelease Sound instance initialized with the specified sound's content.
  
  @param sound The original sound containing the content.
  @return An initialized Sound object.
  */
-+ (AKSound*)instanceOfSound:(AKSound*)sound;
++ (CKSound*)instanceOfSound:(CKSound*)sound;
 
 /** Initializes and returns a newly allocated Sound object by importing the specified file at path.
  
@@ -76,7 +75,6 @@
  This method will load an audio player with the specified data and use the specified filename to store the file on the cache directory. The filename MUST specify the right extension (ex. @"mySound.mp3")
  
  @param data The binary data representing a sound file.
- @param name The name for runtime identification in scenes.
  @return An initialized Sound object.
  */
 - (id)initWithData:(NSData*)data filename:(NSString*)filename;
@@ -85,7 +83,7 @@
  
  @return An initialized Sound object.
  */
-- (AKSound*)createInstance;
+- (CKSound*)createInstance;
 
 
 ///-----------------------------------
@@ -128,7 +126,7 @@
  @param completion A completion block that will get executed at the end of the sound's playback. If a sound is stopped before it is supposed to end, this block will not get executed.
  @return return NO if the sound has not been initialized correctly or is currently playing.
  */
-- (BOOL)playWithCompletion:(void(^)(AKSound* sound))completion;
+- (BOOL)playWithCompletion:(void(^)(CKSound* sound))completion;
 
 /** Stops the sound playback
  */

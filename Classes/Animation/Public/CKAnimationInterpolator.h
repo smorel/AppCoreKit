@@ -27,7 +27,7 @@
      interpolator.options = CKAnimationOptionForwards | CKAnimationOptionLoop;
      interpolator.values = [NSArray arrayWithObjects:[NSNumber numberWithInt:3], [NSNumber numberWithInt:7],[NSNumber numberWithInt:2], nil];
      interpolator.updateBlock = ^(CKAnimation* animation, id value){
-         NSInteger interpolatedValue = [value intValue];
+         NSInteger interpolatedValue = [value integerValue];
          //Do something with this value
      };
      interpolator.eventBlock = ^(CKAnimation* animation, CKAnimationEvents event){

@@ -19,7 +19,7 @@
         NSInteger integer = 0;
         NSArray* components = [str componentsSeparatedByString:@"|"];
         for(NSString* c in components){
-            NSInteger ci = [[descriptor.valuesAndLabels objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]intValue];
+            NSInteger ci = [[descriptor.valuesAndLabels objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]integerValue];
             integer |= ci;
         }
         return integer;
@@ -27,7 +27,7 @@
     
     NSNumber* ci = [descriptor.valuesAndLabels objectForKey:[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
     if(ci){
-        return [ci intValue];
+        return [ci integerValue];
     }
     return 0;
 }
@@ -38,7 +38,7 @@
 		return result;
 	}
 	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for enum");
-	return (object == nil) ? 0 : [object intValue];
+	return (object == nil) ? 0 : [object integerValue];
 }
 
 
@@ -46,7 +46,7 @@
 	if(bitMask){
         NSMutableString* str = [NSMutableString string];
         for(NSString* e in [enumDefinition.valuesAndLabels allKeys]){
-            NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]intValue];
+            NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]integerValue];
             if(value & ci){
                 if([str length] > 0){
                     [str appendString:@" | "];
@@ -58,7 +58,7 @@
     }
     
     for(NSString* e in [enumDefinition.valuesAndLabels allKeys]){
-        NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]intValue];
+        NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]integerValue];
         if(ci == value){
             return e;
         }
@@ -85,20 +85,20 @@
 
 + (NSInteger)convertIntegerFromObject:(id)object{
 	if([object isKindOfClass:[NSString class]]){
-		return [object intValue];
+		return [object integerValue];
 	}
 	
 	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for int");
-	return (object == nil) ? 0 : [object intValue];
+	return (object == nil) ? 0 : [object integerValue];
 }
 
 + (short)convertShortFromObject:(id)object{
 	if([object isKindOfClass:[NSString class]]){
-		return (short)[object intValue];
+		return (short)[object integerValue];
 	}
 	
 	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for short");
-	return (object == nil) ? 0 : (short)[object intValue];
+	return (object == nil) ? 0 : (short)[object integerValue];
 }
 
 + (long)convertLongFromObject:(id)object{
@@ -137,20 +137,20 @@
 
 + (NSUInteger)convertUnsignedIntFromObject:(id)object{
 	if([object isKindOfClass:[NSString class]]){
-		return (NSUInteger)[object intValue];
+		return (NSUInteger)[object integerValue];
 	}
 	
 	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned int");
-	return (object == nil) ? 0 : [object unsignedIntValue];
+	return (object == nil) ? 0 : [object unsignedIntegerValue];
 }
 
 + (unsigned short)convertUnsignedShortFromObject:(id)object{
 	if([object isKindOfClass:[NSString class]]){
-		return (unsigned short)[object intValue];
+		return (unsigned short)[object integerValue];
 	}
 	
 	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned short");
-	return (object == nil) ? 0 : (unsigned short)[object intValue];
+	return (object == nil) ? 0 : (unsigned short)[object integerValue];
 }
 
 + (unsigned long)convertUnsignedLongFromObject:(id)object{

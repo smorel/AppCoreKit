@@ -390,7 +390,7 @@
         for(int i =0;i<oldAndNewViewControllers.count;++i){
             UIViewController* controller = [oldAndNewViewControllers objectAtIndex:i];
             
-            CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]intValue];
+            CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]integerValue];
             switch(state){
                 case CKSplitViewControllerAnimationStateMoving:
                 case CKSplitViewControllerAnimationStateRemoving: {
@@ -410,7 +410,7 @@
                 
                 CGRect beginFrame = [[beginFrames objectAtIndex:i ] CGRectValue];
                 CGRect endFrame = [[endFrames objectAtIndex:i ] CGRectValue];
-                CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]intValue];
+                CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]integerValue];
 
                 controller.view.frame = beginFrame;
                 if(startAnimationBlock){
@@ -446,7 +446,7 @@
                     
                     CGRect beginFrame = [[beginFrames objectAtIndex:i ] CGRectValue];
                     CGRect endFrame = [[endFrames objectAtIndex:i ] CGRectValue];
-                    CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]intValue];
+                    CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]integerValue];
                     
                     if(animationBlock){
                         animationBlock(controller,beginFrame,endFrame,state);
@@ -460,7 +460,7 @@
                     
                     CGRect beginFrame = [[beginFrames objectAtIndex:i ] CGRectValue];
                     CGRect endFrame = [[endFrames objectAtIndex:i ] CGRectValue];
-                    CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]intValue];
+                    CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]integerValue];
                     
                     controller.view.frame = endFrame;
                     if(endAnimationBlock){
@@ -497,7 +497,7 @@
             
             for(int i =0;i<oldAndNewViewControllers.count;++i){
                 UIViewController* controller = [oldAndNewViewControllers objectAtIndex:i];
-                CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]intValue];
+                CKSplitViewControllerAnimationState state = [[states objectAtIndex:i]integerValue];
                 
                 switch(state){
                     case CKSplitViewControllerAnimationStateMoving: {

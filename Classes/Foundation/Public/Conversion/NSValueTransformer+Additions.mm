@@ -106,14 +106,28 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 			return [NSNumber numberWithShort:s];
 			break;
 		}
-		case CKClassPropertyDescriptorTypeLong:{
-			long l = [NSValueTransformer convertLongFromObject:object];
+        case CKClassPropertyDescriptorTypeLong:{
+            CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+            long l = 0;
+            if(attributes.enumDescriptor != nil){
+                l = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
+            }
+            else{
+                l = [NSValueTransformer convertLongFromObject:object];
+            }
 			[property setValue:[NSNumber numberWithLong:l]];
 			return [NSNumber numberWithLong:l];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeLongLong:{
-			long long ll = [NSValueTransformer convertLongLongFromObject:object];
+            CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+            long long ll = 0;
+            if(attributes.enumDescriptor != nil){
+                ll = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
+            }
+            else{
+                ll = [NSValueTransformer convertLongLongFromObject:object];
+            }
 			[property setValue:[NSNumber numberWithLongLong:ll]];
 			return [NSNumber numberWithLongLong:ll];
 			break;
@@ -496,10 +510,12 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		switch(descriptor.propertyType){
-			case CKClassPropertyDescriptorTypeInt:{
+			case CKClassPropertyDescriptorTypeInt:
+            case CKClassPropertyDescriptorTypeLong:
+            case CKClassPropertyDescriptorTypeLongLong:{
                 CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 				if(attributes.enumDescriptor != nil){
-					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
+					return [NSValueTransformer convertEnumToString:[[property value]integerValue] withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
 				}
 				break;
 			}

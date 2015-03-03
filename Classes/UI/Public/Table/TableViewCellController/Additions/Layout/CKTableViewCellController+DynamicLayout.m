@@ -238,10 +238,10 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     
     UIFont* font = [style objectForKey:CKDynamicLayoutFont];
     
-    NSInteger numberOfLines = [[style objectForKey:CKDynamicLayoutNumberOfLines]intValue];
+    NSInteger numberOfLines = [[style objectForKey:CKDynamicLayoutNumberOfLines]integerValue];
     CGFloat maxHeight = (numberOfLines <= 0) ? CGFLOAT_MAX : numberOfLines * font.lineHeight;
     
-    CGSize size = [CKStringHelper sizeForText:text font:font constrainedToSize:CGSizeMake(width , maxHeight) lineBreakMode:[[style objectForKey:CKDynamicLayoutLineBreakMode]intValue]];
+    CGSize size = [CKStringHelper sizeForText:text font:font constrainedToSize:CGSizeMake(width , maxHeight) lineBreakMode:[[style objectForKey:CKDynamicLayoutLineBreakMode]integerValue]];
     return size;
 }
 
@@ -255,7 +255,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     
     UIFont* detailTextFont = [detailTextStyle objectForKey:CKDynamicLayoutFont];
     UIFont* textFont = [textStyle objectForKey:CKDynamicLayoutFont];
-    UITextAlignment textAlignment = [[textStyle objectForKey:CKDynamicLayoutTextAlignment]intValue];
+    UITextAlignment textAlignment = [[textStyle objectForKey:CKDynamicLayoutTextAlignment]integerValue];
     
     CGFloat rowWidth = [self contentViewWidth];
     CGFloat realWidth = rowWidth;
@@ -359,7 +359,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     
     //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
     if(text == nil || [text isKindOfClass:[NSNull class]] ||[text length] <= 0){
-        NSInteger detailNumberOfLines = [[detailTextStyle objectForKey:CKDynamicLayoutNumberOfLines]intValue];
+        NSInteger detailNumberOfLines = [[detailTextStyle objectForKey:CKDynamicLayoutNumberOfLines]integerValue];
         if(detailText != nil && [detailText isKindOfClass:[NSNull class]] == NO && [detailText length] > 0 && detailNumberOfLines != 1){
             CGFloat maxWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
             CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:maxWidth];

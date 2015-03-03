@@ -81,7 +81,7 @@
 }
 
 + (UIColor*)convertFromNSNumber:(NSNumber*)n{
-	UIColor* result = [UIColor colorWithRGBValue:[n intValue]];
+	UIColor* result = [UIColor colorWithRGBValue:[n integerValue]];
 	return result;
 }
 

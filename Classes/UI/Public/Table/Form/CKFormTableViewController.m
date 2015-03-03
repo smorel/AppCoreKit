@@ -421,10 +421,10 @@
         
         //Sort by bigest number
         NSArray* sortedIndexes = [[sectionsByIndex allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            if([obj1 intValue] > [obj2 intValue]){
+            if([obj1 integerValue] > [obj2 integerValue]){
                 return NSOrderedAscending;
             }
-            else if([obj1 intValue] ==  [obj2 intValue]){
+            else if([obj1 integerValue] ==  [obj2 integerValue]){
                 return NSOrderedSame;
             }
             return NSOrderedDescending;
@@ -432,7 +432,7 @@
         
         for(NSNumber* indexNb in sortedIndexes)
         {
-            NSInteger index = [indexNb intValue];
+            NSInteger index = [indexNb integerValue];
             [self objectController:self.objectController removeSectionAtIndex:index];
         }
         
@@ -451,10 +451,10 @@
         
         //Sort by smallest number
         NSArray* sortedIndexes = [[sectionsByIndex allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            if([obj1 intValue] < [obj2 intValue]){
+            if([obj1 integerValue] < [obj2 integerValue]){
                 return NSOrderedAscending;
             }
-            else if([obj1 intValue] ==  [obj2 intValue]){
+            else if([obj1 integerValue] ==  [obj2 integerValue]){
                 return NSOrderedSame;
             }
             return NSOrderedDescending;
@@ -462,7 +462,7 @@
 
         
         for(NSNumber* indexNb in sortedIndexes){
-            NSInteger index = [indexNb intValue];
+            NSInteger index = [indexNb integerValue];
             [self objectController:self.objectController insertSectionAtIndex:index];
         }
     }

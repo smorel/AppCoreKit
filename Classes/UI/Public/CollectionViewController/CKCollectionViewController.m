@@ -367,7 +367,7 @@
 		if(section > maxVisibleSectionIndex) maxVisibleSectionIndex = section;
 		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInteger:section]];
 		if(maxForSection != nil){
-			if(indexPath.row > [maxForSection intValue]){
+			if(indexPath.row > [maxForSection integerValue]){
 				[maxIndexPaths setObject:[NSNumber numberWithInteger:indexPath.row] forKey:[NSNumber numberWithInteger:section]];
 			}
 		}
@@ -379,7 +379,7 @@
 	for(NSInteger i = minVisibleSectionIndex; i <= maxVisibleSectionIndex; ++i){
 		NSNumber* sectionNumber = [NSNumber numberWithInteger:i];
 		id maxRowNumber = [maxIndexPaths objectForKey:sectionNumber];
-		NSInteger maxRow = maxRowNumber ? [maxRowNumber intValue] : 0;
+		NSInteger maxRow = maxRowNumber ? [maxRowNumber integerValue] : 0;
 		[self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:maxRow inSection:i]];
 	}
 }
@@ -851,8 +851,8 @@
     
     for(NSNumber* section in [indexsToRemove allKeys]){
         NSIndexSet* indexes = [indexsToRemove objectForKey:section];
-        if([section intValue] < [_sectionsToControllers count]){
-            NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[section intValue]];
+        if([section integerValue] < [_sectionsToControllers count]){
+            NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[section integerValue]];
             [controllers removeObjectsAtIndexes:indexes];
         }
     }

@@ -139,7 +139,7 @@
 - (void)orientationChanged:(NSNotification*)notif{
     BOOL shouldDismiss = NO;
     
-    UIInterfaceOrientation o = [[[notif userInfo]objectForKey:@"orientation"]intValue];
+    UIInterfaceOrientation o = [[[notif userInfo]objectForKey:@"orientation"]integerValue];
     switch(self.orientation){
         case UIInterfaceOrientationPortrait:
         case UIInterfaceOrientationPortraitUpsideDown:{

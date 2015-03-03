@@ -79,7 +79,7 @@ static BOOL UIControlSwizzlingDone = NO;
     NSNumber* number = objc_getAssociatedObject(self, &UIViewDragTypeKey);
     if(!number)
         return NO;
-    return (CKDragType)[number intValue];
+    return (CKDragType)[number integerValue];
 }
 
 - (void)setDragging:(BOOL)dragging{
@@ -353,7 +353,7 @@ static BOOL UIControlSwizzlingDone = NO;
     NSNumber* number = objc_getAssociatedObject(self, &UIViewIndexInParentBeforeDraggingKey);
     if(!number)
         return NO;
-    return [number intValue];
+    return [number integerValue];
 }
 
 @end
@@ -498,7 +498,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents ev
 
 -(void)executeDragEventForObject:(UIView*)view touch:(UITouch*)touch dragEvent:(NSNumber*)event{
     if(self.block){
-		self.block(view,touch,[event intValue]);
+		self.block(view,touch,[event integerValue]);
 	}
 	else if(self.targetRef.object && [self.targetRef.object respondsToSelector:self.selector]){
         [self.targetRef.object performSelector:self.selector

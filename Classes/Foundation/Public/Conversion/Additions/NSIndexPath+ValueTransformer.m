@@ -18,7 +18,7 @@
 	
 	int i =0;
 	for(NSString* component in components){
-		indexes[i] = [component intValue];
+		indexes[i] = [component integerValue];
 		++i;
 	}
 	

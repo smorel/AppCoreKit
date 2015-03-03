@@ -1,3 +1,4 @@
+
 //
 //  CKCascadingTree.m
 //  AppCoreKit
@@ -570,6 +571,11 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         }
         
         id object = [self objectForKey:key];
+        
+        if([object isKindOfClass:[NSString class]] && [object isEqualToString:@"#imageSize"]){
+            int i =3;
+        }
+        
         if([object isKindOfClass:[NSString class]]){
             NSString* injectionPath = (NSString*)object;
             
@@ -895,6 +901,7 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         }
         
         id object = [[self objectForKey:key]retain];
+        
         
         if([object isKindOfClass:[NSArray class]]){
             for(id subObject in object){

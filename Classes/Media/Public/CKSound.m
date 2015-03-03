@@ -1,30 +1,37 @@
 //
-//  AKSound.m
-//  test_SWF
+//  CKSound.m
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-01-26.
-//  Copyright (c) 2012 WhereCloud Inc. All rights reserved.
+//  Created by Sebastien Morel on 15-03-03.
 //
 
-#import "AKSound.h"
-#import "AKSoundPrivate.h"
+#import "CKSound.h"
+#import "CKLocalizationManager.h"
 
-#import <AppCoreKit/AppCoreKit.h>
+static NSMutableSet* CKSoundPlayingSounds = nil;
 
-static NSMutableSet* AKSoundPlayingSounds = nil;
+typedef void(^CKSoundCallbackBlock)(CKSound* sound);
 
-@implementation AKSound
+@interface CKSound()
+@property(nonatomic,copy) NSString* filePath;
+@property(nonatomic,retain) AVAudioPlayer* audioPlayer;
+@property(nonatomic,copy) CKSoundCallbackBlock block;
+@property(nonatomic,assign,readwrite) BOOL playing;
+@property(nonatomic,assign) BOOL isTemporaryFile;
+
+@end
+
+
+@implementation CKSound
 @synthesize name = _name;
 @synthesize filePath = _filePath;
-@synthesize scene = _scene;
 @synthesize playing = _playing;
-@synthesize sceneRef = _sceneRef;
 @synthesize audioPlayer = _audioPlayer;
 @synthesize block = _block;
 @synthesize isTemporaryFile = _isTemporaryFile;
 
 - (void)dealloc{
-    [AKSoundPlayingSounds removeObject:[NSValue valueWithNonretainedObject:self]];
+    [CKSoundPlayingSounds removeObject:[NSValue valueWithNonretainedObject:self]];
     
     if(_isTemporaryFile){
         NSError* error = nil;
@@ -39,51 +46,35 @@ static NSMutableSet* AKSoundPlayingSounds = nil;
     
     [_block release];
     [_audioPlayer release];
-    [_sceneRef release];
     [_name release];
     [_filePath release];
     [super dealloc];
 }
 
-- (void)setScene:(AKSceneView *)scene{
-    __block AKSound* bself = self;
-    self.sceneRef = [CKWeakRef weakRefWithObject:scene block:^(CKWeakRef *weakRef) {
-        [bself stop];
-    }];
++ (CKSound*)soundNamed:(NSString*)name{
+    return [[[CKSound alloc]initWithContentOfFile:_snd(name)]autorelease];
 }
 
-- (AKSceneView*)scene{
-    return [_sceneRef object];
++ (CKSound*)soundWithContentOfFile:(NSString*)path{
+    return [[[CKSound alloc]initWithContentOfFile:path]autorelease];
 }
 
-+ (AKSound*)soundNamed:(NSString*)name{
-    return [[[AKSound alloc]initWithContentOfFile:_snd(name)]autorelease];
-}
-
-+ (AKSound*)soundWithContentOfFile:(NSString*)path{
-    return [[[AKSound alloc]initWithContentOfFile:path]autorelease];
-}
-
-+ (AKSound*)instanceOfSound:(AKSound*)thesound{
++ (CKSound*)instanceOfSound:(CKSound*)thesound{
     if(thesound == nil || thesound.filePath == nil){
         //if sound is invalid, we create a fake sound just to be able to play it with completion as we often have code depending on sound completion
         //if the sound is invalid like that, the duration of the "fake" sound will be 0 and a log message will appear in the output.
-        AKSound* sound = [[[AKSound alloc]init]autorelease];
+        CKSound* sound = [[[CKSound alloc]init]autorelease];
         sound.name = thesound.name;
-        sound.scene = thesound.scene;
-        
-        [thesound.scene.debugger addEvent:[AKDebugContentEvent eventWithObject:self type:AKDebugFrameEventTypeNotFound name:[NSString stringWithFormat:@"SOUND (%@)",sound.name]]];
         return sound;
     }
     
-    AKSound* sound = [[[AKSound alloc]initWithContentOfFile:thesound.filePath]autorelease];
+    CKSound* sound = [[[CKSound alloc]initWithContentOfFile:thesound.filePath]autorelease];
     sound.name = thesound.name;
-    sound.scene = thesound.scene;
     return sound;
 }
 
-- (AKSound*)createInstance{
-    return [AKSound instanceOfSound:self];
+- (CKSound*)createInstance{
+    return [CKSound instanceOfSound:self];
 }
 
 - (id)initWithContentOfFile:(NSString*)path temporaryFile:(BOOL)temporaryFile{
@@ -149,14 +140,14 @@ static NSMutableSet* AKSoundPlayingSounds = nil;
     return [self initWithContentOfFile:path temporaryFile:YES];
 }
 
-- (BOOL)playWithCompletion:(void(^)(AKSound* sound))completion{
+- (BOOL)playWithCompletion:(void(^)(CKSound* sound))completion{
     if(_audioPlayer.playing)
         return NO;//currently playing
     
-    if(!AKSoundPlayingSounds){
-        AKSoundPlayingSounds = [[NSMutableSet alloc]init];
+    if(!CKSoundPlayingSounds){
+        CKSoundPlayingSounds = [[NSMutableSet alloc]init];
     }
-    [AKSoundPlayingSounds addObject:[NSValue valueWithNonretainedObject:self]];
+    [CKSoundPlayingSounds addObject:[NSValue valueWithNonretainedObject:self]];
     
     self.block = completion;
     if(![_audioPlayer play]){
@@ -180,7 +171,7 @@ static NSMutableSet* AKSoundPlayingSounds = nil;
     if(!_audioPlayer.playing)
         return;
     
-    [AKSoundPlayingSounds removeObject:[NSValue valueWithNonretainedObject:self]];
+    [CKSoundPlayingSounds removeObject:[NSValue valueWithNonretainedObject:self]];
     
     [_audioPlayer stop];
     self.playing = NO;
@@ -193,7 +184,7 @@ static NSMutableSet* AKSoundPlayingSounds = nil;
     if(flag && _block){
         _block(self);
     }
-    [AKSoundPlayingSounds removeObject:[NSValue valueWithNonretainedObject:self]];
+    [CKSoundPlayingSounds removeObject:[NSValue valueWithNonretainedObject:self]];
     self.playing = NO;
     
     [self autorelease];
@@ -204,9 +195,9 @@ static NSMutableSet* AKSoundPlayingSounds = nil;
 }
 
 + (void)stopAllSounds{
-    NSSet* soundsToStop = [NSSet setWithSet:AKSoundPlayingSounds];
+    NSSet* soundsToStop = [NSSet setWithSet:CKSoundPlayingSounds];
     for(NSValue* soundValue in soundsToStop){
-        AKSound* sound = [soundValue nonretainedObjectValue];
+        CKSound* sound = [soundValue nonretainedObjectValue];
         [sound stop];
     }
 }

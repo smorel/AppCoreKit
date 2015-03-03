@@ -6,8 +6,5 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#ifndef AppCoreKit_Media_h
-#define AppCoreKit_Media_h
 
-
-#endif
+#import "CKSound.h"

@@ -118,7 +118,7 @@
 		for(int i= 0;i < [self.values count]; ++i){
 			NSNumber* v = [self.values objectAtIndex:i];
 			NSString* l = [self.labels objectAtIndex:i];
-			if(intValue & [v intValue]){
+			if(intValue & [v integerValue]){
 				if([str length] > 0){
 					[str appendFormat:@"%@%@",_(@"_|_"),_(l)];
 				}
@@ -142,7 +142,7 @@
 	NSInteger intValue = value;
 	for(int i= 0;i < [self.values count]; ++i){
 		NSNumber* v = [self.values objectAtIndex:i];
-		if(intValue & [v intValue]){
+		if(intValue & [v integerValue]){
 			[indexes addObject:[NSNumber numberWithInt:i]];
 		}
 	}
@@ -152,7 +152,7 @@
 - (NSInteger)currentValue{
     CKProperty* property = [self objectProperty];
     if(self.multiSelectionEnabled){
-        return [[property value]intValue];
+        return [[property value]integerValue];
     }
     else{
         NSInteger index = [self.values indexOfObject:[property value]];
@@ -283,7 +283,7 @@
             NSArray* indexes = tableViewController.selectedIndexes;
             NSInteger v = 0;
             for(NSNumber* index in indexes){
-                v |= [[bself.values objectAtIndex:[index intValue]]intValue];
+                v |= [[bself.values objectAtIndex:[index integerValue]]integerValue];
             }
             
             bself.detailText = [bself labelForValue:v];
