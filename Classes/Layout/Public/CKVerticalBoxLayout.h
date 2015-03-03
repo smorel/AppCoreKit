@@ -13,8 +13,19 @@
  */
 @interface CKVerticalBoxLayout : CKLayoutBox
 
-/** default value is YES
+/** default value is NO
+ */
+@property(nonatomic,assign) BOOL flexibleSize;
+
+@end
+
+
+
+@interface CKVerticalBoxLayout(CKLayout_Deprecated)
+
+/** default value is YES. Opposite of flexibleSize.
  */
 @property(nonatomic,assign) BOOL sizeToFitLayoutBoxes;
+
 
 @end

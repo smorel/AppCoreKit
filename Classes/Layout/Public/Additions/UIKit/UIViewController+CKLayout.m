@@ -21,7 +21,7 @@
 - (void)UIViewController_Layout_loadView{
     [self UIViewController_Layout_loadView];
     if(self.view){
-        self.view.sizeToFitLayoutBoxes = NO;
+        self.view.flexibleSize = YES;
     }
 }
 

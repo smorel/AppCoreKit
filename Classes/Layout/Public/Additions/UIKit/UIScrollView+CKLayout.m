@@ -117,7 +117,7 @@ static char UIScrollViewManuallyManagesContentSizeKey;
     }
     
     //Takes contentInset into account here !
-    if(self.sizeToFitLayoutBoxes && self.layoutBoxes && [self.layoutBoxes count] > 0){
+    if(!self.flexibleSize && self.layoutBoxes && [self.layoutBoxes count] > 0){
         size = [CKLayoutBox preferredSizeConstraintToSize:subBoxesSize forBox:self];
     }else if([self.containerLayoutBox isKindOfClass:[UIView class]]){
         size = [CKLayoutBox preferredSizeConstraintToSize: size forBox:self];
@@ -132,7 +132,7 @@ static char UIScrollViewManuallyManagesContentSizeKey;
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize constraint = theframe.size;
-    if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
+    if(!self.flexibleSize && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         constraint.height = MAXFLOAT;
     }
     
@@ -175,7 +175,7 @@ static char UIScrollViewManuallyManagesContentSizeKey;
                                  boundingBox.width  + (self.padding.left + self.padding.right),
                                  boundingBox.height + (self.padding.top + self.padding.bottom) );
     
-    if(self.sizeToFitLayoutBoxes && self.layoutBoxes && [self.layoutBoxes count] > 0){
+    if(!self.flexibleSize && self.layoutBoxes && [self.layoutBoxes count] > 0){
         CGRect frameWithInsets = CGRectMake(newFrame.origin.x, newFrame.origin.y,
                                             newFrame.size.width /*+ self.contentInset.left + self.contentInset.right*/,
                                             newFrame.size.height /*+self.contentInset.top +  self.contentInset.bottom*/);

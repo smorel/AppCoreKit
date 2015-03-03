@@ -37,7 +37,7 @@
 
 @dynamic  maximumSize, minimumSize, margins, padding, layoutBoxes,frame,containerLayoutBox,containerLayoutView,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,name;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name;
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -92,7 +92,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize constraint = theframe.size;
-    if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
+    if(!self.flexibleSize && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         constraint.height = MAXFLOAT;
     }
     
@@ -135,7 +135,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes,na
     
     [CKLayoutBox performLayoutWithFrame:subBoxesFrame forBox:self];
     
-    if(!skipFrameSetAsNavigationBarSubView && self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
+    if(!skipFrameSetAsNavigationBarSubView && !self.flexibleSize && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         CGSize boundingBox = CGSizeMake(0, 0);
         for(NSObject<CKLayoutBoxProtocol>* subbox in self.layoutBoxes){
             if((subbox.frame.origin.x + subbox.frame.size.width) > boundingBox.width){
@@ -322,32 +322,32 @@ static char UIViewContainerLayoutBoxKey;
 static char UIViewLastComputedSizeKey;
 static char UIViewLastPreferedSizeKey;
 static char UIViewInvalidatedLayoutBlockKey;
-static char UIViewSizeToFitLayoutBoxesKey;
+static char UIViewFlexibleSizeKey;
 
 @interface UIView (Layout_Private)
 @end
 
 @implementation UIView (Layout_Private)
 
-- (void)setSizeToFitLayoutBoxes:(BOOL)sizeToFitLayoutBoxes{
+- (void)setFlexibleSize:(BOOL)flexibleSize{
     objc_setAssociatedObject(self,
-                             &UIViewSizeToFitLayoutBoxesKey,
-                             [NSNumber numberWithBool:sizeToFitLayoutBoxes],
+                             &UIViewFlexibleSizeKey,
+                             [NSNumber numberWithBool:flexibleSize],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)sizeToFitLayoutBoxes{
+- (BOOL)flexibleSize{
     static Class c = nil;
     if(c == nil){
         c = NSClassFromString(@"UITableViewCellContentView");
     }
     
     if([self isKindOfClass:c]){
-        return NO;
+        return YES;
     }
     
-    id value = objc_getAssociatedObject(self, &UIViewSizeToFitLayoutBoxesKey);
-    return value ? [value boolValue] : ( [self isKindOfClass:[UIScrollView class]] ? NO : YES );
+    id value = objc_getAssociatedObject(self, &UIViewFlexibleSizeKey);
+    return value ? [value boolValue] : ( [self isKindOfClass:[UIScrollView class]] ? YES : NO );
 }
 
 - (void)setInvalidatedLayoutBlock:(CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{
@@ -596,6 +596,21 @@ static char UIViewSizeToFitLayoutBoxesKey;
     CKSwizzleSelector([UIView class], @selector(setHidden:), @selector(UIView_Layout_setHidden:));
   //  CKSwizzleSelector([UIView class], @selector(isHidden), @selector(UIView_Layout_isHidden));
   //  CKSwizzleSelector([UIView class], @selector(setTransform:), @selector(UIView_Layout_setTransform:));
+}
+
+@end
+
+
+
+
+@implementation UIView(CKLayout_Deprecated)
+
+- (void)setSizeToFitLayoutBoxes:(BOOL)sizeToFitLayoutBoxes{
+    self.flexibleSize = !sizeToFitLayoutBoxes;
+}
+
+- (BOOL)sizeToFitLayoutBoxes{
+    return !self.flexibleSize;
 }
 
 @end

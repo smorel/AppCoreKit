@@ -242,7 +242,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     UIView* scrollContentView = [[[UIView alloc]initWithFrame:self.view.bounds]autorelease];
     //  scrollContentView.autoresizingMask = UIViewAutoresizingFlexibleSize;
-    scrollContentView.sizeToFitLayoutBoxes = YES;
+    scrollContentView.flexibleSize = NO;
     scrollContentView.name = @"ScrollContentView";
     scrollContentView.layer.zPosition = 1;
     [scrollView addSubview:scrollContentView];

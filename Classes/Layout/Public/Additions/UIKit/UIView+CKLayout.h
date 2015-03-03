@@ -14,10 +14,10 @@
  */
 @interface UIView (CKLayout)<CKLayoutBoxProtocol>
 
-/** Default value is YES. that means layoutting the view will automatically shrink or expand its size to fit the layouted content.
+/** Default value is NO. that means layoutting the view will automatically shrink or expand its size to fit the layouted content.
  Views managed by UIViewController or UITableViewCellContentView are forced to NO as the controller, container controller or table view cell controller is responsible to manage it's view frame.
  */
-@property(nonatomic,assign) BOOL sizeToFitLayoutBoxes;
+@property(nonatomic,assign) BOOL flexibleSize;
 
 /** This method will lookup for a style with the specified id in the global stylesheet scope.
   This style requiers a "@class" key to be defined and the class must be a subclass of UIView.
@@ -36,5 +36,15 @@
  This method will lookup for the id in the specified style manager.
  */
 + (id)inflateViewFromStyleWithId:(NSString*)styleId fromStyleManager:(CKStyleManager*)styleManager;
+
+@end
+
+
+@interface UIView (CKLayout_Deprecated)
+
+/** Default value is YES. that means layoutting the view will automatically shrink or expand its size to fit the layouted content.
+ Views managed by UIViewController or UITableViewCellContentView are forced to NO as the controller, container controller or table view cell controller is responsible to manage it's view frame.
+ */
+@property(nonatomic,assign) BOOL sizeToFitLayoutBoxes;
 
 @end

@@ -64,7 +64,7 @@
     UIView* contentView = [self.view valueForKey:@"contentView"];
     if(contentView == nil){ contentView = self.view; }
     
-    contentView.sizeToFitLayoutBoxes = NO;
+    contentView.flexibleSize = YES;
     [contentView setAppliedStyle:nil];
     
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){

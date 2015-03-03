@@ -45,12 +45,12 @@ namespace __gnu_cxx{
 
 - (id)init{
     self = [super init];
-    self.sizeToFitLayoutBoxes = YES;
+    self.flexibleSize = NO;
     return self;
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)constraintSize{
-    if([self.layoutBoxes count] <= 0 && self.sizeToFitLayoutBoxes)
+    if([self.layoutBoxes count] <= 0 && !self.flexibleSize)
     return CGSizeMake(0,0);
     
     CGSize size = [CKLayoutBox preferredSizeConstraintToSize:constraintSize forBox:self];
@@ -201,7 +201,7 @@ namespace __gnu_cxx{
         }
     }
     
-    if(self.sizeToFitLayoutBoxes){
+    if(!self.flexibleSize){
         CGSize ret = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
         self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
                                                                                      ret.height + self.padding.bottom + self.padding.top)
@@ -299,6 +299,20 @@ namespace __gnu_cxx{
             }
         }
     }
+}
+
+@end
+
+
+
+@implementation CKVerticalBoxLayout(CKLayout_Deprecated)
+
+- (void)setSizeToFitLayoutBoxes:(BOOL)sizeToFitLayoutBoxes{
+    self.flexibleSize = !sizeToFitLayoutBoxes;
+}
+
+- (BOOL)sizeToFitLayoutBoxes{
+    return !self.flexibleSize;
 }
 
 @end
