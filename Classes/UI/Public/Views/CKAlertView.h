@@ -11,7 +11,7 @@
 
 typedef void (^CKAlertViewActionBlock)();
 
-/** Simplified interface for the UIAlertView.
+/** Simplified interface for the UIAlertView. If no button is added prior to calling show, the SDK automatically add a localized "OK" button with no action.
  */
 @interface CKAlertView : NSObject <UIAlertViewDelegate> {
 }

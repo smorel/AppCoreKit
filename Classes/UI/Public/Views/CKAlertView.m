@@ -8,6 +8,7 @@
 
 #import "CKAlertView.h"
 #import "NSObject+Bindings.h"
+#import "CKLocalization.h"
 
 
 @interface CKAlertViewAction : NSObject {
@@ -99,6 +100,10 @@
 - (void)setupAlertView {
 	self.alertView.title = self.title;
 	self.alertView.message = self.message;
+    
+    if(self.actions.count == 0){
+        [self addButtonWithTitle:_(@"OK") action:nil];
+    }
 	
 	for (CKAlertViewAction *action in self.actions) {
 		[self.alertView addButtonWithTitle:action.title];
