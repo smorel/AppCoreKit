@@ -105,7 +105,8 @@ pod 'AppCoreKit-smorel'
 
 #### Compiling the framework
 
-AppCoreKit is built as a Static Framework. Static Framework are not natively supported by Xcode and requires some additional specifications to get compiled properly.
+AppCoreKit is built as a Static Framework. Static Framework are not natively supported by Xcode 5 and less and requires some additional specifications to get compiled properly.
+You can skip this setup if using XCode 6 and more.
 
 Copy the following file:
 
