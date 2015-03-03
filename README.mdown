@@ -43,7 +43,7 @@ A sample repository with binary versions of the framework is available at https:
 
 ## Minimum system requirements
 
-AppCoreKit supports all iOS versions 4.3 and higher. XCode5 is requiered as we integrated support for iOS7.
+AppCoreKit supports all iOS versions 7.0 and higher.
 
 ## Additional dependencies
 
@@ -96,7 +96,7 @@ The recommended approach for installing AppCoreKit is via the [CocoaPods](http:/
 Adds the following lines in you PodFile
 
 <pre>
-platform :ios, '5.0'
+platform :ios, '7.0'
 
 pod 'AppCoreKit'
 </pre>

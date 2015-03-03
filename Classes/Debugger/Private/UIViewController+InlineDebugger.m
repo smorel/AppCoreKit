@@ -9,6 +9,7 @@
 
 #import "UIViewController+InlineDebugger.h"
 #import "NSObject+InlineDebugger.h"
+#import "CKContainerViewController.h"
 
 @implementation UIViewController (CKInlineDebugger)
 
