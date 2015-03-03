@@ -196,8 +196,6 @@ sh "$APPCOREKIT_PROJECT_PATH/copy_framework_resources.sh"
 
 If you have any comments, suggestions, question or information request, please contact us at morel.sebastien@gmail.com.
 
-Want to keep updated? Follow us on Twitter - @appcorekit.
-
 
 ## License
 
