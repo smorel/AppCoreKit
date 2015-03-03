@@ -19,3 +19,4 @@
 #import "Debugger.h"
 #import "AddressBook.h"
 #import "Location.h"
+#import "Media.h"

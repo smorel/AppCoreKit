@@ -670,6 +670,9 @@
 		B0EA78A7156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */; };
 		B0EA78AB156EDEAC00CD5264 /* UINavigationController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */; settings = {ATTRIBUTES = (); }; };
 		B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */; };
+		D96494261AA5F80F00C17BB7 /* CKSound.h in Headers */ = {isa = PBXBuildFile; fileRef = D96494241AA5F80F00C17BB7 /* CKSound.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D96494271AA5F80F00C17BB7 /* CKSound.m in Sources */ = {isa = PBXBuildFile; fileRef = D96494251AA5F80F00C17BB7 /* CKSound.m */; };
+		D96494291AA5F82C00C17BB7 /* Media.h in Headers */ = {isa = PBXBuildFile; fileRef = D96494281AA5F82600C17BB7 /* Media.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
 		EDD9E7E31436166D00E104D9 /* UIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */; };
@@ -1365,6 +1368,9 @@
 		B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UINavigationController+BlockBasedDelegate.mm"; path = "Classes/UI/Public/Controllers/UINavigationController+BlockBasedDelegate.mm"; sourceTree = "<group>"; };
 		B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Style.h"; path = "Classes/Styles/Private/UINavigationController+Style.h"; sourceTree = "<group>"; };
 		B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UINavigationController+Style.mm"; path = "Classes/Styles/Private/UINavigationController+Style.mm"; sourceTree = "<group>"; };
+		D96494241AA5F80F00C17BB7 /* CKSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSound.h; path = Classes/Media/Public/CKSound.h; sourceTree = "<group>"; };
+		D96494251AA5F80F00C17BB7 /* CKSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSound.m; path = Classes/Media/Public/CKSound.m; sourceTree = "<group>"; };
+		D96494281AA5F82600C17BB7 /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Media.h; path = Classes/Media/Media.h; sourceTree = "<group>"; };
 		D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Introspection.h"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.h"; sourceTree = "<group>"; };
 		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UIViewController+Introspection.h"; sourceTree = "<group>"; };
@@ -1969,6 +1975,7 @@
 				75AD5D8A144C687E0008F53A /* Debugger */,
 				7506E40913B9005700EE1471 /* AddressBook */,
 				7506E40713B8FFFE00EE1471 /* Location */,
+				D96494231AA5F80000C17BB7 /* Media */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -2658,6 +2665,16 @@
 			name = ResourceManager;
 			sourceTree = "<group>";
 		};
+		D96494231AA5F80000C17BB7 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				D96494281AA5F82600C17BB7 /* Media.h */,
+				D96494241AA5F80F00C17BB7 /* CKSound.h */,
+				D96494251AA5F80F00C17BB7 /* CKSound.m */,
+			);
+			name = Media;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2791,6 +2808,7 @@
 				7560DD9113B8ED3600268D13 /* UIView+Introspection.h in Headers */,
 				7560DD9513B8ED3600268D13 /* UIView+Style.h in Headers */,
 				7560DD9713B8ED3600268D13 /* CKViewController.h in Headers */,
+				D96494291AA5F82C00C17BB7 /* Media.h in Headers */,
 				7560DD9913B8ED3600268D13 /* UIViewController+Style.h in Headers */,
 				7560DD9D13B8ED3600268D13 /* CKUnit.h in Headers */,
 				7560DDA113B8ED3600268D13 /* CKVersion.h in Headers */,
@@ -2833,6 +2851,7 @@
 				75CC170D13F46E8200835FE3 /* NSURL+ValueTransformer.h in Headers */,
 				75CC171113F46E9800835FE3 /* NSDate+ValueTransformer.h in Headers */,
 				7560DDB513B8ED3600268D13 /* CKWebBrowserViewController.h in Headers */,
+				D96494261AA5F80F00C17BB7 /* CKSound.h in Headers */,
 				75CC171513F46EAF00835FE3 /* NSArray+ValueTransformer.h in Headers */,
 				75CC171913F46EC800835FE3 /* CKCollection+ValueTransformer.h in Headers */,
 				75CC171D13F46EF900835FE3 /* NSIndexPath+ValueTransformer.h in Headers */,
@@ -3249,6 +3268,7 @@
 				7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */,
 				7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */,
 				961B3AD117FDD04900F92D5F /* CKStringHelper.m in Sources */,
+				D96494271AA5F80F00C17BB7 /* CKSound.m in Sources */,
 				7560DDA813B8ED3600268D13 /* CKWeakRef.mm in Sources */,
 				7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */,
 				7560DDB013B8ED3600268D13 /* CKWebService.m in Sources */,
