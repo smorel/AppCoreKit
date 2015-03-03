@@ -16,23 +16,41 @@
 
 #pragma mark ViewController Life Cycle
 
+- (void)postInit{
+    [super postInit];
+    [self setupViewController];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self beginBindingsContextByRemovingPreviousBindings];
+    [self.view beginBindingsContextByRemovingPreviousBindings];
     [self setupBindings];
-    [self endBindingsContext];
+    [self.view endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self clearBindingsContext];
+    [self.view clearBindingsContext];
 }
+
+#pragma mark Initializing View Controller
+
+- (void)setupViewController{
+    //TODO : Setup self and contentCellController here
+}
+
 
 #pragma mark Setup MVC and bindings
 
 - (void)setupBindings{
-    //TODO : Setup Views and bindings
+    //TODO : Setup Views, bindings and contentViewCell here
+}
+
+- (void)didSelect{
+    [super didSelect];
+    
+    //TODO : handle cell selection here
 }
 
 @end
