@@ -1,6 +1,6 @@
 # AppCoreKit
 
-AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 3 years experience at Wherecloud and is a production framework that shipped more than 20 apps.
+AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 4 years experience and is a production framework that shipped more than 20 apps.
 
 AppCoreKit does not offer out of the box UI components but the technology to help you:
 
@@ -21,17 +21,15 @@ Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can c
 The framework is splitted in several modules with the following dependencies:
 
 <div style="text-align:center">
-<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/AppCoreKit-Framework-Overview.png?raw=true"/>
+<img src="https://github.com/smorel/cloudkit/blob/master/Documentation/AppCoreKit-Framework-Overview.png?raw=true"/>
 </div>
 
 
-[![ScreenShot](https://github.com/wherecloud/AppCoreKit/blob/master/Documentation/screencast-thumbnail.png?raw=true)](http://vimeo.com/49265994)
+[![ScreenShot](https://github.com/smorel/AppCoreKit/blob/master/Documentation/screencast-thumbnail.png?raw=true)](http://vimeo.com/49265994)
 
 Screen Cast and high level description of the framework are available at http://www.appcorekit.net
 
-Lets go to http://www.wherecloud.com/apps.html to get an idea of some of the apps we made at Wherecloud based on the AppCoreKit framework.
-
-A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples
+A sample repository with binary versions of the framework is available at https://github.com/smorel/appcorekit-samples
 
 ## Documentation
 
@@ -53,9 +51,9 @@ Since the begining the the version 2.2.0 (Master), AppCoreKit integrates a new R
 
 If this framework is not linked with your app, the AppCoreKit will use the resources from your application's main bundle. If the framework is linked, you can specify one or several repository you want to sync with.
 
-You can find a pre-compiled version of ResourceManager and sample integration in our sample repository at https://github.com/wherecloud/appcorekit-samples
+You can find a pre-compiled version of ResourceManager and sample integration in our sample repository at https://github.com/smorel/appcorekit-samples
 
-Or you can get the sources of this framework and more informations at : https://github.com/wherecloud/ResourceManager
+Or you can get the sources of this framework and more informations at : https://github.com/smorel/ResourceManager
 
 ResourceManager is also available as CocoaPods:
 
@@ -153,7 +151,7 @@ AdSupport.
 </pre>
 
 <div style="text-align:center">
-<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/integrating-framework-projects-and-dependencies.png?raw=true"/>
+<img src="https://github.com/smorel/cloudkit/blob/master/Documentation/integrating-framework-projects-and-dependencies.png?raw=true"/>
 </div>
 
 
@@ -162,14 +160,14 @@ AdSupport.
 /usr/include/libxml2
 </pre>
 
-<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/settings-header-search-path.png?raw=true"/>
+<img src="https://github.com/smorel/cloudkit/blob/master/Documentation/settings-header-search-path.png?raw=true"/>
 
 * Adds the following <b>link flags</b> in your build settings (<b>OTHER_LDFLAGS</b>): 
 <pre>
  -ObjC -all_load -lxml2 -licucore -lz -weak_library /usr/lib/libstdc++.dylib
 </pre>
 
-<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/settings-other-linker-flags.png?raw=true"/>
+<img src="https://github.com/smorel/cloudkit/blob/master/Documentation/settings-other-linker-flags.png?raw=true"/>
 
 * As Xcode do not natively support static frameworks especially for resources, you'll need to add a post build phase if you'd like to use some components. In the build phase for your target, add a <b>"Run Script" build phase</b> and add the following script :
 
@@ -188,19 +186,17 @@ sh "$APPCOREKIT_PROJECT_PATH/copy_framework_resources.sh"
             --project-dir "$PROJECT_DIR"
 </pre>
 
-<img src="https://github.com/wherecloud/cloudkit/blob/master/Documentation/copy-resources-build-phase.png?raw=true"/>
+<img src="https://github.com/smorel/cloudkit/blob/master/Documentation/copy-resources-build-phase.png?raw=true"/>
 
 
 ## Credits
 
-If you have any comments, suggestions, question or information request, please contact us at appcorekitsupport@wherecloud.com.
+If you have any comments, suggestions, question or information request, please contact us at morel.sebastien@gmail.com.
 
 Want to keep updated? Follow us on Twitter - @appcorekit.
 
 
 ## License
-
-Copyright 2009-2013 WhereCloud, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
