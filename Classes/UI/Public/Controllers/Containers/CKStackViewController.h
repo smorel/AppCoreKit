@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Wherecloud. All rights reserved.
 //
 
-#import <AppCoreKit/AppCoreKit.h>
+#import <CKViewController.h>
 
 /**
  */

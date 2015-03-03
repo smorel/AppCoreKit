@@ -52,9 +52,10 @@ Pod::Spec.new do |s|
   end
 
 
-  s.subspec 'Animation' do |f|    
-    f.source_files = 'Classes/Animation/**/*.{h,m,mm}'
-    f.private_header_files = 'Classes/Animation/Private/**/*.{h}'
+  s.subspec 'Animation' do |ani|    
+    ani.source_files = 'Classes/Animation/**/*.{h,m,mm}'
+    ani.private_header_files = 'Classes/Animation/Private/**/*.{h}'
+    ani.dependency 'AppCoreKit/Foundation'
   end
 
   s.subspec 'AddressBook' do |a|    
@@ -111,9 +112,10 @@ Pod::Spec.new do |s|
     n.dependency 'AppCoreKit/Mapping'
   end
 
-  s.subspec 'Media' do |n|    
-    n.source_files = 'Classes/Media/**/*.{h,m,mm}'
-    n.private_header_files = 'Classes/Media/Private/**/*.{h}'
+  s.subspec 'Media' do |m|    
+    m.source_files = 'Classes/Media/**/*.{h,m,mm}'
+    m.private_header_files = 'Classes/Media/Private/**/*.{h}'
+    m.dependency 'AppCoreKit/Foundation'
   end
 
   # AppCoreKit still has a dependency on debugger in CKViewController
