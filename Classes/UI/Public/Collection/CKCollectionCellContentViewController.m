@@ -201,4 +201,8 @@
     return NO;
 }
 
+- (UINavigationController*)navigationController{
+    return self.collectionViewController.navigationController;
+}
+
 @end

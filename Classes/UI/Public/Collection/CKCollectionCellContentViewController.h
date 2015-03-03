@@ -94,4 +94,8 @@
  */
 - (void)didResignFirstResponder;
 
+/**
+ */
+- (UINavigationController*)navigationController;
+
 @end
