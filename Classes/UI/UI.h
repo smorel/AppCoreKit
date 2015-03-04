@@ -107,3 +107,8 @@
 #import "CKCollectionViewPageLayout.h"
 #import "CKCollectionViewFlowLayout.h"
 #import "CKSwipableCollectionCellContentViewController.h"
+
+
+#import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "CKPropertyViewController.h"
+#import "CKPropertyStringViewController.h"
