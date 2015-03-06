@@ -109,6 +109,9 @@
 		return;
 	
 	self.imageView.image = image;
+    if(image != nil){
+        self.defaultImage = image;
+    }
     if(self.button){
         [self.button setBackgroundImage:image forState:UIControlStateNormal];
     }
