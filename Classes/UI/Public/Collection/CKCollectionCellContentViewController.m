@@ -157,7 +157,8 @@
     if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableSet* appliedStack = [NSMutableSet set];
-        [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
+        [self applySubViewsStyle:controllerStyle appliedStack:appliedStack  delegate:nil];
+        /// [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
         [self setAppliedStyle:controllerStyle];
     }
     
