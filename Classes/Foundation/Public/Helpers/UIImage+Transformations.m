@@ -364,6 +364,7 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
     
     UIColor* letterBoxingColor = [UIImage colorAtPoint:CGPointZero data:data imageSize:realSize];
     
+    //todo compute color mean on line and compare with tolerance at the end
     BOOL stop = YES;
     if(potentialLetterBoxingColors.count > 0){
         for(UIColor* p in potentialLetterBoxingColors){
@@ -385,15 +386,28 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
     //Searching for top letter box
     NSInteger top = 0;
     stop = NO;
+    
     for(NSInteger y = 0; y < realSize.height /2 && !stop; y += 1){
+        
+        CGFloat sumR = 0;
+        CGFloat sumG = 0;
+        CGFloat sumB = 0;
+        CGFloat n = 0;
+        
         for(NSInteger x = 0; x < realSize.width && !stop; x += increment){
             UIColor* color = [UIImage colorAtPoint:CGPointMake(x,y) data:data imageSize:realSize];
-            CGFloat d = [self RGBDistance:letterBoxingColor color:color];
-            if(d > tolerance){
-                stop = YES;
-                break;
-            }
+            sumR += color.red;
+            sumG += color.green;
+            sumB += color.blue;
+            n += 1;
         }
+        UIColor* color = [UIColor colorWithRed:sumR/n green:sumG/n blue:sumB/n alpha:1];
+        CGFloat d = [self RGBDistance:letterBoxingColor color:color];
+        if(d > tolerance){
+            stop = YES;
+            break;
+        }
+        
         if(!stop){ top = y; }
     }
     
@@ -401,20 +415,32 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
     NSInteger bottom = realSize.height;
     stop = NO;
     for(NSInteger y = realSize.height-1; y > realSize.height /2 && !stop; y -= 1){
+        
+        CGFloat sumR = 0;
+        CGFloat sumG = 0;
+        CGFloat sumB = 0;
+        CGFloat n = 0;
+        
         for(NSInteger x = 0; x < realSize.width && !stop; x += increment){
             UIColor* color = [UIImage colorAtPoint:CGPointMake(x,y) data:data imageSize:realSize];
-            CGFloat d = [self RGBDistance:letterBoxingColor color:color];
-            if(d > tolerance){
-                stop = YES;
-                break;
-            }
+            sumR += color.red;
+            sumG += color.green;
+            sumB += color.blue;
+            n += 1;
         }
+        UIColor* color = [UIColor colorWithRed:sumR/n green:sumG/n blue:sumB/n alpha:1];
+        CGFloat d = [self RGBDistance:letterBoxingColor color:color];
+        if(d > tolerance){
+            stop = YES;
+            break;
+        }
+        
         if(!stop){ bottom = y; }
     }
     
     //TODO : detect side letter boxes
     
-    finalRect = CGRectMake(0,top/ self.scale,realSize.width / self.scale,(bottom - top) / self.scale);
+    finalRect = CGRectMake(0,(top+1)/ self.scale,realSize.width / self.scale,((bottom -1) - top) / self.scale);
     
     CFRelease(pixelData);
     
