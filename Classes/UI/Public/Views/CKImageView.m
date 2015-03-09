@@ -204,6 +204,23 @@
 	return self.imageView.contentMode;
 }
 
+- (void)imageViewContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"contentMode",
+                                                 UIViewContentModeScaleToFill,
+                                                 UIViewContentModeScaleAspectFit,
+                                                 UIViewContentModeScaleAspectFill,
+                                                 UIViewContentModeRedraw,
+                                                 UIViewContentModeCenter,        
+                                                 UIViewContentModeTop,
+                                                 UIViewContentModeBottom,
+                                                 UIViewContentModeLeft,
+                                                 UIViewContentModeRight,
+                                                 UIViewContentModeTopLeft,
+                                                 UIViewContentModeTopRight,
+                                                 UIViewContentModeBottomLeft,
+                                                 UIViewContentModeBottomRight);
+}
+
 #pragma mark CKWebRequestDelegate Protocol
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
