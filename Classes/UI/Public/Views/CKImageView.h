@@ -72,6 +72,10 @@ typedef NS_ENUM(NSInteger, CKImageViewSpinnerStyle){
 
 /**
  */
+@property (nonatomic, copy) UIImage*(^postProcess)(UIImage* image);
+
+/**
+ */
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 
 ///-----------------------------------

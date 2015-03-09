@@ -46,6 +46,10 @@ typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* erro
  */
 @property (nonatomic, copy) CKImageLoaderErrorBlock errorBlock;
 
+/**
+ */
+@property (nonatomic, copy) UIImage*(^postProcess)(UIImage* image);
+
 ///-----------------------------------
 /// @name Managing the URL and Requests
 ///-----------------------------------

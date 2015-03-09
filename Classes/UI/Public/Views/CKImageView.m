@@ -94,6 +94,8 @@
 	_activityIndicator = nil;
 	[_defaultImageView release];
 	_defaultImageView = nil;
+    [_postProcess release];
+    _postProcess = nil;
 	self.defaultImage = nil;
 	self.delegate = nil;
 	self.imageView = nil;
@@ -155,6 +157,7 @@
 	
 	if(self.imageURL){
 		self.imageLoader = [[[CKImageLoader alloc] initWithDelegate:self] autorelease];
+        self.imageLoader.postProcess = self.postProcess;
 		[self updateViews:YES];
 		[self.imageLoader loadImageWithContentOfURL:self.imageURL];
 	}

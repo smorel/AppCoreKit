@@ -32,6 +32,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 	id _delegate;
 	CKWebRequest *_request;
 	NSURL *_imageURL;
+    dispatch_queue_t _postProcessQueue;
 }
 
 @synthesize delegate = _delegate;
@@ -49,10 +50,14 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 }
 
 - (void)dealloc {
+    if(_postProcessQueue){
+        dispatch_release(_postProcessQueue);
+    }
 	[self cancel];
 	self.imageURL = nil;
     [_completionBlock release];
     [_errorBlock release];
+    [_postProcess release];
 	[super dealloc];
 }
 
@@ -80,13 +85,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
             if(image.scale != [[UIScreen mainScreen]scale]){
                 image = [UIImage imageWithCGImage:image.CGImage scale:[[UIScreen mainScreen]scale] orientation:image.imageOrientation];
             }
-            
-            if (image) {
-                if(_completionBlock){
-                    _completionBlock(self,image,YES);
-                }
-                [self.delegate imageLoader:self didLoadImage:image cached:YES];
-            }
+            [self didFetchImage:image fromCache:YES];
         }
     }
     else if([[self.imageURL scheme] isMatchedByRegex:@"^(http|https)$"]){
@@ -98,6 +97,33 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
     }
 }
 
+- (void)didFetchImage:(UIImage*)image fromCache:(BOOL)cache{
+    if(!self.postProcess){
+        [self didCompleteWithImage:image fromCache:cache];
+    }else{
+        if(!_postProcessQueue){
+            _postProcessQueue = dispatch_queue_create("CKImageLoad_postProcess", 0);
+        }
+        dispatch_async(_postProcessQueue, ^{
+            UIImage* transformed = self.postProcess(image);
+            [self didCompleteWithImage:transformed fromCache:cache];
+        });
+    }
+}
+
+- (void)didCompleteWithImage:(UIImage*)image fromCache:(BOOL)cache{
+    if (image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(_completionBlock){
+                _completionBlock(self, image, YES);
+            }
+            if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
+                [self.delegate imageLoader:self didLoadImage:image cached:cache];
+            }
+        });
+    }
+}
+
 - (void)cancel {
     [self.request cancel];
     self.request = nil;
@@ -105,12 +131,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
 - (void)didReceiveValue:(UIImage*)image error:(NSError*)error cached:(BOOL)cached {
 	if ([image isKindOfClass:[UIImage class]]) {
-        if(_completionBlock){
-            _completionBlock(self, image, YES);
-        }
-		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
-			[self.delegate imageLoader:self didLoadImage:image cached:cached];
-		}
+        [self didFetchImage:image fromCache:cached];
 	} 
     else if (error) {
         if(_errorBlock){
