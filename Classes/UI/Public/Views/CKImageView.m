@@ -66,8 +66,9 @@
 	self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 	[self addSubview:self.imageView];
 	
-	self.fadeInDuration = 0;
+	self.fadeInDuration = 0.4;
 	self.interactive = NO;
+    self.animateLoadingOfImagesLoadedFromCache = NO;
 	_currentState = CKImageViewStateNone;
 	_spinnerStyle = CKImageViewSpinnerStyleNone;
 }
@@ -112,7 +113,8 @@
 	
 	self.imageView.image = image;
     if(image != nil){
-        self.defaultImage = image;
+        [_defaultImage release];
+        _defaultImage = [image retain];
     }
     if(self.button){
         [self.button setBackgroundImage:image forState:UIControlStateNormal];
@@ -224,7 +226,7 @@
 #pragma mark CKWebRequestDelegate Protocol
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
-	[self setImage:image updateViews:YES animated:!cached];
+	[self setImage:image updateViews:YES animated:(self.animateLoadingOfImagesLoadedFromCache || !cached)];
 	[self.delegate imageView:self didLoadImage:image cached:NO];
 }
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
@@ -350,7 +352,11 @@
             }
             
             if (self.superview != nil) {
-                [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                [self createsDefaultImageView];
+                self.defaultImageView.alpha = 1;
+                self.imageView.alpha = 0;
+                self.button.alpha = 0;
+                [UIView animateWithDuration:self.fadeInDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
                     self.imageView.alpha = 1;
                     self.button.alpha = 1;
                     self.defaultImageView.alpha = 0;

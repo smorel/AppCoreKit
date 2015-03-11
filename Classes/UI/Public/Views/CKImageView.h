@@ -90,9 +90,13 @@ typedef NS_ENUM(NSInteger, CKImageViewSpinnerStyle){
  */
 @property (nonatomic, assign, readwrite) UIViewContentMode imageViewContentMode;
 
-/**
+/** default value is 0.4
  */
 @property (nonatomic, assign, readwrite) NSTimeInterval fadeInDuration;
+
+/** default value is NO
+ */
+@property (nonatomic, assign, readwrite) BOOL animateLoadingOfImagesLoadedFromCache;
 
 /**
  */
