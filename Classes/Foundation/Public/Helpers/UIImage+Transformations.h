@@ -9,9 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-/**
- */
-static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius);
 
 
 /**
@@ -46,6 +43,13 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
  potentialLetterBoxingColors is a list of colors we know should be the letter box. generally white or black.
  */
 - (UIImage*)imageByRemovingLetterBoxingWithColors:(NSArray*)potentialLetterBoxingColors precision:(NSInteger)precision tolerance:(CGFloat)tolerance;
+
+/** Calling imageByRemovingLetterBoxingWithColors:precision:tolerance with default usual parameters from social media images:
+ potentialLetterBoxingColors is black or white
+ precision is 20
+ tolerance is 0.2
+ */
+- (UIImage*)imageByRemovingLetterBoxing;
 
 /**
  */
