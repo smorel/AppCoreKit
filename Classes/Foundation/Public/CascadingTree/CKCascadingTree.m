@@ -667,38 +667,52 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
 
 - (void)makeAllPlatformSpecific{
     NSArray* keys = [self allKeys];
+    
+    CKCascadingTreeItemFormat* mostSpecificMatchingFormat = nil;
+    NSString* mostSpecificMatchingKey = nil;
+    NSMutableArray* keysToRemove = [NSMutableArray array];
+    
     for(NSString* key in keys){
-        BOOL keepIt = NO;
-        BOOL hasDeviceKey = NO;
-        
         NSArray* components = [key componentsSeparatedByString:@","];
         for(NSString* component in components){
             NSString* trimmedKey = [component stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if([trimmedKey hasPrefix:CKCascadingTreeDevice]){
-                hasDeviceKey = YES;
                 NSString* normalizedFormat = [CKCascadingTreeItemFormat normalizeFormat:trimmedKey];
                 
                 CKCascadingTreeItemFormat* format = [[[CKCascadingTreeItemFormat alloc]initFormatWithFormat:trimmedKey]autorelease];
                 NSString* deviceFormat = [format formatForObject:[UIDevice currentDevice] propertyName:@"@device" className:@"@device"];
                 
                 if([normalizedFormat isEqualToString:deviceFormat]){
-                    keepIt = YES;
+                    if(mostSpecificMatchingFormat == nil){
+                        mostSpecificMatchingFormat = format;
+                        mostSpecificMatchingKey = key;
+                    }else{
+                        if(format.properties.count > mostSpecificMatchingFormat.properties.count){
+                            [keysToRemove addObject:mostSpecificMatchingKey];
+                            
+                            mostSpecificMatchingFormat = format;
+                            mostSpecificMatchingKey = key;
+                        }else{
+                            [keysToRemove addObject:key];
+                        }
+                    }
                     break;
                 }
             }
         }
-        
-        if(!hasDeviceKey)
-            continue;
-        
-        if(keepIt){
-            NSMutableDictionary* versionDico = [NSMutableDictionary dictionaryWithDictionary:[self objectForKey:key]];
-            [versionDico makeAllAliasesForObjectWithKey:key];
-            [versionDico makeAllPlatformSpecific];
-            [self addEntriesFromDictionary:versionDico];
-        }
-        
+    }
+    
+    for(NSString* key in keysToRemove ){
         [self removeObjectForKey:key];
+    }
+    
+    if(mostSpecificMatchingKey){
+        NSMutableDictionary* versionDico = [NSMutableDictionary dictionaryWithDictionary:[self objectForKey:mostSpecificMatchingKey]];
+        [versionDico makeAllAliasesForObjectWithKey:mostSpecificMatchingKey];
+        [versionDico makeAllPlatformSpecific];
+        [self addEntriesFromDictionary:versionDico];
+        
+        [self removeObjectForKey:mostSpecificMatchingKey];
     }
 }
 
