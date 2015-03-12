@@ -138,6 +138,10 @@
 
 }
 
+- (void)keyboardDidShow:(NSNotification *)notification {
+    [self scrollToCell];
+}
+
 
 #pragma mark UITextField Delegate
 
@@ -164,14 +168,14 @@
         textField.returnKeyType = UIReturnKeyDone;
     }
     
-    //[self scrollToRow];
+    [self scrollToCell];
     
     [self didBecomeFirstResponder];
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    // [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [self didResignFirstResponder];
 }
 
@@ -237,16 +241,16 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    //  [self scrollToRow];
+    [self scrollToCell];
     
     [self didBecomeFirstResponder];
-    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView{
     [self didResignFirstResponder];
-    //  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     return YES;
 }
 
