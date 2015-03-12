@@ -141,6 +141,8 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
+    
+    self.placeholderLabel.frame = CGRectMake(_placeholderOffset.x, _placeholderOffset.y, self.bounds.size.width-(2*_placeholderOffset.x), self.font.lineHeight);
 }
 
 - (void)setText:(NSString *)text {
