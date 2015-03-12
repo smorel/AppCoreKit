@@ -1437,7 +1437,6 @@
 				7560DB2F13B8ED3600268D13 /* CKCallback.m */,
 				7560DC5413B8ED3600268D13 /* CKVersion.h */,
 				7560DC5513B8ED3600268D13 /* CKVersion.m */,
-				966B00C51538884200360C0F /* Object Extension */,
 				7506E3F713B8FCBD00EE1471 /* Runtime */,
 				7506E3EF13B8FA5800EE1471 /* Conversion */,
 				75A405EC13D8B66E00D932B0 /* CascadingTree */,
@@ -1446,7 +1445,7 @@
 				7506E3F313B8FBB100EE1471 /* Document */,
 				964C207D153DB66A00398E0F /* Localization */,
 				96EFE7D01797009D0034F935 /* ResourceManager */,
-				96CC499117CCD3740017A6E7 /* Helpers */,
+				96CC499117CCD3740017A6E7 /* Apple Extensions */,
 			);
 			name = Foundation;
 			sourceTree = "<group>";
@@ -2375,17 +2374,6 @@
 			name = Layout;
 			sourceTree = "<group>";
 		};
-		966B00C51538884200360C0F /* Object Extension */ = {
-			isa = PBXGroup;
-			children = (
-				967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */,
-				967C51801538BD4E00B3F785 /* NSObject+Singleton.m */,
-				96CADE361486BDFC008A23E4 /* NSObject+Validation.h */,
-				96CADE371486BDFD008A23E4 /* NSObject+Validation.m */,
-			);
-			name = "Object Extension";
-			sourceTree = "<group>";
-		};
 		966B51E61594ECCC00311735 /* Private */ = {
 			isa = PBXGroup;
 			children = (
@@ -2568,70 +2556,14 @@
 			name = "Dynamic Layouts";
 			sourceTree = "<group>";
 		};
-		96CC499117CCD3740017A6E7 /* Helpers */ = {
+		96CC499117CCD3740017A6E7 /* Apple Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB3E13B8ED3600268D13 /* UIView+AutoresizingMasks.h */,
-				96EBE431159A43AB00E0F209 /* UIView+Name.h */,
-				96EBE432159A43AB00E0F209 /* UIView+Name.m */,
-				7560DC5013B8ED3600268D13 /* CKUnit.h */,
-				7560DC5113B8ED3600268D13 /* CKUnit.m */,
-				7560DC2C13B8ED3600268D13 /* UIImage+Transformations.h */,
-				7560DC2D13B8ED3600268D13 /* UIImage+Transformations.m */,
-				7560DBA313B8ED3600268D13 /* NSArray+Additions.h */,
-				7560DBA413B8ED3600268D13 /* NSArray+Additions.m */,
-				7560DBA513B8ED3600268D13 /* NSData+Base64.h */,
-				7560DBA613B8ED3600268D13 /* NSData+Base64.m */,
-				7560DBA713B8ED3600268D13 /* NSData+Compression.h */,
-				7560DBA813B8ED3600268D13 /* NSData+Compression.m */,
-				7560DBA913B8ED3600268D13 /* NSData+Matching.h */,
-				7560DBAA13B8ED3600268D13 /* NSData+Matching.m */,
-				7560DBAB13B8ED3600268D13 /* NSData+SHA1.h */,
-				7560DBAC13B8ED3600268D13 /* NSData+SHA1.m */,
-				7560DBAE13B8ED3600268D13 /* NSDate+Calculations.h */,
-				7560DBAF13B8ED3600268D13 /* NSDate+Calculations.m */,
-				7560DBB013B8ED3600268D13 /* NSDate+Conversions.h */,
-				7560DBB113B8ED3600268D13 /* NSDate+Conversions.m */,
-				7560DBC313B8ED3600268D13 /* NSObject+Invocation.h */,
-				7560DBC413B8ED3600268D13 /* NSObject+Invocation.m */,
-				7560DBC513B8ED3600268D13 /* NSObject+JSON.h */,
-				7560DBC613B8ED3600268D13 /* NSObject+JSON.m */,
-				7560DBC713B8ED3600268D13 /* NSObject+Notifications.h */,
-				7560DBC813B8ED3600268D13 /* NSObject+Notifications.m */,
-				7560DBCB13B8ED3600268D13 /* NSSet+Additions.h */,
-				7560DBCC13B8ED3600268D13 /* NSSet+Additions.m */,
-				96AC0AA616022DBC00CC3C77 /* NSString+Formating.h */,
-				96AC0AA716022DBC00CC3C77 /* NSString+Formating.m */,
-				7560DBCD13B8ED3600268D13 /* NSString+Parsing.h */,
-				7560DBCE13B8ED3600268D13 /* NSString+Parsing.m */,
-				7560DBCF13B8ED3600268D13 /* NSString+URIQuery.h */,
-				7560DBD013B8ED3600268D13 /* NSString+URIQuery.m */,
-				7560DBD113B8ED3600268D13 /* NSString+Validations.h */,
-				7560DBD213B8ED3600268D13 /* NSString+Validations.m */,
-				7560DBD313B8ED3600268D13 /* NSString+Additions.h */,
-				7560DBD413B8ED3600268D13 /* NSString+Additions.m */,
-				7560DC2413B8ED3600268D13 /* UIColor+Additions.h */,
-				7560DC2513B8ED3600268D13 /* UIColor+Additions.m */,
-				75F2961013F196F9009CCC70 /* NSPredicate+Additions.h */,
-				75F2961113F196F9009CCC70 /* NSPredicate+Additions.m */,
-				7539FF90142CE94700688E2D /* NSError+Additions.h */,
-				7539FF91142CE94700688E2D /* NSError+Additions.m */,
-				7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */,
-				7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */,
-				96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */,
-				96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */,
-				961B3ACE17FDD04900F92D5F /* CKStringHelper.h */,
-				961B3ACF17FDD04900F92D5F /* CKStringHelper.m */,
-				96E6FA20182D1F8B001F1E6A /* UIImage+FastLoading.h */,
-				96E6FA21182D1F8B001F1E6A /* UIImage+FastLoading.m */,
-				96B4514318D08F8700D58489 /* NSArray+Compare.h */,
-				96B4514418D08F8700D58489 /* NSArray+Compare.m */,
-				96B4514718D08F9100D58489 /* UIColor+Components.h */,
-				96B4514818D08F9100D58489 /* UIColor+Components.m */,
-				96B4514B18D08F9900D58489 /* UIImage+ImageEffects.h */,
-				96B4514C18D08F9900D58489 /* UIImage+ImageEffects.m */,
+				D92C10D21AB0A03700DA4B12 /* Foundations */,
+				D92C10D31AB0A04500DA4B12 /* UIKit */,
+				D92C10D11AB0A01A00DA4B12 /* CoreGraphics */,
 			);
-			name = Helpers;
+			name = "Apple Extensions";
 			sourceTree = "<group>";
 		};
 		96E6FA28182D2990001F1E6A /* CoreAnimation */ = {
@@ -2658,6 +2590,186 @@
 				963AB795179881110076925C /* CKResourceDependencyContext.m */,
 			);
 			name = ResourceManager;
+			sourceTree = "<group>";
+		};
+		D92C10C51AB09EF800DA4B12 /* UIImage */ = {
+			isa = PBXGroup;
+			children = (
+				96B4514B18D08F9900D58489 /* UIImage+ImageEffects.h */,
+				96B4514C18D08F9900D58489 /* UIImage+ImageEffects.m */,
+				96E6FA20182D1F8B001F1E6A /* UIImage+FastLoading.h */,
+				96E6FA21182D1F8B001F1E6A /* UIImage+FastLoading.m */,
+				7560DC2C13B8ED3600268D13 /* UIImage+Transformations.h */,
+				7560DC2D13B8ED3600268D13 /* UIImage+Transformations.m */,
+			);
+			name = UIImage;
+			sourceTree = "<group>";
+		};
+		D92C10C61AB09EFF00DA4B12 /* NSDate */ = {
+			isa = PBXGroup;
+			children = (
+				7560DBAE13B8ED3600268D13 /* NSDate+Calculations.h */,
+				7560DBAF13B8ED3600268D13 /* NSDate+Calculations.m */,
+				7560DBB013B8ED3600268D13 /* NSDate+Conversions.h */,
+				7560DBB113B8ED3600268D13 /* NSDate+Conversions.m */,
+			);
+			name = NSDate;
+			sourceTree = "<group>";
+		};
+		D92C10C71AB09F0400DA4B12 /* NSString */ = {
+			isa = PBXGroup;
+			children = (
+				961B3ACE17FDD04900F92D5F /* CKStringHelper.h */,
+				961B3ACF17FDD04900F92D5F /* CKStringHelper.m */,
+				96AC0AA616022DBC00CC3C77 /* NSString+Formating.h */,
+				96AC0AA716022DBC00CC3C77 /* NSString+Formating.m */,
+				7560DBCD13B8ED3600268D13 /* NSString+Parsing.h */,
+				7560DBCE13B8ED3600268D13 /* NSString+Parsing.m */,
+				7560DBCF13B8ED3600268D13 /* NSString+URIQuery.h */,
+				7560DBD013B8ED3600268D13 /* NSString+URIQuery.m */,
+				7560DBD113B8ED3600268D13 /* NSString+Validations.h */,
+				7560DBD213B8ED3600268D13 /* NSString+Validations.m */,
+				7560DBD313B8ED3600268D13 /* NSString+Additions.h */,
+				7560DBD413B8ED3600268D13 /* NSString+Additions.m */,
+			);
+			name = NSString;
+			sourceTree = "<group>";
+		};
+		D92C10C81AB09F5000DA4B12 /* NSData */ = {
+			isa = PBXGroup;
+			children = (
+				7560DBA513B8ED3600268D13 /* NSData+Base64.h */,
+				7560DBA613B8ED3600268D13 /* NSData+Base64.m */,
+				7560DBA713B8ED3600268D13 /* NSData+Compression.h */,
+				7560DBA813B8ED3600268D13 /* NSData+Compression.m */,
+				7560DBA913B8ED3600268D13 /* NSData+Matching.h */,
+				7560DBAA13B8ED3600268D13 /* NSData+Matching.m */,
+				7560DBAB13B8ED3600268D13 /* NSData+SHA1.h */,
+				7560DBAC13B8ED3600268D13 /* NSData+SHA1.m */,
+			);
+			name = NSData;
+			sourceTree = "<group>";
+		};
+		D92C10C91AB09F7E00DA4B12 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB3E13B8ED3600268D13 /* UIView+AutoresizingMasks.h */,
+				96EBE431159A43AB00E0F209 /* UIView+Name.h */,
+				96EBE432159A43AB00E0F209 /* UIView+Name.m */,
+			);
+			name = UIView;
+			sourceTree = "<group>";
+		};
+		D92C10CA1AB09F9400DA4B12 /* UIColor */ = {
+			isa = PBXGroup;
+			children = (
+				96B4514718D08F9100D58489 /* UIColor+Components.h */,
+				96B4514818D08F9100D58489 /* UIColor+Components.m */,
+				7560DC2413B8ED3600268D13 /* UIColor+Additions.h */,
+				7560DC2513B8ED3600268D13 /* UIColor+Additions.m */,
+			);
+			name = UIColor;
+			sourceTree = "<group>";
+		};
+		D92C10CB1AB09FBD00DA4B12 /* NSArray */ = {
+			isa = PBXGroup;
+			children = (
+				7560DBA313B8ED3600268D13 /* NSArray+Additions.h */,
+				7560DBA413B8ED3600268D13 /* NSArray+Additions.m */,
+				96B4514318D08F8700D58489 /* NSArray+Compare.h */,
+				96B4514418D08F8700D58489 /* NSArray+Compare.m */,
+			);
+			name = NSArray;
+			sourceTree = "<group>";
+		};
+		D92C10CC1AB09FD400DA4B12 /* NSObject */ = {
+			isa = PBXGroup;
+			children = (
+				967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */,
+				967C51801538BD4E00B3F785 /* NSObject+Singleton.m */,
+				96CADE361486BDFC008A23E4 /* NSObject+Validation.h */,
+				96CADE371486BDFD008A23E4 /* NSObject+Validation.m */,
+				7560DBC313B8ED3600268D13 /* NSObject+Invocation.h */,
+				7560DBC413B8ED3600268D13 /* NSObject+Invocation.m */,
+				7560DBC513B8ED3600268D13 /* NSObject+JSON.h */,
+				7560DBC613B8ED3600268D13 /* NSObject+JSON.m */,
+				7560DBC713B8ED3600268D13 /* NSObject+Notifications.h */,
+				7560DBC813B8ED3600268D13 /* NSObject+Notifications.m */,
+			);
+			name = NSObject;
+			sourceTree = "<group>";
+		};
+		D92C10CD1AB09FE200DA4B12 /* NSError */ = {
+			isa = PBXGroup;
+			children = (
+				7539FF90142CE94700688E2D /* NSError+Additions.h */,
+				7539FF91142CE94700688E2D /* NSError+Additions.m */,
+			);
+			name = NSError;
+			sourceTree = "<group>";
+		};
+		D92C10CE1AB09FF600DA4B12 /* NSSet */ = {
+			isa = PBXGroup;
+			children = (
+				7560DBCB13B8ED3600268D13 /* NSSet+Additions.h */,
+				7560DBCC13B8ED3600268D13 /* NSSet+Additions.m */,
+			);
+			name = NSSet;
+			sourceTree = "<group>";
+		};
+		D92C10CF1AB0A00200DA4B12 /* NSPredicate */ = {
+			isa = PBXGroup;
+			children = (
+				75F2961013F196F9009CCC70 /* NSPredicate+Additions.h */,
+				75F2961113F196F9009CCC70 /* NSPredicate+Additions.m */,
+			);
+			name = NSPredicate;
+			sourceTree = "<group>";
+		};
+		D92C10D01AB0A00F00DA4B12 /* NSTimer */ = {
+			isa = PBXGroup;
+			children = (
+				96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */,
+				96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */,
+			);
+			name = NSTimer;
+			sourceTree = "<group>";
+		};
+		D92C10D11AB0A01A00DA4B12 /* CoreGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC5013B8ED3600268D13 /* CKUnit.h */,
+				7560DC5113B8ED3600268D13 /* CKUnit.m */,
+				7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */,
+				7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */,
+			);
+			name = CoreGraphics;
+			sourceTree = "<group>";
+		};
+		D92C10D21AB0A03700DA4B12 /* Foundations */ = {
+			isa = PBXGroup;
+			children = (
+				D92C10D01AB0A00F00DA4B12 /* NSTimer */,
+				D92C10CF1AB0A00200DA4B12 /* NSPredicate */,
+				D92C10CC1AB09FD400DA4B12 /* NSObject */,
+				D92C10CD1AB09FE200DA4B12 /* NSError */,
+				D92C10CB1AB09FBD00DA4B12 /* NSArray */,
+				D92C10CE1AB09FF600DA4B12 /* NSSet */,
+				D92C10C81AB09F5000DA4B12 /* NSData */,
+				D92C10C71AB09F0400DA4B12 /* NSString */,
+				D92C10C61AB09EFF00DA4B12 /* NSDate */,
+			);
+			name = Foundations;
+			sourceTree = "<group>";
+		};
+		D92C10D31AB0A04500DA4B12 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				D92C10CA1AB09F9400DA4B12 /* UIColor */,
+				D92C10C91AB09F7E00DA4B12 /* UIView */,
+				D92C10C51AB09EF800DA4B12 /* UIImage */,
+			);
+			name = UIKit;
 			sourceTree = "<group>";
 		};
 		D92C10531AA78B9F00DA4B12 /* Web */ = {

@@ -58,15 +58,7 @@
     self.inlineDebuggerEnabled = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKInlineDebuggerEnabled"]boolValue];
 #endif
     
-    NSMutableDictionary* dico = nil;
-    switch(self.type){
-        case CKConfigurationTypeDebug:   dico = [self dictionaryForKey:@"@debug"]; break;
-        case CKConfigurationTypeRelease: dico = [self dictionaryForKey:@"@release"]; break;
-    }
-    
-    if(dico){
-        [NSValueTransformer transform:dico toObject:self];
-    }
+    [NSValueTransformer transform:self.tree toObject:self];
     
     if([CKOSVersion() floatValue] >= 5){
         self.checkViewControllerCopyInBlocks = NO;

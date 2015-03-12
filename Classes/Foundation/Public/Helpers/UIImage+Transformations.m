@@ -7,10 +7,14 @@
 //
 
 #import "UIImage+Transformations.h"
+#import "UIColor+Additions.h"
+#import "UIColor+Components.h"
+
+void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius);
 
 static inline double radians(double degrees) { return degrees * M_PI/180; }
 
-static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
+void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     CGContextBeginPath(gc);
 	CGContextSaveGState(gc);
 	
@@ -324,6 +328,174 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
 
 }
 
+
++ (UIColor *)colorAtPoint:(CGPoint)pixelPoint data:(const UInt8*) data imageSize:(CGSize)imageSize{
+    if (pixelPoint.x >= imageSize.width ||
+       pixelPoint.y >= imageSize.height) {
+        return nil;
+    }
+    
+    
+    int numberOfColorComponents = 4; // R,G,B, and A
+    float x = pixelPoint.x;
+    float y = pixelPoint.y;
+    float w = imageSize.width;
+    int pixelInfo = ((w * y) + x) * numberOfColorComponents;
+    
+    UInt8 red = data[pixelInfo];
+    UInt8 green = data[(pixelInfo + 1)];
+    UInt8 blue = data[pixelInfo + 2];
+    UInt8 alpha = data[pixelInfo + 3];
+    
+    // RGBA values range from 0 to 255
+    return [UIColor colorWithRed:MAX(0,MIN(1,red/255.0))
+                           green:MAX(0,MIN(1,green/255.0))
+                            blue:MAX(0,MIN(1,blue/255.0))
+                           alpha:alpha/255.0];
+
+}
+
+
+- (BOOL)doesImageLine:(NSInteger)line matchesColor:(UIColor*)letterBoxingColor precision:(NSInteger)precision tolerance:(CGFloat)tolerance
+            imageData:(const UInt8*) imageData imageSize:(CGSize)imageSize{
+    CGFloat sumR = 0;
+    CGFloat sumG = 0;
+    CGFloat sumB = 0;
+    CGFloat n = 0;
+    
+    NSInteger increment = imageSize.width / ((precision == 0) ? 2 : precision);
+    
+    for(NSInteger x = 0; x < imageSize.width; x += increment){
+        UIColor* color = [UIImage colorAtPoint:CGPointMake(x,line) data:imageData imageSize:imageSize];
+        sumR += color.red;
+        sumG += color.green;
+        sumB += color.blue;
+        n += 1;
+    }
+    UIColor* color = [UIColor colorWithRed:sumR/n green:sumG/n blue:sumB/n alpha:1];
+    CGFloat d = [self RGBDistance:letterBoxingColor color:color];
+    if(d > tolerance){
+        return NO;
+    }
+    
+    return YES;
+}
+
+
+- (BOOL)doesImageColumn:(NSInteger)column matchesColor:(UIColor*)letterBoxingColor precision:(NSInteger)precision tolerance:(CGFloat)tolerance
+            imageData:(const UInt8*) imageData imageSize:(CGSize)imageSize{
+    CGFloat sumR = 0;
+    CGFloat sumG = 0;
+    CGFloat sumB = 0;
+    CGFloat n = 0;
+    
+    NSInteger increment = imageSize.height / ((precision == 0) ? 2 : precision);
+    
+    for(NSInteger y = 0; y < imageSize.height; y += increment){
+        UIColor* color = [UIImage colorAtPoint:CGPointMake(column,y) data:imageData imageSize:imageSize];
+        sumR += color.red;
+        sumG += color.green;
+        sumB += color.blue;
+        n += 1;
+    }
+    UIColor* color = [UIColor colorWithRed:sumR/n green:sumG/n blue:sumB/n alpha:1];
+    CGFloat d = [self RGBDistance:letterBoxingColor color:color];
+    if(d > tolerance){
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (UIImage*)imageByRemovingLetterBoxingWithColors:(NSArray*)potentialLetterBoxingColors precision:(NSInteger)precision tolerance:(CGFloat)tolerance{
+    CGSize realSize = CGSizeMake(self.size.width * self.scale, self.size.height * self.scale);
+    
+    CGRect finalRect = CGRectMake(0,0,realSize.width,realSize.height);
+    
+    CGDataProviderRef provider = CGImageGetDataProvider(self.CGImage);
+    CFDataRef pixelData = CGDataProviderCopyData(provider);
+    const UInt8* data = CFDataGetBytePtr(pixelData);
+    
+    UIColor* letterBoxingColor = [UIImage colorAtPoint:CGPointZero data:data imageSize:realSize];
+    
+    //todo compute color mean on line and compare with tolerance at the end
+    BOOL stop = YES;
+    if(potentialLetterBoxingColors.count > 0){
+        for(UIColor* p in potentialLetterBoxingColors){
+            CGFloat d = [self RGBDistance:letterBoxingColor color:p];
+            if(d < tolerance){
+                stop = NO;
+                break;
+            }
+        }
+    }else{
+        stop = NO;
+    }
+    
+    if(stop)
+        return self;
+    
+    NSInteger increment = realSize.width / ((precision == 0) ? 2 : precision);
+    
+    //Searching for top letter box
+    NSInteger top = 0;
+    NSInteger bottom = realSize.height;
+    NSInteger left = 0;
+    NSInteger right = realSize.width;
+    
+    //Searching for top letter box
+    stop = NO;
+    for(NSInteger y = 0; y < realSize.height /2 && !stop; y += 1){
+        BOOL match = [self doesImageLine:y matchesColor:letterBoxingColor precision:precision tolerance:tolerance imageData:data imageSize:realSize];
+        stop = !match;
+        if(!stop){ top = y; }
+    }
+    top += 1;
+    
+    //Searching for bottom letter box
+    stop = NO;
+    for(NSInteger y = realSize.height-1; y > realSize.height /2 && !stop; y -= 1){
+        BOOL match = [self doesImageLine:y matchesColor:letterBoxingColor precision:precision tolerance:tolerance imageData:data imageSize:realSize];
+        stop = !match;
+        if(!stop){ bottom = y; }
+    }
+    bottom -= 1;
+    
+    //Searching for left letter box
+    stop = NO;
+    for(NSInteger x = 0; x < realSize.width /2 && !stop; x += 1){
+        BOOL match = [self doesImageColumn:x matchesColor:letterBoxingColor precision:precision tolerance:tolerance imageData:data imageSize:realSize];
+        stop = !match;
+        if(!stop){ left = x; }
+    }
+    left += 1;
+    
+    //Searching for right letter box
+    stop = NO;
+    for(NSInteger x = realSize.width-1; x > realSize.width /2 && !stop; x -= 1){
+        BOOL match = [self doesImageColumn:x matchesColor:letterBoxingColor precision:precision tolerance:tolerance imageData:data imageSize:realSize];
+        stop = !match;
+        if(!stop){ right = x; }
+    }
+    right -= 1;
+    
+    finalRect = CGRectMake(left/ self.scale,top/ self.scale,(right - left) / self.scale,(bottom  - top) / self.scale);
+    
+    CFRelease(pixelData);
+    
+    return [self imageInRect:finalRect];
+}
+
+- (UIImage*)imageByRemovingLetterBoxing{
+    return [self imageByRemovingLetterBoxingWithColors:@[ [UIColor blackColor], [UIColor whiteColor]] precision:20 tolerance:0.2];
+}
+
+- (CGFloat)RGBDistance:(UIColor*)c1 color:(UIColor*)c2{
+    CGFloat rDiff = c1.red - c2.red;
+    CGFloat gDiff = c1.green - c2.green;
+    CGFloat bDiff = c1.blue - c2.blue;
+    return sqrt((rDiff*rDiff) + (gDiff*gDiff) + (bDiff * bDiff));
+}
 
 @end
 

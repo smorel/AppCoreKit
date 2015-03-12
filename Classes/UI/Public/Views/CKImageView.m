@@ -66,8 +66,9 @@
 	self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 	[self addSubview:self.imageView];
 	
-	self.fadeInDuration = 0;
+	self.fadeInDuration = 0.4;
 	self.interactive = NO;
+    self.animateLoadingOfImagesLoadedFromCache = NO;
 	_currentState = CKImageViewStateNone;
 	_spinnerStyle = CKImageViewSpinnerStyleNone;
 }
@@ -94,6 +95,8 @@
 	_activityIndicator = nil;
 	[_defaultImageView release];
 	_defaultImageView = nil;
+    [_postProcess release];
+    _postProcess = nil;
 	self.defaultImage = nil;
 	self.delegate = nil;
 	self.imageView = nil;
@@ -109,6 +112,10 @@
 		return;
 	
 	self.imageView.image = image;
+    if(image != nil){
+        [_defaultImage release];
+        _defaultImage = [image retain];
+    }
     if(self.button){
         [self.button setBackgroundImage:image forState:UIControlStateNormal];
     }
@@ -152,6 +159,7 @@
 	
 	if(self.imageURL){
 		self.imageLoader = [[[CKImageLoader alloc] initWithDelegate:self] autorelease];
+        self.imageLoader.postProcess = self.postProcess;
 		[self updateViews:YES];
 		[self.imageLoader loadImageWithContentOfURL:self.imageURL];
 	}
@@ -198,10 +206,27 @@
 	return self.imageView.contentMode;
 }
 
+- (void)imageViewContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"contentMode",
+                                                 UIViewContentModeScaleToFill,
+                                                 UIViewContentModeScaleAspectFit,
+                                                 UIViewContentModeScaleAspectFill,
+                                                 UIViewContentModeRedraw,
+                                                 UIViewContentModeCenter,        
+                                                 UIViewContentModeTop,
+                                                 UIViewContentModeBottom,
+                                                 UIViewContentModeLeft,
+                                                 UIViewContentModeRight,
+                                                 UIViewContentModeTopLeft,
+                                                 UIViewContentModeTopRight,
+                                                 UIViewContentModeBottomLeft,
+                                                 UIViewContentModeBottomRight);
+}
+
 #pragma mark CKWebRequestDelegate Protocol
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
-	[self setImage:image updateViews:YES animated:!cached];
+	[self setImage:image updateViews:YES animated:(self.animateLoadingOfImagesLoadedFromCache || !cached)];
 	[self.delegate imageView:self didLoadImage:image cached:NO];
 }
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
@@ -327,7 +352,11 @@
             }
             
             if (self.superview != nil) {
-                [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                [self createsDefaultImageView];
+                self.defaultImageView.alpha = 1;
+                self.imageView.alpha = 0;
+                self.button.alpha = 0;
+                [UIView animateWithDuration:self.fadeInDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
                     self.imageView.alpha = 1;
                     self.button.alpha = 1;
                     self.defaultImageView.alpha = 0;
