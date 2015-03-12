@@ -78,6 +78,9 @@
     });
 }
 
+- (UIViewController*)containerViewController{
+    return self.collectionViewController;
+}
 
 - (void)setCollectionCellController:(CKCollectionCellController *)c{
     self.collectionCellControllerWeakRef = [CKWeakRef weakRefWithObject:c];
