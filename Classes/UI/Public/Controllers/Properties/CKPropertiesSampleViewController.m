@@ -29,15 +29,20 @@
 - (void)setupForm{
     self.title = @"AppCoreKit - Properties Sample";
     
-    CKPropertyStringViewController* singleLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"singleLineString"]]autorelease];
+    NSMutableArray* cells =[NSMutableArray array];
     
-    CKPropertyStringViewController* multilineLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"multiLineString"]]autorelease];
-    multilineLineController.multiline = YES;
+    for(int i =0; i<10; ++i){
+        CKPropertyStringViewController* singleLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"singleLineString"]]autorelease];
+        
+        CKPropertyStringViewController* multilineLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"multiLineString"]]autorelease];
+        multilineLineController.multiline = YES;
+        
+        [cells addObjectsFromArray:@[
+                                     [singleLineController newTableViewCellController],
+                                     [multilineLineController newTableViewCellController]]];
+    }
     
-    CKFormSection* propertiesSection = [CKFormSection sectionWithCellControllers:@[
-        [singleLineController newTableViewCellController],
-        [multilineLineController newTableViewCellController]
-    ]];
+    CKFormSection* propertiesSection = [CKFormSection sectionWithCellControllers:cells];
     
     NSArray* sections = @[
         propertiesSection

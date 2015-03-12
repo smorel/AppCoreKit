@@ -29,6 +29,8 @@
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     self = [super initWithProperty:property readOnly:readOnly];
     
+    //set as non selectable
+    
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     self.multiline = attributes.multiLineEnabled;
     self.minimumLength = attributes.minimumLength;
@@ -46,7 +48,7 @@
     [super viewDidLoad];
     
     self.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    self.view.minimumHeight = 44;
+    //self.view.minimumHeight = 44;
     
     UILabel* PropertyNameLabel = [[UILabel alloc]init];
     PropertyNameLabel.name = @"PropertyNameLabel";
@@ -64,14 +66,15 @@
     CKTextView* ValueTextView = [[CKTextView alloc]init];
     ValueTextView.name = @"ValueTextView";
     ValueTextView.font = [UIFont systemFontOfSize:14];
+    ValueTextView.marginTop = 10;
     
     CKHorizontalBoxLayout* hBox = [[CKHorizontalBoxLayout alloc]init];
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,ValueTextField]];
-    hBox.marginBottom = 10;
     
     CKVerticalBoxLayout* vBox = [[CKVerticalBoxLayout alloc]init];
     vBox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox,ValueTextView]];
+    
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vBox]];
 }
@@ -139,7 +142,7 @@
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-    [self scrollToCell];
+    // [self scrollToCell];
 }
 
 
@@ -171,11 +174,11 @@
     [self scrollToCell];
     
     [self didBecomeFirstResponder];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [self didResignFirstResponder];
 }
 
@@ -244,13 +247,13 @@
     [self scrollToCell];
     
     [self didBecomeFirstResponder];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
 
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView{
     [self didResignFirstResponder];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     return YES;
 }
 
