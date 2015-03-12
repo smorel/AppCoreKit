@@ -196,9 +196,8 @@ namespace __gnu_cxx{
                     y += subsize.height;
                 }
             }
-            
-            maxHeight = y + lastBox.margins.bottom;
         }
+        maxHeight = y + lastBox.margins.bottom;
     }
     
     if(!self.flexibleSize){
