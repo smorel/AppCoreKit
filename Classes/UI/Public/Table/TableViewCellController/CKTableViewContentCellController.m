@@ -18,6 +18,7 @@
 #import "CKResourceManager.h"
 #import "CKResourceDependencyContext.h"
 #import "CKViewCellCache.h"
+#import "CKCollectionCellContentViewController+ResponderChain.h"
 
 
 @interface CKCollectionCellContentViewController ()
@@ -186,6 +187,25 @@
     
     [super didResignFirstResponder];
     [self.contentViewController didResignFirstResponder];
+}
+
+- (BOOL)hasResponder{
+    return [self.contentViewController hasResponder];
+}
+
+- (UIView*)nextResponder:(UIView*)view{
+    return [self.contentViewController nextResponder:view];
+}
+
+
+@end
+
+
+
+@implementation CKCollectionCellContentViewController(CKTableViewContentCellController)
+
+- (CKTableViewContentCellController*)newTableViewCellController{
+    return [[[CKTableViewContentCellController alloc]initWithContentViewController:self]autorelease];
 }
 
 @end

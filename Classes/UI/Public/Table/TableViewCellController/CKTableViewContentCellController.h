@@ -31,3 +31,12 @@
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size;
 
 @end
+
+
+
+
+@interface CKCollectionCellContentViewController(CKTableViewContentCellController)
+
+- (CKTableViewContentCellController*)newTableViewCellController;
+
+@end
