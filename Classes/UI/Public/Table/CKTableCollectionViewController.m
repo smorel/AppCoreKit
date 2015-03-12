@@ -745,6 +745,7 @@
         }else{
             size = [controller computeSize];
         }
+        
         [controller setSize:size notifyingContainerForUpdate:NO];
     }
     controller.sizeHasBeenQueriedByTableView = NO;
@@ -777,7 +778,8 @@
 	
 	//NSLog(@"Height for row : %d,%d =%f",indexPath.row,indexPath.section,height);
 	
-	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
+	CGFloat h = (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
+    return h;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1276,14 +1278,14 @@
         CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:self.tableViewContainer];
         CGFloat offset = self.tableViewContainer.frame.size.height - keyboardFrame.origin.y;
         
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:animationDuration];
-        [UIView setAnimationCurve:animationCurve];
+        //   [UIView beginAnimations:nil context:nil];
+        //   [UIView setAnimationDuration:animationDuration];
+        //  [UIView setAnimationCurve:animationCurve];
         self.keyboardInsets = offset;
         [self sizeToFit];
        // self.tableView.contentInset =  UIEdgeInsetsMake(self.tableView.contentInset.top,0,self.tableView.contentInset.bottom + offset, 0);
         //self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.tableView.scrollIndicatorInsets.top,0,self.tableView.scrollIndicatorInsets.bottom+offset, 0);
-        [UIView commitAnimations];
+        // [UIView commitAnimations];
     }
 }
 

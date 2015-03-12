@@ -248,7 +248,7 @@
     self.tableView.contentInset = newInsets;
 
 	CGFloat diff = self.tableView.contentInset.bottom - oldContentInset;
-	self.tableView.contentOffset = CGPointMake(p.x, p.y + diff);
+    //self.tableView.contentOffset = CGPointMake(p.x, p.y + diff);
     
     CGRect frame = self.view.bounds;
     CGFloat height = frame.size.height + (self.navigationController.toolbar.translucent ? 0 : insets.bottom);
