@@ -681,6 +681,8 @@
 		D96494291AA5F82C00C17BB7 /* Media.h in Headers */ = {isa = PBXBuildFile; fileRef = D96494281AA5F82600C17BB7 /* Media.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
+		D9E04C8D1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9E04C8E1AB1FF3200E6BECB /* CKPropertiesSampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9E04C8B1AB1FF3200E6BECB /* CKPropertiesSampleViewController.m */; };
 		EDD9E7E31436166D00E104D9 /* UIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* UIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* UIViewController+Introspection.m */; };
 /* End PBXBuildFile section */
@@ -1385,6 +1387,8 @@
 		D96494281AA5F82600C17BB7 /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Media.h; path = Classes/Media/Media.h; sourceTree = "<group>"; };
 		D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Introspection.h"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.h"; sourceTree = "<group>"; };
 		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
+		D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertiesSampleViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertiesSampleViewController.h; sourceTree = "<group>"; };
+		D9E04C8B1AB1FF3200E6BECB /* CKPropertiesSampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertiesSampleViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertiesSampleViewController.m; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* UIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* UIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UIViewController+Introspection.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1620,15 +1624,9 @@
 			children = (
 				75C6DF6313FECA9F00E4AE4F /* UI.h */,
 				7506E40413B8FF6700EE1471 /* Views */,
-				9638264D147FE53F00A9C98B /* Controllers */,
 				960CAED2157E50DB00F6C887 /* Gestures */,
-				7506E40513B8FF7A00EE1471 /* Collection View Controller */,
-				D94CA2F91AA64AF8009EA887 /* Collection Cell Content View Controller */,
-				7506E3FD13B8FDD300EE1471 /* Carousel */,
-				7506E40213B8FE6100EE1471 /* Tables */,
-				969AFE671561504700CFE27A /* Grid */,
-				7506E40613B8FFB400EE1471 /* Map */,
-				96B3BCD3182BED8600978B85 /* Collection */,
+				9638264D147FE53F00A9C98B /* Controllers */,
+				7506E40513B8FF7A00EE1471 /* Collection View Controllers */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1660,48 +1658,22 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9649969C18D0D8EB002E03F4 /* CKSnapshotController.h */,
-				9649969D18D0D8EB002E03F4 /* CKSnapshotController.m */,
-				96FDD48518C0D48600F230A5 /* UIView+Snapshot.h */,
-				96FDD48618C0D48600F230A5 /* UIView+Snapshot.m */,
-				7595696F144626530092F317 /* CKSegmentedControl.h */,
-				75956971144626670092F317 /* CKSegmentedControl.m */,
-				9622AAF91501395E00AEF369 /* UIView+DragNDrop.h */,
-				9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */,
-				969FA53B14966CD90095C61E /* UILabel+Highlight.h */,
-				969FA53C14966CD90095C61E /* UILabel+Highlight.m */,
-				7566AF8A14476A5C00748BB1 /* UIView+Positioning.h */,
-				7566AF8C14476A6800748BB1 /* UIView+Positioning.m */,
-				4F4F052D13C5F5410009DE31 /* CKActionSheet.h */,
-				4F4F052E13C5F5410009DE31 /* CKActionSheet.m */,
-				7560DB1F13B8ED3600268D13 /* CKAlertView.h */,
-				7560DB2013B8ED3600268D13 /* CKAlertView.m */,
-				7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */,
-				7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */,
-				7560DB6F13B8ED3600268D13 /* CKImageView.h */,
-				7560DB7013B8ED3600268D13 /* CKImageView.m */,
-				7560DC1A13B8ED3600268D13 /* CKTextView.h */,
-				7560DC1B13B8ED3600268D13 /* CKTextView.m */,
-				96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */,
-				96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */,
-				7560DC3213B8ED3600268D13 /* UIKeyboard+Information.h */,
-				7560DC3313B8ED3600268D13 /* UIKeyboard+Information.m */,
-				96D5D09717D0CD00001A4534 /* UIButton+FlatDesign.h */,
-				96D5D09817D0CD00001A4534 /* UIButton+FlatDesign.mm */,
-				96D5D09917D0CD00001A4534 /* UISlider+Style.h */,
-				96D5D09A17D0CD00001A4534 /* UISlider+Style.m */,
-				96B4514F18D0908100D58489 /* CKMapViewBlockDelegate.h */,
-				96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */,
-				96B4515318D0924100D58489 /* CKRangeSelectorView.h */,
-				96B4515418D0924100D58489 /* CKRangeSelectorView.m */,
-				961E782218D9D9040008EA33 /* UIView+Bounce.h */,
-				961E782318D9D9040008EA33 /* UIView+Bounce.m */,
+				D9E04C7C1AB1F94A00E6BECB /* CreditsView */,
+				D9E04C7B1AB1F94100E6BECB /* MapView */,
+				D9E04C7A1AB1F92B00E6BECB /* RangeSelectorView */,
+				D9E04C791AB1F91F00E6BECB /* TextView */,
+				D9E04C781AB1F91400E6BECB /* ImageView */,
+				D9E04C771AB1F90900E6BECB /* AlertView */,
+				D9E04C761AB1F8FC00E6BECB /* ActionSheet */,
+				D9E04C751AB1F8EC00E6BECB /* SnapshotController */,
+				D9E04C741AB1F8DA00E6BECB /* SegmentedControl */,
+				D9E04C6D1AB1F83400E6BECB /* Apple Extensions */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
 			name = Views;
 			sourceTree = "<group>";
 		};
-		7506E40513B8FF7A00EE1471 /* Collection View Controller */ = {
+		7506E40513B8FF7A00EE1471 /* Collection View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				7560DB7713B8ED3600268D13 /* CKCollectionViewController.h */,
@@ -1710,8 +1682,14 @@
 				7560DB7A13B8ED3600268D13 /* CKCollectionCellController.m */,
 				7560DBE213B8ED3600268D13 /* CKCollectionCellControllerFactory.h */,
 				7560DBE313B8ED3600268D13 /* CKCollectionCellControllerFactory.m */,
+				D94CA2F91AA64AF8009EA887 /* CellContentViewControllers */,
+				7506E3FD13B8FDD300EE1471 /* Carousel */,
+				7506E40213B8FE6100EE1471 /* Tables */,
+				969AFE671561504700CFE27A /* Grid */,
+				7506E40613B8FFB400EE1471 /* Map */,
+				96B3BCD3182BED8600978B85 /* Collection With Layout */,
 			);
-			name = "Collection View Controller";
+			name = "Collection View Controllers";
 			sourceTree = "<group>";
 		};
 		7506E40613B8FFB400EE1471 /* Map */ = {
@@ -1787,38 +1765,17 @@
 			isa = PBXGroup;
 			children = (
 				75C6DF6713FEE96C00E4AE4F /* Network.h */,
-				7560DB6B13B8ED3600268D13 /* CKImageLoader.h */,
-				7560DB6C13B8ED3600268D13 /* CKImageLoader.m */,
-				7560DB9D13B8ED3600268D13 /* CKNetworkActivityManager.h */,
-				7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */,
-				B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */,
-				B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */,
-				7560DB9913B8ED3600268D13 /* CKMultipartEncoder.h */,
-				7560DB9A13B8ED3600268D13 /* CKMultipartEncoder.m */,
-				7560DB9B13B8ED3600268D13 /* CKMultipartParser.h */,
-				7560DB9C13B8ED3600268D13 /* CKMultipartParser.m */,
-				7560DC5E13B8ED3600268D13 /* CKWebRequest.h */,
-				7560DC5F13B8ED3600268D13 /* CKWebRequest.m */,
-				B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */,
-				B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */,
-				B01481171566A8FD000C1E1C /* CKWebRequestManager.h */,
-				B01481181566A8FD000C1E1C /* CKWebRequestManager.m */,
-				B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */,
-				B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */,
-				7560DC6213B8ED3600268D13 /* CKWebService.h */,
-				7560DC6313B8ED3600268D13 /* CKWebService.m */,
-				7560DC6413B8ED3600268D13 /* CKWebSource.h */,
-				7560DC6513B8ED3600268D13 /* CKWebSource.m */,
-				7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */,
-				7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */,
-				7560DB7113B8ED3600268D13 /* CKInetEndPoint.h */,
-				7560DB7213B8ED3600268D13 /* CKInetEndPoint.m */,
-				7560DB6713B8ED3600268D13 /* CKHost.h */,
-				7560DB6813B8ED3600268D13 /* CKHost.m */,
-				9600B8EC1545D88F00F07C5A /* CKDownloadManager.h */,
-				9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */,
-				9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */,
-				9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */,
+				D9E04C7E1AB1FA1400E6BECB /* WebRequest */,
+				D9E04C821AB1FA5A00E6BECB /* Content-Type Converters */,
+				D9E04C851AB1FA9800E6BECB /* Upload */,
+				D9E04C841AB1FA8B00E6BECB /* Download */,
+				D9E04C811AB1FA4F00E6BECB /* MultiPart */,
+				D9E04C801AB1FA3F00E6BECB /* Network Activity Manager */,
+				D9E04C7F1AB1FA2C00E6BECB /* ImageLoader */,
+				D9E04C831AB1FA6F00E6BECB /* WebSource */,
+				D9E04C861AB1FAA200E6BECB /* Bonjour */,
+				D9E04C881AB1FAC900E6BECB /* WebService */,
+				D9E04C871AB1FABC00E6BECB /* IP */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -2291,7 +2248,7 @@
 				D92C10531AA78B9F00DA4B12 /* Web */,
 				D92C10551AA78BCB00DA4B12 /* Slideshow */,
 				D94CA3061AA75B21009EA887 /* Properties */,
-				D92C10541AA78BB800DA4B12 /* Helpers */,
+				D92C10541AA78BB800DA4B12 /* Apple Extensions */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -2447,14 +2404,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		96B3BCD3182BED8600978B85 /* Collection */ = {
+		96B3BCD3182BED8600978B85 /* Collection With Layout */ = {
 			isa = PBXGroup;
 			children = (
 				96B3BCFB182BEE0800978B85 /* Collection View Controller */,
 				96B3BCFA182BEDFB00978B85 /* Cell Controller */,
 				96B3BCF8182BED9D00978B85 /* Layouts */,
 			);
-			name = Collection;
+			name = "Collection With Layout";
 			sourceTree = "<group>";
 		};
 		96B3BCF8182BED9D00978B85 /* Layouts */ = {
@@ -2590,6 +2547,37 @@
 				963AB795179881110076925C /* CKResourceDependencyContext.m */,
 			);
 			name = ResourceManager;
+			sourceTree = "<group>";
+		};
+		D92C10531AA78B9F00DA4B12 /* Web */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC6613B8ED3600268D13 /* CKWebViewController.h */,
+				7560DC6713B8ED3600268D13 /* CKWebViewController.m */,
+				7560DC6813B8ED3600268D13 /* CKWebBrowserViewController.h */,
+				7560DC6913B8ED3600268D13 /* CKWebBrowserViewController.m */,
+			);
+			name = Web;
+			sourceTree = "<group>";
+		};
+		D92C10541AA78BB800DA4B12 /* Apple Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B0EA78A4156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.h */,
+				B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */,
+				96234817157D6A760036002C /* UIViewController+DeviceOrientation.h */,
+				96234818157D6A760036002C /* UIViewController+DeviceOrientation.mm */,
+			);
+			name = "Apple Extensions";
+			sourceTree = "<group>";
+		};
+		D92C10551AA78BCB00DA4B12 /* Slideshow */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */,
+				9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */,
+			);
+			name = Slideshow;
 			sourceTree = "<group>";
 		};
 		D92C10C51AB09EF800DA4B12 /* UIImage */ = {
@@ -2772,48 +2760,16 @@
 			name = UIKit;
 			sourceTree = "<group>";
 		};
-		D92C10531AA78B9F00DA4B12 /* Web */ = {
-			isa = PBXGroup;
-			children = (
-				7560DC6613B8ED3600268D13 /* CKWebViewController.h */,
-				7560DC6713B8ED3600268D13 /* CKWebViewController.m */,
-				7560DC6813B8ED3600268D13 /* CKWebBrowserViewController.h */,
-				7560DC6913B8ED3600268D13 /* CKWebBrowserViewController.m */,
-			);
-			name = Web;
-			sourceTree = "<group>";
-		};
-		D92C10541AA78BB800DA4B12 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				B0EA78A4156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.h */,
-				B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */,
-				96234817157D6A760036002C /* UIViewController+DeviceOrientation.h */,
-				96234818157D6A760036002C /* UIViewController+DeviceOrientation.mm */,
-			);
-			name = Helpers;
-			sourceTree = "<group>";
-		};
-		D92C10551AA78BCB00DA4B12 /* Slideshow */ = {
-			isa = PBXGroup;
-			children = (
-				9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */,
-				9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */,
-			);
-			name = Slideshow;
-			sourceTree = "<group>";
-		};
-		D94CA2F91AA64AF8009EA887 /* Collection Cell Content View Controller */ = {
+		D94CA2F91AA64AF8009EA887 /* CellContentViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				96B3BCD4182BED9800978B85 /* CKCollectionCellContentViewController.h */,
 				96B3BCD5182BED9800978B85 /* CKCollectionCellContentViewController.m */,
 				D9149CE41AA7682A00D129AB /* CKCollectionCellContentViewController+ResponderChain.h */,
 				D9149CE51AA7682A00D129AB /* CKCollectionCellContentViewController+ResponderChain.m */,
-				96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */,
-				96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */,
+				D9E04C7D1AB1F9C800E6BECB /* Swipable */,
 			);
-			name = "Collection Cell Content View Controller";
+			name = CellContentViewControllers;
 			sourceTree = "<group>";
 		};
 		D94CA3061AA75B21009EA887 /* Properties */ = {
@@ -2823,6 +2779,7 @@
 				D94CA30E1AA75C25009EA887 /* CKPropertyViewController.m */,
 				D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */,
 				D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */,
+				D9E04C891AB1FF0900E6BECB /* Sample */,
 			);
 			name = Properties;
 			sourceTree = "<group>";
@@ -2835,6 +2792,287 @@
 				D96494251AA5F80F00C17BB7 /* CKSound.m */,
 			);
 			name = Media;
+			sourceTree = "<group>";
+		};
+		D9E04C6D1AB1F83400E6BECB /* Apple Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D9E04C731AB1F89100E6BECB /* UIBarButtonItem */,
+				D9E04C721AB1F88300E6BECB /* UISlider */,
+				D9E04C711AB1F86F00E6BECB /* UIKeybord */,
+				D9E04C701AB1F85D00E6BECB /* UIButton */,
+				D9E04C6F1AB1F84A00E6BECB /* UILabel */,
+				D9E04C6E1AB1F83D00E6BECB /* UIView */,
+			);
+			name = "Apple Extensions";
+			sourceTree = "<group>";
+		};
+		D9E04C6E1AB1F83D00E6BECB /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				7566AF8A14476A5C00748BB1 /* UIView+Positioning.h */,
+				7566AF8C14476A6800748BB1 /* UIView+Positioning.m */,
+				96FDD48518C0D48600F230A5 /* UIView+Snapshot.h */,
+				96FDD48618C0D48600F230A5 /* UIView+Snapshot.m */,
+				9622AAF91501395E00AEF369 /* UIView+DragNDrop.h */,
+				9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */,
+				961E782218D9D9040008EA33 /* UIView+Bounce.h */,
+				961E782318D9D9040008EA33 /* UIView+Bounce.m */,
+			);
+			name = UIView;
+			sourceTree = "<group>";
+		};
+		D9E04C6F1AB1F84A00E6BECB /* UILabel */ = {
+			isa = PBXGroup;
+			children = (
+				969FA53B14966CD90095C61E /* UILabel+Highlight.h */,
+				969FA53C14966CD90095C61E /* UILabel+Highlight.m */,
+			);
+			name = UILabel;
+			sourceTree = "<group>";
+		};
+		D9E04C701AB1F85D00E6BECB /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				96D5D09717D0CD00001A4534 /* UIButton+FlatDesign.h */,
+				96D5D09817D0CD00001A4534 /* UIButton+FlatDesign.mm */,
+			);
+			name = UIButton;
+			sourceTree = "<group>";
+		};
+		D9E04C711AB1F86F00E6BECB /* UIKeybord */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC3213B8ED3600268D13 /* UIKeyboard+Information.h */,
+				7560DC3313B8ED3600268D13 /* UIKeyboard+Information.m */,
+			);
+			name = UIKeybord;
+			sourceTree = "<group>";
+		};
+		D9E04C721AB1F88300E6BECB /* UISlider */ = {
+			isa = PBXGroup;
+			children = (
+				96D5D09917D0CD00001A4534 /* UISlider+Style.h */,
+				96D5D09A17D0CD00001A4534 /* UISlider+Style.m */,
+			);
+			name = UISlider;
+			sourceTree = "<group>";
+		};
+		D9E04C731AB1F89100E6BECB /* UIBarButtonItem */ = {
+			isa = PBXGroup;
+			children = (
+				96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */,
+				96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */,
+			);
+			name = UIBarButtonItem;
+			sourceTree = "<group>";
+		};
+		D9E04C741AB1F8DA00E6BECB /* SegmentedControl */ = {
+			isa = PBXGroup;
+			children = (
+				7595696F144626530092F317 /* CKSegmentedControl.h */,
+				75956971144626670092F317 /* CKSegmentedControl.m */,
+			);
+			name = SegmentedControl;
+			sourceTree = "<group>";
+		};
+		D9E04C751AB1F8EC00E6BECB /* SnapshotController */ = {
+			isa = PBXGroup;
+			children = (
+				9649969C18D0D8EB002E03F4 /* CKSnapshotController.h */,
+				9649969D18D0D8EB002E03F4 /* CKSnapshotController.m */,
+			);
+			name = SnapshotController;
+			sourceTree = "<group>";
+		};
+		D9E04C761AB1F8FC00E6BECB /* ActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				4F4F052D13C5F5410009DE31 /* CKActionSheet.h */,
+				4F4F052E13C5F5410009DE31 /* CKActionSheet.m */,
+			);
+			name = ActionSheet;
+			sourceTree = "<group>";
+		};
+		D9E04C771AB1F90900E6BECB /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB1F13B8ED3600268D13 /* CKAlertView.h */,
+				7560DB2013B8ED3600268D13 /* CKAlertView.m */,
+			);
+			name = AlertView;
+			sourceTree = "<group>";
+		};
+		D9E04C781AB1F91400E6BECB /* ImageView */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB6F13B8ED3600268D13 /* CKImageView.h */,
+				7560DB7013B8ED3600268D13 /* CKImageView.m */,
+			);
+			name = ImageView;
+			sourceTree = "<group>";
+		};
+		D9E04C791AB1F91F00E6BECB /* TextView */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC1A13B8ED3600268D13 /* CKTextView.h */,
+				7560DC1B13B8ED3600268D13 /* CKTextView.m */,
+			);
+			name = TextView;
+			sourceTree = "<group>";
+		};
+		D9E04C7A1AB1F92B00E6BECB /* RangeSelectorView */ = {
+			isa = PBXGroup;
+			children = (
+				96B4515318D0924100D58489 /* CKRangeSelectorView.h */,
+				96B4515418D0924100D58489 /* CKRangeSelectorView.m */,
+			);
+			name = RangeSelectorView;
+			sourceTree = "<group>";
+		};
+		D9E04C7B1AB1F94100E6BECB /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				96B4514F18D0908100D58489 /* CKMapViewBlockDelegate.h */,
+				96B4515018D0908100D58489 /* CKMapViewBlockDelegate.m */,
+			);
+			name = MapView;
+			sourceTree = "<group>";
+		};
+		D9E04C7C1AB1F94A00E6BECB /* CreditsView */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */,
+				7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */,
+			);
+			name = CreditsView;
+			sourceTree = "<group>";
+		};
+		D9E04C7D1AB1F9C800E6BECB /* Swipable */ = {
+			isa = PBXGroup;
+			children = (
+				96B4516318D099F800D58489 /* CKSwipableCollectionCellContentViewController.h */,
+				96B4516418D099F800D58489 /* CKSwipableCollectionCellContentViewController.m */,
+			);
+			name = Swipable;
+			sourceTree = "<group>";
+		};
+		D9E04C7E1AB1FA1400E6BECB /* WebRequest */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC5E13B8ED3600268D13 /* CKWebRequest.h */,
+				7560DC5F13B8ED3600268D13 /* CKWebRequest.m */,
+				B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */,
+				B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */,
+				B01481171566A8FD000C1E1C /* CKWebRequestManager.h */,
+				B01481181566A8FD000C1E1C /* CKWebRequestManager.m */,
+				9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */,
+				9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */,
+			);
+			name = WebRequest;
+			sourceTree = "<group>";
+		};
+		D9E04C7F1AB1FA2C00E6BECB /* ImageLoader */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB6B13B8ED3600268D13 /* CKImageLoader.h */,
+				7560DB6C13B8ED3600268D13 /* CKImageLoader.m */,
+			);
+			name = ImageLoader;
+			sourceTree = "<group>";
+		};
+		D9E04C801AB1FA3F00E6BECB /* Network Activity Manager */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB9D13B8ED3600268D13 /* CKNetworkActivityManager.h */,
+				7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */,
+			);
+			name = "Network Activity Manager";
+			sourceTree = "<group>";
+		};
+		D9E04C811AB1FA4F00E6BECB /* MultiPart */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB9913B8ED3600268D13 /* CKMultipartEncoder.h */,
+				7560DB9A13B8ED3600268D13 /* CKMultipartEncoder.m */,
+				7560DB9B13B8ED3600268D13 /* CKMultipartParser.h */,
+				7560DB9C13B8ED3600268D13 /* CKMultipartParser.m */,
+			);
+			name = MultiPart;
+			sourceTree = "<group>";
+		};
+		D9E04C821AB1FA5A00E6BECB /* Content-Type Converters */ = {
+			isa = PBXGroup;
+			children = (
+				B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */,
+				B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */,
+			);
+			name = "Content-Type Converters";
+			sourceTree = "<group>";
+		};
+		D9E04C831AB1FA6F00E6BECB /* WebSource */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC6413B8ED3600268D13 /* CKWebSource.h */,
+				7560DC6513B8ED3600268D13 /* CKWebSource.m */,
+			);
+			name = WebSource;
+			sourceTree = "<group>";
+		};
+		D9E04C841AB1FA8B00E6BECB /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8EC1545D88F00F07C5A /* CKDownloadManager.h */,
+				9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */,
+			);
+			name = Download;
+			sourceTree = "<group>";
+		};
+		D9E04C851AB1FA9800E6BECB /* Upload */ = {
+			isa = PBXGroup;
+			children = (
+				B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */,
+				B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */,
+			);
+			name = Upload;
+			sourceTree = "<group>";
+		};
+		D9E04C861AB1FAA200E6BECB /* Bonjour */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */,
+				7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */,
+			);
+			name = Bonjour;
+			sourceTree = "<group>";
+		};
+		D9E04C871AB1FABC00E6BECB /* IP */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB7113B8ED3600268D13 /* CKInetEndPoint.h */,
+				7560DB7213B8ED3600268D13 /* CKInetEndPoint.m */,
+				7560DB6713B8ED3600268D13 /* CKHost.h */,
+				7560DB6813B8ED3600268D13 /* CKHost.m */,
+			);
+			name = IP;
+			sourceTree = "<group>";
+		};
+		D9E04C881AB1FAC900E6BECB /* WebService */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC6213B8ED3600268D13 /* CKWebService.h */,
+				7560DC6313B8ED3600268D13 /* CKWebService.m */,
+			);
+			name = WebService;
+			sourceTree = "<group>";
+		};
+		D9E04C891AB1FF0900E6BECB /* Sample */ = {
+			isa = PBXGroup;
+			children = (
+				D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */,
+				D9E04C8B1AB1FF3200E6BECB /* CKPropertiesSampleViewController.m */,
+			);
+			name = Sample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3131,6 +3369,7 @@
 				96F9F36C173182D900AF4276 /* UIActivityIndicatorView+Introspection.h in Headers */,
 				96B9D29C177B228300455BE8 /* CKLayoutBox.h in Headers */,
 				96B9D2A0177B22EA00455BE8 /* UIView+CKLayout.h in Headers */,
+				D9E04C8D1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h in Headers */,
 				96B9D2A4177B234000455BE8 /* CKVerticalBoxLayout.h in Headers */,
 				96B9D2A8177B234E00455BE8 /* CKHorizontalBoxLayout.h in Headers */,
 				96B9D2AC177B235F00455BE8 /* CKLayoutFlexibleSpace.h in Headers */,
@@ -3535,6 +3774,7 @@
 				96E4D3EF15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.m in Sources */,
 				96E4D3F415406F5500CCF421 /* CKNSStringPropertyCellController+DynamicLayout.m in Sources */,
 				96E4D3F815406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m in Sources */,
+				D9E04C8E1AB1FF3200E6BECB /* CKPropertiesSampleViewController.m in Sources */,
 				96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m in Sources */,
 				9600B8C21545C41400F07C5A /* CKTypeAhead.mm in Sources */,
 				9600B8C41545C41400F07C5A /* CKTypeAhead+Generator.mm in Sources */,
