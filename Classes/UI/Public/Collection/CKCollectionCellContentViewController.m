@@ -172,7 +172,7 @@
         if(bself.view.window == nil || bself.isComputingSize)
             return;
         
-        [bself.collectionViewController updateSizeForControllerAtIndexPath:bself.indexPath];
+        [bself.collectionCellController invalidateSize];
     };
 }
 
