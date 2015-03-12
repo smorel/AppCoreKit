@@ -91,12 +91,12 @@
 
 
 + (void)activateAfterDelay:(CKCollectionCellContentViewController*)controller indexPath:(NSIndexPath*)indexPath{
-    if([controller.collectionCellController isKindOfClass:[CKTableCollectionViewController class]]){
-        CKTableCollectionViewController* tableViewController = (CKTableCollectionViewController*)controller.collectionCellController;
+    if([controller.collectionViewController isKindOfClass:[CKTableCollectionViewController class]]){
+        CKTableCollectionViewController* tableViewController = (CKTableCollectionViewController*)controller.collectionViewController;
         
         CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
-        if(controller != nil){
-            [controller becomeFirstResponder];
+        if(controllerNew != nil){
+            [controllerNew becomeFirstResponder];
         }
     }
 }
@@ -150,9 +150,11 @@
 
 - (void)addResponder:(UIView*)view toChain:(NSMutableArray*)chain{
     if([view isKindOfClass:[UIResponder class]]){
-        UIResponder* responder = (UIResponder*)view;
-        if([responder canBecomeFirstResponder]){
-            [chain addObject:view];
+        if(view.hidden == NO && view.userInteractionEnabled == YES){
+            UIResponder* responder = (UIResponder*)view;
+            if([responder canBecomeFirstResponder]){
+                [chain addObject:view];
+            }
         }
     }
     

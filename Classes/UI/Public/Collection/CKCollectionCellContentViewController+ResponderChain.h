@@ -36,6 +36,10 @@
 
 /**
  */
+- (UIView*)nextResponder:(UIView*)view;
+
+/**
+ */
 - (void)becomeFirstResponder;
 
 /**
