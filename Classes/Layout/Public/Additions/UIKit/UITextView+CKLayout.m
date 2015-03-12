@@ -115,7 +115,7 @@ static char UITextViewUsesAttributedStringKey;
         ret.width = size.width;
     
     //If contentSize not initalized correctly, compute the size using the text and the font instead. (first initialization !)
-    if(self.contentSize.width < size.width){
+    if(self.contentSize.width <= size.width){
         ret.height =  MAX(ret.height+16,self.font.lineHeight + 16);
     }else{
         ret.height = MAX(self.contentSize.height,self.font.lineHeight + 16);
