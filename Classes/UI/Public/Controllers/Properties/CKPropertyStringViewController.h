@@ -17,7 +17,7 @@
  
  - default view padding is 10 10 10 10, minimumHeight 44, flexibleSize is NO so that it fits the height of the content
  - default marginRight on *PropertyNameLabel*: 10
- - *ValueTextField* is flexible, minimumWidth 100, system font 14, back color
+ - *ValueTextField* is flexible, minimumWidth 100, system font 14, back color, textAlignmentRight
  - default appearance for PropertyNameLabel is bold system font of size 17, black color, numberOfLines 1
  
  
@@ -123,5 +123,12 @@
  Default value is NO. When initializing the controller with the property, textInputFormatter will be set accordingly to the textInputFormatterBlock set in the properties extended attributes.
  */
 @property (nonatomic,copy) BOOL(^textInputFormatter)(id textInputView,NSRange range, NSString* replacementString);
+
+
+/** This block will get called when the user hits the done button in the keyboard.
+ If no block is set, the keyboard will get resigned automatically.
+ If a block is set, this is your responsability to resign the keyboard as follow : [cellController resignFirstResponder];
+ */
+@property (nonatomic,copy) void(^returnKeyHasBeenTapped)(CKPropertyStringViewController* cellController);
 
 @end
