@@ -174,5 +174,9 @@ static char UITextViewUsesAttributedStringKey;
     CKSwizzleSelector([UITextView class], @selector(dealloc),  @selector(UITextView_Layout_dealloc));
 }
 
+- (void)setMarginTop:(CGFloat)marginTop{
+    [super setMarginTop:marginTop];
+}
+
 @end
 

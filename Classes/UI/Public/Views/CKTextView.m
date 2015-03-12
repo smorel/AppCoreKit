@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 #import "CKStringHelper.h"
+#import "UITextView+CKLayout.h"
 
 @interface CKTextView ()
 
@@ -159,6 +160,11 @@
 - (void)setBackgroundColor:(UIColor *)backgroundColor{
     [super setBackgroundColor:backgroundColor];
     self.placeholderLabel.backgroundColor = backgroundColor;
+}
+
+
+- (void)setMarginTop:(CGFloat)marginTop{
+    [super setMarginTop:marginTop];
 }
 
 //

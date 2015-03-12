@@ -65,6 +65,8 @@ static char UITextFieldUsesAttributedStringKey;
         ret.height = self.font.lineHeight;
     }
     
+    ret.height += 16;
+    
     //Adds padding 8
     
     CGFloat width = MAX(size.width,ret.width) + self.padding.left + self.padding.right;
