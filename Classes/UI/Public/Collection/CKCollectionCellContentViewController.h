@@ -100,6 +100,10 @@
 
 /**
  */
+- (void)scrollToCell;
+
+/**
+ */
 - (UINavigationController*)navigationController;
 
 @end

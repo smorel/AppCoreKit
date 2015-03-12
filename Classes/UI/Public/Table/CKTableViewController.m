@@ -626,4 +626,10 @@
     return view;
 }
 
+
+- (void)scrollToCellAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
+    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionMiddle animated:animated];
+}
+
+
 @end

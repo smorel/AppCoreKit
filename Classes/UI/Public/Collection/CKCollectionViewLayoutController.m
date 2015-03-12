@@ -493,6 +493,10 @@
 }
 
 
+- (void)scrollToCellAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
+    [self.collectionView scrollToItemAtIndexPath:indexpath atScrollPosition:UICollectionViewScrollPositionCenteredVertically|UICollectionViewScrollPositionCenteredHorizontally animated:animated];
+}
+
 #pragma mark CKCollectionViewMorphableLayoutDelegate
 
 - (void)morphableLayout:(CKCollectionViewMorphableLayout*)morphableLayout willMorphFormRatio:(CGFloat)ratio toRatio:(CGFloat)toRatio{

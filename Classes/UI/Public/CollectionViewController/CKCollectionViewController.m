@@ -696,6 +696,11 @@
     return nil;
 }
 
+- (void)scrollToCellAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
+    
+}
+
+
 @end
 
 

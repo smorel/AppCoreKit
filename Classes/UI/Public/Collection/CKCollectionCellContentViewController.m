@@ -210,4 +210,8 @@
     return self.collectionViewController.navigationController;
 }
 
+- (void)scrollToCell{
+    [self.collectionViewController scrollToCellAtIndexPath:self.indexPath animated:YES];
+}
+
 @end
