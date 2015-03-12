@@ -44,6 +44,10 @@
     return self;
 }
 
+- (void)postInit{
+    self.collectionCellController.flags = CKItemViewFlagNone;
+}
+
 - (void)viewDidLoad{
     [super viewDidLoad];
     
