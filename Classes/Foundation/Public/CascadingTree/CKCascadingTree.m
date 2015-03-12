@@ -223,6 +223,8 @@ NSString* const CKCascadingTreeInherits  = @"@inherits";
 NSString* const CKCascadingTreeImport    = @"@import";
 
 
+NSString* const CKCascadingTreeDebug = @"@debug";
+NSString* const CKCascadingTreeRelease = @"@release";
 NSString* const CKCascadingTreeDevice = @"@device";
 NSString* const CKCascadingTreeOSVersion  = @"@ios";
 
@@ -664,6 +666,47 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
     }
 }
 
+- (void)makeAllBuildConfigurationSpecific{
+     NSArray* keys = [self allKeys];
+    CKConfiguration* config = [CKConfiguration sharedInstance];
+    
+    for(NSString* key in keys){
+        id object = [self objectForKey:key];
+        if(![object isKindOfClass:[NSDictionary class]])
+            continue;
+        
+        NSMutableDictionary* configDico = [NSMutableDictionary dictionaryWithDictionary:object];
+        
+        NSArray* components = [key componentsSeparatedByString:@","];
+        for(NSString* component in components){
+            NSString* trimmedKey = [component stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+            if([trimmedKey hasPrefix:CKCascadingTreeDebug]){
+                if(config.type == CKConfigurationTypeDebug){
+                    [configDico makeAllBuildConfigurationSpecific];
+                    [self addEntriesFromDictionary:configDico];
+                    [self removeObjectForKey:key];
+                    break;
+                }else{
+                    [self removeObjectForKey:key];
+                    break;
+                }
+            }
+            if([trimmedKey hasPrefix:CKCascadingTreeRelease]){
+                if(config.type == CKConfigurationTypeRelease){
+                    [configDico makeAllBuildConfigurationSpecific];
+                    [self addEntriesFromDictionary:configDico];
+                    [self removeObjectForKey:key];
+                }else{
+                    [self removeObjectForKey:key];
+                    break;
+                }
+            }
+        }
+    }
+
+}
+
 
 - (void)makeAllPlatformSpecific{
     NSArray* keys = [self allKeys];
@@ -780,6 +823,7 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
 
 - (void)initAfterLoadingForObjectWithKey:(NSString*)objectKey{
     [self makeAllAliasesForObjectWithKey:objectKey];
+    [self makeAllBuildConfigurationSpecific];
     [self makeAllPlatformSpecific];
     [self makeAllOSVersionSpecific];
     
