@@ -8,6 +8,9 @@
 
 #import "CKPropertiesSampleViewController.h"
 #import "CKPropertyStringViewController.h"
+#import "CKPropertyNumberViewController.h"
+#import "CKPropertyBoolViewController.h"
+
 #import "CKTableViewContentCellController.h"
 
 @interface CKPropertiesSampleViewController ()
@@ -16,6 +19,7 @@
 @property(nonatomic,assign) NSInteger intValue;
 @property(nonatomic,assign) CGFloat floatValue;
 @property(nonatomic,retain) NSNumber* numberValue;
+@property(nonatomic,assign) BOOL boolValue;
 @end
 
 @implementation CKPropertiesSampleViewController
@@ -37,15 +41,13 @@
     NSMutableArray* cells =[NSMutableArray array];
     
     CKPropertyStringViewController* singleLineController = [[[CKPropertyStringViewController alloc]initWithProperty:_p(@"singleLineString")]autorelease];
-    
     CKPropertyStringViewController* multilineLineController = [[[CKPropertyStringViewController alloc]initWithProperty:_p(@"multiLineString")]autorelease];
     multilineLineController.multiline = YES;
     
     CKPropertyNumberViewController* intValueController = [[[CKPropertyNumberViewController alloc]initWithProperty:_p(@"intValue")]autorelease];
-    
     CKPropertyNumberViewController* floatValueController = [[[CKPropertyNumberViewController alloc]initWithProperty:_p(@"floatValue")]autorelease];
-    
     CKPropertyNumberViewController* numberValueController = [[[CKPropertyNumberViewController alloc]initWithProperty:_p(@"numberValue")]autorelease];
+    CKPropertyBoolViewController* boolValueController = [[[CKPropertyBoolViewController alloc]initWithProperty:_p(@"boolValue")]autorelease];
     
     
     [cells addObjectsFromArray:@[
@@ -53,7 +55,8 @@
                                  [multilineLineController newTableViewCellController],
                                  [intValueController newTableViewCellController],
                                  [floatValueController newTableViewCellController],
-                                 [numberValueController newTableViewCellController]
+                                 [numberValueController newTableViewCellController],
+                                 [boolValueController newTableViewCellController]
                                  ]
      ];
     

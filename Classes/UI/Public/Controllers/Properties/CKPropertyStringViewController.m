@@ -10,6 +10,7 @@
 #import "CKTextView.h"
 #import "CKLocalization.h"
 #import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "CKPropertyNumberViewController.h"
 
 @interface CKPropertyStringViewController ()<UITextFieldDelegate,UITextViewDelegate>
 
@@ -36,7 +37,7 @@
     self.textInputFormatter = attributes.textInputFormatterBlock;
     self.propertyNameLabel = _(property.name);
     
-    if([self isNumber]){
+    if([self.property isNumber]){
         if(attributes.placeholderValue){
             self.valuePlaceholderLabel = [NSValueTransformer transform:attributes.placeholderValue toClass:[NSString class]];
         }
@@ -52,7 +53,7 @@
 
 - (NSString*)reuseIdentifier{
     NSString* parent = [super reuseIdentifier];
-    return [NSString stringWithFormat:@"%@_%d",parent,[self isNumber]];
+    return [NSString stringWithFormat:@"%@_%d",parent,[self.property isNumber]];
 }
 
 - (void)postInit{
@@ -83,7 +84,7 @@
     ValueTextView.font = [UIFont systemFontOfSize:14];
     ValueTextView.marginTop = 10;
     
-    if([self isNumber]){
+    if([self.property isNumber]){
         ValueTextField.keyboardType = ValueTextView.keyboardType = UIKeyboardTypeDecimalPad;
         ValueTextField.autocorrectionType =  ValueTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     }
@@ -112,28 +113,6 @@
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.view clearBindingsContext];
-}
-
-
-- (BOOL)isNumber{
-    CKClassPropertyDescriptor* descriptor = [[self property] descriptor];
-    switch(descriptor.propertyType){
-        case CKClassPropertyDescriptorTypeChar:
-        case CKClassPropertyDescriptorTypeCppBool:
-        case CKClassPropertyDescriptorTypeInt:
-        case CKClassPropertyDescriptorTypeShort:
-        case CKClassPropertyDescriptorTypeLong:
-        case CKClassPropertyDescriptorTypeLongLong:
-        case CKClassPropertyDescriptorTypeUnsignedChar:
-        case CKClassPropertyDescriptorTypeUnsignedInt:
-        case CKClassPropertyDescriptorTypeUnsignedShort:
-        case CKClassPropertyDescriptorTypeUnsignedLong:
-        case CKClassPropertyDescriptorTypeUnsignedLongLong:
-        case CKClassPropertyDescriptorTypeFloat:
-        case CKClassPropertyDescriptorTypeDouble:
-            return YES;
-    }
-    return [NSObject isClass:descriptor.type exactKindOfClass:[NSNumber class]];
 }
 
 #pragma mark Setup MVC and bindings
@@ -176,8 +155,8 @@
 }
 
 - (void)updatePropertyWithValue:(id)value{
-    id result = [NSValueTransformer transform:value toClass:[self isNumber] ? [NSNumber class] : self.property.type];
-    [self.property setValue:([self isNumber] && !result) ? @(0) : result];
+    id result = [NSValueTransformer transform:value toClass:[self.property isNumber] ? [NSNumber class] : self.property.type];
+    [self.property setValue:([self.property isNumber] && !result) ? @(0) : result];
 }
 
 - (BOOL)textInputView:(UIView *)view shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)string{
@@ -207,7 +186,7 @@
         }
         
         
-        if([self isNumber]){
+        if([self.property isNumber]){
             NSMutableCharacterSet *numberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
             
             CKClassPropertyDescriptor* descriptor = [[self property] descriptor];
@@ -331,26 +310,6 @@
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_maximumLength"];
     if(value) return [value integerValue];
     return -1;
-}
-
-@end
-
-
-@implementation CKPropertyNumberViewController
-
-@end
-
-
-
-@implementation CKPropertyExtendedAttributes (CKPropertyNumberViewController)
-
-- (void)setPlaceholderValue:(NSNumber*)placeholderValue{
-    [self.attributes setObject:placeholderValue forKey:@"CKPropertyExtendedAttributes_CKPropertyNumberViewController_placeholderValue"];
-}
-
-- (NSNumber*)placeholderValue{
-    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKPropertyNumberViewController_placeholderValue"];
-    return value;
 }
 
 @end

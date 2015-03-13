@@ -16,7 +16,7 @@
 #import "UIView+Positioning.h"
 
 //Until we get rid of this class for CKPropertyStringViewController
-#import "CKPropertyStringViewController.h"
+#import "CKPropertyNumberViewController.h"
 
 @interface CKNSNumberPropertyCellController()
 @property (nonatomic,retain,readwrite) UITextField* textField;

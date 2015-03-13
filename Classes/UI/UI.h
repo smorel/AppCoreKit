@@ -112,6 +112,8 @@
 #import "CKCollectionCellContentViewController+ResponderChain.h"
 #import "CKPropertyViewController.h"
 #import "CKPropertyStringViewController.h"
+#import "CKPropertyNumberViewController.h"
+#import "CKPropertyBoolViewController.h"
 #import "CKPropertiesSampleViewController.h"
 
 

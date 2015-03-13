@@ -89,6 +89,14 @@
  */
 - (BOOL)isReadOnly;
 
+/**
+ */
+- (BOOL)isNumber;
+
+/**
+ */
+- (BOOL)isBool;
+
 ///-----------------------------------
 /// @name Accessing property extended attributes 
 ///-----------------------------------

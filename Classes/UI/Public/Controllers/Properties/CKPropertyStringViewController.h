@@ -15,7 +15,7 @@
  
  If multiline is not enabled:
  
- - default view padding is 10 10 10 10, minimumHeight 44, flexibleSize is NO so that it fits the height of the content
+ - default view padding is 10 10 10 10, flexibleSize is NO so that it fits the height of the content
  - default marginRight on *PropertyNameLabel*: 10
  - *ValueTextField* is flexible, minimumWidth 100, system font 14, back color, textAlignmentRight,clearButton mode is UITextFieldViewModeWhileEditing, keyboard type is UIKeyboardTypeDecimalPad and autocorrectionType is No if property is native type or NSNumber
  - default appearance for PropertyNameLabel is bold system font of size 17, black color, numberOfLines 1
@@ -96,7 +96,7 @@
  */
 @interface CKPropertyStringViewController : CKPropertyViewController
 
-/** Default value is a localized string as follow: _(@"propertyName")that can be customized by setting a key/value in your localization file as follow:
+/** Default value is a localized string as follow: _(@"propertyName") that can be customized by setting a key/value in your localization file as follow:
  "propertyName" = "My Title";
  Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
  */
@@ -166,19 +166,3 @@
 @end
 
 
-/**
- */
-@interface CKPropertyNumberViewController : CKPropertyStringViewController
-
-@end
-
-
-/** Property extended attributes that operates with CKPropertyNumberViewController
- */
-@interface CKPropertyExtendedAttributes (CKPropertyNumberViewController)
-
-/**
- */
-@property (nonatomic, retain) NSNumber* placeholderValue;
-
-@end

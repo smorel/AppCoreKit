@@ -333,4 +333,35 @@
     return [self.hashValue hash];
 }
 
+
+- (BOOL)isNumber{
+    switch(self.descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeChar:
+        case CKClassPropertyDescriptorTypeCppBool:
+        case CKClassPropertyDescriptorTypeInt:
+        case CKClassPropertyDescriptorTypeShort:
+        case CKClassPropertyDescriptorTypeLong:
+        case CKClassPropertyDescriptorTypeLongLong:
+        case CKClassPropertyDescriptorTypeUnsignedChar:
+        case CKClassPropertyDescriptorTypeUnsignedInt:
+        case CKClassPropertyDescriptorTypeUnsignedShort:
+        case CKClassPropertyDescriptorTypeUnsignedLong:
+        case CKClassPropertyDescriptorTypeUnsignedLongLong:
+        case CKClassPropertyDescriptorTypeFloat:
+        case CKClassPropertyDescriptorTypeDouble:
+            return YES;
+    }
+    return [NSObject isClass:self.descriptor.type exactKindOfClass:[NSNumber class]];
+}
+
+
+- (BOOL)isBool{
+    switch(self.descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeChar:
+        case CKClassPropertyDescriptorTypeCppBool:
+            return YES;
+    }
+    return NO;
+}
+
 @end
