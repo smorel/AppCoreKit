@@ -36,10 +36,23 @@
     self.textInputFormatter = attributes.textInputFormatterBlock;
     self.propertyNameLabel = _(property.name);
     
-    NSString* placeholderKey = [NSString stringWithFormat:@"%@_placeholder",property.name];
-    self.valuePlaceholderLabel = _(placeholderKey);
+    if([self isNumber]){
+        if(attributes.placeholderValue){
+            self.valuePlaceholderLabel = [NSValueTransformer transform:attributes.placeholderValue toClass:[NSString class]];
+        }
+    }
+    
+    if(self.valuePlaceholderLabel == nil){
+        NSString* placeholderKey = [NSString stringWithFormat:@"%@_placeholder",property.name];
+        self.valuePlaceholderLabel = _(placeholderKey);
+    }
     
     return self;
+}
+
+- (NSString*)reuseIdentifier{
+    NSString* parent = [super reuseIdentifier];
+    return [NSString stringWithFormat:@"%@_%d",parent,[self isNumber]];
 }
 
 - (void)postInit{
@@ -50,7 +63,6 @@
     [super viewDidLoad];
     
     self.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    //self.view.minimumHeight = 44;
     
     UILabel* PropertyNameLabel = [[UILabel alloc]init];
     PropertyNameLabel.name = @"PropertyNameLabel";
@@ -64,11 +76,17 @@
     ValueTextField.font = [UIFont systemFontOfSize:14];
     ValueTextField.minimumWidth = 100;
     ValueTextField.textAlignment = UITextAlignmentRight;
+    ValueTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
     CKTextView* ValueTextView = [[CKTextView alloc]init];
     ValueTextView.name = @"ValueTextView";
     ValueTextView.font = [UIFont systemFontOfSize:14];
     ValueTextView.marginTop = 10;
+    
+    if([self isNumber]){
+        ValueTextField.keyboardType = ValueTextView.keyboardType = UIKeyboardTypeDecimalPad;
+        ValueTextField.autocorrectionType =  ValueTextView.autocorrectionType = UITextAutocorrectionTypeNo;
+    }
     
     CKHorizontalBoxLayout* hBox = [[CKHorizontalBoxLayout alloc]init];
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,ValueTextField]];
@@ -77,13 +95,18 @@
     vBox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox,ValueTextView]];
     
-    
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vBox]];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self setup];
+    
+    if(!self.view)
+        return;
+    
+    [self.view beginBindingsContextByRemovingPreviousBindings];
+    [self setupBindings];
+    [self.view endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -91,13 +114,26 @@
     [self.view clearBindingsContext];
 }
 
-- (void)setup{
-    if(!self.view)
-        return;
-    
-    [self.view beginBindingsContextByRemovingPreviousBindings];
-    [self setupBindings];
-    [self.view endBindingsContext];
+
+- (BOOL)isNumber{
+    CKClassPropertyDescriptor* descriptor = [[self property] descriptor];
+    switch(descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeChar:
+        case CKClassPropertyDescriptorTypeCppBool:
+        case CKClassPropertyDescriptorTypeInt:
+        case CKClassPropertyDescriptorTypeShort:
+        case CKClassPropertyDescriptorTypeLong:
+        case CKClassPropertyDescriptorTypeLongLong:
+        case CKClassPropertyDescriptorTypeUnsignedChar:
+        case CKClassPropertyDescriptorTypeUnsignedInt:
+        case CKClassPropertyDescriptorTypeUnsignedShort:
+        case CKClassPropertyDescriptorTypeUnsignedLong:
+        case CKClassPropertyDescriptorTypeUnsignedLongLong:
+        case CKClassPropertyDescriptorTypeFloat:
+        case CKClassPropertyDescriptorTypeDouble:
+            return YES;
+    }
+    return [NSObject isClass:descriptor.type exactKindOfClass:[NSNumber class]];
 }
 
 #pragma mark Setup MVC and bindings
@@ -122,14 +158,11 @@
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
         NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
-        if(![ValueTextField.text isEqualToString:str]){
+
+        if(ValueTextField.hidden == NO && ![ValueTextField.text isEqualToString:str]){
             ValueTextField.text = str;
         }
-    }];
-    
-    [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
-        NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
-        if(![ValueTextView.text isEqualToString:str]){
+        if(ValueTextView.hidden == NO && ![ValueTextView.text isEqualToString:str]){
             ValueTextView.text = str;
         }
     }];
@@ -143,11 +176,9 @@
 }
 
 - (void)updatePropertyWithValue:(id)value{
-    id result = [NSValueTransformer transform:value toClass:self.property.type];
-    [self.property setValue:result];
+    id result = [NSValueTransformer transform:value toClass:[self isNumber] ? [NSNumber class] : self.property.type];
+    [self.property setValue:([self isNumber] && !result) ? @(0) : result];
 }
-
-
 
 - (BOOL)textInputView:(UIView *)view shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)string{
     CKPropertyExtendedAttributes* attributes = [[self property]extendedAttributes];
@@ -174,6 +205,22 @@
         if(max >= 0 && range.location >= max){
             return NO;
         }
+        
+        
+        if([self isNumber]){
+            NSMutableCharacterSet *numberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
+            
+            CKClassPropertyDescriptor* descriptor = [[self property] descriptor];
+            switch(descriptor.propertyType){
+                case CKClassPropertyDescriptorTypeFloat:
+                case CKClassPropertyDescriptorTypeDouble:{
+                    [numberSet addCharactersInString:@".,"];
+                }
+            }
+            
+            return ([string stringByTrimmingCharactersInSet:[numberSet invertedSet]].length > 0);
+        }
+        
         return YES;
     }
     return YES;
@@ -284,6 +331,26 @@
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_maximumLength"];
     if(value) return [value integerValue];
     return -1;
+}
+
+@end
+
+
+@implementation CKPropertyNumberViewController
+
+@end
+
+
+
+@implementation CKPropertyExtendedAttributes (CKPropertyNumberViewController)
+
+- (void)setPlaceholderValue:(NSNumber*)placeholderValue{
+    [self.attributes setObject:placeholderValue forKey:@"CKPropertyExtendedAttributes_CKPropertyNumberViewController_placeholderValue"];
+}
+
+- (NSNumber*)placeholderValue{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKPropertyNumberViewController_placeholderValue"];
+    return value;
 }
 
 @end

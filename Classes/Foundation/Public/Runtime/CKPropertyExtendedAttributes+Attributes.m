@@ -156,7 +156,7 @@
 @end
 
 @implementation CKPropertyExtendedAttributes (CKNSNumberPropertyCellController)
-@dynamic minimumValue,maximumValue,placeholderValue;
+@dynamic minimumValue,maximumValue;
 
 - (void)setMinimumValue:(NSNumber*)minimumValue{
     [self.attributes setObject:minimumValue forKey:@"CKPropertyExtendedAttributes_CKNSNumberPropertyCellController_minimumValue"];
@@ -176,14 +176,7 @@
     return value;
 }
 
-- (void)setPlaceholderValue:(NSNumber*)placeholderValue{
-    [self.attributes setObject:placeholderValue forKey:@"CKPropertyExtendedAttributes_CKNSNumberPropertyCellController_placeholderValue"];
-}
 
-- (NSNumber*)placeholderValue{
-    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKNSNumberPropertyCellController_placeholderValue"];
-    return value;
-}
 
 
 @end

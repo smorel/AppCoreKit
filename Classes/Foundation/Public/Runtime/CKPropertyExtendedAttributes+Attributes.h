@@ -115,9 +115,6 @@ typedef BOOL(^CKInputTextFormatterBlock)(id textInputView,NSRange range, NSStrin
  */
 @property (nonatomic, retain) NSNumber* maximumValue;
 
-/**
- */
-@property (nonatomic, retain) NSNumber* placeholderValue;
 
 @end
 

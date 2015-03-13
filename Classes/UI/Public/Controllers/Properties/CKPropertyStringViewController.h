@@ -17,7 +17,7 @@
  
  - default view padding is 10 10 10 10, minimumHeight 44, flexibleSize is NO so that it fits the height of the content
  - default marginRight on *PropertyNameLabel*: 10
- - *ValueTextField* is flexible, minimumWidth 100, system font 14, back color, textAlignmentRight
+ - *ValueTextField* is flexible, minimumWidth 100, system font 14, back color, textAlignmentRight,clearButton mode is UITextFieldViewModeWhileEditing, keyboard type is UIKeyboardTypeDecimalPad and autocorrectionType is No if property is native type or NSNumber
  - default appearance for PropertyNameLabel is bold system font of size 17, black color, numberOfLines 1
  
  
@@ -34,7 +34,7 @@
  
  - default view padding: 10 10 10 10, flexibleSize is NO so that it fits the height of the content
  - default marginTop on *ValueTextView*: 10
- - *ValueTextView* is flexible in width but fits to the content height, system font 14, back color
+ - *ValueTextView* is flexible in width but fits to the content height, system font 14, back color,clearButton mode is UITextFieldViewModeWhileEditing, keyboard type is UIKeyboardTypeDecimalPad and autocorrectionType is No if property is native type or NSNumber
  - default appearance for PropertyNameLabel is bold system font of size 17, black color, numberOfLines 1
  
  
@@ -104,6 +104,7 @@
 
 /** Default value is a localized string as follow: _(@"propertyName_placeholder") that can be customized by setting a key/value in your localization file as follow:
  "propertyName_placeholder" = "My Placeholder";
+ If the property is a number and the extended attribute placeholderValue property is set, valuePlaceholderLabel will have the specified value.
  Or simply set the valuePlaceholderLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
  */
 @property(nonatomic,retain) NSString* valuePlaceholderLabel;
@@ -161,5 +162,23 @@
 /**
  */
 @property (nonatomic, assign) NSInteger maximumLength;
+
+@end
+
+
+/**
+ */
+@interface CKPropertyNumberViewController : CKPropertyStringViewController
+
+@end
+
+
+/** Property extended attributes that operates with CKPropertyNumberViewController
+ */
+@interface CKPropertyExtendedAttributes (CKPropertyNumberViewController)
+
+/**
+ */
+@property (nonatomic, retain) NSNumber* placeholderValue;
 
 @end
