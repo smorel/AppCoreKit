@@ -22,24 +22,24 @@
  
  
  <pre>
- ====================================================
+ ****************************************************
  |                                                  |
  | [PropertyNameLabel]  [          ValueTextField ] |
  |                                                  |
- ====================================================
+ ****************************************************
  </pre>
  
  
  If multiline is enabled:
  
- - default view padding: 10 10 10 10, minimumHeight 44, flexibleSize is NO so that it fits the height of the content
+ - default view padding: 10 10 10 10, flexibleSize is NO so that it fits the height of the content
  - default marginTop on *ValueTextView*: 10
  - *ValueTextView* is flexible in width but fits to the content height, system font 14, back color
  - default appearance for PropertyNameLabel is bold system font of size 17, black color, numberOfLines 1
  
  
  <pre>
- ====================================================
+ ****************************************************
  |                                                  |
  | [PropertyNameLabel]                              |
  |                                                  |
@@ -48,7 +48,7 @@
  | [                                              ] |
  | [                                              ] |
  |                                                  |
- ====================================================
+ ****************************************************
  </pre>
  
  

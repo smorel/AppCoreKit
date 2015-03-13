@@ -771,9 +771,9 @@
 		7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoForward.png; sourceTree = "<group>"; };
 		7539FF90142CE94700688E2D /* NSError+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Additions.h"; path = "Classes/Foundation/Public/Helpers/NSError+Additions.h"; sourceTree = "<group>"; };
 		7539FF91142CE94700688E2D /* NSError+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Additions.m"; path = "Classes/Foundation/Public/Helpers/NSError+Additions.m"; sourceTree = "<group>"; };
-		7550153913B8EA08002DAE8B /* AppCoreKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCoreKit-Info.plist"; sourceTree = "<group>"; };
+		7550153913B8EA08002DAE8B /* AppCoreKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AppCoreKit-Info.plist"; path = "CloudKit/AppCoreKit-Info.plist"; sourceTree = "<group>"; };
 		7550153B13B8EA08002DAE8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7550153D13B8EA08002DAE8B /* AppCoreKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCoreKit-Prefix.pch"; sourceTree = "<group>"; };
+		7550153D13B8EA08002DAE8B /* AppCoreKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppCoreKit-Prefix.pch"; path = "CloudKit/AppCoreKit-Prefix.pch"; sourceTree = "<group>"; };
 		755CEE17146C8C2E0052B1FF /* CKLocalizationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalizationManager.h; path = Classes/Foundation/Public/Localization/CKLocalizationManager.h; sourceTree = "<group>"; };
 		755CEE18146C8C2E0052B1FF /* CKLocalizationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalizationManager.m; path = Classes/Foundation/Public/Localization/CKLocalizationManager.m; sourceTree = "<group>"; };
 		755CEE1C146C8C7E0052B1FF /* CKLocalizedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalizedString.h; path = Classes/Foundation/Public/Localization/CKLocalizedString.h; sourceTree = "<group>"; };
@@ -1435,18 +1435,18 @@
 				9659E34315E274FF00D43C33 /* CKConfiguration.m */,
 				7560DB4913B8ED3600268D13 /* CKDebug.h */,
 				4F689A6413CF2A4E000CE416 /* CKDebug.m */,
+				7560DC5413B8ED3600268D13 /* CKVersion.h */,
+				7560DC5513B8ED3600268D13 /* CKVersion.m */,
 				7560DC5A13B8ED3600268D13 /* CKWeakRef.h */,
 				7560DC5B13B8ED3600268D13 /* CKWeakRef.mm */,
 				7560DB2E13B8ED3600268D13 /* CKCallback.h */,
 				7560DB2F13B8ED3600268D13 /* CKCallback.m */,
-				7560DC5413B8ED3600268D13 /* CKVersion.h */,
-				7560DC5513B8ED3600268D13 /* CKVersion.m */,
 				7506E3F713B8FCBD00EE1471 /* Runtime */,
 				7506E3EF13B8FA5800EE1471 /* Conversion */,
 				75A405EC13D8B66E00D932B0 /* CascadingTree */,
+				7506E3F313B8FBB100EE1471 /* Document */,
 				9600B8BC1545C40200F07C5A /* TypeAhead */,
 				9600B8CC1545C55200F07C5A /* ObjectGraph */,
-				7506E3F313B8FBB100EE1471 /* Document */,
 				964C207D153DB66A00398E0F /* Localization */,
 				96EFE7D01797009D0034F935 /* ResourceManager */,
 				96CC499117CCD3740017A6E7 /* Apple Extensions */,
@@ -1457,9 +1457,10 @@
 		7506E3EF13B8FA5800EE1471 /* Conversion */ = {
 			isa = PBXGroup;
 			children = (
-				75CC16FE13F46E0800835FE3 /* Additions */,
 				7560DBD713B8ED3600268D13 /* NSValueTransformer+Additions.h */,
 				7560DBD813B8ED3600268D13 /* NSValueTransformer+Additions.mm */,
+				D932C1311AB328C60017F602 /* AppCoreKit Extensions */,
+				75CC16FE13F46E0800835FE3 /* Apple Extensions */,
 			);
 			name = Conversion;
 			sourceTree = "<group>";
@@ -1472,34 +1473,26 @@
 				7560DC0B13B8ED3600268D13 /* CKStyleManager.m */,
 				7560DB6213B8ED3600268D13 /* CKStyleView.h */,
 				7560DB6313B8ED3600268D13 /* CKStyleView.m */,
-				7560DC4813B8ED3600268D13 /* UIView+Style.h */,
-				7560DC4913B8ED3600268D13 /* UIView+Style.m */,
-				7560DC4C13B8ED3600268D13 /* UIViewController+Style.h */,
-				7560DC4D13B8ED3600268D13 /* UIViewController+Style.m */,
-				7506E3F213B8FB1000EE1471 /* Additions */,
+				7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */,
+				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
+				7506E3F213B8FB1000EE1471 /* Apple Extensions */,
 			);
 			name = Styles;
 			sourceTree = "<group>";
 		};
-		7506E3F213B8FB1000EE1471 /* Additions */ = {
+		7506E3F213B8FB1000EE1471 /* Apple Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */,
-				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
-				7560DC2213B8ED3600268D13 /* UIButton+Style.h */,
-				7560DC2313B8ED3600268D13 /* UIButton+Style.m */,
-				7560DC3413B8ED3600268D13 /* UILabel+Style.h */,
-				7560DC3513B8ED3600268D13 /* UILabel+Style.m */,
-				753178121417E4E4009310A8 /* UINavigationBar+Style.h */,
-				753178131417E4E4009310A8 /* UINavigationBar+Style.m */,
-				753178171417E4F9009310A8 /* UIToolbar+Style.h */,
-				753178181417E4F9009310A8 /* UIToolbar+Style.mm */,
-				75956975144626960092F317 /* UIBarButtonItem+Style.h */,
-				759569731446268A0092F317 /* UIBarButtonItem+Style.m */,
-				B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */,
-				B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */,
+				D932C1141AB322130017F602 /* UIView */,
+				D932C1151AB3221B0017F602 /* UIViewController */,
+				D932C1161AB322250017F602 /* UIButton */,
+				D932C1171AB322350017F602 /* UILabel & UITextField */,
+				D932C11B1AB322670017F602 /* UINavigationController */,
+				D932C1181AB322470017F602 /* UINavigationBar */,
+				D932C11A1AB3225D0017F602 /* UIBarButtonItem */,
+				D932C1191AB322520017F602 /* UIToolbar */,
 			);
-			name = Additions;
+			name = "Apple Extensions";
 			sourceTree = "<group>";
 		};
 		7506E3F313B8FBB100EE1471 /* Document */ = {
@@ -1547,33 +1540,27 @@
 		7506E3F713B8FCBD00EE1471 /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
-				7506E3F813B8FD1300EE1471 /* Additions */,
-				96CADE301486B229008A23E4 /* CKRuntime.h */,
-				96CADE311486B229008A23E4 /* CKRuntime.m */,
 				7560DBC113B8ED3600268D13 /* NSObject+Runtime.h */,
 				7560DBC213B8ED3600268D13 /* NSObject+Runtime.m */,
+				96CADE301486B229008A23E4 /* CKRuntime.h */,
+				96CADE311486B229008A23E4 /* CKRuntime.m */,
+				D932C12F1AB328580017F602 /* Property */,
+				D932C12E1AB328480017F602 /* Property Descriptor */,
+				D932C1301AB328670017F602 /* Property Extended Attributes */,
+				7506E3F813B8FD1300EE1471 /* Apple Extensions */,
 				96CADE341486B6F6008A23E4 /* NSObject+Runtime_private.h */,
-				7560DB3813B8ED3600268D13 /* CKClassPropertyDescriptor.h */,
-				7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */,
-				96812C6A159A2E28002160C1 /* CKClassPropertyDescriptor_private.h */,
-				7560DBDC13B8ED3600268D13 /* CKProperty.h */,
-				7560DBDD13B8ED3600268D13 /* CKProperty.m */,
-				75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */,
-				75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.mm */,
-				75043E631404327500C7685D /* CKPropertyExtendedAttributes+Attributes.h */,
-				75043E641404327500C7685D /* CKPropertyExtendedAttributes+Attributes.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
 		};
-		7506E3F813B8FD1300EE1471 /* Additions */ = {
+		7506E3F813B8FD1300EE1471 /* Apple Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				96E6FA28182D2990001F1E6A /* CoreAnimation */,
 				759CB89713BA639F006261B1 /* UIKit */,
+				96E6FA28182D2990001F1E6A /* CoreAnimation */,
 				759CB89513BA6391006261B1 /* MapKit */,
 			);
-			name = Additions;
+			name = "Apple Extensions";
 			sourceTree = "<group>";
 		};
 		7506E3F913B8FD5500EE1471 /* Bindings */ = {
@@ -1658,15 +1645,15 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D9E04C7C1AB1F94A00E6BECB /* CreditsView */,
-				D9E04C7B1AB1F94100E6BECB /* MapView */,
-				D9E04C7A1AB1F92B00E6BECB /* RangeSelectorView */,
-				D9E04C791AB1F91F00E6BECB /* TextView */,
 				D9E04C781AB1F91400E6BECB /* ImageView */,
 				D9E04C771AB1F90900E6BECB /* AlertView */,
 				D9E04C761AB1F8FC00E6BECB /* ActionSheet */,
+				D9E04C7B1AB1F94100E6BECB /* MapView */,
+				D9E04C7A1AB1F92B00E6BECB /* RangeSelectorView */,
+				D9E04C791AB1F91F00E6BECB /* TextView */,
 				D9E04C751AB1F8EC00E6BECB /* SnapshotController */,
 				D9E04C741AB1F8DA00E6BECB /* SegmentedControl */,
+				D9E04C7C1AB1F94A00E6BECB /* CreditsView */,
 				D9E04C6D1AB1F83400E6BECB /* Apple Extensions */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
@@ -1783,6 +1770,8 @@
 		7506E41413B902ED00EE1471 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7550153913B8EA08002DAE8B /* AppCoreKit-Info.plist */,
+				7550153A13B8EA08002DAE8B /* InfoPlist.strings */,
 				7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */,
 				7536F9D113CE0BE900720C17 /* Images */,
 				75A83AC213D75A8400413C17 /* CloudKit.strings */,
@@ -1867,11 +1856,10 @@
 			isa = PBXGroup;
 			children = (
 				963AB7B31799E1280076925C /* README.mdown */,
-				7560DDB713B8EDA300268D13 /* Classes */,
+				7560DDB713B8EDA300268D13 /* AppCoreKit */,
 				7506E41413B902ED00EE1471 /* Resources */,
-				7550153713B8EA08002DAE8B /* CloudKit */,
 				960A2D30150572C000D30AB4 /* Documentation */,
-				96AC0A9616022A9C00CC3C77 /* TypeAheadCrunch */,
+				D932C11C1AB325610017F602 /* Tools */,
 				7550153213B8EA08002DAE8B /* Frameworks */,
 				7550153113B8EA08002DAE8B /* Products */,
 			);
@@ -1909,25 +1897,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7550153713B8EA08002DAE8B /* CloudKit */ = {
-			isa = PBXGroup;
-			children = (
-				7550153813B8EA08002DAE8B /* Supporting Files */,
-			);
-			path = CloudKit;
-			sourceTree = "<group>";
-		};
-		7550153813B8EA08002DAE8B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				7550153913B8EA08002DAE8B /* AppCoreKit-Info.plist */,
-				7550153A13B8EA08002DAE8B /* InfoPlist.strings */,
-				7550153D13B8EA08002DAE8B /* AppCoreKit-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		7560DDB713B8EDA300268D13 /* Classes */ = {
+		7560DDB713B8EDA300268D13 /* AppCoreKit */ = {
 			isa = PBXGroup;
 			children = (
 				75C6DF5913FEC7A800E4AE4F /* AppCoreKit.h */,
@@ -1945,8 +1915,9 @@
 				7506E40913B9005700EE1471 /* AddressBook */,
 				7506E40713B8FFFE00EE1471 /* Location */,
 				D96494231AA5F80000C17BB7 /* Media */,
+				7550153D13B8EA08002DAE8B /* AppCoreKit-Prefix.pch */,
 			);
-			name = Classes;
+			name = AppCoreKit;
 			sourceTree = "<group>";
 		};
 		7560DDB813B8EDB700268D13 /* Vendor */ = {
@@ -2101,41 +2072,15 @@
 			name = Debugger;
 			sourceTree = "<group>";
 		};
-		75CC16FE13F46E0800835FE3 /* Additions */ = {
+		75CC16FE13F46E0800835FE3 /* Apple Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				75CC172313F472B600835FE3 /* NSValueTransformer+NativeTypes.h */,
-				75CC172413F472B900835FE3 /* NSValueTransformer+NativeTypes.m */,
-				75CC172713F4757000835FE3 /* NSValueTransformer+CGTypes.h */,
-				75CC172813F4757300835FE3 /* NSValueTransformer+CGTypes.m */,
-				75CC16FF13F46E3900835FE3 /* UIColor+ValueTransformer.h */,
-				75CC170013F46E3900835FE3 /* UIColor+ValueTransformer.m */,
-				75CC170313F46E5500835FE3 /* UIImage+ValueTransformer.h */,
-				75CC170413F46E5500835FE3 /* UIImage+ValueTransformer.m */,
-				75CC170713F46E6B00835FE3 /* NSNumber+ValueTransformer.h */,
-				75CC170813F46E6B00835FE3 /* NSNumber+ValueTransformer.m */,
-				75CC170B13F46E8100835FE3 /* NSURL+ValueTransformer.h */,
-				75CC170C13F46E8200835FE3 /* NSURL+ValueTransformer.m */,
-				75CC170F13F46E9700835FE3 /* NSDate+ValueTransformer.h */,
-				75CC171013F46E9800835FE3 /* NSDate+ValueTransformer.m */,
-				75CC171313F46EAD00835FE3 /* NSArray+ValueTransformer.h */,
-				75CC171413F46EAE00835FE3 /* NSArray+ValueTransformer.m */,
-				75CC171713F46EC700835FE3 /* CKCollection+ValueTransformer.h */,
-				75CC171813F46EC700835FE3 /* CKCollection+ValueTransformer.m */,
-				75CC171B13F46EF600835FE3 /* NSIndexPath+ValueTransformer.h */,
-				75CC171C13F46EF700835FE3 /* NSIndexPath+ValueTransformer.m */,
-				75CC171F13F4705300835FE3 /* NSObject+ValueTransformer.h */,
-				75CC172013F4705700835FE3 /* NSObject+ValueTransformer.m */,
-				758523E913FAEF7700EE75CE /* UIFont+ValueTransformer.h */,
-				758523EA13FAEF7900EE75CE /* UIFont+ValueTransformer.m */,
-				9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */,
-				9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */,
-				9691DC141843A47C00D3EDD7 /* UILabel+ValueTransformer.h */,
-				9691DC151843A47C00D3EDD7 /* UILabel+ValueTransformer.m */,
-				9603F22318D22B130095B128 /* NSValue+ValueTransformer.h */,
-				9603F22418D22B130095B128 /* NSValue+ValueTransformer.mm */,
+				D932C11D1AB327130017F602 /* Foundations */,
+				D932C11E1AB3271B0017F602 /* UIKit */,
+				D932C1211AB327400017F602 /* CoreGraphics */,
+				D932C11F1AB327280017F602 /* CoreImage */,
 			);
-			name = Additions;
+			name = "Apple Extensions";
 			sourceTree = "<group>";
 		};
 		75F2960213F04424009CCC70 /* CKProperty CellControllers */ = {
@@ -2189,25 +2134,14 @@
 			children = (
 				9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */,
 				9600B8D81545CAFE00F07C5A /* CKContainerViewController.mm */,
-				9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */,
-				9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */,
-				9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */,
-				9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */,
-				9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */,
-				9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */,
-				9600B8E61545CD1D00F07C5A /* CKSegmentedViewController.h */,
-				9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */,
-				962C08911820131B00A6E439 /* CKStackViewController.h */,
-				962C08921820131B00A6E439 /* CKStackViewController.m */,
-				96B4515718D093A400D58489 /* CKBlurModalViewController.h */,
-				96B4515818D093A400D58489 /* CKBlurModalViewController.m */,
-				96B4516D18D09DC000D58489 /* CKBlurModalDebugViewController.style */,
-				96B4516B18D09DC000D58489 /* CKBlurModalDebugViewController.h */,
-				96B4516C18D09DC000D58489 /* CKBlurModalDebugViewController.m */,
-				757578F913E71C000082C247 /* CKSheetController.h */,
-				757578FA13E71C000082C247 /* CKSheetController.m */,
-				75CC16BF13F32B4500835FE3 /* CKPopoverController.h */,
-				75CC16C013F32B4500835FE3 /* CKPopoverController.m */,
+				D932C1031AB320FA0017F602 /* Split */,
+				D932C1021AB320F00017F602 /* Tab */,
+				D932C1041AB321030017F602 /* Segmented */,
+				D932C1081AB321320017F602 /* Popover */,
+				D932C1071AB3212A0017F602 /* Sheet */,
+				D932C1061AB321150017F602 /* Modal Blur */,
+				D932C1051AB3210D0017F602 /* Stack */,
+				D932C1011AB320E40017F602 /* BreadCrumb */,
 			);
 			name = Containers;
 			sourceTree = "<group>";
@@ -2316,17 +2250,9 @@
 				9668B94C15DAFF7100C57715 /* CKLayoutBoxProtocol.h */,
 				96B9D29A177B228200455BE8 /* CKLayoutBox.h */,
 				96B9D29B177B228300455BE8 /* CKLayoutBox.mm */,
-				96B9D2A2177B233F00455BE8 /* CKVerticalBoxLayout.h */,
-				96B9D2A3177B233F00455BE8 /* CKVerticalBoxLayout.mm */,
-				96B9D2A6177B234D00455BE8 /* CKHorizontalBoxLayout.h */,
-				96B9D2A7177B234E00455BE8 /* CKHorizontalBoxLayout.mm */,
-				96B9D2AA177B235D00455BE8 /* CKLayoutFlexibleSpace.h */,
-				96B9D2AB177B235E00455BE8 /* CKLayoutFlexibleSpace.m */,
-				96B4513B18D08D0B00D58489 /* CKLayoutDescription.h */,
-				96B4513C18D08D0B00D58489 /* CKLayoutDescription.m */,
-				96B4513D18D08D0B00D58489 /* CKLayoutViewProxy.h */,
-				96B4513E18D08D0B00D58489 /* CKLayoutViewProxy.m */,
-				96B9D2C6177B25A100455BE8 /* UIKit */,
+				D932C1121AB321CA0017F602 /* Layout Algorithms */,
+				D932C1131AB321DE0017F602 /* Multi Layout */,
+				96B9D2C6177B25A100455BE8 /* Apple Extensions */,
 			);
 			name = Layout;
 			sourceTree = "<group>";
@@ -2466,29 +2392,20 @@
 			name = Animation;
 			sourceTree = "<group>";
 		};
-		96B9D2C6177B25A100455BE8 /* UIKit */ = {
+		96B9D2C6177B25A100455BE8 /* Apple Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */,
-				96B9D29F177B22EA00455BE8 /* UIView+CKLayout.m */,
-				96B9D2AE177B23D800455BE8 /* UIButton+CKLayout.h */,
-				96B9D2AF177B23D900455BE8 /* UIButton+CKLayout.m */,
-				96B9D2B2177B248200455BE8 /* UIViewController+CKLayout.h */,
-				96B9D2B3177B248400455BE8 /* UIViewController+CKLayout.m */,
-				96B9D2B6177B24CF00455BE8 /* UILabel+CKLayout.h */,
-				96B9D2B7177B24D100455BE8 /* UILabel+CKLayout.m */,
-				96B9D2BA177B24F300455BE8 /* UIImageView+CKLayout.h */,
-				96B9D2BB177B24F400455BE8 /* UIImageView+CKLayout.m */,
-				96B9D2BE177B251B00455BE8 /* UITextField+CKLayout.h */,
-				96B9D2BF177B251D00455BE8 /* UITextField+CKLayout.m */,
-				96B9D2C2177B253F00455BE8 /* UITextView+CKLayout.h */,
-				96B9D2C3177B254000455BE8 /* UITextView+CKLayout.m */,
-				962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */,
-				962FE4C418996D6900D5A449 /* UIPickerView+CKLayout.m */,
-				9668EF0618AD076900E72444 /* UIScrollView+CKLayout.h */,
-				9668EF0718AD076900E72444 /* UIScrollView+CKLayout.m */,
+				D932C1111AB321B10017F602 /* UIScrollView */,
+				D932C1101AB321A60017F602 /* UIPickerView */,
+				D932C10F1AB3219D0017F602 /* UITextView */,
+				D932C10E1AB321930017F602 /* UITextField */,
+				D932C10D1AB321890017F602 /* UIImageView */,
+				D932C10C1AB321810017F602 /* UILabel */,
+				D932C10B1AB321750017F602 /* UIViewController */,
+				D932C10A1AB3216C0017F602 /* UIButton */,
+				D932C1091AB321640017F602 /* UIView */,
 			);
-			name = UIKit;
+			name = "Apple Extensions";
 			sourceTree = "<group>";
 		};
 		96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */ = {
@@ -2737,15 +2654,15 @@
 		D92C10D21AB0A03700DA4B12 /* Foundations */ = {
 			isa = PBXGroup;
 			children = (
-				D92C10D01AB0A00F00DA4B12 /* NSTimer */,
-				D92C10CF1AB0A00200DA4B12 /* NSPredicate */,
 				D92C10CC1AB09FD400DA4B12 /* NSObject */,
-				D92C10CD1AB09FE200DA4B12 /* NSError */,
+				D92C10C71AB09F0400DA4B12 /* NSString */,
+				D92C10C81AB09F5000DA4B12 /* NSData */,
+				D92C10C61AB09EFF00DA4B12 /* NSDate */,
 				D92C10CB1AB09FBD00DA4B12 /* NSArray */,
 				D92C10CE1AB09FF600DA4B12 /* NSSet */,
-				D92C10C81AB09F5000DA4B12 /* NSData */,
-				D92C10C71AB09F0400DA4B12 /* NSString */,
-				D92C10C61AB09EFF00DA4B12 /* NSDate */,
+				D92C10D01AB0A00F00DA4B12 /* NSTimer */,
+				D92C10CF1AB0A00200DA4B12 /* NSPredicate */,
+				D92C10CD1AB09FE200DA4B12 /* NSError */,
 			);
 			name = Foundations;
 			sourceTree = "<group>";
@@ -2758,6 +2675,473 @@
 				D92C10C51AB09EF800DA4B12 /* UIImage */,
 			);
 			name = UIKit;
+			sourceTree = "<group>";
+		};
+		D932C1011AB320E40017F602 /* BreadCrumb */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */,
+				9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */,
+			);
+			name = BreadCrumb;
+			sourceTree = "<group>";
+		};
+		D932C1021AB320F00017F602 /* Tab */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */,
+				9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */,
+			);
+			name = Tab;
+			sourceTree = "<group>";
+		};
+		D932C1031AB320FA0017F602 /* Split */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */,
+				9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */,
+			);
+			name = Split;
+			sourceTree = "<group>";
+		};
+		D932C1041AB321030017F602 /* Segmented */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8E61545CD1D00F07C5A /* CKSegmentedViewController.h */,
+				9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */,
+			);
+			name = Segmented;
+			sourceTree = "<group>";
+		};
+		D932C1051AB3210D0017F602 /* Stack */ = {
+			isa = PBXGroup;
+			children = (
+				962C08911820131B00A6E439 /* CKStackViewController.h */,
+				962C08921820131B00A6E439 /* CKStackViewController.m */,
+			);
+			name = Stack;
+			sourceTree = "<group>";
+		};
+		D932C1061AB321150017F602 /* Modal Blur */ = {
+			isa = PBXGroup;
+			children = (
+				96B4515718D093A400D58489 /* CKBlurModalViewController.h */,
+				96B4515818D093A400D58489 /* CKBlurModalViewController.m */,
+				96B4516D18D09DC000D58489 /* CKBlurModalDebugViewController.style */,
+				96B4516B18D09DC000D58489 /* CKBlurModalDebugViewController.h */,
+				96B4516C18D09DC000D58489 /* CKBlurModalDebugViewController.m */,
+			);
+			name = "Modal Blur";
+			sourceTree = "<group>";
+		};
+		D932C1071AB3212A0017F602 /* Sheet */ = {
+			isa = PBXGroup;
+			children = (
+				757578F913E71C000082C247 /* CKSheetController.h */,
+				757578FA13E71C000082C247 /* CKSheetController.m */,
+			);
+			name = Sheet;
+			sourceTree = "<group>";
+		};
+		D932C1081AB321320017F602 /* Popover */ = {
+			isa = PBXGroup;
+			children = (
+				75CC16BF13F32B4500835FE3 /* CKPopoverController.h */,
+				75CC16C013F32B4500835FE3 /* CKPopoverController.m */,
+			);
+			name = Popover;
+			sourceTree = "<group>";
+		};
+		D932C1091AB321640017F602 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D29E177B22E900455BE8 /* UIView+CKLayout.h */,
+				96B9D29F177B22EA00455BE8 /* UIView+CKLayout.m */,
+			);
+			name = UIView;
+			sourceTree = "<group>";
+		};
+		D932C10A1AB3216C0017F602 /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D2AE177B23D800455BE8 /* UIButton+CKLayout.h */,
+				96B9D2AF177B23D900455BE8 /* UIButton+CKLayout.m */,
+			);
+			name = UIButton;
+			sourceTree = "<group>";
+		};
+		D932C10B1AB321750017F602 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D2B2177B248200455BE8 /* UIViewController+CKLayout.h */,
+				96B9D2B3177B248400455BE8 /* UIViewController+CKLayout.m */,
+			);
+			name = UIViewController;
+			sourceTree = "<group>";
+		};
+		D932C10C1AB321810017F602 /* UILabel */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D2B6177B24CF00455BE8 /* UILabel+CKLayout.h */,
+				96B9D2B7177B24D100455BE8 /* UILabel+CKLayout.m */,
+			);
+			name = UILabel;
+			sourceTree = "<group>";
+		};
+		D932C10D1AB321890017F602 /* UIImageView */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D2BA177B24F300455BE8 /* UIImageView+CKLayout.h */,
+				96B9D2BB177B24F400455BE8 /* UIImageView+CKLayout.m */,
+			);
+			name = UIImageView;
+			sourceTree = "<group>";
+		};
+		D932C10E1AB321930017F602 /* UITextField */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D2BE177B251B00455BE8 /* UITextField+CKLayout.h */,
+				96B9D2BF177B251D00455BE8 /* UITextField+CKLayout.m */,
+			);
+			name = UITextField;
+			sourceTree = "<group>";
+		};
+		D932C10F1AB3219D0017F602 /* UITextView */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D2C2177B253F00455BE8 /* UITextView+CKLayout.h */,
+				96B9D2C3177B254000455BE8 /* UITextView+CKLayout.m */,
+			);
+			name = UITextView;
+			sourceTree = "<group>";
+		};
+		D932C1101AB321A60017F602 /* UIPickerView */ = {
+			isa = PBXGroup;
+			children = (
+				962FE4C318996D6900D5A449 /* UIPickerView+CKLayout.h */,
+				962FE4C418996D6900D5A449 /* UIPickerView+CKLayout.m */,
+			);
+			name = UIPickerView;
+			sourceTree = "<group>";
+		};
+		D932C1111AB321B10017F602 /* UIScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				9668EF0618AD076900E72444 /* UIScrollView+CKLayout.h */,
+				9668EF0718AD076900E72444 /* UIScrollView+CKLayout.m */,
+			);
+			name = UIScrollView;
+			sourceTree = "<group>";
+		};
+		D932C1121AB321CA0017F602 /* Layout Algorithms */ = {
+			isa = PBXGroup;
+			children = (
+				96B9D2A2177B233F00455BE8 /* CKVerticalBoxLayout.h */,
+				96B9D2A3177B233F00455BE8 /* CKVerticalBoxLayout.mm */,
+				96B9D2A6177B234D00455BE8 /* CKHorizontalBoxLayout.h */,
+				96B9D2A7177B234E00455BE8 /* CKHorizontalBoxLayout.mm */,
+				96B9D2AA177B235D00455BE8 /* CKLayoutFlexibleSpace.h */,
+				96B9D2AB177B235E00455BE8 /* CKLayoutFlexibleSpace.m */,
+			);
+			name = "Layout Algorithms";
+			sourceTree = "<group>";
+		};
+		D932C1131AB321DE0017F602 /* Multi Layout */ = {
+			isa = PBXGroup;
+			children = (
+				96B4513B18D08D0B00D58489 /* CKLayoutDescription.h */,
+				96B4513C18D08D0B00D58489 /* CKLayoutDescription.m */,
+				96B4513D18D08D0B00D58489 /* CKLayoutViewProxy.h */,
+				96B4513E18D08D0B00D58489 /* CKLayoutViewProxy.m */,
+			);
+			name = "Multi Layout";
+			sourceTree = "<group>";
+		};
+		D932C1141AB322130017F602 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC4813B8ED3600268D13 /* UIView+Style.h */,
+				7560DC4913B8ED3600268D13 /* UIView+Style.m */,
+			);
+			name = UIView;
+			sourceTree = "<group>";
+		};
+		D932C1151AB3221B0017F602 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC4C13B8ED3600268D13 /* UIViewController+Style.h */,
+				7560DC4D13B8ED3600268D13 /* UIViewController+Style.m */,
+			);
+			name = UIViewController;
+			sourceTree = "<group>";
+		};
+		D932C1161AB322250017F602 /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC2213B8ED3600268D13 /* UIButton+Style.h */,
+				7560DC2313B8ED3600268D13 /* UIButton+Style.m */,
+			);
+			name = UIButton;
+			sourceTree = "<group>";
+		};
+		D932C1171AB322350017F602 /* UILabel & UITextField */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC3413B8ED3600268D13 /* UILabel+Style.h */,
+				7560DC3513B8ED3600268D13 /* UILabel+Style.m */,
+			);
+			name = "UILabel & UITextField";
+			sourceTree = "<group>";
+		};
+		D932C1181AB322470017F602 /* UINavigationBar */ = {
+			isa = PBXGroup;
+			children = (
+				753178121417E4E4009310A8 /* UINavigationBar+Style.h */,
+				753178131417E4E4009310A8 /* UINavigationBar+Style.m */,
+			);
+			name = UINavigationBar;
+			sourceTree = "<group>";
+		};
+		D932C1191AB322520017F602 /* UIToolbar */ = {
+			isa = PBXGroup;
+			children = (
+				753178171417E4F9009310A8 /* UIToolbar+Style.h */,
+				753178181417E4F9009310A8 /* UIToolbar+Style.mm */,
+			);
+			name = UIToolbar;
+			sourceTree = "<group>";
+		};
+		D932C11A1AB3225D0017F602 /* UIBarButtonItem */ = {
+			isa = PBXGroup;
+			children = (
+				75956975144626960092F317 /* UIBarButtonItem+Style.h */,
+				759569731446268A0092F317 /* UIBarButtonItem+Style.m */,
+			);
+			name = UIBarButtonItem;
+			sourceTree = "<group>";
+		};
+		D932C11B1AB322670017F602 /* UINavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */,
+				B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */,
+			);
+			name = UINavigationController;
+			sourceTree = "<group>";
+		};
+		D932C11C1AB325610017F602 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				96AC0A9616022A9C00CC3C77 /* TypeAheadCrunch */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
+		D932C11D1AB327130017F602 /* Foundations */ = {
+			isa = PBXGroup;
+			children = (
+				D932C1201AB327350017F602 /* Native Types */,
+				D932C1291AB327910017F602 /* NSObject */,
+				D932C1241AB3275F0017F602 /* NSNumber */,
+				D932C12C1AB327C60017F602 /* NSValue */,
+				D932C1261AB327720017F602 /* NSDate */,
+				D932C1251AB327690017F602 /* NSURL */,
+				D932C1281AB327860017F602 /* NSIndexPath */,
+				D932C1271AB3277B0017F602 /* NSArray & NSSet */,
+			);
+			name = Foundations;
+			sourceTree = "<group>";
+		};
+		D932C11E1AB3271B0017F602 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				D932C1221AB3274D0017F602 /* UIColor */,
+				D932C1231AB327550017F602 /* UIImage */,
+				D932C12A1AB327AA0017F602 /* UIFont */,
+				D932C12D1AB327D50017F602 /* UILabel */,
+			);
+			name = UIKit;
+			sourceTree = "<group>";
+		};
+		D932C11F1AB327280017F602 /* CoreImage */ = {
+			isa = PBXGroup;
+			children = (
+				D932C12B1AB327BB0017F602 /* CIFilter */,
+			);
+			name = CoreImage;
+			sourceTree = "<group>";
+		};
+		D932C1201AB327350017F602 /* Native Types */ = {
+			isa = PBXGroup;
+			children = (
+				75CC172313F472B600835FE3 /* NSValueTransformer+NativeTypes.h */,
+				75CC172413F472B900835FE3 /* NSValueTransformer+NativeTypes.m */,
+			);
+			name = "Native Types";
+			sourceTree = "<group>";
+		};
+		D932C1211AB327400017F602 /* CoreGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				75CC172713F4757000835FE3 /* NSValueTransformer+CGTypes.h */,
+				75CC172813F4757300835FE3 /* NSValueTransformer+CGTypes.m */,
+			);
+			name = CoreGraphics;
+			sourceTree = "<group>";
+		};
+		D932C1221AB3274D0017F602 /* UIColor */ = {
+			isa = PBXGroup;
+			children = (
+				75CC16FF13F46E3900835FE3 /* UIColor+ValueTransformer.h */,
+				75CC170013F46E3900835FE3 /* UIColor+ValueTransformer.m */,
+			);
+			name = UIColor;
+			sourceTree = "<group>";
+		};
+		D932C1231AB327550017F602 /* UIImage */ = {
+			isa = PBXGroup;
+			children = (
+				75CC170313F46E5500835FE3 /* UIImage+ValueTransformer.h */,
+				75CC170413F46E5500835FE3 /* UIImage+ValueTransformer.m */,
+			);
+			name = UIImage;
+			sourceTree = "<group>";
+		};
+		D932C1241AB3275F0017F602 /* NSNumber */ = {
+			isa = PBXGroup;
+			children = (
+				75CC170713F46E6B00835FE3 /* NSNumber+ValueTransformer.h */,
+				75CC170813F46E6B00835FE3 /* NSNumber+ValueTransformer.m */,
+			);
+			name = NSNumber;
+			sourceTree = "<group>";
+		};
+		D932C1251AB327690017F602 /* NSURL */ = {
+			isa = PBXGroup;
+			children = (
+				75CC170B13F46E8100835FE3 /* NSURL+ValueTransformer.h */,
+				75CC170C13F46E8200835FE3 /* NSURL+ValueTransformer.m */,
+			);
+			name = NSURL;
+			sourceTree = "<group>";
+		};
+		D932C1261AB327720017F602 /* NSDate */ = {
+			isa = PBXGroup;
+			children = (
+				75CC170F13F46E9700835FE3 /* NSDate+ValueTransformer.h */,
+				75CC171013F46E9800835FE3 /* NSDate+ValueTransformer.m */,
+			);
+			name = NSDate;
+			sourceTree = "<group>";
+		};
+		D932C1271AB3277B0017F602 /* NSArray & NSSet */ = {
+			isa = PBXGroup;
+			children = (
+				75CC171313F46EAD00835FE3 /* NSArray+ValueTransformer.h */,
+				75CC171413F46EAE00835FE3 /* NSArray+ValueTransformer.m */,
+			);
+			name = "NSArray & NSSet";
+			sourceTree = "<group>";
+		};
+		D932C1281AB327860017F602 /* NSIndexPath */ = {
+			isa = PBXGroup;
+			children = (
+				75CC171B13F46EF600835FE3 /* NSIndexPath+ValueTransformer.h */,
+				75CC171C13F46EF700835FE3 /* NSIndexPath+ValueTransformer.m */,
+			);
+			name = NSIndexPath;
+			sourceTree = "<group>";
+		};
+		D932C1291AB327910017F602 /* NSObject */ = {
+			isa = PBXGroup;
+			children = (
+				75CC171F13F4705300835FE3 /* NSObject+ValueTransformer.h */,
+				75CC172013F4705700835FE3 /* NSObject+ValueTransformer.m */,
+			);
+			name = NSObject;
+			sourceTree = "<group>";
+		};
+		D932C12A1AB327AA0017F602 /* UIFont */ = {
+			isa = PBXGroup;
+			children = (
+				758523E913FAEF7700EE75CE /* UIFont+ValueTransformer.h */,
+				758523EA13FAEF7900EE75CE /* UIFont+ValueTransformer.m */,
+			);
+			name = UIFont;
+			sourceTree = "<group>";
+		};
+		D932C12B1AB327BB0017F602 /* CIFilter */ = {
+			isa = PBXGroup;
+			children = (
+				9667136C18354642007218D2 /* CIFilter+ValueTransformer.h */,
+				9667136D18354643007218D2 /* CIFilter+ValueTransformer.m */,
+			);
+			name = CIFilter;
+			sourceTree = "<group>";
+		};
+		D932C12C1AB327C60017F602 /* NSValue */ = {
+			isa = PBXGroup;
+			children = (
+				9603F22318D22B130095B128 /* NSValue+ValueTransformer.h */,
+				9603F22418D22B130095B128 /* NSValue+ValueTransformer.mm */,
+			);
+			name = NSValue;
+			sourceTree = "<group>";
+		};
+		D932C12D1AB327D50017F602 /* UILabel */ = {
+			isa = PBXGroup;
+			children = (
+				9691DC141843A47C00D3EDD7 /* UILabel+ValueTransformer.h */,
+				9691DC151843A47C00D3EDD7 /* UILabel+ValueTransformer.m */,
+			);
+			name = UILabel;
+			sourceTree = "<group>";
+		};
+		D932C12E1AB328480017F602 /* Property Descriptor */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB3813B8ED3600268D13 /* CKClassPropertyDescriptor.h */,
+				7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */,
+				96812C6A159A2E28002160C1 /* CKClassPropertyDescriptor_private.h */,
+			);
+			name = "Property Descriptor";
+			sourceTree = "<group>";
+		};
+		D932C12F1AB328580017F602 /* Property */ = {
+			isa = PBXGroup;
+			children = (
+				7560DBDC13B8ED3600268D13 /* CKProperty.h */,
+				7560DBDD13B8ED3600268D13 /* CKProperty.m */,
+			);
+			name = Property;
+			sourceTree = "<group>";
+		};
+		D932C1301AB328670017F602 /* Property Extended Attributes */ = {
+			isa = PBXGroup;
+			children = (
+				75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */,
+				75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.mm */,
+				75043E631404327500C7685D /* CKPropertyExtendedAttributes+Attributes.h */,
+				75043E641404327500C7685D /* CKPropertyExtendedAttributes+Attributes.m */,
+			);
+			name = "Property Extended Attributes";
+			sourceTree = "<group>";
+		};
+		D932C1311AB328C60017F602 /* AppCoreKit Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D932C1321AB328D50017F602 /* CKCollection */,
+			);
+			name = "AppCoreKit Extensions";
+			sourceTree = "<group>";
+		};
+		D932C1321AB328D50017F602 /* CKCollection */ = {
+			isa = PBXGroup;
+			children = (
+				75CC171713F46EC700835FE3 /* CKCollection+ValueTransformer.h */,
+				75CC171813F46EC700835FE3 /* CKCollection+ValueTransformer.m */,
+			);
+			name = CKCollection;
 			sourceTree = "<group>";
 		};
 		D94CA2F91AA64AF8009EA887 /* CellContentViewControllers */ = {
@@ -3906,6 +4290,7 @@
 				7550153B13B8EA08002DAE8B /* en */,
 			);
 			name = InfoPlist.strings;
+			path = CloudKit;
 			sourceTree = "<group>";
 		};
 		75A83AC213D75A8400413C17 /* CloudKit.strings */ = {
