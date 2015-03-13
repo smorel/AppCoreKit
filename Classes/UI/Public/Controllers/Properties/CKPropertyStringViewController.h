@@ -33,7 +33,7 @@
  If multiline is enabled:
  
  - default view padding: 10 10 10 10, minimumHeight 44, flexibleSize is NO so that it fits the height of the content
- - default marginBottom on *PropertyNameLabel*: 10
+ - default marginTop on *ValueTextView*: 10
  - *ValueTextView* is flexible in width but fits to the content height, system font 14, back color
  - default appearance for PropertyNameLabel is bold system font of size 17, black color, numberOfLines 1
  
@@ -96,11 +96,15 @@
  */
 @interface CKPropertyStringViewController : CKPropertyViewController
 
-/** Default value is a localized string as follow: _(@"propertyName"). You can customize it by setting a key/value in your localization file.
+/** Default value is a localized string as follow: _(@"propertyName")that can be customized by setting a key/value in your localization file as follow:
+ "propertyName" = "My Title";
+ Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
  */
 @property(nonatomic,retain) NSString* propertyNameLabel;
 
-/** Default value is a localized string as follow: _(@"propertyName_placeholder"). You can customize it by setting a key/value in your localization file.
+/** Default value is a localized string as follow: _(@"propertyName_placeholder") that can be customized by setting a key/value in your localization file as follow:
+ "propertyName_placeholder" = "My Placeholder";
+ Or simply set the valuePlaceholderLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
  */
 @property(nonatomic,retain) NSString* valuePlaceholderLabel;
 
@@ -130,5 +134,32 @@
  If a block is set, this is your responsability to resign the keyboard as follow : [cellController resignFirstResponder];
  */
 @property (nonatomic,copy) void(^returnKeyHasBeenTapped)(CKPropertyStringViewController* cellController);
+
+@end
+
+
+
+
+
+
+/** Property extended attributes that operates with CKPropertyStringViewController
+ */
+@interface CKPropertyExtendedAttributes (CKPropertyStringViewController)
+
+///-----------------------------------
+/// @name Extended attributes
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, copy) BOOL(^textInputFormatterBlock)(id textInputView,NSRange range, NSString* replacementString);
+
+/**
+ */
+@property (nonatomic, assign) NSInteger minimumLength;
+
+/**
+ */
+@property (nonatomic, assign) NSInteger maximumLength;
 
 @end

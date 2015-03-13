@@ -12,6 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKStringHelper.h"
 #import "UITextView+CKLayout.h"
+#import "UITextView+CKLayout.h"
 
 @interface CKTextView ()
 

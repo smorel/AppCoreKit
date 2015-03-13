@@ -97,27 +97,7 @@ typedef CKTableViewCellController*(^CKCellControllerCreationBlock)(CKProperty* p
 typedef BOOL(^CKInputTextFormatterBlock)(id textInputView,NSRange range, NSString* replacementString);
 
 
-/**
- */
-@interface CKPropertyExtendedAttributes (CKTextInputPropertyCellController)
 
-///-----------------------------------
-/// @name Extended attributes
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, copy) CKInputTextFormatterBlock textInputFormatterBlock;
-
-/**
- */
-@property (nonatomic, assign) NSInteger minimumLength;
-
-/**
- */
-@property (nonatomic, assign) NSInteger maximumLength;
-
-@end
 
 /**
  */

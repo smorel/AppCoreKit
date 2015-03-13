@@ -172,9 +172,11 @@ static char UITextViewUsesAttributedStringKey;
     CKSwizzleSelector([UITextView class], @selector(setFont:), @selector(UITextView_Layout_setFont:));
     CKSwizzleSelector([UITextView class], @selector(setContentOffset:), @selector(UITextView_Layout_setContentOffset:));
     CKSwizzleSelector([UITextView class], @selector(dealloc),  @selector(UITextView_Layout_dealloc));
+    CKSwizzleSelector([UITextView class], @selector(setMarginTop:),  @selector(UITextView_setMarginTop:));
 }
 
-- (void)setMarginTop:(CGFloat)marginTop{
+- (void)UITextView_setMarginTop:(CGFloat)marginTop{
+    [self UITextView_setMarginTop:marginTop];
     [super setMarginTop:marginTop];
 }
 

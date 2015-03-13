@@ -17,6 +17,9 @@
 #import "CKSheetController.h"
 #import "UIView+Positioning.h"
 
+//Until we get rid of this class for CKPropertyStringViewController
+#import "CKPropertyStringViewController.h"
+
 #define TEXTFIELD_TAG 50000
 
 @interface CKTableViewCellController()

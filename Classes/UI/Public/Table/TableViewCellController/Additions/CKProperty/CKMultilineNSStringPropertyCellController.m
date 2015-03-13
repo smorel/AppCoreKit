@@ -16,6 +16,8 @@
 #import "UIView+Positioning.h"
 #import "NSValueTransformer+Additions.h"
 
+#import "CKPropertyStringViewController.h"
+
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
 
 #define TEXTVIEW_TAG 50000

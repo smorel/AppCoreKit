@@ -18,6 +18,10 @@
  It doesn't display anything by itself and requiers to get subclassed to implement logic related to certain type of properties.
  
  @see: CKPropertyStringViewController
+ 
+ 
+ TODO: Explain how to customize the navigationToolbar in stylesheets
+ 
  */
 @interface CKPropertyViewController : CKCollectionCellContentViewController
 

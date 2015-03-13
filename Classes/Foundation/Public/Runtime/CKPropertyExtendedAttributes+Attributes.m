@@ -280,38 +280,3 @@
 
 @end
 
-/**
- */
-@implementation CKPropertyExtendedAttributes (CKTextInputPropertyCellController)
-@dynamic textInputFormatterBlock,minimumLength,maximumLength;
-
-- (void)setTextInputFormatterBlock:(CKInputTextFormatterBlock)textInputFormatterBlock{
-    [self.attributes setObject:[[textInputFormatterBlock copy] autorelease] forKey:@"CKPropertyExtendedAttributes_CKTextInputPropertyCellController_textInputFormatterBlock"];
-}
-
-- (CKInputTextFormatterBlock)textInputFormatterBlock{
-    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKTextInputPropertyCellController_textInputFormatterBlock"];
-    return value;
-}
-
-- (void)setMinimumLength:(NSInteger)minimumLength{
-    [self.attributes setObject:[NSNumber numberWithInteger:minimumLength] forKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_minimumLength"];
-}
-
-- (NSInteger)minimumLength{
-    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_minimumLength"];
-    if(value) return [value integerValue];
-    return -1;
-}
-
-- (void)setMaximumLength:(NSInteger)maximumLength{
-    [self.attributes setObject:[NSNumber numberWithInteger:maximumLength] forKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_maximumLength"];
-}
-
-- (NSInteger)maximumLength{
-    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKNSStringPropertyCellController_maximumLength"];
-    if(value) return [value integerValue];
-    return -1;
-}
-
-@end

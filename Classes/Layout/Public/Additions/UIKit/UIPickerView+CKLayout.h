@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Wherecloud. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "UIView+CKLayout.h"
 
 @interface UIPickerView (CKLayout)
 

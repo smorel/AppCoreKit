@@ -29,8 +29,6 @@
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     self = [super initWithProperty:property readOnly:readOnly];
     
-    //set as non selectable
-    
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     self.multiline = attributes.multiLineEnabled;
     self.minimumLength = attributes.minimumLength;
@@ -136,29 +134,62 @@
         }
     }];
     
-    
     [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification
                                                         object:ValueTextField
                                                      withBlock:^(NSNotification *notification) {
-                                                         [self textFieldChanged:ValueTextField.text];
+                                                         [bself updatePropertyWithValue:ValueTextField.text];
                                                      }];
 
 }
 
-- (void)keyboardDidShow:(NSNotification *)notification {
-    // [self scrollToCell];
+- (void)updatePropertyWithValue:(id)value{
+    id result = [NSValueTransformer transform:value toClass:self.property.type];
+    [self.property setValue:result];
+}
+
+
+
+- (BOOL)textInputView:(UIView *)view shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)string{
+    CKPropertyExtendedAttributes* attributes = [[self property]extendedAttributes];
+    
+    CKInputTextFormatterBlock formatterBlock = self.textInputFormatter;
+    if(!formatterBlock){
+        formatterBlock = [attributes textInputFormatterBlock];
+    }
+    
+    if(formatterBlock){
+        BOOL bo = formatterBlock(view,range,string);
+        [self updatePropertyWithValue:[view valueForKey:@"text"]];
+        return bo;
+    }
+    
+    NSInteger min = [attributes minimumLength];
+    NSInteger max = [attributes maximumLength];
+    if (range.length>0) {
+        if(min >= 0 && range.location < min){
+            return NO;
+        }
+        return YES;
+    } else {
+        if(max >= 0 && range.location >= max){
+            return NO;
+        }
+        return YES;
+    }
+    return YES;
 }
 
 
 #pragma mark UITextField Delegate
 
-- (void)textFieldChanged:(id)value{
-    id result = [NSValueTransformer transform:value toClass:self.property.type];
-    [self.property setValue:result];
-}
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField { return YES; }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    return YES;
+- (void)textFieldDidEndEditing:(UITextField *)textField { [self didResignFirstResponder]; }
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField { return YES; }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    return [self textInputView:textField shouldChangeTextInRange:range replacementText:string];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -166,7 +197,6 @@
     if(toolbar){
         textField.inputAccessoryView = toolbar;
     }
-    
     
     if([self hasNextResponder]){
         textField.returnKeyType = UIReturnKeyNext;
@@ -178,13 +208,8 @@
     [self scrollToCell];
     
     [self didBecomeFirstResponder];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-    [self didResignFirstResponder];
-}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if(textField.returnKeyType == UIReturnKeyNext ){
@@ -199,100 +224,66 @@
     return YES;
 }
 
-- (BOOL)textFieldShouldClear:(UITextField *)textField {
-    return YES;
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    CKPropertyExtendedAttributes* attributes = [[self property]extendedAttributes];
-    
-    CKInputTextFormatterBlock formatterBlock = self.textInputFormatter;
-    if(!formatterBlock){
-        formatterBlock = [attributes textInputFormatterBlock];
-    }
-    
-    if(formatterBlock){
-        BOOL bo = formatterBlock(textField,range,string);
-        [self textFieldChanged:textField.text];
-        return bo;
-    }
-    
-    NSInteger min = [attributes minimumLength];
-    NSInteger max = [attributes maximumLength];
-    if (range.length>0) {
-        if(min >= 0 && range.location < min){
-            return NO;
-        }
-        return YES;
-    } else {
-        if(max >= 0 && range.location >= max){
-            return NO;
-        }
-        return YES;
-    }
-    return YES;
-}
-
 
 
 #pragma mark TextView Delegate
 
-- (void)textViewChanged:(id)value{
-    id result = [NSValueTransformer transform:value toClass:self.property.type];
-    [self.property setValue:result];
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView { return YES; }
+
+- (void)textViewValueChanged:(NSString*)text{ [self updatePropertyWithValue:text]; }
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)string{
+    return [self textInputView:textView shouldChangeTextInRange:range replacementText:string];
 }
 
-
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
-    return YES;
-}
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView{ [self didResignFirstResponder]; return YES; }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    UIToolbar* toolbar = [self navigationToolbar];
+    if(toolbar){
+        textView.inputAccessoryView = toolbar;
+    }
+    
     [self scrollToCell];
-    
     [self didBecomeFirstResponder];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
 
 
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView{
-    [self didResignFirstResponder];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-    return YES;
+@end
+
+
+/**
+ */
+@implementation CKPropertyExtendedAttributes (CKPropertyStringViewController)
+@dynamic textInputFormatterBlock,minimumLength,maximumLength;
+
+- (void)setTextInputFormatterBlock:(CKInputTextFormatterBlock)textInputFormatterBlock{
+    [self.attributes setObject:[[textInputFormatterBlock copy] autorelease] forKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_textInputFormatterBlock"];
 }
 
--(void)textViewValueChanged:(NSString*)text{
-    [self textViewChanged:text];
+- (CKInputTextFormatterBlock)textInputFormatterBlock{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_textInputFormatterBlock"];
+    return value;
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    CKPropertyExtendedAttributes* attributes = [[self property]extendedAttributes];
-    
-    CKInputTextFormatterBlock formatterBlock = self.textInputFormatter;
-    if(!formatterBlock){
-        formatterBlock = [attributes textInputFormatterBlock];
-    }
-    
-    if(formatterBlock){
-        BOOL bo = formatterBlock(textView,range,text);
-        [self textViewChanged:textView.text];
-        return bo;
-    }
-    
-    NSInteger min = [attributes minimumLength];
-    NSInteger max = [attributes maximumLength];
-    if (range.length>0) {
-        if(min >= 0 && range.location < min){
-            return NO;
-        }
-        return YES;
-    } else {
-        if(max >= 0 && range.location >= max){
-            return NO;
-        }
-        return YES;
-    }
-    return YES;
+- (void)setMinimumLength:(NSInteger)minimumLength{
+    [self.attributes setObject:[NSNumber numberWithInteger:minimumLength] forKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_minimumLength"];
+}
+
+- (NSInteger)minimumLength{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_minimumLength"];
+    if(value) return [value integerValue];
+    return -1;
+}
+
+- (void)setMaximumLength:(NSInteger)maximumLength{
+    [self.attributes setObject:[NSNumber numberWithInteger:maximumLength] forKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_maximumLength"];
+}
+
+- (NSInteger)maximumLength{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKPropertyStringViewController_maximumLength"];
+    if(value) return [value integerValue];
+    return -1;
 }
 
 @end

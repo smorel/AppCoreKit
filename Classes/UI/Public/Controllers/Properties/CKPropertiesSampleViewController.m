@@ -31,16 +31,14 @@
     
     NSMutableArray* cells =[NSMutableArray array];
     
-    for(int i =0; i<10; ++i){
-        CKPropertyStringViewController* singleLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"singleLineString"]]autorelease];
-        
-        CKPropertyStringViewController* multilineLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"multiLineString"]]autorelease];
-        multilineLineController.multiline = YES;
-        
-        [cells addObjectsFromArray:@[
-                                     [singleLineController newTableViewCellController],
-                                     [multilineLineController newTableViewCellController]]];
-    }
+    CKPropertyStringViewController* singleLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"singleLineString"]]autorelease];
+    
+    CKPropertyStringViewController* multilineLineController = [[[CKPropertyStringViewController alloc]initWithProperty:[CKProperty propertyWithObject:self keyPath:@"multiLineString"]]autorelease];
+    multilineLineController.multiline = YES;
+    
+    [cells addObjectsFromArray:@[
+                                 [singleLineController newTableViewCellController],
+                                 [multilineLineController newTableViewCellController]]];
     
     CKFormSection* propertiesSection = [CKFormSection sectionWithCellControllers:cells];
     
