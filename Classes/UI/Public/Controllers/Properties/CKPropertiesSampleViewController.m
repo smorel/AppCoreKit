@@ -10,8 +10,14 @@
 #import "CKPropertyStringViewController.h"
 #import "CKPropertyNumberViewController.h"
 #import "CKPropertyBoolViewController.h"
+#import "CKPropertyEnumViewController.h"
 
 #import "CKTableViewContentCellController.h"
+
+typedef NS_ENUM(NSInteger, TEST){
+    TEST0,
+    TEST1
+};
 
 @interface CKPropertiesSampleViewController ()
 @property(nonatomic,retain) NSString* singleLineString;
@@ -20,9 +26,14 @@
 @property(nonatomic,assign) CGFloat floatValue;
 @property(nonatomic,retain) NSNumber* numberValue;
 @property(nonatomic,assign) BOOL boolValue;
+@property(nonatomic,assign) TEST enumValue;
 @end
 
 @implementation CKPropertiesSampleViewController
+
+- (void)enumValueExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"TEST", TEST0, TEST1);
+}
 
 #pragma mark ViewController Life Cycle
 
@@ -48,6 +59,7 @@
     CKPropertyNumberViewController* floatValueController = [[[CKPropertyNumberViewController alloc]initWithProperty:_p(@"floatValue")]autorelease];
     CKPropertyNumberViewController* numberValueController = [[[CKPropertyNumberViewController alloc]initWithProperty:_p(@"numberValue")]autorelease];
     CKPropertyBoolViewController* boolValueController = [[[CKPropertyBoolViewController alloc]initWithProperty:_p(@"boolValue")]autorelease];
+    CKPropertyEnumViewController* enumValueController = [[[CKPropertyEnumViewController alloc]initWithProperty:_p(@"enumValue")]autorelease];
     
     
     [cells addObjectsFromArray:@[
@@ -56,7 +68,8 @@
                                  [intValueController newTableViewCellController],
                                  [floatValueController newTableViewCellController],
                                  [numberValueController newTableViewCellController],
-                                 [boolValueController newTableViewCellController]
+                                 [boolValueController newTableViewCellController],
+                                 [enumValueController newTableViewCellController]
                                  ]
      ];
     
