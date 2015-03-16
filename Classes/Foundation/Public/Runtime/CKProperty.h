@@ -119,6 +119,10 @@
 
 /**
  */
+- (BOOL)isContainer;
+
+/**
+ */
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes;
 
 /**
@@ -128,6 +132,18 @@
 /**
  */
 - (void)removeAllObjects;
+
+/**
+ */
+- (void)addObject:(id)value;
+
+/**
+ */
+- (void)removeObject:(id)value;
+
+/**
+ */
+- (BOOL)containsObject:(id)value;
 
 /**
  */

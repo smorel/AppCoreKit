@@ -306,6 +306,64 @@
 	}
 }
 
+- (void)removeObject:(id)value{
+    Class selfClass = [self type];
+    if([NSObject isClass:selfClass kindOfClass:[CKCollection class]]){
+        [[self value]removeObject:value];
+        return;
+    }
+    CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
+    
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
+    
+   
+    NSMutableArray* proxy= nil;
+    if(self.subKeyPath != nil) {
+        proxy = [self.subObject mutableArrayValueForKey:self.subKeyPath];
+    }
+    else{
+        proxy = self.subObject;
+    }
+    NSInteger index = [proxy indexOfObject:value];
+    [proxy removeObjectAtIndex:index];
+}
+
+- (void)addObject:(id)value{
+    Class selfClass = [self type];
+    if([NSObject isClass:selfClass kindOfClass:[CKCollection class]]){
+        [[self value]addObject:value];
+        return;
+    }
+    CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
+    
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
+    
+    
+    NSMutableArray* proxy= nil;
+    if(self.subKeyPath != nil) {
+        proxy = [self.subObject mutableArrayValueForKey:self.subKeyPath];
+    }
+    else{
+        proxy = self.subObject;
+    }
+    [proxy addObject:value];
+}
+
+- (BOOL)isContainer{
+    Class selfClass = [self type];
+    return [NSObject isClass:selfClass kindOfClass:[CKCollection class]] || [NSObject isClass:selfClass kindOfClass:[NSArray class]];
+}
+
+- (BOOL)containsObject:(id)value{
+    Class selfClass = [self type];
+    if([NSObject isClass:selfClass kindOfClass:[CKCollection class]]){
+        return [[[self value]allObjects]containsObject:value];
+    }
+    
+    CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
+    return [[self value]containsObject:value];
+}
+
 - (NSInteger)count{
 	Class selfClass = [self type];
 	CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]]
