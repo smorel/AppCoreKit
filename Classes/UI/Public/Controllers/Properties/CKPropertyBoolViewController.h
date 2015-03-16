@@ -8,12 +8,12 @@
 
 #import "CKPropertyViewController.h"
 
+//TODO: Manages Readonly !
 
-/** CKPropertyBoolViewController propvides the logic to edit and synchronize changes to/from a BOOL property with the desired degree of customization.
+
+/** CKPropertyBoolViewController provides the logic to edit and synchronize changes to/from a BOOL property with the desired degree of customization.
  
  #LAYOUT
- 
- If multiline is not enabled:
  
  - default view padding is 10 10 10 10, flexibleSize is NO so that it fits the height of the content
  - default marginRight on *PropertyNameLabel*: 10

@@ -9,7 +9,7 @@
 #import "CKPropertyViewController.h"
 
 
-/** CKPropertyStringViewController propvides the logic to edit and synchronize changes to/from a NSString property with the desired degree of customization.
+/** CKPropertyStringViewController provides the logic to edit and synchronize changes to/from a NSString property with the desired degree of customization.
  
  #LAYOUT
  
