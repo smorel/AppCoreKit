@@ -37,6 +37,6 @@
 
 @interface CKCollectionCellContentViewController(CKTableViewContentCellController)
 
-- (CKTableViewContentCellController*)newTableViewCellController;
+- (CKTableViewContentCellController*)createTableViewCellController;
 
 @end

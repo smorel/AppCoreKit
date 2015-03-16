@@ -204,7 +204,7 @@
 
 @implementation CKCollectionCellContentViewController(CKTableViewContentCellController)
 
-- (CKTableViewContentCellController*)newTableViewCellController{
+- (CKTableViewContentCellController*)createTableViewCellController{
     return [[[CKTableViewContentCellController alloc]initWithContentViewController:self]autorelease];
 }
 

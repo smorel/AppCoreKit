@@ -63,13 +63,13 @@ typedef NS_ENUM(NSInteger, TEST){
     
     
     [cells addObjectsFromArray:@[
-                                 [singleLineController newTableViewCellController],
-                                 [multilineLineController newTableViewCellController],
-                                 [intValueController newTableViewCellController],
-                                 [floatValueController newTableViewCellController],
-                                 [numberValueController newTableViewCellController],
-                                 [boolValueController newTableViewCellController],
-                                 [enumValueController newTableViewCellController]
+                                 [singleLineController createTableViewCellController],
+                                 [multilineLineController createTableViewCellController],
+                                 [intValueController createTableViewCellController],
+                                 [floatValueController createTableViewCellController],
+                                 [numberValueController createTableViewCellController],
+                                 [boolValueController createTableViewCellController],
+                                 [enumValueController createTableViewCellController]
                                  ]
      ];
     
