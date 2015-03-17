@@ -1,12 +1,12 @@
 //
-//  CKPropertyEnumViewController.m
+//  CKPropertySelectionViewController.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2015-03-13.
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKPropertyEnumViewController.h"
+#import "CKPropertySelectionViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKOptionTableViewController.h"
 #import "UIBarButtonItem+BlockBasedInterface.h"
@@ -14,7 +14,7 @@
 #import "NSValueTransformer+Additions.h"
 #import "CKResourceManager.h"
 
-@implementation CKPropertyEnumValue
+@implementation CKPropertySelectionValue
 
 - (void)dealloc{
     [_property release];
@@ -25,12 +25,12 @@
 
 @end
 
-@interface CKPropertyEnumViewController ()
+@interface CKPropertySelectionViewController ()
 @property(nonatomic,assign,readwrite) BOOL multiSelectionEnabled;
 @property(nonatomic,retain) NSMutableArray* values;
 @end
 
-@implementation CKPropertyEnumViewController
+@implementation CKPropertySelectionViewController
 
 - (void)dealloc{
     [_values release];
@@ -43,7 +43,7 @@
 
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-    NSAssert(attributes.enumDescriptor != nil || attributes.valuesAndLabels != nil,@"CKPropertyEnumViewController needs you to declare an enum descriptor or valuesAndLabels in your property's extended attributes");
+    NSAssert(attributes.enumDescriptor != nil || attributes.valuesAndLabels != nil,@"CKPropertySelectionViewController needs you to declare an enum descriptor or valuesAndLabels in your property's extended attributes");
 
     if(attributes.enumDescriptor ){
         return [self initWithProperty:property enumDescriptor:attributes.enumDescriptor readOnly:readOnly];
@@ -66,7 +66,7 @@
     for(NSString* label in [valuesAndLabels allKeys]){
         id value = [valuesAndLabels objectForKey:label];
         
-        CKPropertyEnumValue* v = [[CKPropertyEnumValue alloc]init];
+        CKPropertySelectionValue* v = [[CKPropertySelectionValue alloc]init];
         v.property = self.property;
         v.label = label;
         v.value = value;
@@ -102,7 +102,7 @@
     if(self.multiSelectionEnabled){
         NSMutableString* str = [NSMutableString string];
         NSArray* sorted = self.sortBlock ? [self.values sortedArrayUsingComparator:self.sortBlock] : self.values;
-        for(CKPropertyEnumValue* v in sorted){
+        for(CKPropertySelectionValue* v in sorted){
             if(intValue & [v.value integerValue]){
                 if([str length] > 0){
                     [str appendFormat:@"%@%@",self.multiSelectionSeparatorString,_(v.label)];
@@ -115,7 +115,7 @@
         return str;
     }
     else{
-        for(CKPropertyEnumValue* v in self.values){
+        for(CKPropertySelectionValue* v in self.values){
             if(intValue == [v.value integerValue]){
                 return _(v.label);
             }
@@ -137,7 +137,7 @@
     
     NSMutableString* str = [NSMutableString string];
     NSArray* sorted = self.sortBlock ? [self.values sortedArrayUsingComparator:self.sortBlock] : self.values;
-    for(CKPropertyEnumValue* v in sorted){
+    for(CKPropertySelectionValue* v in sorted){
         if([self.property containsObject: v.value ]){
             if([str length] > 0){
                 [str appendFormat:@"%@%@",self.multiSelectionSeparatorString,_(v.label)];
@@ -151,11 +151,24 @@
     return str;
 }
 
+- (NSString*)labelForObjectValue:(id)object{
+    for(CKPropertySelectionValue* v in self.value){
+        if([self.property.value isEqual:object]){
+            return _(v.label);
+        }
+    }
+    
+    CKClassPropertyDescriptor* descriptor = [self.property descriptor];
+    NSString* str = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+    return _(str);
+}
+
 - (NSString*)labelForPropertyValue:(id)value{
     if([self.property isContainer])
         return [self labelForCollectionValue:value ];
-    
-    return [self labelForNumberValue:[value integerValue]];
+    else if([self.property isNumber])
+        return [self labelForNumberValue:[value integerValue]];
+    return [self labelForObjectValue:value];
 }
 
 - (void)viewDidLoad{
@@ -209,7 +222,7 @@
 
 
 - (void)setupBindings{
-    __unsafe_unretained CKPropertyEnumViewController* bself = self;
+    __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     UILabel* PropertyNameLabel = [self.view viewWithName:@"PropertyNameLabel"];
     PropertyNameLabel.text = self.propertyNameLabel;
@@ -241,7 +254,7 @@
 - (void)didSelect{
     [super didSelect];
     
-    __unsafe_unretained CKPropertyEnumViewController* bself = self;
+    __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKFormTableViewController* editionViewController = [CKFormTableViewController controller];
     editionViewController.title = _(self.property.name);
@@ -253,7 +266,7 @@
     NSArray* sorted = self.sortBlock ? [self.values sortedArrayUsingComparator:self.sortBlock] : self.values;
     
     NSInteger index = 0;
-    for(CKPropertyEnumValue* v in sorted){
+    for(CKPropertySelectionValue* v in sorted){
         CKTableViewCellController* cell = [factory controllerForObject:v
                                                            atIndexPath:[NSIndexPath indexPathForRow:index inSection:0]
                                               collectionViewController:editionViewController];
@@ -270,7 +283,7 @@
                 }else{
                     [v.property addObject:v.value];
                 }
-            }else{
+            }else if([v.property isNumber]){
                 NSInteger intV = [v.value integerValue];
                 NSInteger intP = [v.property.value integerValue];
                 if(bself.multiSelectionEnabled){
@@ -282,6 +295,8 @@
                 }else{
                     [v.property setValue:@(intV)];
                 }
+            }else{
+                [v.property setValue:v.value];
             }
         }];
         
@@ -298,7 +313,7 @@
 
 - (NSString*)imageNameForValue:(id)value{
     NSString* strValue = nil;
-    for(CKPropertyEnumValue* v in self.values){
+    for(CKPropertySelectionValue* v in self.values){
         if([value isEqual:v.value]){
             strValue = v.label;
             break;
@@ -312,12 +327,12 @@
 }
 
 - (CKCollectionCellControllerFactory*)defaultFactory{
-    __unsafe_unretained CKPropertyEnumViewController* bself = self;
+    __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
-    [factory addItemForObjectOfClass:[CKPropertyEnumValue class]
+    [factory addItemForObjectOfClass:[CKPropertySelectionValue class]
          withControllerCreationBlock:^CKTableViewCellController *(id object, NSIndexPath *indexPath) {
-             CKPropertyEnumValue* v = (CKPropertyEnumValue*)object;
+             CKPropertySelectionValue* v = (CKPropertySelectionValue*)object;
              
              UIImage* image = [CKResourceManager imageNamed:[self imageNameForValue:v.value]];
              
@@ -332,7 +347,7 @@
                      
                      if([v.property isContainer]){
                          selected = [v.property containsObject:v.value];
-                     }else{
+                     }else if([v.property isNumber]){
                          NSInteger intV = [v.value integerValue];
                          NSInteger intP = [v.property.value integerValue];
                          if(bself.multiSelectionEnabled){
@@ -340,6 +355,8 @@
                          }else{
                              selected = (intV == intP);
                          }
+                     }else{
+                         selected = [v.property.value isEqual:v.value];
                      }
                      
                      cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
@@ -353,21 +370,21 @@
 }
 
 - (void)presentEditionViewController:(CKFormTableViewController*)controller{
-    __unsafe_unretained CKPropertyEnumViewController* bself = self;
+    __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKPropertyEnumValuesPresentationStyle style = self.presentationStyle;
-    if(style == CKPropertyEnumValuesPresentationStyleDefault){
+    CKPropertySelectionValuesPresentationStyle style = self.presentationStyle;
+    if(style == CKPropertySelectionValuesPresentationStyleDefault){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-            style = CKPropertyEnumValuesPresentationStylePopover;
+            style = CKPropertySelectionValuesPresentationStylePopover;
         }else if(self.navigationController){
-            style = CKPropertyEnumValuesPresentationStylePush;
+            style = CKPropertySelectionValuesPresentationStylePush;
         }else{
-            style = CKPropertyEnumValuesPresentationStyleModal;
+            style = CKPropertySelectionValuesPresentationStyleModal;
         }
     }
     
     switch(style){
-        case CKPropertyEnumValuesPresentationStylePopover:{
+        case CKPropertySelectionValuesPresentationStylePopover:{
             CKPopoverController* popover = [[CKPopoverController alloc]initWithContentViewController:controller];
             [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             
@@ -381,7 +398,7 @@
             [controller endBindingsContext];
             break;
         }
-        case CKPropertyEnumValuesPresentationStylePush:{
+        case CKPropertySelectionValuesPresentationStylePush:{
             [self.navigationController pushViewController:controller animated:YES];
             
             [controller beginBindingsContextByRemovingPreviousBindings];
@@ -394,7 +411,7 @@
             
             break;
         }
-        case CKPropertyEnumValuesPresentationStyleModal:{
+        case CKPropertySelectionValuesPresentationStyleModal:{
             UINavigationController* nav = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
             
             controller.leftButton = [UIBarButtonItem barButtonItemWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{

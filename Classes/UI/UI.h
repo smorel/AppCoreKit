@@ -114,7 +114,7 @@
 #import "CKPropertyStringViewController.h"
 #import "CKPropertyNumberViewController.h"
 #import "CKPropertyBoolViewController.h"
-#import "CKPropertyEnumViewController.h"
+#import "CKPropertySelectionViewController.h"
 #import "CKPropertiesSampleViewController.h"
 
 

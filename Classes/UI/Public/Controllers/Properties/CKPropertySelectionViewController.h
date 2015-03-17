@@ -1,5 +1,5 @@
 //
-//  CKPropertyEnumViewController.h
+//  CKPropertySelectionViewController.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2015-03-13.
@@ -8,9 +8,9 @@
 
 #import "CKPropertyViewController.h"
 
-/** CKPropertyEnumItem represents an enum or bitfield value and label.
+/** CKPropertySelectionValue represents an enum or bitfield value and label.
  */
-@interface CKPropertyEnumValue : NSObject
+@interface CKPropertySelectionValue : NSObject
 
 /**
  */
@@ -29,17 +29,17 @@
 
 /**
  */
-typedef NS_ENUM(NSInteger, CKPropertyEnumValuesPresentationStyle){
-    CKPropertyEnumValuesPresentationStyleDefault,
-    CKPropertyEnumValuesPresentationStylePush,
-    CKPropertyEnumValuesPresentationStylePopover,
-    CKPropertyEnumValuesPresentationStyleModal
+typedef NS_ENUM(NSInteger, CKPropertySelectionValuesPresentationStyle){
+    CKPropertySelectionValuesPresentationStyleDefault,
+    CKPropertySelectionValuesPresentationStylePush,
+    CKPropertySelectionValuesPresentationStylePopover,
+    CKPropertySelectionValuesPresentationStyleModal
 };
 
 
-/** CKPropertyEnumViewController provides the logic to edit and synchronize changes to/from an Enum of Bitfield property with the desired degree of customization. It also supports NSArray or CKCollection properties and will add objects to them when editing. MultiSelection is enabled by default in case the property is an array.
+/** CKPropertySelectionViewController provides the logic to edit and synchronize changes to/from an Enum, Bitfield, array, collection or object property by providing single or multiselection mechanism with the desired degree of customization. MultiSelection is enabled by default in case the property is an array or a bit mask.
  
- The values and labels can be specified by using some of the init method provided in CKPropertyEnumViewController or by using the CKEnumDescriptor or valuesAndLabels set to your property extended attributes. Implements this in the class owning your property:
+ The values and labels can be specified by using some of the init method provided in CKPropertySelectionViewController or by using the CKEnumDescriptor or valuesAndLabels set to your property extended attributes. Implements this in the class owning your property:
  
  - (void)myPropertyExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
      attributes.enumDescriptor = CKEnumDefinition(@"MyEnum",
@@ -55,8 +55,8 @@ typedef NS_ENUM(NSInteger, CKPropertyEnumValuesPresentationStyle){
      };
  }
  
- By tapping on the controller, a table view controller will be presented with the associated labels and values using the specified presentationStyle.
- By default, the labels representing each value of the enum matches the actual enum strings in your code. You can customize the label of each individual enum values by adding key/values in your localization string as follow:
+ By tapping on the controller, a table view or a picker view controller will be presented with the associated labels and values using the specified presentationStyle.
+ By default, the labels representing each values is a localized version of the string matches the actual enum or label strings in your code. You can customize the label of each individual enum values by adding key/values in your localization string as follow:
      "MyEnumValue0" = "My Enum Value 0";
  
  The images representing each value are loaded using [UIImage imageNamed:@"icon_EnumValue"]. In the example above, the image name would have been "icon_MyEnumValue0". If we do not find any image with this name, or if multiselection is enabled, the cell will display a disclosure indicator instead.
@@ -98,13 +98,13 @@ typedef NS_ENUM(NSInteger, CKPropertyEnumValuesPresentationStyle){
  
  *Stylesheets*
  
- In the stylesheet of the view controller embedding the CKPropertyEnumViewController, you can customize the appearance of this view controller as follow:
+ In the stylesheet of the view controller embedding the CKPropertySelectionViewController, you can customize the appearance of this view controller as follow:
  
  <pre>
  {
      //Target your controller by type and the property path that you set when initializing your property
  
-     "CKPropertyEnumViewController[property.keypath=propertyPath]" : {
+     "CKPropertySelectionViewController[property.keypath=propertyPath]" : {
  
          "view" : {
              //customize the view containing the labels and text input views here
@@ -131,7 +131,7 @@ typedef NS_ENUM(NSInteger, CKPropertyEnumValuesPresentationStyle){
  </pre>
  
  */
-@interface CKPropertyEnumViewController : CKPropertyViewController
+@interface CKPropertySelectionViewController : CKPropertyViewController
 
 /**
  */
@@ -166,15 +166,15 @@ typedef NS_ENUM(NSInteger, CKPropertyEnumValuesPresentationStyle){
 
 /** Defines how we should present the table view controller for editing the enum value.
  */
-@property(nonatomic,assign) CKPropertyEnumValuesPresentationStyle presentationStyle;
+@property(nonatomic,assign) CKPropertySelectionValuesPresentationStyle presentationStyle;
 
 /** Enum value edition is presented as a form of table view controller.
- Each individual cell in the table view controller can be customized by setting itemCellControllerFactory with an item for object of class CKPropertyEnumValue.
+ Each individual cell in the table view controller can be customized by setting itemCellControllerFactory with an item for object of class CKPropertySelectionValue.
  */
 @property(nonatomic,retain) CKCollectionCellControllerFactory* itemCellControllerFactory;
 
 /** Set this block to sort the enum values in the table view controller and when computing the multi selection value label as you expect.
  */
-@property(nonatomic,copy) NSComparisonResult(^sortBlock)(CKPropertyEnumValue* obj1, CKPropertyEnumValue* obj2);
+@property(nonatomic,copy) NSComparisonResult(^sortBlock)(CKPropertySelectionValue* obj1, CKPropertySelectionValue* obj2);
 
 @end

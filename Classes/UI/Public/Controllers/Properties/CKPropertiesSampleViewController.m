@@ -10,7 +10,7 @@
 #import "CKPropertyStringViewController.h"
 #import "CKPropertyNumberViewController.h"
 #import "CKPropertyBoolViewController.h"
-#import "CKPropertyEnumViewController.h"
+#import "CKPropertySelectionViewController.h"
 
 #import "CKTableViewContentCellController.h"
 
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, TEST){
     CKPropertyNumberViewController* floatValueController = [[[CKPropertyNumberViewController alloc]initWithProperty:_p(@"floatValue")]autorelease];
     CKPropertyNumberViewController* numberValueController = [[[CKPropertyNumberViewController alloc]initWithProperty:_p(@"numberValue")]autorelease];
     CKPropertyBoolViewController* boolValueController = [[[CKPropertyBoolViewController alloc]initWithProperty:_p(@"boolValue")]autorelease];
-    CKPropertyEnumViewController* enumValueController = [[[CKPropertyEnumViewController alloc]initWithProperty:_p(@"enumValue")]autorelease];
+    CKPropertySelectionViewController* enumValueController = [[[CKPropertySelectionViewController alloc]initWithProperty:_p(@"enumValue")]autorelease];
     
     
     [cells addObjectsFromArray:@[
