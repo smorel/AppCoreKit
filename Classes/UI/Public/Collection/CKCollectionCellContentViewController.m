@@ -38,6 +38,7 @@
 - (void)dealloc{
     [self clearBindingsContext];
     
+    [_didSelectBlock release];
     [_collectionCellControllerWeakRef release];
     [_reusableView release];
     
@@ -167,6 +168,7 @@
         }
         
         [self viewWillDisappear:NO];
+        [self prepareForReuseUsingContentView:nil contentViewCell:nil];
         [self viewDidDisappear:NO];
         
         self.isComputingSize = NO;
@@ -220,7 +222,9 @@
 }
 
 - (void)didSelect{
-    
+    if(self.didSelectBlock){
+        self.didSelectBlock();
+    }
 }
 
 - (void)didBecomeFirstResponder{

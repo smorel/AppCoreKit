@@ -25,9 +25,11 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    self.pickerView = [[[UIPickerView alloc]initWithFrame:self.view.bounds]autorelease];
+    self.pickerView = [[[UIPickerView alloc]init]autorelease];
+    CGSize size = [self.pickerView sizeThatFits:self.view.bounds.size];
+    self.pickerView.frame = CGRectMake((self.view.width/2)-(size.width/2),(self.view.height/2) - (size.height /2),size.width,size.height);
     self.pickerView.name = @"PickerView";
-    self.pickerView.autoresizingMask = UIViewAutoresizingFlexibleSize;
+    self.pickerView.autoresizingMask = UIViewAutoresizingFlexibleAllMargins;
     
     [self.view addSubview:self.pickerView];
 }

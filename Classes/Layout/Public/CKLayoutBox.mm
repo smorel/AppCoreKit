@@ -291,6 +291,21 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                 }
                 [[box containerLayoutView]addSubview:view];
             }
+        }else if([subBox isKindOfClass:[UIViewController class]]){
+            UIViewController* viewController = (UIViewController*)subBox;
+            UIView* view = viewController.view;
+            view.autoresizingMask = 0;
+            if([view superview] != [box containerLayoutView]){
+                [viewController viewWillAppear:NO];
+                
+                if([view stylesheet] == nil){
+                    NSMutableDictionary* stylesheet = [[box containerLayoutView] stylesheet];
+                    [view findAndApplyStyleFromStylesheet:stylesheet propertyName:nil];
+                }
+                [[box containerLayoutView]addSubview:view];
+                
+                [viewController viewDidAppear:NO];
+            }
         }
     }
 }
@@ -306,6 +321,12 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     if([box isKindOfClass:[UIView class]]){
         UIView* view = (UIView*)box;
         [view removeFromSuperview];
+    }else if([box isKindOfClass:[UIViewController class]]){
+        UIViewController* viewController = (UIViewController*)box;
+        UIView* view = viewController.view;
+        [viewController viewWillDisappear:NO];
+        [view removeFromSuperview];
+        [viewController viewDidDisappear:NO];
     }
     
     for(NSObject<CKLayoutBoxProtocol>* subBox in [box layoutBoxes]){
@@ -345,6 +366,22 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                     }
                     [[self containerLayoutView]addSubview:view];
                 }
+            }else if([subBox isKindOfClass:[UIViewController class]]){
+                UIViewController* viewController = (UIViewController*)subBox;
+                UIView* view = viewController.view;
+                view.autoresizingMask = 0;
+                //TODO : verify if needs to call view will disappear did disappear
+                if([view superview] != [self containerLayoutView]){
+                    [viewController viewWillAppear:NO];
+                    
+                    if([view stylesheet] == nil){
+                        NSMutableDictionary* stylesheet = [[self containerLayoutView] stylesheet];
+                        [view findAndApplyStyleFromStylesheet:stylesheet  propertyName:nil];
+                    }
+                    [[self containerLayoutView]addSubview:view];
+                }
+                
+                [viewController viewDidAppear:NO];
             }
         }
     }

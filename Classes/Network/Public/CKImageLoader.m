@@ -113,14 +113,22 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
 - (void)didCompleteWithImage:(UIImage*)image fromCache:(BOOL)cache{
     if (image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        void(^execute)() = ^(){
             if(_completionBlock){
                 _completionBlock(self, image, YES);
             }
             if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
                 [self.delegate imageLoader:self didLoadImage:image cached:cache];
             }
-        });
+        };
+        
+         if(dispatch_get_current_queue() == dispatch_get_main_queue()){
+            execute();
+         }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                execute();
+            });
+        }
     }
 }
 

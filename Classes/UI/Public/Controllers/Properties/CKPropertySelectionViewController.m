@@ -8,11 +8,16 @@
 
 #import "CKPropertySelectionViewController.h"
 #import "CKTableViewCellController.h"
+#import "CKTableViewContentCellController.h"
 #import "CKOptionTableViewController.h"
 #import "UIBarButtonItem+BlockBasedInterface.h"
 #import "CKPopoverController.h"
 #import "NSValueTransformer+Additions.h"
 #import "CKResourceManager.h"
+#import "CKStyleManager.h"
+#import "UIViewController+Style.h"
+
+#import "CKPickerViewViewController.h"
 
 @implementation CKPropertySelectionValue
 
@@ -280,10 +285,44 @@
     
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKFormTableViewController* editionViewController = [CKFormTableViewController controller];
-    editionViewController.title = _(self.property.name);
+    CKViewController* editionViewController = nil;
+    switch(self.selectionControllerAppearance){
+        case CKPropertySelectionAppearanceStyleDefault:
+        case CKPropertySelectionAppearanceStyleList:{
+            CKFormTableViewController* form = [CKFormTableViewController controller];
+            
+            NSArray* controllers = [self cellsForEditionController:form];
+            NSMutableArray* cells = [NSMutableArray array];
+            for(CKCollectionCellContentViewController* cell in controllers){
+                [cells addObject:[cell createTableViewCellController]];
+            }
+            
+            CKFormSection* section = [CKFormSection sectionWithCellControllers:cells];
+            [form addSections:@[section]];
+            
+            editionViewController = form;
+            break;
+        }
+        case CKPropertySelectionAppearanceStylePicker:{
+            CKPickerViewViewController* picker = [CKPickerViewViewController controller];
+            
+            NSArray* controllers = [self cellsForEditionController:picker];
+            CKSection* section = [CKSection sectionWithControllers:controllers];
+            [picker addSections:@[section] animated:NO];
+            
+            editionViewController = picker;
+            break;
+        }
+    }
     
-    CKCollectionCellControllerFactory* factory = self.selectionControllerFactory ? self.selectionControllerFactory : [self defaultFactory];
+    editionViewController.stylesheetFileName = self.collectionViewController.stylesheetFileName;
+    editionViewController.view.backgroundColor = self.collectionViewController.view.backgroundColor;
+    editionViewController.title = _(self.property.name);
+    [self presentEditionViewController:editionViewController];
+}
+
+- (NSArray*)cellsForEditionController:(UIViewController*)editionController{
+    CKViewControllerFactory* factory = self.selectionControllerFactory ? self.selectionControllerFactory : [self defaultFactory];
     
     NSMutableArray* cells = [NSMutableArray array];
     
@@ -291,48 +330,16 @@
     
     NSInteger index = 0;
     for(CKPropertySelectionValue* v in sorted){
-        CKTableViewCellController* cell = [factory controllerForObject:v
-                                                           atIndexPath:[NSIndexPath indexPathForRow:index inSection:0]
-                                              collectionViewController:editionViewController];
-        
-        CKCallback* olSelectionCallback = cell.selectionCallback;
-        [cell setSelectionBlock:^(CKTableViewCellController *controller) {
-            if(olSelectionCallback){
-                [olSelectionCallback execute:controller];
-            }
-            
-            if([v.property isContainer]){
-                if([v.property containsObject:v.value]){
-                    [v.property removeObject:v.value];
-                }else{
-                    [v.property addObject:v.value];
-                }
-            }else if([v.property isNumber]){
-                NSInteger intV = [v.value integerValue];
-                NSInteger intP = [v.property.value integerValue];
-                if(bself.multiSelectionEnabled){
-                    if(intP & intV){
-                        [v.property setValue:@(intP &~ intV)];
-                    }else{
-                        [v.property setValue:@(intP | intV)];
-                    }
-                }else{
-                    [v.property setValue:@(intV)];
-                }
-            }else{
-                [v.property setValue:v.value];
-            }
-        }];
+        CKCollectionCellContentViewController* cell = [factory controllerForObject:v
+                                                                         indexPath:[NSIndexPath indexPathForRow:index inSection:0]
+                                                               containerController:editionController];
         
         [cells addObject:cell];
         
         ++index;
     };
-    
-    CKFormSection* section = [CKFormSection sectionWithCellControllers:cells];
-    [editionViewController addSections:@[section]];
-    
-    [self presentEditionViewController:editionViewController];
+
+    return cells;
 }
 
 - (NSString*)imageNameForValue:(id)value{
@@ -350,44 +357,62 @@
     return [NSString stringWithFormat:@"icon_%@",strValue];
 }
 
-- (CKCollectionCellControllerFactory*)defaultFactory{
+- (CKViewControllerFactory*)defaultFactory{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
-    [factory addItemForObjectOfClass:[CKPropertySelectionValue class]
-         withControllerCreationBlock:^CKTableViewCellController *(id object, NSIndexPath *indexPath) {
+    CKViewControllerFactory* factory = [CKViewControllerFactory factory];
+    [factory registerFactoryForObjectOfClass:[CKPropertySelectionValue class]
+                                     factory:^CKCollectionCellContentViewController *(id object, NSIndexPath *indexPath) {
              CKPropertySelectionValue* v = (CKPropertySelectionValue*)object;
+                                         
+            CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^{
+                if([v.property isContainer]){
+                    if([v.property containsObject:v.value]){
+                        [v.property removeObject:v.value];
+                    }else{
+                        [v.property addObject:v.value];
+                    }
+                }else if([v.property isNumber]){
+                    NSInteger intV = [v.value integerValue];
+                    NSInteger intP = [v.property.value integerValue];
+                    if(bself.multiSelectionEnabled){
+                        if(intP & intV){
+                            [v.property setValue:@(intP &~ intV)];
+                        }else{
+                            [v.property setValue:@(intP | intV)];
+                        }
+                    }else{
+                        [v.property setValue:@(intV)];
+                    }
+                }else{
+                    [v.property setValue:v.value];
+                }
+            }];
              
-             UIImage* image = [CKResourceManager imageNamed:[self imageNameForValue:v.value]];
-             
-             CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:_(v.label) image:image action:^(CKTableViewCellController *controller) {
-                 
-             }];
-             
-             [cellController setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-                 [cell beginBindingsContextByRemovingPreviousBindings];
-                 [v.property.object bind:v.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
-                     BOOL selected = NO;
-                     
-                     if([v.property isContainer]){
-                         selected = [v.property containsObject:v.value];
-                     }else if([v.property isNumber]){
-                         NSInteger intV = [v.value integerValue];
-                         NSInteger intP = [v.property.value integerValue];
-                         if(bself.multiSelectionEnabled){
-                             selected = (intP & intV);
-                         }else{
-                             selected = (intV == intP);
-                         }
-                     }else{
-                         selected = [v.property.value isEqual:v.value];
-                     }
-                     
-                     cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-                 }];
-                 [cell endBindingsContext];
-             }];
-             return cellController;
+            [cell beginBindingsContextByRemovingPreviousBindings];
+            [v.property.object bind:v.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
+                BOOL selected = NO;
+                
+                if([v.property isContainer]){
+                    selected = [v.property containsObject:v.value];
+                }else if([v.property isNumber]){
+                    NSInteger intV = [v.value integerValue];
+                    NSInteger intP = [v.property.value integerValue];
+                    if(bself.multiSelectionEnabled){
+                        selected = (intP & intV);
+                    }else{
+                        selected = (intV == intP);
+                    }
+                }else{
+                    selected = [v.property.value isEqual:v.value];
+                }
+                
+                //TODO!
+                //cell.collectionCellController.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            }];
+            [cell endBindingsContext];
+                                         
+            return cell;
     }];
     
     return factory;

@@ -8,6 +8,10 @@
 
 #import "CKCollectionViewController.h"
 
+#import "NSObject+Bindings.h"
+#import "Layout.h"
+#import "UIView+Name.h"
+
 /**
  */
 @interface CKCollectionCellContentViewController : UIViewController
@@ -105,5 +109,9 @@
 /**
  */
 - (UINavigationController*)navigationController;
+
+/**
+ */
+@property(nonatomic,copy) void(^didSelectBlock)();
 
 @end
