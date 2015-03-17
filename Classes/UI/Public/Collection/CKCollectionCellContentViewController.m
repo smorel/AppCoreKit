@@ -146,6 +146,32 @@
         
         //Support for nibs
         return CGSizeMake(MIN(size.width,self.view.width),MIN(size.height,self.view.height));
+    }else{
+        UIView* view = [[[UIView alloc]init]autorelease];
+        view.frame = CGRectMake(0, 0, size.width, size.height);
+        [self prepareForReuseUsingContentView:view contentViewCell:view];
+        
+        [self viewDidLoad];
+        [self viewWillAppear:NO];
+        [self viewDidAppear:NO];
+        
+        [view layoutSubviews];
+        
+        //Support for CKLayout
+        CGSize returnSize = CGSizeMake(0,0);
+        if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
+            returnSize = [view preferredSizeConstraintToSize:size];
+        }
+        //TODO : Auto layout support !
+        else{
+        }
+        
+        [self viewWillDisappear:NO];
+        [self viewDidDisappear:NO];
+        
+        self.isComputingSize = NO;
+        
+        return returnSize;
     }
     
     self.isComputingSize = NO;
