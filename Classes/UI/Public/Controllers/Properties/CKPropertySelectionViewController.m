@@ -41,6 +41,23 @@
     [super dealloc];
 }
 
+- (void)selectionControllerAppearanceExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertySelectionAppearanceStyle",
+                                                 CKPropertySelectionAppearanceStyleDefault,
+                                                 CKPropertySelectionAppearanceStyleList,
+                                                 CKPropertySelectionAppearanceStylePicker);
+}
+
+- (void)selectionControllerPresentationStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertySelectionPresentationStyle",
+                                                 CKPropertySelectionPresentationStyleDefault,
+                                                 CKPropertySelectionPresentationStylePush,
+                                                 CKPropertySelectionPresentationStylePopover,
+                                                 CKPropertySelectionPresentationStyleModal,
+                                                 CKPropertySelectionPresentationStyleSheet,
+                                                 CKPropertySelectionPresentationStyleInline);
+}
+
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     NSAssert(attributes.enumDescriptor != nil || attributes.valuesAndLabels != nil,@"CKPropertySelectionViewController needs you to declare an enum descriptor or valuesAndLabels in your property's extended attributes");
@@ -84,7 +101,8 @@
     self.propertyNameLabel = _(self.property.name);
     self.hideDisclosureIndicatorWhenImageIsAvailable = YES;
     
-    self.presentationStyle = CKOptionPropertyCellControllerPresentationStyleDefault;
+    self.selectionControllerAppearance = CKPropertySelectionAppearanceStyleDefault;
+    self.selectionControllerPresentationStyle = CKPropertySelectionPresentationStyleDefault;
     self.multiSelectionSeparatorString = @"\n";
     
     self.collectionCellController.flags = CKItemViewFlagSelectable;
@@ -258,6 +276,8 @@
 - (void)didSelect{
     [super didSelect];
     
+    //TODO: handle self.appearance
+    
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKFormTableViewController* editionViewController = [CKFormTableViewController controller];
@@ -373,10 +393,10 @@
     return factory;
 }
 
-- (void)presentEditionViewController:(CKFormTableViewController*)controller{
+- (void)presentEditionViewController:(CKViewController*)controller{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKPropertySelectionPresentationStyle style = self.presentationStyle;
+    CKPropertySelectionPresentationStyle style = self.selectionControllerPresentationStyle;
     if(style == CKPropertySelectionPresentationStyleDefault){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
             style = CKPropertySelectionPresentationStylePopover;
@@ -433,12 +453,12 @@
             [bself.collectionViewController presentViewController:controller animated:YES completion:nil];
             break;
         }
-        case CKPropertySelectionPresentationStyleInlinePicker:{
-            //TODO When we'll have a CKPickerViewController
+        case CKPropertySelectionPresentationStyleSheet:{
+            //TODO
             break;
         }
-        case CKPropertySelectionPresentationStylePopoverPicker:{
-            //TODO When we'll have a CKPickerViewController
+        case CKPropertySelectionPresentationStyleInline:{
+            //TODO
             break;
         }
     }

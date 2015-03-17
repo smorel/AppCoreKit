@@ -27,16 +27,24 @@
 @end
 
 
+
+/**
+ */
+typedef NS_ENUM(NSInteger, CKPropertySelectionAppearanceStyle){
+    CKPropertySelectionAppearanceStyleDefault,
+    CKPropertySelectionAppearanceStyleList,
+    CKPropertySelectionAppearanceStylePicker
+};
+
 /**
  */
 typedef NS_ENUM(NSInteger, CKPropertySelectionPresentationStyle){
-    //default is popover picker on iPad, push or modal (if no navigationController) on iphone ios < 7, inline picker on iphone ios >= 7.
     CKPropertySelectionPresentationStyleDefault,
     CKPropertySelectionPresentationStylePush,
     CKPropertySelectionPresentationStylePopover,
     CKPropertySelectionPresentationStyleModal,
-    CKPropertySelectionPresentationStyleInlinePicker,
-    CKPropertySelectionPresentationStylePopoverPicker
+    CKPropertySelectionPresentationStyleSheet,
+    CKPropertySelectionPresentationStyleInline
 };
 
 
@@ -155,10 +163,6 @@ typedef NS_ENUM(NSInteger, CKPropertySelectionPresentationStyle){
  */
 @property(nonatomic,retain) NSString* propertyNameLabel;
 
-/** An accessor on the properties extended attribute enum definition that is YES if the enum descriptor is a bit mask.
- */
-@property(nonatomic,readonly) BOOL multiSelectionEnabled;
-
 /** multiSelectionSeparatorString is used when concatenating the string representation of values that matches the property value in case the property is declared as a bit mask. Default value is '\n'.
  */
 @property(nonatomic,retain) NSString* multiSelectionSeparatorString;
@@ -171,9 +175,17 @@ typedef NS_ENUM(NSInteger, CKPropertySelectionPresentationStyle){
 /// @name Customizing the enum edition view controller
 ///-----------------------------------
 
-/** Defines how we should present the table view controller for editing the enum value.
+/** An accessor on the properties extended attribute enum definition that is YES if the enum descriptor is a bit mask.
  */
-@property(nonatomic,assign) CKPropertySelectionPresentationStyle presentationStyle;
+@property(nonatomic,readonly) BOOL multiSelectionEnabled;
+
+/** Defines if we should present a table view controller or a picker view controller for editing the value.
+ */
+@property(nonatomic,assign) CKPropertySelectionAppearanceStyle selectionControllerAppearance;
+
+/** Defines how we should present the edition controller.
+ */
+@property(nonatomic,assign) CKPropertySelectionPresentationStyle selectionControllerPresentationStyle;
 
 /** Enum value edition is presented as a form of table view controller.
  Each individual cell in the table view controller can be customized by setting selectionControllerFactory with an item for object of class CKPropertySelectionValue.

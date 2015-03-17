@@ -10,67 +10,7 @@
 #import "CKPropertyTableViewCellController.h"
 #include "CKSheetController.h"
 
-/**
- */
-typedef NS_ENUM(NSInteger, CKDatePickerMode){
-    CKDatePickerModeTime = UIDatePickerModeTime,   
-    CKDatePickerModeDate = UIDatePickerModeDate,
-    CKDatePickerModeDateAndTime = UIDatePickerModeDateAndTime,   
-    CKDatePickerModeCountDownTime = UIDatePickerModeCountDownTimer,
-    CKDatePickerModeCreditCardExpirationDate
-} ;
-
-
-/**
- */
-@interface CKNSDateViewController : CKViewController<UIPickerViewDataSource,UIPickerViewDelegate>
-
-///-----------------------------------
-/// @name Initializing a CKNSDateViewController Object
-///-----------------------------------
-
-/**
- */
-- (id)initWithProperty:(CKProperty*)property mode:(CKDatePickerMode)mode;
-
-///-----------------------------------
-/// @name Customizing the appearance
-///-----------------------------------
-
-/** 
- */
-@property(nonatomic,assign)CKDatePickerMode datePickerMode;
-
-///-----------------------------------
-/// @name Getting the picker view
-///-----------------------------------
-
-/** 
- */
-@property(nonatomic,retain)UIDatePicker* datePicker;
-
-/** if mode == CKDatePickerModeCreditCardExpirationDate
- */
-@property(nonatomic,retain)UIPickerView* pickerView;
-
-///-----------------------------------
-/// @name Managing the delegate
-///-----------------------------------
-
-/** 
- */
-@property(nonatomic,assign)id delegate;
-
-///-----------------------------------
-/// @name Managing the property
-///-----------------------------------
-
-/**
- */
-@property(nonatomic,assign)CKProperty* property;
-
-@end
-
+#import "CKDatePickerViewController.h"
 
 
 
@@ -92,7 +32,7 @@ typedef NS_ENUM(NSInteger, CKDatePickerMode){
 
 /**
  */
-- (void)onBeginEditingUsingViewController:(CKNSDateViewController*)dateViewController;
+- (void)onBeginEditingUsingViewController:(CKDatePickerViewController*)dateViewController;
 
 /**
  */
