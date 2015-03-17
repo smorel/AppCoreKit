@@ -35,7 +35,7 @@
 - (void)dealloc{
     [_values release];
     [_propertyNameLabel release];
-    [_itemCellControllerFactory release];
+    [_selectionControllerFactory release];
     [_sortBlock release];
     [_multiSelectionSeparatorString release];
     [super dealloc];
@@ -56,6 +56,10 @@
 
 - (id)initWithProperty:(CKProperty*)property enumDescriptor:(CKEnumDescriptor*)enumDescriptor readOnly:(BOOL)readOnly{
     return [self initWithProperty:property valuesAndLabels:enumDescriptor.valuesAndLabels multiSelectionEnabled:enumDescriptor.isBitMask readOnly:readOnly];
+}
+
+- (id)initWithProperty:(CKProperty*)property valuesAndLabels:(NSDictionary*)valuesAndLabels readOnly:(BOOL)readOnly{
+    return [self initWithProperty:property valuesAndLabels:valuesAndLabels multiSelectionEnabled:[property isContainer] readOnly:readOnly];
 }
 
 - (id)initWithProperty:(CKProperty*)property valuesAndLabels:(NSDictionary*)valuesAndLabels multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly{
@@ -259,7 +263,7 @@
     CKFormTableViewController* editionViewController = [CKFormTableViewController controller];
     editionViewController.title = _(self.property.name);
     
-    CKCollectionCellControllerFactory* factory = self.itemCellControllerFactory ? self.itemCellControllerFactory : [self defaultFactory];
+    CKCollectionCellControllerFactory* factory = self.selectionControllerFactory ? self.selectionControllerFactory : [self defaultFactory];
     
     NSMutableArray* cells = [NSMutableArray array];
     
@@ -372,19 +376,19 @@
 - (void)presentEditionViewController:(CKFormTableViewController*)controller{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKPropertySelectionValuesPresentationStyle style = self.presentationStyle;
-    if(style == CKPropertySelectionValuesPresentationStyleDefault){
+    CKPropertySelectionPresentationStyle style = self.presentationStyle;
+    if(style == CKPropertySelectionPresentationStyleDefault){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-            style = CKPropertySelectionValuesPresentationStylePopover;
+            style = CKPropertySelectionPresentationStylePopover;
         }else if(self.navigationController){
-            style = CKPropertySelectionValuesPresentationStylePush;
+            style = CKPropertySelectionPresentationStylePush;
         }else{
-            style = CKPropertySelectionValuesPresentationStyleModal;
+            style = CKPropertySelectionPresentationStyleModal;
         }
     }
     
     switch(style){
-        case CKPropertySelectionValuesPresentationStylePopover:{
+        case CKPropertySelectionPresentationStylePopover:{
             CKPopoverController* popover = [[CKPopoverController alloc]initWithContentViewController:controller];
             [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             
@@ -398,7 +402,7 @@
             [controller endBindingsContext];
             break;
         }
-        case CKPropertySelectionValuesPresentationStylePush:{
+        case CKPropertySelectionPresentationStylePush:{
             [self.navigationController pushViewController:controller animated:YES];
             
             [controller beginBindingsContextByRemovingPreviousBindings];
@@ -411,7 +415,7 @@
             
             break;
         }
-        case CKPropertySelectionValuesPresentationStyleModal:{
+        case CKPropertySelectionPresentationStyleModal:{
             UINavigationController* nav = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
             
             controller.leftButton = [UIBarButtonItem barButtonItemWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{
@@ -427,6 +431,14 @@
             [controller endBindingsContext];
             
             [bself.collectionViewController presentViewController:controller animated:YES completion:nil];
+            break;
+        }
+        case CKPropertySelectionPresentationStyleInlinePicker:{
+            //TODO When we'll have a CKPickerViewController
+            break;
+        }
+        case CKPropertySelectionPresentationStylePopoverPicker:{
+            //TODO When we'll have a CKPickerViewController
             break;
         }
     }
