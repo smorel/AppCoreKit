@@ -77,4 +77,9 @@
 - (CKCollectionCellContentViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath;
 - (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths;
 
+- (NSIndexPath*)indexPathForController:(CKCollectionCellContentViewController*)controller;
+- (NSArray*)indexPathsForControllers:(NSArray*)controllers;
+
+@property(nonatomic,retain) NSArray* selectedIndexPaths;
+
 @end

@@ -54,10 +54,6 @@ static char UIViewAttachedCellContentViewControllerKey;
     [super postInit];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-}
-
 - (instancetype)controllerWithSections:(NSArray*)sections{
     return [[[[self class]alloc]initWithSections:sections]autorelease];
 }
@@ -135,6 +131,8 @@ static char UIViewAttachedCellContentViewControllerKey;
     
     [self willRemoveSections:sections atIndexes:indexes animated:animated];
     
+    //TODO : Update selectedIndexPaths
+    
     for(CKAbstractSection* section in sections){
         section.delegate = nil;
     }
@@ -156,6 +154,7 @@ static char UIViewAttachedCellContentViewControllerKey;
 }
 
 - (void)section:(CKAbstractSection*)section willRemoveControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    //TODO : Update selectedIndexPaths
     [self willRemoveControllers:controllers atIndexPaths:[self indexPathsForIndexes:indexes inSection:section] animated:animated];
 }
 
@@ -215,6 +214,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     }else{
         CKCollectionCellContentViewController* previousController = [view attachedCellContentViewController];
         if(previousController){
+            [view clearBindingsContext];
             [previousController viewWillDisappear:NO];
             [previousController viewDidDisappear:NO];
             [previousController prepareForReuseUsingContentView:nil contentViewCell:nil];
@@ -228,6 +228,80 @@ static char UIViewAttachedCellContentViewControllerKey;
     [controller viewDidAppear:NO];
 
     return view;
+}
+
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    for(CKSection* section in self.sections){
+        for(CKCollectionCellContentViewController* controller in section.controllers){
+            if([controller isViewLoaded]){
+                [controller viewWillAppear:animated];
+            }
+        }
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    for(CKSection* section in self.sections){
+        for(CKCollectionCellContentViewController* controller in section.controllers){
+            if([controller isViewLoaded]){
+                [controller viewWillDisappear:animated];
+            }
+        }
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    for(CKSection* section in self.sections){
+        for(CKCollectionCellContentViewController* controller in section.controllers){
+            if([controller isViewLoaded]){
+                [controller viewDidAppear:animated];
+            }
+        }
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
+    for(CKSection* section in self.sections){
+        for(CKCollectionCellContentViewController* controller in section.controllers){
+            if([controller isViewLoaded]){
+                [controller viewDidDisappear:animated];
+            }
+        }
+    }
+}
+
+- (NSIndexPath*)indexPathForController:(CKCollectionCellContentViewController*)controller{
+    NSArray* indexPaths = [self indexPathsForControllers:@[controller]];
+    return indexPaths.count > 0 ? [indexPaths firstObject] : nil;
+}
+
+- (NSArray*)indexPathsForControllers:(NSArray*)controllers{
+    NSMutableArray* indexPaths = [NSMutableArray array];
+    
+    NSInteger sectionIndex = 0;
+    for(CKSection* section in self.sections){
+        
+        NSInteger controllerIndex = 0;
+        for(CKCollectionCellContentViewController* controller in section.controllers){
+            if([controllers indexOfObjectIdenticalTo:controller] != NSNotFound){
+                [indexPaths addObject:[NSIndexPath indexPathForRow:controllerIndex inSection:sectionIndex]];
+            }
+            ++controllerIndex;
+        }
+        
+        ++sectionIndex;
+    }
+    
+    return indexPaths;
 }
 
 @end
