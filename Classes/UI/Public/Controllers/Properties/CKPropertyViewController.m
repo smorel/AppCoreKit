@@ -9,6 +9,7 @@
 #import "CKPropertyViewController.h"
 #import "NSObject+Bindings.h"
 #import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "UINavigationController+BlockBasedDelegate.h"
 
 @interface CKPropertyViewController ()
 
@@ -159,6 +160,12 @@
                 }];
             }
             [controller endBindingsContext];
+            
+            popover.didDismissPopoverBlock = ^(CKPopoverController* popover){
+                [bself resignFirstResponder];
+                [controller clearBindingsContext];
+            };
+            
             break;
         }
         case CKPropertyEditionPresentationStylePush:{
@@ -172,24 +179,35 @@
             }
             [controller endBindingsContext];
             
+            self.navigationController.didPopViewControllerBlock = ^(UINavigationController* navigationController,UIViewController* controller, BOOL animated){
+                [bself resignFirstResponder];
+                bself.navigationController.didPopViewControllerBlock = nil;
+                [controller clearBindingsContext];
+            };
+            
             break;
         }
         case CKPropertyEditionPresentationStyleModal:{
             UINavigationController* nav = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
             
             controller.leftButton = [UIBarButtonItem barButtonItemWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{
+                [bself resignFirstResponder];
                 [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
+                [controller clearBindingsContext];
             }];
             
             [controller beginBindingsContextByRemovingPreviousBindings];
             if(shouldDismissOnPropertyValueChange){
                 [self.property.object bind:self.property.keyPath withBlock:^(id value) {
+                    [bself resignFirstResponder];
                     [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
+                    [controller clearBindingsContext];
                 }];
             }
             [controller endBindingsContext];
             
-            [bself.collectionViewController presentViewController:controller animated:YES completion:nil];
+            [bself.collectionViewController presentViewController:nav animated:YES completion:nil];
+            
             break;
         }
         case CKPropertyEditionPresentationStyleSheet:{
@@ -203,6 +221,13 @@
                                        inView:parentView
                                      animated:YES];
             }
+            
+            [controller beginBindingsContextByRemovingPreviousBindings];
+            [NSNotificationCenter bindNotificationName:CKSheetResignNotification withBlock:^(NSNotification *notification) {
+                [bself resignFirstResponder];
+                [controller clearBindingsContext];
+            }];
+            [controller endBindingsContext];
             
             break;
         }
