@@ -42,6 +42,7 @@
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
 
 - (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view;
+- (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
 

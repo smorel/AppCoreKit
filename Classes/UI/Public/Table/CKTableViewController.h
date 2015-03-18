@@ -8,6 +8,21 @@
 
 #import "CKSectionedViewController.h"
 
+@class CKTableViewCell;
+
+/**
+ */
+@interface CKCollectionCellContentViewController(CKTableViewController)
+
+/**
+ */
+@property(nonatomic,readonly) CKTableViewCell* tableViewCell;
+
+@end
+
+
+
+
 /**
  */
 @interface CKTableViewController : CKSectionedViewController

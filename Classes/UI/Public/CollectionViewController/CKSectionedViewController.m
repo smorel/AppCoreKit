@@ -10,6 +10,12 @@
 #import <objc/runtime.h>
 
 
+@interface CKCollectionCellContentViewController ()
+@property(nonatomic,assign) BOOL isComputingSize;
+@end
+
+
+
 @implementation UIView(CKSectionedViewController)
 @dynamic attachedCellContentViewController;
 
@@ -206,19 +212,18 @@ static char UIViewAttachedCellContentViewControllerKey;
 
 - (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view{
     CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    
+    UIView* contentView = [view valueForKey:@"contentView"];
+    
     if(!view){
-        view = [[UIView alloc]init];
+        contentView = view = [[UIView alloc]init];
         [controller prepareForReuseUsingContentView:view contentViewCell:view];
         [controller viewDidLoad];
         
     }else{
-        UIView* contentView = [view valueForKey:@"contentView"];
-        
         CKCollectionCellContentViewController* previousController = [view attachedCellContentViewController];
         if(previousController){
             [view clearBindingsContext];
-            // [previousController viewWillDisappear:NO];
-            //[previousController viewDidDisappear:NO];
             [previousController prepareForReuseUsingContentView:nil contentViewCell:nil];
         }
         
@@ -226,8 +231,17 @@ static char UIViewAttachedCellContentViewControllerKey;
     }
     
     [view setAttachedCellContentViewController:controller];
-    // [controller viewWillAppear:NO];
-    // [controller viewDidAppear:NO];
+    
+    
+    __unsafe_unretained CKSectionedViewController* bself = self;
+    __unsafe_unretained CKCollectionCellContentViewController* bController = controller;
+    
+    contentView.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+        if(bController.view.window == nil || bController.isComputingSize)
+            return;
+        
+        [bself invalidateSizeForControllerAtIndexPath:bController.indexPath];
+    };
 
     return view;
 }
@@ -304,6 +318,10 @@ static char UIViewAttachedCellContentViewControllerKey;
     }
     
     return indexPaths;
+}
+
+- (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath{
+    
 }
 
 @end

@@ -639,6 +639,73 @@ static char NSObjectAppliedStyleObjectKey;
 	}
 }
 
+- (void)applySubViewStyle:(NSMutableDictionary*)style
+               descriptor:(CKClassPropertyDescriptor*)descriptor
+             appliedStack:(NSMutableSet*)appliedStack
+                 delegate:(id)delegate{
+    
+    //Handle special cases where styles should not be applyed !
+    if([[[self class]description]isEqualToString:@"UITableHeaderFooterView"] &&
+       [NSObject isClass:descriptor.type kindOfClass:[UITableView class]]){
+        return;
+    }
+    
+    //Handle special cases for view property in CKCollectionCellController !
+    if([[[self class]description]isEqualToString:@"CKCollectionCellController"] &&
+       [descriptor.name isEqualToString:@"view"]){
+        return;
+    }
+    
+    UIView* view = nil;
+    if(   ([self isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"])
+       || ([self isKindOfClass:[UITableView class]] && [descriptor.name isEqualToString:@"backgroundView"])){
+        //We are supposed to get a nil view here ! but UIKit creates a view when getting selectedBackgroundView wich have not the right class if called here.
+    }
+    else{
+        view = [self valueForKey:descriptor.name];
+    }
+    
+    if([descriptor.name isEqualToString:@"tableViewCell"]){
+        int i =3;
+    }
+    
+    NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
+    
+    if([CKStyleManager logEnabled]){
+        if([myViewStyle isEmpty]){
+            CKDebugLog(@"did not find style for view %@ in parent %@ with style %@",descriptor.name,self,style);
+        }
+        else{
+            CKDebugLog(@"found style %@ for view %@ in parent %@",myViewStyle,descriptor.name,self);
+        }
+    }
+    
+    if(([view appliedStyle] == nil || [[view appliedStyle]isEmpty])){
+        
+        //if(![myViewStyle isEmpty]){
+        BOOL shouldReplaceView = NO;
+        if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){
+            shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
+        }
+        
+        if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKStyleView class]] == NO)) )
+        {
+            UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
+            CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
+            view = [[[CKStyleView alloc]initWithFrame:frame]autorelease];
+            view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [self setValue:view forKey:descriptor.name];
+        }
+        
+        if(view){
+            [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+        }
+        //}
+    }
+    
+    [view setNeedsDisplay];
+}
+
 //FIXME : something not optimial here as we retrieve myViewStyle which is done also in applyStyle
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	if(style == nil)
@@ -652,63 +719,7 @@ static char NSObjectAppliedStyleObjectKey;
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in properties){
-        
-        //Handle special cases where styles should not be applyed !
-        if([[[self class]description]isEqualToString:@"UITableHeaderFooterView"] &&
-           [NSObject isClass:descriptor.type kindOfClass:[UITableView class]]){
-            continue;
-        }
-        
-        //Handle special cases for view property in CKCollectionCellController !
-        if([[[self class]description]isEqualToString:@"CKCollectionCellController"] &&
-           [descriptor.name isEqualToString:@"view"]){
-            continue;
-        }
-        
-		UIView* view = nil;
-        if(   ([self isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"])
-           || ([self isKindOfClass:[UITableView class]] && [descriptor.name isEqualToString:@"backgroundView"])){
-            //We are supposed to get a nil view here ! but UIKit creates a view when getting selectedBackgroundView wich have not the right class if called here.
-        }
-        else{
-            view = [self valueForKey:descriptor.name];
-        }
-
-		NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
-        
-        if([CKStyleManager logEnabled]){
-            if([myViewStyle isEmpty]){
-                CKDebugLog(@"did not find style for view %@ in parent %@ with style %@",descriptor.name,self,style);
-            }
-            else{
-                CKDebugLog(@"found style %@ for view %@ in parent %@",myViewStyle,descriptor.name,self);
-            }
-        }
-        
-        if(([view appliedStyle] == nil || [[view appliedStyle]isEmpty])){
-        
-		//if(![myViewStyle isEmpty]){
-			BOOL shouldReplaceView = NO;
-			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){
-				shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
-			}
-			
-			if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKStyleView class]] == NO)) )
-            {
-                UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
-                CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
-				view = [[[CKStyleView alloc]initWithFrame:frame]autorelease];
-				view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-				[self setValue:view forKey:descriptor.name];
-			}
-			
-			if(view){
-				[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
-			}
-		//}
-        }
-        
-        [view setNeedsDisplay];
+        [self applySubViewStyle:style descriptor:descriptor appliedStack:appliedStack delegate:delegate];
 	}
 	
     

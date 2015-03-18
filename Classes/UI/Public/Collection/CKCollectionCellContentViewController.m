@@ -17,8 +17,20 @@
 #import "CKStyleManager.h"
 #import "CKResourceManager.h"
 #import "CKResourceDependencyContext.h"
+#import "CKVersion.h"
 
-@interface CKCollectionViewController () 
+
+@interface NSObject ()
+
+- (void)applySubViewStyle:(NSMutableDictionary*)style
+               descriptor:(CKClassPropertyDescriptor*)descriptor
+             appliedStack:(NSMutableSet*)appliedStack
+                 delegate:(id)delegate;
+
+@end
+
+
+@interface CKCollectionViewController ()
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
 @end
 
@@ -203,41 +215,6 @@
     return CGSizeMake(0,0);
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    //HERE we do not apply style on sub views as we have reuse
-    if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
-        NSMutableDictionary* controllerStyle = [self controllerStyle];
-        NSMutableSet* appliedStack = [NSMutableSet set];
-        [self applySubViewsStyle:controllerStyle appliedStack:appliedStack  delegate:nil];
-        /// [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
-        [self setAppliedStyle:controllerStyle];
-    }
-    
-    if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
-        [self applyStyleToSubViews];
-    }
-    
-    __unsafe_unretained CKCollectionCellContentViewController* bself = self;
-    
-    self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
-        if(bself.view.window == nil || bself.isComputingSize)
-            return;
-        
-        [bself.collectionCellController invalidateSize];
-    };
-}
-
-- (void)applyStyleToSubViews{
-    //Allows the CKCollectionCellContentViewController to specify style for the contentViewCell
-    if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
-        [self.contentViewCell setAppliedStyle:nil];
-        [self.contentViewCell findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"contentViewCell"];
-    }
-    
-    [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
-}
 
 - (void)postInit{
     
@@ -269,6 +246,220 @@
     if([self.collectionViewController respondsToSelector:@selector(scrollToControllerAtIndexPath:animated:)]){
         [self.collectionViewController performSelector:@selector(scrollToControllerAtIndexPath:animated:) withObject:self.indexPath withObject:@(YES)];
     }
+}
+
+
+#pragma Managing style
+
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    //HERE we do not apply style on sub views as we have reuse
+    if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
+        NSMutableSet* appliedStack = [NSMutableSet set];
+        [self applySubViewsStyle:controllerStyle appliedStack:appliedStack  delegate:self];
+        /// [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
+        [self setAppliedStyle:controllerStyle];
+    }
+    
+    [self applyStyleToSubViews];
+}
+
+- (void)reapplyingStyleOnSubviewNamed:(NSString*)name{
+    if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
+        [self.contentViewCell setAppliedStyle:nil];
+        [self applySubViewStyle:[self controllerStyle]
+                     descriptor:[self propertyDescriptorForKeyPath:name]
+                   appliedStack:[NSMutableSet set]
+                       delegate:self];
+    }
+
+}
+
+- (void)applyStyleToSubViews{
+    [self reapplyingStyleOnSubviewNamed:@"contentViewCell"];
+    [self reapplyingStyleOnSubviewNamed:@"tableViewCell"];
+    
+    if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
+        [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
+    }
+}
+
+- (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
+    if(![self.contentView isKindOfClass:[UITableView class]]){
+        return CKStyleViewCornerTypeNone;
+    }
+    
+    NSIndexPath* theIndexPath = self.indexPath;
+    UITableViewCell* cell = (UITableViewCell*)self.contentViewCell;
+    UITableView* tableView = (UITableView*)self.contentView;
+    
+    CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleCornerStyle]){
+        cornerStyle = [style cornerStyle];
+    }
+    
+    CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
+    switch(cornerStyle){
+        case CKViewCornerStyleTableViewCell:{
+            if([CKOSVersion() floatValue] < 7){
+                
+                if(view == cell.backgroundView || view == cell.selectedBackgroundView){
+                    if(tableView.style == UITableViewStyleGrouped){
+                        NSInteger numberOfRows = [tableView.dataSource tableView:tableView numberOfRowsInSection:theIndexPath.section];
+                        if(theIndexPath.row == 0 && numberOfRows > 1){
+                            roundedCornerType = CKStyleViewCornerTypeTop;
+                        }
+                        else if(theIndexPath.row == 0){
+                            roundedCornerType = CKStyleViewCornerTypeAll;
+                        }
+                        else if(theIndexPath.row == numberOfRows-1){
+                            roundedCornerType = CKStyleViewCornerTypeBottom;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case CKViewCornerStyleRounded:{
+            roundedCornerType = CKStyleViewCornerTypeAll;
+            break;
+        }
+        case CKViewCornerStyleRoundedTop:{
+            roundedCornerType = CKStyleViewCornerTypeTop;
+            break;
+        }
+        case CKViewCornerStyleRoundedBottom:{
+            roundedCornerType = CKStyleViewCornerTypeBottom;
+            break;
+        }
+    }
+    
+    return roundedCornerType;
+}
+
+- (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
+    if(![self.contentView isKindOfClass:[UITableView class]]){
+        return CKViewBorderStyleNone;
+    }
+    
+    NSIndexPath* theIndexPath = self.indexPath;
+    UITableViewCell* cell = (UITableViewCell*)self.contentViewCell;
+    UITableView* tableView = (UITableView*)self.contentView;
+    
+    CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleBorderStyle]){
+        borderStyle = [style borderStyle];
+    }
+    
+    if(borderStyle & CKViewBorderStyleTableViewCell){
+        if(view == cell.backgroundView
+           || view == cell.selectedBackgroundView){
+            NSInteger numberOfRows = [tableView.dataSource tableView:tableView numberOfRowsInSection:theIndexPath.section];
+            if(numberOfRows > 1){
+                if(theIndexPath.row == 0){
+                    return  CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationTop | CKStyleViewBorderLocationRight;
+                }else if(theIndexPath.row == numberOfRows-1){
+                    return  CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationBottom | CKStyleViewBorderLocationRight;
+                }else{
+                    return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
+                }
+            }
+            else{
+                return CKStyleViewBorderLocationAll;
+            }
+        }
+    }else{
+        CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;
+        if(borderStyle & CKViewBorderStyleTop){
+            viewBorderType |= CKStyleViewBorderLocationTop;
+        }
+        if(borderStyle & CKViewBorderStyleLeft){
+            viewBorderType |= CKStyleViewBorderLocationLeft;
+        }
+        if(borderStyle & CKViewBorderStyleRight){
+            viewBorderType |= CKStyleViewBorderLocationRight;
+        }
+        if(borderStyle & CKViewBorderStyleBottom){
+            viewBorderType |= CKStyleViewBorderLocationBottom;
+        }
+        return viewBorderType;
+    }
+    
+    return CKStyleViewBorderLocationNone;
+}
+
+- (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style{
+    if(![self.contentView isKindOfClass:[UITableView class]]){
+        return CKStyleViewSeparatorLocationNone;
+    }
+    
+    NSIndexPath* theIndexPath = self.indexPath;
+    UITableViewCell* cell = (UITableViewCell*)self.contentViewCell;
+    UITableView* tableView = (UITableView*)self.contentView;
+    
+    CKStyleViewSeparatorLocation separatorType = CKStyleViewSeparatorLocationNone;
+    
+    CKViewSeparatorStyle separatorStyle = CKViewSeparatorStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleSeparatorStyle]){
+        separatorStyle = [style separatorStyle];
+    }
+    
+    switch(separatorStyle){
+        case CKViewSeparatorStyleTableViewCell:{
+            if(view == cell.backgroundView || view == cell.selectedBackgroundView){
+                NSInteger numberOfRows = [tableView.dataSource tableView:tableView numberOfRowsInSection:theIndexPath.section];
+                if(numberOfRows > 1 && theIndexPath.row != numberOfRows-1){
+                    return CKStyleViewSeparatorLocationBottom;
+                }
+                else{
+                    return CKStyleViewSeparatorLocationNone;
+                }
+            }
+            break;
+        }
+        case CKViewSeparatorStyleTop:    return CKStyleViewSeparatorLocationAll;
+        case CKViewSeparatorStyleBottom: return CKStyleViewSeparatorLocationBottom;
+        case CKViewSeparatorStyleLeft:   return CKStyleViewSeparatorLocationLeft;
+        case CKViewSeparatorStyleRight:  return CKStyleViewSeparatorLocationRight;
+    }
+    
+    return separatorType;
+}
+
+
+- (UIColor*)separatorColorForView:(UIView*)view withStyle:(NSMutableDictionary*)style{
+    if(![self.contentView isKindOfClass:[UITableView class]]){
+        return nil;
+    }
+    
+    UITableView* tableView = (UITableView*)self.contentView;
+    
+    BOOL hasSeparator = ([tableView separatorStyle] != UITableViewCellSeparatorStyleNone);
+    UIColor* separatorColor = hasSeparator ? [tableView separatorColor] : [UIColor clearColor];
+    if([style containsObjectForKey:CKStyleSeparatorColor]){
+        separatorColor = [style separatorColor];
+    }
+    return separatorColor;
+}
+
+- (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
+    if(style == nil || [style isEmpty] == YES)
+        return NO;
+    
+    if([object isKindOfClass:[UITableViewCell class]]){
+        if(([descriptor.name isEqual:@"backgroundView"]
+            || [descriptor.name isEqual:@"selectedBackgroundView"]) && [style isEmpty] == NO){
+            if([CKOSVersion() floatValue] >= 7){
+                UITableViewCell* cell = (UITableViewCell*)object;
+                cell.backgroundColor = [UIColor clearColor];
+            }
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end

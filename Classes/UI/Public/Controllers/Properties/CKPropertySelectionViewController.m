@@ -118,12 +118,6 @@
     
     self.flags = CKViewControllerFlagsSelectable;
     
-    /*
-    if([self.collectionCellController isKindOfClass:[CKTableViewCellController class]]){
-        CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)self.collectionCellController;
-        tableViewCellController.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }*/
-    
     self.collectionCellController.flags = self.readOnly ? CKItemViewFlagNone : CKItemViewFlagSelectable;
 }
 
@@ -236,6 +230,10 @@
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,ValueLabel,ValueImageView]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
+    
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
 }
 
 
@@ -274,13 +272,8 @@
         ValueImageView.image = image;
         
         if(bself.hideDisclosureIndicatorWhenImageIsAvailable){
-            if([bself.collectionCellController isKindOfClass:[CKTableViewCellController class]]){
-                CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)bself.collectionCellController;
-                if(!image){
-                    tableViewCellController.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                }else{
-                    tableViewCellController.accessoryType = UITableViewCellAccessoryNone;
-                }
+            if(bself.tableViewCell){
+                bself.tableViewCell.accessoryType = !image ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
             }
         }
     }];

@@ -166,6 +166,12 @@
     return size.height;
 }
 
+
+- (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath{
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
 /*
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -362,6 +368,20 @@
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.view endEditing:YES];
     [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
+}
+
+@end
+
+
+
+
+@implementation CKCollectionCellContentViewController(CKTableViewController)
+@dynamic tableViewCell;
+
+- (CKTableViewCell*)tableViewCell{
+    if([self.contentViewCell isKindOfClass:[CKTableViewCell class]])
+        return (CKTableViewCell*)self.contentViewCell;
+    return nil;
 }
 
 @end
