@@ -35,6 +35,10 @@
  */
 @property(nonatomic,readonly) UITableView* tableView;
 
+/** Default is YES
+ */
+@property(nonatomic,assign) BOOL endEditingViewWhenScrolling;
+
 /**
  */
 - (Class)tableViewClass;

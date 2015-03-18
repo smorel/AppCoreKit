@@ -27,6 +27,7 @@
 - (void)postInit{
     [super postInit];
     self.style = UITableViewStyleGrouped;
+    self.endEditingViewWhenScrolling = YES;
 }
 
 - (void)dealloc{
@@ -366,8 +367,10 @@
 
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    [self.view endEditing:YES];
-    [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
+    if(self.endEditingViewWhenScrolling){
+        [self.view endEditing:YES];
+        [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
+    }
 }
 
 @end
