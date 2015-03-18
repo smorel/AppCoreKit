@@ -2,108 +2,30 @@
 //  CKTableViewController.h
 //  AppCoreKit
 //
-//  Created by Fred Brunel.
-//  Copyright 2010 WhereCloud Inc. All rights reserved.
+//  Created by Sebastien Morel on 2015-03-18.
+//  Copyright (c) 2015 Wherecloud. All rights reserved.
+//
 
-#import <Foundation/Foundation.h>
-#import "CKCollectionViewController.h"
-
-/**
- */
-typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
-	CKTableViewOrientationPortrait,
-	CKTableViewOrientationLandscape
-} ;
-
-// From UITableViewController:
-// Creates a table view with the correct dimensions and autoresizing, setting the datasource and delegate to self.
-// In -viewWillAppear:, it reloads the table's data if it's empty. Otherwise, it deselects all rows (with or without animation).
-// In -viewDidAppear:, it flashes the table's scroll indicators.
-// Implements -setEditing:animated: to toggle the editing state of the table.
-
+#import "CKSectionedViewController.h"
 
 /**
  */
-@interface CKTableView : UITableView
-@end
+@interface CKTableViewController : CKSectionedViewController
+
+/** default id grouped
+ */
+@property(nonatomic,assign) UITableViewStyle style;
 
 /**
  */
-@interface CKTableViewController : CKCollectionViewController <UITableViewDataSource, UITableViewDelegate> 
-
-///-----------------------------------
-/// @name Initializing a TableView Controller Object
-///-----------------------------------
+@property(nonatomic,readonly) UITableView* tableView;
 
 /**
- */
-- (id)initWithStyle:(UITableViewStyle)style;
-
-/** Allow to specify the class for the table view that will be created in the controller.
- Sometimes you need to override touches or other stuff by implementing your own tableView class.
- This must inherit CKTableView.
  */
 - (Class)tableViewClass;
 
-///-----------------------------------
-/// @name Getting the Table View
-///-----------------------------------
-
 /**
  */
-@property (nonatomic, retain) CKTableView *tableView;
-
-/** tableView is a subview of tableViewContainer. tableViewContainer allow us to rotate the whole content in portrait or landscape correctly.
- */
-@property (nonatomic, retain) UIView *tableViewContainer;
-
-///-----------------------------------
-/// @name Customizing the appearance
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, assign) UITableViewStyle style;
-
-/**
- Specify if the scrolling interactions should be horizontal or vertical
- */
-@property (nonatomic, assign) CKTableViewOrientation orientation;
-
-/**
- */
-@property (nonatomic, assign) UIEdgeInsets tableViewInsets;
-
-
-/** Computes the insets that will get applied to the table view and scroll indicators taking care of navigation's controller (navigationBar, toolBar) ans status bar transparency.
- */
-@property (nonatomic, readonly) UIEdgeInsets navigationControllerTransparencyInsets;
-
-/**
- */
-@property (nonatomic, copy) void(^didAdjustInsetsBlock)(CKTableViewController* controller);
-
-
-///-----------------------------------
-/// @name Managing Selection
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, assign, getter = isStickySelection) BOOL stickySelectionEnabled;
-
-/**
- */
-- (void)clearSelection:(BOOL)animated;
-
-
-///-----------------------------------
-/// @name Reloading the TableView Controller
-///-----------------------------------
-
-/**
- */
-- (void)reload;
-
+- (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated;
 
 @end

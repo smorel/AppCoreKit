@@ -20,7 +20,7 @@
 
 @interface CKSectionHeaderView()
 @property(nonatomic,retain,readwrite) UILabel* label;
-@property(nonatomic,assign,readwrite) CKTableViewController* tableViewController;
+@property(nonatomic,assign,readwrite) CKTableViewControllerOld* tableViewController;
 @property(nonatomic,retain) CKWeakRef* tableViewControllerRef;
 - (void)setupDefaults;
 @end
@@ -40,7 +40,7 @@
     [super dealloc];
 }
 
-- (void)setTableViewController:(CKTableViewController *)theTableViewController{
+- (void)setTableViewController:(CKTableViewControllerOld *)theTableViewController{
     self.tableViewControllerRef = [CKWeakRef weakRefWithObject:theTableViewController];
     [self setupDefaults];
     
@@ -56,7 +56,7 @@
     [self endBindingsContext];
 }
 
-- (CKTableViewController*)tableViewController{
+- (CKTableViewControllerOld*)tableViewController{
     return [_tableViewControllerRef object];
 }
 

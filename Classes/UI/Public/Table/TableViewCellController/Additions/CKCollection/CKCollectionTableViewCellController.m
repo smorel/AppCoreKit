@@ -64,8 +64,8 @@
 - (BOOL)forceHidden{
 	if([self.containerController isKindOfClass:[CKCarouselCollectionViewController class]])
 		return YES;
-	else if([self.containerController isKindOfClass:[CKTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController ;
+	else if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
+		CKTableViewControllerOld* tableViewController = (CKTableViewControllerOld*)self.containerController ;
 		return tableViewController.tableView.pagingEnabled;
 	}
 	return NO;

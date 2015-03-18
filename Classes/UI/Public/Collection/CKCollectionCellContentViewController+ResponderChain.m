@@ -9,7 +9,7 @@
 #import "CKCollectionCellContentViewController+ResponderChain.h"
 
 
-//TODO: add support for any type of CKCollectionViewController not only CKTableViewController
+//TODO: add support for any type of CKCollectionViewController not only CKTableViewControllerOld
 
 @implementation CKCollectionCellContentViewController (ResponderChain)
 
@@ -28,7 +28,7 @@
 
 
 - (NSIndexPath*)findNextResponderWithScrollEnabled:(BOOL)enableScroll{
-    if([self.collectionViewController isKindOfClass:[CKTableViewController class]]){
+    if([self.collectionViewController isKindOfClass:[CKTableViewControllerOld class]]){
         CKCollectionViewController* parentController = (CKCollectionViewController*)self.collectionViewController;
         
         NSIndexPath* indexPath = self.indexPath;
@@ -60,7 +60,7 @@
 }
 
 - (NSIndexPath*)findPreviousResponderWithScrollEnabled:(BOOL)enableScroll{
-    if([self.collectionViewController isKindOfClass:[CKTableViewController class]]){
+    if([self.collectionViewController isKindOfClass:[CKTableViewControllerOld class]]){
         CKCollectionViewController* parentController = (CKCollectionViewController*)self.collectionViewController;
         
         NSIndexPath* indexPath = self.indexPath;

@@ -248,7 +248,7 @@
 		propertyNavBarTitleLocalized = _(property.name);
 	}
     
-    CKTableViewController* tableController = (CKTableViewController*)[self containerController];
+    CKTableViewControllerOld* tableController = (CKTableViewControllerOld*)[self containerController];
 	if(self.multiSelectionEnabled){
 		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self currentValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
 	}

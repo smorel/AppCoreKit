@@ -31,7 +31,7 @@
 
 
 - (NSIndexPath*)findNextResponderWithScrollEnabled:(BOOL)enableScroll{
-	if([self.containerController isKindOfClass:[CKTableViewController class]]){
+	if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
         CKCollectionViewController* parentController = (CKCollectionViewController*)self.containerController;
         
 		NSIndexPath* indexPath = self.indexPath;
@@ -63,7 +63,7 @@
 }
 
 - (NSIndexPath*)findPreviousResponderWithScrollEnabled:(BOOL)enableScroll{
-	if([self.containerController isKindOfClass:[CKTableViewController class]]){
+	if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
         CKCollectionViewController* parentController = (CKCollectionViewController*)self.containerController;
         
 		NSIndexPath* indexPath = self.indexPath;

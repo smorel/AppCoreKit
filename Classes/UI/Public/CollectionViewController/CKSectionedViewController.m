@@ -212,20 +212,22 @@ static char UIViewAttachedCellContentViewControllerKey;
         [controller viewDidLoad];
         
     }else{
+        UIView* contentView = [view valueForKey:@"contentView"];
+        
         CKCollectionCellContentViewController* previousController = [view attachedCellContentViewController];
         if(previousController){
             [view clearBindingsContext];
-            [previousController viewWillDisappear:NO];
-            [previousController viewDidDisappear:NO];
+            // [previousController viewWillDisappear:NO];
+            //[previousController viewDidDisappear:NO];
             [previousController prepareForReuseUsingContentView:nil contentViewCell:nil];
         }
         
-        [controller prepareForReuseUsingContentView:view contentViewCell:view];
+        [controller prepareForReuseUsingContentView:(contentView ? contentView : view) contentViewCell:view];
     }
     
     [view setAttachedCellContentViewController:controller];
-    [controller viewWillAppear:NO];
-    [controller viewDidAppear:NO];
+    // [controller viewWillAppear:NO];
+    // [controller viewDidAppear:NO];
 
     return view;
 }

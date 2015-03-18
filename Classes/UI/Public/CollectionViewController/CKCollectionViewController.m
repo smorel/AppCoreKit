@@ -231,7 +231,7 @@
     
     
     [self didBeginUpdates];
-    if([self isKindOfClass:[CKTableViewController class]]){
+    if([self isKindOfClass:[CKTableViewControllerOld class]]){
         //Invalidate all controller's size !
         for(int i =0; i< [self numberOfSections];++i){
             for(int j=0;j<[self numberOfObjectsForSection:i];++j){
@@ -244,7 +244,7 @@
     [self didEndUpdates];
     [UIView setAnimationsEnabled:YES];*/
     
-    if([self isKindOfClass:[CKTableViewController class]]){
+    if([self isKindOfClass:[CKTableViewControllerOld class]]){
         //Invalidate all controller's size !
         for(int i =0; i< [self numberOfSections];++i){
             for(int j=0;j<[self numberOfObjectsForSection:i];++j){
@@ -696,7 +696,7 @@
     return nil;
 }
 
-- (void)scrollToCellAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
+- (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
     
 }
 

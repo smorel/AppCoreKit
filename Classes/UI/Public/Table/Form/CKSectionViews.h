@@ -7,7 +7,7 @@
 //
 
 #import "CKStyleView.h"
-#import "CKTableViewController.h"
+#import "CKTableViewControllerOld.h"
 
 /**
  */
@@ -35,7 +35,7 @@
 
 /**
  */
-@property(nonatomic,assign,readonly) CKTableViewController* tableViewController;
+@property(nonatomic,assign,readonly) CKTableViewControllerOld* tableViewController;
 
 @end
 

@@ -49,7 +49,7 @@
 @end
 
 
-@interface CKUITableViewCell()
+@interface CKTableViewCell()
 @property (nonatomic,retain) CKWeakRef* delegateRef;
 @property (nonatomic,assign,readwrite) CKTableViewCellController* delegate;
 @property (nonatomic, retain) NSString* syncControllerViewBindingContextId;
@@ -87,7 +87,7 @@
 
 @end
 
-@implementation CKUITableViewCell
+@implementation CKTableViewCell
 @synthesize delegate;
 @synthesize delegateRef = _delegateRef;
 @synthesize disclosureIndicatorImage = _disclosureIndicatorImage;
@@ -98,12 +98,12 @@
 @synthesize syncControllerViewBindingContextId = _syncControllerViewBindingContextId;
 @synthesize editingMask = _editingMask;
 
-//OverLoads sharedInstance here as CKUITableViewCell has to be inited using a style !
+//OverLoads sharedInstance here as CKTableViewCell has to be inited using a style !
 + (id)sharedInstance{
-    static CKUITableViewCell* sharedCKUITableViewCell = nil;
+    static CKTableViewCell* sharedCKUITableViewCell = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedCKUITableViewCell = [[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"sharedCKUITableViewCell"];
+        sharedCKUITableViewCell = [[CKTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"sharedCKUITableViewCell"];
     });
     return sharedCKUITableViewCell;
 }
@@ -485,8 +485,8 @@
         cell = (UITableViewCell*)[[contentView superview]superview];
     }
     
-    if([cell isKindOfClass:[CKUITableViewCell class]]){
-        __block CKUITableViewCell* bcell = (CKUITableViewCell*)cell;
+    if([cell isKindOfClass:[CKTableViewCell class]]){
+        __block CKTableViewCell* bcell = (CKTableViewCell*)cell;
         self.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
             [bcell.delegate invalidateSize];
         };
@@ -799,8 +799,8 @@
 
 - (void)setView:(UIView*)view{
 	[super setView:view];
-	if([view isKindOfClass:[CKUITableViewCell class]]){
-		CKUITableViewCell* customCell = (CKUITableViewCell*)view;
+	if([view isKindOfClass:[CKTableViewCell class]]){
+		CKTableViewCell* customCell = (CKTableViewCell*)view;
 		customCell.delegate = self;
 	}
 }
@@ -838,7 +838,7 @@
 		toUseCellStyle = CKTableViewCellStyleSubtitle;
     }
     
-	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
+	CKTableViewCell *cell = [[[CKTableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	
 	return cell;
 }
@@ -956,9 +956,9 @@
 
 // Update
 
-- (CKTableViewController*)parentTableViewController{
-	if([self.containerController isKindOfClass:[CKTableViewController class]]){
-		return (CKTableViewController*)self.containerController;
+- (CKTableViewControllerOld*)parentTableViewController{
+	if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
+		return (CKTableViewControllerOld*)self.containerController;
 	}
 	return nil;
 }
@@ -1184,8 +1184,8 @@
 }
 
 - (void)didSelect{
-	if([self.containerController isKindOfClass:[CKTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
+	if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
+		CKTableViewControllerOld* tableViewController = (CKTableViewControllerOld*)self.containerController;
 		if (tableViewController.stickySelectionEnabled == NO){
             if(self.parentCellController){
                 [self.tableViewCell setHighlighted:NO animated:NO];
@@ -1206,8 +1206,8 @@
 }
 
 - (void)scrollToRow{
-    CKAssert([self.containerController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
-    CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
+    CKAssert([self.containerController isKindOfClass:[CKTableViewControllerOld class]],@"invalid parent controller class");
+    CKTableViewControllerOld* tableViewController = (CKTableViewControllerOld*)self.containerController;
     [tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
                                          atScrollPosition:UITableViewScrollPositionMiddle 
                                                  animated:YES];

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
-#import "CKTableViewController.h"
+#import "CKTableViewControllerOld.h"
 #import "UIView+Style.h"
 #import "UIViewController+Style.h"
 
@@ -46,7 +46,7 @@ extern NSString* CKStyleAccessoryImage;
 
 /**
  */
-@interface CKTableViewController (CKStyle)
+@interface CKTableViewControllerOld (CKStyle)
 @end
 
 

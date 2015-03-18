@@ -23,7 +23,7 @@
 @property (nonatomic, retain) NSIndexPath *gridItemSelectedIndexPath;
 @end
 
-@interface CKTableViewController ()
+@interface CKTableViewControllerOld ()
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 
@@ -120,9 +120,9 @@
     for(int i =0; i< _numberOfColumns; ++i){
         NSInteger viewTag = ControllerViewBaseTag + i;
         UIView* view = [cell.contentView viewWithTag:viewTag];
-        CKAssert(!view || [view isKindOfClass:[CKUITableViewCell class]],@"Invalid view class");
+        CKAssert(!view || [view isKindOfClass:[CKTableViewCell class]],@"Invalid view class");
         
-        CKUITableViewCell* subcell = (CKUITableViewCell*)view;
+        CKTableViewCell* subcell = (CKTableViewCell*)view;
         if(i < [self.cellControllers count]){
             //HERE WE ASSUME WE ONLY HAVE 1 TYPE OF CELLS IN GRIDS AND REUSE THE EXISTING VIEWS
             NSInteger index = i;
@@ -157,7 +157,7 @@
                 
                 [cell.contentView addSubview:view];
                 
-                subcell = (CKUITableViewCell*) view;
+                subcell = (CKTableViewCell*) view;
             }
             
             subcell.contentView.userInteractionEnabled = NO;

@@ -94,7 +94,7 @@
 
 /** This will scroll to the specified cell at index path by trying to center it.
  */
-- (void)scrollToCellAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated;
+- (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated;
 
 ///-----------------------------------
 /// @name Managing the cell views/controllers

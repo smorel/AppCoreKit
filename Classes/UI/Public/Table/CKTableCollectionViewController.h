@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKTableViewController.h"
+#import "CKTableViewControllerOld.h"
 #import "CKTableViewCellController.h"
 
 
@@ -44,7 +44,7 @@ typedef UITableViewRowAnimation(^CKTableCollectionViewControllerSectionAnimation
 
 /**
  */
-@interface CKTableCollectionViewController : CKTableViewController<UISearchBarDelegate> 
+@interface CKTableCollectionViewController : CKTableViewControllerOld<UISearchBarDelegate> 
 
 ///-----------------------------------
 /// @name Getting the Controller status

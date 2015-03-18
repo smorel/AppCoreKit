@@ -8,6 +8,7 @@
 
 #import "CKAbstractSection.h"
 #import "CKSectionedViewController.h"
+#import "CKContainerViewController.h"
 
 @interface CKAbstractSection()
 @property(nonatomic,retain, readwrite) NSArray* controllers;
@@ -71,6 +72,12 @@
     if(indexes.count <= 0)
         return;
     
+    if(self.delegate){
+        for(CKCollectionCellContentViewController* controller in controllers){
+            [controller setContainerViewController:self.delegate];
+        }
+    }
+    
     [self.delegate section:self willInsertControllers:controllers atIndexes:indexes animated:animated];
     [[self mutableControllers]insertObjects:controllers atIndexes:indexes];
     [self.delegate section:self didInsertControllers:controllers atIndexes:indexes animated:animated];
@@ -121,6 +128,15 @@
 
 - (void)fetchNextPage{
     
+}
+
+- (void)setDelegate:(CKSectionedViewController *)delegate{
+    [_delegate release];
+    _delegate = [delegate retain];
+    
+    for(CKCollectionCellContentViewController* controller in self.controllers){
+        [controller setContainerViewController:_delegate];
+    }
 }
 
 @end

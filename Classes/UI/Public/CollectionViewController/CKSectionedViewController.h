@@ -11,10 +11,12 @@
 #import "CKSection.h"
 #import "CKCollectionSection.h"
 
-
+/**
+ */
 @interface UIView(CKSectionedViewController)
 @property(nonatomic,retain) CKCollectionCellContentViewController* attachedCellContentViewController;
 @end
+
 
 //this aims to be the nex generation of CKCollectionViewController.
 //Tables, collection and maps will move to CKSectionedViewController.

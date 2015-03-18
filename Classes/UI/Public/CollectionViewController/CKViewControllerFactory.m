@@ -7,6 +7,7 @@
 //
 
 #import "CKViewControllerFactory.h"
+#import "CKContainerViewController.h"
 
 @interface CKViewControllerFactoryItem : NSObject
 
@@ -82,7 +83,9 @@
     if(!item)
         return nil;
     
-    return item.factory(object,indexPath);
+    CKCollectionCellContentViewController* controller = item.factory(object,indexPath);
+    [controller setContainerViewController:containerController];
+    return controller;
 }
 
 @end

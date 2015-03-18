@@ -22,7 +22,7 @@
 #import "CKDebug.h"
 
 @interface CKSectionHeaderView()
-@property(nonatomic,assign,readwrite) CKTableViewController* tableViewController;
+@property(nonatomic,assign,readwrite) CKTableViewControllerOld* tableViewController;
 @end
 
 //CKFormSectionBase

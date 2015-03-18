@@ -46,7 +46,7 @@
 
 
 
-@interface CKTableViewController ()
+@interface CKTableViewControllerOld ()
 
 - (void)sizeToFit;
 

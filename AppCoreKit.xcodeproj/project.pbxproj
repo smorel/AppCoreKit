@@ -256,8 +256,8 @@
 		7560DD5E13B8ED3600268D13 /* CKTableViewCellController+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1113B8ED3600268D13 /* CKTableViewCellController+Style.m */; };
 		7560DD6113B8ED3600268D13 /* CKTableViewCellController+Responder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD6213B8ED3600268D13 /* CKTableViewCellController+Responder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */; };
-		7560DD6313B8ED3600268D13 /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1613B8ED3600268D13 /* CKTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD6413B8ED3600268D13 /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1713B8ED3600268D13 /* CKTableViewController.m */; };
+		7560DD6313B8ED3600268D13 /* CKTableViewControllerOld.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1613B8ED3600268D13 /* CKTableViewControllerOld.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD6413B8ED3600268D13 /* CKTableViewControllerOld.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1713B8ED3600268D13 /* CKTableViewControllerOld.m */; };
 		7560DD6713B8ED3600268D13 /* CKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1A13B8ED3600268D13 /* CKTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD6813B8ED3600268D13 /* CKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1B13B8ED3600268D13 /* CKTextView.m */; };
 		7560DD6F13B8ED3600268D13 /* UIButton+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2213B8ED3600268D13 /* UIButton+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -692,6 +692,8 @@
 		D9418A841AB8B89500234A15 /* CKStandardContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A821AB8B89500234A15 /* CKStandardContentViewController.m */; };
 		D9418A871AB8C18600234A15 /* UIImageView+URL.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A851AB8C18600234A15 /* UIImageView+URL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A881AB8C18600234A15 /* UIImageView+URL.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A861AB8C18600234A15 /* UIImageView+URL.m */; };
+		D9418A8C1AB9CB1E00234A15 /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A8A1AB9CB1E00234A15 /* CKTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9418A8D1AB9CB1E00234A15 /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A8B1AB9CB1E00234A15 /* CKTableViewController.m */; };
 		D94CA30A1AA75BDF009EA887 /* CKPropertyStringViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D94CA30B1AA75BDF009EA887 /* CKPropertyStringViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */; };
 		D94CA3101AA75C25009EA887 /* CKPropertyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -978,8 +980,8 @@
 		7560DC1113B8ED3600268D13 /* CKTableViewCellController+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKTableViewCellController+Style.m"; path = "Classes/UI/Private/CKTableViewCellController+Style.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+Responder.h"; path = "Classes/UI/Public/Table/TableViewCellController/CKTableViewCellController+Responder.h"; sourceTree = "<group>"; };
 		7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKTableViewCellController+Responder.m"; path = "Classes/UI/Public/Table/TableViewCellController/CKTableViewCellController+Responder.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7560DC1613B8ED3600268D13 /* CKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewController.h; path = Classes/UI/Public/Table/CKTableViewController.h; sourceTree = "<group>"; };
-		7560DC1713B8ED3600268D13 /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewController.m; path = Classes/UI/Public/Table/CKTableViewController.m; sourceTree = "<group>"; };
+		7560DC1613B8ED3600268D13 /* CKTableViewControllerOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewControllerOld.h; path = Classes/UI/Public/Table/CKTableViewControllerOld.h; sourceTree = "<group>"; };
+		7560DC1713B8ED3600268D13 /* CKTableViewControllerOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewControllerOld.m; path = Classes/UI/Public/Table/CKTableViewControllerOld.m; sourceTree = "<group>"; };
 		7560DC1A13B8ED3600268D13 /* CKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTextView.h; path = Classes/UI/Public/Views/CKTextView.h; sourceTree = "<group>"; };
 		7560DC1B13B8ED3600268D13 /* CKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTextView.m; path = Classes/UI/Public/Views/CKTextView.m; sourceTree = "<group>"; };
 		7560DC2213B8ED3600268D13 /* UIButton+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+Style.h"; path = "Classes/Styles/Public/UIButton+Style.h"; sourceTree = "<group>"; };
@@ -1424,6 +1426,8 @@
 		D9418A821AB8B89500234A15 /* CKStandardContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStandardContentViewController.m; path = Classes/UI/Public/Controllers/CKStandardContentViewController.m; sourceTree = "<group>"; };
 		D9418A851AB8C18600234A15 /* UIImageView+URL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+URL.h"; path = "Classes/UI/Public/Views/UIImageView+URL.h"; sourceTree = "<group>"; };
 		D9418A861AB8C18600234A15 /* UIImageView+URL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+URL.m"; path = "Classes/UI/Public/Views/UIImageView+URL.m"; sourceTree = "<group>"; };
+		D9418A8A1AB9CB1E00234A15 /* CKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewController.h; path = Classes/UI/Public/Table/CKTableViewController.h; sourceTree = "<group>"; };
+		D9418A8B1AB9CB1E00234A15 /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewController.m; path = Classes/UI/Public/Table/CKTableViewController.m; sourceTree = "<group>"; };
 		D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyStringViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.h; sourceTree = "<group>"; };
 		D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyStringViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.m; sourceTree = "<group>"; };
 		D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyViewController.h; sourceTree = "<group>"; };
@@ -1685,8 +1689,8 @@
 		7506E40213B8FE6100EE1471 /* Tables */ = {
 			isa = PBXGroup;
 			children = (
-				7560DC1613B8ED3600268D13 /* CKTableViewController.h */,
-				7560DC1713B8ED3600268D13 /* CKTableViewController.m */,
+				7560DC1613B8ED3600268D13 /* CKTableViewControllerOld.h */,
+				7560DC1713B8ED3600268D13 /* CKTableViewControllerOld.m */,
 				7560DBE013B8ED3600268D13 /* CKTableCollectionViewController.h */,
 				7560DBE113B8ED3600268D13 /* CKTableCollectionViewController.m */,
 				7528070913D4B35F0010A300 /* CellControllers */,
@@ -3223,6 +3227,7 @@
 				D9418A7F1AB8877100234A15 /* Controller Factory */,
 				D9418A7E1AB8875A00234A15 /* Sections */,
 				D9418A631AB86CDF00234A15 /* Picker */,
+				D9418A891AB9CA8500234A15 /* Table */,
 			);
 			name = "Sectioned View Controllers";
 			sourceTree = "<group>";
@@ -3256,6 +3261,15 @@
 				D9418A821AB8B89500234A15 /* CKStandardContentViewController.m */,
 			);
 			name = "Standard Content";
+			sourceTree = "<group>";
+		};
+		D9418A891AB9CA8500234A15 /* Table */ = {
+			isa = PBXGroup;
+			children = (
+				D9418A8A1AB9CB1E00234A15 /* CKTableViewController.h */,
+				D9418A8B1AB9CB1E00234A15 /* CKTableViewController.m */,
+			);
+			name = Table;
 			sourceTree = "<group>";
 		};
 		D94CA2F91AA64AF8009EA887 /* Content ViewControllers */ = {
@@ -3752,7 +3766,7 @@
 				7560DD5B13B8ED3600268D13 /* CKTableViewCellController.h in Headers */,
 				7560DD5D13B8ED3600268D13 /* CKTableViewCellController+Style.h in Headers */,
 				7560DD6113B8ED3600268D13 /* CKTableViewCellController+Responder.h in Headers */,
-				7560DD6313B8ED3600268D13 /* CKTableViewController.h in Headers */,
+				7560DD6313B8ED3600268D13 /* CKTableViewControllerOld.h in Headers */,
 				7560DD6713B8ED3600268D13 /* CKTextView.h in Headers */,
 				962C08931820131B00A6E439 /* CKStackViewController.h in Headers */,
 				7560DD6F13B8ED3600268D13 /* UIButton+Style.h in Headers */,
@@ -3943,6 +3957,7 @@
 				96B9D2A4177B234000455BE8 /* CKVerticalBoxLayout.h in Headers */,
 				96B9D2A8177B234E00455BE8 /* CKHorizontalBoxLayout.h in Headers */,
 				96B9D2AC177B235F00455BE8 /* CKLayoutFlexibleSpace.h in Headers */,
+				D9418A8C1AB9CB1E00234A15 /* CKTableViewController.h in Headers */,
 				96B9D2B0177B23DA00455BE8 /* UIButton+CKLayout.h in Headers */,
 				961E782418D9D9040008EA33 /* UIView+Bounce.h in Headers */,
 				96B9D2B4177B248500455BE8 /* UIViewController+CKLayout.h in Headers */,
@@ -4223,7 +4238,7 @@
 				7560DD5C13B8ED3600268D13 /* CKTableViewCellController.m in Sources */,
 				7560DD5E13B8ED3600268D13 /* CKTableViewCellController+Style.m in Sources */,
 				7560DD6213B8ED3600268D13 /* CKTableViewCellController+Responder.m in Sources */,
-				7560DD6413B8ED3600268D13 /* CKTableViewController.m in Sources */,
+				7560DD6413B8ED3600268D13 /* CKTableViewControllerOld.m in Sources */,
 				7560DD6813B8ED3600268D13 /* CKTextView.m in Sources */,
 				7560DD7013B8ED3600268D13 /* UIButton+Style.m in Sources */,
 				7560DD7213B8ED3600268D13 /* UIColor+Additions.m in Sources */,
@@ -4303,6 +4318,7 @@
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
 				75043E661404327500C7685D /* CKPropertyExtendedAttributes+Attributes.m in Sources */,
 				753178151417E4E4009310A8 /* UINavigationBar+Style.m in Sources */,
+				D9418A8D1AB9CB1E00234A15 /* CKTableViewController.m in Sources */,
 				7531781A1417E4F9009310A8 /* UIToolbar+Style.mm in Sources */,
 				7531781E1417E5A1009310A8 /* UILabel+Introspection.m in Sources */,
 				753178221417E61D009310A8 /* UINavigationBar+Introspection.m in Sources */,

@@ -12,6 +12,18 @@
 #import "Layout.h"
 #import "UIView+Name.h"
 
+
+
+typedef NS_ENUM(NSInteger,CKViewControllerFlags){
+    CKViewControllerFlagsNone = 1UL << 0,
+    CKViewControllerFlagsSelectable = 1UL << 1,
+    CKViewControllerFlagsEditable = 1UL << 2,
+    CKViewControllerFlagsRemovable = 1UL << 3,
+    CKViewControllerFlagsMovable = 1UL << 4,
+    CKViewControllerFlagsAll = CKViewControllerFlagsSelectable | CKViewControllerFlagsEditable | CKViewControllerFlagsRemovable | CKViewControllerFlagsMovable
+};
+
+
 /**
  */
 @interface CKCollectionCellContentViewController : UIViewController
@@ -19,7 +31,7 @@
 
 /** The CKCollectionViewController managing the collection of CKCollectionCellController and the collectionView
  
-    CKTableViewController,
+    CKTableViewControllerOld,
     CKTableCollectionViewViewController, 
     CKFormTableViewController , 
     CKCarouselCollectionViewController, 
@@ -27,7 +39,7 @@
     CKMapCollectionViewController,
     CKCollectionViewLayoutController
  */
-@property(nonatomic,readonly) CKCollectionViewController* collectionViewController;
+@property(nonatomic,readonly) CKViewController* collectionViewController;
 
 
 /** The collection view
@@ -66,6 +78,10 @@
  */
 @property(nonatomic,readonly) NSIndexPath* indexPath;
 
+/** default value is selectable
+ */
+@property(nonatomic,assign) CKViewControllerFlags flags;
+
 /** Identifying the controller by a name
  */
 @property(nonatomic,readonly) NSString* name;
@@ -73,6 +89,10 @@
 /**
  */
 - (NSString*)reuseIdentifier;
+
+/** Default is 0 meaning we should
+ */
+@property(nonatomic,assign) CGFloat estimatedRowHeight;
 
 /** Ensure you call the super implementation !
  */

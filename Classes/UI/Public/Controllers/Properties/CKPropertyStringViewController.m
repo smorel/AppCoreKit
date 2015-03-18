@@ -57,7 +57,7 @@
 }
 
 - (void)postInit{
-    self.collectionCellController.flags = CKItemViewFlagNone;
+    self.flags = CKViewControllerFlagsNone;
 }
 
 - (void)viewDidLoad{
@@ -131,9 +131,12 @@
     
     ValueTextField.hidden = self.multiline;
     ValueTextView.hidden = !ValueTextField.hidden;
-    ValueTextField.userInteractionEnabled = ValueTextView.userInteractionEnabled = !self.readOnly;
     
     __unsafe_unretained CKPropertyStringViewController* bself = self;
+    
+    [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
+        ValueTextField.userInteractionEnabled = ValueTextView.userInteractionEnabled = !bself.readOnly;
+    }];
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
         NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];

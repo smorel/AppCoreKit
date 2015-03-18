@@ -493,7 +493,7 @@
 }
 
 
-- (void)scrollToCellAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
+- (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
     [self.collectionView scrollToItemAtIndexPath:indexpath atScrollPosition:UICollectionViewScrollPositionCenteredVertically|UICollectionViewScrollPositionCenteredHorizontally animated:animated];
 }
 

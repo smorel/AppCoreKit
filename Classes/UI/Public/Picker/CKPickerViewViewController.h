@@ -12,6 +12,8 @@
  */
 @interface CKPickerViewViewController : CKSectionedViewController
 
+/**
+ */
 @property(nonatomic,readonly) UIPickerView* pickerView;
 
 @end

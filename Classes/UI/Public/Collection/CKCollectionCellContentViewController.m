@@ -26,6 +26,7 @@
 @property(nonatomic,retain) CKWeakRef* collectionCellControllerWeakRef;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @property(nonatomic,retain) UIView* reusableView;
+@property(nonatomic,retain) UIView* contentViewCell;
 @property(nonatomic,assign) BOOL isComputingSize;
 @end
 
@@ -41,6 +42,7 @@
     [_didSelectBlock release];
     [_collectionCellControllerWeakRef release];
     [_reusableView release];
+    [_contentViewCell release];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
     
@@ -54,8 +56,14 @@
 
 - (id)init{
     self = [super init];
+    self.flags = CKViewControllerFlagsSelectable;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
     return self;
+}
+
+- (void)setContainerViewController:(UIViewController *)containerViewController{
+    [super setContainerViewController:containerViewController];
+    [self postInit];
 }
 
 - (void)styleManagerDidUpdate:(NSNotification*)notification{
@@ -63,7 +71,6 @@
     if(!self.view){
         return;
     }
-    
     
     if(notification.object == [self styleManager]){
         [self resourceManagerReloadUI];
@@ -77,10 +84,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionCellController invalidateSize];
     });
-}
-
-- (UIViewController*)containerViewController{
-    return self.collectionViewController;
 }
 
 - (void)setCollectionCellController:(CKCollectionCellController *)c{
@@ -97,20 +100,33 @@
 }
 
 - (NSIndexPath*)indexPath{
-    return [self.collectionCellController indexPath];
+    if(self.collectionCellController )
+        return [self.collectionCellController indexPath];
+    
+    if([self.containerViewController respondsToSelector:@selector(indexPathForController:)]){
+        return [self.containerViewController performSelector:@selector(indexPathForController:) withObject:self];
+    }
+    
+    return nil;
 }
 
-- (CKCollectionViewController*)collectionViewController{
-    return [self.collectionCellController containerController];
+- (CKViewController*)collectionViewController{
+    if(self.collectionCellController)
+        return [self.collectionCellController containerController];
+    
+    return (CKViewController*)self.containerViewController;
 }
-
 
 - (UIView*) contentViewCell{
-    return  self.collectionCellController.view;
+    if(self.collectionCellController)
+        return  self.collectionCellController.view;
+    return _contentViewCell;
 }
 
 - (UIView*) contentView{
-    return  [self.collectionViewController contentView];
+    if([self.collectionViewController respondsToSelector:@selector(contentView)])
+        return [self.collectionViewController performSelector:@selector(contentView) withObject:nil];
+    return nil;
 }
 
 - (UIView*)view{
@@ -128,6 +144,7 @@
 
 - (void)prepareForReuseUsingContentView:(UIView*)contentView contentViewCell:(UIView*)contentViewCell{
     self.reusableView = contentView;
+    self.contentViewCell = contentViewCell;
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
@@ -148,8 +165,8 @@
         //Support for nibs
         return CGSizeMake(MIN(size.width,self.view.width),MIN(size.height,self.view.height));
     }else{
-        UIView* view = [[[UIView alloc]init]autorelease];
-        view.frame = CGRectMake(0, 0, size.width, size.height);
+        UIView* view = [[UIView alloc]init];
+        view.frame = CGRectMake(0, 0, size.width, 100);
         [self prepareForReuseUsingContentView:view contentViewCell:view];
         
         [self viewDidLoad];
@@ -173,6 +190,8 @@
         [view clearBindingsContext];
         
         [self prepareForReuseUsingContentView:nil contentViewCell:nil];
+        
+        [view release];
         
         self.isComputingSize = NO;
         
@@ -247,7 +266,9 @@
 }
 
 - (void)scrollToCell{
-    [self.collectionViewController scrollToCellAtIndexPath:self.indexPath animated:YES];
+    if([self.collectionViewController respondsToSelector:@selector(scrollToControllerAtIndexPath:animated:)]){
+        [self.collectionViewController performSelector:@selector(scrollToControllerAtIndexPath:animated:) withObject:self.indexPath withObject:@(YES)];
+    }
 }
 
 @end

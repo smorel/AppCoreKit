@@ -138,7 +138,7 @@
         UITableViewCell* view = (UITableViewCell*)[[CKViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
         
         if(!view){
-            view = [[[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[self identifier]]autorelease];
+            view = [[[CKTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[self identifier]]autorelease];
             view.height = size.height;
             view.width  = size.width;
             

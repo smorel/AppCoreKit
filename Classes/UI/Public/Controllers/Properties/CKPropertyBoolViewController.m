@@ -33,7 +33,7 @@
 }
 
 - (void)postInit{
-    self.collectionCellController.flags = CKItemViewFlagNone;
+    self.flags = CKViewControllerFlagsNone;
 }
 
 - (void)viewDidLoad{

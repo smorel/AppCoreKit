@@ -8,24 +8,24 @@
 
 #import <Foundation/Foundation.h>
 #import "CKCollectionCellController.h"
-#import "CKTableViewController.h"
+#import "CKTableViewControllerOld.h"
 #import "CKObject.h"
 #import "CKCallback.h"
 #import "CKWeakRef.h"
 
-/********************************************** CKUITableViewCell *************************************/
+/********************************************** CKTableViewCell *************************************/
 
 @class CKTableCollectionViewController;
 @class CKTableViewCellController;
-@class CKTableViewController;
+@class CKTableViewControllerOld;
 
 /**
  */
-@interface CKUITableViewCell : UITableViewCell
+@interface CKTableViewCell : UITableViewCell
 
 
 ///-----------------------------------
-/// @name Initializing a CKUITableViewCell instance
+/// @name Initializing a CKTableViewCell instance
 ///-----------------------------------
 
 /**
@@ -221,7 +221,7 @@ typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* c
 
 /**
  */
-- (CKTableViewController*)parentTableViewController;
+- (CKTableViewControllerOld*)parentTableViewController;
 
 /**
  */

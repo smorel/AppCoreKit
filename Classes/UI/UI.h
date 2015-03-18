@@ -57,7 +57,7 @@
 #import "CKCarouselCollectionViewController.h"
 
 
-#import "CKTableViewController.h"
+#import "CKTableViewControllerOld.h"
 #import "CKTableCollectionViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+BlockBasedInterface.h"
@@ -123,4 +123,5 @@
 
 
 #import "CKSectionedViewController.h"
+#import "CKTableViewController.h"
 #import "CKPickerViewViewController.h"

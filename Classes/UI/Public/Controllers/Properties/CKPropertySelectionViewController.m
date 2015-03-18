@@ -100,23 +100,29 @@
         v.value = value;
         [self.values addObject:v];
     }
+    
+    CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
+    self.propertyNameLabel = _(self.property.name);
+    
     return self;
 }
 
 - (void)postInit{
-    CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
-    self.propertyNameLabel = _(self.property.name);
+    [super postInit];
+    
     self.hideDisclosureIndicatorWhenImageIsAvailable = YES;
     
     self.selectionControllerAppearance = CKPropertySelectionAppearanceStyleDefault;
     self.selectionControllerPresentationStyle = CKPropertyEditionPresentationStyleDefault;
     self.multiSelectionSeparatorString = @"\n";
     
-    self.collectionCellController.flags = CKItemViewFlagSelectable;
+    self.flags = CKViewControllerFlagsSelectable;
+    
+    /*
     if([self.collectionCellController isKindOfClass:[CKTableViewCellController class]]){
         CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)self.collectionCellController;
         tableViewCellController.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
+    }*/
     
     self.collectionCellController.flags = self.readOnly ? CKItemViewFlagNone : CKItemViewFlagSelectable;
 }
@@ -421,28 +427,31 @@
     }
 }
 
+- (CKCollectionCellContentViewController*)defaultControllerForValue:(CKPropertySelectionValue*)v{
+    __unsafe_unretained CKPropertySelectionViewController* bself = self;
+    
+    CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^{
+        [bself setValueSelected:v];
+    }];
+    
+    [cell beginBindingsContextByRemovingPreviousBindings];
+    [v.property.object bind:v.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
+        BOOL selected = [bself isValueSelected:v];
+        // TODO!
+        //cell.collectionCellController.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    }];
+    [cell endBindingsContext];
+    
+    return cell;
+}
+
 - (CKViewControllerFactory*)defaultFactory{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKViewControllerFactory* factory = [CKViewControllerFactory factory];
     [factory registerFactoryForObjectOfClass:[CKPropertySelectionValue class]
                                      factory:^CKCollectionCellContentViewController *(id object, NSIndexPath *indexPath) {
-             CKPropertySelectionValue* v = (CKPropertySelectionValue*)object;
-                                         
-            CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^{
-                [bself setValueSelected:v];
-            }];
-             
-            [cell beginBindingsContextByRemovingPreviousBindings];
-            [v.property.object bind:v.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
-                BOOL selected = [bself isValueSelected:v];
-                
-                // TODO!
-                //cell.collectionCellController.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            }];
-            [cell endBindingsContext];
-                                         
-            return cell;
+            return [bself defaultControllerForValue:object];
     }];
     
     return factory;

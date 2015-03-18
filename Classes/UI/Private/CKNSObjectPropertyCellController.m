@@ -159,7 +159,7 @@
         [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {return [CKNSObjectPropertyCellController cellController];}];
         
         CKTableCollectionViewController* controller = [[[CKTableCollectionViewController alloc]initWithCollection:thevalue factory:factory]autorelease];
-        controller.style = [[(CKTableViewController*)self.containerController tableView]style];
+        controller.style = [[(CKTableViewControllerOld*)self.containerController tableView]style];
         controller.name = @"CKInlineDebugger";
 		controller.title = self.tableViewCell.textLabel.text;
 		if(contentType != nil || contentProtocol != nil){

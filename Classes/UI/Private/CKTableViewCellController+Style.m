@@ -11,7 +11,7 @@
 
 //HACK : here to know the context of the parent controller ...
 #import "CKCarouselCollectionViewController.h"
-#import "CKTableViewController.h"
+#import "CKTableViewControllerOld.h"
 #import "CKMapCollectionViewController.h"
 
 #import "CKStyleView.h"
@@ -84,7 +84,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 
 @end
 
-@implementation CKTableViewController (CKStyle)
+@implementation CKTableViewControllerOld (CKStyle)
 
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
 	if(style == nil || [style isEmpty] == YES)
@@ -163,7 +163,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 @implementation CKTableViewCellController (CKStyle)
 
 - (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
-    if(![self.containerController isKindOfClass:[CKTableViewController class]]){
+    if(![self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
         return CKStyleViewCornerTypeNone;
     }
     
@@ -178,7 +178,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 		case CKViewCornerStyleTableViewCell:{
             if([CKOSVersion() floatValue] < 7){
                 if(view == self.tableViewCell.backgroundView || view == self.tableViewCell.selectedBackgroundView){
-                    CKTableViewController* tableViewController = ((CKTableViewController*)self.containerController);
+                    CKTableViewControllerOld* tableViewController = ((CKTableViewControllerOld*)self.containerController);
                     if(tableViewController.tableView.style == UITableViewStyleGrouped){
                         NSInteger numberOfRows = [tableViewController numberOfObjectsForSection:self.indexPath.section];
                         if(self.indexPath.row == 0 && numberOfRows > 1){
@@ -213,7 +213,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
-    if(![self.containerController isKindOfClass:[CKTableViewController class]]){
+    if(![self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
         return CKViewBorderStyleNone;
     }
     
@@ -225,7 +225,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
     if(borderStyle & CKViewBorderStyleTableViewCell){
         if(view == self.tableViewCell.backgroundView
            || view == self.tableViewCell.selectedBackgroundView){
-            CKTableViewController* tableViewController = ((CKTableViewController*)self.containerController);
+            CKTableViewControllerOld* tableViewController = ((CKTableViewControllerOld*)self.containerController);
             NSInteger numberOfRows = [tableViewController numberOfObjectsForSection:self.indexPath.section];
             if(numberOfRows > 1){
                 if(self.indexPath.row == 0){
@@ -261,7 +261,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style{
-    if(![self.containerController isKindOfClass:[CKTableViewController class]]){
+    if(![self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
         return CKStyleViewSeparatorLocationNone;
     }
     
@@ -275,7 +275,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 	switch(separatorStyle){
 		case CKViewSeparatorStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView || view == self.tableViewCell.selectedBackgroundView){
-                CKTableViewController* tableViewController = ((CKTableViewController*)self.containerController);
+                CKTableViewControllerOld* tableViewController = ((CKTableViewControllerOld*)self.containerController);
                 NSInteger numberOfRows = [tableViewController numberOfObjectsForSection:self.indexPath.section];
                 if(numberOfRows > 1 && self.indexPath.row != numberOfRows-1){
                     return CKStyleViewSeparatorLocationBottom;

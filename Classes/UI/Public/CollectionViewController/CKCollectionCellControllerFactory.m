@@ -15,7 +15,7 @@
 #import "CKStyleManager.h"
 #import "CKTableViewCellController+Style.h"
 
-#import "CKTableViewController.h"
+#import "CKTableViewControllerOld.h"
 #import "CKTableViewContentCellController.h"
 
 #import "CKCollectionViewLayoutController.h"
@@ -59,7 +59,7 @@
         }
         return controller;
     }else if(_contentControllerCreateBlock){
-        if([collectionViewController isKindOfClass:[CKTableViewController class]]){
+        if([collectionViewController isKindOfClass:[CKTableViewControllerOld class]]){
             CKCollectionCellContentViewController* content = _contentControllerCreateBlock(object,indexPath);
             
             CKTableViewContentCellController* cellController = [[CKTableViewContentCellController alloc]initWithContentViewController:content];
