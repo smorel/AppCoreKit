@@ -118,9 +118,5 @@
  */
 @property(nonatomic,retain) NSString* defaultImageName;
 
-/** The accessoryType when the CKStandardContentViewController is presented in a table view.
- Default value is UITableViewCellAccessoryNone
- */
-@property(nonatomic,assign) UITableViewCellAccessoryType accessoryType;
 
 @end

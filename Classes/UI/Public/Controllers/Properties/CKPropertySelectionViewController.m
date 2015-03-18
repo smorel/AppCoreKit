@@ -105,6 +105,8 @@
     CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
     self.propertyNameLabel = _(self.property.name);
     
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
     return self;
 }
 
@@ -231,10 +233,6 @@
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,ValueLabel,ValueImageView]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
-    
-    if(self.tableViewCell){
-        self.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
 }
 
 
@@ -273,9 +271,7 @@
         ValueImageView.image = image;
         
         if(bself.hideDisclosureIndicatorWhenImageIsAvailable){
-            if(bself.tableViewCell){
-                bself.tableViewCell.accessoryType = !image ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-            }
+            bself.tableViewCell.accessoryType = !image ? self.accessoryType : UITableViewCellAccessoryNone;
         }
     }];
 }

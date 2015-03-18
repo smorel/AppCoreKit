@@ -20,6 +20,9 @@
 #import "CKVersion.h"
 
 
+#import "CKTableViewCellController.h"
+#import "CKTableViewController.h"
+
 @interface NSObject ()
 
 - (void)applySubViewStyle:(NSMutableDictionary*)style
@@ -70,6 +73,7 @@
     self = [super init];
     self.flags = CKViewControllerFlagsSelectable;
     self.state = CKViewControllerStateNone;
+    self.accessoryType = UITableViewCellAccessoryNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
     return self;
 }
@@ -283,6 +287,10 @@
     [super viewWillAppear:animated];
     
     self.state = CKViewControllerStateWillAppear;
+    
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryType = self.accessoryType;
+    }
     
     //HERE we do not apply style on sub views as we have reuse
     if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
@@ -503,6 +511,24 @@
         }
     }
     return NO;
+}
+
+
+- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType{
+    _accessoryType = accessoryType;
+    
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryType = self.accessoryType;
+    }
+}
+
+- (void)accessoryTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+                                                 UITableViewCellAccessoryNone,                   // don't show any accessory view
+                                                 UITableViewCellAccessoryDisclosureIndicator,    // regular chevron. doesn't track
+                                                 UITableViewCellAccessoryDetailDisclosureButton, // info button w/ chevron. tracks
+                                                 UITableViewCellAccessoryCheckmark,              // checkmark. doesn't track
+                                                 UITableViewCellAccessoryDetailButton);
 }
 
 @end

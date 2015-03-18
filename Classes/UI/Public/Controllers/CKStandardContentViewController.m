@@ -10,9 +10,6 @@
 #import "CKResourceManager.h"
 #import "UIImageView+URL.h"
 
-#import "CKTableViewCellController.h"
-#import "CKTableViewController.h"
-
 @interface CKStandardContentViewController ()
 
 @end
@@ -48,7 +45,8 @@
 }
 
 + (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle imageName:(NSString*)imageName action:(void(^)())action{
-    NSURL* imageURL = [NSURL fileURLWithPath:[CKResourceManager pathForImageNamed:imageName]];
+    NSString* filePath = [CKResourceManager pathForImageNamed:imageName];
+    NSURL* imageURL = filePath ? [NSURL fileURLWithPath:filePath] : nil;
     return [self controllerWithTitle:title subtitle:subtitle defaultImageName:nil imageURL:imageURL action:action];
 }
 
@@ -66,11 +64,6 @@
     return controller;
 }
 
-- (id)init{
-    self = [super init];
-    self.accessoryType = UITableViewCellAccessoryNone;
-    return self;
-}
 
 - (void)viewDidLoad{
     [super viewDidLoad];
@@ -125,19 +118,8 @@
     UILabel* subtitleLabel = [self.view viewWithName:@"SubtitleLabel"];
     subtitleLabel.hidden = (self.subtitle == nil);
     subtitleLabel.text = self.subtitle;
-    
-    if(self.tableViewCell){
-        self.tableViewCell.accessoryType = self.accessoryType;
-    }
 }
 
-- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType{
-    _accessoryType = accessoryType;
-    
-    if(self.tableViewCell){
-        self.tableViewCell.accessoryType = self.accessoryType;
-    }
-}
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

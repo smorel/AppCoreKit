@@ -243,6 +243,11 @@
             vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[controller]];
             
             [self.view addLayoutBox:vbox];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self scrollToCell];
+            });
+            
             break;
         }
     }

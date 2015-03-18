@@ -139,4 +139,10 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
  */
 @property(nonatomic,copy) void(^didSelectBlock)();
 
+
+/** The accessoryType when the CKStandardContentViewController is presented in a table view.
+ Default value is UITableViewCellAccessoryNone
+ */
+@property(nonatomic,assign) UITableViewCellAccessoryType accessoryType;
+
 @end
