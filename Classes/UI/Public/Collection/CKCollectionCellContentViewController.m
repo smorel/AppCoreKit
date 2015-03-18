@@ -168,8 +168,11 @@
         }
         
         [self viewWillDisappear:NO];
-        [self prepareForReuseUsingContentView:nil contentViewCell:nil];
         [self viewDidDisappear:NO];
+        
+        [view clearBindingsContext];
+        
+        [self prepareForReuseUsingContentView:nil contentViewCell:nil];
         
         self.isComputingSize = NO;
         
