@@ -306,6 +306,7 @@
         case CKPropertySelectionAppearanceStyleList:{
             CKTableViewController* table = [CKTableViewController controller];
             table.style = UITableViewStylePlain;
+            table.endEditingViewWhenScrolling = NO;
             
             NSMutableArray* selectedIndexPaths = [NSMutableArray array];
             NSArray* controllers = [self cellsForEditionController:table selectedIndexPaths:selectedIndexPaths];
@@ -433,11 +434,12 @@
         [bself setValueSelected:v];
     }];
     
+    __unsafe_unretained CKStandardContentViewController* bcell = cell;
+    
     [cell beginBindingsContextByRemovingPreviousBindings];
     [v.property.object bind:v.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
         BOOL selected = [bself isValueSelected:v];
-        // TODO!
-        //cell.collectionCellController.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        bcell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }];
     [cell endBindingsContext];
     
