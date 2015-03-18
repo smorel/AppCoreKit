@@ -1722,7 +1722,6 @@
 				7560DB7A13B8ED3600268D13 /* CKCollectionCellController.m */,
 				7560DBE213B8ED3600268D13 /* CKCollectionCellControllerFactory.h */,
 				7560DBE313B8ED3600268D13 /* CKCollectionCellControllerFactory.m */,
-				D94CA2F91AA64AF8009EA887 /* CellContentViewControllers */,
 				7506E3FD13B8FDD300EE1471 /* Carousel */,
 				7506E40213B8FE6100EE1471 /* Tables */,
 				969AFE671561504700CFE27A /* Grid */,
@@ -2224,6 +2223,7 @@
 				D92C10531AA78B9F00DA4B12 /* Web */,
 				D92C10551AA78BCB00DA4B12 /* Slideshow */,
 				D9418A571AB8652300234A15 /* Date Picker */,
+				D94CA2F91AA64AF8009EA887 /* Content ViewControllers */,
 				D9418A801AB8B86900234A15 /* Standard Content */,
 				D94CA3061AA75B21009EA887 /* Properties */,
 				D92C10541AA78BB800DA4B12 /* Apple Extensions */,
@@ -3258,7 +3258,7 @@
 			name = "Standard Content";
 			sourceTree = "<group>";
 		};
-		D94CA2F91AA64AF8009EA887 /* CellContentViewControllers */ = {
+		D94CA2F91AA64AF8009EA887 /* Content ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				96B3BCD4182BED9800978B85 /* CKCollectionCellContentViewController.h */,
@@ -3267,7 +3267,7 @@
 				D9149CE51AA7682A00D129AB /* CKCollectionCellContentViewController+ResponderChain.m */,
 				D9E04C7D1AB1F9C800E6BECB /* Swipable */,
 			);
-			name = CellContentViewControllers;
+			name = "Content ViewControllers";
 			sourceTree = "<group>";
 		};
 		D94CA3061AA75B21009EA887 /* Properties */ = {
