@@ -7,6 +7,7 @@
 //
 
 #import "CKSectionedViewController.h"
+#import "UIView+Positioning.h"
 #import <objc/runtime.h>
 
 
@@ -311,6 +312,10 @@ static char UIViewAttachedCellContentViewControllerKey;
 
 - (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath{
     
+}
+
+- (CGSize)contentSizeForViewInPopover{
+    return CGSizeMake(self.view.width,MIN(self.view.height,216));
 }
 
 @end
