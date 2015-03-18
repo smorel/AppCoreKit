@@ -40,6 +40,10 @@
     self.pickerView.delegate = self;
     self.pickerView.dataSource = self;
     [self.pickerView reloadAllComponents];
+    
+    for(NSIndexPath* indexPath in self.selectedIndexPaths){
+        [self.pickerView selectRow:indexPath.row inComponent:indexPath.section animated:NO];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -126,9 +130,31 @@
     return [self viewForControllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component] reusingView:view];
 }
 
+
+- (CGSize)contentSizeForViewInPopover{
+    return CGSizeMake(self.pickerView.width,self.pickerView.height);
+}
+
+
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+    NSMutableArray* indexPaths = [NSMutableArray arrayWithArray:self.selectedIndexPaths];
+    
+    NSInteger index = 0;
+    for(NSIndexPath* ip in self.selectedIndexPaths){
+        if(ip.section == component){
+            [indexPaths removeObjectAtIndex:index];
+            break;
+        }
+        ++index;
+    }
+    
+    [indexPaths addObject:[NSIndexPath indexPathForRow:row inSection:component]];
+    
+    self.selectedIndexPaths = indexPaths;
+    
     CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component]];
     [controller didSelect];
 }
+
 
 @end
