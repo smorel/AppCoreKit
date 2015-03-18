@@ -25,7 +25,6 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 @property(nonatomic,assign, readwrite) BOOL visible;
 @property(nonatomic,assign) BOOL registeredToNotifications;
 @property(nonatomic,retain) CKWeakRef* delegateRef;
-@property(nonatomic,retain,readwrite) UIViewController* contentViewController;
 @end
 
 @implementation CKSheetController{
@@ -69,31 +68,41 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     [super dealloc];
 }
 
-- (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated{
-   [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+- (void)setContentViewController:(UIViewController *)contentViewController{
+    if(_contentViewController){
+        [_contentViewController viewWillDisappear:NO];
+        [_contentViewController.view removeFromSuperview];
+        [_contentViewController viewDidDisappear:NO];
+        [_contentViewController release];
+        _contentViewController = nil;
+    }
     
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldResign:) name:CKSheetResignNotification object:nil];
-    self.registeredToNotifications = YES;
+    _contentViewController = [contentViewController retain];
     
-    //this will retain the CKSheetController until it will get dismissed.
-    //this avoid us to explicitelly retain it in the client code.
-    [self retain];
-    
-    
+    if(self.visible){
+        UIView* contentView = [_contentViewController view];
+        [_contentViewController viewWillAppear:NO];
+        [self prepareViewWithContentViewController:contentViewController rect:self.sheetView.frame];
+        [_contentViewController viewDidAppear:NO];
+    }
+}
+
+- (CGRect)prepareViewWithContentViewController:(UIViewController*)content rect:(CGRect)rect{
     UIView* contentView = self.contentViewController.view;
-    
     
     UIView* toolbar = self.contentViewController.navigationItem.titleView;
     
     CGSize size = self.contentViewController.contentSizeForViewInPopover;
-                                                            
+    
     CGFloat height = size.height + (toolbar ? toolbar.frame.size.height : 0);
+    
     CGRect contentEndRect = CGRectMake(rect.origin.x,rect.origin.y + rect.size.height - height,
                                        rect.size.width,height);
     
+    if(!self.sheetView){
+        self.sheetView = [[[UIView alloc]initWithFrame:contentEndRect]autorelease];
+    }
     
-    self.sheetView = [[[UIView alloc]initWithFrame:contentEndRect]autorelease];
     CGFloat y = 0;
     if(toolbar){
         toolbar.frame = CGRectMake(0,0,contentEndRect.size.width,toolbar.frame.size.height);
@@ -113,8 +122,23 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         self.sheetView.backgroundColor = [UIColor clearColor];
         [self.sheetView insertSubview:blurView atIndex:0];
     }
-    //add toolbar 
-    //add contentview
+    
+    return contentEndRect;
+}
+
+- (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated{
+   [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldResign:) name:CKSheetResignNotification object:nil];
+    self.registeredToNotifications = YES;
+    
+    //this will retain the CKSheetController until it will get dismissed.
+    //this avoid us to explicitelly retain it in the client code.
+    [self retain];
+    
+    
+    CGRect contentEndRect = [self prepareViewWithContentViewController:self.contentViewController rect:rect];
     
     UIWindow* window = [view window];
     CGRect contentEndRectInWindow = [window convertRect:contentEndRect fromView:view];
@@ -125,7 +149,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     }
     
     CGRect contentOriginRect = CGRectMake(rect.origin.x,rect.origin.y + rect.size.height,
-                                          rect.size.width,height);
+                                          rect.size.width,contentEndRect.size.height);
     self.sheetView.frame = contentOriginRect;
     
     [_contentViewController viewWillAppear:animated];

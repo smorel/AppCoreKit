@@ -54,7 +54,7 @@ extern NSString *const CKSheetKeyboardWillShowInfoKey;
 
 /** 
  */
-@property(nonatomic,retain,readonly) UIViewController* contentViewController;
+@property(nonatomic,retain) UIViewController* contentViewController;
 
 /** 
  */
