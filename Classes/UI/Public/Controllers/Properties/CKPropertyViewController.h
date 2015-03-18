@@ -12,6 +12,19 @@
 #import "Layout.h"
 #import "UIView+Name.h"
 
+
+/**
+ */
+typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
+    CKPropertyEditionPresentationStyleDefault,
+    CKPropertyEditionPresentationStylePush,
+    CKPropertyEditionPresentationStylePopover,
+    CKPropertyEditionPresentationStyleModal,
+    CKPropertyEditionPresentationStyleSheet,
+    CKPropertyEditionPresentationStyleInline
+};
+
+
 //TODO: adds support for property validation UI compatible with any CKCollectionViewController
 
 /** CKPropertyViewController provides the base mechanism for implementing a view controller that synchronize, edit and display any kind of properties.
@@ -88,5 +101,15 @@
  */
 @property(nonatomic,retain)UIToolbar* navigationToolbar;
 
+
+///-----------------------------------
+/// @name Presenting an edition view controller
+///-----------------------------------
+
+/**
+ */
+- (void)presentEditionViewController:(CKViewController*)controller
+                   presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
+  shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange;
 
 @end

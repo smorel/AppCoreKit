@@ -16,6 +16,8 @@
 #import "CKResourceManager.h"
 #import "CKStyleManager.h"
 #import "UIViewController+Style.h"
+#import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "CKSheetController.h"
 
 #import "CKPickerViewViewController.h"
 
@@ -54,13 +56,13 @@
 }
 
 - (void)selectionControllerPresentationStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertySelectionPresentationStyle",
-                                                 CKPropertySelectionPresentationStyleDefault,
-                                                 CKPropertySelectionPresentationStylePush,
-                                                 CKPropertySelectionPresentationStylePopover,
-                                                 CKPropertySelectionPresentationStyleModal,
-                                                 CKPropertySelectionPresentationStyleSheet,
-                                                 CKPropertySelectionPresentationStyleInline);
+    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertyEditionPresentationStyle",
+                                                 CKPropertyEditionPresentationStyleDefault,
+                                                 CKPropertyEditionPresentationStylePush,
+                                                 CKPropertyEditionPresentationStylePopover,
+                                                 CKPropertyEditionPresentationStyleModal,
+                                                 CKPropertyEditionPresentationStyleSheet,
+                                                 CKPropertyEditionPresentationStyleInline);
 }
 
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
@@ -107,7 +109,7 @@
     self.hideDisclosureIndicatorWhenImageIsAvailable = YES;
     
     self.selectionControllerAppearance = CKPropertySelectionAppearanceStyleDefault;
-    self.selectionControllerPresentationStyle = CKPropertySelectionPresentationStyleDefault;
+    self.selectionControllerPresentationStyle = CKPropertyEditionPresentationStyleDefault;
     self.multiSelectionSeparatorString = @"\n";
     
     self.collectionCellController.flags = CKItemViewFlagSelectable;
@@ -261,7 +263,7 @@
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
         ValueLabel.text = [bself labelForPropertyValue:value];
         
-        UIImage* image = [CKResourceManager imageNamed:[self imageNameForValue:self.property.value]];
+        UIImage* image = [CKResourceManager imageNamed:[bself imageNameForValue:bself.property.value]];
         ValueImageView.hidden = image == nil;
         ValueImageView.image = image;
         
@@ -280,9 +282,14 @@
 
 - (void)didSelect{
     [super didSelect];
-    
-    //TODO: handle self.appearance
-    
+    [self becomeFirstResponder];
+}
+
+- (BOOL)hasResponder{
+    return YES;
+}
+
+- (void)becomeFirstResponder{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKViewController* editionViewController = nil;
@@ -291,7 +298,8 @@
         case CKPropertySelectionAppearanceStyleList:{
             CKFormTableViewController* form = [CKFormTableViewController controller];
             
-            NSArray* controllers = [self cellsForEditionController:form];
+            NSMutableArray* selectedIndexPaths = [NSMutableArray array];
+            NSArray* controllers = [self cellsForEditionController:form selectedIndexPaths:selectedIndexPaths];
             NSMutableArray* cells = [NSMutableArray array];
             for(CKCollectionCellContentViewController* cell in controllers){
                 [cells addObject:[cell createTableViewCellController]];
@@ -306,9 +314,12 @@
         case CKPropertySelectionAppearanceStylePicker:{
             CKPickerViewViewController* picker = [CKPickerViewViewController controller];
             
-            NSArray* controllers = [self cellsForEditionController:picker];
+            NSMutableArray* selectedIndexPaths = [NSMutableArray array];
+            NSArray* controllers = [self cellsForEditionController:picker selectedIndexPaths:selectedIndexPaths];
             CKSection* section = [CKSection sectionWithControllers:controllers];
             [picker addSections:@[section] animated:NO];
+            
+            picker.selectedIndexPaths = selectedIndexPaths;
             
             editionViewController = picker;
             break;
@@ -318,10 +329,14 @@
     editionViewController.stylesheetFileName = self.collectionViewController.stylesheetFileName;
     editionViewController.view.backgroundColor = self.collectionViewController.view.backgroundColor;
     editionViewController.title = _(self.property.name);
-    [self presentEditionViewController:editionViewController];
+    editionViewController.name = self.property.name;
+    
+    [self presentEditionViewController:editionViewController
+                     presentationStyle:self.selectionControllerPresentationStyle
+    shouldDismissOnPropertyValueChange:!self.multiSelectionEnabled];
 }
 
-- (NSArray*)cellsForEditionController:(UIViewController*)editionController{
+- (NSArray*)cellsForEditionController:(UIViewController*)editionController selectedIndexPaths:(NSMutableArray*)selectedIndexPath{
     CKViewControllerFactory* factory = self.selectionControllerFactory ? self.selectionControllerFactory : [self defaultFactory];
     
     NSMutableArray* cells = [NSMutableArray array];
@@ -335,6 +350,10 @@
                                                                containerController:editionController];
         
         [cells addObject:cell];
+        
+        if([self isValueSelected:v]){
+            [selectedIndexPath addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+        }
         
         ++index;
     };
@@ -357,6 +376,51 @@
     return [NSString stringWithFormat:@"icon_%@",strValue];
 }
 
+
+- (BOOL)isValueSelected:(CKPropertySelectionValue*)v{
+    BOOL selected = NO;
+    
+    if([v.property isContainer]){
+        selected = [v.property containsObject:v.value];
+    }else if([v.property isNumber]){
+        NSInteger intV = [v.value integerValue];
+        NSInteger intP = [v.property.value integerValue];
+        if(self.multiSelectionEnabled){
+            selected = (intP & intV);
+        }else{
+            selected = (intV == intP);
+        }
+    }else{
+        selected = [v.property.value isEqual:v.value];
+    }
+    
+    return selected;
+}
+
+- (void)setValueSelected:(CKPropertySelectionValue*)v{
+    if([v.property isContainer]){
+        if([v.property containsObject:v.value]){
+            [v.property removeObject:v.value];
+        }else{
+            [v.property addObject:v.value];
+        }
+    }else if([v.property isNumber]){
+        NSInteger intV = [v.value integerValue];
+        NSInteger intP = [v.property.value integerValue];
+        if(self.multiSelectionEnabled){
+            if(intP & intV){
+                [v.property setValue:@(intP &~ intV)];
+            }else{
+                [v.property setValue:@(intP | intV)];
+            }
+        }else{
+            [v.property setValue:@(intV)];
+        }
+    }else{
+        [v.property setValue:v.value];
+    }
+}
+
 - (CKViewControllerFactory*)defaultFactory{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
@@ -366,48 +430,14 @@
              CKPropertySelectionValue* v = (CKPropertySelectionValue*)object;
                                          
             CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^{
-                if([v.property isContainer]){
-                    if([v.property containsObject:v.value]){
-                        [v.property removeObject:v.value];
-                    }else{
-                        [v.property addObject:v.value];
-                    }
-                }else if([v.property isNumber]){
-                    NSInteger intV = [v.value integerValue];
-                    NSInteger intP = [v.property.value integerValue];
-                    if(bself.multiSelectionEnabled){
-                        if(intP & intV){
-                            [v.property setValue:@(intP &~ intV)];
-                        }else{
-                            [v.property setValue:@(intP | intV)];
-                        }
-                    }else{
-                        [v.property setValue:@(intV)];
-                    }
-                }else{
-                    [v.property setValue:v.value];
-                }
+                [bself setValueSelected:v];
             }];
              
             [cell beginBindingsContextByRemovingPreviousBindings];
             [v.property.object bind:v.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
-                BOOL selected = NO;
+                BOOL selected = [bself isValueSelected:v];
                 
-                if([v.property isContainer]){
-                    selected = [v.property containsObject:v.value];
-                }else if([v.property isNumber]){
-                    NSInteger intV = [v.value integerValue];
-                    NSInteger intP = [v.property.value integerValue];
-                    if(bself.multiSelectionEnabled){
-                        selected = (intP & intV);
-                    }else{
-                        selected = (intV == intP);
-                    }
-                }else{
-                    selected = [v.property.value isEqual:v.value];
-                }
-                
-                //TODO!
+                // TODO!
                 //cell.collectionCellController.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             }];
             [cell endBindingsContext];
@@ -416,77 +446,6 @@
     }];
     
     return factory;
-}
-
-- (void)presentEditionViewController:(CKViewController*)controller{
-    __unsafe_unretained CKPropertySelectionViewController* bself = self;
-    
-    CKPropertySelectionPresentationStyle style = self.selectionControllerPresentationStyle;
-    if(style == CKPropertySelectionPresentationStyleDefault){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-            style = CKPropertySelectionPresentationStylePopover;
-        }else if(self.navigationController){
-            style = CKPropertySelectionPresentationStylePush;
-        }else{
-            style = CKPropertySelectionPresentationStyleModal;
-        }
-    }
-    
-    switch(style){
-        case CKPropertySelectionPresentationStylePopover:{
-            CKPopoverController* popover = [[CKPopoverController alloc]initWithContentViewController:controller];
-            [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-            
-            __unsafe_unretained CKPopoverController* bPopover = popover;
-            [controller beginBindingsContextByRemovingPreviousBindings];
-            if(!self.multiSelectionEnabled){
-                [self.property.object bind:self.property.keyPath withBlock:^(id value) {
-                    [bPopover dismissPopoverAnimated:YES];
-                }];
-            }
-            [controller endBindingsContext];
-            break;
-        }
-        case CKPropertySelectionPresentationStylePush:{
-            [self.navigationController pushViewController:controller animated:YES];
-            
-            [controller beginBindingsContextByRemovingPreviousBindings];
-            if(!self.multiSelectionEnabled){
-                [self.property.object bind:self.property.keyPath withBlock:^(id value) {
-                    [bself.navigationController popViewControllerAnimated:YES];
-                }];
-            }
-            [controller endBindingsContext];
-            
-            break;
-        }
-        case CKPropertySelectionPresentationStyleModal:{
-            UINavigationController* nav = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
-            
-            controller.leftButton = [UIBarButtonItem barButtonItemWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{
-                [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
-            }];
-            
-            [controller beginBindingsContextByRemovingPreviousBindings];
-            if(!self.multiSelectionEnabled){
-                [self.property.object bind:self.property.keyPath withBlock:^(id value) {
-                    [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
-                }];
-            }
-            [controller endBindingsContext];
-            
-            [bself.collectionViewController presentViewController:controller animated:YES completion:nil];
-            break;
-        }
-        case CKPropertySelectionPresentationStyleSheet:{
-            //TODO
-            break;
-        }
-        case CKPropertySelectionPresentationStyleInline:{
-            //TODO
-            break;
-        }
-    }
 }
 
 @end

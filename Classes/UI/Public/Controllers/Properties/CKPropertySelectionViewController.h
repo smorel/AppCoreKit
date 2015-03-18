@@ -38,17 +38,6 @@ typedef NS_ENUM(NSInteger, CKPropertySelectionAppearanceStyle){
     CKPropertySelectionAppearanceStylePicker
 };
 
-/**
- */
-typedef NS_ENUM(NSInteger, CKPropertySelectionPresentationStyle){
-    CKPropertySelectionPresentationStyleDefault,
-    CKPropertySelectionPresentationStylePush,
-    CKPropertySelectionPresentationStylePopover,
-    CKPropertySelectionPresentationStyleModal,
-    CKPropertySelectionPresentationStyleSheet,
-    CKPropertySelectionPresentationStyleInline
-};
-
 
 /** CKPropertySelectionViewController provides the logic to edit and synchronize changes to/from an Enum, Bitfield, array, collection or object property by providing single or multiselection mechanism with the desired degree of customization. MultiSelection is enabled by default in case the property is an array or a bit mask.
  
@@ -188,7 +177,7 @@ typedef NS_ENUM(NSInteger, CKPropertySelectionPresentationStyle){
 
 /** Defines how we should present the edition controller.
  */
-@property(nonatomic,assign) CKPropertySelectionPresentationStyle selectionControllerPresentationStyle;
+@property(nonatomic,assign) CKPropertyEditionPresentationStyle selectionControllerPresentationStyle;
 
 /** Enum value edition is presented as a form of table view controller.
  Each individual cell in the table view controller can be customized by setting selectionControllerFactory with an item for object of class CKPropertySelectionValue.

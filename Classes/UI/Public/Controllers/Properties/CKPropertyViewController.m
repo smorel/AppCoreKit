@@ -124,5 +124,107 @@
     return _navigationToolbar;
 }
 
+- (void)presentEditionViewController:(CKViewController*)controller
+                   presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
+  shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange{
+    
+    __unsafe_unretained CKPropertyViewController* bself = self;
+    
+    CKPropertyEditionPresentationStyle style = presentationStyle;
+    if(style == CKPropertyEditionPresentationStyleDefault){
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+            style = CKPropertyEditionPresentationStylePopover;
+        }else if(self.navigationController){
+            style = CKPropertyEditionPresentationStylePush;
+        }else{
+            style = CKPropertyEditionPresentationStyleModal;
+        }
+    }
+    
+    switch(style){
+        case CKPropertyEditionPresentationStylePopover:{
+            CKPopoverController* popover = [[CKPopoverController alloc]initWithContentViewController:controller];
+            [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            
+            __unsafe_unretained CKPopoverController* bPopover = popover;
+            [controller beginBindingsContextByRemovingPreviousBindings];
+            if(shouldDismissOnPropertyValueChange){
+                [self.property.object bind:self.property.keyPath withBlock:^(id value) {
+                    [bPopover dismissPopoverAnimated:YES];
+                }];
+            }
+            [controller endBindingsContext];
+            break;
+        }
+        case CKPropertyEditionPresentationStylePush:{
+            [self.navigationController pushViewController:controller animated:YES];
+            
+            [controller beginBindingsContextByRemovingPreviousBindings];
+            if(shouldDismissOnPropertyValueChange){
+                [self.property.object bind:self.property.keyPath withBlock:^(id value) {
+                    [bself.navigationController popViewControllerAnimated:YES];
+                }];
+            }
+            [controller endBindingsContext];
+            
+            break;
+        }
+        case CKPropertyEditionPresentationStyleModal:{
+            UINavigationController* nav = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
+            
+            controller.leftButton = [UIBarButtonItem barButtonItemWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{
+                [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
+            }];
+            
+            [controller beginBindingsContextByRemovingPreviousBindings];
+            if(shouldDismissOnPropertyValueChange){
+                [self.property.object bind:self.property.keyPath withBlock:^(id value) {
+                    [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
+                }];
+            }
+            [controller endBindingsContext];
+            
+            [bself.collectionViewController presentViewController:controller animated:YES completion:nil];
+            break;
+        }
+        case CKPropertyEditionPresentationStyleSheet:{
+            CKSheetController*  sheetController = [CKSheetController sharedInstance];
+            
+            [sheetController setContentViewController:controller];
+            
+            if(!sheetController.visible){
+                UIView* parentView = self.collectionViewController.view;
+                [sheetController showFromRect:[parentView bounds]
+                                       inView:parentView
+                                     animated:YES];
+            }
+            
+            break;
+        }
+        case CKPropertyEditionPresentationStyleInline:{
+            // TODO
+            break;
+        }
+    }
+}
+
+- (void)resignFirstResponder{
+    //TODO
+}
+
+- (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController{
+    [self didBecomeFirstResponder];
+}
+
+- (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController{
+}
+
+- (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{
+    [self didResignFirstResponder];
+}
+
+- (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
+    sheetController.delegate = nil;
+}
 
 @end
