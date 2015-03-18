@@ -10,6 +10,9 @@
 #import "CKResourceManager.h"
 #import "UIImageView+URL.h"
 
+#import "CKTableViewCellController.h"
+#import "CKTableViewController.h"
+
 @interface CKStandardContentViewController ()
 
 @end
@@ -61,6 +64,12 @@
     controller.defaultImageName = defaultImageName;
     controller.didSelectBlock = action;
     return controller;
+}
+
+- (id)init{
+    self = [super init];
+    self.accessoryType = UITableViewCellAccessoryNone;
+    return self;
 }
 
 - (void)viewDidLoad{
@@ -116,6 +125,18 @@
     UILabel* subtitleLabel = [self.view viewWithName:@"SubtitleLabel"];
     subtitleLabel.hidden = (self.subtitle == nil);
     subtitleLabel.text = self.subtitle;
+    
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryType = self.accessoryType;
+    }
+}
+
+- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType{
+    _accessoryType = accessoryType;
+    
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryType = self.accessoryType;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
