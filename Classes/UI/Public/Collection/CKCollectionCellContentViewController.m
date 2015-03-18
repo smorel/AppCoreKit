@@ -164,9 +164,12 @@
     if(self.isViewLoaded || self.reusableView){
         UIView* view = [self view];
         
+        //Support for nibs
+        CGSize returnSize = CGSizeMake(MIN(size.width,self.view.width),MIN(size.height,self.view.height));
+        
         //Support for CKLayout
         if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
-            return [view preferredSizeConstraintToSize:size];
+            returnSize = [view preferredSizeConstraintToSize:size];
         }
         //TODO : Auto layout support !
         else{
@@ -174,8 +177,7 @@
         
         self.isComputingSize = NO;
         
-        //Support for nibs
-        return CGSizeMake(MIN(size.width,self.view.width),MIN(size.height,self.view.height));
+        return returnSize;
     }else{
         UIView* view = [[UIView alloc]init];
         view.frame = CGRectMake(0, 0, size.width, 100);
@@ -265,6 +267,21 @@
     }
     
     [self applyStyleToSubViews];
+    
+    __unsafe_unretained CKCollectionCellContentViewController* bself = self;
+    
+    self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+        if(bself.view.window == nil || bself.isComputingSize)
+            return;
+        
+        if(bself.collectionCellController){
+            [bself.collectionCellController invalidateSize];
+        }
+        else if([bself.containerViewController respondsToSelector:@selector(invalidateSizeForControllerAtIndexPath:)]){
+            [bself.containerViewController performSelector:@selector(invalidateSizeForControllerAtIndexPath:) withObject:bself.indexPath];
+        }
+    };
+
 }
 
 - (void)reapplyingStyleOnSubviewNamed:(NSString*)name{

@@ -9,12 +9,26 @@
 #import "UIViewController+CKLayout.h"
 #import "UIView+CKLayout.h"
 #import "CKRuntime.h"
+#import <objc/runtime.h>
 
 @interface CKLayoutBox()
 
 + (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
+- (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
++ (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly;
++ (void)performLayoutWithFrame:(CGRect)theframe forBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (void)addLayoutBoxes:(NSArray*)boxes toBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (void)removeViewsFromBox:(NSObject<CKLayoutBoxProtocol>*)box recursively:(BOOL)recursively;
++ (void)removeLayoutBoxes:(NSArray*)boxes fromBox:(NSObject<CKLayoutBoxProtocol>*)box;
++ (void)initializeBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
 @end
+
+/**
+ */
+@interface UIViewController (CKLayout)
+@end
+
 
 @implementation UIViewController(CKLayout)
 
@@ -29,8 +43,6 @@
     CKSwizzleSelector([UIViewController class], @selector(loadView), @selector(UIViewController_Layout_loadView));
 }
 
-#ifdef ENABLE_VIEW_CONTROLLER_LAYOUT_SUPPORT
-
 - (void)setFrame:(CGRect)frame{
     [self.view setFrame:frame];
 }
@@ -39,13 +51,17 @@
     return [self.view frame];
 }
 
+static char UIViewControllerNameKey;
+
+
 - (void)setName:(NSString *)name{
-    [self.view setName:name];
+    objc_setAssociatedObject(self, &UIViewControllerNameKey, name, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (NSString*)name{
-    return [self.view name];
+    return objc_getAssociatedObject(self, &UIViewControllerNameKey);
 }
+
 
 - (void)setHidden:(BOOL)hidden{
     [self.view setHidden:hidden];
@@ -53,6 +69,10 @@
 
 - (BOOL)isHidden{
     return [self.view isHidden];
+}
+
++ (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly{
+    [CKLayoutBox invalidateLayoutBox:box recursivelly:recursivelly];
 }
 
 - (id<CKLayoutBoxProtocol>)_layoutWithNameInSelf:(NSString*)name{
@@ -66,6 +86,7 @@
 - (void)invalidateLayout{
     [self.view invalidateLayout];
 }
+
 
 - (id<CKLayoutBoxProtocol>)layoutWithName:(NSString*)name{
     return [self.view layoutWithName:name];
@@ -91,6 +112,7 @@
     [self.view removeAllLayoutBoxes];
 }
 
+
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     return [self.view preferredSizeConstraintToSize:size];
 }
@@ -110,6 +132,7 @@
 - (CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{
     return [self.view invalidatedLayoutBlock];
 }
+
 
 - (void)setFixedSize:(CGSize)size{
     [self.view setFixedSize:size];
@@ -168,6 +191,7 @@
     return [self.view padding];
 }
 
+
 - (void)setLayoutBoxes:(CKArrayCollection*)boxes{
     [self.view setLayoutBoxes:boxes];
 }
@@ -220,7 +244,5 @@
 - (CGFloat)paddingTop    { return [self.view paddingTop]; }
 - (CGFloat)paddingBottom { return [self.view paddingBottom]; }
 - (CGFloat)paddingRight  { return [self.view paddingRight]; }
-
-#endif
 
 @end

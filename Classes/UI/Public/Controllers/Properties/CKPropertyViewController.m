@@ -124,6 +124,11 @@
     return _navigationToolbar;
 }
 
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    self.contentView.clipsToBounds = YES;
+}
+
 - (void)presentEditionViewController:(CKViewController*)controller
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange{
@@ -202,14 +207,29 @@
             break;
         }
         case CKPropertyEditionPresentationStyleInline:{
-            // TODO
+            CKVerticalBoxLayout* vbox = [[CKVerticalBoxLayout alloc]init];
+            vbox.name = @"InlineEditionControllerLayout";
+            vbox.paddingTop = self.view.height;
+            if(controller.layoutBoxes.count > 0){
+                controller.view.flexibleSize = NO;
+            }else{
+                controller.view.fixedHeight = 216;
+            }
+            vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[controller]];
+            
+            [self.view addLayoutBox:vbox];
             break;
         }
     }
 }
 
 - (void)resignFirstResponder{
-    //TODO
+    [super resignFirstResponder];
+    
+    CKVerticalBoxLayout* vbox = (CKVerticalBoxLayout*)[self.view layoutWithName:@"InlineEditionControllerLayout"];
+    if(vbox){
+        [self.view removeLayoutBox:vbox];
+    }
 }
 
 - (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController{

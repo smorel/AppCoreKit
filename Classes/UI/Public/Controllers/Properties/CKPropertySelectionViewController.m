@@ -281,7 +281,13 @@
 
 - (void)didSelect{
     [super didSelect];
-    [self becomeFirstResponder];
+    if(self.isFirstResponder){
+        if(self.selectionControllerPresentationStyle == CKPropertyEditionPresentationStyleInline){
+            [self resignFirstResponder];
+        }
+    }else{
+        [self becomeFirstResponder];
+    }
 }
 
 - (BOOL)hasResponder{
@@ -289,6 +295,8 @@
 }
 
 - (void)becomeFirstResponder{
+    [super becomeFirstResponder];
+    
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKViewController* editionViewController = nil;

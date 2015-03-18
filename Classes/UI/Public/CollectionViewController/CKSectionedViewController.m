@@ -232,17 +232,6 @@ static char UIViewAttachedCellContentViewControllerKey;
     
     [view setAttachedCellContentViewController:controller];
     
-    
-    __unsafe_unretained CKSectionedViewController* bself = self;
-    __unsafe_unretained CKCollectionCellContentViewController* bController = controller;
-    
-    contentView.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
-        if(bController.view.window == nil || bController.isComputingSize)
-            return;
-        
-        [bself invalidateSizeForControllerAtIndexPath:bController.indexPath];
-    };
-
     return view;
 }
 

@@ -10,9 +10,14 @@
 
 @interface CKCollectionCellContentViewController (ResponderChain)
 
+
 ///-----------------------------------
 /// @name Managing UIResponder Chain
 ///-----------------------------------
+
+/**
+*/
+@property(nonatomic,assign,readonly) BOOL isFirstResponder;
 
 /**
  */

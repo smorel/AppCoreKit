@@ -665,10 +665,6 @@ static char NSObjectAppliedStyleObjectKey;
         view = [self valueForKey:descriptor.name];
     }
     
-    if([descriptor.name isEqualToString:@"tableViewCell"]){
-        int i =3;
-    }
-    
     NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
     
     if([CKStyleManager logEnabled]){

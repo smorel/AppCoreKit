@@ -7,6 +7,7 @@
 //
 
 #import "CKCollectionCellContentViewController+ResponderChain.h"
+#import <objc/runtime.h>
 
 
 //TODO: add support for any type of CKCollectionViewController not only CKTableViewControllerOld
@@ -175,6 +176,8 @@
 
 
 - (void)becomeFirstResponder{
+    self.isFirstResponder = YES;
+    
     UIView* responder = [self nextResponder:nil];
     if(responder && [responder isKindOfClass:[UIResponder class]]){
         [responder becomeFirstResponder];
@@ -182,6 +185,8 @@
 }
 
 - (void)resignFirstResponder{
+    self.isFirstResponder = NO;
+    
     NSArray* chain = [self responderChain];
     for(UIResponder* responder in chain){
         if([responder isFirstResponder]){
@@ -199,6 +204,17 @@
         return nil;
     
     return [chain objectAtIndex:index];
+}
+
+static char CKCollectionCellContentViewControllerIsFirstResponderKey;
+
+- (void)setIsFirstResponder:(BOOL)isFirstResponder{
+    objc_setAssociatedObject(self, &CKCollectionCellContentViewControllerIsFirstResponderKey, @(isFirstResponder), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (BOOL)isFirstResponder{
+    id value = objc_getAssociatedObject(self, &CKCollectionCellContentViewControllerIsFirstResponderKey);
+    return value ? [value boolValue] : NO;
 }
 
 @end

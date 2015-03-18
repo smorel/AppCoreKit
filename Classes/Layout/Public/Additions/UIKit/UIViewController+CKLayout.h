@@ -9,13 +9,6 @@
 #import "CKLayoutBoxProtocol.h"
 #import "CKLayoutBox.h"
 
-//#define ENABLE_VIEW_CONTROLLER_LAYOUT_SUPPORT
 
-/**
- */
-@interface UIViewController (CKLayout)
-#ifdef ENABLE_VIEW_CONTROLLER_LAYOUT_SUPPORT
-    <CKLayoutBoxProtocol>
-#endif
-
+@interface UIViewController () <CKLayoutBoxProtocol>
 @end
