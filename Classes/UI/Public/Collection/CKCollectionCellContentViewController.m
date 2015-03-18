@@ -69,6 +69,7 @@
 - (id)init{
     self = [super init];
     self.flags = CKViewControllerFlagsSelectable;
+    self.state = CKViewControllerStateNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
     return self;
 }
@@ -253,9 +254,35 @@
 
 #pragma Managing style
 
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    self.state = CKViewControllerStateDidLoad;
+}
+
+- (void)viewDidUnload{
+    [super viewDidUnload];
+    self.state = CKViewControllerStateDidUnload;
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    self.state = CKViewControllerStateDidAppear;
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    self.state = CKViewControllerStateWillDisappear;
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    self.state = CKViewControllerStateDidDisappear;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    self.state = CKViewControllerStateWillAppear;
     
     //HERE we do not apply style on sub views as we have reuse
     if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
@@ -271,7 +298,7 @@
     __unsafe_unretained CKCollectionCellContentViewController* bself = self;
     
     self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
-        if(bself.view.window == nil || bself.isComputingSize)
+        if(bself.view.window == nil || bself.isComputingSize || bself.state != CKViewControllerStateDidAppear)
             return;
         
         if(bself.collectionCellController){
@@ -281,7 +308,6 @@
             [bself.containerViewController performSelector:@selector(invalidateSizeForControllerAtIndexPath:) withObject:bself.indexPath];
         }
     };
-
 }
 
 - (void)reapplyingStyleOnSubviewNamed:(NSString*)name{

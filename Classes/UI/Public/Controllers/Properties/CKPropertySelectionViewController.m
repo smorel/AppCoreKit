@@ -18,6 +18,7 @@
 #import "UIViewController+Style.h"
 #import "CKCollectionCellContentViewController+ResponderChain.h"
 #import "CKSheetController.h"
+#import "CKTableViewController.h"
 
 #import "CKPickerViewViewController.h"
 
@@ -303,19 +304,16 @@
     switch(self.selectionControllerAppearance){
         case CKPropertySelectionAppearanceStyleDefault:
         case CKPropertySelectionAppearanceStyleList:{
-            CKFormTableViewController* form = [CKFormTableViewController controller];
+            CKTableViewController* table = [CKTableViewController controller];
+            table.style = UITableViewStylePlain;
             
             NSMutableArray* selectedIndexPaths = [NSMutableArray array];
-            NSArray* controllers = [self cellsForEditionController:form selectedIndexPaths:selectedIndexPaths];
-            NSMutableArray* cells = [NSMutableArray array];
-            for(CKCollectionCellContentViewController* cell in controllers){
-                [cells addObject:[cell createTableViewCellController]];
-            }
+            NSArray* controllers = [self cellsForEditionController:table selectedIndexPaths:selectedIndexPaths];
             
-            CKFormSection* section = [CKFormSection sectionWithCellControllers:cells];
-            [form addSections:@[section]];
+            CKSection* section = [CKSection sectionWithControllers:controllers];
+            [table addSections:@[section] animated:NO];
             
-            editionViewController = form;
+            editionViewController = table;
             break;
         }
         case CKPropertySelectionAppearanceStylePicker:{

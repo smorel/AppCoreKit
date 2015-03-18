@@ -82,6 +82,11 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
  */
 @property(nonatomic,assign) CKViewControllerFlags flags;
 
+
+/** default value is selectable
+ */
+@property(nonatomic,assign) CKViewControllerState state;
+
 /** Identifying the controller by a name
  */
 @property(nonatomic,readonly) NSString* name;
