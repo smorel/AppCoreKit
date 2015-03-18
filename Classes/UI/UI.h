@@ -119,6 +119,7 @@
 #import "CKPropertyURLViewController.h"
 #import "CKPropertyBoolViewController.h"
 #import "CKPropertySelectionViewController.h"
+#import "CKPropertyDateViewController.h"
 #import "CKPropertiesSampleViewController.h"
 
 

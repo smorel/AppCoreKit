@@ -251,7 +251,7 @@
 
 - (void)scrollToCell{
     if([self.collectionViewController respondsToSelector:@selector(scrollToControllerAtIndexPath:animated:)]){
-        [self.collectionViewController performSelector:@selector(scrollToControllerAtIndexPath:animated:) withObject:self.indexPath withObject:@(YES)];
+        [self.collectionViewController scrollToControllerAtIndexPath:self.indexPath animated:YES];
     }
 }
 

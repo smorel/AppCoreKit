@@ -694,6 +694,8 @@
 		D9418A881AB8C18600234A15 /* UIImageView+URL.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A861AB8C18600234A15 /* UIImageView+URL.m */; };
 		D9418A8C1AB9CB1E00234A15 /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A8A1AB9CB1E00234A15 /* CKTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A8D1AB9CB1E00234A15 /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A8B1AB9CB1E00234A15 /* CKTableViewController.m */; };
+		D9418A911ABA206D00234A15 /* CKPropertyDateViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A8F1ABA206D00234A15 /* CKPropertyDateViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9418A921ABA206D00234A15 /* CKPropertyDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A901ABA206D00234A15 /* CKPropertyDateViewController.m */; };
 		D94CA30A1AA75BDF009EA887 /* CKPropertyStringViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D94CA30B1AA75BDF009EA887 /* CKPropertyStringViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */; };
 		D94CA3101AA75C25009EA887 /* CKPropertyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1428,6 +1430,8 @@
 		D9418A861AB8C18600234A15 /* UIImageView+URL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+URL.m"; path = "Classes/UI/Public/Views/UIImageView+URL.m"; sourceTree = "<group>"; };
 		D9418A8A1AB9CB1E00234A15 /* CKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewController.h; path = Classes/UI/Public/Table/CKTableViewController.h; sourceTree = "<group>"; };
 		D9418A8B1AB9CB1E00234A15 /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewController.m; path = Classes/UI/Public/Table/CKTableViewController.m; sourceTree = "<group>"; };
+		D9418A8F1ABA206D00234A15 /* CKPropertyDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyDateViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyDateViewController.h; sourceTree = "<group>"; };
+		D9418A901ABA206D00234A15 /* CKPropertyDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyDateViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyDateViewController.m; sourceTree = "<group>"; };
 		D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyStringViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.h; sourceTree = "<group>"; };
 		D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyStringViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.m; sourceTree = "<group>"; };
 		D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyViewController.h; sourceTree = "<group>"; };
@@ -3272,6 +3276,15 @@
 			name = Table;
 			sourceTree = "<group>";
 		};
+		D9418A8E1ABA204100234A15 /* Date */ = {
+			isa = PBXGroup;
+			children = (
+				D9418A8F1ABA206D00234A15 /* CKPropertyDateViewController.h */,
+				D9418A901ABA206D00234A15 /* CKPropertyDateViewController.m */,
+			);
+			name = Date;
+			sourceTree = "<group>";
+		};
 		D94CA2F91AA64AF8009EA887 /* Content ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -3294,6 +3307,7 @@
 				D9418A5E1AB86AA500234A15 /* URL */,
 				D98F3FD91AB379040094572C /* Bool */,
 				D98F3FDA1AB37D260094572C /* Selection */,
+				D9418A8E1ABA204100234A15 /* Date */,
 				D9E04C891AB1FF0900E6BECB /* Sample */,
 			);
 			name = Properties;
@@ -3898,6 +3912,7 @@
 				9603F22518D22B130095B128 /* NSValue+ValueTransformer.h in Headers */,
 				969FA53F14966CD90095C61E /* UILabel+Highlight.h in Headers */,
 				969FA54114966CD90095C61E /* UITableViewCell+Highlight.h in Headers */,
+				D9418A911ABA206D00234A15 /* CKPropertyDateViewController.h in Headers */,
 				96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */,
 				9622AAFB1501395E00AEF369 /* UIView+DragNDrop.h in Headers */,
 				96D4B83515125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h in Headers */,
@@ -4278,6 +4293,7 @@
 				7560DDDF13B8EE9800268D13 /* CXMLElement_ElementTreeExtensions.m in Sources */,
 				D9418A791AB8808100234A15 /* CKCollectionSection.m in Sources */,
 				7560DDE113B8EE9800268D13 /* CXMLElement.m in Sources */,
+				D9418A921ABA206D00234A15 /* CKPropertyDateViewController.m in Sources */,
 				7560DDE313B8EE9800268D13 /* CXMLNode_PrivateExtensions.m in Sources */,
 				7560DDE513B8EE9800268D13 /* CXMLNode_XPathExtensions.m in Sources */,
 				7560DDE713B8EE9800268D13 /* CXMLNode.m in Sources */,

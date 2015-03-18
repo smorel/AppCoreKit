@@ -122,6 +122,7 @@
             [self beginBindingsContextByRemovingPreviousBindings];
             [_datePicker bindEvent:UIControlEventValueChanged withBlock:^() {
                 NSDate* newDate = [bself.datePicker date];
+                [bself.property setValue:newDate];
                 if(bself.delegate && [bself.delegate respondsToSelector:@selector(dateController:didSetValue:)]){
                     [bself.delegate performSelector:@selector(dateController:didSetValue:) withObject:bself withObject:newDate];
                 }
@@ -224,6 +225,8 @@
             [comp setYear:[comp2 year] + [self.pickerView selectedRowInComponent:1]];
             
             NSDate* newDate = [[NSCalendar currentCalendar]dateFromComponents:comp];
+            
+            [self.property setValue:newDate];
             
             if(self.delegate && [self.delegate respondsToSelector:@selector(dateController:didSetValue:)]){
                 [self.delegate performSelector:@selector(dateController:didSetValue:) withObject:self withObject:newDate];

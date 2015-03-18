@@ -28,12 +28,9 @@
     
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     self.propertyNameLabel = _(property.name);
+    self.flags = CKViewControllerFlagsNone;
     
     return self;
-}
-
-- (void)postInit{
-    self.flags = CKViewControllerFlagsNone;
 }
 
 - (void)viewDidLoad{

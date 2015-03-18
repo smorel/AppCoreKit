@@ -36,6 +36,7 @@
     self.maximumLength = attributes.maximumLength;
     self.textInputFormatter = attributes.textInputFormatterBlock;
     self.propertyNameLabel = _(property.name);
+    self.flags = CKViewControllerFlagsNone;
     
     if([self.property isNumber]){
         if(attributes.placeholderValue){
@@ -54,10 +55,6 @@
 - (NSString*)reuseIdentifier{
     NSString* parent = [super reuseIdentifier];
     return [NSString stringWithFormat:@"%@_%d",parent,[self.property isNumber]];
-}
-
-- (void)postInit{
-    self.flags = CKViewControllerFlagsNone;
 }
 
 - (void)viewDidLoad{
@@ -122,11 +119,11 @@
     PropertyNameLabel.text = self.propertyNameLabel;
     
     UITextField* ValueTextField = [self.view viewWithName:@"ValueTextField"];
-    ValueTextField.placeholder = self.valuePlaceholderLabel;
+    ValueTextField.placeholder = _(self.valuePlaceholderLabel);
     ValueTextField.delegate = self;
     
     CKTextView* ValueTextView = [self.view viewWithName:@"ValueTextView"];
-    ValueTextView.placeholder = self.valuePlaceholderLabel;
+    ValueTextView.placeholder = _(self.valuePlaceholderLabel);
     ValueTextView.delegate = self;
     
     ValueTextField.hidden = self.multiline;

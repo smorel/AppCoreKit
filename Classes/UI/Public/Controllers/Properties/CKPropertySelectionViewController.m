@@ -328,10 +328,6 @@
         }
     }
     
-    editionViewController.stylesheetFileName = self.collectionViewController.stylesheetFileName;
-    editionViewController.view.backgroundColor = self.collectionViewController.view.backgroundColor;
-    editionViewController.title = _(self.property.name);
-    editionViewController.name = self.property.name;
     
     [self presentEditionViewController:editionViewController
                      presentationStyle:self.selectionControllerPresentationStyle

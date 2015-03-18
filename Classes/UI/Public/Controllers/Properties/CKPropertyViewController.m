@@ -134,6 +134,12 @@
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange{
     
+    
+    controller.stylesheetFileName = self.collectionViewController.stylesheetFileName;
+    controller.view.backgroundColor = self.collectionViewController.view.backgroundColor;
+    controller.title = _(self.property.name);
+    controller.name = self.property.name;
+    
     __unsafe_unretained CKPropertyViewController* bself = self;
     
     CKPropertyEditionPresentationStyle style = presentationStyle;
