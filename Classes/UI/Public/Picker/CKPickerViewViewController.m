@@ -104,6 +104,9 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    if(component >= self.sections.count)
+        return 0;
+    
     CKAbstractSection* section = [self sectionAtIndex:component];
     return section.controllers.count;
 }
