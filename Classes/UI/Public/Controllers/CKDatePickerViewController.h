@@ -71,5 +71,29 @@ typedef NS_ENUM(NSInteger, CKDatePickerMode){
  */
 @property(nonatomic,retain)UIPickerView* pickerView;
 
+/**
+ */
+@property (nonatomic, retain) NSLocale   *locale;   // default is [NSLocale currentLocale]. setting nil returns to default
+
+/**
+ */
+@property (nonatomic, retain) NSCalendar *calendar; // default is [NSCalendar currentCalendar]. setting nil returns to default
+
+/**
+ */
+@property (nonatomic, retain) NSTimeZone *timeZone;
+
+
+/**
+ */
+@property (nonatomic, retain) NSDate *minimumDate;
+
+/**
+ */
+@property (nonatomic, retain) NSDate *maximumDate;
+
+/** default value is NSNotFound (not taken into account)
+ */
+@property (nonatomic, assign) NSInteger minuteInterval;
 
 @end

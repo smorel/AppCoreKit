@@ -50,6 +50,7 @@
     self = [super init];
     _property = [theproperty retain];
     self.datePickerMode = mode;
+    self.minuteInterval = NSNotFound;
     return self;
 }
 
@@ -59,6 +60,11 @@
     _datePicker = nil;
     [_pickerView release];
     _pickerView = nil;
+    [_timeZone release];
+    [_calendar release];
+    [_locale release];
+    [_minimumDate release];
+    [_maximumDate release];
     
     if(_delegateRef){
         if(_delegateRef.object && [_delegateRef.object respondsToSelector:@selector(dateController:delegateChanged:)]){
@@ -86,26 +92,40 @@
     CGRect theFrame = CGRectMake((frame.size.width / 2.0) - 160.0,(frame.size.height / 2.0) - (height / 2.0),320.0, height);
     
     switch(self.datePickerMode){
-        case  CKDatePickerModeTime:
+        case CKDatePickerModeTime:
         case CKDatePickerModeDate:
         case CKDatePickerModeDateAndTime:
         case CKDatePickerModeCountDownTime :{
             self.datePicker = [[[UIDatePicker alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
+            if(self.locale){
+                self.datePicker.locale = self.locale;
+            }
+            if(self.calendar){
+                self.datePicker.calendar = self.calendar;
+            }
+            if(self.timeZone){
+                self.datePicker.timeZone = self.timeZone;
+            }
+            
             _datePicker.datePickerMode = self.datePickerMode;
             _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
             
             CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
-            if(attributes.minimumDate){
-                _datePicker.minimumDate = attributes.minimumDate;
-            }
-            if(attributes.maximumDate){
-                _datePicker.maximumDate = attributes.maximumDate;
-            }
-            if(attributes.minuteInterval >= 0){
-                _datePicker.minuteInterval = attributes.minuteInterval;
+            
+            NSDate* minimumDate = self.minimumDate ? self.minimumDate : attributes.minimumDate;
+            if(minimumDate){
+                _datePicker.minimumDate = minimumDate;
             }
             
+            NSDate* maximumDate = self.maximumDate ? self.maximumDate : attributes.maximumDate;
+            if(maximumDate){
+                _datePicker.maximumDate = maximumDate;
+            }
             
+            NSInteger minuteInterval = (self.minuteInterval != NSNotFound) ? self.minuteInterval : attributes.minuteInterval;
+            if(minuteInterval != NSNotFound){
+                _datePicker.minuteInterval = minuteInterval;
+            }
             
             /*_datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             NSDate* date = [self.property value];

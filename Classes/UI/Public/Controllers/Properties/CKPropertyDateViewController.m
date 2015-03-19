@@ -20,10 +20,14 @@
     [_propertyNameLabel release];
     [_dateFormatter release];
     [_valuePlaceholderLabel release];
+    [_editionControllerPickerMinimumDate release];
+    [_editionControllerPickerMaximumDate release];
     [super dealloc];
 }
 
 #pragma mark ViewController Life Cycle
+
+static NSDateFormatter* sharedFormatter = nil;
 
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     self = [super initWithProperty:property readOnly:readOnly];
@@ -38,14 +42,13 @@
         self.valuePlaceholderLabel = _(placeholderKey);
     }
     
-    static NSDateFormatter* sharedFormatter = nil;
     if(!sharedFormatter){
         sharedFormatter = [[NSDateFormatter alloc]init];
         sharedFormatter.dateStyle = NSDateFormatterLongStyle;
         sharedFormatter.timeStyle = NSDateFormatterNoStyle;
     }
-    self.dateFormatter = sharedFormatter;
     
+    self.editionControllerPickerMinuteInterval = NSNotFound;
     self.editionControllerPresentationStyle = CKPropertyEditionPresentationStyleInline;
     
     return self;
@@ -102,7 +105,8 @@
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
         if(bself.property.value){
-            ValueLabel.text = [bself.dateFormatter stringFromDate:bself.property.value];
+            NSDateFormatter* formatter = bself.dateFormatter ? bself.dateFormatter : sharedFormatter;
+            ValueLabel.text = [formatter stringFromDate:bself.property.value];
         }else{
             ValueLabel.text = _(bself.valuePlaceholderLabel);
         }
@@ -128,6 +132,15 @@
     [super becomeFirstResponder];
     
     CKDatePickerViewController* picker = [[CKDatePickerViewController alloc]initWithProperty:self.property mode:self.editionControllerPickerMode];
+    
+    NSDateFormatter* formatter = self.dateFormatter ? self.dateFormatter : sharedFormatter;
+    picker.timeZone = formatter.timeZone;
+    picker.locale = formatter.locale;
+    picker.calendar = formatter.calendar;
+    picker.minimumDate = self.editionControllerPickerMinimumDate;
+    picker.maximumDate = self.editionControllerPickerMaximumDate;
+    picker.minuteInterval = self.editionControllerPickerMinuteInterval;
+    
     [self presentEditionViewController:picker presentationStyle:self.editionControllerPresentationStyle shouldDismissOnPropertyValueChange:NO];
 }
 
@@ -142,6 +155,10 @@
                                                  CKDatePickerModeCountDownTime,
                                                  UIDatePickerModeCountDownTimer,
                                                  CKDatePickerModeCreditCardExpirationDate);
+}
+
+- (void)dateFormatterExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.contentType = [NSDateFormatter class];
 }
 
 @end

@@ -80,9 +80,22 @@
  */
 @property(nonatomic,retain) NSDateFormatter* dateFormatter;
 
+
 /** default value is CKDatePickerModeDate
  */
 @property(nonatomic,assign) CKDatePickerMode editionControllerPickerMode;
+
+/**
+ */
+@property (nonatomic, retain) NSDate *editionControllerPickerMinimumDate;
+
+/**
+ */
+@property (nonatomic, retain) NSDate *editionControllerPickerMaximumDate;
+
+/** default value is NSNotFound (not taken into account)
+ */
+@property (nonatomic, assign) NSInteger editionControllerPickerMinuteInterval;
 
 /** Defines how we should present the edition controller. Default value is CKPropertyEditionPresentationStyleInline.
  */
