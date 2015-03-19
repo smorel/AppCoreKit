@@ -696,6 +696,14 @@
 		D9418A8D1AB9CB1E00234A15 /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A8B1AB9CB1E00234A15 /* CKTableViewController.m */; };
 		D9418A911ABA206D00234A15 /* CKPropertyDateViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A8F1ABA206D00234A15 /* CKPropertyDateViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A921ABA206D00234A15 /* CKPropertyDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A901ABA206D00234A15 /* CKPropertyDateViewController.m */; };
+		D9418A961ABAFD3200234A15 /* NSDateFormatter+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A941ABAFD3200234A15 /* NSDateFormatter+Introspection.h */; };
+		D9418A971ABAFD3200234A15 /* NSDateFormatter+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A951ABAFD3200234A15 /* NSDateFormatter+Introspection.m */; };
+		D9418A9B1ABB019200234A15 /* NSLocale+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A991ABB019200234A15 /* NSLocale+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9418A9C1ABB019200234A15 /* NSLocale+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A9A1ABB019200234A15 /* NSLocale+ValueTransformer.m */; };
+		D9418AA01ABB024F00234A15 /* NSDateFormatter+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A9E1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9418AA11ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A9F1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m */; };
+		D9418AA51ABB030D00234A15 /* NSCalendar+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AA31ABB030D00234A15 /* NSCalendar+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9418AA61ABB030D00234A15 /* NSCalendar+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */; };
 		D94CA30A1AA75BDF009EA887 /* CKPropertyStringViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D94CA30B1AA75BDF009EA887 /* CKPropertyStringViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */; };
 		D94CA3101AA75C25009EA887 /* CKPropertyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1432,6 +1440,14 @@
 		D9418A8B1AB9CB1E00234A15 /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewController.m; path = Classes/UI/Public/Table/CKTableViewController.m; sourceTree = "<group>"; };
 		D9418A8F1ABA206D00234A15 /* CKPropertyDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyDateViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyDateViewController.h; sourceTree = "<group>"; };
 		D9418A901ABA206D00234A15 /* CKPropertyDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyDateViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyDateViewController.m; sourceTree = "<group>"; };
+		D9418A941ABAFD3200234A15 /* NSDateFormatter+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDateFormatter+Introspection.h"; path = "Classes/Foundation/Private/Additions/Foundations/NSDateFormatter+Introspection.h"; sourceTree = "<group>"; };
+		D9418A951ABAFD3200234A15 /* NSDateFormatter+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDateFormatter+Introspection.m"; path = "Classes/Foundation/Private/Additions/Foundations/NSDateFormatter+Introspection.m"; sourceTree = "<group>"; };
+		D9418A991ABB019200234A15 /* NSLocale+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSLocale+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/NSLocale+ValueTransformer.h"; sourceTree = "<group>"; };
+		D9418A9A1ABB019200234A15 /* NSLocale+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSLocale+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/NSLocale+ValueTransformer.m"; sourceTree = "<group>"; };
+		D9418A9E1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDateFormatter+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/NSDateFormatter+ValueTransformer.h"; sourceTree = "<group>"; };
+		D9418A9F1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDateFormatter+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/NSDateFormatter+ValueTransformer.m"; sourceTree = "<group>"; };
+		D9418AA31ABB030D00234A15 /* NSCalendar+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSCalendar+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/NSCalendar+ValueTransformer.h"; sourceTree = "<group>"; };
+		D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSCalendar+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/NSCalendar+ValueTransformer.m"; sourceTree = "<group>"; };
 		D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyStringViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.h; sourceTree = "<group>"; };
 		D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyStringViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.m; sourceTree = "<group>"; };
 		D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyViewController.h; sourceTree = "<group>"; };
@@ -1616,6 +1632,7 @@
 		7506E3F813B8FD1300EE1471 /* Apple Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D9418A931ABAFD0200234A15 /* Foundations */,
 				759CB89713BA639F006261B1 /* UIKit */,
 				96E6FA28182D2990001F1E6A /* CoreAnimation */,
 				759CB89513BA6391006261B1 /* MapKit */,
@@ -2152,8 +2169,6 @@
 				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
 				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
 				7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */,
-				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
-				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
 			);
 			name = "CKProperty CellControllers";
 			sourceTree = "<group>";
@@ -3000,6 +3015,9 @@
 				D932C1251AB327690017F602 /* NSURL */,
 				D932C1281AB327860017F602 /* NSIndexPath */,
 				D932C1271AB3277B0017F602 /* NSArray & NSSet */,
+				D9418A981ABB016100234A15 /* NSLocale */,
+				D9418A9D1ABB022F00234A15 /* NSDateFormatter */,
+				D9418AA21ABB02EB00234A15 /* NSCalendar */,
 			);
 			name = Foundations;
 			sourceTree = "<group>";
@@ -3228,7 +3246,7 @@
 			children = (
 				D9418A691AB8759B00234A15 /* CKSectionedViewController.h */,
 				D9418A6A1AB8759B00234A15 /* CKSectionedViewController.m */,
-				D9418A7F1AB8877100234A15 /* Controller Factory */,
+				D9418A7F1AB8877100234A15 /* Factory */,
 				D9418A7E1AB8875A00234A15 /* Sections */,
 				D9418A631AB86CDF00234A15 /* Picker */,
 				D9418A891AB9CA8500234A15 /* Table */,
@@ -3249,13 +3267,13 @@
 			name = Sections;
 			sourceTree = "<group>";
 		};
-		D9418A7F1AB8877100234A15 /* Controller Factory */ = {
+		D9418A7F1AB8877100234A15 /* Factory */ = {
 			isa = PBXGroup;
 			children = (
 				D9418A7A1AB880D300234A15 /* CKViewControllerFactory.h */,
 				D9418A7B1AB880D300234A15 /* CKViewControllerFactory.m */,
 			);
-			name = "Controller Factory";
+			name = Factory;
 			sourceTree = "<group>";
 		};
 		D9418A801AB8B86900234A15 /* Standard Content */ = {
@@ -3283,6 +3301,42 @@
 				D9418A901ABA206D00234A15 /* CKPropertyDateViewController.m */,
 			);
 			name = Date;
+			sourceTree = "<group>";
+		};
+		D9418A931ABAFD0200234A15 /* Foundations */ = {
+			isa = PBXGroup;
+			children = (
+				D9418A941ABAFD3200234A15 /* NSDateFormatter+Introspection.h */,
+				D9418A951ABAFD3200234A15 /* NSDateFormatter+Introspection.m */,
+			);
+			name = Foundations;
+			sourceTree = "<group>";
+		};
+		D9418A981ABB016100234A15 /* NSLocale */ = {
+			isa = PBXGroup;
+			children = (
+				D9418A991ABB019200234A15 /* NSLocale+ValueTransformer.h */,
+				D9418A9A1ABB019200234A15 /* NSLocale+ValueTransformer.m */,
+			);
+			name = NSLocale;
+			sourceTree = "<group>";
+		};
+		D9418A9D1ABB022F00234A15 /* NSDateFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				D9418A9E1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.h */,
+				D9418A9F1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m */,
+			);
+			name = NSDateFormatter;
+			sourceTree = "<group>";
+		};
+		D9418AA21ABB02EB00234A15 /* NSCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				D9418AA31ABB030D00234A15 /* NSCalendar+ValueTransformer.h */,
+				D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */,
+			);
+			name = NSCalendar;
 			sourceTree = "<group>";
 		};
 		D94CA2F91AA64AF8009EA887 /* Content ViewControllers */ = {
@@ -3326,6 +3380,8 @@
 		D98F3FD01AB374910094572C /* Obsolete (See CKPropertyViewController) */ = {
 			isa = PBXGroup;
 			children = (
+				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
+				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
 				758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */,
 				758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */,
 				7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */,
@@ -3828,6 +3884,7 @@
 				75A4058213D87B2000D932B0 /* CKMappingContext.h in Headers */,
 				75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */,
 				96B3BCEC182BED9800978B85 /* CKCollectionViewCell.h in Headers */,
+				D9418AA01ABB024F00234A15 /* NSDateFormatter+ValueTransformer.h in Headers */,
 				7577DFE613E2EE480065E098 /* CKTableViewCellController+PropertyGrid.h in Headers */,
 				757578FB13E71C000082C247 /* CKSheetController.h in Headers */,
 				75B03FC313E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.h in Headers */,
@@ -3933,6 +3990,7 @@
 				96B4515918D093A400D58489 /* CKBlurModalViewController.h in Headers */,
 				96B3BD07182BEF1C00978B85 /* CKAnimationManager.h in Headers */,
 				9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */,
+				D9418A961ABAFD3200234A15 /* NSDateFormatter+Introspection.h in Headers */,
 				D94CA3101AA75C25009EA887 /* CKPropertyViewController.h in Headers */,
 				9600B8DF1545CAFF00F07C5A /* CKContainerViewController.h in Headers */,
 				96B3BCF2182BED9800978B85 /* CKCollectionViewLayoutController.h in Headers */,
@@ -3981,9 +4039,11 @@
 				96B9D2BC177B24F600455BE8 /* UIImageView+CKLayout.h in Headers */,
 				96B9D2C0177B251F00455BE8 /* UITextField+CKLayout.h in Headers */,
 				96B9D2C4177B254400455BE8 /* UITextView+CKLayout.h in Headers */,
+				D9418AA51ABB030D00234A15 /* NSCalendar+ValueTransformer.h in Headers */,
 				96B9D2C8177B285000455BE8 /* Layout.h in Headers */,
 				96EFE7D3179700BE0034F935 /* CKResourceManager.h in Headers */,
 				96FEFDF517978D620001CC4A /* CKResourceManager+UIUpdate.h in Headers */,
+				D9418A9B1ABB019200234A15 /* NSLocale+ValueTransformer.h in Headers */,
 				963AB796179881110076925C /* CKResourceDependencyContext.h in Headers */,
 				96E6FA22182D1F8B001F1E6A /* UIImage+FastLoading.h in Headers */,
 				96CC498117CBFE710017A6E7 /* JSONKit.h in Headers */,
@@ -4249,6 +4309,7 @@
 				7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */,
 				7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */,
 				7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */,
+				D9418AA11ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m in Sources */,
 				7560DD5813B8ED3600268D13 /* CKStyleManager.m in Sources */,
 				7560DD5C13B8ED3600268D13 /* CKTableViewCellController.m in Sources */,
 				7560DD5E13B8ED3600268D13 /* CKTableViewCellController+Style.m in Sources */,
@@ -4334,6 +4395,7 @@
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
 				75043E661404327500C7685D /* CKPropertyExtendedAttributes+Attributes.m in Sources */,
 				753178151417E4E4009310A8 /* UINavigationBar+Style.m in Sources */,
+				D9418A9C1ABB019200234A15 /* NSLocale+ValueTransformer.m in Sources */,
 				D9418A8D1AB9CB1E00234A15 /* CKTableViewController.m in Sources */,
 				7531781A1417E4F9009310A8 /* UIToolbar+Style.mm in Sources */,
 				7531781E1417E5A1009310A8 /* UILabel+Introspection.m in Sources */,
@@ -4385,11 +4447,13 @@
 				96E4D3EF15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.m in Sources */,
 				96E4D3F415406F5500CCF421 /* CKNSStringPropertyCellController+DynamicLayout.m in Sources */,
 				96E4D3F815406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m in Sources */,
+				D9418A971ABAFD3200234A15 /* NSDateFormatter+Introspection.m in Sources */,
 				D9E04C8E1AB1FF3200E6BECB /* CKPropertiesSampleViewController.m in Sources */,
 				96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m in Sources */,
 				9600B8C21545C41400F07C5A /* CKTypeAhead.mm in Sources */,
 				9600B8C41545C41400F07C5A /* CKTypeAhead+Generator.mm in Sources */,
 				9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */,
+				D9418AA61ABB030D00234A15 /* NSCalendar+ValueTransformer.m in Sources */,
 				9600B8D41545C6B000F07C5A /* CKSlideShowViewController.m in Sources */,
 				9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */,
 				9600B8E01545CAFF00F07C5A /* CKContainerViewController.mm in Sources */,

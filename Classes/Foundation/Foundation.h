@@ -54,6 +54,9 @@
 #import "UIFont+ValueTransformer.h"
 #import "CIFilter+ValueTransformer.h"
 #import "NSValue+ValueTransformer.h"
+#import "NSLocale+ValueTransformer.h"
+#import "NSDateFormatter+ValueTransformer.h"
+#import "NSCalendar+ValueTransformer.h"
 
 //Cascading Tree
 #import "CKCascadingTree.h"

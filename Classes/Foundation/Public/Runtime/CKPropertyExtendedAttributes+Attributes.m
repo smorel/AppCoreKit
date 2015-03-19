@@ -268,7 +268,7 @@
 
 - (NSInteger)minuteInterval{
     id obj = [self.attributes valueForKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minuteInterval"];
-    return obj ? [obj integerValue] : -1;
+    return obj ? [obj integerValue] : NSNotFound;
 }
 
 @end
