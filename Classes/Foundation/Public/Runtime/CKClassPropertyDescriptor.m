@@ -542,5 +542,10 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitMask,NSString* str
     self.valuesAndLabels = nil;
     [super dealloc];
 }
+
+- (void)addValue:(id)value label:(NSString*)label{
+    [(NSMutableDictionary*)self.valuesAndLabels setObject:value forKey:label];
+}
+
 @end
 

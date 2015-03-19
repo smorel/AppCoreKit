@@ -36,11 +36,11 @@
 @property(nonatomic,retain) CKCollectionCellContentViewController* footerViewController;
 
 
-/** This will set headerViewController with a CKStandardContentViewController initialized with the specified text
+/** This will set headerViewController with a CKSectionHeaderFooterViewController initialized with the specified text
  */
 - (void)setHeaderTitle:(NSString*)headerTitle;
 
-/** This will set footerViewController with a CKStandardContentViewController initialized with the specified text
+/** This will set footerViewController with a CKSectionHeaderFooterViewController initialized with the specified text
  */
 - (void)setFooterTitle:(NSString*)footerTitle;
 

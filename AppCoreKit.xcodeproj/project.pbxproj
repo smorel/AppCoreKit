@@ -704,6 +704,8 @@
 		D9418AA11ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A9F1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m */; };
 		D9418AA51ABB030D00234A15 /* NSCalendar+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AA31ABB030D00234A15 /* NSCalendar+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418AA61ABB030D00234A15 /* NSCalendar+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */; };
+		D9418AAE1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AAC1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h */; };
+		D9418AAF1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */; };
 		D94CA30A1AA75BDF009EA887 /* CKPropertyStringViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D94CA30B1AA75BDF009EA887 /* CKPropertyStringViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */; };
 		D94CA3101AA75C25009EA887 /* CKPropertyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1448,6 +1450,8 @@
 		D9418A9F1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDateFormatter+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/NSDateFormatter+ValueTransformer.m"; sourceTree = "<group>"; };
 		D9418AA31ABB030D00234A15 /* NSCalendar+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSCalendar+ValueTransformer.h"; path = "Classes/Foundation/Public/Conversion/Additions/NSCalendar+ValueTransformer.h"; sourceTree = "<group>"; };
 		D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSCalendar+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/NSCalendar+ValueTransformer.m"; sourceTree = "<group>"; };
+		D9418AAC1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSectionHeaderFooterViewController.h; path = Classes/UI/Public/Table/CKSectionHeaderFooterViewController.h; sourceTree = "<group>"; };
+		D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSectionHeaderFooterViewController.m; path = Classes/UI/Public/Table/CKSectionHeaderFooterViewController.m; sourceTree = "<group>"; };
 		D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyStringViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.h; sourceTree = "<group>"; };
 		D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyStringViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.m; sourceTree = "<group>"; };
 		D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyViewController.h; sourceTree = "<group>"; };
@@ -3263,6 +3267,8 @@
 				D9418A731AB8806C00234A15 /* CKSection.m */,
 				D9418A761AB8808100234A15 /* CKCollectionSection.h */,
 				D9418A771AB8808100234A15 /* CKCollectionSection.m */,
+				D9418AAC1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h */,
+				D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */,
 			);
 			name = Sections;
 			sourceTree = "<group>";
@@ -3726,6 +3732,7 @@
 			files = (
 				96B4515518D0924100D58489 /* CKRangeSelectorView.h in Headers */,
 				7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */,
+				D9418AAE1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h in Headers */,
 				B0EA78A6156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.h in Headers */,
 				7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */,
 				7560DC6E13B8ED3600268D13 /* CKAttribute.h in Headers */,
@@ -4294,6 +4301,7 @@
 				96B3BD06182BEF1C00978B85 /* CKAnimationInterpolator.m in Sources */,
 				7560DD1F13B8ED3600268D13 /* NSString+Validations.m in Sources */,
 				7560DD2113B8ED3600268D13 /* NSString+Additions.m in Sources */,
+				D9418AAF1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m in Sources */,
 				7560DD2313B8ED3600268D13 /* CKNSStringPropertyCellController.m in Sources */,
 				965A817B18B2B6D3005E8508 /* CKCollectionViewFlowLayout.m in Sources */,
 				96B4514A18D08F9100D58489 /* UIColor+Components.m in Sources */,

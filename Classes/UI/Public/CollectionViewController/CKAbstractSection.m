@@ -9,7 +9,7 @@
 #import "CKAbstractSection.h"
 #import "CKSectionedViewController.h"
 #import "CKContainerViewController.h"
-#import "CKStandardContentViewController.h"
+#import "CKSectionHeaderFooterViewController.h"
 
 @interface CKAbstractSection()
 @property(nonatomic,retain, readwrite) NSArray* controllers;
@@ -160,11 +160,11 @@
 }
 
 - (void)setHeaderTitle:(NSString*)headerTitle{
-    self.headerViewController = [CKStandardContentViewController controllerWithTitle:headerTitle action:nil];
+    self.headerViewController = [CKSectionHeaderFooterViewController controllerWithType:CKSectionViewControllerTypeHeader text:headerTitle];
 }
 
 - (void)setFooterTitle:(NSString*)footerTitle{
-    self.footerViewController = [CKStandardContentViewController controllerWithTitle:footerTitle action:nil];
+    self.footerViewController = [CKSectionHeaderFooterViewController controllerWithType:CKSectionViewControllerTypeFooter text:footerTitle];
 }
 
 @end

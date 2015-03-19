@@ -164,6 +164,9 @@ typedef NS_ENUM(NSInteger, CKClassPropertyDescriptorAssignementType){
 @property(nonatomic,assign)BOOL isBitMask;
 @property(nonatomic,retain)NSString* name;
 @property(nonatomic,retain)NSDictionary* valuesAndLabels;
+
+- (void)addValue:(id)value label:(NSString*)label;
+
 @end
 
 #ifdef __cplusplus
