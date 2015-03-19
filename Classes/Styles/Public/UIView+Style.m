@@ -644,6 +644,9 @@ static char NSObjectAppliedStyleObjectKey;
              appliedStack:(NSMutableSet*)appliedStack
                  delegate:(id)delegate{
     
+    if(!descriptor)
+        return;
+    
     //Handle special cases where styles should not be applyed !
     if([[[self class]description]isEqualToString:@"UITableHeaderFooterView"] &&
        [NSObject isClass:descriptor.type kindOfClass:[UITableView class]]){
