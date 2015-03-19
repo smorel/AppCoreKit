@@ -39,6 +39,10 @@
  */
 @property(nonatomic,assign) BOOL endEditingViewWhenScrolling;
 
+/** Default is YES
+ */
+@property(nonatomic,assign) BOOL adjustInsetsOnKeyboardNotification;
+
 /**
  */
 - (Class)tableViewClass;

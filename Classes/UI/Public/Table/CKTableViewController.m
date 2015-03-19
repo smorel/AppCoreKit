@@ -20,17 +20,20 @@
 
 @interface CKTableViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,retain,readwrite) UITableView* tableView;
+@property(nonatomic,retain) NSMutableArray* keyboardObservers;
 @end
 
 @implementation CKTableViewController
 
 - (void)postInit{
     [super postInit];
+    self.adjustInsetsOnKeyboardNotification = YES;
     self.style = UITableViewStyleGrouped;
     self.endEditingViewWhenScrolling = YES;
 }
 
 - (void)dealloc{
+    [self unregisterForKeyboardNotifications];
     [_tableView release];
     [super dealloc];
 }
@@ -69,6 +72,8 @@
     self.tableView.dataSource = self;
     [self.tableView reloadData];
     
+    [self registerForKeyboardNotifications];
+    
     //for(NSIndexPath* indexPath in self.selectedIndexPaths){
     //    [self.pickerView selectRow:indexPath.row inComponent:indexPath.section animated:NO];
     //}
@@ -79,6 +84,8 @@
     
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
+    
+    [self unregisterForKeyboardNotifications];
 }
 
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion{
@@ -125,7 +132,7 @@
 }
 
 - (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
-    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionMiddle animated:animated];
+    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
 #pragma mark Managing Content
@@ -447,6 +454,102 @@
         [self.view endEditing:YES];
         [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
     }
+}
+
+- (void)registerForKeyboardNotifications
+{
+    if(!self.adjustInsetsOnKeyboardNotification)
+        return;
+    
+    __unsafe_unretained CKTableViewController* bself = self;
+    
+    self.keyboardObservers = [NSMutableArray array];
+    [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:UIKeyboardWillShowNotification
+                                                                                       object:nil
+                                                                                        queue:[NSOperationQueue mainQueue]
+                                                                                   usingBlock:^(NSNotification *note) {
+        [bself keyboardWasShown:note];
+    }]];
+    
+    [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:UIKeyboardWillHideNotification
+                                                                                       object:nil
+                                                                                        queue:[NSOperationQueue mainQueue]
+                                                                                   usingBlock:^(NSNotification *note) {
+        [bself keyboardWillBeHidden:note];
+    }]];
+    [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:CKSheetWillShowNotification
+                                                                                       object:nil
+                                                                                        queue:[NSOperationQueue mainQueue]
+                                                                                   usingBlock:^(NSNotification *note) {
+                                                                                       [bself keyboardWasShown:note];
+                                                                                   }]];
+    
+    [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:CKSheetWillHideNotification
+                                                                                       object:nil
+                                                                                        queue:[NSOperationQueue mainQueue]
+                                                                                   usingBlock:^(NSNotification *note) {
+                                                                                       [bself keyboardWillBeHidden:note];
+                                                                                   }]];
+}
+
+- (void)unregisterForKeyboardNotifications
+{
+    for(id observer in self.keyboardObservers){
+        [[NSNotificationCenter defaultCenter]removeObserver:observer];
+    }
+    self.keyboardObservers = nil;
+}
+
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = CGSizeZero;
+    if([info objectForKey:CKSheetFrameEndUserInfoKey]){
+        kbSize = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue].size;
+    }else{
+        kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    }
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top,
+                                                  self.tableView.contentInset.left,
+                                                  self.tableView.contentInset.bottom + kbSize.height,
+                                                  self.tableView.contentInset.right);
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = CGSizeZero;
+    
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    
+    if([info objectForKey:CKSheetFrameEndUserInfoKey]){
+        kbSize = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue].size;
+        animationCurve = (UIViewAnimationCurve)[[info objectForKey:CKSheetAnimationCurveUserInfoKey] integerValue];
+        animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
+    }else{
+        kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+        [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    }
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top,
+                                                  self.tableView.contentInset.left,
+                                                  self.tableView.contentInset.bottom - kbSize.height,
+                                                  self.tableView.contentInset.right);
+    
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    [UIView setAnimationCurve:animationCurve];
+    
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+    
+    [UIView commitAnimations];
 }
 
 @end
