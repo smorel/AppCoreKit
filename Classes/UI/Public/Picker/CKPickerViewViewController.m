@@ -130,13 +130,7 @@
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    UIView* v = [self viewForControllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component] reusingView:view];
-    
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component] ];
-    [controller viewWillAppear:NO];
-    [controller viewDidAppear:NO];
-    
-    return v;
+    return [self viewForControllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component] reusingView:view];
 }
 
 

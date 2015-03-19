@@ -224,14 +224,37 @@ static char UIViewAttachedCellContentViewControllerKey;
     }else{
         CKCollectionCellContentViewController* previousController = [view attachedCellContentViewController];
         if(previousController){
+            if(previousController.state != CKViewControllerStateDidDisappear){
+                if(previousController.state != CKViewControllerStateWillDisappear){
+                    [previousController viewWillDisappear:NO];
+                }
+                if(previousController.state != CKViewControllerStateDidDisappear){
+                    [previousController viewDidDisappear:NO];
+                }
+            }
+            
             [view clearBindingsContext];
             [previousController prepareForReuseUsingContentView:nil contentViewCell:nil];
         }
         
         [controller prepareForReuseUsingContentView:(contentView ? contentView : view) contentViewCell:view];
+        
+        if(!previousController){
+            [controller viewDidLoad];
+        }
     }
     
     [view setAttachedCellContentViewController:controller];
+    
+    if(controller.state == CKViewControllerStateDidAppear)
+        return view;
+    
+    if(controller.state != CKViewControllerStateWillAppear){
+        [controller viewWillAppear:NO];
+    }
+    if(controller.state != CKViewControllerStateDidAppear){
+        [controller viewDidAppear:NO];
+    }
     
     return view;
 }

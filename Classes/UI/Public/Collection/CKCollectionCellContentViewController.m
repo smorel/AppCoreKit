@@ -160,8 +160,15 @@
 }
 
 - (void)prepareForReuseUsingContentView:(UIView*)contentView contentViewCell:(UIView*)contentViewCell{
+    if(self.state == CKViewControllerStateDidAppear
+       || self.state == CKViewControllerStateWillAppear){
+        [self viewWillDisappear:NO];
+        [self viewDidDisappear:NO];
+    }
+    
     self.reusableView = contentView;
     self.contentViewCell = contentViewCell;
+    contentViewCell.containerViewController = self;
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{

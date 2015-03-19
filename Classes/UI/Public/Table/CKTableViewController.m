@@ -141,24 +141,12 @@
     CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
     NSString* reuseIdentifier = [controller reuseIdentifier];
     
-    BOOL needsToCallViewDidLoad = NO;
-    
     CKTableViewCell* cell = (CKTableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if(!cell){
         cell = [[CKTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-        needsToCallViewDidLoad = YES;
     }
     
-    
-    [self viewForControllerAtIndexPath:indexPath reusingView:cell];
-    if(needsToCallViewDidLoad){
-        [controller viewDidLoad];
-    }
-    
-    [controller viewWillAppear:NO];
-    [controller viewDidAppear:NO];
-    
-    return cell;
+    return (UITableViewCell*)[self viewForControllerAtIndexPath:indexPath reusingView:cell];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -182,13 +170,29 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
     
+    if(controller.contentViewCell != cell || controller.state == CKViewControllerStateDidAppear)
+        return;
+    
+    if(controller.state != CKViewControllerStateWillAppear){
+        [controller viewWillAppear:NO];
+    }
+    if(controller.state != CKViewControllerStateDidAppear){
+        [controller viewDidAppear:NO];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath{
     CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
     
-    [controller viewWillDisappear:NO];
-    [controller viewDidDisappear:NO];
+    if(controller.contentViewCell != cell || controller.state == CKViewControllerStateDidDisappear)
+        return;
+    
+    if(controller.state != CKViewControllerStateWillDisappear){
+        [controller viewWillDisappear:NO];
+    }
+    if(controller.state != CKViewControllerStateDidDisappear){
+        [controller viewDidDisappear:NO];
+    }
 }
 
 
@@ -201,8 +205,15 @@
     
     UIView* v = s.headerViewController.view;
     
-    [s.headerViewController viewWillAppear:NO];
-    [s.headerViewController viewDidAppear:NO];
+    if(s.headerViewController.state == CKViewControllerStateDidAppear)
+        return v;
+    
+    if(s.headerViewController.state != CKViewControllerStateWillAppear){
+        [s.headerViewController viewWillAppear:NO];
+    }
+    if(s.headerViewController.state != CKViewControllerStateDidAppear){
+        [s.headerViewController viewDidAppear:NO];
+    }
     
     return v;
 }
@@ -227,6 +238,16 @@
     if(!s.headerViewController)
         return ;
     
+    
+    if(s.headerViewController.view != view || s.headerViewController.state == CKViewControllerStateDidAppear)
+        return;
+    
+    if(s.headerViewController.state != CKViewControllerStateWillAppear){
+        [s.headerViewController viewWillAppear:NO];
+    }
+    if(s.headerViewController.state != CKViewControllerStateDidAppear){
+        [s.headerViewController viewDidAppear:NO];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section{
@@ -235,8 +256,15 @@
     if(!s.headerViewController)
         return ;
     
-    [s.headerViewController viewWillDisappear:NO];
-    [s.headerViewController viewDidDisappear:NO];
+    if(s.headerViewController.view != view || s.headerViewController.state == CKViewControllerStateDidDisappear)
+        return;
+    
+    if(s.headerViewController.state != CKViewControllerStateWillDisappear){
+        [s.headerViewController viewWillDisappear:NO];
+    }
+    if(s.headerViewController.state != CKViewControllerStateDidDisappear){
+        [s.headerViewController viewDidDisappear:NO];
+    }
 }
 
 
@@ -249,8 +277,15 @@
     
     UIView* v = s.footerViewController.view;
     
-    [s.footerViewController viewWillAppear:NO];
-    [s.footerViewController viewDidAppear:NO];
+    if(s.footerViewController.state == CKViewControllerStateDidAppear)
+        return v;
+    
+    if(s.footerViewController.state != CKViewControllerStateWillAppear){
+        [s.footerViewController viewWillAppear:NO];
+    }
+    if(s.footerViewController.state != CKViewControllerStateDidAppear){
+        [s.footerViewController viewDidAppear:NO];
+    }
     
     return v;
 }
@@ -274,6 +309,16 @@
     
     if(!s.footerViewController)
         return ;
+    
+    if(s.footerViewController.view != view || s.footerViewController.state == CKViewControllerStateDidAppear)
+        return ;
+    
+    if(s.footerViewController.state != CKViewControllerStateWillAppear){
+        [s.footerViewController viewWillAppear:NO];
+    }
+    if(s.footerViewController.state != CKViewControllerStateDidAppear){
+        [s.footerViewController viewDidAppear:NO];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section{
@@ -282,15 +327,23 @@
     if(!s.footerViewController)
         return ;
     
-    [s.footerViewController viewWillDisappear:NO];
-    [s.footerViewController viewDidDisappear:NO];
+    if(s.footerViewController.view != view || s.footerViewController.state == CKViewControllerStateDidDisappear)
+        return;
+    
+    if(s.footerViewController.state != CKViewControllerStateWillDisappear){
+        [s.footerViewController viewWillDisappear:NO];
+    }
+    if(s.footerViewController.state != CKViewControllerStateDidDisappear){
+        [s.footerViewController viewDidDisappear:NO];
+    }
 }
 
 #pragma mark Managing selection and highlight
 
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-    return YES; //TODO
+    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    return controller.flags & CKItemViewFlagSelectable;
 }
 
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
