@@ -17,6 +17,8 @@
 #import "UIView+Name.h"
 #import "CKStyleView.h"
 #import "CKCascadingTree.h"
+#import "UIView+CKLayout.h"
+#import "UIViewController+CKLayout.h"
 
 using namespace __gnu_cxx;
 
@@ -41,7 +43,7 @@ namespace __gnu_cxx{
 @implementation CKLayoutBox
 @synthesize maximumSize = _maximumSize, minimumSize = _minimumSize, margins = _margins, padding = _padding, layoutBoxes = _layoutBoxes,frame,containerLayoutBox,containerLayoutView = _containerLayoutView,verticalAlignment,horizontalAlignment,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock, name;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock, name, containerViewController;
 
 #ifdef LAYOUT_DEBUG_ENABLED
 @synthesize debugView;
@@ -293,6 +295,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
             }
         }else if([subBox isKindOfClass:[UIViewController class]]){
             UIViewController* viewController = (UIViewController*)subBox;
+            
             UIView* view = viewController.view;
             view.autoresizingMask = 0;
             if([view superview] != [box containerLayoutView]){
@@ -305,6 +308,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                 [[box containerLayoutView]addSubview:view];
                 
                 [viewController viewDidAppear:NO];
+                
+                viewController.containerViewController = [[box containerLayoutView]containerViewController];
             }
         }
     }
@@ -368,6 +373,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                 }
             }else if([subBox isKindOfClass:[UIViewController class]]){
                 UIViewController* viewController = (UIViewController*)subBox;
+                
                 UIView* view = viewController.view;
                 view.autoresizingMask = 0;
                 //TODO : verify if needs to call view will disappear did disappear
@@ -379,9 +385,12 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                         [view findAndApplyStyleFromStylesheet:stylesheet  propertyName:nil];
                     }
                     [[self containerLayoutView]addSubview:view];
+                    
+                    [viewController viewDidAppear:NO];
+                    
+                    viewController.containerViewController = [[self containerLayoutView]containerViewController];
                 }
                 
-                [viewController viewDidAppear:NO];
             }
         }
     }
@@ -515,4 +524,9 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     self.debugView.frame = self.frame;
 #endif
 }
+
+- (UIViewController*)containerViewController{
+    return self.containerLayoutView.containerViewController;
+}
+
 @end

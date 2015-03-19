@@ -459,71 +459,8 @@ typedef void(^CKTransitionBlock)();
 @end
 
 #pragma mark - UIViewController Additions
-@interface UIViewController ()
-@property (nonatomic,retain)CKWeakRef* containerViewControllerRef;
-@end
 
 @implementation UIViewController (CKContainerViewController)
-
-static char CKViewControllerContainerViewControllerKey;
-
-- (void)setContainerViewControllerRef:(CKWeakRef *)ref {
-    objc_setAssociatedObject(self, 
-                             &CKViewControllerContainerViewControllerKey,
-                             ref,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (CKWeakRef *)containerViewControllerRef {
-    return objc_getAssociatedObject(self, &CKViewControllerContainerViewControllerKey);
-}
-
-
-
-- (void)setContainerViewController:(UIViewController *)viewController {
-    if([self containerViewController] != nil){
-        if([self isViewLoaded] && [[self view]superview] != nil){
-            
-            if(viewController == nil){
-                if([CKOSVersion() floatValue] < 5){
-                    [self viewWillDisappear:NO];
-                }
-                
-                [[self view]removeFromSuperview];
-                
-                if([CKOSVersion() floatValue] < 5){
-                    [self viewDidDisappear:NO];
-                }
-            }
-        }
-    }
-    
-    
-    CKWeakRef* ref = self.containerViewControllerRef;
-    if(!ref){
-        ref = [CKWeakRef weakRefWithObject:viewController];
-        objc_setAssociatedObject(self, 
-                                 &CKViewControllerContainerViewControllerKey,
-                                 ref,
-                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    else{
-        ref.object = viewController;
-    }
-    
-    if([CKOSVersion() floatValue] >= 5){
-        if(viewController == nil){
-            [self removeFromParentViewController];
-        }else{
-            [viewController addChildViewController:self];
-        }
-    }
-}
-
-- (UIViewController *)containerViewController {
-    CKWeakRef* ref = self.containerViewControllerRef;
-    return [ref object];
-}
 
 - (UIInterfaceOrientation)UIViewController_CKContainerController_interfaceOrientation{
     if(self.containerViewController){

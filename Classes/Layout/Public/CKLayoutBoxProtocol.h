@@ -138,6 +138,10 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
  */
 @property(nonatomic,assign,readonly) UIView* containerLayoutView;
 
+/** The UIView containing the current layout box.
+ */
+@property(nonatomic,assign,readonly) UIViewController* containerViewController;
+
 /** The root layout box of the hierarchy.
  */
 - (NSObject<CKLayoutBoxProtocol>*)rootLayoutBox;

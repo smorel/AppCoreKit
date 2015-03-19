@@ -37,6 +37,10 @@
  */
 + (id)inflateViewFromStyleWithId:(NSString*)styleId fromStyleManager:(CKStyleManager*)styleManager;
 
+/**
+ */
+@property(nonatomic,assign) UIViewController* containerViewController;
+
 @end
 
 

@@ -9,6 +9,22 @@
 #import "CKLayoutBoxProtocol.h"
 #import "CKLayoutBox.h"
 
-
+/**
+ */
 @interface UIViewController () <CKLayoutBoxProtocol>
+@end
+
+
+/**
+ */
+@interface UIViewController (CKContainerViewController)
+
+///-----------------------------------
+/// @name Accessing the Container Controller=
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) UIViewController *containerViewController;
+
 @end

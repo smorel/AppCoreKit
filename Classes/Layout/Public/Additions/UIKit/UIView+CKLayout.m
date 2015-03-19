@@ -37,7 +37,7 @@
 
 @dynamic  maximumSize, minimumSize, margins, padding, layoutBoxes,frame,containerLayoutBox,containerLayoutView,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,containerViewController;
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -305,6 +305,21 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name;
 
 + (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly{
     [CKLayoutBox invalidateLayoutBox:box recursivelly:recursivelly];
+}
+
+static char UIViewContainerViewControllerKey;
+- (void)setContainerViewController:(UIViewController *)containerViewController{
+    objc_setAssociatedObject(self, &UIViewContainerViewControllerKey, containerViewController, OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (UIViewController*)containerViewController{
+    UIViewController* controller = objc_getAssociatedObject(self, &UIViewContainerViewControllerKey);
+    if(!controller){
+        if([self superview]){
+            return [[self superview]containerViewController];
+        }
+    }
+    return controller;
 }
 
 @end

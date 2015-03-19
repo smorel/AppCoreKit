@@ -7,6 +7,7 @@
 //
 
 #import "CKViewController.h"
+#import "UIViewController+CKLayout.h"
 
 /**
  */
@@ -94,17 +95,3 @@ typedef NS_ENUM(NSInteger, CKTransitionType){
 
 @end
 
-
-/**
- */
-@interface UIViewController (CKContainerViewController)
-
-///-----------------------------------
-/// @name Accessing the Container Controller=
-///-----------------------------------
-
-/**
- */
-@property (nonatomic,assign) UIViewController *containerViewController;
-
-@end
