@@ -217,19 +217,23 @@
     if(!s.headerViewController)
         return nil;
     
-    UIView* v = s.headerViewController.view;
+    NSString* reuseIdentifier = [s.headerViewController reuseIdentifier];
     
-    if(s.headerViewController.state == CKViewControllerStateDidAppear)
-        return v;
+#ifdef USING_UITableViewHeaderFooterView
+    UITableViewHeaderFooterView* view = (UITableViewHeaderFooterView*)[self.tableView dequeueReusableHeaderFooterViewWithIdentifier:reuseIdentifier];
+#else
+    UIView* view = nil;
+#endif
     
-    if(s.headerViewController.state != CKViewControllerStateWillAppear){
-        [s.headerViewController viewWillAppear:NO];
+    if(!view){
+#ifdef USING_UITableViewHeaderFooterView
+        view = [[UITableViewHeaderFooterView alloc]initWithReuseIdentifier:reuseIdentifier];
+#else
+        view = [[UIView alloc]init];
+#endif
     }
-    if(s.headerViewController.state != CKViewControllerStateDidAppear){
-        [s.headerViewController viewDidAppear:NO];
-    }
     
-    return v;
+    return [self viewForController:s.headerViewController reusingView:view];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -237,9 +241,10 @@
     if(!s.headerViewController)
         return UITableViewAutomaticDimension;
     
-    return [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)].height;
+    return [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)].height ;
 }
 
+#ifdef USING_UITableViewHeaderFooterView
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];
@@ -253,6 +258,7 @@
     return s.headerViewController.estimatedRowHeight;
 }
 
+#endif
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];
@@ -297,19 +303,23 @@
     if(!s.footerViewController)
         return nil;
     
-    UIView* v = s.footerViewController.view;
+    NSString* reuseIdentifier = [s.footerViewController reuseIdentifier];
+
+#ifdef USING_UITableViewHeaderFooterView
+    UITableViewHeaderFooterView* view = (UITableViewHeaderFooterView*)[self.tableView dequeueReusableHeaderFooterViewWithIdentifier:reuseIdentifier];
+#else
+    UIView* view = nil;
+#endif
     
-    if(s.footerViewController.state == CKViewControllerStateDidAppear)
-        return v;
-    
-    if(s.footerViewController.state != CKViewControllerStateWillAppear){
-        [s.footerViewController viewWillAppear:NO];
+    if(!view){
+#ifdef USING_UITableViewHeaderFooterView
+        view = [[UITableViewHeaderFooterView alloc]initWithReuseIdentifier:reuseIdentifier];
+#else
+        view = [[UIView alloc]init];
+#endif
     }
-    if(s.footerViewController.state != CKViewControllerStateDidAppear){
-        [s.footerViewController viewDidAppear:NO];
-    }
     
-    return v;
+    return [self viewForController:s.footerViewController reusingView:view];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -320,6 +330,7 @@
     return [s.footerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)].height;
 }
 
+#ifdef USING_UITableViewHeaderFooterView
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];
@@ -332,7 +343,7 @@
     }
     return s.footerViewController.estimatedRowHeight;
 }
-
+#endif
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];
@@ -565,5 +576,13 @@
         return (CKTableViewCell*)self.contentViewCell;
     return nil;
 }
+
+#ifdef USING_UITableViewHeaderFooterView
+- (UITableViewHeaderFooterView*)headerFooterView{
+    if([self.contentViewCell isKindOfClass:[UITableViewHeaderFooterView class]])
+        return (UITableViewHeaderFooterView*)self.contentViewCell;
+    return nil;
+}
+#endif
 
 @end

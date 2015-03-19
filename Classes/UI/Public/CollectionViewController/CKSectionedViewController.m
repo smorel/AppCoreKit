@@ -211,10 +211,14 @@ static char UIViewAttachedCellContentViewControllerKey;
     }
 }
 
-- (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+- (UIView*)viewForController:(CKCollectionCellContentViewController*)controller reusingView:(UIView*)view{
     
-    UIView* contentView = [view valueForKey:@"contentView"];
+    UIView* contentView = nil;
+    @try{
+        contentView = [view valueForKey:@"contentView"];
+    }
+    @catch (NSException* e) {
+    }
     
     if(!view){
         contentView = view = [[UIView alloc]init];
@@ -257,8 +261,13 @@ static char UIViewAttachedCellContentViewControllerKey;
     }
     
     return view;
+
 }
 
+- (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view{
+    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    return [self viewForController:controller reusingView:view];
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];

@@ -41,7 +41,6 @@
 
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
 
-- (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view;
 - (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
@@ -82,6 +81,9 @@
 
 - (NSIndexPath*)indexPathForController:(CKCollectionCellContentViewController*)controller;
 - (NSArray*)indexPathsForControllers:(NSArray*)controllers;
+
+- (UIView*)viewForController:(CKCollectionCellContentViewController*)controller reusingView:(UIView*)view;
+- (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view;
 
 @property(nonatomic,retain) NSArray* selectedIndexPaths;
 

@@ -8,6 +8,9 @@
 
 #import "CKSectionedViewController.h"
 
+//commented until the layout loop is solved
+//#define USING_UITableViewHeaderFooterView
+
 @class CKTableViewCell;
 
 /**
@@ -17,6 +20,12 @@
 /**
  */
 @property(nonatomic,readonly) CKTableViewCell* tableViewCell;
+
+#ifdef USING_UITableViewHeaderFooterView
+/**
+ */
+@property(nonatomic,readonly) UITableViewHeaderFooterView* headerFooterView;
+#endif
 
 @end
 

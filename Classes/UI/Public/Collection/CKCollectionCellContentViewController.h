@@ -64,7 +64,8 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
  
     UITableViewCell,
     UICollectionViewCell, 
-    MKMapAnnotationView
+    MKMapAnnotationView,
+    UITableViewHeaderFooterView
  */
 @property(nonatomic,readonly) UIView* contentViewCell;
 

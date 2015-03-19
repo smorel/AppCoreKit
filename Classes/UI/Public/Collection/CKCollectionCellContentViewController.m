@@ -186,6 +186,7 @@
         }
         //TODO : Auto layout support !
         else{
+            returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
         }
         
         self.isComputingSize = NO;
@@ -209,6 +210,7 @@
         }
         //TODO : Auto layout support !
         else{
+            returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
         }
         
         [self viewWillDisappear:NO];
@@ -340,6 +342,7 @@
 - (void)applyStyleToSubViews{
     [self reapplyingStyleOnSubviewNamed:@"contentViewCell"];
     [self reapplyingStyleOnSubviewNamed:@"tableViewCell"];
+    [self reapplyingStyleOnSubviewNamed:@"headerFooterView"];
     
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
         [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];

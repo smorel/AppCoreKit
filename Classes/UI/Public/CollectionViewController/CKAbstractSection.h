@@ -35,6 +35,16 @@
 @property(nonatomic,retain) CKCollectionCellContentViewController* headerViewController;
 @property(nonatomic,retain) CKCollectionCellContentViewController* footerViewController;
 
+
+/** This will set headerViewController with a CKStandardContentViewController initialized with the specified text
+ */
+- (void)setHeaderTitle:(NSString*)headerTitle;
+
+/** This will set footerViewController with a CKStandardContentViewController initialized with the specified text
+ */
+- (void)setFooterTitle:(NSString*)footerTitle;
+
+
 @property (nonatomic,assign) BOOL hidden;
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated;
 

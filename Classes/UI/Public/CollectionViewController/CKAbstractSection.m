@@ -9,6 +9,7 @@
 #import "CKAbstractSection.h"
 #import "CKSectionedViewController.h"
 #import "CKContainerViewController.h"
+#import "CKStandardContentViewController.h"
 
 @interface CKAbstractSection()
 @property(nonatomic,retain, readwrite) NSArray* controllers;
@@ -137,6 +138,15 @@
     for(CKCollectionCellContentViewController* controller in self.controllers){
         [controller setContainerViewController:_delegate];
     }
+}
+
+
+- (void)setHeaderTitle:(NSString*)headerTitle{
+    self.headerViewController = [CKStandardContentViewController controllerWithTitle:headerTitle action:nil];
+}
+
+- (void)setFooterTitle:(NSString*)footerTitle{
+    self.footerViewController = [CKStandardContentViewController controllerWithTitle:footerTitle action:nil];
 }
 
 @end
