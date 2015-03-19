@@ -138,8 +138,26 @@
     for(CKCollectionCellContentViewController* controller in self.controllers){
         [controller setContainerViewController:_delegate];
     }
+    
+    [self.headerViewController setContainerViewController:_delegate];
+    [self.footerViewController setContainerViewController:_delegate];
 }
 
+- (void)setHeaderViewController:(CKCollectionCellContentViewController *)headerViewController{
+    [_headerViewController release];
+    _headerViewController = [headerViewController retain];
+    if(_delegate){
+        [headerViewController setContainerViewController:_delegate];
+    }
+}
+
+- (void)setFooterViewController:(CKCollectionCellContentViewController *)footerViewController{
+    [_footerViewController release];
+    _footerViewController = [footerViewController retain];
+    if(_delegate){
+        [footerViewController setContainerViewController:_delegate];
+    }
+}
 
 - (void)setHeaderTitle:(NSString*)headerTitle{
     self.headerViewController = [CKStandardContentViewController controllerWithTitle:headerTitle action:nil];
