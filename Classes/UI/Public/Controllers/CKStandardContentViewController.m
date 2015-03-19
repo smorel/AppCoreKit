@@ -61,6 +61,8 @@
     controller.imageURL = imageURL;
     controller.defaultImageName = defaultImageName;
     controller.didSelectBlock = action;
+    controller.accessoryType = action ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    controller.flags = action ? CKViewControllerFlagsSelectable : CKViewControllerFlagsNone;
     return controller;
 }
 
