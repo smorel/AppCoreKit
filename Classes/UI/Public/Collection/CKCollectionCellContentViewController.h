@@ -95,7 +95,7 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
  */
 - (NSString*)reuseIdentifier;
 
-/** Default is 0 meaning we should
+/** Default is 44
  */
 @property(nonatomic,assign) CGFloat estimatedRowHeight;
 

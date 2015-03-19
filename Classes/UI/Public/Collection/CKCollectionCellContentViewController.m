@@ -71,6 +71,7 @@
 
 - (id)init{
     self = [super init];
+    self.estimatedRowHeight = 44;
     self.flags = CKViewControllerFlagsSelectable;
     self.state = CKViewControllerStateNone;
     self.accessoryType = UITableViewCellAccessoryNone;

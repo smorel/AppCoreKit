@@ -56,6 +56,8 @@
     self.tableView = [[[[self tableViewClass] alloc]initWithFrame:self.view.bounds style:self.style]autorelease];
     self.tableView.name = @"TableView";
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleSize;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+
     
     [self.view addSubview:self.tableView];
 }
@@ -161,11 +163,16 @@
     [self.tableView endUpdates];
 }
 
-/*
+
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    if(controller.contentViewCell){
+        CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        return size.height;
+    }
+    return controller.estimatedRowHeight;
 }
-*/
+
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
@@ -221,16 +228,24 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];
     if(!s.headerViewController)
-        return 0;
+        return UITableViewAutomaticDimension;
     
     return [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)].height;
 }
 
-/*
+
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section{
+    CKAbstractSection* s = [self sectionAtIndex:section];
+    if(!s.headerViewController)
+        return UITableViewAutomaticDimension;
     
+    if(s.headerViewController.contentViewCell){
+        CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        return size.height;
+    }
+    return s.headerViewController.estimatedRowHeight;
 }
-*/
+
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];
@@ -293,16 +308,24 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];
     if(!s.footerViewController)
-        return 0;
+        return UITableViewAutomaticDimension;
     
     return [s.footerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)].height;
 }
 
-/*
+
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section{
+    CKAbstractSection* s = [self sectionAtIndex:section];
+    if(!s.footerViewController)
+        return UITableViewAutomaticDimension;
     
+    if(s.footerViewController.contentViewCell){
+        CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        return size.height;
+    }
+    return s.footerViewController.estimatedRowHeight;
 }
-*/
+
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section{
     CKAbstractSection* s = [self sectionAtIndex:section];

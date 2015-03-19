@@ -53,7 +53,7 @@
     self.scrollEnabled = NO;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(valueDidChange) name:UITextViewTextDidChangeNotification object:self];
-	[self addObserver:self forKeyPath:@"font" options:NSKeyValueObservingOptionNew context:nil];
+    //[self addObserver:self forKeyPath:@"font" options:NSKeyValueObservingOptionNew context:nil];
     
     _oldFrame = self.frame;
     _frameChangeDelegate = nil;
@@ -81,7 +81,7 @@
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[self removeObserver:self forKeyPath:@"font"];
+    //   [self removeObserver:self forKeyPath:@"font" context:nil];
 	self.placeholderLabel = nil;
     _frameChangeDelegate = nil;
 	[super dealloc];
