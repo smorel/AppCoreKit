@@ -127,7 +127,7 @@
     ValueTextView.delegate = self;
     
     ValueTextField.hidden = self.multiline;
-    ValueTextView.hidden = !ValueTextField.hidden;
+    ValueTextView.hidden = !self.multiline;
     
     __unsafe_unretained CKPropertyStringViewController* bself = self;
     
