@@ -23,6 +23,18 @@ static char UIViewControllerStylesheetFileNameKey;
 @implementation UIViewController (CKStyle)
 @dynamic stylesheetFileName, styleManager;
 
+- (BOOL)isLayoutDefinedInStylesheet{
+    NSMutableDictionary* style = [self controllerStyle];
+    if([style containsObjectForKey:@"layoutBoxes"])
+        return YES;
+    
+    NSMutableDictionary* viewDictionary = [style objectForKey:@"view"];
+    if([viewDictionary containsObjectForKey:@"layoutBoxes"])
+        return YES;
+    
+    return NO;
+}
+
 - (void)setStylesheetFileName:(NSString *)stylesheetFileName{
     objc_setAssociatedObject(self,
                              &UIViewControllerStylesheetFileNameKey,

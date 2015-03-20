@@ -59,6 +59,9 @@ static NSDateFormatter* sharedFormatter = nil;
     
     self.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     
+    if([self isLayoutDefinedInStylesheet])
+        return;
+    
     UILabel* PropertyNameLabel = [[UILabel alloc]init];
     PropertyNameLabel.name = @"PropertyNameLabel";
     PropertyNameLabel.font = [UIFont boldSystemFontOfSize:17];

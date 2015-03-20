@@ -13,6 +13,8 @@
  */
 @interface UIViewController (CKStyle)
 
+- (BOOL)isLayoutDefinedInStylesheet;
+
 /** By specifying a stylesheet filename, this file will get used to initalize the stylemanager for your view controller
     and bypass the following automatic detection.
  

@@ -70,6 +70,10 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
+    if([self isLayoutDefinedInStylesheet])
+        return;
+    
+    
     UIImageView* imageView = [[[UIImageView alloc]init]autorelease];
     imageView.name = @"ImageView";
     imageView.minimumHeight = 44;
