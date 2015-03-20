@@ -128,28 +128,42 @@
 - (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
     if(self.state != CKViewControllerStateDidAppear) return;
     
-    [self.tableView insertSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    
+    [self performBatchUpdates:^{
+        [self.tableView insertSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    } completion:nil preventingUpdates:YES];
+    
+    //MUST Update visual for separators, borders, ...
 }
 
 - (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
     if(self.state != CKViewControllerStateDidAppear) return;
     
-    [self.tableView deleteSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    [self performBatchUpdates:^{
+        [self.tableView deleteSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    } completion:nil preventingUpdates:YES];
+    
+    //MUST Update visual for separators, borders, ...
 }
 
 - (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
     if(self.state != CKViewControllerStateDidAppear) return;
     
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    [self performBatchUpdates:^{
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    } completion:nil preventingUpdates:YES];
+    
+    //MUST Update visual for separators, borders, ...
 }
 
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
     if(self.state != CKViewControllerStateDidAppear) return;
  
-    //TODO manage the fact that didEndDisplayingCell is called after animation but the section has already removed the controller
-    //wich could lead in disabling the next controller that shouldn't or crash if no more controllers in section.
+    [self performBatchUpdates:^{
+        [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    } completion:nil preventingUpdates:YES];
     
-    [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+    //MUST Update visual for separators, borders, ...
 }
 
 - (UIView*)contentView{
