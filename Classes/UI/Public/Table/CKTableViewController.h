@@ -45,6 +45,14 @@
  */
 @property(nonatomic,readonly) CKTableView* tableView;
 
+/**
+ */
+@property(nonatomic,retain) CKCollectionCellContentViewController* tableHeaderViewController;
+
+/**
+ */
+@property(nonatomic,retain) CKCollectionCellContentViewController* tableFooterViewController;
+
 /** Default is YES
  */
 @property(nonatomic,assign) BOOL endEditingViewWhenScrolling;

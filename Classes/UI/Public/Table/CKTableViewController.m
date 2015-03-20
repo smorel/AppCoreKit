@@ -49,6 +49,86 @@
     return [CKTableView class];
 }
 
+#pragma Managing TableHeaderViewController
+
+- (void)setTableHeaderViewController:(CKCollectionCellContentViewController *)tableHeaderViewController{
+    if(_tableHeaderViewController){
+        [self dismissTableHeaderView];
+    }
+    
+    [_tableHeaderViewController release];
+    _tableHeaderViewController = [tableHeaderViewController retain];
+    [_tableHeaderViewController setContainerViewController:self];
+    
+    if(self.tableView){
+        [self presentsTableHeaderView];
+    }
+}
+
+- (void)dismissTableHeaderView{
+    if(self.tableHeaderViewController){
+        if(self.tableHeaderViewController.state != CKViewControllerStateDidDisappear){
+            [self.tableHeaderViewController viewWillDisappear:NO];
+            [self.tableHeaderViewController viewDidDisappear:NO];
+        }
+        self.tableView.tableHeaderView = nil;
+    }
+}
+
+- (void)presentsTableHeaderView{
+    if(self.tableHeaderViewController){
+        UIView* view = self.tableHeaderViewController.view;
+        view.flexibleSize = NO;
+        
+        [self.tableHeaderViewController viewWillAppear:NO];
+        CGSize size = [self.tableHeaderViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        view.frame = CGRectMake(0,0,self.tableView.width,size.height);
+        self.tableView.tableHeaderView = view;
+        [self.tableHeaderViewController viewDidAppear:NO];
+    }
+}
+
+#pragma Managing TableFooterViewController
+
+- (void)setTableFooterViewController:(CKCollectionCellContentViewController *)tableFooterViewController{
+    if(_tableFooterViewController){
+        [self dismissTableFooterView];
+    }
+    
+    [_tableFooterViewController release];
+    _tableFooterViewController = [tableFooterViewController retain];
+    [_tableFooterViewController setContainerViewController:self];
+    
+    if(self.tableView){
+        [self presentsTableFooterView];
+    }
+}
+
+- (void)dismissTableFooterView{
+    if(self.tableFooterViewController){
+        if(self.tableFooterViewController.state != CKViewControllerStateDidDisappear){
+            [self.tableFooterViewController viewWillDisappear:NO];
+            [self.tableFooterViewController viewDidDisappear:NO];
+        }
+        self.tableView.tableFooterView = nil;
+    }
+}
+
+- (void)presentsTableFooterView{
+    if(self.tableFooterViewController){
+        UIView* view = self.tableFooterViewController.view;
+        view.flexibleSize = NO;
+        
+        [self.tableFooterViewController viewWillAppear:NO];
+        CGSize size = [self.tableFooterViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        view.frame = CGRectMake(0,0,self.tableView.width,size.height);
+        self.tableView.tableFooterView = view;
+        [self.tableFooterViewController viewDidAppear:NO];
+    }
+}
+
+#pragma Managing Life Cycle
+
 - (void)viewDidLoad{
     [super viewDidLoad];
     
@@ -61,7 +141,9 @@
     self.tableView.name = @"TableView";
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-
+    
+    [self presentsTableHeaderView];
+    [self presentsTableFooterView];
     
     [self.view addSubview:self.tableView];
 }
@@ -69,10 +151,19 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    if(self.tableHeaderViewController.state != CKViewControllerStateDidAppear){
+        [self.tableHeaderViewController viewWillAppear:NO];
+    }
+    
+    if(self.tableFooterViewController.state != CKViewControllerStateDidAppear){
+        [self.tableFooterViewController viewWillAppear:NO];
+    }
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView reloadData];
-
+    
+    
     if(self.editing){
         [self.tableView setEditing:YES animated:NO];
     }
@@ -84,14 +175,50 @@
     //}
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if(self.tableHeaderViewController.state != CKViewControllerStateDidAppear){
+        [self.tableHeaderViewController viewDidAppear:NO];
+    }
+    
+    if(self.tableFooterViewController.state != CKViewControllerStateDidAppear){
+        [self.tableFooterViewController viewDidAppear:NO];
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    
+    if(self.tableHeaderViewController.state != CKViewControllerStateDidDisappear){
+        [self.tableHeaderViewController viewWillDisappear:NO];
+    }
+    
+    if(self.tableFooterViewController.state != CKViewControllerStateDidDisappear){
+        [self.tableFooterViewController viewWillDisappear:NO];
+    }
     
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
     
     [self unregisterForKeyboardNotifications];
 }
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
+    [self dismissTableHeaderView];
+    [self dismissTableFooterView];
+    
+    if(self.tableHeaderViewController.state != CKViewControllerStateDidDisappear){
+        [self.tableHeaderViewController viewDidDisappear:NO];
+    }
+    
+    if(self.tableFooterViewController.state != CKViewControllerStateDidDisappear){
+        [self.tableFooterViewController viewDidDisappear:NO];
+    }
+}
+
+#pragma Managing Batch Updates
 
 - (void)performBatchUpdates:(void (^)(void))updates
                  completion:(void (^)(BOOL finished))completion{
