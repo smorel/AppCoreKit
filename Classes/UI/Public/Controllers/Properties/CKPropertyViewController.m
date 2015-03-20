@@ -10,6 +10,12 @@
 #import "NSObject+Bindings.h"
 #import "CKCollectionCellContentViewController+ResponderChain.h"
 #import "UINavigationController+BlockBasedDelegate.h"
+#import "CKSheetController.h"
+#import "UIViewController+Style.h"
+#import "CKPopoverController.h"
+#import "UIBarButtonItem+BlockBasedInterface.h"
+#import "UIView+Positioning.h"
+#import "UIView+Style.h"
 
 @interface CKPropertyViewController ()
 
@@ -19,7 +25,8 @@
 
 - (void)dealloc{
     [_property release];
-    [_navigationToolbar release];
+    [_editionToolbar release];
+    [_propertyEditionTitleLabel release];
     [super dealloc];
 }
 
@@ -39,6 +46,11 @@
     self = [super init];
     self.property = property;
     self.readOnly = NO;
+    self.editionToolbarEnabled = YES;
+    
+    NSString* titleKey = [NSString stringWithFormat:@"%@_editionTitle",self.property.descriptor.name];;
+    self.propertyEditionTitleLabel = _(titleKey);
+    
     return self;
 }
 
@@ -71,69 +83,20 @@
     return YES;
 }
 
-- (UIToolbar*)navigationToolbar{
-    if(!self.enableNavigationToolbar)
-        return nil;
-    
-    if(_navigationToolbar == nil){
-        UIToolbar* toolbar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)]autorelease];
-        toolbar.barStyle = UIBarStyleBlackTranslucent;
-        _navigationToolbar = [toolbar retain];
-    }
-    
-    if(self.collectionViewController.state == CKViewControllerStateDidAppear
-       || self.collectionViewController.state == CKViewControllerStateWillAppear){
-        BOOL hasNextResponder = [self hasNextResponder];
-        BOOL hasPreviousResponder = [self hasPreviousResponder];
-        NSMutableArray* buttons = [NSMutableArray array];
-        {
-            UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:_(@"Previous")
-                                                                       style:UIBarButtonItemStyleBordered
-                                                                      target:self
-                                                                      action:@selector(previous:)]autorelease];
-            button.enabled = hasPreviousResponder;
-            [buttons addObject:button];
-        }
-        
-        UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:hasNextResponder ? _(@"Next") : _(@"Done")
-                                                                   style:hasNextResponder ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone
-                                                                  target:self
-                                                                  action:hasNextResponder ? @selector(next:) : @selector(done:)]autorelease];
-        [buttons addObject:button];
-        
-        CKProperty* model = self.property;
-        CKClassPropertyDescriptor* descriptor = [model descriptor];
-        NSString* str = [NSString stringWithFormat:@"%@_NavigationBar",descriptor.name];
-        NSString* title = _(str);
-        if([title isKindOfClass:[NSString class]] && [title length] > 0){
-            UILabel* titleLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0,0,200,44)]autorelease];
-            titleLabel.name = @"PropertyNavigationBarLabel";
-            titleLabel.text = title;
-            titleLabel.textColor = [UIColor whiteColor];
-            titleLabel.backgroundColor = [UIColor clearColor];
-            UIBarButtonItem* titleItem = [[[UIBarButtonItem alloc]initWithCustomView:titleLabel]autorelease];
-            [buttons addObject:titleItem];
-        }
-        
-        _navigationToolbar.items = buttons;
-        
-        NSMutableDictionary* dico = [self controllerStyle];
-        [_navigationToolbar applyStyle:dico propertyName:@"navigationToolbar"];
-    }
-    
-    
-    return _navigationToolbar;
-}
 
 - (void)viewDidLoad{
     [super viewDidLoad];
     self.contentView.clipsToBounds = YES;
 }
 
+- (void)endEditing{
+    [self.collectionViewController.view endEditing:YES];
+    [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
+}
+
 - (void)presentEditionViewController:(CKViewController*)controller
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange{
-    
     
     controller.stylesheetFileName = self.collectionViewController.stylesheetFileName;
     controller.view.backgroundColor = self.collectionViewController.view.backgroundColor;
@@ -151,6 +114,10 @@
         }else{
             style = CKPropertyEditionPresentationStyleModal;
         }
+    }
+    
+    if(style != CKPropertyEditionPresentationStyleSheet){
+        [self endEditing];
     }
     
     switch(style){
@@ -218,8 +185,16 @@
         }
         case CKPropertyEditionPresentationStyleSheet:{
             CKSheetController*  sheetController = [CKSheetController sharedInstance];
+            sheetController.delegate = self;
             
-            [sheetController setContentViewController:controller];
+            UINavigationController* navController = [UINavigationController navigationControllerWithRootViewController:controller];
+            [navController setNavigationBarHidden:YES];
+            
+            if(self.editionToolbarEnabled){
+                navController.navigationItem.titleView = [self editionToolbar];
+            }
+            
+            [sheetController setContentViewController:navController];
             
             if(!sheetController.visible){
                 UIView* parentView = self.collectionViewController.view;
@@ -273,18 +248,94 @@
 }
 
 - (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController{
-    [self didBecomeFirstResponder];
 }
 
 - (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController{
 }
 
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{
-    [self didResignFirstResponder];
+    [self resignFirstResponder];
 }
 
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
     sheetController.delegate = nil;
+}
+
+
+- (UIToolbar*)editionToolbar{
+    if(!self.editionToolbarEnabled)
+        return nil;
+    
+    if(_editionToolbar == nil){
+        UIToolbar* toolbar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)]autorelease];
+        toolbar.barStyle = UIBarStyleBlackTranslucent;
+        _editionToolbar = [toolbar retain];
+    }
+    
+    if(self.collectionViewController.state == CKViewControllerStateDidAppear
+       || self.collectionViewController.state == CKViewControllerStateWillAppear){
+        BOOL hasNextResponder = [self hasNextResponder];
+        BOOL hasPreviousResponder = [self hasPreviousResponder];
+        NSMutableArray* buttons = [NSMutableArray array];
+        {
+            UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:_(@"Previous")
+                                                                       style:UIBarButtonItemStyleBordered
+                                                                      target:self
+                                                                      action:@selector(previous:)]autorelease];
+            button.name = @"PreviousBarButtonItem";
+            button.enabled = hasPreviousResponder;
+            [buttons addObject:button];
+        }
+        
+        UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:hasNextResponder ? _(@"Next") : _(@"Done")
+                                                                   style:hasNextResponder ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone
+                                                                  target:self
+                                                                  action:hasNextResponder ? @selector(next:) : @selector(done:)]autorelease];
+        button.name = hasNextResponder ? @"NextBarButtonItem" : @"DoneBarButtonItem";
+        [buttons addObject:button];
+        
+        CKProperty* model = self.property;
+        CKClassPropertyDescriptor* descriptor = [model descriptor];
+        NSString* title = self.propertyEditionTitleLabel;
+        if([title isKindOfClass:[NSString class]] && [title length] > 0){
+            UILabel* titleLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0,0,200,44)]autorelease];
+            titleLabel.name = @"EditionLabel";
+            titleLabel.text = title;
+            titleLabel.textColor = [UIColor whiteColor];
+            titleLabel.backgroundColor = [UIColor clearColor];
+            UIBarButtonItem* titleItem = [[[UIBarButtonItem alloc]initWithCustomView:titleLabel]autorelease];
+            [buttons addObject:titleItem];
+        }
+        
+        _editionToolbar.items = buttons;
+        
+        NSMutableDictionary* dico = [self controllerStyle];
+        [_editionToolbar applyStyle:dico propertyName:@"editionToolbar"];
+    }
+    
+    
+    return _editionToolbar;
+}
+
+- (void)done:(id)sender{
+    [self resignFirstResponder];
+}
+
+- (void)next:(id)sender{
+    [self activateNextResponder];
+}
+
+- (void)previous:(id)sender{
+    [self activatePreviousResponder];
+}
+- (void)editionControllerPresentationStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertyEditionPresentationStyle",
+                                                 CKPropertyEditionPresentationStyleDefault,
+                                                 CKPropertyEditionPresentationStylePush,
+                                                 CKPropertyEditionPresentationStylePopover,
+                                                 CKPropertyEditionPresentationStyleModal,
+                                                 CKPropertyEditionPresentationStyleSheet,
+                                                 CKPropertyEditionPresentationStyleInline);
 }
 
 @end

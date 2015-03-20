@@ -25,16 +25,6 @@
     [super dealloc];
 }
 
-- (void)editionControllerPresentationStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertyEditionPresentationStyle",
-                                                 CKPropertyEditionPresentationStyleDefault,
-                                                 CKPropertyEditionPresentationStylePush,
-                                                 CKPropertyEditionPresentationStylePopover,
-                                                 CKPropertyEditionPresentationStyleModal,
-                                                 CKPropertyEditionPresentationStyleSheet,
-                                                 CKPropertyEditionPresentationStyleInline);
-}
-
 #pragma mark ViewController Life Cycle
 
 static NSDateFormatter* sharedFormatter = nil;

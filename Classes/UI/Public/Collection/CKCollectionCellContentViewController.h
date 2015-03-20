@@ -120,14 +120,6 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 
 /**
  */
-- (void)didBecomeFirstResponder;
-
-/**
- */
-- (void)didResignFirstResponder;
-
-/**
- */
 - (void)scrollToCell;
 
 /**
@@ -145,3 +137,6 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 @property(nonatomic,assign) UITableViewCellAccessoryType accessoryType;
 
 @end
+
+
+#import "CKCollectionCellContentViewController+ResponderChain.h"

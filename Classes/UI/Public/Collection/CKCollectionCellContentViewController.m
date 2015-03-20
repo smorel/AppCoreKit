@@ -243,14 +243,6 @@
     }
 }
 
-- (void)didBecomeFirstResponder{
-    
-}
-
-- (void)didResignFirstResponder{
-    
-}
-
 - (BOOL)didRemove{
     return NO;
 }

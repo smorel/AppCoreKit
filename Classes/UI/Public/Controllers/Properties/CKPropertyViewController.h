@@ -90,17 +90,22 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
 ///-----------------------------------
 
 /** By enabling this flag, a toolbar will be added on top of the keyboard when editing the property. 
- This adds an automanaged next/done button as well as a label with a localized string with the following format: _(@"propertyName_NavigationBar").
- You can change this label by adding a key with the specified value in your localisation file.
+ This adds an automanaged next/done button as well as a label with a localized string with the following format: _(@"propertyName_editionTitle").
+ You can change this label by adding a key with the specified value in your localisation file or by setting the propertyEditionTitleLabel property
  Default value is NO.
  */
-@property(nonatomic,assign)BOOL enableNavigationToolbar;
+@property(nonatomic,assign)BOOL editionToolbarEnabled;
 
-/** If enableNavigationToolbar is set to YES and you don't set the navigationToolbar, a default one will be created. 
- @see enableNavigationToolbar.
+/** If editionToolbarEnabled is set to YES and you don't set the editionToolbar, a default one will be created.
+ @see editionToolbarEnabled.
  */
-@property(nonatomic,retain)UIToolbar* navigationToolbar;
+@property(nonatomic,retain)UIToolbar* editionToolbar;
 
+/** Default value is a localized string as follow: _(@"propertyName_editionTitle") that can be customized by setting a key/value in your localization file as follow:
+ "propertyName_editionTitle" = "My Title";
+ Or simply set the propertyEditionTitleLabel property programatically or in your stylesheet in the CKPropertyViewController scope.
+ */
+@property(nonatomic,retain) NSString* propertyEditionTitleLabel;
 
 ///-----------------------------------
 /// @name Presenting an edition view controller

@@ -33,7 +33,6 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     UIView* _sheetView;
 }
 
-@synthesize delegate = _delegate;
 @synthesize contentViewController = _contentViewController;
 @synthesize sheetView = _sheetView;
 @synthesize visible;
@@ -48,7 +47,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 }
 
 - (void)setDelegate:(id)delegate{
-    self.delegateRef = [CKWeakRef weakRefWithObject:delegate];
+    self.delegateRef = [CKWeakRef weakRefWithObject:delegate block:^(CKWeakRef *weakRef) {
+    }];
 }
 
 - (id)delegate{
@@ -144,8 +144,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     CGRect contentEndRectInWindow = [window convertRect:contentEndRect fromView:view];
     
     
-    if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerWillShowSheet:)]){
-        [_delegate sheetControllerWillShowSheet:self];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(sheetControllerWillShowSheet:)]){
+        [self.delegate sheetControllerWillShowSheet:self];
     }
     
     CGRect contentOriginRect = CGRectMake(rect.origin.x,rect.origin.y + rect.size.height,
@@ -173,8 +173,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         [UIView animateWithDuration:0.3
                          animations:^{self.sheetView.frame = contentEndRect;}
                          completion:^(BOOL finished){
-                             if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
-                                 [_delegate sheetControllerDidShowSheet:self];
+                             if(self.delegate && [self.delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
+                                 [self.delegate sheetControllerDidShowSheet:self];
                              }
                              [_contentViewController viewDidAppear:animated];
                              
@@ -193,8 +193,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     else{
         self.sheetView.frame = contentEndRect;    
         [[view window]endEditing:YES];//resign keyboard
-        if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
-            [_delegate sheetControllerDidShowSheet:self];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
+            [self.delegate sheetControllerDidShowSheet:self];
         }
         [_contentViewController viewDidAppear:animated];
         
@@ -228,8 +228,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     UIWindow* window = [contentView window];
     CGRect contentEndRectInWindow = [window convertRect:contentEndRect fromView:[contentView superview]];
     
-    if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerWillDismissSheet:)]){
-        [_delegate sheetControllerWillDismissSheet:self];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(sheetControllerWillDismissSheet:)]){
+        [self.delegate sheetControllerWillDismissSheet:self];
     }
     [_contentViewController viewWillDisappear:animated];
     
@@ -254,8 +254,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                              [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
                              [contentView removeFromSuperview]; 
                              
-                             if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidDismissSheet:)]){
-                                 [_delegate sheetControllerDidDismissSheet:self];
+                             if(self.delegate && [self.delegate respondsToSelector:@selector(sheetControllerDidDismissSheet:)]){
+                                 [self.delegate sheetControllerDidDismissSheet:self];
                              }
                              [_contentViewController viewDidDisappear:animated];
                              
@@ -280,8 +280,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [contentView removeFromSuperview];
         
-        if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidDismissSheet:)]){
-            [_delegate sheetControllerDidDismissSheet:self];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(sheetControllerDidDismissSheet:)]){
+            [self.delegate sheetControllerDidDismissSheet:self];
         }
         [_contentViewController viewDidDisappear:animated];
         

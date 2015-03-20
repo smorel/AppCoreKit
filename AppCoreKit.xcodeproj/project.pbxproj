@@ -2250,9 +2250,9 @@
 				D92C10531AA78B9F00DA4B12 /* Web */,
 				D92C10551AA78BCB00DA4B12 /* Slideshow */,
 				D9418A571AB8652300234A15 /* Date Picker */,
-				D94CA2F91AA64AF8009EA887 /* Content ViewControllers */,
 				D9418A801AB8B86900234A15 /* Standard Content */,
 				D94CA3061AA75B21009EA887 /* Properties */,
+				D9E04C7D1AB1F9C800E6BECB /* Swipable */,
 				D92C10541AA78BB800DA4B12 /* Apple Extensions */,
 			);
 			name = Controllers;
@@ -3250,6 +3250,7 @@
 			children = (
 				D9418A691AB8759B00234A15 /* CKSectionedViewController.h */,
 				D9418A6A1AB8759B00234A15 /* CKSectionedViewController.m */,
+				D94CA2F91AA64AF8009EA887 /* Reusable ViewController */,
 				D9418A7F1AB8877100234A15 /* Factory */,
 				D9418A7E1AB8875A00234A15 /* Sections */,
 				D9418A631AB86CDF00234A15 /* Picker */,
@@ -3345,16 +3346,15 @@
 			name = NSCalendar;
 			sourceTree = "<group>";
 		};
-		D94CA2F91AA64AF8009EA887 /* Content ViewControllers */ = {
+		D94CA2F91AA64AF8009EA887 /* Reusable ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				96B3BCD4182BED9800978B85 /* CKCollectionCellContentViewController.h */,
-				96B3BCD5182BED9800978B85 /* CKCollectionCellContentViewController.m */,
 				D9149CE41AA7682A00D129AB /* CKCollectionCellContentViewController+ResponderChain.h */,
 				D9149CE51AA7682A00D129AB /* CKCollectionCellContentViewController+ResponderChain.m */,
-				D9E04C7D1AB1F9C800E6BECB /* Swipable */,
+				96B3BCD4182BED9800978B85 /* CKCollectionCellContentViewController.h */,
+				96B3BCD5182BED9800978B85 /* CKCollectionCellContentViewController.m */,
 			);
-			name = "Content ViewControllers";
+			name = "Reusable ViewController";
 			sourceTree = "<group>";
 		};
 		D94CA3061AA75B21009EA887 /* Properties */ = {

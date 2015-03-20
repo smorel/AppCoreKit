@@ -460,7 +460,7 @@ typedef void(^CKTransitionBlock)();
 
 #pragma mark - UIViewController Additions
 
-@implementation UIViewController (CKContainerViewController)
+@implementation UIViewController (CKContainerViewController_InterfaceOrientation)
 
 - (UIInterfaceOrientation)UIViewController_CKContainerController_interfaceOrientation{
     if(self.containerViewController){

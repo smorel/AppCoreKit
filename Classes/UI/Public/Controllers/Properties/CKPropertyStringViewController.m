@@ -11,6 +11,7 @@
 #import "CKLocalization.h"
 #import "CKCollectionCellContentViewController+ResponderChain.h"
 #import "CKPropertyNumberViewController.h"
+#import "NSValueTransformer+Additions.h"
 
 @interface CKPropertyStringViewController ()<UITextFieldDelegate,UITextViewDelegate>
 
@@ -126,6 +127,12 @@
     ValueTextView.placeholder = _(self.valuePlaceholderLabel);
     ValueTextView.delegate = self;
     
+    UIToolbar* toolbar = [self editionToolbar];
+    if(toolbar){
+        ValueTextView.inputAccessoryView = toolbar;
+        ValueTextField.inputAccessoryView = toolbar;
+    }
+    
     ValueTextField.hidden = self.multiline;
     ValueTextView.hidden = !self.multiline;
     
@@ -219,11 +226,6 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    UIToolbar* toolbar = [self navigationToolbar];
-    if(toolbar){
-        textField.inputAccessoryView = toolbar;
-    }
-    
     if([self hasNextResponder]){
         textField.returnKeyType = UIReturnKeyNext;
     }
@@ -231,7 +233,9 @@
         textField.returnKeyType = UIReturnKeyDone;
     }
     
-    [self scrollToCell];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self scrollToCell];
+    });
     
     [self didBecomeFirstResponder];
 }
@@ -265,12 +269,9 @@
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView{ [self didResignFirstResponder]; return YES; }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    UIToolbar* toolbar = [self navigationToolbar];
-    if(toolbar){
-        textView.inputAccessoryView = toolbar;
-    }
-    
-    [self scrollToCell];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self scrollToCell];
+    });
     [self didBecomeFirstResponder];
 }
 

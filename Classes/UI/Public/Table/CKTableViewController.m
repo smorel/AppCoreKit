@@ -22,6 +22,7 @@
 @interface CKTableViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,retain,readwrite) CKTableView* tableView;
 @property(nonatomic,retain) NSMutableArray* keyboardObservers;
+@property(nonatomic,assign) CGSize lastPresentedKeyboardSize;
 @end
 
 @implementation CKTableViewController
@@ -206,9 +207,6 @@
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     
-    [self dismissTableHeaderView];
-    [self dismissTableFooterView];
-    
     if(self.tableHeaderViewController.state != CKViewControllerStateDidDisappear){
         [self.tableHeaderViewController viewDidDisappear:NO];
     }
@@ -298,7 +296,7 @@
 }
 
 - (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated{
-    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionTop animated:animated];
+    [self.tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionNone animated:animated];
 }
 
 #pragma mark Managing Content
@@ -726,12 +724,18 @@
         kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     }
     
+    CGFloat diff = (kbSize.height - self.lastPresentedKeyboardSize.height);
+    if(diff == 0)
+        return;
+    
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top,
                                                   self.tableView.contentInset.left,
-                                                  self.tableView.contentInset.bottom + kbSize.height,
+                                                  self.tableView.contentInset.bottom + diff,
                                                   self.tableView.contentInset.right);
     self.tableView.contentInset = contentInsets;
     self.tableView.scrollIndicatorInsets = contentInsets;
+    
+    self.lastPresentedKeyboardSize = kbSize;
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
@@ -742,12 +746,13 @@
     NSTimeInterval animationDuration;
     UIViewAnimationCurve animationCurve;
     
+    kbSize = self.lastPresentedKeyboardSize;
     if([info objectForKey:CKSheetFrameEndUserInfoKey]){
-        kbSize = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue].size;
+        //kbSize = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue].size;
         animationCurve = (UIViewAnimationCurve)[[info objectForKey:CKSheetAnimationCurveUserInfoKey] integerValue];
         animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
     }else{
-        kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        //kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
         [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
         [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     }
@@ -766,6 +771,8 @@
     self.tableView.scrollIndicatorInsets = contentInsets;
     
     [UIView commitAnimations];
+    
+    self.lastPresentedKeyboardSize = CGSizeZero;
 }
 
 @end

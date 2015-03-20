@@ -8,29 +8,49 @@
 
 #import "CKCollectionCellContentViewController+ResponderChain.h"
 #import <objc/runtime.h>
+#import "NSObject+Invocation.h"
+
+@interface UIViewController(ResponderChain)
+@property (nonatomic,retain) UIViewController* firstResponderController;
+@end
+
+@implementation UIViewController(ResponderChain)
+
+static char UIViewControllerFirstResponderControllerKey;
+- (void)setFirstResponderController:(UIViewController*)firstResponderController{
+    objc_setAssociatedObject(self, &UIViewControllerFirstResponderControllerKey, firstResponderController, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (UIViewController*)firstResponderController{
+    return objc_getAssociatedObject(self, &UIViewControllerFirstResponderControllerKey);
+}
+
+- (BOOL)isFirstResponderController:(UIViewController*)controller{
+    return [self firstResponderController] == controller;
+}
+
+@end
 
 
-//TODO: add support for any type of CKCollectionViewController not only CKTableViewControllerOld
+
+//TODO: add support for any type of CKViewController not only controllers with tableView property
 
 @implementation CKCollectionCellContentViewController (ResponderChain)
 
-+ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKCollectionViewController*)controller{
-    if([controller isKindOfClass:[CKTableCollectionViewController class]]){
-        CKTableCollectionViewController* tableViewController = (CKTableCollectionViewController*)controller;
-        CKTableViewCellController* cellController = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
-        if([cellController hasResponder] == YES)
++ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKViewController*)controller{
+    if([controller respondsToSelector:@selector(controllerAtIndexPath:)]){
+        id c = [controller performSelector:@selector(controllerAtIndexPath:) withObject:indexPath];
+        if([c hasResponder] == YES)
             return YES;
     }
-    else{
-        CKAssert(NO,@"CKTableViewCellNextResponder is supported only for CKTableCollectionViewController yet");
-    }
+    
     return NO;
 }
 
 
 - (NSIndexPath*)findNextResponderWithScrollEnabled:(BOOL)enableScroll{
-    if([self.collectionViewController isKindOfClass:[CKTableViewControllerOld class]]){
-        CKCollectionViewController* parentController = (CKCollectionViewController*)self.collectionViewController;
+    if([self.collectionViewController hasPropertyNamed:@"tableView"]){
+        UITableView* tableView = (UITableView*)[self.collectionViewController valueForKey:@"tableView"];
         
         NSIndexPath* indexPath = self.indexPath;
         NSInteger section = indexPath.section;
@@ -38,9 +58,9 @@
         
         NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         while(nextIndexPath != nil){
-            NSInteger rowCountForSection = [parentController numberOfObjectsForSection:section];
+            NSInteger rowCountForSection = [tableView.dataSource tableView:tableView numberOfRowsInSection:section];
             if((NSInteger)nextIndexPath.row >= (rowCountForSection - 1)){
-                NSInteger sectionCount = [parentController numberOfSections];
+                NSInteger sectionCount = [tableView.dataSource numberOfSectionsInTableView:tableView];
                 if((NSInteger)nextIndexPath.section >= (sectionCount - 1)){
                     return nil;
                 }
@@ -52,7 +72,7 @@
             }
             
             nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            if([CKCollectionCellContentViewController hasResponderAtIndexPath:nextIndexPath controller:parentController]){
+            if([CKCollectionCellContentViewController hasResponderAtIndexPath:nextIndexPath controller:self.collectionViewController]){
                 return nextIndexPath;
             }
         }
@@ -61,8 +81,8 @@
 }
 
 - (NSIndexPath*)findPreviousResponderWithScrollEnabled:(BOOL)enableScroll{
-    if([self.collectionViewController isKindOfClass:[CKTableViewControllerOld class]]){
-        CKCollectionViewController* parentController = (CKCollectionViewController*)self.collectionViewController;
+    if([self.collectionViewController hasPropertyNamed:@"tableView"]){
+        UITableView* tableView = (UITableView*)[self.collectionViewController valueForKey:@"tableView"];
         
         NSIndexPath* indexPath = self.indexPath;
         NSInteger section = indexPath.section;
@@ -75,14 +95,14 @@
                     return nil;
                 }
                 section--;
-                row = [parentController numberOfObjectsForSection:section] - 1;
+                row = [tableView.dataSource tableView:tableView numberOfRowsInSection:section] - 1;
             }
             else{
                 row--;
             }
             
             previousIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            if([CKCollectionCellContentViewController hasResponderAtIndexPath:previousIndexPath controller:parentController]){
+            if([CKCollectionCellContentViewController hasResponderAtIndexPath:previousIndexPath controller:self.collectionViewController]){
                 return previousIndexPath;
             }
         }
@@ -92,19 +112,19 @@
 
 
 + (void)activateAfterDelay:(CKCollectionCellContentViewController*)controller indexPath:(NSIndexPath*)indexPath{
-    if([controller.collectionViewController isKindOfClass:[CKTableCollectionViewController class]]){
-        CKTableCollectionViewController* tableViewController = (CKTableCollectionViewController*)controller.collectionViewController;
-        
-        CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
-        if(controllerNew != nil){
-            [controllerNew becomeFirstResponder];
+    if([controller.collectionViewController respondsToSelector:@selector(controllerAtIndexPath:)]){
+        id c = [controller.collectionViewController performSelector:@selector(controllerAtIndexPath:) withObject:indexPath];
+        if(c != nil){
+            [c performSelector:@selector(becomeFirstResponder)];
+            
+            [controller resignFirstResponder];
         }
     }
 }
 
 + (void)activateResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKCollectionCellContentViewController*)controller{
     UITableView* tableView = (UITableView*)[controller contentView];
-    [tableView scrollToRowAtIndexPath:indexPath
+   [tableView scrollToRowAtIndexPath:indexPath
                      atScrollPosition:UITableViewScrollPositionNone
                              animated:YES];
     
@@ -122,6 +142,7 @@
     if(nextIndexPath == nil)
         return NO;
     [CKCollectionCellContentViewController activateResponderAtIndexPath:nextIndexPath controller:self];
+    
     return YES;
 }
 
@@ -139,6 +160,7 @@
     if(previousIndexPath == nil)
         return NO;
     [CKCollectionCellContentViewController activateResponderAtIndexPath:previousIndexPath controller:self];
+    
     return YES;
 }
 
@@ -174,27 +196,52 @@
     return [[self responderChain]count] > 0;
 }
 
+- (BOOL)isFirstResponder{
+    return [self.collectionViewController firstResponderController] == self;
+}
+
+- (void)didBecomeFirstResponder{
+    if([self.collectionViewController firstResponderController] && ![self.collectionViewController isFirstResponderController:self]){
+        [[self.collectionViewController firstResponderController]resignFirstResponder];
+    }
+    
+    [self.collectionViewController setFirstResponderController:self];
+}
 
 - (void)becomeFirstResponder{
-    self.isFirstResponder = YES;
+    UIViewController* previousResponder = [self.collectionViewController firstResponderController];
+    
+    [self.collectionViewController setFirstResponderController:self];
+    
+    if(previousResponder != self){
+        [previousResponder resignFirstResponder];
+    }
+
     
     UIView* responder = [self nextResponder:nil];
     if(responder && [responder isKindOfClass:[UIResponder class]]){
         [responder becomeFirstResponder];
     }
+    
+    [self didBecomeFirstResponder];
+    
+}
+
+- (void)didResignFirstResponder{
+    if([self.collectionViewController isFirstResponderController:self]){
+        [self.collectionViewController setFirstResponderController:nil];
+    }
 }
 
 - (void)resignFirstResponder{
-    self.isFirstResponder = NO;
-    
     NSArray* chain = [self responderChain];
     for(UIResponder* responder in chain){
         if([responder isFirstResponder]){
             [responder resignFirstResponder];
-            [self didResignFirstResponder];
-            return;
+            break;
         }
     }
+    [self didResignFirstResponder];
 }
 
 - (UIView*)nextResponder:(UIView*)view{
@@ -204,17 +251,6 @@
         return nil;
     
     return [chain objectAtIndex:index];
-}
-
-static char CKCollectionCellContentViewControllerIsFirstResponderKey;
-
-- (void)setIsFirstResponder:(BOOL)isFirstResponder{
-    objc_setAssociatedObject(self, &CKCollectionCellContentViewControllerIsFirstResponderKey, @(isFirstResponder), OBJC_ASSOCIATION_RETAIN);
-}
-
-- (BOOL)isFirstResponder{
-    id value = objc_getAssociatedObject(self, &CKCollectionCellContentViewControllerIsFirstResponderKey);
-    return value ? [value boolValue] : NO;
 }
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import <AppCoreKit/AppCoreKit.h>
+#import "CKCollectionCellContentViewController.h"
 
 @interface CKCollectionCellContentViewController (ResponderChain)
 
@@ -15,9 +15,7 @@
 /// @name Managing UIResponder Chain
 ///-----------------------------------
 
-/**
-*/
-@property(nonatomic,assign,readonly) BOOL isFirstResponder;
+- (BOOL)isFirstResponder;
 
 /**
  */
@@ -50,5 +48,14 @@
 /**
  */
 - (void)resignFirstResponder;
+
+
+/**
+ */
+- (void)didBecomeFirstResponder;
+
+/**
+ */
+- (void)didResignFirstResponder;
 
 @end

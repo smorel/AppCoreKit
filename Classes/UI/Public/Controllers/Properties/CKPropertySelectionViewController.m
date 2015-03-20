@@ -43,27 +43,17 @@
 - (void)dealloc{
     [_values release];
     [_propertyNameLabel release];
-    [_selectionControllerFactory release];
+    [_editionControllerFactory release];
     [_sortBlock release];
     [_multiSelectionSeparatorString release];
     [super dealloc];
 }
 
-- (void)selectionControllerAppearanceExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertySelectionAppearanceStyle",
-                                                 CKPropertySelectionAppearanceStyleDefault,
-                                                 CKPropertySelectionAppearanceStyleList,
-                                                 CKPropertySelectionAppearanceStylePicker);
-}
-
-- (void)selectionControllerPresentationStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertyEditionPresentationStyle",
-                                                 CKPropertyEditionPresentationStyleDefault,
-                                                 CKPropertyEditionPresentationStylePush,
-                                                 CKPropertyEditionPresentationStylePopover,
-                                                 CKPropertyEditionPresentationStyleModal,
-                                                 CKPropertyEditionPresentationStyleSheet,
-                                                 CKPropertyEditionPresentationStyleInline);
+- (void)editionControllerAppearanceExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKPropertyEditionAppearanceStyle",
+                                                 CKPropertyEditionAppearanceStyleDefault,
+                                                 CKPropertyEditionAppearanceStyleList,
+                                                 CKPropertyEditionAppearanceStylePicker);
 }
 
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
@@ -115,8 +105,8 @@
     
     self.hideDisclosureIndicatorWhenImageIsAvailable = YES;
     
-    self.selectionControllerAppearance = CKPropertySelectionAppearanceStyleDefault;
-    self.selectionControllerPresentationStyle = CKPropertyEditionPresentationStyleDefault;
+    self.editionControllerAppearance = CKPropertyEditionAppearanceStyleDefault;
+    self.editionControllerPresentationStyle = CKPropertyEditionPresentationStyleDefault;
     self.multiSelectionSeparatorString = @"\n";
     
     self.flags = CKViewControllerFlagsSelectable;
@@ -279,7 +269,7 @@
 - (void)didSelect{
     [super didSelect];
     if(self.isFirstResponder){
-        if(self.selectionControllerPresentationStyle == CKPropertyEditionPresentationStyleInline){
+        if(self.editionControllerPresentationStyle == CKPropertyEditionPresentationStyleInline){
             [self resignFirstResponder];
         }
     }else{
@@ -297,9 +287,9 @@
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKViewController* editionViewController = nil;
-    switch(self.selectionControllerAppearance){
-        case CKPropertySelectionAppearanceStyleDefault:
-        case CKPropertySelectionAppearanceStyleList:{
+    switch(self.editionControllerAppearance){
+        case CKPropertyEditionAppearanceStyleDefault:
+        case CKPropertyEditionAppearanceStyleList:{
             CKTableViewController* table = [CKTableViewController controller];
             table.style = UITableViewStylePlain;
             table.endEditingViewWhenScrolling = NO;
@@ -313,7 +303,7 @@
             editionViewController = table;
             break;
         }
-        case CKPropertySelectionAppearanceStylePicker:{
+        case CKPropertyEditionAppearanceStylePicker:{
             CKPickerViewViewController* picker = [CKPickerViewViewController controller];
             
             NSMutableArray* selectedIndexPaths = [NSMutableArray array];
@@ -330,12 +320,12 @@
     
     
     [self presentEditionViewController:editionViewController
-                     presentationStyle:self.selectionControllerPresentationStyle
+                     presentationStyle:self.editionControllerPresentationStyle
     shouldDismissOnPropertyValueChange:!self.multiSelectionEnabled];
 }
 
 - (NSArray*)cellsForEditionController:(UIViewController*)editionController selectedIndexPaths:(NSMutableArray*)selectedIndexPath{
-    CKViewControllerFactory* factory = self.selectionControllerFactory ? self.selectionControllerFactory : [self defaultFactory];
+    CKViewControllerFactory* factory = self.editionControllerFactory ? self.editionControllerFactory : [self defaultFactory];
     
     NSMutableArray* cells = [NSMutableArray array];
     

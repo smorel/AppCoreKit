@@ -32,10 +32,10 @@
 
 /**
  */
-typedef NS_ENUM(NSInteger, CKPropertySelectionAppearanceStyle){
-    CKPropertySelectionAppearanceStyleDefault,
-    CKPropertySelectionAppearanceStyleList,
-    CKPropertySelectionAppearanceStylePicker
+typedef NS_ENUM(NSInteger, CKPropertyEditionAppearanceStyle){
+    CKPropertyEditionAppearanceStyleDefault,
+    CKPropertyEditionAppearanceStyleList,
+    CKPropertyEditionAppearanceStylePicker
 };
 
 
@@ -173,16 +173,16 @@ typedef NS_ENUM(NSInteger, CKPropertySelectionAppearanceStyle){
 
 /** Defines if we should present a table view controller or a picker view controller for editing the value.
  */
-@property(nonatomic,assign) CKPropertySelectionAppearanceStyle selectionControllerAppearance;
+@property(nonatomic,assign) CKPropertyEditionAppearanceStyle editionControllerAppearance;
 
 /** Defines how we should present the edition controller.
  */
-@property(nonatomic,assign) CKPropertyEditionPresentationStyle selectionControllerPresentationStyle;
+@property(nonatomic,assign) CKPropertyEditionPresentationStyle editionControllerPresentationStyle;
 
 /** Enum value edition is presented as a form of table view controller.
  Each individual cell in the table view controller can be customized by setting selectionControllerFactory with an item for object of class CKPropertySelectionValue.
  */
-@property(nonatomic,retain) CKViewControllerFactory* selectionControllerFactory;
+@property(nonatomic,retain) CKViewControllerFactory* editionControllerFactory;
 
 /** Set this block to sort the enum values in the table view controller and when computing the multi selection value label as you expect.
  */
