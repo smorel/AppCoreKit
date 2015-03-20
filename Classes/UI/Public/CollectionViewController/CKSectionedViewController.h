@@ -41,7 +41,7 @@
 
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
 
-- (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath;
+- (void)invalidateControllerAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
 

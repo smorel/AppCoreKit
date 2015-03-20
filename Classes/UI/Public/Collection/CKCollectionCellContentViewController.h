@@ -17,10 +17,8 @@
 typedef NS_ENUM(NSInteger,CKViewControllerFlags){
     CKViewControllerFlagsNone = 1UL << 0,
     CKViewControllerFlagsSelectable = 1UL << 1,
-    CKViewControllerFlagsEditable = 1UL << 2,
     CKViewControllerFlagsRemovable = 1UL << 3,
-    CKViewControllerFlagsMovable = 1UL << 4,
-    CKViewControllerFlagsAll = CKViewControllerFlagsSelectable | CKViewControllerFlagsEditable | CKViewControllerFlagsRemovable | CKViewControllerFlagsMovable
+    CKViewControllerFlagsAll = CKViewControllerFlagsSelectable  | CKViewControllerFlagsRemovable
 };
 
 

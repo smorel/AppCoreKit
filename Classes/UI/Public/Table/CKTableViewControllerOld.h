@@ -25,6 +25,19 @@ typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
 /**
  */
 @interface CKTableView : UITableView
+
+/**
+ */
+@property(nonatomic,readonly) BOOL isPreventingUpdates;
+
+/**
+ */
+- (void)beginPreventingUpdates;
+
+/**
+ */
+- (void)endPreventingUpdates;
+
 @end
 
 /**
@@ -104,6 +117,7 @@ typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
 /**
  */
 - (void)reload;
+
 
 
 @end

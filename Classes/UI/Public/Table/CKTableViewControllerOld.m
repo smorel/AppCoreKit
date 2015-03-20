@@ -44,6 +44,7 @@
 @property (nonatomic,assign) NSInteger numberOfUpdates;
 @property(nonatomic,assign) BOOL sizeChangedWhileReloading;
 @property(nonatomic,assign) BOOL isLayouting;
+@property(nonatomic,assign) BOOL preventingUpdates;
 @end
 
 
@@ -56,6 +57,7 @@
     self.numberOfUpdates = 0;
     self.sizeChangedWhileReloading = NO;
     self.isLayouting = NO;
+    self.preventingUpdates = NO;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
@@ -82,7 +84,22 @@
     return self;
 }
 
+- (BOOL)isPreventingUpdates{
+    return self.preventingUpdates;
+}
+
+- (void)beginPreventingUpdates{
+    self.preventingUpdates = YES;
+}
+
+- (void)endPreventingUpdates{
+    self.preventingUpdates = NO;
+}
+
 - (void)beginUpdates{
+    if( self.preventingUpdates)
+        return;
+    
     if(self.numberOfUpdates == 0){
   //      NSLog(@"beginUpdates");
         [super beginUpdates];
@@ -91,6 +108,9 @@
 }
 
 - (void)endUpdates{
+    if( self.preventingUpdates)
+        return;
+    
     self.numberOfUpdates--;
     if(self.numberOfUpdates == 0){
  //       NSLog(@"endUpdates");

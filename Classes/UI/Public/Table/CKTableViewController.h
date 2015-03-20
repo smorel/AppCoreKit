@@ -12,6 +12,7 @@
 //#define USING_UITableViewHeaderFooterView
 
 @class CKTableViewCell;
+@class CKTableView;
 
 /**
  */
@@ -42,7 +43,7 @@
 
 /**
  */
-@property(nonatomic,readonly) UITableView* tableView;
+@property(nonatomic,readonly) CKTableView* tableView;
 
 /** Default is YES
  */

@@ -214,10 +214,12 @@ static char UIViewAttachedCellContentViewControllerKey;
 - (UIView*)viewForController:(CKCollectionCellContentViewController*)controller reusingView:(UIView*)view{
     
     UIView* contentView = nil;
-    @try{
-        contentView = [view valueForKey:@"contentView"];
-    }
-    @catch (NSException* e) {
+    if(![NSObject isClass:[view class] exactKindOfClass:[UIView class]]){
+        @try{
+            contentView = [view valueForKey:@"contentView"];
+        }
+        @catch (NSException* e) {
+        }
     }
     
     if(!view){
@@ -342,7 +344,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     return indexPaths;
 }
 
-- (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath{
+- (void)invalidateControllerAtIndexPath:(NSIndexPath*)indexPath{
     
 }
 

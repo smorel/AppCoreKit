@@ -322,8 +322,8 @@
         if(bself.collectionCellController){
             [bself.collectionCellController invalidateSize];
         }
-        else if([bself.containerViewController respondsToSelector:@selector(invalidateSizeForControllerAtIndexPath:)]){
-            [bself.containerViewController performSelector:@selector(invalidateSizeForControllerAtIndexPath:) withObject:bself.indexPath];
+        else if([bself.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
+            [bself.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:bself.indexPath];
         }
     };
 }
@@ -540,6 +540,21 @@
                                                  UITableViewCellAccessoryDetailDisclosureButton, // info button w/ chevron. tracks
                                                  UITableViewCellAccessoryCheckmark,              // checkmark. doesn't track
                                                  UITableViewCellAccessoryDetailButton);
+}
+
+
+- (void)setFlags:(CKViewControllerFlags)flags{
+    if(_flags != flags){
+        _flags = flags;
+        if([self isViewLoaded]){
+            if(self.view.window == nil || self.isComputingSize || self.state != CKViewControllerStateDidAppear)
+                return;
+            
+            if([self.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
+                [self.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:self.indexPath];
+            }
+        }
+    }
 }
 
 @end

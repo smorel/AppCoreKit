@@ -62,6 +62,9 @@
 }
 
 - (CKCollectionCellContentViewController*)controllerAtIndex:(NSInteger)index{
+    if(index >= [self mutableControllers].count)
+        return nil;
+    
     return [[self mutableControllers]objectAtIndex:index];
 }
 
@@ -165,6 +168,18 @@
 
 - (void)setFooterTitle:(NSString*)footerTitle{
     self.footerViewController = [CKSectionHeaderFooterViewController controllerWithType:CKSectionViewControllerTypeFooter text:footerTitle];
+}
+
+- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController willRemoveControllerAtIndex:(NSInteger)index{
+    [self removeControllersAtIndexes:[NSIndexSet indexSetWithIndex:index] animated:YES];
+}
+
+- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
+{
+    CKCollectionCellContentViewController* controller = [[[self mutableControllers] objectAtIndex:from]retain];
+    
+    [[self mutableControllers] removeObjectAtIndex:from];
+    [[self mutableControllers] insertObject:controller atIndex:to];
 }
 
 @end

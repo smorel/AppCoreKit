@@ -59,6 +59,10 @@
 - (CKCollectionCellContentViewController*)controllerAtIndex:(NSInteger)index;
 - (NSArray*)controllersAtIndexes:(NSIndexSet*)indexes;
 
+- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController willRemoveControllerAtIndex:(NSInteger)index;
+
+- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to;
+
 @property(nonatomic,readonly) NSInteger sectionIndex;
 
 - (void)fetchNextPage;

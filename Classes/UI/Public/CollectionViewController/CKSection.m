@@ -49,7 +49,7 @@
     [self removeControllerAtIndex:index animated:animated];
 }
 
-- (void)removeControllerAtIndex:(NSInteger)index animated:(BOOL)animated{
+- (void)removeControllerAtIndex:(NSInteger)index animated:(BOOL)animated{    
     [self removeControllersAtIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 

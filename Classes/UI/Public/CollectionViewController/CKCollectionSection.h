@@ -16,11 +16,19 @@
 - (id)initWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory;
 + (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory;
 
+- (id)initWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled;
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled;
+
 
 @property(nonatomic,readonly) NSArray* collectionControllers;
 @property(nonatomic,readonly) CKCollection* collection;
 @property(nonatomic,readonly) CKViewControllerFactory* factory;
 
+/** Default value is NO.
+ */
+@property(nonatomic,assign) BOOL reorderingEnabled;
+
+- (NSRange)rangeForCollectionControllers;
 
 @property(nonatomic,readonly) NSArray* collectionHeaderControllers;
 - (void)addCollectionHeaderController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated;

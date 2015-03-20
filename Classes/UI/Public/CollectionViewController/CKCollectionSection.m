@@ -42,26 +42,31 @@
 }
 
 - (id)initWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory{
+    return [self initWithCollection:collection factory:factory reorderingEnabled:NO];
+}
+
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory{
+    return [[[CKCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
+}
+
+- (id)initWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
     self = [super init];
     self.collection = collection;
     self.factory = factory;
-    
-    
+    self.reorderingEnabled = reorderingEnabled;
     return self;
 }
 
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
+    return [[[CKCollectionSection alloc]initWithCollection:collection factory:factory reorderingEnabled:reorderingEnabled]autorelease];
+}
 
 - (void)setDelegate:(CKSectionedViewController *)delegate{
     [super setDelegate:delegate];
     
     if(delegate){
-        [self setupCollectionControllers];
+        [self setupCollectionControllersByUpdatingCollectionController:YES];
     }
-}
-
-
-+ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory{
-    return [[[CKCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 }
 
 - (NSMutableArray*)mutableCollectionControllers{
@@ -198,18 +203,17 @@
     [super removeControllersAtIndexes:[self indexesForCollectionFooterIndexes:indexes] animated:animated];
 }
 
-
-
-
-- (void)setupCollectionControllers{
+- (void)setupCollectionControllersByUpdatingCollectionController:(BOOL)updateCollectionControllers{
     self.collectionBindingContext = [NSString stringWithFormat:@"CKCollectionSection_<%p>",self];
     
-    [self removeAllCollectionControllersAnimated:YES];
+    if(updateCollectionControllers){
+        [self removeAllCollectionControllersAnimated:YES];
+    }
     
     __unsafe_unretained CKCollectionSection* bself = self;
     
     [NSObject beginBindingsContext:self.collectionBindingContext];
-    [self.collection bindEvent:CKCollectionBindingEventAll executeBlockImmediatly:YES withBlock:^(CKCollectionBindingEvents event, NSArray *objects, NSIndexSet *indexes) {
+    [self.collection bindEvent:CKCollectionBindingEventAll executeBlockImmediatly:updateCollectionControllers withBlock:^(CKCollectionBindingEvents event, NSArray *objects, NSIndexSet *indexes) {
         NSArray* indexPaths = [bself indexPathsForIndexes:[bself indexesForCollectionIndexes:indexes]];
         
         switch(event){
@@ -234,6 +238,12 @@
     [NSObject endBindingsContext];
 }
 
+- (void)clearCollectionBindings{
+    if(!self.collectionBindingContext)
+        return;
+    [NSObject removeAllBindingsForContext:self.collectionBindingContext];
+}
+
 - (void)removeAllCollectionControllersAnimated:(BOOL)animated{
     [self removeCollectionControllersAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,self.mutableCollectionControllers.count)] animated:animated];
 }
@@ -252,6 +262,62 @@
 - (void)fetchNextPage{
     //TODO : Moves paging on CKFeedSource !
     [self.collection fetchRange:NSMakeRange(self.collection.count, 20)];
+}
+
+- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController willRemoveControllerAtIndex:(NSInteger)index{
+    
+    
+    if(index < self.collectionHeaderControllers.count){
+        [[self mutableCollectionHeaderControllers] removeObjectAtIndex:index];
+    }else if(index < (self.collectionControllers.count + self.collectionHeaderControllers.count)){
+        [self clearCollectionBindings];
+        index -= self.collectionHeaderControllers.count;
+        [self.collection removeObjectAtIndex:index];
+        [[self mutableCollectionControllers] removeObjectAtIndex:index];
+        [self setupCollectionControllersByUpdatingCollectionController:NO];
+    }else{
+        index -= (self.collectionHeaderControllers.count + self.collectionControllers.count);
+        [[self mutableCollectionFooterControllers] removeObjectAtIndex:index];
+    }
+    
+    [super sectionedViewController:sectionViewController willRemoveControllerAtIndex:index];
+    
+}
+
+- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
+{
+    if(from < (self.collectionControllers.count + self.collectionHeaderControllers.count)
+       && to < (self.collectionControllers.count + self.collectionHeaderControllers.count)){
+        from -= self.collectionHeaderControllers.count;
+        to -= self.collectionHeaderControllers.count;
+        
+        CKCollectionCellContentViewController* controller = [[[self mutableCollectionControllers] objectAtIndex:from]retain];
+        id object = [[self.collection objectAtIndex:from]retain];
+        
+        [self clearCollectionBindings];
+        
+        [self.collection removeObjectAtIndex:from];
+        [[self mutableCollectionControllers] removeObjectAtIndex:from];
+            
+        [self.collection insertObject:object atIndex:to];
+        [[self mutableCollectionControllers] insertObject:controller atIndex:to];
+        
+        [controller release];
+        [object release];
+        
+        NSLog(@"collection: %@controllers: %@",
+              [[[self collection]allObjects]valueForKey:@"username"],
+              [[[self mutableCollectionControllers]valueForKey:@"property"]valueForKey:@"value"]
+        );
+        
+        [self setupCollectionControllersByUpdatingCollectionController:NO];
+    }
+    
+    [super sectionedViewController:sectionViewController didMoveControllerAtIndex:from toIndex:to];
+}
+
+- (NSRange)rangeForCollectionControllers{
+    return NSMakeRange(self.collectionHeaderControllers.count, self.collectionControllers.count);
 }
 
 @end

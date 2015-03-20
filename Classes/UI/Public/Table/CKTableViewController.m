@@ -16,10 +16,11 @@
 //For CKTableViewCell
 #import "CKTableViewCellController.h"
 #import "CKSheetController.h"
+#import "CKTableViewControllerOld.h"
 
 
 @interface CKTableViewController ()<UITableViewDataSource,UITableViewDelegate>
-@property(nonatomic,retain,readwrite) UITableView* tableView;
+@property(nonatomic,retain,readwrite) CKTableView* tableView;
 @property(nonatomic,retain) NSMutableArray* keyboardObservers;
 @end
 
@@ -45,7 +46,7 @@
 }
 
 - (Class)tableViewClass{
-    return [UITableView class];
+    return [CKTableView class];
 }
 
 - (void)viewDidLoad{
@@ -71,6 +72,10 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView reloadData];
+
+    if(self.editing){
+        [self.tableView setEditing:YES animated:NO];
+    }
     
     [self registerForKeyboardNotifications];
     
@@ -88,17 +93,34 @@
     [self unregisterForKeyboardNotifications];
 }
 
-- (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion{
-    [self.tableView beginUpdates];
+- (void)performBatchUpdates:(void (^)(void))updates
+                 completion:(void (^)(BOOL finished))completion{
+    [self performBatchUpdates:updates completion:completion preventingUpdates:NO];
+}
+
+- (void)performBatchUpdates:(void (^)(void))updates
+                 completion:(void (^)(BOOL finished))completion
+          preventingUpdates:(BOOL)preventingUpdates{
+    if(preventingUpdates){
+        [self.tableView beginPreventingUpdates];
+    }else{
+        [self.tableView beginUpdates];
+    }
+    
     if(updates){
         updates();
     }
-    [self.tableView endUpdates];
+    if(preventingUpdates){
+        [self.tableView endPreventingUpdates];
+    }else{
+        [self.tableView endUpdates];
+    }
     
     if(completion){
         completion(YES);
     }
 }
+
 
 #pragma mark CKSectionedViewController protocol
 
@@ -123,6 +145,9 @@
 
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
     if(self.state != CKViewControllerStateDidAppear) return;
+ 
+    //TODO manage the fact that didEndDisplayingCell is called after animation but the section has already removed the controller
+    //wich could lead in disabling the next controller that shouldn't or crash if no more controllers in section.
     
     [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
 }
@@ -153,6 +178,7 @@
     CKTableViewCell* cell = (CKTableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if(!cell){
         cell = [[CKTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell.showsReorderControl = YES;
     }
     
     return (UITableViewCell*)[self viewForControllerAtIndexPath:indexPath reusingView:cell];
@@ -165,7 +191,7 @@
 }
 
 
-- (void)invalidateSizeForControllerAtIndexPath:(NSIndexPath*)indexPath{
+- (void)invalidateControllerAtIndexPath:(NSIndexPath*)indexPath{
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
@@ -387,13 +413,9 @@
     return controller.flags & CKItemViewFlagSelectable;
 }
 
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-     //TODO
-}
+- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath{ }
 
-- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-     //TODO
-}
+- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath{ }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
@@ -434,31 +456,70 @@
 
 #pragma mark Managing Edition
 
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    [super setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:animated];
+}
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
-    return NO;//TODO
+    CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
+    
+    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    return (controller.flags & CKViewControllerFlagsRemovable)
+        || ([section isKindOfClass:[CKCollectionSection class]] && [(CKCollectionSection*)section reorderingEnabled] == YES && [[(CKCollectionSection*)section collection]count] > 1);
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
-    return NO;//TODO
+    CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
+    return ([section isKindOfClass:[CKCollectionSection class]] && [(CKCollectionSection*)section reorderingEnabled] == YES && [[(CKCollectionSection*)section collection]count] > 1);
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    //TODO
+    if (editingStyle == UITableViewCellEditingStyleDelete){
+        CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
+        [section sectionedViewController:self willRemoveControllerAtIndex:indexPath.row];
+    }
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
-    //TODO
+- (void)tableView:(UITableView*)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath{ }
+
+- (void)tableView:(UITableView*)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath{ }
+
+- (NSIndexPath*)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+      toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
+    
+    CKCollectionSection* section = (CKCollectionSection*)[self sectionAtIndex:sourceIndexPath.section];
+    NSRange rangeForCollectionControllers = [section rangeForCollectionControllers];
+    
+    if(sourceIndexPath.section == proposedDestinationIndexPath.section){
+        if(proposedDestinationIndexPath.row <= rangeForCollectionControllers.location){
+            return [NSIndexPath indexPathForRow:rangeForCollectionControllers.location inSection:sourceIndexPath.section];
+        }else if (proposedDestinationIndexPath.row >= (rangeForCollectionControllers.location + rangeForCollectionControllers.length)){
+            return [NSIndexPath indexPathForRow:(rangeForCollectionControllers.location + rangeForCollectionControllers.length - 1) inSection:sourceIndexPath.section];
+        }
+    }else if(proposedDestinationIndexPath.section < sourceIndexPath.section){
+        return [NSIndexPath indexPathForRow:rangeForCollectionControllers.location inSection:sourceIndexPath.section];
+    }else{
+        return [NSIndexPath indexPathForRow:(rangeForCollectionControllers.location + rangeForCollectionControllers.length - 1) inSection:sourceIndexPath.section];
+    }
+    
+    return proposedDestinationIndexPath;
 }
 
-- (void)tableView:(UITableView*)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath{
-    //TODO
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+      toIndexPath:(NSIndexPath *)destinationIndexPath{
+    CKCollectionSection* section = (CKCollectionSection*)[self sectionAtIndex:sourceIndexPath.section];
+    
+    [self performBatchUpdates:^{
+        [section sectionedViewController:self didMoveControllerAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
+    } completion:nil preventingUpdates:YES];
+    
+    //MUST Update visual for separators, borders, ...
 }
 
-- (void)tableView:(UITableView*)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath{
-    //TODO
-}
+#pragma mark Managing Scrolling
 
-
+//TODO: Manage section fetchNextPage
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if(self.endEditingViewWhenScrolling){
@@ -466,6 +527,9 @@
         [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
     }
 }
+
+
+#pragma mark Managing Keyboard Insets
 
 - (void)registerForKeyboardNotifications
 {
