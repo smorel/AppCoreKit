@@ -8,23 +8,23 @@
 
 #import "CKCallback.h"
 #import "CKCollectionCellController.h"
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 
 //THIS SHOULD BE PART OF TE BASE MECHANISM FOR CKCollectionCellController !!!!
 //CKTableViewCellController should only offer extra attributes for managing UITableViewCell specific stuff as well as CKMapAnnotationController
 
-/** This allows to define a collection view cell controller displaying a CKResusableViewController in collectionViewCell's contentView with reuse capability.
+/** This allows to define a collection view cell controller displaying a CKReusableViewController in collectionViewCell's contentView with reuse capability.
  This is the equivalent of CKTableViewContentCellController for table view controller.
  */
 @interface CKCollectionContentCellController : CKCollectionCellController
 
 /**
  */
-@property(nonatomic,retain,readonly) CKResusableViewController* contentViewController;
+@property(nonatomic,retain,readonly) CKReusableViewController* contentViewController;
 
 /**
  */
-- (id)initWithContentViewController:(CKResusableViewController*)contentViewController;
+- (id)initWithContentViewController:(CKReusableViewController*)contentViewController;
 
 /**
  */

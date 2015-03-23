@@ -17,21 +17,21 @@
 #import "CKViewCellCache.h"
 #import "NSObject+Bindings.h"
 
-@interface CKResusableViewController ()
+@interface CKReusableViewController ()
 @property(nonatomic,assign) BOOL isComputingSize;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @end
 
 
 @interface CKCollectionContentCellController()
-@property(nonatomic,retain) CKResusableViewController* contentViewController;
+@property(nonatomic,retain) CKReusableViewController* contentViewController;
 @property(nonatomic,assign) BOOL isContentViewDidAppear;
 @end
 
 @implementation CKCollectionContentCellController
 @synthesize deselectionCallback = _deselectionCallback;
 
-- (id)initWithContentViewController:(CKResusableViewController*)contentViewController{
+- (id)initWithContentViewController:(CKReusableViewController*)contentViewController{
     self = [super init];
     self.contentViewController = contentViewController;
     [contentViewController setCollectionCellController:self];

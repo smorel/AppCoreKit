@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Sebastien Morel. All rights reserved.
 //
 
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 
 @class CKSwipeableViewController;
 
@@ -122,7 +122,7 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 
 /**
  */
-@interface CKSwipeableViewController : CKResusableViewController
+@interface CKSwipeableViewController : CKReusableViewController
 
 /**
  */
@@ -155,11 +155,11 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 
 /**
  */
-@property(nonatomic,retain,readonly) CKResusableViewController* contentViewController;
+@property(nonatomic,retain,readonly) CKReusableViewController* contentViewController;
 
 /**
  */
-- (id)initWithContentViewController:(CKResusableViewController*)contentViewController;
+- (id)initWithContentViewController:(CKReusableViewController*)contentViewController;
 
 @end
 
@@ -167,11 +167,11 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 
 
 
-//CKResusableViewController ---------------------------------
+//CKReusableViewController ---------------------------------
 
 /**
  */
-@interface CKResusableViewController(CKSwipeableViewController)
+@interface CKReusableViewController(CKSwipeableViewController)
 
 /**
  */

@@ -26,10 +26,11 @@
 #import "UIView+Positioning.h"
 #import "CKResourceManager.h"
 #import "CKResourceDependencyContext.h"
+#import <objc/runtime.h>
+#import "CKReusableViewController.h"
 
 
-
-@interface CKViewController()<UIGestureRecognizerDelegate>
+@interface UIViewController (AppCoreKit_Private)<UIGestureRecognizerDelegate>
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
 @property(nonatomic,retain) NSString* navigationTitleBindingContext;
 @property(nonatomic,assign) BOOL styleHasBeenApplied;
@@ -40,40 +41,227 @@
 
 @end
 
-@implementation CKViewController
 
-@synthesize name = _name;
-@synthesize viewWillAppearBlock = _viewWillAppearBlock;
-@synthesize viewWillAppearEndBlock = _viewWillAppearEndBlock;
-@synthesize viewDidAppearBlock = _viewDidAppearBlock;
-@synthesize viewWillDisappearBlock = _viewWillDisappearBlock;
-@synthesize viewDidDisappearBlock = _viewDidDisappearBlock;
-@synthesize orientationChangeBlock = _orientationChangeBlock;
-@synthesize viewDidLoadBlock = _viewDidLoadBlock;
-@synthesize viewDidUnloadBlock = _viewDidUnloadBlock;
-@synthesize rightButton = _rightButton;
-@synthesize leftButton = _leftButton;
-@synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
-@synthesize navigationTitleBindingContext = _navigationTitleBindingContext;
-@synthesize supportedInterfaceOrientations;
-@synthesize deallocBlock = _deallocBlock;
-@synthesize styleHasBeenApplied;
-@synthesize state;
-@synthesize isViewDisplayed;
-@synthesize editingBlock = _editingBlock;
 
-@synthesize inlineDebuggerController = _inlineDebuggerController;
+@implementation UIViewController (AppCoreKit_Private)
 
-+ (void)load {
+
+static char UIViewControllerNavigationItemsBindingContextKey;
+- (void)setNavigationItemsBindingContext:(NSString *)navigationItemsBindingContext{
+    objc_setAssociatedObject(self, &UIViewControllerNavigationItemsBindingContextKey, navigationItemsBindingContext, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (NSString*)navigationItemsBindingContext{
+    return objc_getAssociatedObject(self, &UIViewControllerNavigationItemsBindingContextKey);
+}
+
+static char UIViewControllerNavigationTitleBindingContextKey;
+- (void)setNavigationTitleBindingContext:(NSString *)navigationTitleBindingContext{
+    objc_setAssociatedObject(self, &UIViewControllerNavigationTitleBindingContextKey, navigationTitleBindingContext, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (NSString*)navigationTitleBindingContext{
+    return objc_getAssociatedObject(self, &UIViewControllerNavigationTitleBindingContextKey);
     
 }
 
-
-#ifdef __IPHONE_6_0
-- (BOOL)shouldAutorotate{
-    return YES;
+static char UIViewControllerStyleHasBeenAppliedKey;
+- (void)setStyleHasBeenApplied:(BOOL)styleHasBeenApplied{
+    objc_setAssociatedObject(self, &UIViewControllerStyleHasBeenAppliedKey, @(styleHasBeenApplied), OBJC_ASSOCIATION_RETAIN);
 }
-#endif
+
+- (BOOL)styleHasBeenApplied{
+    id value = objc_getAssociatedObject(self, &UIViewControllerStyleHasBeenAppliedKey);
+    return value ? [value boolValue] : NO;
+}
+
+static char UIViewControllerStateKey;
+- (void)setState:(CKViewControllerState)state{
+    objc_setAssociatedObject(self, &UIViewControllerStateKey, @(state), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (CKViewControllerState)state{
+    id value = objc_getAssociatedObject(self, &UIViewControllerStateKey);
+    return value ? [value integerValue] : CKViewControllerStateNone;
+}
+
+- (void)stateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKViewControllerState",
+                                                 CKViewControllerStateNone,
+                                                 CKViewControllerStateWillAppear,
+                                                 CKViewControllerStateDidAppear,
+                                                 CKViewControllerStateWillDisappear,
+                                                 CKViewControllerStateDidDisappear,
+                                                 CKViewControllerStateDidUnload,
+                                                 CKViewControllerStateDidLoad);
+}
+
+static char UIViewControllerInlineDebuggerControllerKey;
+- (void)setInlineDebuggerController:(CKInlineDebuggerController *)inlineDebuggerController{
+    objc_setAssociatedObject(self, &UIViewControllerInlineDebuggerControllerKey, inlineDebuggerController, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (CKInlineDebuggerController*)inlineDebuggerController{
+    return objc_getAssociatedObject(self, &UIViewControllerInlineDebuggerControllerKey);
+}
+
+- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated{
+    if([[self.view subviews]count] <= 0)
+        return;
+    
+    if(self.isViewDisplayed){
+        UIView* v0 = [[self.view subviews]objectAtIndex:0];
+        if([v0 isKindOfClass:[CKStyleView class]]){
+            if(hidden){
+                v0.frame = self.view.bounds;
+            }else{
+                CGFloat toolbarHeight = self.navigationController.toolbar.bounds.size.height;
+                v0.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height+toolbarHeight);
+            }
+        }
+    }
+}
+
+@end
+
+
+
+
+@implementation UIViewController (AppCoreKit)
+
+@dynamic viewWillAppearBlock;
+
+static char UIViewControllerViewWillAppearBlockKey;
+- (void)setViewWillAppearBlock:(CKViewControllerAnimatedBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerViewWillAppearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerAnimatedBlock)viewWillAppearBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerViewWillAppearBlockKey);
+}
+
+@dynamic viewWillAppearEndBlock;
+
+static char UIViewControllerViewWillAppearEndBlockKey;
+- (void)setViewWillAppearEndBlock:(CKViewControllerAnimatedBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerViewWillAppearEndBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerAnimatedBlock)viewWillAppearEndBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerViewWillAppearEndBlockKey);
+}
+
+@dynamic viewDidAppearBlock;
+
+static char UIViewControllerViewDidAppearBlockKey;
+- (void)setViewDidAppearBlock:(CKViewControllerAnimatedBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerViewDidAppearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerAnimatedBlock)viewDidAppearBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerViewDidAppearBlockKey);
+}
+
+@dynamic viewWillDisappearBlock;
+
+static char UIViewControllerViewWillDisappearBlockKey;
+- (void)setViewWillDisappearBlock:(CKViewControllerAnimatedBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerViewWillDisappearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerAnimatedBlock)viewWillDisappearBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerViewWillDisappearBlockKey);
+}
+
+@dynamic viewDidDisappearBlock;
+
+static char UIViewControllerViewDidDisappearBlockKey;
+- (void)setViewDidDisappearBlock:(CKViewControllerAnimatedBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerViewDidDisappearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerAnimatedBlock)viewDidDisappearBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerViewDidDisappearBlockKey);
+}
+
+@dynamic orientationChangeBlock;
+
+static char UIViewControllerOrientationChangeBlockKey;
+- (void)setOrientationChangeBlock:(CKViewControllerOrientationBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerOrientationChangeBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerOrientationBlock)orientationChangeBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerOrientationChangeBlockKey);
+}
+
+@dynamic viewDidLoadBlock;
+
+static char UIViewControllerViewDidLoadBlockKey;
+- (void)setViewDidLoadBlock:(CKViewControllerBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerViewDidLoadBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerBlock)viewDidLoadBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerViewDidLoadBlockKey);
+}
+
+@dynamic viewDidUnloadBlock;
+
+static char UIViewControllerViewDidUnloadBlockKey;
+- (void)setViewDidUnloadBlock:(CKViewControllerBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerViewDidUnloadBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerBlock)viewDidUnloadBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerViewDidUnloadBlockKey);
+}
+
+@dynamic deallocBlock;
+
+static char UIViewControllerDeallocBlockKey;
+- (void)setDeallocBlock:(CKViewControllerBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerDeallocBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerBlock)deallocBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerDeallocBlockKey);
+}
+
+
+@dynamic editingBlock;
+
+static char UIViewControllerEditingBlockKey;
+- (void)setEditingBlock:(CKViewControllerEditingBlock)block{
+    objc_setAssociatedObject(self, &UIViewControllerEditingBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+}
+
+- (CKViewControllerEditingBlock)editingBlock{
+    return objc_getAssociatedObject(self, &UIViewControllerEditingBlockKey);
+}
+
+
+
+@dynamic isViewDisplayed;
+
+- (BOOL)isViewDisplayed{
+    if(![self isViewLoaded])
+        return NO;
+    
+    return self.state & CKViewControllerStateWillAppear || self.state & CKViewControllerStateDidAppear;
+}
+
+@dynamic supportedInterfaceOrientations;
+
+static char UIViewControllerSupportedInterfaceOrientationKey;
+- (void)setSupportedInterfaceOrientations:(CKInterfaceOrientation)supportedInterfaceOrientations{
+    objc_setAssociatedObject(self, &UIViewControllerSupportedInterfaceOrientationKey, @(supportedInterfaceOrientations), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (CKInterfaceOrientation)supportedInterfaceOrientations{
+    id value = objc_getAssociatedObject(self, &UIViewControllerSupportedInterfaceOrientationKey);
+    return value ? [value integerValue] : CKInterfaceOrientationAll;
+}
 
 - (void)supportedInterfaceOrientationsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
 #ifdef __IPHONE_6_0
@@ -91,15 +279,23 @@
 #endif
 }
 
-- (void)stateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKViewControllerState", 
-                                                 CKViewControllerStateNone,
-                                                 CKViewControllerStateWillAppear,
-                                                 CKViewControllerStateDidAppear,
-                                                 CKViewControllerStateWillDisappear,
-                                                 CKViewControllerStateDidDisappear,
-                                                 CKViewControllerStateDidUnload,
-                                                 CKViewControllerStateDidLoad);
+
+
+
+
+
+/**
+ */
+@dynamic preferredStatusBarStyle;
+
+static char UIViewControllerPreferredStatusBarStyleKey;
+- (void)setPreferredStatusBarStyle:(UIStatusBarStyle)style{
+    objc_setAssociatedObject(self, &UIViewControllerPreferredStatusBarStyleKey, @(style), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (UIStatusBarStyle)AppCoreKit_preferredStatusBarStyle{
+    id value = objc_getAssociatedObject(self, &UIViewControllerPreferredStatusBarStyleKey);
+    return value ? [value integerValue] : UIStatusBarStyleDefault;
 }
 
 - (void)preferredStatusBarStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -110,12 +306,43 @@
                                                  UIStatusBarStyleBlackOpaque );
 }
 
+
+/**
+ */
+@dynamic preferredStatusBarUpdateAnimation;
+
+static char UIViewControllerPreferredStatusBarUpdateAnimationKey;
+- (void)setPreferredStatusBarUpdateAnimation:(UIStatusBarAnimation)animation{
+    objc_setAssociatedObject(self, &UIViewControllerPreferredStatusBarUpdateAnimationKey, @(animation), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (UIStatusBarAnimation)AppCoreKit_preferredStatusBarUpdateAnimation{
+    id value = objc_getAssociatedObject(self, &UIViewControllerPreferredStatusBarUpdateAnimationKey);
+    return value ? [value integerValue] : UIStatusBarStyleDefault;
+}
+
 - (void)preferredStatusBarUpdateAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"UIStatusBarAnimation",
                                                  UIStatusBarAnimationNone,
                                                  UIStatusBarAnimationFade,
                                                  UIStatusBarAnimationSlide );
 }
+
+
+/**
+ */
+@dynamic prefersStatusBarHidden;
+
+static char UIViewControllerPrefersStatusBarHiddenKey;
+- (void)setPrefersStatusBarHidden:(BOOL)hidden{
+    objc_setAssociatedObject(self, &UIViewControllerPrefersStatusBarHiddenKey, @(hidden), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (BOOL)AppCoreKit_prefersStatusBarHidden{
+    id value = objc_getAssociatedObject(self, &UIViewControllerPrefersStatusBarHiddenKey);
+    return value ? [value boolValue] : NO;
+}
+
 
 
 - (void)postInit {	
@@ -134,68 +361,42 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsHidden:) name:UINavigationControllerWillHideToolbar object:nil];
 }
 
+
+
 - (id)init {
     return [self initWithNibName:nil bundle:nil];
 }
 
-
-- (id)initWithCoder:(NSCoder *)coder {
-    self = [super initWithCoder:coder];
+- (id)AppCoreKit_initWithCoder:(NSCoder *)coder {
+    self = [self AppCoreKit_initWithCoder:coder];
     if (self) {
         [self postInit];
     }
     return self;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (id)AppCoreKit_initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	self = [self AppCoreKit_initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 	if (self) {
 		[self postInit];
 	}
 	return self;
 }
 
-- (void)dealloc{
+- (void)AppCoreKit_dealloc{
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
     [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
     [self clearBindingsContext];
     
-    if(_deallocBlock){
-        _deallocBlock(self);
+    if(self.deallocBlock){
+        self.deallocBlock(self);
     }
-    
-	[_name release];
-    [_viewWillAppearBlock release];
-    [_viewWillAppearEndBlock release];
-    [_viewDidAppearBlock release];
-    [_viewWillDisappearBlock release];
-    [_viewDidDisappearBlock release];
-    [_viewDidLoadBlock release];
-    [_viewDidUnloadBlock release];
-    [_rightButton release];
-	_rightButton = nil;
-	[_leftButton release];
-	_leftButton = nil;
-	[_navigationItemsBindingContext release];
-	_navigationItemsBindingContext = nil;
-    [_deallocBlock release];
-    _deallocBlock = nil;
-    [_navigationTitleBindingContext release];
-    _navigationTitleBindingContext = nil;
-    [_orientationChangeBlock release];
-    _orientationChangeBlock = nil;
-    
-    [_editingBlock release];
-    _editingBlock = nil;
-    
-    [_inlineDebuggerController release];
-	_inlineDebuggerController = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillHideToolbar object:nil];
     
-	[super dealloc];
+	[self AppCoreKit_dealloc];
 }
 
 - (NSMutableDictionary*)stylesheet{
@@ -208,9 +409,9 @@
     }
 }
 
-- (void)resourceManagerReloadUI{
+- (void)AppCoreKit_resourceManagerReloadUI{
     self.styleHasBeenApplied = NO;
-    [super resourceManagerReloadUI];
+    [self AppCoreKit_resourceManagerReloadUI];
 }
 
 + (id)controller{
@@ -238,40 +439,10 @@
 
 #pragma mark - Style Management
 
-
-- (void)observerNavigationChanges:(BOOL)bo{
-    /*if(bo){
-     [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
-     [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
-     [self.navigationItem bind:@"rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
-     [self.navigationItem bind:@"backBarButtonItem" target:self action:@selector(backItemChanged:)];
-     [self.navigationItem bind:@"titleView" target:self action:@selector(titleViewChanged:)];
-     [NSObject endBindingsContext];
-     }
-     else{
-     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
-     }
-     
-     UIViewController* container = self;
-     if([container respondsToSelector:@selector(containerViewController)]){
-     container = [container performSelector:@selector(containerViewController)];
-     }
-     
-     while(container){
-     if([container isKindOfClass:[CKViewController class]]){
-     [(CKViewController*)container observerNavigationChanges:bo];
-     }
-     if([container respondsToSelector:@selector(containerViewController)]){
-     container = [container performSelector:@selector(containerViewController)];
-     }
-     }*/
-}
-
 - (void)applyStyleForLeftBarButtonItem{
     if([self.styleManager isEmpty])
         return;
-    
-    [self observerNavigationChanges:NO];
+
     
     UIBarButtonItem* leftBarButtonItem = self.navigationItem.leftBarButtonItem ;
     if([CKOSVersion() floatValue] >= 7){
@@ -317,14 +488,12 @@
             [self.navigationItem setLeftBarButtonItem:bu animated:YES];
         }
     }
-    [self observerNavigationChanges:YES];
 }
 
 - (void)applyStyleForRightBarButtonItem{
     if([self.styleManager isEmpty])
         return;
     
-    [self observerNavigationChanges:NO];
     
     UIBarButtonItem* rightBarButtonItem = self.navigationItem.rightBarButtonItem ;
     if([CKOSVersion() floatValue] >= 7){
@@ -369,14 +538,12 @@
             [self.navigationItem setRightBarButtonItem:bu animated:YES];
         }
     }
-    [self observerNavigationChanges:YES];
 }
 
 - (void)applyStyleForBackBarButtonItem{
     if([self.styleManager isEmpty])
         return;
     
-    [self observerNavigationChanges:NO];
     if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
@@ -399,54 +566,7 @@
             }
         }
     }
-    
-    [self observerNavigationChanges:YES];
 }
-
-/*
-- (void)applyStyleForTitleView{
-    if([self.styleManager isEmpty])
-        return;
-    
-    [self observerNavigationChanges:NO];
-    if(self.navigationItem.titleView){
-        NSMutableDictionary* controllerStyle = [self controllerStyle];
-        NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
-        NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
-        
-        //This weird steps are needed to avoid super views layout to be called when setting the styles !
-        UIView* view = self.navigationItem.titleView;
-        self.navigationItem.titleView = nil;
-        [view applyStyle:navBarStyle propertyName:@"titleView"];
-        self.navigationItem.titleView = view;
-    }
-    
-    [self observerNavigationChanges:YES];
-}
- */
-
-- (void)leftItemChanged:(UIBarButtonItem*)item{
-    if(self.navigationItem.backBarButtonItem == self.navigationItem.leftBarButtonItem){
-        [self applyStyleForBackBarButtonItem];
-    }
-    else{
-        [self applyStyleForLeftBarButtonItem];
-    }
-}
-
-- (void)rightItemChanged:(UIBarButtonItem*)item{
-    [self applyStyleForRightBarButtonItem];
-}
-
-- (void)backItemChanged:(UIBarButtonItem*)item{
-    [self applyStyleForBackBarButtonItem];
-}
-
-/*
-- (void)titleViewChanged:(UIBarButtonItem*)item{
-    [self applyStyleForTitleView];
-}
- */
 
 - (void)popViewController{
     [self.navigationController popViewControllerAnimated:YES];
@@ -472,7 +592,6 @@
     if([self.styleManager isEmpty])
         return;
     
-    [self observerNavigationChanges:NO];
     
     //disable animations in case frames are set in stylesheets and currently in animation...
     [CATransaction begin];
@@ -638,7 +757,7 @@
             UILabel* label = (UILabel*)view;
             [label sizeToFit];
             
-            [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+            [NSObject beginBindingsContext:self.navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
             [self bind:@"title" withBlock:^(id value) {
                 label.text = [value isKindOfClass:[NSString class]] ? value : nil;
                 [label sizeToFit];
@@ -666,7 +785,7 @@
         
         [label sizeToFit];
         
-        [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [NSObject beginBindingsContext:self.navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
         [self bind:@"title" withBlock:^(id value) {
             label.text = [value isKindOfClass:[NSString class]] ? value : nil;
             [label sizeToFit];
@@ -680,17 +799,12 @@
     
     [CATransaction commit];
     
-    
-    [self observerNavigationChanges:YES];
-    
     //ios7
     //http://stackoverflow.com/questions/19054625/changing-back-button-in-ios-7-disables-swipe-to-navigate-back
     if([CKOSVersion() floatValue] >= 7){
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
 }
-
-#pragma mark - View lifecycle
 
 - (void)applyStylesheet:(BOOL)animated{
     //Force to create the manager here !
@@ -700,9 +814,10 @@
         [CKResourceDependencyContext beginContext];
     }
     
-    if([[self containerViewController]isKindOfClass:[CKCollectionViewController class]]){
-        //skip style for navigation as we are contained by a collection view cell
-        
+    if([self isKindOfClass:[CKReusableViewController class]]
+       || [self isKindOfClass:[UINavigationController class]]){
+        //Style applied by super class
+        /*
         NSMutableDictionary* controllerStyle = nil;
         if(!self.styleHasBeenApplied){
             [CATransaction begin];
@@ -714,7 +829,7 @@
             self.styleHasBeenApplied = YES;
             
             [CATransaction commit];
-        }
+        }*/
         
     }else{
         
@@ -737,8 +852,6 @@
             [self.navigationItem setLeftBarButtonItem:left animated:animated];
             [self.navigationItem setRightBarButtonItem:right animated:animated];
         }
-        
-        [self observerNavigationChanges:YES];
     }
     
     if([CKResourceManager isResourceManagerConnected]){
@@ -755,18 +868,21 @@
     [self applyStylesheet:NO];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+
+#pragma mark Managing Life Cycle
+
+- (void)AppCoreKit_viewWillAppear:(BOOL)animated{
     self.state = CKViewControllerStateWillAppear;
-    if(_viewWillAppearBlock){
-        _viewWillAppearBlock(self,animated);
+    if(self.viewWillAppearBlock){
+        self.viewWillAppearBlock(self,animated);
     }
     
     [self applyStylesheet:animated];
     
-    [super viewWillAppear:animated];
+    [self AppCoreKit_viewWillAppear:animated];
     
-    if(_viewWillAppearEndBlock){
-        _viewWillAppearEndBlock(self,animated);
+    if(self.viewWillAppearEndBlock){
+        self.viewWillAppearEndBlock(self,animated);
     }
     
     if([self containerViewController] == nil){
@@ -776,27 +892,28 @@
     [self adjustStyleViewWithToolbarHidden:[self.navigationController isToolbarHidden] animated:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated{
+
+- (void)AppCoreKit_viewWillDisappear:(BOOL)animated{
     self.state = CKViewControllerStateWillDisappear;
-    [super viewWillDisappear:animated];
-    if(_viewWillDisappearBlock){
-        _viewWillDisappearBlock(self,animated);
+    [self AppCoreKit_viewWillDisappear:animated];
+    if(self.viewWillDisappearBlock){
+        self.viewWillDisappearBlock(self,animated);
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)AppCoreKit_viewDidAppear:(BOOL)animated{
     self.state = CKViewControllerStateDidAppear;
-    [super viewDidAppear:animated];
-    if(_viewDidAppearBlock){
-        _viewDidAppearBlock(self,animated);
+    [self AppCoreKit_viewDidAppear:animated];
+    if(self.viewDidAppearBlock){
+        self.viewDidAppearBlock(self,animated);
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated{
+- (void)AppCoreKit_viewDidDisappear:(BOOL)animated{
     self.state = CKViewControllerStateDidDisappear;
-    [super viewDidDisappear:animated];
-    if(_viewDidDisappearBlock){
-        _viewDidDisappearBlock(self,animated);
+    [self AppCoreKit_viewDidDisappear:animated];
+    if(self.viewDidDisappearBlock){
+        self.viewDidDisappearBlock(self,animated);
     }
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
     [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
@@ -806,11 +923,12 @@
     }
 }
 
--(void) viewDidLoad{
+
+-(void) AppCoreKit_viewDidLoad{
     self.state = CKViewControllerStateDidLoad;
-	[super viewDidLoad];
-    if(_viewDidLoadBlock){
-        _viewDidLoadBlock(self);
+	[self AppCoreKit_viewDidLoad];
+    if(self.viewDidLoadBlock){
+        self.viewDidLoadBlock(self);
     }
     self.styleHasBeenApplied = NO;
     
@@ -823,18 +941,20 @@
     self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
 }
 
--(void) viewDidUnload{
+-(void) AppCoreKit_viewDidUnload{
     self.state = CKViewControllerStateDidUnload;
-	[super viewDidUnload];
-    if(_viewDidUnloadBlock){
-        _viewDidUnloadBlock(self);
+	[self AppCoreKit_viewDidUnload];
+    if(self.viewDidUnloadBlock){
+        self.viewDidUnloadBlock(self);
     }
     
-    [_inlineDebuggerController release];
-    _inlineDebuggerController = nil;
+    [self.inlineDebuggerController release];
+    self.inlineDebuggerController = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+#pragma Managing Orientation
+
+- (BOOL)AppCoreKit_shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     if(UIInterfaceOrientationIsPortrait(interfaceOrientation)
        && (self.supportedInterfaceOrientations & CKInterfaceOrientationPortrait))
         return YES;
@@ -844,17 +964,14 @@
     return NO;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    
-}
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-    if(_orientationChangeBlock){
-        _orientationChangeBlock(self,toInterfaceOrientation);
+
+- (void)AppCoreKit_willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    if(self.orientationChangeBlock){
+        self.orientationChangeBlock(self,toInterfaceOrientation);
     }
     
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self AppCoreKit_willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
     NSMutableDictionary* viewStyle = [self.view appliedStyle];
     [[self.view class] applyStyle:viewStyle toView:self.view appliedStack:nil delegate:nil];//Apply only on view and not hierarchy !
@@ -868,20 +985,22 @@
     [self adjustStyleViewWithToolbarHidden:self.navigationController.isToolbarHidden animated:NO];
 }
 
-- (BOOL)isViewDisplayed{
-    return (self.state & CKViewControllerStateWillAppear) || (self.state & CKViewControllerStateDidAppear);
-}
-
 #pragma mark - Buttons Management
+
+@dynamic leftButton;
+
+static char UIViewControllerLeftButtonKey;
 
 - (void)setLeftButton:(UIBarButtonItem *)theleftButton{
     [self setLeftButton:theleftButton animated:NO];
 }
 
+- (UIBarButtonItem*)leftButton{
+    return objc_getAssociatedObject(self, &UIViewControllerLeftButtonKey);
+}
 
 - (void)setLeftButton:(UIBarButtonItem*)theleftButton animated:(BOOL)animated{
-    [_leftButton release];
-    _leftButton = [theleftButton retain];
+    objc_setAssociatedObject(self, &UIViewControllerLeftButtonKey, theleftButton, OBJC_ASSOCIATION_RETAIN);
     
     if([CKOSVersion() floatValue] >= 7){
         UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
@@ -903,14 +1022,22 @@
     }
 }
 
+
+@dynamic rightButton;
+
+static char UIViewControllerRightButtonKey;
+
+
 - (void)setRightButton:(UIBarButtonItem *)theRightButton{
     [self setRightButton:theRightButton animated:NO];
 }
 
+- (UIBarButtonItem*)rightButton{
+    return objc_getAssociatedObject(self, &UIViewControllerRightButtonKey);
+}
 
 - (void)setRightButton:(UIBarButtonItem*)theRightButton animated:(BOOL)animated{
-    [_rightButton release];
-    _rightButton = [theRightButton retain];
+    objc_setAssociatedObject(self, &UIViewControllerRightButtonKey, theRightButton, OBJC_ASSOCIATION_RETAIN);
     
     if([CKOSVersion() floatValue] >= 7){
         UIBarButtonItem *negativeSpacer = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
@@ -932,58 +1059,51 @@
     }
 }
 
-//#ifdef DEBUG
-- (void)CheckForBlockCopy{
-  /* if(![[CKConfiguration sharedInstance]checkViewControllerCopyInBlocks])
-       return;
-    
-    void *frames[128];
-    int len = backtrace(frames, 128);
-    char **symbols = backtrace_symbols(frames, len);
-    for (int i = 0; i < len; ++i) {
-        NSString* string = [NSString stringWithUTF8String:symbols[i]];
-        NSRange range = [string rangeOfString:@"__copy_helper_block_"];
-        if(range.location != NSNotFound){
-            CKAssert(NO,@"You are retaining an object in a block copy !\nPlease define a variable with __block %@* bYourVar = yourVar; outside the scope of the block and use bYourVar in your block instead of yourVar.",[self class]);
-        }
-    }
-    free(symbols);
-   */
+#pragma mark Managing Editing Mode
+
++ (void)load {
+    CKSwizzleSelector([UIViewController class], @selector(initWithCoder:), @selector(AppCoreKit_initWithCoder:));
+    CKSwizzleSelector([UIViewController class], @selector(initWithNibName:bundle:), @selector(AppCoreKit_initWithNibName:bundle:));
+    CKSwizzleSelector([UIViewController class], @selector(dealloc), @selector(AppCoreKit_dealloc));
+    CKSwizzleSelector([UIViewController class], @selector(resourceManagerReloadUI), @selector(AppCoreKit_resourceManagerReloadUI));
+    CKSwizzleSelector([UIViewController class], @selector(viewWillAppear:), @selector(AppCoreKit_viewWillAppear:));
+    CKSwizzleSelector([UIViewController class], @selector(viewWillDisappear:), @selector(AppCoreKit_viewWillDisappear:));
+    CKSwizzleSelector([UIViewController class], @selector(viewDidAppear:), @selector(AppCoreKit_viewDidAppear:));
+    CKSwizzleSelector([UIViewController class], @selector(viewDidDisappear:), @selector(AppCoreKit_viewDidDisappear:));
+    CKSwizzleSelector([UIViewController class], @selector(viewDidLoad), @selector(AppCoreKit_viewDidLoad));
+    CKSwizzleSelector([UIViewController class], @selector(viewDidUnload), @selector(AppCoreKit_viewDidUnload));
+    CKSwizzleSelector([UIViewController class], @selector(shouldAutorotateToInterfaceOrientation:), @selector(AppCoreKit_shouldAutorotateToInterfaceOrientation:));
+    CKSwizzleSelector([UIViewController class], @selector(willAnimateRotationToInterfaceOrientation:duration:), @selector(AppCoreKit_willAnimateRotationToInterfaceOrientation:duration:));
+    CKSwizzleSelector([UIViewController class], @selector(setEditing:), @selector(AppCoreKit_setEditing:));
+    CKSwizzleSelector([UIViewController class], @selector(setEditing:animated:), @selector(AppCoreKit_setEditing:animated:));
+    CKSwizzleSelector([UIViewController class], @selector(preferredStatusBarStyle), @selector(AppCoreKit_preferredStatusBarStyle));
+    CKSwizzleSelector([UIViewController class], @selector(preferredStatusBarUpdateAnimation), @selector(AppCoreKit_preferredStatusBarUpdateAnimation));
+    CKSwizzleSelector([UIViewController class], @selector(prefersStatusBarHidden), @selector(AppCoreKit_prefersStatusBarHidden));
 }
 
-
-- (id)retain{
-    [self CheckForBlockCopy];
-    return [super retain];
-}
-//#endif
-
-
-
-- (void)setEditing:(BOOL)editing{
+//Adding KVO support for the editing property
+- (void)AppCoreKit_setEditing:(BOOL)editing{
     [self willChangeValueForKey:@"editing"];
-    [super setEditing:editing];
+    [self AppCoreKit_setEditing:editing];
     [self didChangeValueForKey:@"editing"];
     
-    if(_editingBlock){
-        _editingBlock(editing);
+    if(self.editingBlock){
+        self.editingBlock(editing);
     }
 }
 
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
+- (void)AppCoreKit_setEditing:(BOOL)editing animated:(BOOL)animated{
     [self willChangeValueForKey:@"editing"];
-    [super setEditing:editing animated:animated];
+    [self AppCoreKit_setEditing:editing animated:animated];
     [self didChangeValueForKey:@"editing"];
     
-    if(_editingBlock){
-        _editingBlock(editing);
+    if(self.editingBlock){
+        self.editingBlock(editing);
     }
 }
 
-//This avoid keyboard to stay on screen in controllers presented as UIModalPresentationFormSheet 
-- (BOOL)disablesAutomaticKeyboardDismissal {
-    return NO;
-}
+#pragma mark Managing UI adjustments when displaying navigation artifacts
+
 
 - (void)toolbarGetsDisplayed:(NSNotification*)notif{
     if(notif.object == self.navigationController){
@@ -999,22 +1119,6 @@
     }
 }
 
-- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated{
-    if([[self.view subviews]count] <= 0)
-        return;
-    
-    if(self.isViewDisplayed){
-        UIView* v0 = [[self.view subviews]objectAtIndex:0];
-        if([v0 isKindOfClass:[CKStyleView class]]){
-            if(hidden){
-                v0.frame = self.view.bounds;
-            }else{
-                CGFloat toolbarHeight = self.navigationController.toolbar.bounds.size.height;
-                v0.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height+toolbarHeight);
-            }
-        }
-    }
-}
 
 //ios 7
 - (UIEdgeInsets)navigationControllerTransparencyInsets{
@@ -1056,6 +1160,22 @@
         }
     }
     return current;
+}
+
+@end
+
+
+@implementation CKViewController
+
+#ifdef __IPHONE_6_0
+- (BOOL)shouldAutorotate{
+    return YES;
+}
+#endif
+
+//This avoid keyboard to stay on screen in controllers presented as UIModalPresentationFormSheet
+- (BOOL)disablesAutomaticKeyboardDismissal {
+    return NO;
 }
 
 @end

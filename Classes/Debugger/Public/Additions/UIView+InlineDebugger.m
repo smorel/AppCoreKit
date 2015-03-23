@@ -156,7 +156,7 @@
             UIView* subView = (UIView*)controller.value;
             
             CKViewController* slideshow = [CKViewController controller];
-            slideshow.viewDidLoadBlock = ^(CKViewController* controller){
+            slideshow.viewDidLoadBlock = ^(UIViewController* controller){
                 UIImageView* imageView = [[[UIImageView alloc]initWithFrame:controller.view.bounds]autorelease];
                 imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 imageView.image = [UIView createsImageForView:subView];

@@ -33,7 +33,7 @@
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
         debugger.title = @"Applied Style";
         debugger.name = @"CKInlineDebugger";
-        debugger.viewDidLoadBlock = ^(CKViewController* controller){
+        debugger.viewDidLoadBlock = ^(UIViewController* controller){
             UILabel* label = [[[UILabel alloc]initWithFrame:CGRectInset(controller.view.bounds,10,10)]autorelease];
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             label.numberOfLines = 0;
@@ -199,7 +199,7 @@
         }
     };
     
-    debugger.deallocBlock = ^(CKViewController* controller){
+    debugger.deallocBlock = ^(UIViewController* controller){
         [propertiesSection release];
         [inheritingClasses release];
     };

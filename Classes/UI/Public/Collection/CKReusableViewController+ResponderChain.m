@@ -1,12 +1,12 @@
 //
-//  CKResusableViewController+ResponderChain.m
+//  CKReusableViewController+ResponderChain.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2015-03-04.
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKResusableViewController+ResponderChain.h"
+#import "CKReusableViewController+ResponderChain.h"
 #import <objc/runtime.h>
 #import "NSObject+Invocation.h"
 
@@ -35,7 +35,7 @@ static char UIViewControllerFirstResponderControllerKey;
 
 //TODO: add support for any type of CKViewController not only controllers with tableView property
 
-@implementation CKResusableViewController (ResponderChain)
+@implementation CKReusableViewController (ResponderChain)
 
 + (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKViewController*)controller{
     if([controller respondsToSelector:@selector(controllerAtIndexPath:)]){
@@ -72,7 +72,7 @@ static char UIViewControllerFirstResponderControllerKey;
             }
             
             nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            if([CKResusableViewController hasResponderAtIndexPath:nextIndexPath controller:self.collectionViewController]){
+            if([CKReusableViewController hasResponderAtIndexPath:nextIndexPath controller:self.collectionViewController]){
                 return nextIndexPath;
             }
         }
@@ -102,7 +102,7 @@ static char UIViewControllerFirstResponderControllerKey;
             }
             
             previousIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            if([CKResusableViewController hasResponderAtIndexPath:previousIndexPath controller:self.collectionViewController]){
+            if([CKReusableViewController hasResponderAtIndexPath:previousIndexPath controller:self.collectionViewController]){
                 return previousIndexPath;
             }
         }
@@ -111,7 +111,7 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 
-+ (void)activateAfterDelay:(CKResusableViewController*)controller indexPath:(NSIndexPath*)indexPath{
++ (void)activateAfterDelay:(CKReusableViewController*)controller indexPath:(NSIndexPath*)indexPath{
     if([controller.collectionViewController respondsToSelector:@selector(controllerAtIndexPath:)]){
         id c = [controller.collectionViewController performSelector:@selector(controllerAtIndexPath:) withObject:indexPath];
         if(c != nil){
@@ -122,18 +122,20 @@ static char UIViewControllerFirstResponderControllerKey;
     }
 }
 
-+ (void)activateResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKResusableViewController*)controller{
-    UITableView* tableView = (UITableView*)[controller contentView];
-   [tableView scrollToRowAtIndexPath:indexPath
-                     atScrollPosition:UITableViewScrollPositionNone
-                             animated:YES];
-    
-    UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
-    if(tableViewCell != nil){
-        [[self class] activateAfterDelay:controller indexPath:indexPath];
-    }
-    else{
-        [[self class]performSelector:@selector(activateAfterDelay:indexPath:) withObject:controller withObject:indexPath afterDelay:0.3];
++ (void)activateResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKReusableViewController*)controller{
+    if([controller.collectionViewController hasPropertyNamed:@"tableView"]){
+        UITableView* tableView = (UITableView*)[controller.collectionViewController valueForKey:@"tableView"];
+        [tableView scrollToRowAtIndexPath:indexPath
+                         atScrollPosition:UITableViewScrollPositionNone
+                                 animated:YES];
+        
+        UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
+        if(tableViewCell != nil){
+            [[self class] activateAfterDelay:controller indexPath:indexPath];
+        }
+        else{
+            [[self class]performSelector:@selector(activateAfterDelay:indexPath:) withObject:controller withObject:indexPath afterDelay:0.3];
+        }
     }
 }
 
@@ -141,7 +143,7 @@ static char UIViewControllerFirstResponderControllerKey;
     NSIndexPath* nextIndexPath = [self findNextResponderWithScrollEnabled:YES];
     if(nextIndexPath == nil)
         return NO;
-    [CKResusableViewController activateResponderAtIndexPath:nextIndexPath controller:self];
+    [CKReusableViewController activateResponderAtIndexPath:nextIndexPath controller:self];
     
     return YES;
 }
@@ -159,7 +161,7 @@ static char UIViewControllerFirstResponderControllerKey;
     NSIndexPath* previousIndexPath = [self findPreviousResponderWithScrollEnabled:YES];
     if(previousIndexPath == nil)
         return NO;
-    [CKResusableViewController activateResponderAtIndexPath:previousIndexPath controller:self];
+    [CKReusableViewController activateResponderAtIndexPath:previousIndexPath controller:self];
     
     return YES;
 }

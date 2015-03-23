@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 #import "CKProperty.h"
 #import "NSObject+Bindings.h"
 #import "Layout.h"
@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
  TODO: Explain how to customize the navigationToolbar in stylesheets
  
  */
-@interface CKPropertyViewController : CKResusableViewController
+@interface CKPropertyViewController : CKReusableViewController
 
 ///-----------------------------------
 /// @name Creating initialized Property View Controller Objects
@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
 
 /**
  */
-- (void)presentEditionViewController:(CKViewController*)controller
+- (void)presentEditionViewController:(UIViewController*)controller
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange;
 

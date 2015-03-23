@@ -22,7 +22,7 @@
 #import "UIGestureRecognizer+BlockBasedInterface.h"
 #import "NSObject+Invocation.h"
 
-@interface CKResusableViewController()
+@interface CKReusableViewController()
 @property(nonatomic,assign) BOOL isComputingSize;
 - (void)setCollectionCellController:(CKCollectionCellController *)c;
 @end
@@ -30,7 +30,7 @@
 
 static char CKCollectionCellContentViewControllerParentSwipeableControllerKey;
 
-@implementation CKResusableViewController(CKSwipeableViewController)
+@implementation CKReusableViewController(CKSwipeableViewController)
 
 - (void)setParentSwipeableContentViewController:(CKSwipeableViewController*)controller{
     objc_setAssociatedObject(self,
@@ -48,7 +48,7 @@ static char CKCollectionCellContentViewControllerParentSwipeableControllerKey;
 
 
 @interface CKSwipeableViewController ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
-@property(nonatomic,retain) CKResusableViewController* contentViewController;
+@property(nonatomic,retain) CKReusableViewController* contentViewController;
 @property(nonatomic,retain) CKSwipableAction* currentLeftAction;
 @property(nonatomic,retain) CKSwipableAction* currentRightAction;
 @property(nonatomic,assign) CGPoint lastScrollOffset;
@@ -108,7 +108,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 
 #pragma Content View Controller And Layout Updates Management
 
-- (id)initWithContentViewController:(CKResusableViewController*)contentViewController{
+- (id)initWithContentViewController:(CKReusableViewController*)contentViewController{
     self = [super init];
     self.enabled = YES;
     self.internalBindingsContext = [NSString stringWithFormat:@"CKSwipableCollectionCellContentViewController_<%p>",self];

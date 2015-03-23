@@ -9,7 +9,7 @@
 #import "CKPropertyStringViewController.h"
 #import "CKTextView.h"
 #import "CKLocalization.h"
-#import "CKResusableViewController+ResponderChain.h"
+#import "CKReusableViewController+ResponderChain.h"
 #import "CKPropertyNumberViewController.h"
 #import "NSValueTransformer+Additions.h"
 

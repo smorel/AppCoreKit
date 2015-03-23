@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 
 
 /** CKStandardContentViewController provides the logic to display table view cell like content with the desired degree of customization.
@@ -68,7 +68,7 @@
  </pre>
  
  */
-@interface CKStandardContentViewController : CKResusableViewController
+@interface CKStandardContentViewController : CKReusableViewController
 
 /**
  */

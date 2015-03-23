@@ -101,7 +101,7 @@
 #import "CKCollectionViewLayoutController.h"
 #import "CKCollectionViewCell.h"
 #import "CKCollectionContentCellController.h"
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 #import "CKCollectionViewLayout.h"
 #import "CKCollectionViewMorphableLayout.h"
 #import "CKCollectionViewGridLayout.h"
@@ -111,7 +111,7 @@
 
 #import "CKDatePickerViewController.h"
 
-#import "CKResusableViewController+ResponderChain.h"
+#import "CKReusableViewController+ResponderChain.h"
 #import "CKStandardContentViewController.h"
 #import "CKPropertyViewController.h"
 #import "CKPropertyStringViewController.h"
@@ -123,6 +123,6 @@
 #import "CKPropertiesSampleViewController.h"
 
 
-#import "CKSectionedViewController.h"
+#import "CKSectionContainer.h"
 #import "CKTableViewController.h"
 #import "CKPickerViewViewController.h"

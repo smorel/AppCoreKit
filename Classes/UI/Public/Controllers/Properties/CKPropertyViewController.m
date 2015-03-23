@@ -8,7 +8,7 @@
 
 #import "CKPropertyViewController.h"
 #import "NSObject+Bindings.h"
-#import "CKResusableViewController+ResponderChain.h"
+#import "CKReusableViewController+ResponderChain.h"
 #import "UINavigationController+BlockBasedDelegate.h"
 #import "CKSheetController.h"
 #import "UIViewController+Style.h"
@@ -94,7 +94,7 @@
     [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
 }
 
-- (void)presentEditionViewController:(CKViewController*)controller
+- (void)presentEditionViewController:(UIViewController*)controller
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange{
     

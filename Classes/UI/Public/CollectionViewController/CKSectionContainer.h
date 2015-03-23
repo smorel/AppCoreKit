@@ -1,5 +1,5 @@
 //
-//  CKSectionedViewController.h
+//  CKSectionContainer.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2015-03-17.
@@ -14,30 +14,32 @@
 /**
  */
 @interface UIView(CKSectionedViewController)
-@property(nonatomic,retain) CKResusableViewController* attachedCellContentViewController;
+@property(nonatomic,retain) CKReusableViewController* reusableViewController;
 @end
 
 
-//this aims to be the nex generation of CKCollectionViewController.
-//Tables, collection and maps will move to CKSectionedViewController.
-                                               
 
-/** These methods must be implemented in the inherited classes and refresh the views in consequence.
- Inherited classes are respondible to reload their view appropriatly in viewWillAppear.
+@class CKSectionContainer;
+
+/**
  */
-@protocol CKSectionedViewControllerProtocol
+@protocol CKSectionContainerDelegate
+
+@required
+
+@property (nonatomic,retain,readonly) CKSectionContainer* sectionContainer;
+
+- (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
+- (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
+- (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated;
+- (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated;
+
+@optional
 
 - (void)willInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
-- (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
-
 - (void)willRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
-- (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
-
 - (void)willInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated;
-- (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated;
-
 - (void)willRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated;
-- (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated;
 
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion;
 
@@ -48,15 +50,15 @@
 
 
 
+
 /**
  */
-@interface CKSectionedViewController : CKViewController<CKSectionDelegate,CKSectionedViewControllerProtocol>
+@interface CKSectionContainer : NSObject<CKSectionDelegate>
 
-- (id)initWithSections:(NSArray*)sections;
-- (instancetype)controllerWithSections:(NSArray*)sections;
+- (id)initWithDelegate:(UIViewController<CKSectionContainerDelegate>*)delegate;
+- (id)initWithSections:(NSArray*)sections delegate:(UIViewController<CKSectionContainerDelegate>*)delegate;
 
-- (void)postInit;
-
+@property(nonatomic,assign,readonly) UIViewController<CKSectionContainerDelegate>* delegate;
 @property(nonatomic,retain,readonly) NSArray* sections;
 
 - (NSInteger)indexOfSection:(CKAbstractSection*)section;
@@ -76,15 +78,21 @@
 - (void)removeSections:(NSArray*)sections animated:(BOOL)animated;
 - (void)removeSectionsAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 
-- (CKResusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath;
+- (CKReusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath;
 - (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths;
 
-- (NSIndexPath*)indexPathForController:(CKResusableViewController*)controller;
+- (NSIndexPath*)indexPathForController:(CKReusableViewController*)controller;
 - (NSArray*)indexPathsForControllers:(NSArray*)controllers;
 
-- (UIView*)viewForController:(CKResusableViewController*)controller reusingView:(UIView*)view;
+- (UIView*)viewForController:(CKReusableViewController*)controller reusingView:(UIView*)view;
 - (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view;
 
+
 @property(nonatomic,retain) NSArray* selectedIndexPaths;
+
+- (void)handleViewWillAppearAnimated:(BOOL)animated;
+- (void)handleViewDidAppearAnimated:(BOOL)animated;
+- (void)handleViewWillDisappearAnimated:(BOOL)animated;
+- (void)handleViewDidDisappearAnimated:(BOOL)animated;
 
 @end

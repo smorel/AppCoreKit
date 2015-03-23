@@ -1,14 +1,14 @@
 //
-//  CKResusableViewController+ResponderChain.h
+//  CKReusableViewController+ResponderChain.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2015-03-04.
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 
-@interface CKResusableViewController (ResponderChain)
+@interface CKReusableViewController (ResponderChain)
 
 
 ///-----------------------------------

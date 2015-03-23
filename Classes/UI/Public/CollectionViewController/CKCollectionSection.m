@@ -7,7 +7,7 @@
 //
 
 #import "CKCollectionSection.h"
-#import "CKSectionedViewController.h"
+#import "CKSectionContainer.h"
 
 @interface CKAbstractSection()
 - (NSMutableArray*)mutableControllers;
@@ -22,7 +22,7 @@
 @property(nonatomic,retain, readwrite) NSArray* collectionHeaderControllers;
 @property(nonatomic,retain, readwrite) NSArray* collectionFooterControllers;
 @property(nonatomic,retain, readwrite) CKCollection* collection;
-@property(nonatomic,retain, readwrite) CKViewControllerFactory* factory;
+@property(nonatomic,retain, readwrite) CKReusableViewControllerFactory* factory;
 @property(nonatomic,retain, readwrite) NSString* collectionBindingContext;
 
 @end
@@ -41,15 +41,15 @@
     [super dealloc];
 }
 
-- (id)initWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory{
+- (id)initWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory{
     return [self initWithCollection:collection factory:factory reorderingEnabled:NO];
 }
 
-+ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory{
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory{
     return [[[CKCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 }
 
-- (id)initWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
+- (id)initWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
     self = [super init];
     self.collection = collection;
     self.factory = factory;
@@ -57,14 +57,14 @@
     return self;
 }
 
-+ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
     return [[[CKCollectionSection alloc]initWithCollection:collection factory:factory reorderingEnabled:reorderingEnabled]autorelease];
 }
 
-- (void)setDelegate:(CKSectionedViewController *)delegate{
-    [super setDelegate:delegate];
+- (void)setContainerViewController:(UIViewController *)containerViewController{
+    [super setContainerViewController:containerViewController];
     
-    if(delegate){
+    if(containerViewController){
         [self setupCollectionControllersByUpdatingCollectionController:YES];
     }
 }
@@ -114,11 +114,11 @@
 
 
 
-- (void)addCollectionHeaderController:(CKResusableViewController*)controller animated:(BOOL)animated{
+- (void)addCollectionHeaderController:(CKReusableViewController*)controller animated:(BOOL)animated{
     [self insertCollectionHeaderController:controller atIndex:self.collectionHeaderControllers.count animated:animated];
 }
 
-- (void)insertCollectionHeaderController:(CKResusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
+- (void)insertCollectionHeaderController:(CKReusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
     [self insertCollectionHeaderControllers:@[controller] atIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -130,7 +130,7 @@
     [self removeCollectionHeaderControllersAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionHeaderControllers.count)] animated:animated];
 }
 
-- (void)removeCollectionHeaderController:(CKResusableViewController*)controller animated:(BOOL)animated{
+- (void)removeCollectionHeaderController:(CKReusableViewController*)controller animated:(BOOL)animated{
     NSInteger index = [[self mutableCollectionHeaderControllers]indexOfObjectIdenticalTo:controller];
     [self removeCollectionHeaderControllerAtIndex:index animated:animated];
 }
@@ -161,11 +161,11 @@
 
 
 
-- (void)addCollectionFooterController:(CKResusableViewController*)controller animated:(BOOL)animated{
+- (void)addCollectionFooterController:(CKReusableViewController*)controller animated:(BOOL)animated{
     [self insertCollectionFooterController:controller atIndex:self.mutableCollectionFooterControllers.count animated:animated];
 }
 
-- (void)insertCollectionFooterController:(CKResusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
+- (void)insertCollectionFooterController:(CKReusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
     [self insertCollectionFooterControllers:@[controller] atIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -177,7 +177,7 @@
     [self removeCollectionFooterControllersAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.mutableCollectionFooterControllers.count)] animated:animated];
 }
 
-- (void)removeCollectionFooterController:(CKResusableViewController*)controller animated:(BOOL)animated{
+- (void)removeCollectionFooterController:(CKReusableViewController*)controller animated:(BOOL)animated{
     NSInteger index = [[self mutableCollectionFooterControllers]indexOfObjectIdenticalTo:controller];
     [self removeCollectionFooterControllerAtIndex:index animated:animated];
 }
@@ -222,7 +222,7 @@
                 for(int i =0; i< objects.count; ++i){
                     id object = objects[i];
                     NSIndexPath* indexPath = indexPaths[i];
-                    CKResusableViewController* controller = [bself.factory controllerForObject:object indexPath:indexPath containerController:bself.delegate];
+                    CKReusableViewController* controller = [bself.factory controllerForObject:object indexPath:indexPath containerController:bself.containerViewController];
                     NSAssert(controllers,@"Unable to create a controller from the specified factory for object %@",object);
                     [controllers addObject:controller];
                 }
@@ -264,7 +264,7 @@
     [self.collection fetchRange:NSMakeRange(self.collection.count, 20)];
 }
 
-- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController willRemoveControllerAtIndex:(NSInteger)index{
+- (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate willRemoveControllerAtIndex:(NSInteger)index{
     
     
     if(index < self.collectionHeaderControllers.count){
@@ -280,18 +280,18 @@
         [[self mutableCollectionFooterControllers] removeObjectAtIndex:index];
     }
     
-    [super sectionedViewController:sectionViewController willRemoveControllerAtIndex:index];
+    [super sectionContainerDelegate:sectionContainerDelegate willRemoveControllerAtIndex:index];
     
 }
 
-- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
+- (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
 {
     if(from < (self.collectionControllers.count + self.collectionHeaderControllers.count)
        && to < (self.collectionControllers.count + self.collectionHeaderControllers.count)){
         from -= self.collectionHeaderControllers.count;
         to -= self.collectionHeaderControllers.count;
         
-        CKResusableViewController* controller = [[[self mutableCollectionControllers] objectAtIndex:from]retain];
+        CKReusableViewController* controller = [[[self mutableCollectionControllers] objectAtIndex:from]retain];
         id object = [[self.collection objectAtIndex:from]retain];
         
         [self clearCollectionBindings];
@@ -313,7 +313,7 @@
         [self setupCollectionControllersByUpdatingCollectionController:NO];
     }
     
-    [super sectionedViewController:sectionViewController didMoveControllerAtIndex:from toIndex:to];
+    [super sectionContainerDelegate:sectionContainerDelegate didMoveControllerAtIndex:from toIndex:to];
 }
 
 - (NSRange)rangeForCollectionControllers{

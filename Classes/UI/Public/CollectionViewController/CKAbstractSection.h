@@ -6,21 +6,27 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 #import "NSObject+Bindings.h"
 
 @class CKAbstractSection;
 @class CKSectionedViewController;
+@protocol CKSectionContainerDelegate;
+
 
 /**
  */
 @protocol CKSectionDelegate
+
+@required
 
 - (void)section:(CKAbstractSection*)section willInsertControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 - (void)section:(CKAbstractSection*)section didInsertControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 
 - (void)section:(CKAbstractSection*)section willRemoveControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 - (void)section:(CKAbstractSection*)section didRemoveControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
+
+- (NSInteger)indexOfSection:(CKAbstractSection*)section;
 
 @end
 
@@ -30,10 +36,11 @@
  */
 @interface CKAbstractSection : NSObject
 
-@property(nonatomic,assign) CKSectionedViewController* delegate;
+@property(nonatomic,assign) id<CKSectionDelegate> delegate;
+@property(nonatomic,assign) UIViewController* containerViewController;
 
-@property(nonatomic,retain) CKResusableViewController* headerViewController;
-@property(nonatomic,retain) CKResusableViewController* footerViewController;
+@property(nonatomic,retain) CKReusableViewController* headerViewController;
+@property(nonatomic,retain) CKReusableViewController* footerViewController;
 
 
 /** This will set headerViewController with a CKSectionHeaderFooterViewController initialized with the specified text
@@ -53,15 +60,15 @@
 
 @property(nonatomic,readonly) NSArray* controllers;
 
-- (NSInteger)indexOfController:(CKResusableViewController*)controller;
+- (NSInteger)indexOfController:(CKReusableViewController*)controller;
 - (NSIndexSet*)indexesOfControllers:(NSArray*)controllers;
 
-- (CKResusableViewController*)controllerAtIndex:(NSInteger)index;
+- (CKReusableViewController*)controllerAtIndex:(NSInteger)index;
 - (NSArray*)controllersAtIndexes:(NSIndexSet*)indexes;
 
-- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController willRemoveControllerAtIndex:(NSInteger)index;
+- (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate willRemoveControllerAtIndex:(NSInteger)index;
 
-- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to;
+- (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to;
 
 @property(nonatomic,readonly) NSInteger sectionIndex;
 

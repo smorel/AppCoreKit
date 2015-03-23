@@ -11,14 +11,13 @@
 #import "CKLocalization.h"
 #import "CKInlineDebuggerController.h"
 #import "CKStyleManager.h"
+#import "UIViewController+CKLayout.h"
 
 @class CKViewController;
-@class CKFormTableViewController;
 
-typedef void(^CKViewControllerAnimatedBlock)(CKViewController* controller,BOOL animated);
-typedef void(^CKViewControllerBlock)(CKViewController* controller);
-typedef void(^CKViewControllerOrientationBlock)(CKViewController* controller, UIInterfaceOrientation orientation);
-
+typedef void(^CKViewControllerAnimatedBlock)(UIViewController* controller,BOOL animated);
+typedef void(^CKViewControllerBlock)(UIViewController* controller);
+typedef void(^CKViewControllerOrientationBlock)(UIViewController* controller, UIInterfaceOrientation orientation);
 typedef void(^CKViewControllerEditingBlock)(BOOL editing);
 
 /** 
@@ -47,14 +46,14 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
     CKViewControllerStateDidLoad        = 1 << 6
 };
 
+
+
 /** 
  CKViewController is the base class providing helpers to build a view controller and manage customization with stylesheet.
  It also provides convenient blocks to define a view controller inline instead of subclassing it.
  You can define some elements for navigation like left/right bar buttons and the supported interface orientations without having to subclass it.
  */
-@interface CKViewController : UIViewController {
-	NSString* _name;
-}
+@interface UIViewController (AppCoreKit)
 
 ///-----------------------------------
 /// @name Creating initialized View Controller Objects
@@ -79,15 +78,6 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
  This returns an autorelease view controller of the calling class by initializing its name property with the specified name and its style manager using the specified stylesheetFileName.
  */
 + (id)controllerWithName:(NSString*)name stylesheetFileName:(NSString*)stylesheetFileName;
-
-///-----------------------------------
-/// @name Identifying View Controller at runtime
-///-----------------------------------
-/** 
- Setting a name is almost only used for stylesheets.
- You can then target this view controller easily for customization using "CKViewController[name=YourControllerName] : { ... }".
- */
-@property (nonatomic,retain) NSString* name;
 
 ///-----------------------------------
 /// @name Customizing View Controller behaviour
@@ -266,6 +256,8 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
  */
 - (void)postInit;
 
+/**
+ */
 - (void)reapplyStylesheet;
 
 @end
@@ -282,3 +274,7 @@ typedef NS_ENUM(NSInteger, CKViewControllerState){
 @end
 
 
+/**
+ */
+@interface CKViewController : UIViewController
+@end

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKSectionedViewController.h"
+#import "CKSectionContainer.h"
 
 //commented until the layout loop is solved
 //#define USING_UITableViewHeaderFooterView
@@ -16,7 +16,7 @@
 
 /**
  */
-@interface CKResusableViewController(CKTableViewController)
+@interface CKReusableViewController(CKTableViewController)
 
 /**
  */
@@ -35,7 +35,7 @@
 
 /**
  */
-@interface CKTableViewController : CKSectionedViewController
+@interface CKTableViewController : UITableViewController<CKSectionContainerDelegate>
 
 /** default id grouped
  */
@@ -43,15 +43,11 @@
 
 /**
  */
-@property(nonatomic,readonly) CKTableView* tableView;
+@property(nonatomic,retain) CKReusableViewController* tableHeaderViewController;
 
 /**
  */
-@property(nonatomic,retain) CKResusableViewController* tableHeaderViewController;
-
-/**
- */
-@property(nonatomic,retain) CKResusableViewController* tableFooterViewController;
+@property(nonatomic,retain) CKReusableViewController* tableFooterViewController;
 
 /** Default is YES
  */
@@ -68,5 +64,32 @@
 /**
  */
 - (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated;
+
+
+- (NSInteger)indexOfSection:(CKAbstractSection*)section;
+- (NSIndexSet*)indexesOfSections:(NSArray*)sections;
+
+- (id)sectionAtIndex:(NSInteger)index;
+- (NSArray*)sectionsAtIndexes:(NSIndexSet*)indexes;
+
+- (void)addSection:(CKAbstractSection*)section animated:(BOOL)animated;
+- (void)insertSection:(CKAbstractSection*)section atIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)addSections:(NSArray*)sections animated:(BOOL)animated;
+- (void)insertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
+
+- (void)removeAllSectionsAnimated:(BOOL)animated;
+- (void)removeSection:(CKAbstractSection*)section animated:(BOOL)animated;
+- (void)removeSectionAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)removeSections:(NSArray*)sections animated:(BOOL)animated;
+- (void)removeSectionsAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
+
+- (CKReusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath;
+- (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths;
+
+- (NSIndexPath*)indexPathForController:(CKReusableViewController*)controller;
+- (NSArray*)indexPathsForControllers:(NSArray*)controllers;
+
+
+@property(nonatomic,retain) NSArray* selectedIndexPaths;
 
 @end

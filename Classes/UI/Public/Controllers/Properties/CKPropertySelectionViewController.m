@@ -16,7 +16,7 @@
 #import "CKResourceManager.h"
 #import "CKStyleManager.h"
 #import "UIViewController+Style.h"
-#import "CKResusableViewController+ResponderChain.h"
+#import "CKReusableViewController+ResponderChain.h"
 #import "CKSheetController.h"
 #import "CKTableViewController.h"
 
@@ -289,12 +289,11 @@
     
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKViewController* editionViewController = nil;
+    UIViewController* editionViewController = nil;
     switch(self.editionControllerAppearance){
         case CKPropertyEditionAppearanceStyleDefault:
         case CKPropertyEditionAppearanceStyleList:{
-            CKTableViewController* table = [CKTableViewController controller];
-            table.style = UITableViewStylePlain;
+            CKTableViewController* table = [[[CKTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
             table.endEditingViewWhenScrolling = NO;
             
             NSMutableArray* selectedIndexPaths = [NSMutableArray array];
@@ -328,7 +327,7 @@
 }
 
 - (NSArray*)cellsForEditionController:(UIViewController*)editionController selectedIndexPaths:(NSMutableArray*)selectedIndexPath{
-    CKViewControllerFactory* factory = self.editionControllerFactory ? self.editionControllerFactory : [self defaultFactory];
+    CKReusableViewControllerFactory* factory = self.editionControllerFactory ? self.editionControllerFactory : [self defaultFactory];
     
     NSMutableArray* cells = [NSMutableArray array];
     
@@ -336,7 +335,7 @@
     
     NSInteger index = 0;
     for(CKPropertySelectionValue* v in sorted){
-        CKResusableViewController* cell = [factory controllerForObject:v
+        CKReusableViewController* cell = [factory controllerForObject:v
                                                                          indexPath:[NSIndexPath indexPathForRow:index inSection:0]
                                                                containerController:editionController];
         
@@ -412,7 +411,7 @@
     }
 }
 
-- (CKResusableViewController*)defaultControllerForValue:(CKPropertySelectionValue*)v{
+- (CKReusableViewController*)defaultControllerForValue:(CKPropertySelectionValue*)v{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^{
@@ -431,12 +430,12 @@
     return cell;
 }
 
-- (CKViewControllerFactory*)defaultFactory{
+- (CKReusableViewControllerFactory*)defaultFactory{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKViewControllerFactory* factory = [CKViewControllerFactory factory];
+    CKReusableViewControllerFactory* factory = [CKReusableViewControllerFactory factory];
     [factory registerFactoryForObjectOfClass:[CKPropertySelectionValue class]
-                                     factory:^CKResusableViewController *(id object, NSIndexPath *indexPath) {
+                                     factory:^CKReusableViewController *(id object, NSIndexPath *indexPath) {
             return [bself defaultControllerForValue:object];
     }];
     

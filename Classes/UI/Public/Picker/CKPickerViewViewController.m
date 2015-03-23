@@ -13,13 +13,20 @@
 
 @interface CKPickerViewViewController ()<UIPickerViewDataSource,UIPickerViewDelegate>
 @property(nonatomic,retain,readwrite) UIPickerView* pickerView;
+@property (nonatomic,retain,readwrite) CKSectionContainer* sectionContainer;
 @end
 
 @implementation CKPickerViewViewController
 
 - (void)dealloc{
     [_pickerView release];
+    [_sectionContainer release];
     [super dealloc];
+}
+
+- (void)postInit{
+    [super postInit];
+    self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
 }
 
 - (void)viewDidLoad{
@@ -37,22 +44,37 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    [self.sectionContainer handleViewWillAppearAnimated:animated];
+    
     self.pickerView.delegate = self;
     self.pickerView.dataSource = self;
     [self.pickerView reloadAllComponents];
     
-    for(NSIndexPath* indexPath in self.selectedIndexPaths){
+    for(NSIndexPath* indexPath in self.sectionContainer.selectedIndexPaths){
         [self.pickerView selectRow:indexPath.row inComponent:indexPath.section animated:NO];
     }
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    [self.sectionContainer handleViewDidAppearAnimated:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
+    [self.sectionContainer handleViewWillDisappearAnimated:animated];
+    
     self.pickerView.delegate = nil;
     self.pickerView.dataSource = nil;
 }
 
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
+    [self.sectionContainer handleViewDidDisappearAnimated:animated];
+}
 
 - (void)reloadComponentsMatchingIndexPaths:(NSArray*)indexPaths{
     NSMutableIndexSet* sections = [NSMutableIndexSet indexSet];
@@ -96,33 +118,34 @@
 }
 
 - (void)performBatchUpdates:(void (^)(void))updates completion:(void (^)(BOOL finished))completion{
-    [super performBatchUpdates:updates completion:completion];
+    if(updates){ updates(); }
+    if(completion){ completion(YES); }
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    return self.sections.count;
+    return self.sectionContainer.sections.count;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-    if(component >= self.sections.count)
+    if(component >= self.sectionContainer.sections.count)
         return 0;
     
-    CKAbstractSection* section = [self sectionAtIndex:component];
+    CKAbstractSection* section = [self.sectionContainer sectionAtIndex:component];
     return section.controllers.count;
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    if(component >= self.sections.count)
+    if(component >= self.sectionContainer.sections.count)
         return 0.0f;
     
-    return self.sections.count > 0 ? self.view.width / self.sections.count : self.view.width;
+    return self.sectionContainer.sections.count > 0 ? self.view.width / self.sectionContainer.sections.count : self.view.width;
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
-    if(component >= self.sections.count)
+    if(component >= self.sectionContainer.sections.count)
         return 0.0f;
     
-    CKResusableViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:component]];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:component]];
     CGFloat width = [self pickerView:pickerView widthForComponent:component];
     
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
@@ -130,7 +153,7 @@
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    return [self viewForControllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component] reusingView:view];
+    return [self.sectionContainer viewForControllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component] reusingView:view];
 }
 
 
@@ -140,10 +163,10 @@
 
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    NSMutableArray* indexPaths = [NSMutableArray arrayWithArray:self.selectedIndexPaths];
+    NSMutableArray* indexPaths = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
     
     NSInteger index = 0;
-    for(NSIndexPath* ip in self.selectedIndexPaths){
+    for(NSIndexPath* ip in self.sectionContainer.selectedIndexPaths){
         if(ip.section == component){
             [indexPaths removeObjectAtIndex:index];
             break;
@@ -153,10 +176,91 @@
     
     [indexPaths addObject:[NSIndexPath indexPathForRow:row inSection:component]];
     
-    self.selectedIndexPaths = indexPaths;
+    self.sectionContainer.selectedIndexPaths = indexPaths;
     
-    CKResusableViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component]];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component]];
     [controller didSelect];
+}
+
+
+
+/* Forwarding calls to section container
+ */
+
+- (NSInteger)indexOfSection:(CKAbstractSection*)section{
+    return [self.sectionContainer indexOfSection:section];
+}
+
+- (NSIndexSet*)indexesOfSections:(NSArray*)sections{
+    return [self.sectionContainer indexesOfSections:sections];
+}
+
+- (id)sectionAtIndex:(NSInteger)index{
+    return [self.sectionContainer sectionAtIndex:index];
+}
+
+- (NSArray*)sectionsAtIndexes:(NSIndexSet*)indexes{
+    return [self.sectionContainer sectionsAtIndexes:indexes];
+}
+
+- (void)addSection:(CKAbstractSection*)section animated:(BOOL)animated{
+    [self.sectionContainer addSection:section animated:animated];
+}
+
+- (void)insertSection:(CKAbstractSection*)section atIndex:(NSInteger)index animated:(BOOL)animated{
+    [self.sectionContainer insertSection:section atIndex:index animated:animated];
+}
+
+- (void)addSections:(NSArray*)sections animated:(BOOL)animated{
+    [self.sectionContainer addSections:sections animated:animated];
+}
+
+- (void)insertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    [self.sectionContainer insertSections:sections atIndexes:indexes animated:animated];
+}
+
+- (void)removeAllSectionsAnimated:(BOOL)animated{
+    [self.sectionContainer removeAllSectionsAnimated:animated];
+}
+
+- (void)removeSection:(CKAbstractSection*)section animated:(BOOL)animated{
+    [self.sectionContainer removeSection:section animated:animated];
+}
+
+- (void)removeSectionAtIndex:(NSInteger)index animated:(BOOL)animated{
+    [self.sectionContainer removeSectionAtIndex:index animated:animated];
+}
+
+- (void)removeSections:(NSArray*)sections animated:(BOOL)animated{
+    [self.sectionContainer removeSections:sections animated:animated];
+}
+
+- (void)removeSectionsAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    [self.sectionContainer removeSectionsAtIndexes:indexes animated:animated];
+}
+
+- (CKReusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath{
+    return [self.sectionContainer controllerAtIndexPath:indexPath];
+}
+
+- (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths{
+    return [self.sectionContainer controllersAtIndexPaths:indexPaths];
+}
+
+- (NSIndexPath*)indexPathForController:(CKReusableViewController*)controller{
+    return [self.sectionContainer indexPathForController:controller];
+}
+
+- (NSArray*)indexPathsForControllers:(NSArray*)controllers{
+    return [self.sectionContainer indexPathsForControllers:controllers];
+}
+
+- (void)setSelectedIndexPaths:(NSArray*)selectedIndexPaths{
+    self.sectionContainer.selectedIndexPaths = selectedIndexPaths;
+}
+
+- (NSArray*)selectedIndexPaths{
+    return self.sectionContainer.selectedIndexPaths;
 }
 
 

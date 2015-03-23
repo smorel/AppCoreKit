@@ -1,12 +1,12 @@
 //
-//  CKResusableViewController.m
+//  CKReusableViewController.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2013-10-23.
 //  Copyright (c) 2013 Sebastien Morel. All rights reserved.
 //
 
-#import "CKResusableViewController.h"
+#import "CKReusableViewController.h"
 #import "NSObject+Bindings.h"
 #import "UIView+Positioning.h"
 #import "UIView+Style.h"
@@ -37,7 +37,7 @@
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
 @end
 
-@interface CKResusableViewController ()
+@interface CKReusableViewController ()
 @property(nonatomic,retain) CKWeakRef* collectionCellControllerWeakRef;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @property(nonatomic,retain) UIView* reusableView;
@@ -49,7 +49,7 @@
 - (UIView*)parentControllerView;
 @end
 
-@implementation CKResusableViewController
+@implementation CKReusableViewController
 
 - (void)dealloc{
     [self clearBindingsContext];
@@ -234,7 +234,7 @@
 
 
 - (void)postInit{
-    
+    [super postInit];
 }
 
 - (void)didSelect{
@@ -305,10 +305,15 @@
     
     [self applyStyleToSubViews];
     
-    __unsafe_unretained CKResusableViewController* bself = self;
+    __unsafe_unretained CKReusableViewController* bself = self;
     
     self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
         if(bself.view.window == nil || bself.isComputingSize || bself.state != CKViewControllerStateDidAppear)
+            return;
+        
+        CGSize currentSize = self.view.bounds.size;
+        CGSize size = [bself preferredSizeConstraintToSize:CGSizeMake(bself.contentViewCell.width,MAXFLOAT)];
+        if(CGSizeEqualToSize(currentSize, size))
             return;
         
         if(bself.collectionCellController){

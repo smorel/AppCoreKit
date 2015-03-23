@@ -1,5 +1,5 @@
 //
-//  CKResusableViewController.h
+//  CKReusableViewController.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2013-10-23.
@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 
 /**
  */
-@interface CKResusableViewController : UIViewController
+@interface CKReusableViewController : UIViewController
 
 
 /** The CKCollectionViewController managing the collection of CKCollectionCellController and the collectionView
@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 @property(nonatomic,readonly) UIView* contentView;
 
 
-/** The collectionCellController That will manage CKResusableViewController appearance and reuse
+/** The collectionCellController That will manage CKReusableViewController appearance and reuse
  
     CKCollectionCellController,
     CKTableViewCellController, 
@@ -140,4 +140,4 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 @end
 
 
-#import "CKResusableViewController+ResponderChain.h"
+#import "CKReusableViewController+ResponderChain.h"

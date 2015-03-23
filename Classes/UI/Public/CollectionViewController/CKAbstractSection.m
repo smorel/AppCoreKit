@@ -7,7 +7,7 @@
 //
 
 #import "CKAbstractSection.h"
-#import "CKSectionedViewController.h"
+#import "CKSectionContainer.h"
 #import "CKContainerViewController.h"
 #import "CKSectionHeaderFooterViewController.h"
 
@@ -23,6 +23,7 @@
     [self clearBindingsContext];
     
     _delegate = nil;
+    _containerViewController = nil;
     [_controllers release];
     [_headerViewController release];
     [_footerViewController release];
@@ -51,7 +52,7 @@
     [self setCollapsed:collapsed animated:NO];
 }
 
-- (NSInteger)indexOfController:(CKResusableViewController*)controller{
+- (NSInteger)indexOfController:(CKReusableViewController*)controller{
     return [[self mutableControllers]indexOfObjectIdenticalTo:controller];
 }
 
@@ -61,7 +62,7 @@
     }];
 }
 
-- (CKResusableViewController*)controllerAtIndex:(NSInteger)index{
+- (CKReusableViewController*)controllerAtIndex:(NSInteger)index{
     if(index >= [self mutableControllers].count)
         return nil;
     
@@ -77,8 +78,8 @@
         return;
     
     if(self.delegate){
-        for(CKResusableViewController* controller in controllers){
-            [controller setContainerViewController:self.delegate];
+        for(CKReusableViewController* controller in controllers){
+            [controller setContainerViewController:self.containerViewController];
         }
     }
     
@@ -134,31 +135,30 @@
     
 }
 
-- (void)setDelegate:(CKSectionedViewController *)delegate{
-    [_delegate release];
-    _delegate = [delegate retain];
+- (void)setContainerViewController:(UIViewController *)containerViewController{
+    _containerViewController = containerViewController;
     
-    for(CKResusableViewController* controller in self.controllers){
-        [controller setContainerViewController:_delegate];
+    for(CKReusableViewController* controller in self.controllers){
+        [controller setContainerViewController:_containerViewController];
     }
     
-    [self.headerViewController setContainerViewController:_delegate];
-    [self.footerViewController setContainerViewController:_delegate];
+    [self.headerViewController setContainerViewController:_containerViewController];
+    [self.footerViewController setContainerViewController:_containerViewController];
 }
 
-- (void)setHeaderViewController:(CKResusableViewController *)headerViewController{
+- (void)setHeaderViewController:(CKReusableViewController *)headerViewController{
     [_headerViewController release];
     _headerViewController = [headerViewController retain];
     if(_delegate){
-        [headerViewController setContainerViewController:_delegate];
+        [headerViewController setContainerViewController:self.containerViewController];
     }
 }
 
-- (void)setFooterViewController:(CKResusableViewController *)footerViewController{
+- (void)setFooterViewController:(CKReusableViewController *)footerViewController{
     [_footerViewController release];
     _footerViewController = [footerViewController retain];
     if(_delegate){
-        [footerViewController setContainerViewController:_delegate];
+        [footerViewController setContainerViewController:self.containerViewController];
     }
 }
 
@@ -170,13 +170,13 @@
     self.footerViewController = [CKSectionHeaderFooterViewController controllerWithType:CKSectionViewControllerTypeFooter text:footerTitle];
 }
 
-- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController willRemoveControllerAtIndex:(NSInteger)index{
+- (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate willRemoveControllerAtIndex:(NSInteger)index{
     [self removeControllersAtIndexes:[NSIndexSet indexSetWithIndex:index] animated:YES];
 }
 
-- (void)sectionedViewController:(CKSectionedViewController*)sectionViewController didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
+- (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
 {
-    CKResusableViewController* controller = [[[self mutableControllers] objectAtIndex:from]retain];
+    CKReusableViewController* controller = [[[self mutableControllers] objectAtIndex:from]retain];
     
     [[self mutableControllers] removeObjectAtIndex:from];
     [[self mutableControllers] insertObject:controller atIndex:to];

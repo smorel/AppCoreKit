@@ -60,7 +60,7 @@
         return controller;
     }else if(_contentControllerCreateBlock){
         if([collectionViewController isKindOfClass:[CKTableViewControllerOld class]]){
-            CKResusableViewController* content = _contentControllerCreateBlock(object,indexPath);
+            CKReusableViewController* content = _contentControllerCreateBlock(object,indexPath);
             
             CKTableViewContentCellController* cellController = [[CKTableViewContentCellController alloc]initWithContentViewController:content];
             if(cellController.name == nil){
@@ -68,7 +68,7 @@
             }
             return cellController;
         }else if([collectionViewController isKindOfClass:[CKCollectionViewLayoutController class]]){
-            CKResusableViewController* content = _contentControllerCreateBlock(object,indexPath);
+            CKReusableViewController* content = _contentControllerCreateBlock(object,indexPath);
             
             CKCollectionContentCellController* cellController = [[CKCollectionContentCellController alloc]initWithContentViewController:content];
             if(cellController.name == nil){
@@ -96,7 +96,7 @@
 }
 
 + (CKCollectionCellControllerFactoryItem*)itemForObjectWithPredicate:(NSPredicate*)predicate
-                                  withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block{
+                                  withContentControllerCreationBlock:(CKReusableViewController*(^)(id object, NSIndexPath* indexPath))block{
     CKCollectionCellControllerFactoryItem* item = [[[CKCollectionCellControllerFactoryItem alloc]init]autorelease];
     item.contentControllerCreateBlock = block;
     item.predicate = predicate;
@@ -104,7 +104,7 @@
 }
 
 + (CKCollectionCellControllerFactoryItem*)itemForObjectOfClass:(Class)type
-                            withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block{
+                            withContentControllerCreationBlock:(CKReusableViewController*(^)(id object, NSIndexPath* indexPath))block{
     return [CKCollectionCellControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         return [evaluatedObject isKindOfClass:type];
     }] withContentControllerCreationBlock:block];
@@ -197,14 +197,14 @@
 }
 
 - (CKCollectionCellControllerFactoryItem*)addItemForObjectOfClass:(Class)type
-                               withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block{
+                               withContentControllerCreationBlock:(CKReusableViewController*(^)(id object, NSIndexPath* indexPath))block{
     CKCollectionCellControllerFactoryItem* item = [CKCollectionCellControllerFactoryItem itemForObjectOfClass:type withContentControllerCreationBlock:block];
     [self.items addObject:item];
     return item;
 }
 
 - (CKCollectionCellControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate
-                                     withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block{
+                                     withContentControllerCreationBlock:(CKReusableViewController*(^)(id object, NSIndexPath* indexPath))block{
     CKCollectionCellControllerFactoryItem* item = [CKCollectionCellControllerFactoryItem itemForObjectWithPredicate:predicate withContentControllerCreationBlock:block];
     [self.items addObject:item];
     return item;

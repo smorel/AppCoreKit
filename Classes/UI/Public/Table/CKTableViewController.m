@@ -19,16 +19,17 @@
 #import "CKTableViewControllerOld.h"
 
 
-@interface CKTableViewController ()<UITableViewDataSource,UITableViewDelegate>
-@property(nonatomic,retain,readwrite) CKTableView* tableView;
+@interface CKTableViewController ()
 @property(nonatomic,retain) NSMutableArray* keyboardObservers;
 @property(nonatomic,assign) CGSize lastPresentedKeyboardSize;
+@property (nonatomic,retain,readwrite) CKSectionContainer* sectionContainer;
 @end
 
 @implementation CKTableViewController
 
 - (void)postInit{
     [super postInit];
+    self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
     self.adjustInsetsOnKeyboardNotification = YES;
     self.style = UITableViewStyleGrouped;
     self.endEditingViewWhenScrolling = YES;
@@ -36,7 +37,7 @@
 
 - (void)dealloc{
     [self unregisterForKeyboardNotifications];
-    [_tableView release];
+    [_sectionContainer release];
     [super dealloc];
 }
 
@@ -50,9 +51,15 @@
     return [CKTableView class];
 }
 
+
+- (CGSize)contentSizeForViewInPopover{
+    return CGSizeMake(self.view.width,MIN(self.view.height,216));
+}
+
+
 #pragma Managing TableHeaderViewController
 
-- (void)setTableHeaderViewController:(CKResusableViewController *)tableHeaderViewController{
+- (void)setTableHeaderViewController:(CKReusableViewController *)tableHeaderViewController{
     if(_tableHeaderViewController){
         [self dismissTableHeaderView];
     }
@@ -91,7 +98,7 @@
 
 #pragma Managing TableFooterViewController
 
-- (void)setTableFooterViewController:(CKResusableViewController *)tableFooterViewController{
+- (void)setTableFooterViewController:(CKReusableViewController *)tableFooterViewController{
     if(_tableFooterViewController){
         [self dismissTableFooterView];
     }
@@ -138,19 +145,21 @@
         [NSValueTransformer transform:[stylesheet objectForKey:@"style"] inProperty:[CKProperty propertyWithObject:self keyPath:@"style"]];
     }
     
-    self.tableView = [[[[self tableViewClass] alloc]initWithFrame:self.view.bounds style:self.style]autorelease];
+    self.tableView = [[[[self tableViewClass] alloc]initWithFrame:[UIScreen mainScreen].bounds style:self.style]autorelease];
     self.tableView.name = @"TableView";
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     [self presentsTableHeaderView];
     [self presentsTableFooterView];
-    
-    [self.view addSubview:self.tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [self.sectionContainer handleViewWillAppearAnimated:animated];
     
     if(self.tableHeaderViewController.state != CKViewControllerStateDidAppear){
         [self.tableHeaderViewController viewWillAppear:NO];
@@ -159,11 +168,6 @@
     if(self.tableFooterViewController.state != CKViewControllerStateDidAppear){
         [self.tableFooterViewController viewWillAppear:NO];
     }
-    
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView reloadData];
-    
     
     if(self.editing){
         [self.tableView setEditing:YES animated:NO];
@@ -178,6 +182,9 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
+    [self.sectionContainer handleViewDidAppearAnimated:animated];
+    
     if(self.tableHeaderViewController.state != CKViewControllerStateDidAppear){
         [self.tableHeaderViewController viewDidAppear:NO];
     }
@@ -190,6 +197,8 @@
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
+    [self.sectionContainer handleViewWillDisappearAnimated:animated];
+    
     if(self.tableHeaderViewController.state != CKViewControllerStateDidDisappear){
         [self.tableHeaderViewController viewWillDisappear:NO];
     }
@@ -198,14 +207,13 @@
         [self.tableFooterViewController viewWillDisappear:NO];
     }
     
-    self.tableView.delegate = nil;
-    self.tableView.dataSource = nil;
-    
     [self unregisterForKeyboardNotifications];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
+    
+    [self.sectionContainer handleViewDidDisappearAnimated:animated];
     
     if(self.tableHeaderViewController.state != CKViewControllerStateDidDisappear){
         [self.tableHeaderViewController viewDidDisappear:NO];
@@ -227,18 +235,18 @@
                  completion:(void (^)(BOOL finished))completion
           preventingUpdates:(BOOL)preventingUpdates{
     if(preventingUpdates){
-        [self.tableView beginPreventingUpdates];
+        [(CKTableView*)self.tableView beginPreventingUpdates];
     }else{
-        [self.tableView beginUpdates];
+        [(CKTableView*)self.tableView beginUpdates];
     }
     
     if(updates){
         updates();
     }
     if(preventingUpdates){
-        [self.tableView endPreventingUpdates];
+        [(CKTableView*)self.tableView endPreventingUpdates];
     }else{
-        [self.tableView endUpdates];
+        [(CKTableView*)self.tableView endUpdates];
     }
     
     if(completion){
@@ -302,16 +310,16 @@
 #pragma mark Managing Content
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.sections.count;
+    return self.sectionContainer.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     return s.controllers.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     NSString* reuseIdentifier = [controller reuseIdentifier];
     
     CKTableViewCell* cell = (CKTableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
@@ -320,11 +328,11 @@
         cell.showsReorderControl = YES;
     }
     
-    return (UITableViewCell*)[self viewForControllerAtIndexPath:indexPath reusingView:cell];
+    return (UITableViewCell*)[self.sectionContainer viewForControllerAtIndexPath:indexPath reusingView:cell];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
     return size.height;
 }
@@ -337,7 +345,7 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     if(controller.contentViewCell){
         CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
         return size.height;
@@ -347,7 +355,7 @@
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     
     if(controller.contentViewCell != cell || controller.state == CKViewControllerStateDidAppear)
         return;
@@ -361,7 +369,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath{
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     
     if(controller.contentViewCell != cell || controller.state == CKViewControllerStateDidDisappear)
         return;
@@ -378,7 +386,7 @@
 #pragma mark Managing section headers
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     if(!s.headerViewController)
         return nil;
     
@@ -398,11 +406,11 @@
 #endif
     }
     
-    return [self viewForController:s.headerViewController reusingView:view];
+    return [self.sectionContainer viewForController:s.headerViewController reusingView:view];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     if(!s.headerViewController)
         return UITableViewAutomaticDimension;
     
@@ -412,7 +420,7 @@
 #ifdef USING_UITableViewHeaderFooterView
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     if(!s.headerViewController)
         return UITableViewAutomaticDimension;
     
@@ -426,7 +434,7 @@
 #endif
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     
     if(!s.headerViewController)
         return ;
@@ -444,7 +452,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     
     if(!s.headerViewController)
         return ;
@@ -464,7 +472,7 @@
 #pragma mark Managing section footers
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     if(!s.footerViewController)
         return nil;
     
@@ -484,11 +492,11 @@
 #endif
     }
     
-    return [self viewForController:s.footerViewController reusingView:view];
+    return [self.sectionContainer viewForController:s.footerViewController reusingView:view];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     if(!s.footerViewController)
         return UITableViewAutomaticDimension;
     
@@ -498,7 +506,7 @@
 #ifdef USING_UITableViewHeaderFooterView
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     if(!s.footerViewController)
         return UITableViewAutomaticDimension;
     
@@ -511,7 +519,7 @@
 #endif
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     
     if(!s.footerViewController)
         return ;
@@ -528,7 +536,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section{
-    CKAbstractSection* s = [self sectionAtIndex:section];
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:section];
     
     if(!s.footerViewController)
         return ;
@@ -548,7 +556,7 @@
 
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     return controller.flags & CKItemViewFlagSelectable;
 }
 
@@ -557,7 +565,7 @@
 - (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath{ }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     BOOL bo = controller.flags & CKItemViewFlagSelectable;
     if(bo){
         return indexPath;
@@ -570,27 +578,27 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSMutableArray* selected = [NSMutableArray arrayWithArray:self.selectedIndexPaths];
+    NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
     [selected addObject:indexPath];
-    self.selectedIndexPaths = selected;
+    self.sectionContainer.selectedIndexPaths = selected;
     
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     [controller didSelect];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         
         //Cause didDeselectRowAtIndexPath is not called!
-        NSMutableArray* selected = [NSMutableArray arrayWithArray:self.selectedIndexPaths];
+        NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
         [selected removeObject:indexPath];
-        self.selectedIndexPaths = selected;
+        self.sectionContainer.selectedIndexPaths = selected;
     });
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSMutableArray* selected = [NSMutableArray arrayWithArray:self.selectedIndexPaths];
+    NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
     [selected removeObject:indexPath];
-    self.selectedIndexPaths = selected;
+    self.sectionContainer.selectedIndexPaths = selected;
 }
 
 #pragma mark Managing Edition
@@ -601,22 +609,24 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
+    CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
     
-    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     return (controller.flags & CKViewControllerFlagsRemovable)
         || ([section isKindOfClass:[CKCollectionSection class]] && [(CKCollectionSection*)section reorderingEnabled] == YES && [[(CKCollectionSection*)section collection]count] > 1);
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
+    CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
     return ([section isKindOfClass:[CKCollectionSection class]] && [(CKCollectionSection*)section reorderingEnabled] == YES && [[(CKCollectionSection*)section collection]count] > 1);
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (editingStyle == UITableViewCellEditingStyleDelete){
-        CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
-        [section sectionedViewController:self willRemoveControllerAtIndex:indexPath.row];
+        CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
+        [self performBatchUpdates:^{
+            [section sectionContainerDelegate:self willRemoveControllerAtIndex:indexPath.row];
+        } completion:nil preventingUpdates:YES];
     }
 }
 
@@ -627,7 +637,7 @@
 - (NSIndexPath*)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath
       toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
     
-    CKCollectionSection* section = (CKCollectionSection*)[self sectionAtIndex:sourceIndexPath.section];
+    CKCollectionSection* section = (CKCollectionSection*)[self.sectionContainer sectionAtIndex:sourceIndexPath.section];
     NSRange rangeForCollectionControllers = [section rangeForCollectionControllers];
     
     if(sourceIndexPath.section == proposedDestinationIndexPath.section){
@@ -647,10 +657,10 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
       toIndexPath:(NSIndexPath *)destinationIndexPath{
-    CKCollectionSection* section = (CKCollectionSection*)[self sectionAtIndex:sourceIndexPath.section];
+    CKCollectionSection* section = (CKCollectionSection*)[self.sectionContainer sectionAtIndex:sourceIndexPath.section];
     
     [self performBatchUpdates:^{
-        [section sectionedViewController:self didMoveControllerAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
+        [section sectionContainerDelegate:self didMoveControllerAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
     } completion:nil preventingUpdates:YES];
     
     //MUST Update visual for separators, borders, ...
@@ -672,13 +682,13 @@
 
 - (void)registerForKeyboardNotifications
 {
-    if(!self.adjustInsetsOnKeyboardNotification)
+   if(!self.adjustInsetsOnKeyboardNotification)
         return;
     
     __unsafe_unretained CKTableViewController* bself = self;
     
     self.keyboardObservers = [NSMutableArray array];
-    [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:UIKeyboardWillShowNotification
+   /* [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:UIKeyboardWillShowNotification
                                                                                        object:nil
                                                                                         queue:[NSOperationQueue mainQueue]
                                                                                    usingBlock:^(NSNotification *note) {
@@ -691,6 +701,8 @@
                                                                                    usingBlock:^(NSNotification *note) {
         [bself keyboardWillBeHidden:note];
     }]];
+    */
+    
     [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:CKSheetWillShowNotification
                                                                                        object:nil
                                                                                         queue:[NSOperationQueue mainQueue]
@@ -775,12 +787,94 @@
     self.lastPresentedKeyboardSize = CGSizeZero;
 }
 
+
+
+/* Forwarding calls to section container
+ */
+
+- (NSInteger)indexOfSection:(CKAbstractSection*)section{
+    return [self.sectionContainer indexOfSection:section];
+}
+
+- (NSIndexSet*)indexesOfSections:(NSArray*)sections{
+    return [self.sectionContainer indexesOfSections:sections];
+}
+
+- (id)sectionAtIndex:(NSInteger)index{
+    return [self.sectionContainer sectionAtIndex:index];
+}
+
+- (NSArray*)sectionsAtIndexes:(NSIndexSet*)indexes{
+    return [self.sectionContainer sectionsAtIndexes:indexes];
+}
+
+- (void)addSection:(CKAbstractSection*)section animated:(BOOL)animated{
+    [self.sectionContainer addSection:section animated:animated];
+}
+
+- (void)insertSection:(CKAbstractSection*)section atIndex:(NSInteger)index animated:(BOOL)animated{
+    [self.sectionContainer insertSection:section atIndex:index animated:animated];
+}
+
+- (void)addSections:(NSArray*)sections animated:(BOOL)animated{
+    [self.sectionContainer addSections:sections animated:animated];
+}
+
+- (void)insertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    [self.sectionContainer insertSections:sections atIndexes:indexes animated:animated];
+}
+
+- (void)removeAllSectionsAnimated:(BOOL)animated{
+    [self.sectionContainer removeAllSectionsAnimated:animated];
+}
+
+- (void)removeSection:(CKAbstractSection*)section animated:(BOOL)animated{
+    [self.sectionContainer removeSection:section animated:animated];
+}
+
+- (void)removeSectionAtIndex:(NSInteger)index animated:(BOOL)animated{
+    [self.sectionContainer removeSectionAtIndex:index animated:animated];
+}
+
+- (void)removeSections:(NSArray*)sections animated:(BOOL)animated{
+    [self.sectionContainer removeSections:sections animated:animated];
+}
+
+- (void)removeSectionsAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    [self.sectionContainer removeSectionsAtIndexes:indexes animated:animated];
+}
+
+- (CKReusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath{
+    return [self.sectionContainer controllerAtIndexPath:indexPath];
+}
+
+- (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths{
+    return [self.sectionContainer controllersAtIndexPaths:indexPaths];
+}
+
+- (NSIndexPath*)indexPathForController:(CKReusableViewController*)controller{
+    return [self.sectionContainer indexPathForController:controller];
+}
+
+- (NSArray*)indexPathsForControllers:(NSArray*)controllers{
+    return [self.sectionContainer indexPathsForControllers:controllers];
+}
+
+- (void)setSelectedIndexPaths:(NSArray*)selectedIndexPaths{
+    self.sectionContainer.selectedIndexPaths = selectedIndexPaths;
+}
+
+- (NSArray*)selectedIndexPaths{
+    return self.sectionContainer.selectedIndexPaths;
+}
+
+
 @end
 
 
 
 
-@implementation CKResusableViewController(CKTableViewController)
+@implementation CKReusableViewController(CKTableViewController)
 @dynamic tableViewCell;
 
 - (CKTableViewCell*)tableViewCell{
@@ -796,5 +890,8 @@
     return nil;
 }
 #endif
+
+
+
 
 @end
