@@ -131,7 +131,7 @@
     return indexPaths;
 }
 
-- (void)fetchNextPage{
+- (void)fetchNextPageFromIndex:(NSInteger)index{
     
 }
 

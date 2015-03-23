@@ -118,8 +118,7 @@
     
     for(UIViewController* controller in self.viewControllers){
         if([controller hasPropertyNamed:@"state"]){
-            CKViewControllerState state = [[controller valueForKey:@"state"]integerValue];
-            if(state != CKViewControllerStateDidAppear || state != CKViewControllerStateWillAppear){
+            if(controller.state != CKViewControllerStateDidAppear || controller.state != CKViewControllerStateWillAppear){
                 [controller viewWillAppear:animated];
             }
         }
@@ -132,8 +131,7 @@
     
     for(UIViewController* controller in self.viewControllers){
         if([controller hasPropertyNamed:@"state"]){
-            CKViewControllerState state = [[controller valueForKey:@"state"]integerValue];
-            if(state != CKViewControllerStateDidAppear){
+            if(controller.state != CKViewControllerStateDidAppear){
                 [controller viewDidAppear:animated];
             }
         }
@@ -145,8 +143,7 @@
     
     for(UIViewController* controller in self.viewControllers){
         if([controller hasPropertyNamed:@"state"]){
-            CKViewControllerState state = [[controller valueForKey:@"state"]integerValue];
-            if(state != CKViewControllerStateDidDisappear || state != CKViewControllerStateWillDisappear){
+            if(controller.state != CKViewControllerStateWillDisappear){
                 [controller viewWillDisappear:animated];
             }
         }
@@ -159,8 +156,7 @@
     
     for(UIViewController* controller in self.viewControllers){
         if([controller hasPropertyNamed:@"state"]){
-            CKViewControllerState state = [[controller valueForKey:@"state"]integerValue];
-            if(state != CKViewControllerStateDidDisappear){
+            if(controller.state != CKViewControllerStateDidDisappear){
                 [controller viewDidDisappear:animated];
             }
         }

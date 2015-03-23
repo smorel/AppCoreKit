@@ -25,6 +25,9 @@
 @property(nonatomic,retain) NSMutableArray* keyboardObservers;
 @property(nonatomic,assign) CGSize lastPresentedKeyboardSize;
 @property (nonatomic,retain,readwrite) CKSectionContainer* sectionContainer;
+@property (nonatomic, assign, readwrite) NSInteger currentPage;
+@property (nonatomic, assign, readwrite) NSInteger numberOfPages;
+@property (nonatomic, assign, readwrite) BOOL scrolling;
 @end
 
 @implementation CKTableViewController
@@ -41,6 +44,9 @@
 
 - (void)postInit{
     [super postInit];
+    self.currentPage = 0;
+    self.numberOfPages = 0;
+    self.scrolling = NO;
     self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
     self.adjustInsetsOnKeyboardNotification = YES;
     self.endEditingViewWhenScrolling = YES;
@@ -154,6 +160,9 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    [self updateNumberOfPages];
+    
     [self.sectionContainer handleViewWillAppearAnimated:animated];
     
     if(self.tableHeaderViewController.state != CKViewControllerStateDidAppear){
@@ -169,6 +178,7 @@
     }
     
     [self registerForKeyboardNotifications];
+    [self fetchMoreData];
     
     //for(NSIndexPath* indexPath in self.selectedIndexPaths){
     //    [self.pickerView selectRow:indexPath.row inComponent:indexPath.section animated:NO];
@@ -191,6 +201,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    
+    [self.tableView removeObserver:self forKeyPath:@"contentSize"];
     
     [self.sectionContainer handleViewWillDisappearAnimated:animated];
     
@@ -254,7 +266,7 @@
 
 
 - (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    if(self.state != CKViewControllerStateDidAppear) return;
+    // if(self.state != CKViewControllerStateDidAppear) return;
     
     
     [self performBatchUpdates:^{
@@ -264,7 +276,7 @@
 }
 
 - (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    if(self.state != CKViewControllerStateDidAppear) return;
+    //if(self.state != CKViewControllerStateDidAppear) return;
     
     [self performBatchUpdates:^{
         [self.tableView deleteSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
@@ -273,7 +285,7 @@
 }
 
 - (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    if(self.state != CKViewControllerStateDidAppear) return;
+    //  if(self.state != CKViewControllerStateDidAppear) return;
     
     [self performBatchUpdates:^{
         [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
@@ -282,7 +294,7 @@
 }
 
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    if(self.state != CKViewControllerStateDidAppear) return;
+    //  if(self.state != CKViewControllerStateDidAppear) return;
  
     [self performBatchUpdates:^{
         [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
@@ -325,6 +337,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+    if(size.height < 0){
+        int i =3;
+    }
     return size.height;
 }
 
@@ -339,6 +354,9 @@
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     if(controller.contentViewCell){
         CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        if(size.height < 0){
+            int i =3;
+        }
         return size.height;
     }
     return controller.estimatedRowHeight;
@@ -405,7 +423,11 @@
     if(!s.headerViewController)
         return UITableViewAutomaticDimension;
     
-    return [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)].height ;
+    CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)] ;
+    if(size.height < 0){
+        int i =3;
+    }
+    return size.height;
 }
 
 #ifdef USING_UITableViewHeaderFooterView
@@ -417,6 +439,9 @@
     
     if(s.headerViewController.contentViewCell){
         CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        if(size.height < 0){
+            int i =3;
+        }
         return size.height;
     }
     return s.headerViewController.estimatedRowHeight;
@@ -491,7 +516,11 @@
     if(!s.footerViewController)
         return UITableViewAutomaticDimension;
     
-    return [s.footerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)].height;
+    CGSize size = [s.footerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+    if(size.height < 0){
+        int i =3;
+    }
+    return size.height;
 }
 
 #ifdef USING_UITableViewHeaderFooterView
@@ -503,6 +532,9 @@
     
     if(s.footerViewController.contentViewCell){
         CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+        if(size.height < 0){
+            int i =3;
+        }
         return size.height;
     }
     return s.footerViewController.estimatedRowHeight;
@@ -687,12 +719,117 @@
 
 //TODO: Manage section fetchNextPage
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if(object == self.tableView && [keyPath isEqualToString:@"contentSize"]){
+        [self updateNumberOfPages];
+    }
+}
+
+//Scroll callbacks : update self.currentPage
+- (void)updateCurrentPage{
+    CGFloat scrollPosition = self.tableView.contentOffset.y;
+    CGFloat height = self.tableView.bounds.size.height;
+    
+    NSInteger intTmp = 0;
+    if(height != 0){
+        CGFloat tmp = scrollPosition / height ;
+        intTmp = (NSInteger)tmp;
+        CGFloat tmpdiff = tmp - intTmp;
+        if(fabs(tmpdiff) > 0.5){
+            ++intTmp;
+        }
+    }
+    
+    NSInteger page = intTmp;
+    if(page < 0)
+        page = 0;
+    
+    if(_currentPage != page){
+        self.currentPage = page;
+    }
+}
+
+- (void)updateNumberOfPages{
+    CGFloat totalSize = self.tableView.contentSize.height;
+    CGFloat height = self.tableView.bounds.size.height;
+    int pages = (height != 0) ? totalSize / height : 0;
+    if(pages < 0)
+        pages = 0;
+    
+    if(_numberOfPages != pages){
+        self.numberOfPages = pages;
+    }
+}
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    self.scrolling = YES;
+    
     if(self.endEditingViewWhenScrolling){
         [self.view endEditing:YES];
         [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
     }
 }
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
+    [self updateCurrentPage];
+    [self fetchMoreData];
+    
+    self.scrolling = NO;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self updateCurrentPage];
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+    [self updateCurrentPage];
+    [self fetchMoreData];
+    
+    self.scrolling = NO;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self updateCurrentPage];
+    [self fetchMoreData];
+    
+    self.scrolling = NO;
+}
+
+- (void)fetchMoreData{
+    NSMutableIndexSet* sectionsIndexes = [NSMutableIndexSet indexSet];
+    NSMutableDictionary* lastRowForSections = [NSMutableDictionary dictionary];
+    
+    for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows) {
+        NSInteger section = indexPath.section;
+        [sectionsIndexes addIndex:indexPath.section];
+        
+        NSNumber* lastRow = [lastRowForSections objectForKey:@(section)];
+        if(lastRow){
+            if([lastRow integerValue] < indexPath.row){
+                [lastRowForSections setObject:@(indexPath.row) forKey:@(section)];
+            }
+        }else{
+            [lastRowForSections setObject:@(indexPath.row) forKey:@(section)];
+        }
+    }
+    
+    if(lastRowForSections.count == 0){
+        for(CKSection* section in self.sectionContainer.sections){
+            if([section isKindOfClass:[CKCollectionSection class]]){
+                [sectionsIndexes addIndex:section.sectionIndex];
+                [lastRowForSections setObject:@(0) forKey:@(section.sectionIndex)];
+            }
+        }
+    }
+    
+    for(NSNumber* section in [lastRowForSections allKeys]){
+        NSNumber* row = [lastRowForSections objectForKey:section];
+        
+        CKAbstractSection* abstractSection = [self sectionAtIndex:[section integerValue]];
+        [abstractSection fetchNextPageFromIndex:[row integerValue]];
+    }
+}
+
 
 
 #pragma mark Managing Keyboard Insets

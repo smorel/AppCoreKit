@@ -72,6 +72,26 @@
  */
 @property(nonatomic,assign) BOOL adjustInsetsOnKeyboardNotification;
 
+///-----------------------------------
+/// @name Getting the Controller status
+///-----------------------------------
+/**
+ Returns the current page computed using tableView height or width depending on the orientation
+ */
+@property (nonatomic, assign, readonly) NSInteger currentPage;
+/**
+ Returns the number of pages computed using tableView height or width depending on the orientation
+ */
+@property (nonatomic, assign, readonly) NSInteger numberOfPages;
+
+///-----------------------------------
+/// @name Scrolling
+///-----------------------------------
+/**
+ Returns the scrolling state of the table. Somebody can bind himself on this property to act depending on the scrolling state for example.
+ */
+@property (nonatomic, assign, readonly) BOOL scrolling;
+
 /**
  */
 - (void)scrollToControllerAtIndexPath:(NSIndexPath*)indexpath animated:(BOOL)animated;

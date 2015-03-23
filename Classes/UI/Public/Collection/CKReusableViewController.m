@@ -181,11 +181,15 @@
         CGSize returnSize = CGSizeMake(MIN(size.width,self.view.width),MIN(size.height,self.view.height));
         
         //Support for CKLayout
-        if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
+        // if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
             returnSize = [view preferredSizeConstraintToSize:size];
-        }
+        //}
         //TODO : Auto layout support !
-        else{
+        //else{
+        //    returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
+        //}
+        
+        if(returnSize.height <= 0){
             returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
         }
         
@@ -205,11 +209,16 @@
         
         //Support for CKLayout
         CGSize returnSize = CGSizeMake(0,0);
-        if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
-            returnSize = [view preferredSizeConstraintToSize:size];
-        }
+        //Support for CKLayout
+        // if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
+        returnSize = [view preferredSizeConstraintToSize:size];
+        //}
         //TODO : Auto layout support !
-        else{
+        //else{
+        //    returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
+        //}
+        
+        if(returnSize.height <= 0){
             returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
         }
         
@@ -311,6 +320,10 @@
         if(bself.view.window == nil || bself.isComputingSize || bself.state != CKViewControllerStateDidAppear)
             return;
         
+        NSIndexPath* indexPath = bself.indexPath;
+        if(!indexPath)
+            return;
+        
         CGSize currentSize = self.view.bounds.size;
         CGSize size = [bself preferredSizeConstraintToSize:CGSizeMake(bself.contentViewCell.width,MAXFLOAT)];
         if(CGSizeEqualToSize(currentSize, size))
@@ -320,7 +333,7 @@
             [bself.collectionCellController invalidateSize];
         }
         else if([bself.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
-            [bself.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:bself.indexPath];
+            [bself.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:indexPath];
         }
     };
 }

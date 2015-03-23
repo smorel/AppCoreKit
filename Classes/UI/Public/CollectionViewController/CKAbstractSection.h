@@ -72,6 +72,6 @@
 
 @property(nonatomic,readonly) NSInteger sectionIndex;
 
-- (void)fetchNextPage;
+- (void)fetchNextPageFromIndex:(NSInteger)index;
 
 @end

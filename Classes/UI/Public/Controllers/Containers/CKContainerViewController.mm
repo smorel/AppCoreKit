@@ -159,11 +159,8 @@ typedef void(^CKTransitionBlock)();
     [UIView setAnimationsEnabled:NO];
     
     UIViewController *newController = self.selectedViewController;
-    if(newController && [newController.view superview] != nil){
-        //if([CKOSVersion() floatValue] < 5){
-            [newController viewWillAppear:animated];
-            self.needsToCallViewDidAppearOnSelectedController = YES;
-        //}
+    if([newController isViewLoaded] && [newController.view window] != nil && newController.state != CKViewControllerStateWillAppear ){
+        //  [newController viewWillAppear:animated];
     }
     else{
         [self presentViewControllerAtIndex:self.selectedIndex withTransition:CKTransitionNone];
@@ -175,23 +172,24 @@ typedef void(^CKTransitionBlock)();
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
     
-    if(self.needsToCallViewDidAppearOnSelectedController){
-        UIViewController *newController = self.selectedViewController;
-        if(newController){
-            [newController viewDidAppear:animated];
-        }
-        self.needsToCallViewDidAppearOnSelectedController = NO;
-    }
+    UIViewController *newController = self.selectedViewController;
+    //if(newController.state != CKViewControllerStateDidAppear ){
+    //    [newController viewDidAppear:animated];
+    // }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-	[self.selectedViewController viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
+    //   if( self.selectedViewController.state != CKViewControllerStateWillDisappear){
+    //      [self.selectedViewController viewWillDisappear:animated];
+    // }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
-	[self.selectedViewController viewDidDisappear:animated];
+    [super viewDidDisappear:animated];
+    //if(self.selectedViewController.state != CKViewControllerStateDidDisappear){
+    //    [self.selectedViewController viewDidDisappear:animated];
+    // }
 }
 
 #pragma mark - Controllers management

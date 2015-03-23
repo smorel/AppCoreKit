@@ -223,7 +223,7 @@
                     id object = objects[i];
                     NSIndexPath* indexPath = indexPaths[i];
                     CKReusableViewController* controller = [bself.factory controllerForObject:object indexPath:indexPath containerController:bself.containerViewController];
-                    NSAssert(controllers,@"Unable to create a controller from the specified factory for object %@",object);
+                    NSAssert(controller,@"Unable to create a controller from the specified factory for object %@",object);
                     [controllers addObject:controller];
                 }
                 [bself insertCollectionControllers:controllers atIndexes:indexes animated:YES];
@@ -259,9 +259,14 @@
 }
 
 
-- (void)fetchNextPage{
-    //TODO : Moves paging on CKFeedSource !
-    [self.collection fetchRange:NSMakeRange(self.collection.count, 20)];
+- (void)fetchNextPageFromIndex:(NSInteger)index{
+    if(self.collection.isFetching)
+        return;
+    
+    NSInteger pageSize = 20;
+    if(index >= self.collection.count - pageSize){
+        [self.collection fetchRange:NSMakeRange(self.collection.count, pageSize)];
+    }
 }
 
 - (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate willRemoveControllerAtIndex:(NSInteger)index{
