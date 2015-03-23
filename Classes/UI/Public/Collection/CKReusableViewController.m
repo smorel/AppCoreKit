@@ -554,4 +554,44 @@
     }
 }
 
+- (void)setNeedsDisplay{
+    if([[self styleManager] isEmpty])
+        return;
+    
+    if(self.tableViewCell){
+        CKStyleView* backgroundStyleView = (self.tableViewCell.backgroundView && [self.tableViewCell.backgroundView isKindOfClass:[CKStyleView class]])
+            ? (CKStyleView*)self.tableViewCell.backgroundView : nil;
+        CKStyleView* selectedBackgroundStyleView = (self.tableViewCell.selectedBackgroundView && [self.tableViewCell.selectedBackgroundView isKindOfClass:[CKStyleView class]])
+            ? (CKStyleView*)self.tableViewCell.selectedBackgroundView : nil;
+        
+        NSMutableDictionary* styleForBackgroundView = nil;
+        NSMutableDictionary* styleForSelectedBackgroundView = nil;
+        if(backgroundStyleView || selectedBackgroundStyleView){
+            
+            NSMutableDictionary* style = [self controllerStyle];
+            NSMutableDictionary* tableViewCellStyle = [style styleForObject:self.tableViewCell  propertyName:@"tableViewCell"];
+            
+            if(backgroundStyleView){
+                styleForBackgroundView = [tableViewCellStyle styleForObject:self.tableViewCell.backgroundView  propertyName:@"backgroundView"];
+            }
+            if(selectedBackgroundStyleView){
+                styleForSelectedBackgroundView = [tableViewCellStyle styleForObject:self.tableViewCell.selectedBackgroundView  propertyName:@"selectedBackgroundView"];
+            }
+        }
+        
+        
+        if(styleForBackgroundView){
+            backgroundStyleView.corners = [self view:self.tableViewCell.backgroundView cornerStyleWithStyle:styleForBackgroundView];
+            backgroundStyleView.borderLocation = [self view:self.tableViewCell.backgroundView borderStyleWithStyle:styleForBackgroundView];
+            backgroundStyleView.separatorLocation = [self view:self.tableViewCell.backgroundView separatorStyleWithStyle:styleForBackgroundView];
+        }
+        
+        if(styleForSelectedBackgroundView){
+            selectedBackgroundStyleView.corners = [self view:self.tableViewCell.selectedBackgroundView cornerStyleWithStyle:styleForSelectedBackgroundView];
+            selectedBackgroundStyleView.borderLocation = [self view:self.tableViewCell.selectedBackgroundView borderStyleWithStyle:styleForSelectedBackgroundView];
+            selectedBackgroundStyleView.separatorLocation = [self view:self.tableViewCell.selectedBackgroundView separatorStyleWithStyle:styleForSelectedBackgroundView];
+        }
+    }
+}
+
 @end

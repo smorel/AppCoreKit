@@ -264,9 +264,8 @@
     
     [self performBatchUpdates:^{
         [self.tableView insertSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
-    
-    //MUST Update visual for separators, borders, ...
 }
 
 - (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
@@ -274,9 +273,8 @@
     
     [self performBatchUpdates:^{
         [self.tableView deleteSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
-    
-    //MUST Update visual for separators, borders, ...
 }
 
 - (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
@@ -284,9 +282,8 @@
     
     [self performBatchUpdates:^{
         [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
-    
-    //MUST Update visual for separators, borders, ...
 }
 
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
@@ -294,9 +291,8 @@
  
     [self performBatchUpdates:^{
         [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
-    
-    //MUST Update visual for separators, borders, ...
 }
 
 - (UIView*)contentView{
@@ -661,9 +657,16 @@
     
     [self performBatchUpdates:^{
         [section sectionContainerDelegate:self didMoveControllerAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
+        [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
-    
-    //MUST Update visual for separators, borders, ...
+}
+
+- (void)updateAppearanceOfVisibleControllers{
+    NSArray* indexPaths = [self.tableView indexPathsForVisibleRows];
+    NSArray* controllers = [self controllersAtIndexPaths:indexPaths];
+    for(CKReusableViewController* controller in controllers){
+        [controller setNeedsDisplay];
+    }
 }
 
 #pragma mark Managing Scrolling

@@ -137,6 +137,10 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
  */
 @property(nonatomic,assign) UITableViewCellAccessoryType accessoryType;
 
+/** This method will be called by the container view controller if the separators or corners needs to be updated after some controllers have been removed/added in sections.
+ */
+- (void)setNeedsDisplay;
+
 @end
 
 
