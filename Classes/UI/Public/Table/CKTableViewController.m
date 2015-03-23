@@ -52,7 +52,7 @@
 
 #pragma Managing TableHeaderViewController
 
-- (void)setTableHeaderViewController:(CKCollectionCellContentViewController *)tableHeaderViewController{
+- (void)setTableHeaderViewController:(CKResusableViewController *)tableHeaderViewController{
     if(_tableHeaderViewController){
         [self dismissTableHeaderView];
     }
@@ -91,7 +91,7 @@
 
 #pragma Managing TableFooterViewController
 
-- (void)setTableFooterViewController:(CKCollectionCellContentViewController *)tableFooterViewController{
+- (void)setTableFooterViewController:(CKResusableViewController *)tableFooterViewController{
     if(_tableFooterViewController){
         [self dismissTableFooterView];
     }
@@ -311,7 +311,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     NSString* reuseIdentifier = [controller reuseIdentifier];
     
     CKTableViewCell* cell = (CKTableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
@@ -324,7 +324,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
     return size.height;
 }
@@ -337,7 +337,7 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     if(controller.contentViewCell){
         CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
         return size.height;
@@ -347,7 +347,7 @@
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     
     if(controller.contentViewCell != cell || controller.state == CKViewControllerStateDidAppear)
         return;
@@ -361,7 +361,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     
     if(controller.contentViewCell != cell || controller.state == CKViewControllerStateDidDisappear)
         return;
@@ -548,7 +548,7 @@
 
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     return controller.flags & CKItemViewFlagSelectable;
 }
 
@@ -557,7 +557,7 @@
 - (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath{ }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     BOOL bo = controller.flags & CKItemViewFlagSelectable;
     if(bo){
         return indexPath;
@@ -574,7 +574,7 @@
     [selected addObject:indexPath];
     self.selectedIndexPaths = selected;
     
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     [controller didSelect];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -603,7 +603,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
     CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
     
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     return (controller.flags & CKViewControllerFlagsRemovable)
         || ([section isKindOfClass:[CKCollectionSection class]] && [(CKCollectionSection*)section reorderingEnabled] == YES && [[(CKCollectionSection*)section collection]count] > 1);
 }
@@ -780,7 +780,7 @@
 
 
 
-@implementation CKCollectionCellContentViewController(CKTableViewController)
+@implementation CKResusableViewController(CKTableViewController)
 @dynamic tableViewCell;
 
 - (CKTableViewCell*)tableViewCell{

@@ -31,26 +31,26 @@
 - (NSRange)rangeForCollectionControllers;
 
 @property(nonatomic,readonly) NSArray* collectionHeaderControllers;
-- (void)addCollectionHeaderController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated;
-- (void)insertCollectionHeaderController:(CKCollectionCellContentViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)addCollectionHeaderController:(CKResusableViewController*)controller animated:(BOOL)animated;
+- (void)insertCollectionHeaderController:(CKResusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)addCollectionHeaderControllers:(NSArray*)controller animated:(BOOL)animated;
 - (void)insertCollectionHeaderControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 
 - (void)removeAllCollectionHeaderControllersAnimated:(BOOL)animated;
-- (void)removeCollectionHeaderController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated;
+- (void)removeCollectionHeaderController:(CKResusableViewController*)controller animated:(BOOL)animated;
 - (void)removeCollectionHeaderControllerAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)removeCollectionHeaderControllers:(NSArray*)controllers animated:(BOOL)animated;
 - (void)removeCollectionHeaderControllersAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 
 
 @property(nonatomic,readonly) NSArray* collectionFooterControllers;
-- (void)addCollectionFooterController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated;
-- (void)insertCollectionFooterController:(CKCollectionCellContentViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)addCollectionFooterController:(CKResusableViewController*)controller animated:(BOOL)animated;
+- (void)insertCollectionFooterController:(CKResusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)addCollectionFooterControllers:(NSArray*)controller animated:(BOOL)animated;
 - (void)insertCollectionFooterControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 
 - (void)removeAllCollectionFooterControllersAnimated:(BOOL)animated;
-- (void)removeCollectionFooterController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated;
+- (void)removeCollectionFooterController:(CKResusableViewController*)controller animated:(BOOL)animated;
 - (void)removeCollectionFooterControllerAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)removeCollectionFooterControllers:(NSArray*)controllers animated:(BOOL)animated;
 - (void)removeCollectionFooterControllersAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;

@@ -12,10 +12,10 @@
 @interface CKViewControllerFactoryItem : NSObject
 
 + (CKViewControllerFactoryItem*)itemWithPredicate:(NSPredicate*)predicate
-                                          factory:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+                                          factory:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block;
 
 
-@property(nonatomic,copy)   CKCollectionCellContentViewController*(^factory)(id object, NSIndexPath* indexPath);
+@property(nonatomic,copy)   CKResusableViewController*(^factory)(id object, NSIndexPath* indexPath);
 @property(nonatomic,retain) NSPredicate* predicate;
 
 @end
@@ -30,7 +30,7 @@
 }
 
 + (CKViewControllerFactoryItem*)itemWithPredicate:(NSPredicate*)predicate
-                                          factory:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))factory{
+                                          factory:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))factory{
     CKViewControllerFactoryItem* item = [[[CKViewControllerFactoryItem alloc]init]autorelease];
     item.predicate = predicate;
     item.factory = factory;
@@ -56,14 +56,14 @@
 }
 
 - (void)registerFactoryForObjectOfClass:(Class)type
-                                factory:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))factory{
+                                factory:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))factory{
     [self registerFactoryWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         return [evaluatedObject isKindOfClass:type];
     }] factory:factory];
 }
 
 - (void)registerFactoryWithPredicate:(NSPredicate*)predicate
-                             factory:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))factory{
+                             factory:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))factory{
     CKViewControllerFactoryItem* item = [CKViewControllerFactoryItem itemWithPredicate:predicate factory:factory];
     if(!self.items) { self.items = [NSMutableArray array]; }
     [self.items addObject:item];
@@ -78,12 +78,12 @@
     return nil;
 }
 
-- (CKCollectionCellContentViewController*)controllerForObject:(id)object indexPath:(NSIndexPath*)indexPath containerController:(UIViewController*)containerController{
+- (CKResusableViewController*)controllerForObject:(id)object indexPath:(NSIndexPath*)indexPath containerController:(UIViewController*)containerController{
     CKViewControllerFactoryItem* item = [self factoryItemForObject:object atIndexPath:indexPath containerController:containerController];
     if(!item)
         return nil;
     
-    CKCollectionCellContentViewController* controller = item.factory(object,indexPath);
+    CKResusableViewController* controller = item.factory(object,indexPath);
     [controller setContainerViewController:containerController];
     return controller;
 }

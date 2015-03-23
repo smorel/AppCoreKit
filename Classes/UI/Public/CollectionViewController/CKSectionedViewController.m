@@ -11,7 +11,7 @@
 #import <objc/runtime.h>
 
 
-@interface CKCollectionCellContentViewController ()
+@interface CKResusableViewController ()
 @property(nonatomic,assign) BOOL isComputingSize;
 @end
 
@@ -22,11 +22,11 @@
 
 static char UIViewAttachedCellContentViewControllerKey;
 
-- (void)setAttachedCellContentViewController:(CKCollectionCellContentViewController *)attachedCellContentViewController{
+- (void)setAttachedCellContentViewController:(CKResusableViewController *)attachedCellContentViewController{
     objc_setAssociatedObject(self, &UIViewAttachedCellContentViewControllerKey, attachedCellContentViewController, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (CKCollectionCellContentViewController*)attachedCellContentViewController{
+- (CKResusableViewController*)attachedCellContentViewController{
     return objc_getAssociatedObject(self, &UIViewAttachedCellContentViewControllerKey);
 }
 
@@ -180,7 +180,7 @@ static char UIViewAttachedCellContentViewControllerKey;
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated {}
 
 
-- (CKCollectionCellContentViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath{
+- (CKResusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath{
     CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
     return [section controllerAtIndex:indexPath.row];
 }
@@ -188,7 +188,7 @@ static char UIViewAttachedCellContentViewControllerKey;
 - (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths{
     NSMutableArray* controllers = [NSMutableArray arrayWithCapacity:indexPaths.count];
     for(NSIndexPath* indexPath in indexPaths){
-        CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+        CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
         if(controller){
             [controllers addObject:controller];
         }
@@ -211,7 +211,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     }
 }
 
-- (UIView*)viewForController:(CKCollectionCellContentViewController*)controller reusingView:(UIView*)view{
+- (UIView*)viewForController:(CKResusableViewController*)controller reusingView:(UIView*)view{
     
     UIView* contentView = nil;
     if(![NSObject isClass:[view class] exactKindOfClass:[UIView class]]){
@@ -228,7 +228,7 @@ static char UIViewAttachedCellContentViewControllerKey;
         [controller viewDidLoad];
         
     }else{
-        CKCollectionCellContentViewController* previousController = [view attachedCellContentViewController];
+        CKResusableViewController* previousController = [view attachedCellContentViewController];
         if(previousController){
             if(previousController.state != CKViewControllerStateDidDisappear){
                 if(previousController.state != CKViewControllerStateWillDisappear){
@@ -267,7 +267,7 @@ static char UIViewAttachedCellContentViewControllerKey;
 }
 
 - (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view{
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKResusableViewController* controller = [self controllerAtIndexPath:indexPath];
     return [self viewForController:controller reusingView:view];
 }
 
@@ -275,7 +275,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     [super viewWillAppear:animated];
     
     for(CKSection* section in self.sections){
-        for(CKCollectionCellContentViewController* controller in section.controllers){
+        for(CKResusableViewController* controller in section.controllers){
             if([controller isViewLoaded]){
                 [controller viewWillAppear:animated];
             }
@@ -287,7 +287,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     [super viewWillDisappear:animated];
     
     for(CKSection* section in self.sections){
-        for(CKCollectionCellContentViewController* controller in section.controllers){
+        for(CKResusableViewController* controller in section.controllers){
             if([controller isViewLoaded]){
                 [controller viewWillDisappear:animated];
             }
@@ -299,7 +299,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     [super viewDidAppear:animated];
     
     for(CKSection* section in self.sections){
-        for(CKCollectionCellContentViewController* controller in section.controllers){
+        for(CKResusableViewController* controller in section.controllers){
             if([controller isViewLoaded]){
                 [controller viewDidAppear:animated];
             }
@@ -311,7 +311,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     [super viewDidDisappear:animated];
     
     for(CKSection* section in self.sections){
-        for(CKCollectionCellContentViewController* controller in section.controllers){
+        for(CKResusableViewController* controller in section.controllers){
             if([controller isViewLoaded]){
                 [controller viewDidDisappear:animated];
             }
@@ -319,7 +319,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     }
 }
 
-- (NSIndexPath*)indexPathForController:(CKCollectionCellContentViewController*)controller{
+- (NSIndexPath*)indexPathForController:(CKResusableViewController*)controller{
     NSArray* indexPaths = [self indexPathsForControllers:@[controller]];
     return indexPaths.count > 0 ? [indexPaths firstObject] : nil;
 }
@@ -331,7 +331,7 @@ static char UIViewAttachedCellContentViewControllerKey;
     for(CKSection* section in self.sections){
         
         NSInteger controllerIndex = 0;
-        for(CKCollectionCellContentViewController* controller in section.controllers){
+        for(CKResusableViewController* controller in section.controllers){
             if([controllers indexOfObjectIdenticalTo:controller] != NSNotFound){
                 [indexPaths addObject:[NSIndexPath indexPathForRow:controllerIndex inSection:sectionIndex]];
             }

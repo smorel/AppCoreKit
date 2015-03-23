@@ -85,7 +85,7 @@ typedef NS_ENUM(NSInteger,CKSectionViewControllerType){
  </pre>
  
  */
-@interface CKSectionHeaderFooterViewController : CKCollectionCellContentViewController
+@interface CKSectionHeaderFooterViewController : CKResusableViewController
 
 /**
  */

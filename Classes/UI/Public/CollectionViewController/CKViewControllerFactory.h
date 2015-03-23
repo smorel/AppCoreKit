@@ -6,23 +6,23 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKCollectionCellContentViewController.h"
+#import "CKResusableViewController.h"
 
 
-// this will replace CKCollectionCellControllerFactory and create CKCollectionCellContentViewController instead of CKCollectionCellController
+// this will replace CKCollectionCellControllerFactory and create CKResusableViewController instead of CKCollectionCellController
 @interface CKViewControllerFactory : NSObject
 
 + (CKViewControllerFactory*)factory;
 
-- (CKCollectionCellContentViewController*)controllerForObject:(id)object
+- (CKResusableViewController*)controllerForObject:(id)object
                                                     indexPath:(NSIndexPath*)indexPath
                                           containerController:(UIViewController*)containerController;
 
 
 - (void)registerFactoryForObjectOfClass:(Class)type
-                                factory:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))factory;
+                                factory:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))factory;
 
 - (void)registerFactoryWithPredicate:(NSPredicate*)predicate
-                                factory:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))factory;
+                                factory:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))factory;
 
 @end

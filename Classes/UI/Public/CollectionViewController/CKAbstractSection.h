@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKCollectionCellContentViewController.h"
+#import "CKResusableViewController.h"
 #import "NSObject+Bindings.h"
 
 @class CKAbstractSection;
@@ -32,8 +32,8 @@
 
 @property(nonatomic,assign) CKSectionedViewController* delegate;
 
-@property(nonatomic,retain) CKCollectionCellContentViewController* headerViewController;
-@property(nonatomic,retain) CKCollectionCellContentViewController* footerViewController;
+@property(nonatomic,retain) CKResusableViewController* headerViewController;
+@property(nonatomic,retain) CKResusableViewController* footerViewController;
 
 
 /** This will set headerViewController with a CKSectionHeaderFooterViewController initialized with the specified text
@@ -53,10 +53,10 @@
 
 @property(nonatomic,readonly) NSArray* controllers;
 
-- (NSInteger)indexOfController:(CKCollectionCellContentViewController*)controller;
+- (NSInteger)indexOfController:(CKResusableViewController*)controller;
 - (NSIndexSet*)indexesOfControllers:(NSArray*)controllers;
 
-- (CKCollectionCellContentViewController*)controllerAtIndex:(NSInteger)index;
+- (CKResusableViewController*)controllerAtIndex:(NSInteger)index;
 - (NSArray*)controllersAtIndexes:(NSIndexSet*)indexes;
 
 - (void)sectionedViewController:(CKSectionedViewController*)sectionViewController willRemoveControllerAtIndex:(NSInteger)index;

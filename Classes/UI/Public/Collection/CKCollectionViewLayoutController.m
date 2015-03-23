@@ -251,7 +251,7 @@
             //TODO : Removes this check when CKCollectionContentCellController will be merged with CKCollectionCellController
             if([controller isKindOfClass:[CKCollectionContentCellController class]]){
                 CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
-                CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
+                CKResusableViewController* contentViewController = [contentCellController contentViewController];
                 if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
                     
                     
@@ -264,7 +264,7 @@
             //TODO : Removes this check when CKCollectionContentCellController will be merged with CKCollectionCellController
             if([controller isKindOfClass:[CKCollectionContentCellController class]]){
                 CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
-                CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
+                CKResusableViewController* contentViewController = [contentCellController contentViewController];
                 if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
                     id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
                     [morphableDelegate morphableLayout:morphableLayout didMorphFormRatio:morphableLayout.morphRatio toRatio:morphableLayout.morphRatio];
@@ -506,7 +506,7 @@
         //TODO : Removes this check when CKCollectionContentCellController will be merged with CKCollectionCellController
         if([controller isKindOfClass:[CKCollectionContentCellController class]]){
             CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
-            CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
+            CKResusableViewController* contentViewController = [contentCellController contentViewController];
             if(contentViewController.contentViewCell != nil){
                 if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
                     id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
@@ -524,7 +524,7 @@
         //TODO : Removes this check when CKCollectionContentCellController will be merged with CKCollectionCellController
         if([controller isKindOfClass:[CKCollectionContentCellController class]]){
             CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
-            CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
+            CKResusableViewController* contentViewController = [contentCellController contentViewController];
             if(contentViewController.contentViewCell != nil){
                 if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
                     id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;
@@ -542,7 +542,7 @@
         //TODO : Removes this check when CKCollectionContentCellController will be merged with CKCollectionCellController
         if([controller isKindOfClass:[CKCollectionContentCellController class]]){
             CKCollectionContentCellController* contentCellController = (CKCollectionContentCellController*)controller;
-            CKCollectionCellContentViewController* contentViewController = [contentCellController contentViewController];
+            CKResusableViewController* contentViewController = [contentCellController contentViewController];
             if(contentViewController.contentViewCell != nil){
                 if([contentViewController conformsToProtocol:@protocol(CKCollectionViewMorphableLayoutDelegate) ]){
                     id<CKCollectionViewMorphableLayoutDelegate> morphableDelegate = (id<CKCollectionViewMorphableLayoutDelegate> )contentViewController;

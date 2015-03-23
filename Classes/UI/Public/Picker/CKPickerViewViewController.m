@@ -122,7 +122,7 @@
     if(component >= self.sections.count)
         return 0.0f;
     
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:component]];
+    CKResusableViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:component]];
     CGFloat width = [self pickerView:pickerView widthForComponent:component];
     
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
@@ -155,7 +155,7 @@
     
     self.selectedIndexPaths = indexPaths;
     
-    CKCollectionCellContentViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component]];
+    CKResusableViewController* controller = [self controllerAtIndexPath:[NSIndexPath indexPathForRow:row inSection:component]];
     [controller didSelect];
 }
 

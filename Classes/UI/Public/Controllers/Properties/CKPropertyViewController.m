@@ -8,7 +8,7 @@
 
 #import "CKPropertyViewController.h"
 #import "NSObject+Bindings.h"
-#import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "CKResusableViewController+ResponderChain.h"
 #import "UINavigationController+BlockBasedDelegate.h"
 #import "CKSheetController.h"
 #import "UIViewController+Style.h"

@@ -18,10 +18,10 @@
 #import "CKResourceManager.h"
 #import "CKResourceDependencyContext.h"
 #import "CKViewCellCache.h"
-#import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "CKResusableViewController+ResponderChain.h"
 
 
-@interface CKCollectionCellContentViewController ()
+@interface CKResusableViewController ()
 @property(nonatomic,assign) BOOL isComputingSize;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @end
@@ -39,12 +39,12 @@
 
 
 @interface CKTableViewContentCellController()
-@property(nonatomic,retain) CKCollectionCellContentViewController* contentViewController;
+@property(nonatomic,retain) CKResusableViewController* contentViewController;
 @end
 
 @implementation CKTableViewContentCellController
 
-- (id)initWithContentViewController:(CKCollectionCellContentViewController*)contentViewController{
+- (id)initWithContentViewController:(CKResusableViewController*)contentViewController{
     self = [super init];
     self.cellStyle = CKTableViewCellStyleCustomLayout;
     [self setContentViewController:contentViewController];
@@ -202,7 +202,7 @@
 
 
 
-@implementation CKCollectionCellContentViewController(CKTableViewContentCellController)
+@implementation CKResusableViewController(CKTableViewContentCellController)
 
 - (CKTableViewContentCellController*)createTableViewCellController{
     return [[[CKTableViewContentCellController alloc]initWithContentViewController:self]autorelease];

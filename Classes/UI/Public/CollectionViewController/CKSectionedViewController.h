@@ -14,7 +14,7 @@
 /**
  */
 @interface UIView(CKSectionedViewController)
-@property(nonatomic,retain) CKCollectionCellContentViewController* attachedCellContentViewController;
+@property(nonatomic,retain) CKResusableViewController* attachedCellContentViewController;
 @end
 
 
@@ -76,13 +76,13 @@
 - (void)removeSections:(NSArray*)sections animated:(BOOL)animated;
 - (void)removeSectionsAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated;
 
-- (CKCollectionCellContentViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath;
+- (CKResusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath;
 - (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths;
 
-- (NSIndexPath*)indexPathForController:(CKCollectionCellContentViewController*)controller;
+- (NSIndexPath*)indexPathForController:(CKResusableViewController*)controller;
 - (NSArray*)indexPathsForControllers:(NSArray*)controllers;
 
-- (UIView*)viewForController:(CKCollectionCellContentViewController*)controller reusingView:(UIView*)view;
+- (UIView*)viewForController:(CKResusableViewController*)controller reusingView:(UIView*)view;
 - (UIView*)viewForControllerAtIndexPath:(NSIndexPath*)indexPath reusingView:(UIView*)view;
 
 @property(nonatomic,retain) NSArray* selectedIndexPaths;

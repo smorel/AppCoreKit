@@ -1,12 +1,12 @@
 //
-//  CKCollectionCellContentViewController.m
+//  CKResusableViewController.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2013-10-23.
 //  Copyright (c) 2013 Sebastien Morel. All rights reserved.
 //
 
-#import "CKCollectionCellContentViewController.h"
+#import "CKResusableViewController.h"
 #import "NSObject+Bindings.h"
 #import "UIView+Positioning.h"
 #import "UIView+Style.h"
@@ -37,7 +37,7 @@
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
 @end
 
-@interface CKCollectionCellContentViewController ()
+@interface CKResusableViewController ()
 @property(nonatomic,retain) CKWeakRef* collectionCellControllerWeakRef;
 @property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @property(nonatomic,retain) UIView* reusableView;
@@ -49,7 +49,7 @@
 - (UIView*)parentControllerView;
 @end
 
-@implementation CKCollectionCellContentViewController
+@implementation CKResusableViewController
 
 - (void)dealloc{
     [self clearBindingsContext];
@@ -305,7 +305,7 @@
     
     [self applyStyleToSubViews];
     
-    __unsafe_unretained CKCollectionCellContentViewController* bself = self;
+    __unsafe_unretained CKResusableViewController* bself = self;
     
     self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
         if(bself.view.window == nil || bself.isComputingSize || bself.state != CKViewControllerStateDidAppear)

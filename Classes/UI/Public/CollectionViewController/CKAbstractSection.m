@@ -51,7 +51,7 @@
     [self setCollapsed:collapsed animated:NO];
 }
 
-- (NSInteger)indexOfController:(CKCollectionCellContentViewController*)controller{
+- (NSInteger)indexOfController:(CKResusableViewController*)controller{
     return [[self mutableControllers]indexOfObjectIdenticalTo:controller];
 }
 
@@ -61,7 +61,7 @@
     }];
 }
 
-- (CKCollectionCellContentViewController*)controllerAtIndex:(NSInteger)index{
+- (CKResusableViewController*)controllerAtIndex:(NSInteger)index{
     if(index >= [self mutableControllers].count)
         return nil;
     
@@ -77,7 +77,7 @@
         return;
     
     if(self.delegate){
-        for(CKCollectionCellContentViewController* controller in controllers){
+        for(CKResusableViewController* controller in controllers){
             [controller setContainerViewController:self.delegate];
         }
     }
@@ -138,7 +138,7 @@
     [_delegate release];
     _delegate = [delegate retain];
     
-    for(CKCollectionCellContentViewController* controller in self.controllers){
+    for(CKResusableViewController* controller in self.controllers){
         [controller setContainerViewController:_delegate];
     }
     
@@ -146,7 +146,7 @@
     [self.footerViewController setContainerViewController:_delegate];
 }
 
-- (void)setHeaderViewController:(CKCollectionCellContentViewController *)headerViewController{
+- (void)setHeaderViewController:(CKResusableViewController *)headerViewController{
     [_headerViewController release];
     _headerViewController = [headerViewController retain];
     if(_delegate){
@@ -154,7 +154,7 @@
     }
 }
 
-- (void)setFooterViewController:(CKCollectionCellContentViewController *)footerViewController{
+- (void)setFooterViewController:(CKResusableViewController *)footerViewController{
     [_footerViewController release];
     _footerViewController = [footerViewController retain];
     if(_delegate){
@@ -176,7 +176,7 @@
 
 - (void)sectionedViewController:(CKSectionedViewController*)sectionViewController didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
 {
-    CKCollectionCellContentViewController* controller = [[[self mutableControllers] objectAtIndex:from]retain];
+    CKResusableViewController* controller = [[[self mutableControllers] objectAtIndex:from]retain];
     
     [[self mutableControllers] removeObjectAtIndex:from];
     [[self mutableControllers] insertObject:controller atIndex:to];

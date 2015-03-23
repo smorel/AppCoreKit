@@ -114,11 +114,11 @@
 
 
 
-- (void)addCollectionHeaderController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated{
+- (void)addCollectionHeaderController:(CKResusableViewController*)controller animated:(BOOL)animated{
     [self insertCollectionHeaderController:controller atIndex:self.collectionHeaderControllers.count animated:animated];
 }
 
-- (void)insertCollectionHeaderController:(CKCollectionCellContentViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
+- (void)insertCollectionHeaderController:(CKResusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
     [self insertCollectionHeaderControllers:@[controller] atIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -130,7 +130,7 @@
     [self removeCollectionHeaderControllersAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionHeaderControllers.count)] animated:animated];
 }
 
-- (void)removeCollectionHeaderController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated{
+- (void)removeCollectionHeaderController:(CKResusableViewController*)controller animated:(BOOL)animated{
     NSInteger index = [[self mutableCollectionHeaderControllers]indexOfObjectIdenticalTo:controller];
     [self removeCollectionHeaderControllerAtIndex:index animated:animated];
 }
@@ -161,11 +161,11 @@
 
 
 
-- (void)addCollectionFooterController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated{
+- (void)addCollectionFooterController:(CKResusableViewController*)controller animated:(BOOL)animated{
     [self insertCollectionFooterController:controller atIndex:self.mutableCollectionFooterControllers.count animated:animated];
 }
 
-- (void)insertCollectionFooterController:(CKCollectionCellContentViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
+- (void)insertCollectionFooterController:(CKResusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
     [self insertCollectionFooterControllers:@[controller] atIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -177,7 +177,7 @@
     [self removeCollectionFooterControllersAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.mutableCollectionFooterControllers.count)] animated:animated];
 }
 
-- (void)removeCollectionFooterController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated{
+- (void)removeCollectionFooterController:(CKResusableViewController*)controller animated:(BOOL)animated{
     NSInteger index = [[self mutableCollectionFooterControllers]indexOfObjectIdenticalTo:controller];
     [self removeCollectionFooterControllerAtIndex:index animated:animated];
 }
@@ -222,7 +222,7 @@
                 for(int i =0; i< objects.count; ++i){
                     id object = objects[i];
                     NSIndexPath* indexPath = indexPaths[i];
-                    CKCollectionCellContentViewController* controller = [bself.factory controllerForObject:object indexPath:indexPath containerController:bself.delegate];
+                    CKResusableViewController* controller = [bself.factory controllerForObject:object indexPath:indexPath containerController:bself.delegate];
                     NSAssert(controllers,@"Unable to create a controller from the specified factory for object %@",object);
                     [controllers addObject:controller];
                 }
@@ -291,7 +291,7 @@
         from -= self.collectionHeaderControllers.count;
         to -= self.collectionHeaderControllers.count;
         
-        CKCollectionCellContentViewController* controller = [[[self mutableCollectionControllers] objectAtIndex:from]retain];
+        CKResusableViewController* controller = [[[self mutableCollectionControllers] objectAtIndex:from]retain];
         id object = [[self.collection objectAtIndex:from]retain];
         
         [self clearCollectionBindings];

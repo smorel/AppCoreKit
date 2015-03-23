@@ -16,7 +16,7 @@
 #import "CKResourceManager.h"
 #import "CKStyleManager.h"
 #import "UIViewController+Style.h"
-#import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "CKResusableViewController+ResponderChain.h"
 #import "CKSheetController.h"
 #import "CKTableViewController.h"
 
@@ -336,7 +336,7 @@
     
     NSInteger index = 0;
     for(CKPropertySelectionValue* v in sorted){
-        CKCollectionCellContentViewController* cell = [factory controllerForObject:v
+        CKResusableViewController* cell = [factory controllerForObject:v
                                                                          indexPath:[NSIndexPath indexPathForRow:index inSection:0]
                                                                containerController:editionController];
         
@@ -412,7 +412,7 @@
     }
 }
 
-- (CKCollectionCellContentViewController*)defaultControllerForValue:(CKPropertySelectionValue*)v{
+- (CKResusableViewController*)defaultControllerForValue:(CKPropertySelectionValue*)v{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
     CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^{
@@ -436,7 +436,7 @@
     
     CKViewControllerFactory* factory = [CKViewControllerFactory factory];
     [factory registerFactoryForObjectOfClass:[CKPropertySelectionValue class]
-                                     factory:^CKCollectionCellContentViewController *(id object, NSIndexPath *indexPath) {
+                                     factory:^CKResusableViewController *(id object, NSIndexPath *indexPath) {
             return [bself defaultControllerForValue:object];
     }];
     

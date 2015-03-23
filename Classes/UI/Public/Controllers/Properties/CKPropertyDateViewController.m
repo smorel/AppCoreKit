@@ -8,7 +8,7 @@
 
 #import "CKPropertyDateViewController.h"
 #import "NSDate+Conversions.h"
-#import "CKCollectionCellContentViewController+ResponderChain.h"
+#import "CKResusableViewController+ResponderChain.h"
 
 
 @interface CKPropertyDateViewController ()

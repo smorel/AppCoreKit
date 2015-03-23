@@ -28,11 +28,11 @@
     return [[[CKSection alloc]initWithControllers:controllers]autorelease];
 }
 
-- (void)addController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated{
+- (void)addController:(CKResusableViewController*)controller animated:(BOOL)animated{
     [self insertController:controller atIndex:self.mutableControllers.count animated:animated];
 }
 
-- (void)insertController:(CKCollectionCellContentViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
+- (void)insertController:(CKResusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
     [self insertControllers:@[controller] atIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -44,7 +44,7 @@
     [self removeControllersAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.mutableControllers.count)] animated:animated];
 }
 
-- (void)removeController:(CKCollectionCellContentViewController*)controller animated:(BOOL)animated{
+- (void)removeController:(CKResusableViewController*)controller animated:(BOOL)animated{
     NSInteger index = [self indexOfController:controller];
     [self removeControllerAtIndex:index animated:animated];
 }

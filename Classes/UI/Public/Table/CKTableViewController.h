@@ -16,7 +16,7 @@
 
 /**
  */
-@interface CKCollectionCellContentViewController(CKTableViewController)
+@interface CKResusableViewController(CKTableViewController)
 
 /**
  */
@@ -47,11 +47,11 @@
 
 /**
  */
-@property(nonatomic,retain) CKCollectionCellContentViewController* tableHeaderViewController;
+@property(nonatomic,retain) CKResusableViewController* tableHeaderViewController;
 
 /**
  */
-@property(nonatomic,retain) CKCollectionCellContentViewController* tableFooterViewController;
+@property(nonatomic,retain) CKResusableViewController* tableFooterViewController;
 
 /** Default is YES
  */

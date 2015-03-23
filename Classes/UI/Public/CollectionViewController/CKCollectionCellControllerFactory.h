@@ -10,12 +10,12 @@
 #import "CKCollectionCellController.h"
 
 @class CKCollectionViewController;
-@class CKCollectionCellContentViewController;
+@class CKResusableViewController;
 
 /********************************* CKCollectionCellControllerFactoryItem *********************************/
 
 typedef CKCollectionCellController*(^CKCollectionCellControllerCreationBlock)(id object, NSIndexPath* indexPath);
-typedef CKCollectionCellContentViewController*(^CKCollectionCellContentControllerCreationBlock)(id object, NSIndexPath* indexPath);
+typedef CKResusableViewController*(^CKCollectionCellContentControllerCreationBlock)(id object, NSIndexPath* indexPath);
 
 /**
  */
@@ -38,12 +38,12 @@ typedef CKCollectionCellContentViewController*(^CKCollectionCellContentControlle
 /**
  */
 + (CKCollectionCellControllerFactoryItem*)itemForObjectWithPredicate:(NSPredicate*)predicate
-                                  withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+                                  withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block;
 
 /**
  */
 + (CKCollectionCellControllerFactoryItem*)itemForObjectOfClass:(Class)type
-                            withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+                            withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block;
 
 
 
@@ -106,12 +106,12 @@ typedef CKCollectionCellContentViewController*(^CKCollectionCellContentControlle
 /**
  */
 - (CKCollectionCellControllerFactoryItem*)addItemForObjectOfClass:(Class)type
-                                      withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+                                      withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block;
 
 /**
  */
 - (CKCollectionCellControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate
-                                            withContentControllerCreationBlock:(CKCollectionCellContentViewController*(^)(id object, NSIndexPath* indexPath))block;
+                                            withContentControllerCreationBlock:(CKResusableViewController*(^)(id object, NSIndexPath* indexPath))block;
 
 ///-----------------------------------
 /// @name Creating CKCollectionCellController
