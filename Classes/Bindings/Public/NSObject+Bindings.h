@@ -67,6 +67,49 @@ typedef NS_ENUM(NSInteger, CKBindingsContextOptions){
  */
 + (void)removeAllBindingsForContext:(id)context;
 
+
+/** beginBindingsContext is calling beginBindingsContextByRemovingPreviousBindings
+ */
+- (void)beginBindingsContext;
+
+/**
+ */
+- (void)endBindingsContext;
+
+/**
+ */
+- (void)clearBindingsContext;
+
+/**
+ */
+- (id)bindingContextWithScope:(NSString*)scope;
+
+/** It often happend that we want to manage several bindings context per object instance cause all the bindings do not have the same life span.
+ Or we want to manage bindings in a class and other bindings in an inherited class.
+ Scope is here to allow multiple set of binding per instance.
+ */
+- (void)beginBindingsContextWithScope:(NSString*)scope;
+
+/**
+ */
+- (void)beginBindingsContextByKeepingPreviousBindingsWithScope:(NSString*)scope;
+
+/**
+ */
+- (void)beginBindingsContextByRemovingPreviousBindingsWithScope:(NSString*)scope;
+
+/**
+ */
+- (void)beginBindingsContextByKeepingPreviousBindingsWithOptions:(CKBindingsContextOptions)options scope:(NSString*)scope;
+
+/**
+ */
+- (void)beginBindingsContextByRemovingPreviousBindingsWithOptions:(CKBindingsContextOptions)options scope:(NSString*)scope;
+
+/**
+ */
+- (void)clearBindingsContextWithScope:(NSString*)scope;
+
 /**
  */
 - (void)beginBindingsContextByKeepingPreviousBindings;
@@ -83,14 +126,6 @@ typedef NS_ENUM(NSInteger, CKBindingsContextOptions){
  */
 - (void)beginBindingsContextByRemovingPreviousBindingsWithOptions:(CKBindingsContextOptions)options;
 
-
-/**
- */
-- (void)endBindingsContext;
-
-/**
- */
-- (void)clearBindingsContext;
 
 /**
  */

@@ -170,6 +170,52 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[NSObject removeAllBindingsForContext:[self weakRefBindingsContext]];
 }
 
+- (void)beginBindingsContext{
+    [self beginBindingsContextByRemovingPreviousBindings];
+}
+
+- (id)bindingContextWithScope:(NSString*)scope{
+    return [NSString stringWithFormat:@"%@_<%p>_%@",[self class],self,scope];
+}
+
+- (void)beginBindingsContextWithScope:(NSString*)scope{
+    [self beginBindingsContextByRemovingPreviousBindingsWithScope:scope];
+}
+
+- (void)clearBindingsContextWithScope:(NSString*)scope{
+    NSString* context = [self bindingContextWithScope:scope];
+    [NSObject removeAllBindingsForContext:context];
+}
+
+/**
+ */
+- (void)beginBindingsContextByKeepingPreviousBindingsWithScope:(NSString*)scope{
+    NSString* context = [self bindingContextWithScope:scope];
+    [NSObject beginBindingsContext:context policy:CKBindingsContextPolicyAdd options:(CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone)];
+}
+
+/**
+ */
+- (void)beginBindingsContextByRemovingPreviousBindingsWithScope:(NSString*)scope{
+    NSString* context = [self bindingContextWithScope:scope];
+    [NSObject beginBindingsContext:context policy:CKBindingsContextPolicyRemovePreviousBindings options:(CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone)];
+}
+
+/**
+ */
+- (void)beginBindingsContextByKeepingPreviousBindingsWithOptions:(CKBindingsContextOptions)options scope:(NSString*)scope{
+    NSString* context = [self bindingContextWithScope:scope];
+    [NSObject beginBindingsContext:context policy:CKBindingsContextPolicyAdd options:options];
+}
+
+/**
+ */
+- (void)beginBindingsContextByRemovingPreviousBindingsWithOptions:(CKBindingsContextOptions)options scope:(NSString*)scope{
+    NSString* context = [self bindingContextWithScope:scope];
+    [NSObject beginBindingsContext:context policy:CKBindingsContextPolicyRemovePreviousBindings options:options];
+}
+
+
 @end
 
 @implementation NSObject (CKBindings)
