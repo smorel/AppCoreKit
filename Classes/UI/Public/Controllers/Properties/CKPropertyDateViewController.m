@@ -87,14 +87,14 @@ static NSDateFormatter* sharedFormatter = nil;
     if(!self.view)
         return;
     
-    [self.view beginBindingsContextByRemovingPreviousBindings];
+    [self.view beginBindingsContextWithScope:@"CKPropertyDateViewController"];
     [self setupBindings];
     [self.view endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.view clearBindingsContext];
+    [self.view clearBindingsContextWithScope:@"CKPropertyDateViewController"];
 }
 
 

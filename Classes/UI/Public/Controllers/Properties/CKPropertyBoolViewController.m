@@ -63,14 +63,14 @@
     if(!self.view)
         return;
     
-    [self.view beginBindingsContextByRemovingPreviousBindings];
+    [self.view beginBindingsContextWithScope:@"CKPropertyBoolViewController"];
     [self setupBindings];
     [self.view endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.view clearBindingsContext];
+    [self.view clearBindingsContextWithScope:@"CKPropertyBoolViewController"];
 }
 
 

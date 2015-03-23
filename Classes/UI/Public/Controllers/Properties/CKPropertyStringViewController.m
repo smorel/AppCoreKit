@@ -106,14 +106,14 @@
     if(!self.view)
         return;
     
-    [self.view beginBindingsContextByRemovingPreviousBindings];
+    [self.view beginBindingsContextWithScope:@"CKPropertyStringViewController"];
     [self setupBindings];
     [self.view endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.view clearBindingsContext];
+    [self.view clearBindingsContextWithScope:@"CKPropertyStringViewController"];
 }
 
 #pragma mark Setup MVC and bindings
@@ -130,6 +130,7 @@
     ValueTextView.placeholder = _(self.valuePlaceholderLabel);
     ValueTextView.delegate = self;
     
+    //verify if cells are added after it has been setup !
     UIToolbar* toolbar = [self editionToolbar];
     if(toolbar){
         ValueTextView.inputAccessoryView = toolbar;
