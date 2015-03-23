@@ -17,6 +17,8 @@
 #import "CKTableViewCellController.h"
 #import "CKSheetController.h"
 #import "CKTableViewControllerOld.h"
+#import "CKRuntime.h"
+#import <objc/runtime.h>
 
 
 @interface CKTableViewController ()
@@ -27,11 +29,20 @@
 
 @implementation CKTableViewController
 
+- (instancetype)init{
+    return [self initWithStyle:UITableViewStyleGrouped];
+}
+
+- (instancetype)initWithStyle:(UITableViewStyle)style{
+    self = [super initWithStyle:style];
+    [self postInit];
+    return self;
+}
+
 - (void)postInit{
     [super postInit];
     self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
     self.adjustInsetsOnKeyboardNotification = YES;
-    self.style = UITableViewStyleGrouped;
     self.endEditingViewWhenScrolling = YES;
 }
 
@@ -46,11 +57,6 @@
                                                  UITableViewStylePlain,
                                                  UITableViewStyleGrouped );
 }
-
-- (Class)tableViewClass{
-    return [CKTableView class];
-}
-
 
 - (CGSize)contentSizeForViewInPopover{
     return CGSizeMake(self.view.width,MIN(self.view.height,216));
@@ -140,17 +146,6 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    NSMutableDictionary* stylesheet = [self controllerStyle];
-    if([stylesheet containsObjectForKey:@"style"]){
-        [NSValueTransformer transform:[stylesheet objectForKey:@"style"] inProperty:[CKProperty propertyWithObject:self keyPath:@"style"]];
-    }
-    
-    self.tableView = [[[[self tableViewClass] alloc]initWithFrame:[UIScreen mainScreen].bounds style:self.style]autorelease];
-    self.tableView.name = @"TableView";
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleSize;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     
     [self presentsTableHeaderView];
     [self presentsTableFooterView];
@@ -691,7 +686,7 @@
     __unsafe_unretained CKTableViewController* bself = self;
     
     self.keyboardObservers = [NSMutableArray array];
-   /* [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:UIKeyboardWillShowNotification
+    [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:UIKeyboardWillShowNotification
                                                                                        object:nil
                                                                                         queue:[NSOperationQueue mainQueue]
                                                                                    usingBlock:^(NSNotification *note) {
@@ -704,7 +699,7 @@
                                                                                    usingBlock:^(NSNotification *note) {
         [bself keyboardWillBeHidden:note];
     }]];
-    */
+    
     
     [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:CKSheetWillShowNotification
                                                                                        object:nil
@@ -737,6 +732,8 @@
         kbSize = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue].size;
     }else{
         kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        self.lastPresentedKeyboardSize = kbSize;
+        return; //Done by UITableViewController
     }
     
     CGFloat diff = (kbSize.height - self.lastPresentedKeyboardSize.height);
@@ -763,13 +760,14 @@
     
     kbSize = self.lastPresentedKeyboardSize;
     if([info objectForKey:CKSheetFrameEndUserInfoKey]){
-        //kbSize = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue].size;
         animationCurve = (UIViewAnimationCurve)[[info objectForKey:CKSheetAnimationCurveUserInfoKey] integerValue];
         animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
     }else{
-        //kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-        [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+        self.lastPresentedKeyboardSize = CGSizeZero;
+        return; //Done by UITableViewController
+        
+        // [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+        //[[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     }
     
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.tableView.contentInset.top,
@@ -894,7 +892,67 @@
 }
 #endif
 
+@end
 
+
+@implementation UITableView (AppCoreKit)
+
++ (void)load{
+    CKSwizzleSelector([UITableView class], @selector(beginUpdates), @selector(AppCoreKit_beginUpdates));
+    CKSwizzleSelector([UITableView class], @selector(endUpdates), @selector(AppCoreKit_endUpdates));
+}
+
+static char UITableViewPreventingUpdatesKey;
+
+- (void)setPreventingUpdates:(BOOL)preventingUpdates{
+    objc_setAssociatedObject(self, &UITableViewPreventingUpdatesKey, @(preventingUpdates), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (BOOL)preventingUpdates{
+    id value = objc_getAssociatedObject(self, &UITableViewPreventingUpdatesKey);
+    return value ? [value integerValue] : NO;
+}
+
+static char UITableViewNumberOfUpdatesKey;
+
+- (void)setNumberOfUpdates:(NSInteger)updates{
+    objc_setAssociatedObject(self, &UITableViewNumberOfUpdatesKey, @(updates), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (NSInteger)numberOfUpdates{
+    id value = objc_getAssociatedObject(self, &UITableViewNumberOfUpdatesKey);
+    return value ? [value integerValue] : NO;
+}
+
+- (void)beginPreventingUpdates{
+    self.preventingUpdates = YES;
+}
+
+- (void)endPreventingUpdates{
+    self.preventingUpdates = NO;
+}
+
+- (void)AppCoreKit_beginUpdates{
+    if( self.preventingUpdates)
+        return;
+    
+    if(self.numberOfUpdates == 0){
+        //      NSLog(@"beginUpdates");
+        [self AppCoreKit_beginUpdates];
+    }
+    self.numberOfUpdates++;
+}
+
+- (void)AppCoreKit_endUpdates{
+    if( self.preventingUpdates)
+        return;
+    
+    self.numberOfUpdates--;
+    if(self.numberOfUpdates == 0){
+        //       NSLog(@"endUpdates");
+        [self AppCoreKit_endUpdates];
+    }
+}
 
 
 @end

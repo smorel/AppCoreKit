@@ -31,15 +31,30 @@
 @end
 
 
+/**
+ */
+@interface UITableView(AppCoreKit)
+
+/**
+ */
+@property(nonatomic,readonly) BOOL isPreventingUpdates;
+
+/**
+ */
+- (void)beginPreventingUpdates;
+
+/**
+ */
+- (void)endPreventingUpdates;
+
+@end
+
+
 
 
 /**
  */
 @interface CKTableViewController : UITableViewController<CKSectionContainerDelegate>
-
-/** default id grouped
- */
-@property(nonatomic,assign) UITableViewStyle style;
 
 /**
  */
@@ -56,10 +71,6 @@
 /** Default is YES
  */
 @property(nonatomic,assign) BOOL adjustInsetsOnKeyboardNotification;
-
-/**
- */
-- (Class)tableViewClass;
 
 /**
  */
