@@ -265,7 +265,7 @@
 }
 
 - (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate willRemoveControllerAtIndex:(NSInteger)index{
-    
+    NSInteger originalIndex = index;
     
     if(index < self.collectionHeaderControllers.count){
         [[self mutableCollectionHeaderControllers] removeObjectAtIndex:index];
@@ -280,12 +280,15 @@
         [[self mutableCollectionFooterControllers] removeObjectAtIndex:index];
     }
     
-    [super sectionContainerDelegate:sectionContainerDelegate willRemoveControllerAtIndex:index];
+    [super sectionContainerDelegate:sectionContainerDelegate willRemoveControllerAtIndex:originalIndex];
     
 }
 
 - (void)sectionContainerDelegate:(UIViewController<CKSectionContainerDelegate>*)sectionContainerDelegate didMoveControllerAtIndex:(NSInteger)from toIndex:(NSInteger)to
 {
+    NSInteger originalFrom = from;
+    NSInteger originalTo = to;
+    
     if(from < (self.collectionControllers.count + self.collectionHeaderControllers.count)
        && to < (self.collectionControllers.count + self.collectionHeaderControllers.count)){
         from -= self.collectionHeaderControllers.count;
@@ -305,15 +308,10 @@
         [controller release];
         [object release];
         
-        NSLog(@"collection: %@controllers: %@",
-              [[[self collection]allObjects]valueForKey:@"username"],
-              [[[self mutableCollectionControllers]valueForKey:@"property"]valueForKey:@"value"]
-        );
-        
         [self setupCollectionControllersByUpdatingCollectionController:NO];
     }
     
-    [super sectionContainerDelegate:sectionContainerDelegate didMoveControllerAtIndex:from toIndex:to];
+    [super sectionContainerDelegate:sectionContainerDelegate didMoveControllerAtIndex:originalFrom toIndex:originalTo];
 }
 
 - (NSRange)rangeForCollectionControllers{

@@ -603,13 +603,32 @@
     CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
     
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
-    return (controller.flags & CKViewControllerFlagsRemovable)
-        || ([section isKindOfClass:[CKCollectionSection class]] && [(CKCollectionSection*)section reorderingEnabled] == YES && [[(CKCollectionSection*)section collection]count] > 1);
+    if(controller.flags & CKViewControllerFlagsRemovable)
+        return YES;
+    
+    CKCollectionSection* collectionSection = [section isKindOfClass:[CKCollectionSection class]] ? (CKCollectionSection*)section : nil;
+    if(collectionSection){
+        NSRange range = [collectionSection rangeForCollectionControllers];
+        if([collectionSection reorderingEnabled] && [[collectionSection collection]count] > 1 && indexPath.row >= range.location && indexPath.row < (range.location + range.length)){
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
     CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
-    return ([section isKindOfClass:[CKCollectionSection class]] && [(CKCollectionSection*)section reorderingEnabled] == YES && [[(CKCollectionSection*)section collection]count] > 1);
+    
+    CKCollectionSection* collectionSection = [section isKindOfClass:[CKCollectionSection class]] ? (CKCollectionSection*)section : nil;
+    if(collectionSection){
+        NSRange range = [collectionSection rangeForCollectionControllers];
+        if([collectionSection reorderingEnabled] && [[collectionSection collection]count] > 1 && indexPath.row >= range.location && indexPath.row < (range.location + range.length)){
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
