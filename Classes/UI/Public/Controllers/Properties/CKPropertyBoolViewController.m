@@ -48,11 +48,23 @@
     PropertyNameLabel.numberOfLines = 1;
     PropertyNameLabel.marginRight = 10;
     
+    UILabel* SubtitleLabel = [[UILabel alloc]init];
+    SubtitleLabel.name = @"SubtitleLabel";
+    SubtitleLabel.font = [UIFont systemFontOfSize:14];
+    SubtitleLabel.textColor = [UIColor blackColor];
+    SubtitleLabel.numberOfLines = 1;
+    SubtitleLabel.marginRight = 10;
+    SubtitleLabel.marginTop = 10;
+    
+    
     UISwitch* ValueSwitch = [[UISwitch alloc]init];
     ValueSwitch.name = @"ValueSwitch";
     
+    CKVerticalBoxLayout* vBox = [[CKVerticalBoxLayout alloc]init];
+    vBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,SubtitleLabel]];
+    
     CKHorizontalBoxLayout* hBox = [[CKHorizontalBoxLayout alloc]init];
-    hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,[[[CKLayoutFlexibleSpace alloc]init]autorelease],ValueSwitch]];
+    hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vBox,[[[CKLayoutFlexibleSpace alloc]init]autorelease],ValueSwitch]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
 }
@@ -80,6 +92,8 @@
     UILabel* PropertyNameLabel = [self.view viewWithName:@"PropertyNameLabel"];
     PropertyNameLabel.text = self.propertyNameLabel;
     
+    UILabel* SubtitleLabel = [self.view viewWithName:@"SubtitleLabel"];
+    
     UISwitch* ValueSwitch = [self.view viewWithName:@"ValueSwitch"];
     
     [ValueSwitch bindEvent:UIControlEventValueChanged withBlock:^{
@@ -88,6 +102,9 @@
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
         BOOL bo = [value boolValue];
+        SubtitleLabel.text = bo ? bself.onSubtitleLabel : bself.offSubtitleLabel;
+        SubtitleLabel.hidden = (SubtitleLabel.text == nil);
+        
         if(ValueSwitch.on != bo){
             ValueSwitch.on = bo;
         }

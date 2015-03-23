@@ -17,14 +17,19 @@
  
  - default view padding is 10 10 10 10, flexibleSize is NO so that it fits the height of the content
  - default marginRight on *PropertyNameLabel*: 10
+ - default marginRight on *SubtitleLabel*: 10
+ - default marginTop on *SubtitleLabel*: 10
  - *ValueSwitch* is separated by a flexi space so that it aligns on the right.
  - default appearance for PropertyNameLabel is bold system font of size 17, black color, numberOfLines 1
+ - default appearance for SubtitleLabel is  system font of size 14, black color, numberOfLines 1
  
  
  <pre>
  ****************************************************
  |                                                  |
- | [PropertyNameLabel] -------------[ ValueSwitch ] |
+ | [PropertyNameLabel]              [             ] |
+ |                      ------------[ ValueSwitch ] |
+ | [SubtitleLabel]                  [             ] |
  |                                                  |
  ****************************************************
  </pre>
@@ -54,6 +59,12 @@
                  (font, textColor, margins, ...)
          },
  
+         "UILabel[name=SubtitleLabel]" : {
+            "hidden" : 0, //or 1
+            //customize any appearance or layout properties of UILabel
+              (font, textColor, margins, ...)
+         },
+ 
          "UISwitch[name=ValueSwitch]" : {
              //customize any appearance or layout properties of UISwitch
                  (font, textColor, margins, returnKeyType, keyboardAppearance, keyboardType ...)
@@ -70,5 +81,13 @@
  Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
  */
 @property(nonatomic,retain) NSString* propertyNameLabel;
+
+/**
+ */
+@property(nonatomic,retain) NSString* onSubtitleLabel;
+
+/**
+ */
+@property(nonatomic,retain) NSString* offSubtitleLabel;
 
 @end
