@@ -28,6 +28,7 @@
 #import "CKResourceDependencyContext.h"
 #import <objc/runtime.h>
 #import "CKReusableViewController.h"
+#import "CKSectionContainer.h"
 
 
 @interface UIViewController (AppCoreKit_Private)<UIGestureRecognizerDelegate>
@@ -814,7 +815,7 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
         [CKResourceDependencyContext beginContext];
     }
     
-    if([self isKindOfClass:[CKReusableViewController class]]
+    if([self containerViewControllerConformsToProtocol:@protocol(CKSectionContainerDelegate)] != nil
        || [self isKindOfClass:[UINavigationController class]]){
         //Style applied by super class
         /*
