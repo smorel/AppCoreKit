@@ -325,4 +325,25 @@ static char CKViewControllerContainerViewControllerKey;
     return [ref object];
 }
 
+- (UIViewController*)containerViewControllerOfClass:(Class)type{
+    UIViewController* controller = [self containerViewController];
+    while(controller){
+        if([controller isKindOfClass:type])
+            return controller;
+        controller = [controller containerViewController];
+    }
+    return nil;
+}
+
+
+- (UIViewController*)containerViewControllerConformsToProtocol:(Protocol*)protocol{
+    UIViewController* controller = [self containerViewController];
+    while(controller){
+        if([controller conformsToProtocol:protocol])
+            return controller;
+        controller = [controller containerViewController];
+    }
+    return nil;
+}
+
 @end
