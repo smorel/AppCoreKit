@@ -23,6 +23,15 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
     CKViewControllerFlagsAll = CKViewControllerFlagsSelectable  | CKViewControllerFlagsRemovable
 };
 
+typedef NS_ENUM(NSInteger,CKAccessoryType){
+    CKAccessoryNone = UITableViewCellAccessoryNone,
+    CKAccessoryDisclosureIndicator = UITableViewCellAccessoryDisclosureIndicator,
+    CKAccessoryDetailDisclosureButton = UITableViewCellAccessoryDetailDisclosureButton,
+    CKAccessoryCheckmark = UITableViewCellAccessoryCheckmark,
+    CKAccessoryDetailButton = UITableViewCellAccessoryDetailButton,
+    CKAccessoryActivityIndicator
+};
+
 
 /**
  */
@@ -91,7 +100,7 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 
 /**
  */
-@property(nonatomic,copy) void(^didSelectBlock)();
+@property(nonatomic,copy) void(^didSelectBlock)(CKReusableViewController* controller);
 
 /** This method is called after the cell has been removec
  */
@@ -99,7 +108,7 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 
 /**
  */
-@property(nonatomic,copy) void(^didRemoveBlock)();
+@property(nonatomic,copy) void(^didRemoveBlock)(CKReusableViewController* controller);
 
 
 
@@ -145,7 +154,7 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 /** The accessoryType when the CKStandardContentViewController is presented in a table view.
  Default value is UITableViewCellAccessoryNone
  */
-@property(nonatomic,assign) UITableViewCellAccessoryType accessoryType;
+@property(nonatomic,assign) CKAccessoryType accessoryType;
 
 /** This method will be called by the container view controller if the separators or corners needs to be updated after some controllers have been removed/added in sections.
  */

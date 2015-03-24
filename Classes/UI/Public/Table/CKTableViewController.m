@@ -238,6 +238,7 @@
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
+    [[self.view superview] endEditing:YES];
     [self.tableView removeObserver:self forKeyPath:@"contentSize"];
     
     [self.sectionContainer handleViewWillDisappearAnimated:animated];
@@ -805,7 +806,7 @@
     self.scrolling = YES;
     
     if(self.endEditingViewWhenScrolling){
-        [self.view endEditing:YES];
+        [[self.view superview] endEditing:YES];
         [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
     }
 }

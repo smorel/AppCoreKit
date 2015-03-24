@@ -414,7 +414,7 @@
 - (CKReusableViewController*)defaultControllerForValue:(CKPropertySelectionValue*)v{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
-    CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^{
+    CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^(CKStandardContentViewController* controller){
         [bself setValueSelected:v];
     }];
     

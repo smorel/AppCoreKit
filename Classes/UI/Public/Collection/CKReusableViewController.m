@@ -248,13 +248,13 @@
 
 - (void)didSelect{
     if(self.didSelectBlock){
-        self.didSelectBlock();
+        self.didSelectBlock(self);
     }
 }
 
 - (void)didRemove{
     if(self.didRemoveBlock){
-        self.didRemoveBlock();
+        self.didRemoveBlock(self);
     }
 }
 
@@ -275,9 +275,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    if(self.tableViewCell){
-        self.tableViewCell.accessoryType = self.accessoryType;
-    }
+    [self setupAccessoryView];
     
     //HERE we do not apply style on sub views as we have reuse
     if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
@@ -510,22 +508,41 @@
     return NO;
 }
 
-
-- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType{
-    _accessoryType = accessoryType;
-    
+- (void)setupAccessoryView{
     if(self.tableViewCell){
-        self.tableViewCell.accessoryType = self.accessoryType;
+        if(self.accessoryType == CKAccessoryActivityIndicator){
+            UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            self.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+            self.tableViewCell.accessoryView = activityIndicator;
+            [activityIndicator startAnimating];
+        }else{
+            if([self.tableViewCell.accessoryView isKindOfClass:[UIActivityIndicatorView class]]){
+                [(UIActivityIndicatorView*)self.tableViewCell.accessoryView stopAnimating];
+            }
+            self.tableViewCell.accessoryView = nil;
+            self.tableViewCell.accessoryType = self.accessoryType;
+        }
     }
 }
 
+- (void)setAccessoryType:(CKAccessoryType)accessoryType{
+    _accessoryType = accessoryType;
+    [self setupAccessoryView];
+}
+
 - (void)accessoryTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+    attributes.enumDescriptor = CKEnumDefinition(@"CKAccessoryType",
                                                  UITableViewCellAccessoryNone,                   // don't show any accessory view
                                                  UITableViewCellAccessoryDisclosureIndicator,    // regular chevron. doesn't track
                                                  UITableViewCellAccessoryDetailDisclosureButton, // info button w/ chevron. tracks
                                                  UITableViewCellAccessoryCheckmark,              // checkmark. doesn't track
-                                                 UITableViewCellAccessoryDetailButton);
+                                                 UITableViewCellAccessoryDetailButton,
+                                                 CKAccessoryNone,
+                                                 CKAccessoryDisclosureIndicator,
+                                                 CKAccessoryDetailDisclosureButton,
+                                                 CKAccessoryDetailButton,
+                                                 CKAccessoryCheckmark,
+                                                 CKAccessoryActivityIndicator);
 }
 
 

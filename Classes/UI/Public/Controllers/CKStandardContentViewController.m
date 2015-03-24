@@ -24,43 +24,45 @@
     [super dealloc];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title action:(void(^)(CKStandardContentViewController* controller))action{
     return [self controllerWithTitle:title subtitle:nil defaultImageName:nil imageURL:nil action:action];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle action:(void(^)(CKStandardContentViewController* controller))action{
     return [self controllerWithTitle:title subtitle:subtitle defaultImageName:nil imageURL:nil action:action];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title imageURL:(NSURL*)imageURL action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title imageURL:(NSURL*)imageURL action:(void(^)(CKStandardContentViewController* controller))action{
     return [self controllerWithTitle:title subtitle:nil defaultImageName:nil imageURL:imageURL action:action];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle imageURL:(NSURL*)imageURL action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle imageURL:(NSURL*)imageURL action:(void(^)(CKStandardContentViewController* controller))action{
     return [self controllerWithTitle:title subtitle:subtitle defaultImageName:nil imageURL:imageURL action:action];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title imageName:(NSString*)imageName action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title imageName:(NSString*)imageName action:(void(^)(CKStandardContentViewController* controller))action{
     return [self controllerWithTitle:title subtitle:nil imageName:imageName action:action];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle imageName:(NSString*)imageName action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle imageName:(NSString*)imageName action:(void(^)(CKStandardContentViewController* controller))action{
     NSString* filePath = [CKResourceManager pathForImageNamed:imageName];
     NSURL* imageURL = filePath ? [NSURL fileURLWithPath:filePath] : nil;
     return [self controllerWithTitle:title subtitle:subtitle defaultImageName:nil imageURL:imageURL action:action];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title defaultImageName:(NSString*)defaultImageName imageURL:(NSURL*)imageURL action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title defaultImageName:(NSString*)defaultImageName imageURL:(NSURL*)imageURL action:(void(^)(CKStandardContentViewController* controller))action{
     return [self controllerWithTitle:title subtitle:nil defaultImageName:defaultImageName imageURL:imageURL action:action];
 }
 
-+ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle defaultImageName:(NSString*)defaultImageName imageURL:(NSURL*)imageURL action:(void(^)())action{
++ (CKStandardContentViewController*)controllerWithTitle:(NSString*)title subtitle:(NSString*)subtitle defaultImageName:(NSString*)defaultImageName imageURL:(NSURL*)imageURL action:(void(^)(CKStandardContentViewController* controller))action{
     CKStandardContentViewController* controller = [[[[self class] alloc]init]autorelease];
     controller.title = title;
     controller.subtitle = subtitle;
     controller.imageURL = imageURL;
     controller.defaultImageName = defaultImageName;
-    controller.didSelectBlock = action;
+    controller.didSelectBlock = ^(CKReusableViewController* controller){
+        action((CKStandardContentViewController*)controller);
+    };
     controller.accessoryType = action ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     controller.flags = action ? CKViewControllerFlagsSelectable : CKViewControllerFlagsNone;
     return controller;
