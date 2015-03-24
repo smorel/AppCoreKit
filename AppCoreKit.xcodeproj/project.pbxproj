@@ -706,6 +706,8 @@
 		D9418AA61ABB030D00234A15 /* NSCalendar+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */; };
 		D9418AAE1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AAC1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h */; };
 		D9418AAF1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */; };
+		D9418AB71AC1A46B00234A15 /* CKPassThroughView.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AB51AC1A46B00234A15 /* CKPassThroughView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9418AB81AC1A46B00234A15 /* CKPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AB61AC1A46B00234A15 /* CKPassThroughView.m */; };
 		D94CA30A1AA75BDF009EA887 /* CKPropertyStringViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D94CA30B1AA75BDF009EA887 /* CKPropertyStringViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */; };
 		D94CA3101AA75C25009EA887 /* CKPropertyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1452,6 +1454,8 @@
 		D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSCalendar+ValueTransformer.m"; path = "Classes/Foundation/Public/Conversion/Additions/NSCalendar+ValueTransformer.m"; sourceTree = "<group>"; };
 		D9418AAC1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSectionHeaderFooterViewController.h; path = Classes/UI/Public/Table/CKSectionHeaderFooterViewController.h; sourceTree = "<group>"; };
 		D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSectionHeaderFooterViewController.m; path = Classes/UI/Public/Table/CKSectionHeaderFooterViewController.m; sourceTree = "<group>"; };
+		D9418AB51AC1A46B00234A15 /* CKPassThroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPassThroughView.h; path = Classes/UI/Public/Views/CKPassThroughView.h; sourceTree = "<group>"; };
+		D9418AB61AC1A46B00234A15 /* CKPassThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPassThroughView.m; path = Classes/UI/Public/Views/CKPassThroughView.m; sourceTree = "<group>"; };
 		D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyStringViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.h; sourceTree = "<group>"; };
 		D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyStringViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.m; sourceTree = "<group>"; };
 		D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyViewController.h; sourceTree = "<group>"; };
@@ -1727,6 +1731,7 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D9418AB41AC1A42900234A15 /* PassThrough */,
 				D9E04C781AB1F91400E6BECB /* ImageView */,
 				D9E04C771AB1F90900E6BECB /* AlertView */,
 				D9E04C761AB1F8FC00E6BECB /* ActionSheet */,
@@ -3336,6 +3341,15 @@
 			name = NSCalendar;
 			sourceTree = "<group>";
 		};
+		D9418AB41AC1A42900234A15 /* PassThrough */ = {
+			isa = PBXGroup;
+			children = (
+				D9418AB51AC1A46B00234A15 /* CKPassThroughView.h */,
+				D9418AB61AC1A46B00234A15 /* CKPassThroughView.m */,
+			);
+			name = PassThrough;
+			sourceTree = "<group>";
+		};
 		D94CA2F91AA64AF8009EA887 /* Reusable View Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -4024,6 +4038,7 @@
 				96B3BCEA182BED9800978B85 /* CKCollectionContentCellController.h in Headers */,
 				96F9F36C173182D900AF4276 /* UIActivityIndicatorView+Introspection.h in Headers */,
 				96B9D29C177B228300455BE8 /* CKLayoutBox.h in Headers */,
+				D9418AB71AC1A46B00234A15 /* CKPassThroughView.h in Headers */,
 				96B9D2A0177B22EA00455BE8 /* UIView+CKLayout.h in Headers */,
 				D9E04C8D1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h in Headers */,
 				96B9D2A4177B234000455BE8 /* CKVerticalBoxLayout.h in Headers */,
@@ -4340,6 +4355,7 @@
 				7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */,
 				7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */,
 				961B3AD117FDD04900F92D5F /* CKStringHelper.m in Sources */,
+				D9418AB81AC1A46B00234A15 /* CKPassThroughView.m in Sources */,
 				D96494271AA5F80F00C17BB7 /* CKSound.m in Sources */,
 				7560DDA813B8ED3600268D13 /* CKWeakRef.mm in Sources */,
 				7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */,

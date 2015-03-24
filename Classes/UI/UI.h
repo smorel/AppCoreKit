@@ -44,6 +44,7 @@
 #import "UINavigationController+BlockBasedDelegate.h"
 #import "UIViewController+DeviceOrientation.h"
 #import "CKStackViewController.h"
+#import "CKPassThroughView.h"
 
 #import "UIGestureRecognizer+BlockBasedInterface.h"
 
