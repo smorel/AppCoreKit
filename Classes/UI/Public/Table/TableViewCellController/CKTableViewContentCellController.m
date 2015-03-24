@@ -172,10 +172,9 @@
 }
 
 - (BOOL)didRemove{
-    if([super didRemove])
-        return YES;
-    
-    return [self.contentViewController didRemove];
+    [super didRemove];
+    [self.contentViewController didRemove];
+    return YES;
 }
 
 - (void)didBecomeFirstResponder{

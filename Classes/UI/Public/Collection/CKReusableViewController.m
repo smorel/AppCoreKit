@@ -55,6 +55,7 @@
     [self clearBindingsContext];
     
     [_didSelectBlock release];
+    [_didRemoveBlock release];
     [_collectionCellControllerWeakRef release];
     [_reusableView release];
     [_contentViewCell release];
@@ -73,7 +74,6 @@
     self = [super init];
     self.estimatedRowHeight = 44;
     self.flags = CKViewControllerFlagsSelectable;
-    self.state = CKViewControllerStateNone;
     self.accessoryType = UITableViewCellAccessoryNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
     return self;
@@ -252,8 +252,10 @@
     }
 }
 
-- (BOOL)didRemove{
-    return NO;
+- (void)didRemove{
+    if(self.didRemoveBlock){
+        self.didRemoveBlock();
+    }
 }
 
 - (UINavigationController*)navigationController{
@@ -269,35 +271,9 @@
 
 #pragma Managing style
 
-- (void)viewDidLoad{
-    [super viewDidLoad];
-    self.state = CKViewControllerStateDidLoad;
-}
-
-- (void)viewDidUnload{
-    [super viewDidUnload];
-    self.state = CKViewControllerStateDidUnload;
-}
-
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    self.state = CKViewControllerStateDidAppear;
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    self.state = CKViewControllerStateWillDisappear;
-}
-
-- (void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
-    self.state = CKViewControllerStateDidDisappear;
-}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-    self.state = CKViewControllerStateWillAppear;
     
     if(self.tableViewCell){
         self.tableViewCell.accessoryType = self.accessoryType;

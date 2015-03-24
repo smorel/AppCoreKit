@@ -84,11 +84,9 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     [self.contentViewController didSelect];
 }
 
-- (BOOL)didRemove{
-    if([super didRemove])
-        return YES;
-    
-    return [self.contentViewController didRemove];
+- (void)didRemove{
+    [super didRemove];
+    [self.contentViewController didRemove];
 }
 
 - (void)didBecomeFirstResponder{

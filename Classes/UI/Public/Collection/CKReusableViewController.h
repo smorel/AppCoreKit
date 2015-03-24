@@ -12,6 +12,7 @@
 #import "Layout.h"
 #import "UIView+Name.h"
 #import "UIViewController+Style.h"
+#import "CKViewController.h"
 
 
 
@@ -27,6 +28,13 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
  */
 @interface CKReusableViewController : UIViewController
 
+/**
+ */
+- (void)postInit;
+
+/**
+ */
+- (UINavigationController*)navigationController;
 
 /** The CKCollectionViewController managing the collection of CKCollectionCellController and the collectionView
  
@@ -70,34 +78,32 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 
 
 
-/** The Model Represented by the collectionCellController
- */
-@property(nonatomic,readonly) id value;
 
-/** The IndexPath of the collectionCellController
- */
-@property(nonatomic,readonly) NSIndexPath* indexPath;
+
 
 /** default value is selectable
  */
 @property(nonatomic,assign) CKViewControllerFlags flags;
 
-
-/** default value is selectable
+/** This method is called after the cell has been selected
  */
-@property(nonatomic,assign) CKViewControllerState state;
-
-/** Identifying the controller by a name
- */
-@property(nonatomic,readonly) NSString* name;
+- (void)didSelect;
 
 /**
  */
-- (NSString*)reuseIdentifier;
+@property(nonatomic,copy) void(^didSelectBlock)();
 
-/** Default is 44
+/** This method is called after the cell has been removec
  */
-@property(nonatomic,assign) CGFloat estimatedRowHeight;
+- (void)didRemove;
+
+/**
+ */
+@property(nonatomic,copy) void(^didRemoveBlock)();
+
+
+
+
 
 /** Ensure you call the super implementation !
  */
@@ -105,31 +111,35 @@ typedef NS_ENUM(NSInteger,CKViewControllerFlags){
 
 /**
  */
+- (NSString*)reuseIdentifier;
+
+/** The IndexPath of the collectionCellController
+ */
+@property(nonatomic,readonly) NSIndexPath* indexPath;
+
+
+
+
+
+
+
+/** Default is 44
+ */
+@property(nonatomic,assign) CGFloat estimatedRowHeight;
+
+
+/**
+ */
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size;
 
-/** The postInit method mimics the postInit method from CKViewController. It will be called after the content view controller has been inserted in a cell controller so that we can custom the parent cell controller if needed.
- */
-- (void)postInit;
 
-/** This method is called after the cell has been selected
- */
-- (void)didSelect;
 
-/** return YES if you manage the update of your models or NO if you want the system to remove the cell from the contentView.
- */
-- (BOOL)didRemove;
+
 
 /**
  */
 - (void)scrollToCell;
 
-/**
- */
-- (UINavigationController*)navigationController;
-
-/**
- */
-@property(nonatomic,copy) void(^didSelectBlock)();
 
 
 /** The accessoryType when the CKStandardContentViewController is presented in a table view.
