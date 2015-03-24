@@ -174,7 +174,7 @@
 }
 
 - (NSString*)labelForObjectValue:(id)object{
-    for(CKPropertySelectionValue* v in self.value){
+    for(CKPropertySelectionValue* v in self.values){
         if([self.property.value isEqual:object]){
             return _(v.label);
         }
