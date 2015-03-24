@@ -55,6 +55,8 @@
 - (void)dealloc{
     [self unregisterForKeyboardNotifications];
     [_sectionContainer release];
+    [_backgroundView release];
+    [_foregroundView release];
     [super dealloc];
 }
 
@@ -152,13 +154,47 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
+    self.backgroundView = [[[UIView alloc]initWithFrame:self.tableView.bounds]autorelease];
+    self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
+    self.backgroundView.flexibleSize = YES;
+    self.backgroundView.backgroundColor = [UIColor clearColor];
+    
+    self.foregroundView = [[[CKPassThroughView alloc]initWithFrame:self.tableView.bounds]autorelease];
+    self.foregroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
+    self.foregroundView.flexibleSize = YES;
+    self.foregroundView.backgroundColor = [UIColor clearColor];
     
     [self presentsTableHeaderView];
     [self presentsTableFooterView];
 }
 
+- (void)presentsBackgroundView{
+    if([self.view superview] && [self.backgroundView superview] == nil){
+        self.backgroundView.frame = self.tableView.frame;
+        [[self.view superview]insertSubview:self.backgroundView belowSubview:self.tableView];
+    }
+}
+
+- (void)presentsForegroundView{
+    if([self.view superview] && [self.foregroundView superview] == nil){
+        self.foregroundView.frame = self.tableView.frame;
+        [[self.view superview]insertSubview:self.foregroundView aboveSubview:self.tableView];
+    }
+}
+
+- (void)viewWillLayoutSubviews{
+    [super viewWillLayoutSubviews];
+    [self presentsBackgroundView];
+    [self presentsForegroundView];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    if([self.foregroundView superview] == nil){
+        self.foregroundView.frame = self.tableView.frame;
+        [[self.view superview]insertSubview:self.foregroundView aboveSubview:self.tableView];
+    }
     
     [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     [self updateNumberOfPages];
@@ -665,10 +701,14 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (editingStyle == UITableViewCellEditingStyleDelete){
+        CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+        
         CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
         [self performBatchUpdates:^{
             [section sectionContainerDelegate:self willRemoveControllerAtIndex:indexPath.row];
         } completion:nil preventingUpdates:YES];
+        
+        [controller didRemove];
     }
 }
 
@@ -1052,6 +1092,7 @@
 
 
 @implementation UITableView (AppCoreKit)
+@dynamic isPreventingUpdates;
 
 + (void)load{
     CKSwizzleSelector([UITableView class], @selector(beginUpdates), @selector(AppCoreKit_beginUpdates));
@@ -1064,7 +1105,7 @@ static char UITableViewPreventingUpdatesKey;
     objc_setAssociatedObject(self, &UITableViewPreventingUpdatesKey, @(preventingUpdates), OBJC_ASSOCIATION_RETAIN);
 }
 
-- (BOOL)preventingUpdates{
+- (BOOL)isPreventingUpdates{
     id value = objc_getAssociatedObject(self, &UITableViewPreventingUpdatesKey);
     return value ? [value integerValue] : NO;
 }
@@ -1081,15 +1122,15 @@ static char UITableViewNumberOfUpdatesKey;
 }
 
 - (void)beginPreventingUpdates{
-    self.preventingUpdates = YES;
+    [self setPreventingUpdates : YES];
 }
 
 - (void)endPreventingUpdates{
-    self.preventingUpdates = NO;
+    [self setPreventingUpdates : NO];
 }
 
 - (void)AppCoreKit_beginUpdates{
-    if( self.preventingUpdates)
+    if( self.isPreventingUpdates)
         return;
     
     if(self.numberOfUpdates == 0){
@@ -1100,7 +1141,7 @@ static char UITableViewNumberOfUpdatesKey;
 }
 
 - (void)AppCoreKit_endUpdates{
-    if( self.preventingUpdates)
+    if( self.isPreventingUpdates)
         return;
     
     self.numberOfUpdates--;
