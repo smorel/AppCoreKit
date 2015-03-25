@@ -20,7 +20,7 @@
     return [NSString stringWithFormat:@"%@_%@",[super reuseIdentifier],[self.vector class]];
 }
 
-- (instancetype)initWithProperty:(CKProperty *)property{
+- (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     CKPropertyVector* vector = nil;
     
     NSString* vectorClassName = nil;
@@ -37,23 +37,21 @@
         vector = [[vectorClass alloc]initWithProperty:property];
     }
     
-    return [self initWithPropertyVector:vector];
+    return [self initWithPropertyVector:vector readOnly:readOnly];
 }
 
-- (instancetype)initWithPropertyVector:(CKPropertyVector*)vector{
-    self = [super initWithProperty:vector.property];
+- (instancetype)initWithPropertyVector:(CKPropertyVector*)vector readOnly:(BOOL)readOnly{
+    self = [super initWithProperty:vector.property readOnly:readOnly];
     self.vector = vector;
-    self.propertyNameLabel = _(vector.property.name);
     self.flags = CKViewControllerFlagsNone;
     return self;
 }
 
-+ (instancetype)controllerWithPropertyVector:(CKPropertyVector*)vector{
-    return [[[[self class]alloc]initWithPropertyVector:vector]autorelease];
++ (instancetype)controllerWithPropertyVector:(CKPropertyVector*)vector readOnly:(BOOL)readOnly{
+    return [[[[self class]alloc]initWithPropertyVector:vector readOnly:readOnly]autorelease];
 }
 
 - (void)dealloc{
-    [_propertyNameLabel release];
     [_vector release];
     [super dealloc];
 }
@@ -93,6 +91,7 @@
     
     for(CKProperty* editableProperty in self.vector.editableProperties){
         CKPropertyNumberViewController* controller = (CKPropertyNumberViewController*)[self.view layoutWithName:editableProperty.name];
+        controller.readOnly = self.readOnly;
         controller.property = editableProperty;
     }
 }

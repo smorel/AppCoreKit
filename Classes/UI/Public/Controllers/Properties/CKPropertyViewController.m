@@ -24,6 +24,7 @@
 @implementation CKPropertyViewController
 
 - (void)dealloc{
+    [_propertyNameLabel release];
     [_property release];
     [_editionToolbar release];
     [_propertyEditionTitleLabel release];
@@ -47,11 +48,12 @@
     self.property = property;
     self.readOnly = NO;
     self.editionToolbarEnabled = YES;
+    self.propertyNameLabel = _(property.name);
     
     NSString* titleKey = [NSString stringWithFormat:@"%@_editionTitle",self.property.descriptor.name];;
     self.propertyEditionTitleLabel = _(titleKey);
     if([self.propertyEditionTitleLabel isEqualToString:titleKey]){
-        self.propertyEditionTitleLabel = _(property.name);
+        self.propertyEditionTitleLabel = self.propertyNameLabel;
     }
     
     return self;

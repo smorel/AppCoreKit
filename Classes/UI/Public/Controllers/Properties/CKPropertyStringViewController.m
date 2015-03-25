@@ -21,7 +21,6 @@
 
 - (void)dealloc{
     [_textInputFormatter release];
-    [_propertyNameLabel release];
     [_valuePlaceholderLabel release];
     [super dealloc];
 }
@@ -36,7 +35,6 @@
     self.minimumLength = attributes.minimumLength;
     self.maximumLength = attributes.maximumLength;
     self.textInputFormatter = attributes.textInputFormatterBlock;
-    self.propertyNameLabel = _(property.name);
     self.flags = CKViewControllerFlagsNone;
     
     if([self.property isNumber]){

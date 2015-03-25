@@ -96,12 +96,6 @@
  */
 @interface CKPropertyStringViewController : CKPropertyViewController
 
-/** Default value is a localized string as follow: _(@"propertyName") that can be customized by setting a key/value in your localization file as follow:
- "propertyName" = "My Title";
- Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
- */
-@property(nonatomic,retain) NSString* propertyNameLabel;
-
 /** Default value is a localized string as follow: _(@"propertyName_placeholder") that can be customized by setting a key/value in your localization file as follow:
  "propertyName_placeholder" = "My Placeholder";
  If the property is a number and the extended attribute placeholderValue property is set, valuePlaceholderLabel will have the specified value.

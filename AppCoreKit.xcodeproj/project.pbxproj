@@ -715,6 +715,8 @@
 		D9CD82601AC332E500B2985D /* CKPropertyVectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD825E1AC332E500B2985D /* CKPropertyVectorViewController.m */; };
 		D9CD82641AC3500200B2985D /* CKPropertyColorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD82621AC3500200B2985D /* CKPropertyColorViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CD82651AC3500200B2985D /* CKPropertyColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD82631AC3500200B2985D /* CKPropertyColorViewController.m */; };
+		D9CD82691AC3586D00B2985D /* CKPropertyImageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD82671AC3586D00B2985D /* CKPropertyImageViewController.h */; };
+		D9CD826A1AC3586D00B2985D /* CKPropertyImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD82681AC3586D00B2985D /* CKPropertyImageViewController.m */; };
 		D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
 		D9E04C8D1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1457,6 +1459,8 @@
 		D9CD825E1AC332E500B2985D /* CKPropertyVectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyVectorViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyVectorViewController.m; sourceTree = "<group>"; };
 		D9CD82621AC3500200B2985D /* CKPropertyColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyColorViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyColorViewController.h; sourceTree = "<group>"; };
 		D9CD82631AC3500200B2985D /* CKPropertyColorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyColorViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyColorViewController.m; sourceTree = "<group>"; };
+		D9CD82671AC3586D00B2985D /* CKPropertyImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyImageViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyImageViewController.h; sourceTree = "<group>"; };
+		D9CD82681AC3586D00B2985D /* CKPropertyImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyImageViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyImageViewController.m; sourceTree = "<group>"; };
 		D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Introspection.h"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.h"; sourceTree = "<group>"; };
 		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
 		D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertiesSampleViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertiesSampleViewController.h; sourceTree = "<group>"; };
@@ -1871,7 +1875,6 @@
 				7560DC1113B8ED3600268D13 /* CKTableViewCellController+Style.m */,
 				964DAF7F153F2E970024C08F /* CKCollection CellControllers */,
 				75F2960213F04424009CCC70 /* CKProperty CellControllers */,
-				96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */,
 			);
 			name = CellControllers;
 			sourceTree = "<group>";
@@ -2329,8 +2332,6 @@
 				7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */,
 				7560DB3613B8ED3600268D13 /* CKClassExplorer.h */,
 				7560DB3713B8ED3600268D13 /* CKClassExplorer.m */,
-				7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */,
-				7560DC2713B8ED3600268D13 /* CKUIColorPropertyCellController.m */,
 				7560DC2E13B8ED3600268D13 /* CKUIImagePropertyCellController.h */,
 				7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */,
 			);
@@ -3291,6 +3292,7 @@
 				D9418A8E1ABA204100234A15 /* Date */,
 				D9CD825C1AC332B800B2985D /* Vector */,
 				D9CD82611AC34FE000B2985D /* Color */,
+				D9CD82661AC3584E00B2985D /* Image */,
 				D9E04C891AB1FF0900E6BECB /* Sample */,
 			);
 			name = Properties;
@@ -3309,6 +3311,9 @@
 		D98F3FD01AB374910094572C /* Obsolete (See CKPropertyViewController) */ = {
 			isa = PBXGroup;
 			children = (
+				96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */,
+				7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */,
+				7560DC2713B8ED3600268D13 /* CKUIColorPropertyCellController.m */,
 				7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */,
 				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
 				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
@@ -3408,6 +3413,15 @@
 				D9CD82631AC3500200B2985D /* CKPropertyColorViewController.m */,
 			);
 			name = Color;
+			sourceTree = "<group>";
+		};
+		D9CD82661AC3584E00B2985D /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				D9CD82671AC3586D00B2985D /* CKPropertyImageViewController.h */,
+				D9CD82681AC3586D00B2985D /* CKPropertyImageViewController.m */,
+			);
+			name = Image;
 			sourceTree = "<group>";
 		};
 		D9E04C6D1AB1F83400E6BECB /* Apple Extensions */ = {
@@ -3980,6 +3994,7 @@
 				96445943154869170054F907 /* CKViewControllerCellController.h in Headers */,
 				96243226155B0689002B6CE8 /* CKMapAnnotationController+BlockBasedInterface.h in Headers */,
 				96C78A53155C6C9600A1120B /* CKAggregateCollection.h in Headers */,
+				D9CD82691AC3586D00B2985D /* CKPropertyImageViewController.h in Headers */,
 				B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */,
 				962347D01577FF5B0036002C /* CKSectionViews.h in Headers */,
 				96234819157D6A770036002C /* UIViewController+DeviceOrientation.h in Headers */,
@@ -4318,6 +4333,7 @@
 				7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */,
 				961B3AD117FDD04900F92D5F /* CKStringHelper.m in Sources */,
 				D9418AB81AC1A46B00234A15 /* CKPassThroughView.m in Sources */,
+				D9CD826A1AC3586D00B2985D /* CKPropertyImageViewController.m in Sources */,
 				D96494271AA5F80F00C17BB7 /* CKSound.m in Sources */,
 				7560DDA813B8ED3600268D13 /* CKWeakRef.mm in Sources */,
 				7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */,

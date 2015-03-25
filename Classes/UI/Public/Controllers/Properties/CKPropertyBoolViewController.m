@@ -14,11 +14,6 @@
 
 @implementation CKPropertyBoolViewController
 
-- (void)dealloc{
-    [_propertyNameLabel release];
-    [super dealloc];
-}
-
 #pragma mark ViewController Life Cycle
 
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
@@ -27,7 +22,6 @@
     NSAssert([property isBool],@"CKPropertyBoolViewController aims to work with BOOL properties only.");
     
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-    self.propertyNameLabel = _(property.name);
     self.flags = CKViewControllerFlagsNone;
     
     return self;

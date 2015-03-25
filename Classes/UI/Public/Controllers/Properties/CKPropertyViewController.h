@@ -69,6 +69,13 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
  */
 @property(nonatomic,retain)CKProperty* property;
 
+
+/** Default value is a localized string as follow: _(@"propertyName") that can be customized by setting a key/value in your localization file as follow:
+ "propertyName" = "My Title";
+ Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
+ */
+@property(nonatomic,retain) NSString* propertyNameLabel;
+
 ///-----------------------------------
 /// @name Customizing the appearance
 ///-----------------------------------

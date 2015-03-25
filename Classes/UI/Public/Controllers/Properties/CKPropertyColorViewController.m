@@ -13,16 +13,10 @@
 @implementation CKPropertyColorViewController
 
 
-- (instancetype)initWithProperty:(CKProperty*)property{
-    self = [super initWithProperty:property];
-    self.propertyNameLabel = _(property.name);
+- (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
+    self = [super initWithProperty:property readOnly:readOnly];
     self.flags = CKViewControllerFlagsNone;
     return self;
-}
-
-- (void)dealloc{
-    [_propertyNameLabel release];
-    [super dealloc];
 }
 
 - (void)viewDidLoad{
@@ -33,16 +27,16 @@
     
     UIView* colorView = [[[UIView alloc]init]autorelease];
     colorView.name = @"ColorView";
-    colorView.fixedHeight = 20;
-    colorView.marginTop = 10;
+    colorView.fixedWidth = 20;
+    colorView.marginLeft = 10;
     
-    CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    CKHorizontalBoxLayout* vbox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     
     CKPropertyVectorViewController* controller = [CKPropertyVectorViewController controllerWithProperty:self.property];
     controller.name = @"VectorViewController";
     controller.marginTop = 10;
     
-    vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[colorView,controller]];
+    vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[controller,colorView]];
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vbox]];
 }
 
@@ -51,6 +45,7 @@
     
     CKPropertyVectorViewController* controller = (CKPropertyVectorViewController*)[self.view layoutWithName:@"VectorViewController"];
     controller.propertyNameLabel = self.propertyNameLabel;
+    controller.readOnly = self.readOnly;
     controller.property = self.property;
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {

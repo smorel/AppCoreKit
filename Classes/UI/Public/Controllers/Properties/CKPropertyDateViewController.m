@@ -17,7 +17,6 @@
 @implementation CKPropertyDateViewController
 
 - (void)dealloc{
-    [_propertyNameLabel release];
     [_dateFormatter release];
     [_valuePlaceholderLabel release];
     [_editionControllerPickerMinimumDate release];
@@ -33,7 +32,6 @@ static NSDateFormatter* sharedFormatter = nil;
     self = [super initWithProperty:property readOnly:readOnly];
     
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-    self.propertyNameLabel = _(property.name);
     
     self.editionControllerPickerMode = CKDatePickerModeDate;
     

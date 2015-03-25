@@ -42,7 +42,6 @@
 
 - (void)dealloc{
     [_values release];
-    [_propertyNameLabel release];
     [_editionControllerFactory release];
     [_sortBlock release];
     [_multiSelectionSeparatorString release];
@@ -93,7 +92,6 @@
     }
     
     CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
-    self.propertyNameLabel = _(self.property.name);
     
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     

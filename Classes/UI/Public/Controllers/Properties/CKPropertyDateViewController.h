@@ -63,13 +63,6 @@
  */
 @interface CKPropertyDateViewController : CKPropertyViewController
 
-/** Default value is a localized string as follow: _(@"propertyName") that can be customized by setting a key/value in your localization file as follow:
- "propertyName" = "My Title";
- Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyDateViewController scope.
- */
-@property(nonatomic,retain) NSString* propertyNameLabel;
-
-
 /** Default value is a localized string as follow: _(@"propertyName_placeholder") that can be customized by setting a key/value in your localization file as follow:
  "propertyName_placeholder" = "My Placeholder";
  Or simply set the valuePlaceholderLabel property programatically or in your stylesheet in the CKPropertyDateViewController scope.

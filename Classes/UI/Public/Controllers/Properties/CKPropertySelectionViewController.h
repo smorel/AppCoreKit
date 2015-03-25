@@ -148,13 +148,6 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionAppearanceStyle){
  */
 - (id)initWithProperty:(CKProperty*)property valuesAndLabels:(NSDictionary*)valuesAndLabels multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly;
 
-
-/** Default value is a localized string as follow: _(@"propertyName") that can be customized by setting a key/value in your localization file as follow:
- "propertyName" = "My Title";
- Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
- */
-@property(nonatomic,retain) NSString* propertyNameLabel;
-
 /** multiSelectionSeparatorString is used when concatenating the string representation of values that matches the property value in case the property is declared as a bit mask. Default value is '\n'.
  */
 @property(nonatomic,retain) NSString* multiSelectionSeparatorString;

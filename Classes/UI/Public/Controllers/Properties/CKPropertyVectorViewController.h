@@ -33,17 +33,11 @@
 
 /**
  */
-- (instancetype)initWithPropertyVector:(CKPropertyVector*)vector;
+- (instancetype)initWithPropertyVector:(CKPropertyVector*)vector readOnly:(BOOL)readOnly;
 
 /**
  */
-+ (instancetype)controllerWithPropertyVector:(CKPropertyVector*)vector;
++ (instancetype)controllerWithPropertyVector:(CKPropertyVector*)vector readOnly:(BOOL)readOnly;
 
-
-/** Default value is a localized string as follow: _(@"propertyName") that can be customized by setting a key/value in your localization file as follow:
- "propertyName" = "My Title";
- Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
- */
-@property(nonatomic,retain) NSString* propertyNameLabel;
 
 @end
