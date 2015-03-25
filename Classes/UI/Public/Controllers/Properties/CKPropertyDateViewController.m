@@ -62,20 +62,20 @@ static NSDateFormatter* sharedFormatter = nil;
     if([self isLayoutDefinedInStylesheet])
         return;
     
-    UILabel* PropertyNameLabel = [[UILabel alloc]init];
+    UILabel* PropertyNameLabel = [[[UILabel alloc]init]autorelease];
     PropertyNameLabel.name = @"PropertyNameLabel";
     PropertyNameLabel.font = [UIFont boldSystemFontOfSize:17];
     PropertyNameLabel.textColor = [UIColor blackColor];
     PropertyNameLabel.numberOfLines = 1;
     PropertyNameLabel.marginRight = 10;
     
-    UILabel* ValueLabel = [[UILabel alloc]init];
+    UILabel* ValueLabel = [[[UILabel alloc]init]autorelease];
     ValueLabel.name = @"ValueLabel";
     ValueLabel.font = [UIFont systemFontOfSize:14];
     ValueLabel.textColor = [UIColor blackColor];
     ValueLabel.numberOfLines = 1;
     
-    CKHorizontalBoxLayout* hBox = [[CKHorizontalBoxLayout alloc]init];
+    CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,[[[CKLayoutFlexibleSpace alloc]init]autorelease],ValueLabel]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];

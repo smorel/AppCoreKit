@@ -85,7 +85,7 @@
     for(NSString* label in [valuesAndLabels allKeys]){
         id value = [valuesAndLabels objectForKey:label];
         
-        CKPropertySelectionValue* v = [[CKPropertySelectionValue alloc]init];
+        CKPropertySelectionValue* v = [[[CKPropertySelectionValue alloc]init]autorelease];
         v.property = self.property;
         v.label = label;
         v.value = value;
@@ -201,14 +201,14 @@
     if([self isLayoutDefinedInStylesheet])
         return;
     
-    UILabel* PropertyNameLabel = [[UILabel alloc]init];
+    UILabel* PropertyNameLabel = [[[UILabel alloc]init]autorelease];
     PropertyNameLabel.name = @"PropertyNameLabel";
     PropertyNameLabel.font = [UIFont boldSystemFontOfSize:17];
     PropertyNameLabel.textColor = [UIColor blackColor];
     PropertyNameLabel.numberOfLines = 1;
     PropertyNameLabel.marginRight = 10;
     
-    UILabel* ValueLabel = [[UILabel alloc]init];
+    UILabel* ValueLabel = [[[UILabel alloc]init]autorelease];
     ValueLabel.name = @"ValueLabel";
     ValueLabel.font = [UIFont systemFontOfSize:14];
     ValueLabel.textColor = [UIColor blackColor];
@@ -216,13 +216,13 @@
     ValueLabel.flexibleWidth = 1;
     ValueLabel.textAlignment = UITextAlignmentRight;
     
-    UIImageView* ValueImageView = [[UIImageView alloc]init];
+    UIImageView* ValueImageView = [[[UIImageView alloc]init]autorelease];
     ValueImageView.name = @"ValueImageView";
     ValueImageView.fixedSize = CGSizeMake(40,40);
     ValueImageView.marginLeft = 10;
     ValueImageView.contentMode = UIViewContentModeScaleAspectFit;
     
-    CKHorizontalBoxLayout* hBox = [[CKHorizontalBoxLayout alloc]init];
+    CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,ValueLabel,ValueImageView]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];

@@ -32,7 +32,7 @@
 - (void)postInit{
     [super postInit];
     self.orientation = CKSplitViewOrientationVertical;
-    self.automaticallyAdjustInsetsToMatchNavigationControllerTransparency = NO;
+    self.automaticallyAdjustInsetsToMatchNavigationControllerTransparency = YES;
 }
 
 - (void)dealloc{
@@ -89,6 +89,10 @@
     }
 
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[layout]];
+    
+    if(self.automaticallyAdjustInsetsToMatchNavigationControllerTransparency){
+        self.view.padding = [self navigationControllerTransparencyInsets];
+    }
 }
 
 - (void)setViewControllers:(NSArray *)viewControllers {

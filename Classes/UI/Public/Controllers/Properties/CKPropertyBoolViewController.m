@@ -41,14 +41,14 @@
     if([self isLayoutDefinedInStylesheet])
         return;
     
-    UILabel* PropertyNameLabel = [[UILabel alloc]init];
+    UILabel* PropertyNameLabel = [[[UILabel alloc]init]autorelease];
     PropertyNameLabel.name = @"PropertyNameLabel";
     PropertyNameLabel.font = [UIFont boldSystemFontOfSize:17];
     PropertyNameLabel.textColor = [UIColor blackColor];
     PropertyNameLabel.numberOfLines = 1;
     PropertyNameLabel.marginRight = 10;
     
-    UILabel* SubtitleLabel = [[UILabel alloc]init];
+    UILabel* SubtitleLabel = [[[UILabel alloc]init]autorelease];
     SubtitleLabel.name = @"SubtitleLabel";
     SubtitleLabel.font = [UIFont systemFontOfSize:14];
     SubtitleLabel.textColor = [UIColor blackColor];
@@ -57,13 +57,13 @@
     SubtitleLabel.marginTop = 10;
     
     
-    UISwitch* ValueSwitch = [[UISwitch alloc]init];
+    UISwitch* ValueSwitch = [[[UISwitch alloc]init]autorelease];
     ValueSwitch.name = @"ValueSwitch";
     
-    CKVerticalBoxLayout* vBox = [[CKVerticalBoxLayout alloc]init];
+    CKVerticalBoxLayout* vBox = [[[CKVerticalBoxLayout alloc]init]autorelease];
     vBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,SubtitleLabel]];
     
-    CKHorizontalBoxLayout* hBox = [[CKHorizontalBoxLayout alloc]init];
+    CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vBox,[[[CKLayoutFlexibleSpace alloc]init]autorelease],ValueSwitch]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];

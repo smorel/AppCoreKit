@@ -217,7 +217,7 @@
             break;
         }
         case CKPropertyEditionPresentationStyleInline:{
-            CKVerticalBoxLayout* vbox = [[CKVerticalBoxLayout alloc]init];
+            CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
             vbox.name = @"InlineEditionControllerLayout";
             vbox.paddingTop = self.view.height;
             if(controller.layoutBoxes.count > 0){

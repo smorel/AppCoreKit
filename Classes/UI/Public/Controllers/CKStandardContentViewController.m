@@ -92,10 +92,10 @@
     subtitleLabel.numberOfLines = 0;
     subtitleLabel.margins = UIEdgeInsetsMake(10,10,10,10);
     
-    CKVerticalBoxLayout* vbox = [[CKVerticalBoxLayout alloc]init];
+    CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
     vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[titleLabel,subtitleLabel]];
     
-    CKHorizontalBoxLayout* hbox = [[CKHorizontalBoxLayout alloc]init];
+    CKHorizontalBoxLayout* hbox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[imageView,vbox]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hbox]];

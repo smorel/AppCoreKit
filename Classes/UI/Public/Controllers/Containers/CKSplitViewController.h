@@ -62,9 +62,9 @@ typedef NS_ENUM(NSInteger, CKSplitViewOrientation){
  */
 @property(nonatomic,assign)CKSplitViewOrientation orientation;
 
-/** default value is NO. Set this value to YES if you want the split view controllers to start layouting beside the navigation bar taking care of transparency when the split view controller is in a navigation controller.
+/** default value is YES. Set this value to YES if you want the split view controllers to start layouting beside the navigation bar taking care of transparency when the split view controller is in a navigation controller.
  */
-@property(nonatomic,assign)CKSplitViewOrientation automaticallyAdjustInsetsToMatchNavigationControllerTransparency;
+@property(nonatomic,assign) BOOL automaticallyAdjustInsetsToMatchNavigationControllerTransparency;
 
 
 ///-----------------------------------

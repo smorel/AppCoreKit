@@ -66,21 +66,21 @@
     if([self isLayoutDefinedInStylesheet])
         return;
     
-    UILabel* PropertyNameLabel = [[UILabel alloc]init];
+    UILabel* PropertyNameLabel = [[[UILabel alloc]init]autorelease];
     PropertyNameLabel.name = @"PropertyNameLabel";
     PropertyNameLabel.font = [UIFont boldSystemFontOfSize:17];
     PropertyNameLabel.textColor = [UIColor blackColor];
     PropertyNameLabel.numberOfLines = 1;
     PropertyNameLabel.marginRight = 10;
     
-    UITextField* ValueTextField = [[UITextField alloc]init];
+    UITextField* ValueTextField = [[[UITextField alloc]init]autorelease];
     ValueTextField.name = @"ValueTextField";
     ValueTextField.font = [UIFont systemFontOfSize:14];
     ValueTextField.minimumWidth = 100;
     ValueTextField.textAlignment = UITextAlignmentRight;
     ValueTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-    CKTextView* ValueTextView = [[CKTextView alloc]init];
+    CKTextView* ValueTextView = [[[CKTextView alloc]init]autorelease];
     ValueTextView.name = @"ValueTextView";
     ValueTextView.font = [UIFont systemFontOfSize:14];
     ValueTextView.marginTop = 10;
@@ -90,10 +90,10 @@
         ValueTextField.autocorrectionType =  ValueTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     }
     
-    CKHorizontalBoxLayout* hBox = [[CKHorizontalBoxLayout alloc]init];
+    CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,ValueTextField]];
     
-    CKVerticalBoxLayout* vBox = [[CKVerticalBoxLayout alloc]init];
+    CKVerticalBoxLayout* vBox = [[[CKVerticalBoxLayout alloc]init]autorelease];
     vBox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox,ValueTextView]];
     
