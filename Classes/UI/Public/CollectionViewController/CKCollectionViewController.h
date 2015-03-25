@@ -38,6 +38,11 @@
  */
 @property(nonatomic,retain) UIView* foregroundView;
 
+
+/** Default is NO. If no, selected items will be deselected right after collection view formwarded a didSelect event.
+ */
+@property(nonatomic,assign) BOOL stickySelectionEnabled;
+
 ///-----------------------------------
 /// @name Scrolling
 ///-----------------------------------

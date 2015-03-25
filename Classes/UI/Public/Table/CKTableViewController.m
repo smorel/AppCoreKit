@@ -44,6 +44,7 @@
 
 - (void)postInit{
     [super postInit];
+    self.stickySelectionEnabled = NO;
     self.currentPage = 0;
     self.numberOfPages = 0;
     self.scrolling = NO;
@@ -645,14 +646,16 @@
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     [controller didSelect];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        
-        //Cause didDeselectRowAtIndexPath is not called!
-        NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
-        [selected removeObject:indexPath];
-        self.sectionContainer.selectedIndexPaths = selected;
-    });
+    if(!self.stickySelectionEnabled){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            
+            //Cause didDeselectRowAtIndexPath is not called!
+            NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
+            [selected removeObject:indexPath];
+            self.sectionContainer.selectedIndexPaths = selected;
+        });
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{

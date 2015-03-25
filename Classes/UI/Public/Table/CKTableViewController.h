@@ -81,6 +81,12 @@
  */
 @property(nonatomic,assign) BOOL adjustInsetsOnKeyboardNotification;
 
+
+/** Default is NO. If no, selected row will be deselected right after table view formwarded a didSelect event.
+ */
+@property(nonatomic,assign) BOOL stickySelectionEnabled;
+
+
 ///-----------------------------------
 /// @name Getting the Controller status
 ///-----------------------------------

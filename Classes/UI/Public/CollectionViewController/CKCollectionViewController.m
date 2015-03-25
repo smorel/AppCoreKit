@@ -41,6 +41,7 @@
 
 - (void)postInit{
     [super postInit];
+    self.stickySelectionEnabled = NO;
     self.scrolling = NO;
     self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
 }
@@ -53,7 +54,12 @@
 }
 
 - (void)setCollectionViewLayout:(UICollectionViewLayout*)collectionViewLayout animated:(BOOL)animated{
-    [self.collectionView setCollectionViewLayout:collectionViewLayout animated:animated];
+    if([self isViewLoaded]){
+        [self.collectionView setCollectionViewLayout:collectionViewLayout animated:animated];
+    }else{
+        //self.collectionViewLayout = collectionViewLayout;
+        int i =3;
+    }
 }
 
 #pragma Managing Decorator Views
@@ -250,6 +256,12 @@
 #pragma mark Managing Supplementary Views
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+    if([kind isEqualToString:UICollectionElementKindSectionHeader]){
+        int i =3;
+    }else if([kind isEqualToString:UICollectionElementKindSectionFooter]){
+        int i =3;
+    }
+    
     return nil;
 }
 
@@ -290,14 +302,16 @@
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     [controller didSelect];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
-        
-        //Cause didDeselectRowAtIndexPath is not called!
-        NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
-        [selected removeObject:indexPath];
-        self.sectionContainer.selectedIndexPaths = selected;
-    });
+    if(!self.stickySelectionEnabled){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+            
+            //Cause didDeselectRowAtIndexPath is not called!
+            NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
+            [selected removeObject:indexPath];
+            self.sectionContainer.selectedIndexPaths = selected;
+        });
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -313,7 +327,7 @@
 */
 
 - (void)invalidateControllerAtIndexPath:(NSIndexPath*)indexPath{
-    UICollectionViewLayoutInvalidationContext* context = [[[UICollectionViewLayoutInvalidationContext alloc]init]autorelease];
+    UICollectionViewLayoutInvalidationContext* context = [[[[[self.collectionViewLayout class] invalidationContextClass] alloc]init]autorelease];
     [context invalidateItemsAtIndexPaths:@[indexPath]];
     [self.collectionViewLayout invalidateLayoutWithContext:context];
 }
