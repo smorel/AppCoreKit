@@ -100,21 +100,6 @@
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vBox]];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    if(!self.view)
-        return;
-    
-    [self.view beginBindingsContextWithScope:@"CKPropertyStringViewController"];
-    [self setupBindings];
-    [self.view endBindingsContext];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.view clearBindingsContextWithScope:@"CKPropertyStringViewController"];
-}
 
 #pragma mark Setup MVC and bindings
 

@@ -11,6 +11,7 @@
 #import "CKPropertyNumberViewController.h"
 #import "CKPropertyBoolViewController.h"
 #import "CKPropertySelectionViewController.h"
+#import "CKPropertyVectorViewController.h"
 
 #import "CKTableViewContentCellController.h"
 
@@ -27,6 +28,13 @@ typedef NS_ENUM(NSInteger, TEST){
 @property(nonatomic,retain) NSNumber* numberValue;
 @property(nonatomic,assign) BOOL boolValue;
 @property(nonatomic,assign) TEST enumValue;
+@property(nonatomic,assign) CGPoint pointValue;
+@property(nonatomic,assign) CGSize sizeValue;
+@property(nonatomic,assign) CGRect rectValue;
+@property(nonatomic,assign) UIEdgeInsets edgeInsetsValue;
+@property(nonatomic,assign) CLLocationCoordinate2D locationCoordinate2DValue;
+@property(nonatomic,assign) CGAffineTransform affineTransformValue;
+
 @end
 
 @implementation CKPropertiesSampleViewController
@@ -49,7 +57,6 @@ typedef NS_ENUM(NSInteger, TEST){
     
 #define _p(name) [CKProperty propertyWithObject:self keyPath:name]
     
-    NSMutableArray* cells =[NSMutableArray array];
     
     CKPropertyStringViewController* singleLineController = [[[CKPropertyStringViewController alloc]initWithProperty:_p(@"singleLineString")]autorelease];
     CKPropertyStringViewController* multilineLineController = [[[CKPropertyStringViewController alloc]initWithProperty:_p(@"multiLineString")]autorelease];
@@ -61,25 +68,40 @@ typedef NS_ENUM(NSInteger, TEST){
     CKPropertyBoolViewController* boolValueController = [[[CKPropertyBoolViewController alloc]initWithProperty:_p(@"boolValue")]autorelease];
     CKPropertySelectionViewController* enumValueController = [[[CKPropertySelectionViewController alloc]initWithProperty:_p(@"enumValue")]autorelease];
     
+    CKPropertyVectorViewController* pointValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"pointValue")]autorelease];
+    CKPropertyVectorViewController* sizeValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"sizeValue")]autorelease];
+    CKPropertyVectorViewController* rectValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"rectValue")]autorelease];
+    CKPropertyVectorViewController* edgeInsetsValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"edgeInsetsValue")]autorelease];
+    CKPropertyVectorViewController* locationCoordinate2DValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"locationCoordinate2DValue")]autorelease];
     
-    [cells addObjectsFromArray:@[
-                                 [singleLineController createTableViewCellController],
-                                 [multilineLineController createTableViewCellController],
-                                 [intValueController createTableViewCellController],
-                                 [floatValueController createTableViewCellController],
-                                 [numberValueController createTableViewCellController],
-                                 [boolValueController createTableViewCellController],
-                                 [enumValueController createTableViewCellController]
+    self.affineTransformValue = CGAffineTransformIdentity;
+    CKPropertyVectorViewController* affineTransformValueValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"affineTransformValue")]autorelease];
+    
+    NSMutableArray* controllers =[NSMutableArray array];
+    [controllers addObjectsFromArray:@[
+                                 singleLineController ,
+                                 multilineLineController ,
+                                 intValueController ,
+                                 floatValueController ,
+                                 numberValueController ,
+                                 boolValueController ,
+                                 enumValueController,
+                                 pointValueController,
+                                 sizeValueController,
+                                 rectValueController,
+                                 edgeInsetsValueController,
+                                 locationCoordinate2DValueController,
+                                 affineTransformValueValueController
                                  ]
      ];
     
-    CKFormSection* propertiesSection = [CKFormSection sectionWithCellControllers:cells];
+    CKSection* propertiesSection = [CKSection sectionWithControllers:controllers];
     
     NSArray* sections = @[
         propertiesSection
     ];
     
-    [self addSections:sections];
+    [self addSections:sections animated:NO];
   
 }
 

@@ -81,23 +81,6 @@ static NSDateFormatter* sharedFormatter = nil;
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    if(!self.view)
-        return;
-    
-    [self.view beginBindingsContextWithScope:@"CKPropertyDateViewController"];
-    [self setupBindings];
-    [self.view endBindingsContext];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.view clearBindingsContextWithScope:@"CKPropertyDateViewController"];
-}
-
-
 - (void)setupBindings{
     __unsafe_unretained CKPropertyDateViewController* bself = self;
     

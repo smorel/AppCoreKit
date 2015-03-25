@@ -228,24 +228,6 @@
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
 }
 
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    if(!self.view)
-        return;
-    
-    [self.view beginBindingsContextWithScope:@"CKPropertySelectionViewController"];
-    [self setupBindings];
-    [self.view endBindingsContext];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.view clearBindingsContextWithScope:@"CKPropertySelectionViewController"];
-}
-
-
 - (void)setupBindings{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     

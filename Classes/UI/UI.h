@@ -112,6 +112,7 @@
 #import "CKPropertyBoolViewController.h"
 #import "CKPropertySelectionViewController.h"
 #import "CKPropertyDateViewController.h"
+#import "CKPropertyVectorViewController.h"
 #import "CKPropertiesSampleViewController.h"
 
 

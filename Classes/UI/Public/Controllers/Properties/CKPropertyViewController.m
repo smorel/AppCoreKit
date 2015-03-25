@@ -50,6 +50,9 @@
     
     NSString* titleKey = [NSString stringWithFormat:@"%@_editionTitle",self.property.descriptor.name];;
     self.propertyEditionTitleLabel = _(titleKey);
+    if([self.propertyEditionTitleLabel isEqualToString:titleKey]){
+        self.propertyEditionTitleLabel = _(property.name);
+    }
     
     return self;
 }
@@ -68,10 +71,14 @@
     if(self.readOnly){
         [self resignFirstResponder];
     }
-    [self readOnlyDidChange];
+    [self _setupBindings];
 }
 
-- (void)readOnlyDidChange{
+- (void)setProperty:(CKProperty *)property{
+    [_property release];
+    _property = [property retain];
+    
+    [self _setupBindings];
 }
 
 - (BOOL)isValidValue:(id)value{
@@ -83,6 +90,33 @@
     return YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    if(!self.view)
+        return;
+    
+    [self.view beginBindingsContextWithScope:@"CKPropertyViewController"];
+    [self setupBindings];
+    [self.view endBindingsContext];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.view clearBindingsContextWithScope:@"CKPropertyViewController"];
+}
+
+- (void)_setupBindings{
+    if(self.state != CKViewControllerStateDidAppear || self.view == nil)
+        return;
+    
+    [self.view beginBindingsContextWithScope:@"CKPropertyViewController"];
+    [self setupBindings];
+    [self.view endBindingsContext];
+}
+
+- (void)setupBindings{
+}
 
 - (void)viewDidLoad{
     [super viewDidLoad];

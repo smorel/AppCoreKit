@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import <AppCoreKit/AppCoreKit.h>
+#import "CKTableViewController.h"
 
-@interface CKPropertiesSampleViewController : CKFormTableViewController
+@interface CKPropertiesSampleViewController : CKTableViewController
 
 @end

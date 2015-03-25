@@ -117,4 +117,14 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange;
 
+
+///-----------------------------------
+/// @name Setuping the controller
+///-----------------------------------
+
+/** Override this method to setup your subviews.
+ The binding context is automatically manged for you and this method will be called when the view will appear, if the property or readonly gets changed while the controller is displayed.
+ */
+- (void)setupBindings;
+
 @end

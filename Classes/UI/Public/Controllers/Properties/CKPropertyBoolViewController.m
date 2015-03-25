@@ -69,23 +69,6 @@
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    if(!self.view)
-        return;
-    
-    [self.view beginBindingsContextWithScope:@"CKPropertyBoolViewController"];
-    [self setupBindings];
-    [self.view endBindingsContext];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.view clearBindingsContextWithScope:@"CKPropertyBoolViewController"];
-}
-
-
 - (void)setupBindings{
     __unsafe_unretained CKPropertyBoolViewController* bself = self;
     
