@@ -14,6 +14,7 @@
 #import "CKPropertyVectorViewController.h"
 #import "CKPropertyColorViewController.h"
 #import "CKPropertyImageViewController.h"
+#import "CKPropertyObjectViewController.h"
 
 #import "CKTableViewContentCellController.h"
 
@@ -38,6 +39,7 @@ typedef NS_ENUM(NSInteger, TEST){
 @property(nonatomic,assign) CGAffineTransform affineTransformValue;
 @property(nonatomic,retain) UIColor* colorValue;
 @property(nonatomic,retain) UIImage* imageValue;
+@property(nonatomic,retain) id objectValue;
 
 @end
 
@@ -87,6 +89,9 @@ typedef NS_ENUM(NSInteger, TEST){
     self.imageValue = [UIImage imageNamed:@"test"];
     CKPropertyImageViewController* imageValueController = [[[CKPropertyImageViewController alloc]initWithProperty:_p(@"imageValue")]autorelease];
     
+    self.objectValue = imageValueController;
+    CKPropertyObjectViewController* objectValueController = [[[CKPropertyObjectViewController alloc]initWithProperty:_p(@"objectValue")]autorelease];
+    
 
     
     NSMutableArray* controllers =[NSMutableArray array];
@@ -105,7 +110,8 @@ typedef NS_ENUM(NSInteger, TEST){
                                  locationCoordinate2DValueController,
                                  affineTransformValueController,
                                  colorValueController,
-                                 imageValueController
+                                 imageValueController,
+                                 objectValueController
                                  ]
      ];
     
