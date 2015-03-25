@@ -18,9 +18,6 @@
 #import "CKTableViewControllerOld.h"
 #import "CKTableViewContentCellController.h"
 
-#import "CKCollectionViewLayoutController.h"
-#import "CKCollectionContentCellController.h"
-
 //Private interface
 @interface CKCollectionCellController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
@@ -63,14 +60,6 @@
             CKReusableViewController* content = _contentControllerCreateBlock(object,indexPath);
             
             CKTableViewContentCellController* cellController = [[CKTableViewContentCellController alloc]initWithContentViewController:content];
-            if(cellController.name == nil){
-                cellController.name = [NSString stringWithFormat:@"<%p>",self];
-            }
-            return cellController;
-        }else if([collectionViewController isKindOfClass:[CKCollectionViewLayoutController class]]){
-            CKReusableViewController* content = _contentControllerCreateBlock(object,indexPath);
-            
-            CKCollectionContentCellController* cellController = [[CKCollectionContentCellController alloc]initWithContentViewController:content];
             if(cellController.name == nil){
                 cellController.name = [NSString stringWithFormat:@"<%p>",self];
             }

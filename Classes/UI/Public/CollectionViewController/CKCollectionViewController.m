@@ -13,7 +13,6 @@
 #import "NSValueTransformer+Additions.h"
 #import "UIView+AutoresizingMasks.h"
 #import "UIView+Positioning.h"
-#import "CKCollectionViewCell.h"
 
 //For CKTableViewCell
 #import "CKTableViewCellController.h"
@@ -218,10 +217,10 @@
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     NSString* reuseIdentifier = [controller reuseIdentifier];
     
-    [self.collectionView registerClass:[CKCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    CKCollectionViewCell* cell = (CKCollectionViewCell*)[self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    UICollectionViewCell* cell = (UICollectionViewCell*)[self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     cell.contentView.flexibleSize = YES;
-    return (CKCollectionViewCell*)[self.sectionContainer viewForControllerAtIndexPath:indexPath reusingView:cell];
+    return (UICollectionViewCell*)[self.sectionContainer viewForControllerAtIndexPath:indexPath reusingView:cell];
 }
 
 
