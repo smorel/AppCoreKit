@@ -149,12 +149,12 @@
     }
 }
 
-#pragma Managing Life Cycle
+#pragma Managing Decorator Views
 
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    self.backgroundView = [[[UIView alloc]initWithFrame:self.tableView.bounds]autorelease];
+    self.backgroundView = [[[CKPassThroughView alloc]initWithFrame:self.tableView.bounds]autorelease];
     self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.backgroundView.flexibleSize = YES;
     self.backgroundView.backgroundColor = [UIColor clearColor];
@@ -188,14 +188,11 @@
     [self presentsForegroundView];
 }
 
+#pragma Managing Life Cycle
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-    if([self.foregroundView superview] == nil){
-        self.foregroundView.frame = self.tableView.frame;
-        [[self.view superview]insertSubview:self.foregroundView aboveSubview:self.tableView];
-    }
-    
+
     [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     [self updateNumberOfPages];
     
@@ -303,8 +300,8 @@
 
 
 - (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    // if(self.state != CKViewControllerStateDidAppear) return;
-    
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+        return;
     
     [self performBatchUpdates:^{
         [self.tableView insertSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
@@ -313,7 +310,8 @@
 }
 
 - (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    //if(self.state != CKViewControllerStateDidAppear) return;
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+        return;
     
     [self performBatchUpdates:^{
         [self.tableView deleteSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
@@ -322,7 +320,8 @@
 }
 
 - (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    //  if(self.state != CKViewControllerStateDidAppear) return;
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+        return;
     
     [self performBatchUpdates:^{
         [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
@@ -331,7 +330,8 @@
 }
 
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    //  if(self.state != CKViewControllerStateDidAppear) return;
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+        return;
  
     [self performBatchUpdates:^{
         [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
@@ -1043,6 +1043,8 @@
 }
 
 - (CKReusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath{
+    if(!indexPath)
+        return nil;
     return [self.sectionContainer controllerAtIndexPath:indexPath];
 }
 

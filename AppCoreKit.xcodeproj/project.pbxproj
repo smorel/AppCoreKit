@@ -153,8 +153,8 @@
 		7560DCC113B8ED3600268D13 /* CKItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7413B8ED3600268D13 /* CKItem.m */; };
 		7560DCC213B8ED3600268D13 /* CKItemAttributeReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7513B8ED3600268D13 /* CKItemAttributeReference.h */; settings = {ATTRIBUTES = (); }; };
 		7560DCC313B8ED3600268D13 /* CKItemAttributeReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7613B8ED3600268D13 /* CKItemAttributeReference.m */; };
-		7560DCC413B8ED3600268D13 /* CKCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7713B8ED3600268D13 /* CKCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCC513B8ED3600268D13 /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7813B8ED3600268D13 /* CKCollectionViewController.m */; };
+		7560DCC413B8ED3600268D13 /* CKCollectionViewControllerOld.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7713B8ED3600268D13 /* CKCollectionViewControllerOld.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCC513B8ED3600268D13 /* CKCollectionViewControllerOld.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7813B8ED3600268D13 /* CKCollectionViewControllerOld.m */; };
 		7560DCC613B8ED3600268D13 /* CKCollectionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7913B8ED3600268D13 /* CKCollectionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCC713B8ED3600268D13 /* CKCollectionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7A13B8ED3600268D13 /* CKCollectionCellController.m */; };
 		7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7B13B8ED3600268D13 /* CKKeypadView.h */; settings = {ATTRIBUTES = (); }; };
@@ -721,6 +721,8 @@
 		D98F3FD51AB374E10094572C /* CKPropertyBoolViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FD21AB374E10094572C /* CKPropertyBoolViewController.m */; };
 		D98F3FDE1AB37D970094572C /* CKPropertySelectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FDB1AB37D970094572C /* CKPropertySelectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98F3FDF1AB37D970094572C /* CKPropertySelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FDC1AB37D970094572C /* CKPropertySelectionViewController.m */; };
+		D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */; };
 		D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
 		D9E04C8D1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -891,8 +893,8 @@
 		7560DB7413B8ED3600268D13 /* CKItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKItem.m; path = Classes/CoreData/Private/CKItem.m; sourceTree = "<group>"; };
 		7560DB7513B8ED3600268D13 /* CKItemAttributeReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemAttributeReference.h; path = Classes/CoreData/Private/CKItemAttributeReference.h; sourceTree = "<group>"; };
 		7560DB7613B8ED3600268D13 /* CKItemAttributeReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKItemAttributeReference.m; path = Classes/CoreData/Private/CKItemAttributeReference.m; sourceTree = "<group>"; };
-		7560DB7713B8ED3600268D13 /* CKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKCollectionViewController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		7560DB7813B8ED3600268D13 /* CKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKCollectionViewController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		7560DB7713B8ED3600268D13 /* CKCollectionViewControllerOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKCollectionViewControllerOld.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewControllerOld.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		7560DB7813B8ED3600268D13 /* CKCollectionViewControllerOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKCollectionViewControllerOld.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewControllerOld.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB7913B8ED3600268D13 /* CKCollectionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionCellController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionCellController.h; sourceTree = "<group>"; };
 		7560DB7A13B8ED3600268D13 /* CKCollectionCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionCellController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionCellController.m; sourceTree = "<group>"; };
 		7560DB7B13B8ED3600268D13 /* CKKeypadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKKeypadView.h; path = Classes/UI/Private/CKKeypadView.h; sourceTree = "<group>"; };
@@ -1469,6 +1471,8 @@
 		D98F3FD21AB374E10094572C /* CKPropertyBoolViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyBoolViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyBoolViewController.m; sourceTree = "<group>"; };
 		D98F3FDB1AB37D970094572C /* CKPropertySelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertySelectionViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertySelectionViewController.h; sourceTree = "<group>"; };
 		D98F3FDC1AB37D970094572C /* CKPropertySelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertySelectionViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertySelectionViewController.m; sourceTree = "<group>"; };
+		D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionViewController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.h; sourceTree = "<group>"; };
+		D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionViewController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.m; sourceTree = "<group>"; };
 		D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Introspection.h"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.h"; sourceTree = "<group>"; };
 		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
 		D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertiesSampleViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertiesSampleViewController.h; sourceTree = "<group>"; };
@@ -1698,7 +1702,7 @@
 				7506E40413B8FF6700EE1471 /* Views */,
 				960CAED2157E50DB00F6C887 /* Gestures */,
 				9638264D147FE53F00A9C98B /* Controllers */,
-				7506E40513B8FF7A00EE1471 /* Collection View Controllers */,
+				7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */,
 				D9418A681AB8755A00234A15 /* Section View Controllers */,
 			);
 			name = UI;
@@ -1747,11 +1751,11 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
-		7506E40513B8FF7A00EE1471 /* Collection View Controllers */ = {
+		7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB7713B8ED3600268D13 /* CKCollectionViewController.h */,
-				7560DB7813B8ED3600268D13 /* CKCollectionViewController.m */,
+				7560DB7713B8ED3600268D13 /* CKCollectionViewControllerOld.h */,
+				7560DB7813B8ED3600268D13 /* CKCollectionViewControllerOld.m */,
 				7560DB7913B8ED3600268D13 /* CKCollectionCellController.h */,
 				7560DB7A13B8ED3600268D13 /* CKCollectionCellController.m */,
 				7560DBE213B8ED3600268D13 /* CKCollectionCellControllerFactory.h */,
@@ -1762,7 +1766,7 @@
 				7506E40613B8FFB400EE1471 /* Map */,
 				96B3BCD3182BED8600978B85 /* Collection With Layout */,
 			);
-			name = "Collection View Controllers";
+			name = "Collection View Controllers (Will all be deprecated)";
 			sourceTree = "<group>";
 		};
 		7506E40613B8FFB400EE1471 /* Map */ = {
@@ -2419,16 +2423,8 @@
 		96B3BCF8182BED9D00978B85 /* Layouts */ = {
 			isa = PBXGroup;
 			children = (
-				96B3BCDE182BED9800978B85 /* CKCollectionViewLayout.h */,
-				96B3BCDF182BED9800978B85 /* CKCollectionViewLayout.m */,
 				96B3BCE2182BED9800978B85 /* CKCollectionViewMorphableLayout.h */,
 				96B3BCE3182BED9800978B85 /* CKCollectionViewMorphableLayout.m */,
-				96B3BCDC182BED9800978B85 /* CKCollectionViewGridLayout.h */,
-				96B3BCDD182BED9800978B85 /* CKCollectionViewGridLayout.m */,
-				96B3BCE4182BED9800978B85 /* CKCollectionViewPageLayout.h */,
-				96B3BCE5182BED9800978B85 /* CKCollectionViewPageLayout.m */,
-				965A817818B2B6D3005E8508 /* CKCollectionViewFlowLayout.h */,
-				965A817918B2B6D3005E8508 /* CKCollectionViewFlowLayout.m */,
 			);
 			name = Layouts;
 			sourceTree = "<group>";
@@ -3257,6 +3253,7 @@
 				D94CA2F91AA64AF8009EA887 /* Reusable View Controller */,
 				D9418A631AB86CDF00234A15 /* Picker */,
 				D9418A891AB9CA8500234A15 /* Table */,
+				D9CD82491AC1CCA000B2985D /* Collection */,
 			);
 			name = "Section View Controllers";
 			sourceTree = "<group>";
@@ -3444,6 +3441,31 @@
 				D98F3FDC1AB37D970094572C /* CKPropertySelectionViewController.m */,
 			);
 			name = Selection;
+			sourceTree = "<group>";
+		};
+		D9CD82491AC1CCA000B2985D /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */,
+				D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */,
+				D9CD824E1AC1CDCF00B2985D /* Layouts */,
+			);
+			name = Collection;
+			sourceTree = "<group>";
+		};
+		D9CD824E1AC1CDCF00B2985D /* Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				96B3BCDE182BED9800978B85 /* CKCollectionViewLayout.h */,
+				96B3BCDF182BED9800978B85 /* CKCollectionViewLayout.m */,
+				96B3BCDC182BED9800978B85 /* CKCollectionViewGridLayout.h */,
+				96B3BCDD182BED9800978B85 /* CKCollectionViewGridLayout.m */,
+				96B3BCE4182BED9800978B85 /* CKCollectionViewPageLayout.h */,
+				96B3BCE5182BED9800978B85 /* CKCollectionViewPageLayout.m */,
+				965A817818B2B6D3005E8508 /* CKCollectionViewFlowLayout.h */,
+				965A817918B2B6D3005E8508 /* CKCollectionViewFlowLayout.m */,
+			);
+			name = Layouts;
 			sourceTree = "<group>";
 		};
 		D9E04C6D1AB1F83400E6BECB /* Apple Extensions */ = {
@@ -3785,7 +3807,7 @@
 				7560DCC013B8ED3600268D13 /* CKItem.h in Headers */,
 				9649969E18D0D8EB002E03F4 /* CKSnapshotController.h in Headers */,
 				7560DCC213B8ED3600268D13 /* CKItemAttributeReference.h in Headers */,
-				7560DCC413B8ED3600268D13 /* CKCollectionViewController.h in Headers */,
+				7560DCC413B8ED3600268D13 /* CKCollectionViewControllerOld.h in Headers */,
 				7560DCC613B8ED3600268D13 /* CKCollectionCellController.h in Headers */,
 				7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */,
 				7560DCCC13B8ED3600268D13 /* CKLocalization.h in Headers */,
@@ -3821,6 +3843,7 @@
 				7560DD1413B8ED3600268D13 /* NSObject+Notifications.h in Headers */,
 				7560DD1613B8ED3600268D13 /* CKNSObjectPropertyCellController.h in Headers */,
 				96B4514118D08D0B00D58489 /* CKLayoutViewProxy.h in Headers */,
+				D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */,
 				7560DD1813B8ED3600268D13 /* NSSet+Additions.h in Headers */,
 				709C71CC1843BE8C006BB1DD /* UIControl+Introspection.h in Headers */,
 				7560DD1A13B8ED3600268D13 /* NSString+Parsing.h in Headers */,
@@ -4266,7 +4289,7 @@
 				D9418A7D1AB880D300234A15 /* CKReusableViewControllerFactory.m in Sources */,
 				7560DCC113B8ED3600268D13 /* CKItem.m in Sources */,
 				7560DCC313B8ED3600268D13 /* CKItemAttributeReference.m in Sources */,
-				7560DCC513B8ED3600268D13 /* CKCollectionViewController.m in Sources */,
+				7560DCC513B8ED3600268D13 /* CKCollectionViewControllerOld.m in Sources */,
 				7560DCC713B8ED3600268D13 /* CKCollectionCellController.m in Sources */,
 				7560DCC913B8ED3600268D13 /* CKKeypadView.m in Sources */,
 				7560DCCD13B8ED3600268D13 /* CKLocalization.m in Sources */,
@@ -4528,6 +4551,7 @@
 				96FEFDF617978D620001CC4A /* CKResourceManager+UIUpdate.m in Sources */,
 				963AB797179881110076925C /* CKResourceDependencyContext.m in Sources */,
 				D9418A881AB8C18600234A15 /* UIImageView+URL.m in Sources */,
+				D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */,
 				96CC498217CBFE710017A6E7 /* JSONKit.m in Sources */,
 				96CC498417CBFE710017A6E7 /* Reachability.m in Sources */,
 				96CC498C17CBFE780017A6E7 /* UIScrollView+SVInfiniteScrolling.m in Sources */,

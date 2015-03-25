@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 #import "CKCarouselView.h"
 #import "CKObjectController.h"
 #import "CKCollectionCellControllerFactory.h"
@@ -16,7 +16,7 @@
 
 /**
  */
-@interface CKCarouselCollectionViewController : CKCollectionViewController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> 
+@interface CKCarouselCollectionViewController : CKCollectionViewControllerOld<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> 
 
 ///-----------------------------------
 /// @name Getting/Setting the carousel and pageControl Views

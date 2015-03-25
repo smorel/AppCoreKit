@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CKCollectionCellController.h"
 
-@class CKCollectionViewController;
+@class CKCollectionViewControllerOld;
 @class CKReusableViewController;
 
 /********************************* CKCollectionCellControllerFactoryItem *********************************/
@@ -119,6 +119,6 @@ typedef CKReusableViewController*(^CKCollectionCellContentControllerCreationBloc
 
 /**
  */
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld*)collectionViewController;
 
 @end

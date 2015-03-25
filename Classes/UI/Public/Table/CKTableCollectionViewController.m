@@ -27,7 +27,7 @@
 #import "UIView+Positioning.h"
 
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
@@ -953,7 +953,7 @@
 	return nil;
 }
 
-#pragma mark CKCollectionViewController Implementation
+#pragma mark CKCollectionViewControllerOld Implementation
 
 - (void)updateVisibleViewsRotation{
     //Rotate views for visible controllers.

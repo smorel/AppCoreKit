@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Sebastien Morel. All rights reserved.
 //
 
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 
 #import "NSObject+Bindings.h"
 #import "Layout.h"
@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
  */
 - (UINavigationController*)navigationController;
 
-/** The CKCollectionViewController managing the collection of CKCollectionCellController and the collectionView
+/** The CKCollectionViewControllerOld managing the collection of CKCollectionCellController and the collectionView
  
     CKTableViewControllerOld,
     CKTableCollectionViewViewController, 

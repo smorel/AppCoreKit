@@ -22,7 +22,7 @@
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
 @end
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
@@ -570,7 +570,7 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
 }
 
-#pragma mark CKCollectionViewController Implementation
+#pragma mark CKCollectionViewControllerOld Implementation
 
 - (NSArray*)visibleIndexPaths{
     if(self.tableViewHasBeenReloaded == NO)

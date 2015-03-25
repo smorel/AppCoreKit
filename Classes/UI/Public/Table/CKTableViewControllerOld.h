@@ -6,7 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 
 /**
  */
@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, CKTableViewOrientation) {
 
 /**
  */
-@interface CKTableViewControllerOld : CKCollectionViewController <UITableViewDataSource, UITableViewDelegate> 
+@interface CKTableViewControllerOld : CKCollectionViewControllerOld <UITableViewDataSource, UITableViewDelegate> 
 
 ///-----------------------------------
 /// @name Initializing a TableView Controller Object

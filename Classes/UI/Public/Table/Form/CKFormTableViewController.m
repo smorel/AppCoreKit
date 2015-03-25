@@ -22,12 +22,12 @@
 
 //private interfaces
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 @property (nonatomic, retain) id objectController;
 @property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
 @end
 
-@interface CKCollectionViewController(CKCollectionCellControllerManagement)
+@interface CKCollectionViewControllerOld(CKCollectionCellControllerManagement)
 - (void) insertItemViewControllersSectionAtIndex:(NSInteger)index;
 @end
 
@@ -36,7 +36,7 @@
 - (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld *)collectionViewController;
 @end
 
 
@@ -153,7 +153,7 @@
 
 @implementation CKFormObjectControllerFactory
 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController{
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld *)collectionViewController{
     CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.parentController;
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController visibleSectionAtIndex:indexPath.section];

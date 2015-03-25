@@ -8,9 +8,9 @@
 
 #import "CKCollectionViewLayout.h"
 #import "CKCollectionViewMorphableLayout.h"
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 
-@interface CKCollectionViewLayoutController : CKCollectionViewController <UICollectionViewDataSource,UICollectionViewDelegate,CKCollectionViewMorphableLayoutDelegate>
+@interface CKCollectionViewLayoutController : CKCollectionViewControllerOld <UICollectionViewDataSource,UICollectionViewDelegate,CKCollectionViewMorphableLayoutDelegate>
 
 - (id)initWithLayout:(UICollectionViewLayout*)layout collection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 

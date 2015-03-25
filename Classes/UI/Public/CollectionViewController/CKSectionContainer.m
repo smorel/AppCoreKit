@@ -181,11 +181,16 @@ static char UIViewReusableViewControllerKey;
 
 
 - (CKReusableViewController*)controllerAtIndexPath:(NSIndexPath*)indexPath{
+    if(!indexPath)
+        return nil;
     CKAbstractSection* section = [self sectionAtIndex:indexPath.section];
     return [section controllerAtIndex:indexPath.row];
 }
 
 - (NSArray*)controllersAtIndexPaths:(NSArray*)indexPaths{
+    if(!indexPaths)
+        return nil;
+    
     NSMutableArray* controllers = [NSMutableArray arrayWithCapacity:indexPaths.count];
     for(NSIndexPath* indexPath in indexPaths){
         CKReusableViewController* controller = [self controllerAtIndexPath:indexPath];

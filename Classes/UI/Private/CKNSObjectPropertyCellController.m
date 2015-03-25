@@ -207,7 +207,7 @@
 	[property setValue:nil];
 }
 
-- (void)collectionViewController:(CKCollectionViewController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
+- (void)collectionViewController:(CKCollectionViewControllerOld*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
 	CKClassExplorer* classExplorer = (CKClassExplorer*)controller;
 	
 	

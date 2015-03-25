@@ -19,7 +19,7 @@
 
 #import "CKDebug.h"
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;

@@ -24,11 +24,11 @@
 //Private interface
 @interface CKCollectionCellController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
-@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
+@property (nonatomic, assign, readwrite) CKCollectionViewControllerOld* containerController;
 @end
 
 @interface CKCollectionCellControllerFactoryItem() 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld*)collectionViewController;
 @end
 
 /********************************* CKCollectionCellControllerFactoryItem *********************************
@@ -51,7 +51,7 @@
 	[super dealloc];
 }
 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController{
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld*)collectionViewController{
     if(_controllerCreateBlock){
         CKCollectionCellController* controller = _controllerCreateBlock(object,indexPath);
         if(controller.name == nil){
@@ -120,8 +120,8 @@
 @property (nonatomic, retain) NSMutableArray* items;
 @property (nonatomic, assign) id objectController;
 
-- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld *)collectionViewController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld *)collectionViewController;
 
 @end
 
@@ -160,7 +160,7 @@
     return [predicate evaluateWithObject:object];
 }
 
-- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController{
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld*)collectionViewController{
 	for(CKCollectionCellControllerFactoryItem* item in _items){
 		if([self doesItem:item matchWithObject:object]){
 			return item;
@@ -170,7 +170,7 @@
 }
 
 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController*)collectionViewController{
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld*)collectionViewController{
     CKCollectionCellControllerFactoryItem* item = [self factoryItemForObject:object atIndexPath:indexPath collectionViewController:collectionViewController];
     if(!item){
         return nil;

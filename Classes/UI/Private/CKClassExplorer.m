@@ -21,7 +21,7 @@ __strong NSString* CKClassExplorerFilter = nil;
 NSString* CKClassExplorerAdditionalFilter = @"ck";
 CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 @property (nonatomic, retain) id objectController;
 @property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
 @end

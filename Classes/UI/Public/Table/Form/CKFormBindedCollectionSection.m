@@ -27,7 +27,7 @@
 
 @property (nonatomic, assign) id objectController;
 - (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewController *)collectionViewController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath collectionViewController:(CKCollectionViewControllerOld *)collectionViewController;
 @end
 
 //CKFormBindedCollectionSection

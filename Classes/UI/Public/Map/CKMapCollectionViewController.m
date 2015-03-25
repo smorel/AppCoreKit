@@ -174,7 +174,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 @property (nonatomic, retain) id objectController;
 @property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
 

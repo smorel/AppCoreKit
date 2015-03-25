@@ -16,7 +16,7 @@
 
 @implementation CKTableViewCellController(CKResponder)
 
-+ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKCollectionViewController*)controller{
++ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKCollectionViewControllerOld*)controller{
     if([controller isKindOfClass:[CKTableCollectionViewController class]]){
         CKTableCollectionViewController* tableViewController = (CKTableCollectionViewController*)controller;
         CKTableViewCellController* cellController = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
@@ -32,7 +32,7 @@
 
 - (NSIndexPath*)findNextResponderWithScrollEnabled:(BOOL)enableScroll{
 	if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
-        CKCollectionViewController* parentController = (CKCollectionViewController*)self.containerController;
+        CKCollectionViewControllerOld* parentController = (CKCollectionViewControllerOld*)self.containerController;
         
 		NSIndexPath* indexPath = self.indexPath;
 		NSInteger section = indexPath.section;
@@ -64,7 +64,7 @@
 
 - (NSIndexPath*)findPreviousResponderWithScrollEnabled:(BOOL)enableScroll{
 	if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
-        CKCollectionViewController* parentController = (CKCollectionViewController*)self.containerController;
+        CKCollectionViewControllerOld* parentController = (CKCollectionViewControllerOld*)self.containerController;
         
 		NSIndexPath* indexPath = self.indexPath;
 		NSInteger section = indexPath.section;

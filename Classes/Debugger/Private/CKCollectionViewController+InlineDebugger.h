@@ -1,5 +1,5 @@
 //
-//  CKCollectionViewController+InlineDebugger.h
+//  CKCollectionViewControllerOld+InlineDebugger.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
@@ -7,11 +7,11 @@
 //
 
 
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 #import "UIViewController+InlineDebugger.h"
 #import "CKGridCollectionViewController.h"
 
-@interface CKCollectionViewController (CKInlineDebugger)
+@interface CKCollectionViewControllerOld (CKInlineDebugger)
 
 @end
 

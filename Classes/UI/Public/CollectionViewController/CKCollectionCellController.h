@@ -26,7 +26,7 @@ enum{
 typedef NSUInteger CKItemViewFlags;
 
 
-@class CKCollectionViewController;
+@class CKCollectionViewControllerOld;
 
 /**
  */
@@ -55,7 +55,7 @@ typedef NSUInteger CKItemViewFlags;
 
 /**
  */
-@property (nonatomic, assign, readonly) CKCollectionViewController* containerController;
+@property (nonatomic, assign, readonly) CKCollectionViewControllerOld* containerController;
 
 /**
  */

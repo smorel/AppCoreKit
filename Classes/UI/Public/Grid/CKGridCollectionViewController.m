@@ -11,7 +11,7 @@
 #import "CKArrayCollection.h"
 #import "CKDebug.h"
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
@@ -34,7 +34,7 @@
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 
-@interface CKCollectionViewController(CKCollectionCellControllerManagement)
+@interface CKCollectionViewControllerOld(CKCollectionCellControllerManagement)
 - (CKCollectionCellController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 @end
 

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 #import "CKObjectController.h"
 #import "CKCollectionCellControllerFactory.h"
 #import "CKCollection.h"
@@ -39,7 +39,7 @@ typedef void(^CKMapCollectionViewControllerScrollBlock)(CKMapCollectionViewContr
 
 /**
  */
-@interface CKMapCollectionViewController : CKCollectionViewController <MKMapViewDelegate> 
+@interface CKMapCollectionViewController : CKCollectionViewControllerOld <MKMapViewDelegate> 
 
 ///-----------------------------------
 /// @name Initializing a Map View Controller

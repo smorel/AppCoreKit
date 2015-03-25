@@ -11,7 +11,7 @@
 #import "CKContainerViewController.h"
 
 @interface CKCollectionCellController()
-@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
+@property (nonatomic, assign, readwrite) CKCollectionViewControllerOld* containerController;
 @property (nonatomic, assign) BOOL isViewAppeared;
 @end
 
@@ -106,7 +106,7 @@
     [_viewController setContainerViewController:self.containerController];
 }
 
-- (void)setContainerController:(CKCollectionViewController *)containerController{
+- (void)setContainerController:(CKCollectionViewControllerOld *)containerController{
     [super setContainerController:containerController];
     [_viewController setContainerViewController:containerController];
 }

@@ -33,7 +33,7 @@
 @end
 
 
-@interface CKCollectionViewController ()
+@interface CKCollectionViewControllerOld ()
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
 @end
 
@@ -326,6 +326,7 @@
 - (void)applyStyleToSubViews{
     [self reapplyingStyleOnSubviewNamed:@"contentViewCell"];
     [self reapplyingStyleOnSubviewNamed:@"tableViewCell"];
+    [self reapplyingStyleOnSubviewNamed:@"collectionViewCell"];
     [self reapplyingStyleOnSubviewNamed:@"headerFooterView"];
     
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){

@@ -50,4 +50,9 @@
     return [self.contentView preferredSizeConstraintToSize:size];
 }
 
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    [self.contentView layoutSubviews];
+}
+
 @end

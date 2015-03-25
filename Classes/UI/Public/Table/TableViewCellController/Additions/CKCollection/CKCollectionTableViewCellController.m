@@ -24,7 +24,7 @@
 #define ACTIVITY_INDICATOR_TAG 98634
 
 @interface CKCollectionCellController()
-- (void)setContainerController:(CKCollectionViewController*)c;
+- (void)setContainerController:(CKCollectionViewControllerOld*)c;
 @end
 
 
@@ -35,7 +35,7 @@
     self.flags = CKItemViewFlagNone;
 }
 
-- (void)setContainerController:(CKCollectionViewController*)c{
+- (void)setContainerController:(CKCollectionViewControllerOld*)c{
     [super setContainerController:c];
     if(self.parentTableView.pagingEnabled){
         self.size = CGSizeMake(-1,-1);

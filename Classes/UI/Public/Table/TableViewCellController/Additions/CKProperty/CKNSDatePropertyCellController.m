@@ -21,7 +21,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 
 @interface CKCollectionCellController()
-@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
+@property (nonatomic, assign, readwrite) CKCollectionViewControllerOld* containerController;
 @end
 
 
@@ -56,7 +56,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     self.datePickerMode = CKDatePickerModeDate;
 }
 
-- (void)setContainerController:(CKCollectionViewController *)containerController{
+- (void)setContainerController:(CKCollectionViewControllerOld *)containerController{
     [super setContainerController:containerController];
     
     __block CKNSDatePropertyCellController* bself = self;

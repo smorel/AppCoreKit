@@ -17,7 +17,7 @@
 
 
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 @property (nonatomic, retain) id objectController;
 @property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
 

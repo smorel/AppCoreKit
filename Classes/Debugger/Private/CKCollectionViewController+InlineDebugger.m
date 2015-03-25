@@ -1,5 +1,5 @@
 //
-//  CKCollectionViewController+InlineDebugger.m
+//  CKCollectionViewControllerOld+InlineDebugger.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
@@ -10,7 +10,7 @@
 #import "CKCollectionViewController+InlineDebugger.h"
 #import "CKGridTableViewCellController.h"
 
-@interface CKCollectionViewController()
+@interface CKCollectionViewControllerOld()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation CKCollectionViewController (CKInlineDebugger)
+@implementation CKCollectionViewControllerOld (CKInlineDebugger)
 
 - (id)itemControllerForSubView:(UIView*)view{
     UIView* v = view;

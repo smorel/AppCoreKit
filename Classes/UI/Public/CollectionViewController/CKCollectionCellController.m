@@ -7,7 +7,7 @@
 //
 
 #import "CKCollectionCellController.h"
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 #import "CKTableViewCellController+Style.h"
 
 #import "CKStyleManager.h"
@@ -22,7 +22,7 @@
 @property (nonatomic, retain) CKWeakRef *weakParentController;
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, retain) CKWeakRef *targetRef;
-@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
+@property (nonatomic, assign, readwrite) CKCollectionViewControllerOld* containerController;
 @property (nonatomic, assign) BOOL isViewAppeared;
 @property (nonatomic, assign) BOOL controllerStyleApplyed;
 @property (nonatomic, assign) BOOL applyingStyle;
@@ -156,7 +156,7 @@
 	return [_viewRef object];
 }
 
-- (void)setContainerController:(CKCollectionViewController *)c{
+- (void)setContainerController:(CKCollectionViewControllerOld *)c{
     if(_weakParentController){
         [_weakParentController setObject:c];
     }else{
@@ -164,8 +164,8 @@
     }
 }
 
-- (CKCollectionViewController*)containerController{
-	return (CKCollectionViewController*)[_weakParentController object];
+- (CKCollectionViewControllerOld*)containerController{
+	return (CKCollectionViewControllerOld*)[_weakParentController object];
 }
 
 //sequence : loadView, initView, applyStyle

@@ -57,13 +57,13 @@
  */
 @interface CKTableViewController : UITableViewController<CKSectionContainerDelegate>
 
-/** You can set your own backgroundview in viewDidLoad
+/** By default, a CKPassThroughView transparent view that does catches touches. You can set your own backgroundview in viewDidLoad
  */
 @property(nonatomic,retain) UIView* backgroundView;
 
-/** A transparent view that does catches touches. You can add views that must be displayed on top of the tableView here
+/** By default, a CKPassThroughView transparent view that does catches touches. You can add views that must be displayed on top of the tableView here
  */
-@property(nonatomic,retain) CKPassThroughView* foregroundView;
+@property(nonatomic,retain) UIView* foregroundView;
 
 /**
  */

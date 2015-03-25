@@ -49,7 +49,7 @@
 #import "UIGestureRecognizer+BlockBasedInterface.h"
 
 
-#import "CKCollectionViewController.h"
+#import "CKCollectionViewControllerOld.h"
 #import "CKCollectionCellController.h"
 #import "CKCollectionCellControllerFactory.h"
 
@@ -127,3 +127,4 @@
 #import "CKSectionContainer.h"
 #import "CKTableViewController.h"
 #import "CKPickerViewViewController.h"
+#import "CKCollectionViewController.h"
