@@ -12,6 +12,7 @@
 #import "CKPropertyBoolViewController.h"
 #import "CKPropertySelectionViewController.h"
 #import "CKPropertyVectorViewController.h"
+#import "CKPropertyColorViewController.h"
 
 #import "CKTableViewContentCellController.h"
 
@@ -34,6 +35,7 @@ typedef NS_ENUM(NSInteger, TEST){
 @property(nonatomic,assign) UIEdgeInsets edgeInsetsValue;
 @property(nonatomic,assign) CLLocationCoordinate2D locationCoordinate2DValue;
 @property(nonatomic,assign) CGAffineTransform affineTransformValue;
+@property(nonatomic,retain) UIColor* colorValue;
 
 @end
 
@@ -75,7 +77,11 @@ typedef NS_ENUM(NSInteger, TEST){
     CKPropertyVectorViewController* locationCoordinate2DValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"locationCoordinate2DValue")]autorelease];
     
     self.affineTransformValue = CGAffineTransformIdentity;
-    CKPropertyVectorViewController* affineTransformValueValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"affineTransformValue")]autorelease];
+    CKPropertyVectorViewController* affineTransformValueController = [[[CKPropertyVectorViewController alloc]initWithProperty:_p(@"affineTransformValue")]autorelease];
+    
+    self.colorValue = [UIColor redColor];
+    CKPropertyColorViewController* colorValueController = [[[CKPropertyColorViewController alloc]initWithProperty:_p(@"colorValue")]autorelease];
+
     
     NSMutableArray* controllers =[NSMutableArray array];
     [controllers addObjectsFromArray:@[
@@ -91,7 +97,8 @@ typedef NS_ENUM(NSInteger, TEST){
                                  rectValueController,
                                  edgeInsetsValueController,
                                  locationCoordinate2DValueController,
-                                 affineTransformValueValueController
+                                 affineTransformValueController,
+                                 colorValueController
                                  ]
      ];
     

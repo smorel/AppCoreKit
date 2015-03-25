@@ -21,11 +21,14 @@
 }
 
 - (instancetype)initWithProperty:(CKProperty *)property{
-    NSAssert(property.descriptor.propertyType == CKClassPropertyDescriptorTypeStruct, @"Invalid property");
-    
     CKPropertyVector* vector = nil;
     
-    NSString* vectorClassName = [NSString stringWithFormat:@"CK%@Vector",[property.descriptor.className substringFromIndex:2]];
+    NSString* vectorClassName = nil;
+    if(property.descriptor.type){
+        vectorClassName = [NSString stringWithFormat:@"CK%@Vector",[[[property.descriptor.type class]description] substringFromIndex:2]];
+    }else{
+        vectorClassName = [NSString stringWithFormat:@"CK%@Vector",[property.descriptor.className substringFromIndex:2]];
+    }
     Class vectorClass = NSClassFromString(vectorClassName);
     
     NSAssert(vectorClass, @"Could not find a vector class for representing this property");

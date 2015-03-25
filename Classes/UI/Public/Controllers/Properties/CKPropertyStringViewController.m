@@ -193,7 +193,8 @@
                 }
             }
             
-            return ([string stringByTrimmingCharactersInSet:[numberSet invertedSet]].length > 0);
+            NSString* result = [string stringByTrimmingCharactersInSet:[numberSet invertedSet]];
+            return result.length > 0;
         }
         
         return YES;

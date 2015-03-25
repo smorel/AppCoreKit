@@ -113,6 +113,7 @@
 #import "CKPropertySelectionViewController.h"
 #import "CKPropertyDateViewController.h"
 #import "CKPropertyVectorViewController.h"
+#import "CKPropertyColorViewController.h"
 #import "CKPropertiesSampleViewController.h"
 
 

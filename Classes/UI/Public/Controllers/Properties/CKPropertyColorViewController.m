@@ -1,0 +1,127 @@
+//
+//  CKPropertyColorViewController.m
+//  AppCoreKit
+//
+//  Created by Sebastien Morel on 2015-03-25.
+//  Copyright (c) 2015 Wherecloud. All rights reserved.
+//
+
+#import "CKPropertyColorViewController.h"
+#import "CKPropertyVectorViewController.h"
+#import "UIColor+Components.h"
+
+@implementation CKPropertyColorViewController
+
+
+- (instancetype)initWithProperty:(CKProperty*)property{
+    self = [super initWithProperty:property];
+    self.propertyNameLabel = _(property.name);
+    self.flags = CKViewControllerFlagsNone;
+    return self;
+}
+
+- (void)dealloc{
+    [_propertyNameLabel release];
+    [super dealloc];
+}
+
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    
+    if([self isLayoutDefinedInStylesheet])
+        return;
+    
+    UIView* colorView = [[[UIView alloc]init]autorelease];
+    colorView.name = @"ColorView";
+    colorView.fixedHeight = 20;
+    colorView.marginTop = 10;
+    
+    CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    
+    CKPropertyVectorViewController* controller = [CKPropertyVectorViewController controllerWithProperty:self.property];
+    controller.name = @"VectorViewController";
+    controller.marginTop = 10;
+    
+    vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[colorView,controller]];
+    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vbox]];
+}
+
+- (void)setupBindings{
+    UIView* colorView = [self.view viewWithName:@"ColorView"];
+    
+    CKPropertyVectorViewController* controller = (CKPropertyVectorViewController*)[self.view layoutWithName:@"VectorViewController"];
+    controller.propertyNameLabel = self.propertyNameLabel;
+    controller.property = self.property;
+    
+    [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
+        colorView.backgroundColor = value;
+    }];
+}
+
+@end
+
+
+@interface CKColorVector : CKPropertyVector
+@property(nonatomic,assign) NSInteger red;
+@property(nonatomic,assign) NSInteger green;
+@property(nonatomic,assign) NSInteger blue;
+@property(nonatomic,assign) NSInteger alpha;
+@end
+
+@implementation CKColorVector
+
+- (id)initWithProperty:(CKProperty*)property{
+    self = [super initWithProperty:property];
+    self.editableProperties = @[ [CKProperty propertyWithObject:self keyPath:@"red"],
+                                 [CKProperty propertyWithObject:self keyPath:@"green"],
+                                 [CKProperty propertyWithObject:self keyPath:@"blue"],
+                                 [CKProperty propertyWithObject:self keyPath:@"alpha"]
+                                 ];
+    return self;
+}
+
+- (void)setRed:(NSInteger)red{
+    if(red > 255) red = 255;
+    if(red < 0) red = 0;
+    UIColor* color = [UIColor colorWithRed:red/255.0f green:[self.property.value green] blue:[self.property.value blue] alpha:[self.property.value alpha]];
+    [self.property setValue:color];
+}
+
+- (void)setGreen:(NSInteger)green{
+    if(green > 255) green = 255;
+    if(green < 0) green = 0;
+    UIColor* color = [UIColor colorWithRed:[self.property.value red] green:green/255.0f blue:[self.property.value blue] alpha:[self.property.value alpha]];
+    [self.property setValue:color];
+}
+
+- (void)setBlue:(NSInteger)blue{
+    if(blue > 255) blue = 255;
+    if(blue < 0) blue = 0;
+    UIColor* color = [UIColor colorWithRed:[self.property.value red] green:[self.property.value green] blue:blue/255.0f alpha:[self.property.value alpha]];
+    [self.property setValue:color];
+}
+
+- (void)setAlpha:(NSInteger)alpha{
+    if(alpha > 255) alpha = 255;
+    if(alpha < 0) alpha = 0;
+    UIColor* color = [UIColor colorWithRed:[self.property.value red] green:[self.property.value green] blue:[self.property.value blue] alpha:alpha/255.0f];
+    [self.property setValue:color];
+}
+
+- (NSInteger)red{
+    return [self.property.value red] * 255;
+}
+
+- (NSInteger)green{
+    return [self.property.value green] * 255;
+}
+
+- (NSInteger)blue{
+    return [self.property.value blue] * 255;
+}
+
+- (NSInteger)alpha{
+    return [self.property.value alpha] * 255;
+}
+
+@end
