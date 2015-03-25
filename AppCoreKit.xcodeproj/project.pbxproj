@@ -723,6 +723,8 @@
 		D98F3FDF1AB37D970094572C /* CKPropertySelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FDC1AB37D970094572C /* CKPropertySelectionViewController.m */; };
 		D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */; };
+		D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9CD82521AC2FA0E00B2985D /* UIView+Highlight.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD82501AC2FA0E00B2985D /* UIView+Highlight.m */; };
 		D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
 		D9E04C8D1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1473,6 +1475,8 @@
 		D98F3FDC1AB37D970094572C /* CKPropertySelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertySelectionViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertySelectionViewController.m; sourceTree = "<group>"; };
 		D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionViewController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.h; sourceTree = "<group>"; };
 		D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionViewController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.m; sourceTree = "<group>"; };
+		D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Highlight.h"; path = "Classes/UI/Public/Views/UIView+Highlight.h"; sourceTree = "<group>"; };
+		D9CD82501AC2FA0E00B2985D /* UIView+Highlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Highlight.m"; path = "Classes/UI/Public/Views/UIView+Highlight.m"; sourceTree = "<group>"; };
 		D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Introspection.h"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.h"; sourceTree = "<group>"; };
 		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
 		D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertiesSampleViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertiesSampleViewController.h; sourceTree = "<group>"; };
@@ -3492,6 +3496,8 @@
 				9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */,
 				961E782218D9D9040008EA33 /* UIView+Bounce.h */,
 				961E782318D9D9040008EA33 /* UIView+Bounce.m */,
+				D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */,
+				D9CD82501AC2FA0E00B2985D /* UIView+Highlight.m */,
 			);
 			name = UIView;
 			sourceTree = "<group>";
@@ -3898,6 +3904,7 @@
 				7560DDA113B8ED3600268D13 /* CKVersion.h in Headers */,
 				7560DDA713B8ED3600268D13 /* CKWeakRef.h in Headers */,
 				D9418A831AB8B89500234A15 /* CKStandardContentViewController.h in Headers */,
+				D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */,
 				7560DDAB13B8ED3600268D13 /* CKWebRequest.h in Headers */,
 				7560DDAF13B8ED3600268D13 /* CKWebService.h in Headers */,
 				7560DDB113B8ED3600268D13 /* CKWebSource.h in Headers */,
@@ -4438,6 +4445,7 @@
 				D9418A8D1AB9CB1E00234A15 /* CKTableViewController.m in Sources */,
 				7531781A1417E4F9009310A8 /* UIToolbar+Style.mm in Sources */,
 				7531781E1417E5A1009310A8 /* UILabel+Introspection.m in Sources */,
+				D9CD82521AC2FA0E00B2985D /* UIView+Highlight.m in Sources */,
 				753178221417E61D009310A8 /* UINavigationBar+Introspection.m in Sources */,
 				D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */,
 				753178261417E64C009310A8 /* UIToolbar+introspection.m in Sources */,
