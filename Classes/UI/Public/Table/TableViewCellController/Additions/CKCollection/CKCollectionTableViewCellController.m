@@ -11,7 +11,6 @@
 #import "CKFeedSource.h"
 #import "NSObject+Bindings.h"
 #import "CKLocalization.h"
-#import "CKCarouselCollectionViewController.h"
 #import "CKCollection.h"
 #import "CKCollectionTableViewCellController+Style.h"
 #import "CKTableViewCellController+Style.h"
@@ -62,9 +61,7 @@
 
 //FIXME : UGLY TEMPORARY HACK
 - (BOOL)forceHidden{
-	if([self.containerController isKindOfClass:[CKCarouselCollectionViewController class]])
-		return YES;
-	else if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
+    if([self.containerController isKindOfClass:[CKTableViewControllerOld class]]){
 		CKTableViewControllerOld* tableViewController = (CKTableViewControllerOld*)self.containerController ;
 		return tableViewController.tableView.pagingEnabled;
 	}

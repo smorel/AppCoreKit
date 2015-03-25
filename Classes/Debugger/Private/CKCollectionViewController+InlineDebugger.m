@@ -8,7 +8,6 @@
 
 
 #import "CKCollectionViewController+InlineDebugger.h"
-#import "CKGridTableViewCellController.h"
 
 @interface CKCollectionViewControllerOld()
 
@@ -97,38 +96,3 @@
 }
 
 @end
-
-@implementation CKGridCollectionViewController (CKInlineDebugger)
-
-- (id)subItemControllerForSubView:(UIView*)view inControllers:(NSArray*)itemViewControllers{
-    UIView* v = view;
-    while(v){
-        for(CKCollectionCellController* controller in itemViewControllers){
-            UIView* controllerView = [controller view];
-            if(controllerView == v){
-                return controller;
-            }
-        }
-        v = [v superview];
-    }
-    return nil;
-}
-
-- (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view{
-    CKFormTableViewController* debugger = [super inlineDebuggerForSubView:view];
-    CKGridTableViewCellController* itemController = (CKGridTableViewCellController*)[self itemControllerForSubView:view];
-    
-    if(itemController){
-        CKFormSection* controllerSection = [self sectionForCellControllersInDebugger:debugger];
-        
-        id subItemController = [self subItemControllerForSubView:view inControllers:itemController.cellControllers];
-        if(subItemController){
-            [controllerSection addCellController:[self cellControllerForItemViewController:subItemController debugger:debugger]];
-        }
-    }
-    
-    return debugger;
-}
-
-@end
-

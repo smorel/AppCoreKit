@@ -10,7 +10,6 @@
 #import "CKStyleManager.h"
 
 //HACK : here to know the context of the parent controller ...
-#import "CKCarouselCollectionViewController.h"
 #import "CKTableViewControllerOld.h"
 #import "CKMapCollectionViewController.h"
 

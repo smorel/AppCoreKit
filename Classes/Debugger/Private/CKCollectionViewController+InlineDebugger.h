@@ -9,12 +9,7 @@
 
 #import "CKCollectionViewControllerOld.h"
 #import "UIViewController+InlineDebugger.h"
-#import "CKGridCollectionViewController.h"
 
 @interface CKCollectionViewControllerOld (CKInlineDebugger)
-
-@end
-
-@interface CKGridCollectionViewController (CKInlineDebugger)
 
 @end
