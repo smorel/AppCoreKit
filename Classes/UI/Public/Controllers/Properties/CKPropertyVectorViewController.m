@@ -20,9 +20,7 @@
     return [NSString stringWithFormat:@"%@_%@",[super reuseIdentifier],[self.vector class]];
 }
 
-- (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
-    CKPropertyVector* vector = nil;
-    
++ (Class)vectorClassForProperty:(CKProperty*)property{
     NSString* vectorClassName = nil;
     if(property.descriptor.type){
         vectorClassName = [NSString stringWithFormat:@"CK%@Vector",[[[property.descriptor.type class]description] substringFromIndex:2]];
@@ -31,8 +29,19 @@
     }
     Class vectorClass = NSClassFromString(vectorClassName);
     
+    return vectorClass;
+}
+
++ (BOOL)compatibleWithProperty:(CKProperty*)property{
+    return [self vectorClassForProperty:property] != nil;
+}
+
+- (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
+    Class vectorClass = [CKPropertyVectorViewController vectorClassForProperty:property];
+    
     NSAssert(vectorClass, @"Could not find a vector class for representing this property");
     
+    CKPropertyVector* vector = nil;
     if(vectorClass){
         vector = [[vectorClass alloc]initWithProperty:property];
     }

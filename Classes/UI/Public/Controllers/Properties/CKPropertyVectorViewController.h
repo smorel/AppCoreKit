@@ -33,6 +33,10 @@
 
 /**
  */
++ (BOOL)compatibleWithProperty:(CKProperty*)property;
+
+/**
+ */
 - (instancetype)initWithPropertyVector:(CKPropertyVector*)vector readOnly:(BOOL)readOnly;
 
 /**

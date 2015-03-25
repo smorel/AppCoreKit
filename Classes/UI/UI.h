@@ -116,6 +116,9 @@
 #import "CKPropertyColorViewController.h"
 #import "CKPropertiesSampleViewController.h"
 
+#import "CKReusableViewController+Standard.h"
+#import "CKReusableViewController+Property.h"
+#import "CKSection+Property.h"
 
 #import "CKSectionContainer.h"
 #import "CKTableViewController.h"
