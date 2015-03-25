@@ -709,6 +709,8 @@
 		D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */; };
 		D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CD82521AC2FA0E00B2985D /* UIView+Highlight.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD82501AC2FA0E00B2985D /* UIView+Highlight.m */; };
+		D9CD82591AC30BFC00B2985D /* CKCollectionStatusViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD82571AC30BFC00B2985D /* CKCollectionStatusViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9CD825A1AC30BFC00B2985D /* CKCollectionStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD82581AC30BFC00B2985D /* CKCollectionStatusViewController.m */; };
 		D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9D196991A6833CC00AC47F6 /* UIDevice+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */; };
 		D9E04C8D1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1445,6 +1447,8 @@
 		D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionViewController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.m; sourceTree = "<group>"; };
 		D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Highlight.h"; path = "Classes/UI/Public/Views/UIView+Highlight.h"; sourceTree = "<group>"; };
 		D9CD82501AC2FA0E00B2985D /* UIView+Highlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Highlight.m"; path = "Classes/UI/Public/Views/UIView+Highlight.m"; sourceTree = "<group>"; };
+		D9CD82571AC30BFC00B2985D /* CKCollectionStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionStatusViewController.h; path = Classes/UI/Public/Controllers/CKCollectionStatusViewController.h; sourceTree = "<group>"; };
+		D9CD82581AC30BFC00B2985D /* CKCollectionStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionStatusViewController.m; path = Classes/UI/Public/Controllers/CKCollectionStatusViewController.m; sourceTree = "<group>"; };
 		D9D196961A6833CC00AC47F6 /* UIDevice+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Introspection.h"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.h"; sourceTree = "<group>"; };
 		D9D196971A6833CC00AC47F6 /* UIDevice+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Introspection.m"; path = "Classes/Foundation/Public/Runtime/UIDevice+Introspection.m"; sourceTree = "<group>"; };
 		D9E04C8A1AB1FF3200E6BECB /* CKPropertiesSampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertiesSampleViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertiesSampleViewController.h; sourceTree = "<group>"; };
@@ -3188,6 +3192,8 @@
 			children = (
 				D9418A811AB8B89500234A15 /* CKStandardContentViewController.h */,
 				D9418A821AB8B89500234A15 /* CKStandardContentViewController.m */,
+				D9CD82571AC30BFC00B2985D /* CKCollectionStatusViewController.h */,
+				D9CD82581AC30BFC00B2985D /* CKCollectionStatusViewController.m */,
 			);
 			name = "Standard Content";
 			sourceTree = "<group>";
@@ -3726,6 +3732,7 @@
 				7560DCDC13B8ED3600268D13 /* MKMapView+Introspection.h in Headers */,
 				7560DCDE13B8ED3600268D13 /* CKObject.h in Headers */,
 				7560DCE013B8ED3600268D13 /* CKObject+CKStore.h in Headers */,
+				D9CD82591AC30BFC00B2985D /* CKCollectionStatusViewController.h in Headers */,
 				7560DCE413B8ED3600268D13 /* CKMultiFloatPropertyCellController.h in Headers */,
 				7560DCE613B8ED3600268D13 /* CKMultipartEncoder.h in Headers */,
 				7560DCE813B8ED3600268D13 /* CKMultipartParser.h in Headers */,
@@ -4244,6 +4251,7 @@
 				96B4515A18D093A400D58489 /* CKBlurModalViewController.m in Sources */,
 				7560DD3013B8ED3600268D13 /* CKCollectionCellControllerFactory.m in Sources */,
 				7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */,
+				D9CD825A1AC30BFC00B2985D /* CKCollectionStatusViewController.m in Sources */,
 				7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */,
 				7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */,
 				7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */,
