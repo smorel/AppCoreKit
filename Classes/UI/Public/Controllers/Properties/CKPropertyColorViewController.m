@@ -83,45 +83,45 @@
 - (void)setRed:(NSInteger)red{
     if(red > 255) red = 255;
     if(red < 0) red = 0;
-    UIColor* color = [UIColor colorWithRed:red/255.0f green:[self.property.value green] blue:[self.property.value blue] alpha:[self.property.value alpha]];
+    UIColor* color = [UIColor colorWithRed:red/255.0f green:[(UIColor*)self.property.value green] blue:[(UIColor*)self.property.value blue] alpha:[(UIColor*)self.property.value alpha]];
     [self.property setValue:color];
 }
 
 - (void)setGreen:(NSInteger)green{
     if(green > 255) green = 255;
     if(green < 0) green = 0;
-    UIColor* color = [UIColor colorWithRed:[self.property.value red] green:green/255.0f blue:[self.property.value blue] alpha:[self.property.value alpha]];
+    UIColor* color = [UIColor colorWithRed:[(UIColor*)self.property.value red] green:green/255.0f blue:[(UIColor*)self.property.value blue] alpha:[(UIColor*)self.property.value alpha]];
     [self.property setValue:color];
 }
 
 - (void)setBlue:(NSInteger)blue{
     if(blue > 255) blue = 255;
     if(blue < 0) blue = 0;
-    UIColor* color = [UIColor colorWithRed:[self.property.value red] green:[self.property.value green] blue:blue/255.0f alpha:[self.property.value alpha]];
+    UIColor* color = [UIColor colorWithRed:[(UIColor*)self.property.value red] green:[(UIColor*)self.property.value green] blue:blue/255.0f alpha:[(UIColor*)self.property.value alpha]];
     [self.property setValue:color];
 }
 
 - (void)setAlpha:(NSInteger)alpha{
     if(alpha > 255) alpha = 255;
     if(alpha < 0) alpha = 0;
-    UIColor* color = [UIColor colorWithRed:[self.property.value red] green:[self.property.value green] blue:[self.property.value blue] alpha:alpha/255.0f];
+    UIColor* color = [UIColor colorWithRed:[(UIColor*)self.property.value red] green:[(UIColor*)self.property.value green] blue:[(UIColor*)self.property.value blue] alpha:alpha/255.0f];
     [self.property setValue:color];
 }
 
 - (NSInteger)red{
-    return [self.property.value red] * 255;
+    return [(UIColor*)self.property.value red] * 255;
 }
 
 - (NSInteger)green{
-    return [self.property.value green] * 255;
+    return [(UIColor*)self.property.value green] * 255;
 }
 
 - (NSInteger)blue{
-    return [self.property.value blue] * 255;
+    return [(UIColor*)self.property.value blue] * 255;
 }
 
 - (NSInteger)alpha{
-    return [self.property.value alpha] * 255;
+    return [(UIColor*)self.property.value alpha] * 255;
 }
 
 @end
