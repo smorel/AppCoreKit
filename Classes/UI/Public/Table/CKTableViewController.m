@@ -31,7 +31,7 @@
 @implementation CKTableViewController
 
 - (instancetype)init{
-    return [self initWithStyle:UITableViewStyleGrouped];
+    return [self initWithStyle:UITableViewStylePlain];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style{
