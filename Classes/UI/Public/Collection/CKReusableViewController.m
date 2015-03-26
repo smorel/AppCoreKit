@@ -20,6 +20,7 @@
 #import "CKVersion.h"
 
 #import "CKTableViewController.h"
+#import "CKCollectionViewController.h"
 
 @interface NSObject ()
 
@@ -271,22 +272,37 @@
     [self setNeedsDisplay];
 }
 
+- (void)resetStyleOnViewRecursivelly:(UIView*)view{
+    [view setAppliedStyle:nil];
+    if([view respondsToSelector:@selector(backgroundView)]){
+        [[view performSelector:@selector(backgroundView)]setAppliedStyle:nil];
+    }
+    
+    if([view respondsToSelector:@selector(selectedBackgroundView)]){
+        [[view performSelector:@selector(selectedBackgroundView)]setAppliedStyle:nil];
+    }
+}
+
 - (void)reapplyingStyleOnSubviewNamed:(NSString*)name{
-    if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
-        [self.contentViewCell setAppliedStyle:nil];
+    // if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
+        [self resetStyleOnViewRecursivelly:self.contentViewCell];
         [self applySubViewStyle:[self controllerStyle]
                      descriptor:[self propertyDescriptorForKeyPath:name]
                    appliedStack:[NSMutableSet set]
                        delegate:self];
-    }
+    //}
 
 }
 
 - (void)applyStyleToSubViews{
-    [self reapplyingStyleOnSubviewNamed:@"contentViewCell"];
-    [self reapplyingStyleOnSubviewNamed:@"tableViewCell"];
-    [self reapplyingStyleOnSubviewNamed:@"collectionViewCell"];
-    [self reapplyingStyleOnSubviewNamed:@"headerFooterView"];
+    //[self reapplyingStyleOnSubviewNamed:@"contentViewCell"];
+    if(self.tableViewCell){
+        [self reapplyingStyleOnSubviewNamed:@"tableViewCell"];
+    }
+    if(self.collectionViewCell){
+        [self reapplyingStyleOnSubviewNamed:@"collectionViewCell"];
+    }
+    //[self reapplyingStyleOnSubviewNamed:@"headerFooterView"];
     
     if(self.view.appliedStyle == nil || [self.view.appliedStyle isEmpty]){
         [self.view findAndApplyStyleFromStylesheet:[self controllerStyle] propertyName:@"view"];
