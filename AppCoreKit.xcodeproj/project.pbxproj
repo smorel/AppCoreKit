@@ -1524,8 +1524,8 @@
 				7506E40413B8FF6700EE1471 /* Views */,
 				960CAED2157E50DB00F6C887 /* Gestures */,
 				9638264D147FE53F00A9C98B /* Controllers */,
-				7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */,
 				D9418A681AB8755A00234A15 /* Section View Controllers */,
+				7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */,
 			);
 			name = UI;
 			sourceTree = "<group>";
