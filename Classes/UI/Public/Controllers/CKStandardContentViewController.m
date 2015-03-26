@@ -78,7 +78,7 @@
     
     UIImageView* imageView = [[[UIImageView alloc]init]autorelease];
     imageView.name = @"ImageView";
-    imageView.minimumHeight = 44;
+    imageView.flexibleHeight = YES;
     
     UILabel* titleLabel = [[[UILabel alloc]init]autorelease];
     titleLabel.name = @"TitleLabel";
@@ -104,6 +104,24 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    [self setupImageView];
+    [self setupTitle];
+    [self setupSubtitle];
+}
+
+- (void)setupTitle{
+    UILabel* titleLabel = [self.view viewWithName:@"TitleLabel"];
+    titleLabel.hidden = (self.title == nil);
+    titleLabel.text = self.title;
+}
+
+- (void)setupSubtitle{
+    UILabel* subtitleLabel = [self.view viewWithName:@"SubtitleLabel"];
+    subtitleLabel.hidden = (self.subtitle == nil);
+    subtitleLabel.text = self.subtitle;
+}
+
+- (void)setupImageView{
     UIImageView* imageView = [self.view viewWithName:@"ImageView"];
     if(self.defaultImageName){
         imageView.image = [CKResourceManager imageNamed:self.defaultImageName];
@@ -118,22 +136,40 @@
     }else{
         imageView.hidden = YES;
     }
-    
-    UILabel* titleLabel = [self.view viewWithName:@"TitleLabel"];
-    titleLabel.hidden = (self.title == nil);
-    titleLabel.text = self.title;
-    
-    UILabel* subtitleLabel = [self.view viewWithName:@"SubtitleLabel"];
-    subtitleLabel.hidden = (self.subtitle == nil);
-    subtitleLabel.text = self.subtitle;
 }
-
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
     UIImageView* imageView = [self.view viewWithName:@"ImageView"];
     [imageView cancelNetworkOperations];
+}
+
+
+- (void)setTitle:(NSString *)title{
+    [super setTitle:title];
+    
+    if(self.state == CKViewControllerStateDidAppear){
+        [self setupTitle];
+    }
+}
+
+- (void)setSubtitle:(NSString *)subtitle{
+    [_subtitle release];
+    _subtitle = [subtitle retain];
+    
+    if(self.state == CKViewControllerStateDidAppear){
+        [self setupSubtitle];
+    }
+}
+
+- (void)setImageURL:(NSURL *)imageURL{
+    [_imageURL release];
+    _imageURL = [imageURL retain];
+    
+    if(self.state == CKViewControllerStateDidAppear){
+        [self setupImageView];
+    }
 }
 
 @end
