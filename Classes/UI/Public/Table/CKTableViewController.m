@@ -449,6 +449,7 @@
 #else
         view = [[UIView alloc]init];
 #endif
+        view.flexibleSize = YES;
     }
     
     return [self.sectionContainer viewForController:s.headerViewController reusingView:view];
@@ -542,6 +543,7 @@
 #else
         view = [[UIView alloc]init];
 #endif
+        view.flexibleSize = YES;
     }
     
     return [self.sectionContainer viewForController:s.footerViewController reusingView:view];
