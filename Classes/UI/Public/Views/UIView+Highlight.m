@@ -43,6 +43,14 @@ static char UIViewOriginalBackgroundColorKey;
 static char UIViewHighlightedKey;
 
 - (void)setHighlighted:(BOOL)highlighted{
+    if(!self.highlighted){
+        [self setOriginalBackgroundColor:self.backgroundColor];
+    }
+    
+    if(highlighted == [self isHighlighted]){
+        return;
+    }
+    
     objc_setAssociatedObject(self,
                              &UIViewHighlightedKey,
                              @(highlighted),
@@ -58,7 +66,6 @@ static char UIViewHighlightedKey;
 - (void)updateBackgroundColor{
     UIColor* color = nil;
     if([self isHighlighted]){
-        [self setOriginalBackgroundColor:self.backgroundColor];
         color = [self highlightedBackgroundColor] ? [self highlightedBackgroundColor] : [self originalBackgroundColor];
     }else{
         color = [self originalBackgroundColor];
