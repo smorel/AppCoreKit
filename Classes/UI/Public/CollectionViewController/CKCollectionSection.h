@@ -15,9 +15,11 @@
 
 - (id)initWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory;
 + (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory;
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory headerTitle:(NSString*)headerTitle;
 
 - (id)initWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled;
 + (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled;
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory headerTitle:(NSString*)headerTitle reorderingEnabled:(BOOL)reorderingEnabled;
 
 
 @property(nonatomic,readonly) NSArray* collectionControllers;

@@ -49,6 +49,12 @@
     return [[[CKCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 }
 
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory headerTitle:(NSString*)headerTitle{
+    CKCollectionSection* section = [CKCollectionSection sectionWithCollection:collection factory:factory];
+    [section setHeaderTitle:headerTitle];
+    return section;
+}
+
 - (id)initWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
     self = [super init];
     self.collection = collection;
@@ -59,6 +65,12 @@
 
 + (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory reorderingEnabled:(BOOL)reorderingEnabled{
     return [[[CKCollectionSection alloc]initWithCollection:collection factory:factory reorderingEnabled:reorderingEnabled]autorelease];
+}
+
++ (CKCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKReusableViewControllerFactory*)factory headerTitle:(NSString*)headerTitle reorderingEnabled:(BOOL)reorderingEnabled{
+    CKCollectionSection* section = [CKCollectionSection sectionWithCollection:collection factory:factory reorderingEnabled:reorderingEnabled];
+    [section setHeaderTitle:headerTitle];
+    return section;
 }
 
 - (void)setContainerViewController:(UIViewController *)containerViewController{

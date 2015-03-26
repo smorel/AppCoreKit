@@ -36,6 +36,7 @@
  */
 @interface CKAbstractSection : NSObject
 
+@property(nonatomic,retain) NSString* name;
 @property(nonatomic,assign) id<CKSectionDelegate> delegate;
 @property(nonatomic,assign) UIViewController* containerViewController;
 

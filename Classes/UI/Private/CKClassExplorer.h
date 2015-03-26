@@ -8,10 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import "CKTableCollectionViewController.h"
 #import "CKArrayCollection.h"
 #import "CKCallback.h"
-
+#import "CKTableViewController.h"
 
 /**
  */
@@ -23,7 +22,7 @@ typedef NS_ENUM(NSInteger, CKClassExplorerType){
 
 /**
  */
-@interface CKClassExplorer : CKTableCollectionViewController {
+@interface CKClassExplorer : CKTableViewController {
 	CKArrayCollection* _classesCollection;
 	id _userInfo;
 	NSString* _className;

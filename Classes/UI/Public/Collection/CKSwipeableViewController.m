@@ -24,7 +24,6 @@
 
 @interface CKReusableViewController()
 @property(nonatomic,assign) BOOL isComputingSize;
-- (void)setCollectionCellController:(CKCollectionCellController *)c;
 @end
 
 
@@ -115,11 +114,6 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     return self;
 }
 
-- (void)setCollectionCellController:(CKCollectionCellController *)c{
-    [super setCollectionCellController:c];
-    [self.contentViewController setCollectionCellController:c];
-}
-
 - (void)prepareForReuseUsingContentView:(UIView*)contentView contentViewCell:(UIView*)contentViewCell{
     [super prepareForReuseUsingContentView:contentView contentViewCell:contentViewCell];
     [self.contentViewController prepareForReuseUsingContentView:[self scrollContentView] contentViewCell:contentViewCell];
@@ -150,11 +144,20 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     __unsafe_unretained CKSwipeableViewController* bself = self;
     self.contentViewController.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* layoutBox){
         BOOL bo = [bself updatesScrollViewContentSize:NO];
-        if(!bself.viewDidAppear || !bo)
+        if(bself.view.window == nil || bself.isComputingSize || bself.state != CKViewControllerStateDidAppear || !bo)
             return;
         
-        if([[bself collectionCellController]respondsToSelector:@selector(invalidateSize)]){
-            [[bself collectionCellController]performSelector:@selector(invalidateSize) withObject:nil];
+        NSIndexPath* indexPath = bself.indexPath;
+        if(!indexPath)
+            return;
+        
+        CGSize currentSize = self.view.bounds.size;
+        CGSize size = [bself preferredSizeConstraintToSize:CGSizeMake(bself.contentViewCell.width,MAXFLOAT)];
+        if(CGSizeEqualToSize(currentSize, size))
+            return;
+        
+        if([bself.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
+            [bself.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:indexPath];
         }
     };
     

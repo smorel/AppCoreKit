@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKFormTableViewController.h"
+#import "CKTableViewController.h"
 
 /**
  */
@@ -19,6 +19,6 @@
 
 /**
  */
-+ (CKFormTableViewController*)inlineDebuggerForObject:(id)object;
++ (CKTableViewController*)inlineDebuggerForObject:(id)object;
 
 @end

@@ -8,10 +8,10 @@
 
 #import "CKViewController.h"
 #import "NSObject+InlineDebugger.h"
+#import "CKTableViewController.h"
 
-@class CKFormTableViewController;
 @interface UIViewController (CKInlineDebugger)
 
-- (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view;
+- (CKTableViewController*)inlineDebuggerForSubView:(UIView*)view;
 
 @end

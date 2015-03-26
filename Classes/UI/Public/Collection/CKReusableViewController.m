@@ -19,8 +19,6 @@
 #import "CKResourceDependencyContext.h"
 #import "CKVersion.h"
 
-
-#import "CKTableViewCellController.h"
 #import "CKTableViewController.h"
 
 @interface NSObject ()
@@ -33,21 +31,13 @@
 @end
 
 
-@interface CKCollectionViewControllerOld ()
-- (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index;
-@end
 
 @interface CKReusableViewController ()
-@property(nonatomic,retain) CKWeakRef* collectionCellControllerWeakRef;
-@property(nonatomic,assign,readwrite) CKCollectionCellController* collectionCellController;
 @property(nonatomic,retain) UIView* reusableView;
 @property(nonatomic,retain) UIView* contentViewCell;
 @property(nonatomic,assign) BOOL isComputingSize;
 @end
 
-@interface CKCollectionCellController()
-- (UIView*)parentControllerView;
-@end
 
 @implementation CKReusableViewController
 
@@ -56,7 +46,6 @@
     
     [_didSelectBlock release];
     [_didRemoveBlock release];
-    [_collectionCellControllerWeakRef release];
     [_reusableView release];
     [_contentViewCell release];
     
@@ -98,52 +87,22 @@
 
 - (void)resourceManagerReloadUI{
     [super resourceManagerReloadUI];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.collectionCellController invalidateSize];
-    });
-}
-
-- (void)setCollectionCellController:(CKCollectionCellController *)c{
-    self.collectionCellControllerWeakRef = [CKWeakRef weakRefWithObject:c];
-    [self setContainerViewController:c.containerController];
-}
-
-- (CKCollectionCellController*)collectionCellController{
-    return [self.collectionCellControllerWeakRef object];
-}
-
-- (id)value{
-    return [self.collectionCellController value];
 }
 
 - (NSIndexPath*)indexPath{
-    if(self.collectionCellController )
-        return [self.collectionCellController indexPath];
-    
     if([self.containerViewController respondsToSelector:@selector(indexPathForController:)]){
         return [self.containerViewController performSelector:@selector(indexPathForController:) withObject:self];
     }
-    
     return nil;
 }
 
-- (CKViewController*)collectionViewController{
-    if(self.collectionCellController)
-        return [self.collectionCellController containerController];
-    
-    return (CKViewController*)self.containerViewController;
-}
-
 - (UIView*) contentViewCell{
-    if(self.collectionCellController)
-        return  self.collectionCellController.view;
     return _contentViewCell;
 }
 
 - (UIView*) contentView{
-    if([self.collectionViewController respondsToSelector:@selector(contentView)])
-        return [self.collectionViewController performSelector:@selector(contentView) withObject:nil];
+    if([self.containerViewController respondsToSelector:@selector(contentView)])
+        return [self.containerViewController performSelector:@selector(contentView) withObject:nil];
     return nil;
 }
 
@@ -259,12 +218,12 @@
 }
 
 - (UINavigationController*)navigationController{
-    return self.collectionViewController.navigationController;
+    return self.containerViewController.navigationController;
 }
 
 - (void)scrollToCell{
-    if([self.collectionViewController respondsToSelector:@selector(scrollToControllerAtIndexPath:animated:)]){
-        [self.collectionViewController scrollToControllerAtIndexPath:self.indexPath animated:YES];
+    if([self.containerViewController respondsToSelector:@selector(scrollToControllerAtIndexPath:animated:)]){
+        [self.containerViewController scrollToControllerAtIndexPath:self.indexPath animated:YES];
     }
 }
 
@@ -303,10 +262,7 @@
         if(CGSizeEqualToSize(currentSize, size))
             return;
         
-        if(bself.collectionCellController){
-            [bself.collectionCellController invalidateSize];
-        }
-        else if([bself.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
+        if([bself.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
             [bself.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:indexPath];
         }
     };

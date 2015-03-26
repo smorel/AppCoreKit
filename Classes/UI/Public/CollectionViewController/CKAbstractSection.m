@@ -24,6 +24,7 @@
     
     _delegate = nil;
     _containerViewController = nil;
+    [_name release];
     [_controllers release];
     [_headerViewController release];
     [_footerViewController release];

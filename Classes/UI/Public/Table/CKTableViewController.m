@@ -14,9 +14,7 @@
 #import "UIView+Positioning.h"
 
 //For CKTableViewCell
-#import "CKTableViewCellController.h"
 #import "CKSheetController.h"
-#import "CKTableViewControllerOld.h"
 #import "CKRuntime.h"
 #import <objc/runtime.h>
 
@@ -618,7 +616,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
-    return controller.flags & CKItemViewFlagSelectable;
+    return controller.flags & CKViewControllerFlagsSelectable;
 }
 
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath{ }
@@ -627,7 +625,7 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
-    BOOL bo = controller.flags & CKItemViewFlagSelectable;
+    BOOL bo = controller.flags & CKViewControllerFlagsSelectable;
     if(bo){
         return indexPath;
     }

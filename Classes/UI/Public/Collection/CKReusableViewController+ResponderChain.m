@@ -37,7 +37,7 @@ static char UIViewControllerFirstResponderControllerKey;
 
 @implementation CKReusableViewController (ResponderChain)
 
-+ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKViewController*)controller{
++ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(UIViewController*)controller{
     if([controller respondsToSelector:@selector(controllerAtIndexPath:)]){
         id c = [controller performSelector:@selector(controllerAtIndexPath:) withObject:indexPath];
         if([c hasResponder] == YES)
@@ -49,8 +49,8 @@ static char UIViewControllerFirstResponderControllerKey;
 
 
 - (NSIndexPath*)findNextResponderWithScrollEnabled:(BOOL)enableScroll{
-    if([self.collectionViewController hasPropertyNamed:@"tableView"]){
-        UITableView* tableView = (UITableView*)[self.collectionViewController valueForKey:@"tableView"];
+    if([self.containerViewController hasPropertyNamed:@"tableView"]){
+        UITableView* tableView = (UITableView*)[self.containerViewController valueForKey:@"tableView"];
         
         NSIndexPath* indexPath = self.indexPath;
         NSInteger section = indexPath.section;
@@ -72,7 +72,7 @@ static char UIViewControllerFirstResponderControllerKey;
             }
             
             nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            if([CKReusableViewController hasResponderAtIndexPath:nextIndexPath controller:self.collectionViewController]){
+            if([CKReusableViewController hasResponderAtIndexPath:nextIndexPath controller:self.containerViewController]){
                 return nextIndexPath;
             }
         }
@@ -81,8 +81,8 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 - (NSIndexPath*)findPreviousResponderWithScrollEnabled:(BOOL)enableScroll{
-    if([self.collectionViewController hasPropertyNamed:@"tableView"]){
-        UITableView* tableView = (UITableView*)[self.collectionViewController valueForKey:@"tableView"];
+    if([self.containerViewController hasPropertyNamed:@"tableView"]){
+        UITableView* tableView = (UITableView*)[self.containerViewController valueForKey:@"tableView"];
         
         NSIndexPath* indexPath = self.indexPath;
         NSInteger section = indexPath.section;
@@ -102,7 +102,7 @@ static char UIViewControllerFirstResponderControllerKey;
             }
             
             previousIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            if([CKReusableViewController hasResponderAtIndexPath:previousIndexPath controller:self.collectionViewController]){
+            if([CKReusableViewController hasResponderAtIndexPath:previousIndexPath controller:self.containerViewController]){
                 return previousIndexPath;
             }
         }
@@ -112,8 +112,8 @@ static char UIViewControllerFirstResponderControllerKey;
 
 
 + (void)activateAfterDelay:(CKReusableViewController*)controller indexPath:(NSIndexPath*)indexPath{
-    if([controller.collectionViewController respondsToSelector:@selector(controllerAtIndexPath:)]){
-        id c = [controller.collectionViewController performSelector:@selector(controllerAtIndexPath:) withObject:indexPath];
+    if([controller.containerViewController respondsToSelector:@selector(controllerAtIndexPath:)]){
+        id c = [controller.containerViewController performSelector:@selector(controllerAtIndexPath:) withObject:indexPath];
         if(c != nil){
             [c performSelector:@selector(becomeFirstResponder)];
             
@@ -123,8 +123,8 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 + (void)activateResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKReusableViewController*)controller{
-    if([controller.collectionViewController hasPropertyNamed:@"tableView"]){
-        UITableView* tableView = (UITableView*)[controller.collectionViewController valueForKey:@"tableView"];
+    if([controller.containerViewController hasPropertyNamed:@"tableView"]){
+        UITableView* tableView = (UITableView*)[controller.containerViewController valueForKey:@"tableView"];
         [tableView scrollToRowAtIndexPath:indexPath
                          atScrollPosition:UITableViewScrollPositionNone
                                  animated:YES];
@@ -199,21 +199,21 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 - (BOOL)isFirstResponder{
-    return [self.collectionViewController firstResponderController] == self;
+    return [self.containerViewController firstResponderController] == self;
 }
 
 - (void)didBecomeFirstResponder{
-    if([self.collectionViewController firstResponderController] && ![self.collectionViewController isFirstResponderController:self]){
-        [[self.collectionViewController firstResponderController]resignFirstResponder];
+    if([self.containerViewController firstResponderController] && ![self.containerViewController isFirstResponderController:self]){
+        [[self.containerViewController firstResponderController]resignFirstResponder];
     }
     
-    [self.collectionViewController setFirstResponderController:self];
+    [self.containerViewController setFirstResponderController:self];
 }
 
 - (void)becomeFirstResponder{
-    UIViewController* previousResponder = [self.collectionViewController firstResponderController];
+    UIViewController* previousResponder = [self.containerViewController firstResponderController];
     
-    [self.collectionViewController setFirstResponderController:self];
+    [self.containerViewController setFirstResponderController:self];
     
     if(previousResponder != self){
         [previousResponder resignFirstResponder];
@@ -230,8 +230,8 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 - (void)didResignFirstResponder{
-    if([self.collectionViewController isFirstResponderController:self]){
-        [self.collectionViewController setFirstResponderController:nil];
+    if([self.containerViewController isFirstResponderController:self]){
+        [self.containerViewController setFirstResponderController:nil];
     }
 }
 

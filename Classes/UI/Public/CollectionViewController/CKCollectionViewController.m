@@ -14,10 +14,7 @@
 #import "UIView+AutoresizingMasks.h"
 #import "UIView+Positioning.h"
 
-//For CKTableViewCell
-#import "CKTableViewCellController.h"
 #import "CKSheetController.h"
-#import "CKTableViewControllerOld.h"
 #import "CKRuntime.h"
 #import <objc/runtime.h>
 
@@ -277,7 +274,7 @@
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
-    return controller.flags & CKItemViewFlagSelectable;
+    return controller.flags & CKViewControllerFlagsSelectable;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath{ }
@@ -286,7 +283,7 @@
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
-    return controller.flags & CKItemViewFlagSelectable;
+    return controller.flags & CKViewControllerFlagsSelectable;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath{

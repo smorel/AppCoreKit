@@ -87,11 +87,6 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
  */
 @property(nonatomic,assign)BOOL readOnly;
 
-/** This method will be called whenever the readonly property changes while the controller's view is displayed.
- You should overload this method in your subclass if you need to modify the layout or do any additional processing to handle the new readOnly state.
- */
-- (void)readOnlyDidChange;
-
 ///-----------------------------------
 /// @name Customizing the Toolbar for editing
 ///-----------------------------------

@@ -8,11 +8,11 @@
 
 #import "CKSectionContainer.h"
 #import "CKPassThroughView.h"
+#import "CKTableViewCell.h"
 
 //commented until the layout loop is solved
 //#define USING_UITableViewHeaderFooterView
 
-@class CKTableViewCell;
 @class CKTableView;
 
 /**

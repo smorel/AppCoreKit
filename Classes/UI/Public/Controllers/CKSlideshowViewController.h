@@ -7,7 +7,7 @@
 //
 
 
-#import "CKTableCollectionViewController.h"
+#import "CKCollectionViewController.h"
 
 
 /* StyleSheet example for CKSlideShowViewController :
@@ -40,7 +40,7 @@
     }
 }
 */
-@interface CKSlideShowViewController : CKTableCollectionViewController
+@interface CKSlideShowViewController : CKCollectionViewController
 
 ///-----------------------------------
 /// @name Creating CKSlideShowViewController Object
@@ -52,7 +52,7 @@
 
 /**
  */
-+ (id)slideShowControllerWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
++ (id)slideShowControllerWithCollection:(CKCollection *)collection factory:(CKReusableViewControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
 
 /**
  */
@@ -76,7 +76,7 @@
 
 /**
  */
-- (id)initWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
+- (id)initWithCollection:(CKCollection *)collection factory:(CKReusableViewControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
 
 /**
  */

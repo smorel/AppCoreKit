@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Sebastien Morel. All rights reserved.
 //
 
-#import "CKCollectionViewControllerOld.h"
-
 #import "NSObject+Bindings.h"
 #import "Layout.h"
 #import "UIView+Name.h"
@@ -45,19 +43,6 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
  */
 - (UINavigationController*)navigationController;
 
-/** The CKCollectionViewControllerOld managing the collection of CKCollectionCellController and the collectionView
- 
-    CKTableViewControllerOld,
-    CKTableCollectionViewViewController, 
-    CKFormTableViewController , 
-    CKCarouselCollectionViewController, 
-    CKGridCollectionViewController, 
-    CKMapCollectionViewController,
-    CKCollectionViewLayoutController
- */
-@property(nonatomic,readonly) CKViewController* collectionViewController;
-
-
 /** The collection view
  
     UITableView,
@@ -65,15 +50,6 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
     MKMapView
  */
 @property(nonatomic,readonly) UIView* contentView;
-
-
-/** The collectionCellController That will manage CKReusableViewController appearance and reuse
- 
-    CKCollectionCellController,
-    CKTableViewCellController, 
-    CKMapAnnotationController
- */
-@property(nonatomic,readonly) CKCollectionCellController* collectionCellController;
 
 
 /** The reusable collection view currently associated to the collectionCellController

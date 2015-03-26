@@ -10,10 +10,11 @@
 #import "UIViewController+InlineDebugger.h"
 #import "NSObject+InlineDebugger.h"
 #import "CKContainerViewController.h"
+#import "CKStandardContentViewController.h"
 
 @implementation UIViewController (CKInlineDebugger)
 
-+ (CKTableViewCellController*)cellControllerForViewController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
++ (CKStandardContentViewController*)controllerForViewController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
     NSString* title = nil;
     NSString* subtitle = nil;
     if([c respondsToSelector:@selector(name)]){
@@ -34,24 +35,24 @@
     __block UIViewController* bController = c;
     __block UIViewController* bDebugger = debugger;
     
-    CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:title subtitle:subtitle action:^(CKTableViewCellController* controller){
-        CKFormTableViewController* controllerForm = [[bController class]inlineDebuggerForObject:bController];
+    CKStandardContentViewController* controller = [CKStandardContentViewController controllerWithTitle:title subtitle:subtitle action:^(CKStandardContentViewController* controller){
+        CKTableViewController* controllerForm = [[bController class]inlineDebuggerForObject:bController];
         controllerForm.title = title;
         [bDebugger.navigationController pushViewController:controllerForm animated:YES];
     }];
     
-    return cellController;
+    return controller;
 }
 
-- (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view{
-    CKFormTableViewController* debugger = [[view class]inlineDebuggerForObject:view];
+- (CKTableViewController*)inlineDebuggerForSubView:(UIView*)view{
+    CKTableViewController* debugger = [[view class]inlineDebuggerForObject:view];
     
     //TODO : Fixme use view to find controller and cell controller hierarchy !
     
-    NSMutableArray* cellControllers = [NSMutableArray array];
+    NSMutableArray* controllers = [NSMutableArray array];
     UIViewController* c = self;
     while(c){
-        [cellControllers insertObject:[CKViewController cellControllerForViewController:c withDebugger:debugger] atIndex:0];
+        [controllers insertObject:[CKViewController controllerForViewController:c withDebugger:debugger] atIndex:0];
         if([c respondsToSelector:@selector(containerViewController)]){
             c = [c performSelector:@selector(containerViewController)];
         }
@@ -60,19 +61,20 @@
         }
     }
     
-    [cellControllers insertObject:[CKViewController cellControllerForViewController:self.navigationController withDebugger:debugger] atIndex:0];
+    [controllers insertObject:[CKViewController controllerForViewController:self.navigationController withDebugger:debugger] atIndex:0];
     
-    CKFormSection* section = [CKFormSection sectionWithCellControllers:cellControllers headerTitle:@"Controller Hierarchy"];
+    CKSection* section = [CKSection sectionWithControllers:controllers];
+    [section setHeaderTitle:@"Controller Hierarchy"];
     
     int i =0;
-    for(CKFormSectionBase* section in debugger.sections){
-        if([section.headerTitle isEqualToString:@"Class Hierarchy"]){
+    for(CKAbstractSection* section in debugger.sectionContainer.sections){
+        if([section.name isEqualToString:@"ClassHierarchy"]){
             break;
         }
         ++i;
     }
     
-    [debugger insertSection:section atIndex:i];
+    [debugger insertSection:section atIndex:i animated:NO];
     
     return debugger;
 }

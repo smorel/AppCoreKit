@@ -7,7 +7,6 @@
 //
 
 #import "NSObject+InlineDebugger.h"
-#import "CKTableViewCellController+BlockBasedInterface.h"
 #import "UIView+Style.h"
 #import "CKCascadingTree.h"
 #import "CKLocalization.h"
@@ -15,22 +14,26 @@
 #import "CKConfiguration.h"
 
 #import "NSObject+Invocation.h"
+#import "CKReusableViewController+Property.h"
+#import "CKSection+Property.h"
 
 @implementation NSObject (CKInlineDebugger)
 
-+ (CKFormSection*)sectionWithDictionary:(NSMutableDictionary*)dico keys:(NSArray*)keys title:(NSString*)title{
-    NSMutableArray* cellControllers = [NSMutableArray array];
++ (CKSection*)sectionWithDictionary:(NSMutableDictionary*)dico keys:(NSArray*)keys title:(NSString*)title{
+    NSMutableArray* controllers = [NSMutableArray array];
     for(id key in keys){
         CKProperty* property = [[[CKProperty alloc]initWithDictionary:dico key:key]autorelease];
-        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithProperty:property];
-        [cellControllers addObject:cellController];
+        CKReusableViewController* controller = [CKReusableViewController controllerWithProperty:property];
+        [controllers addObject:controller];
     }
-    return [CKFormSection sectionWithCellControllers:cellControllers headerTitle:title];
+    CKSection* section = [CKSection sectionWithControllers:controllers];
+    [section setHeaderTitle:title];
+    return section;
 }
 
-+ (CKFormTableViewController*)inlineDebuggerForStylesheet:(NSMutableDictionary*)stylesheet withObject:(id)object{
++ (CKTableViewController*)inlineDebuggerForStylesheet:(NSMutableDictionary*)stylesheet withObject:(id)object{
     if([stylesheet isEmpty]){
-        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
+        CKTableViewController* debugger = [[[CKTableViewController alloc]init]autorelease];
         debugger.title = @"Applied Style";
         debugger.name = @"CKInlineDebugger";
         debugger.viewDidLoadBlock = ^(UIViewController* controller){
@@ -91,7 +94,7 @@
         }
         
         
-        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
+        CKTableViewController* debugger = [[[CKTableViewController alloc]init]autorelease];
         debugger.title = @"Applied Style";
         debugger.name = @"CKInlineDebugger";
         
@@ -109,7 +112,7 @@
             [sections addObject:[NSObject sectionWithDictionary:stylesheet keys:subStylesKeys title:_(@"subStylesKeys")]];
         }
         
-        [debugger addSections:sections];
+        [debugger addSections:sections animated:NO];
         
         return debugger;
     }
@@ -117,72 +120,67 @@
     return nil;
 }
 
-+ (CKTableViewCellController*)cellControllerForStylesheetInObject:(id)object{
++ (CKReusableViewController*)cellControllerForStylesheetInObject:(id)object{
     NSMutableDictionary* styleSheet = nil;
     styleSheet = [object appliedStyle];
 
     if(styleSheet){
         NSString* title = [[[object appliedStylePath]componentsSeparatedByString:@"/"]componentsJoinedByString:@"\n"];
-        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:nil subtitle:title action:^(CKTableViewCellController* controller){
-            CKFormTableViewController* debugger = [[object class]inlineDebuggerForStylesheet:styleSheet withObject:object]; 
-            [controller.containerController.navigationController pushViewController:debugger animated:YES];
+        CKStandardContentViewController* controller = [CKStandardContentViewController controllerWithTitle:nil subtitle:title action:^(CKStandardContentViewController* controller){
+            CKTableViewController* debugger = [[object class]inlineDebuggerForStylesheet:styleSheet withObject:object];
+            [controller.navigationController pushViewController:debugger animated:YES];
         }];
-        cellController.name = @"StyleSheetCell";
-        return cellController;
+        controller.name = @"StyleSheetCell";
+        return controller;
     }
     
     return nil;
 }
 
-+ (CKCollectionCellControllerFactoryItem*)factoryItemForClass{
-    return [CKCollectionCellControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithValue:YES] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
-        CKTableViewCellController* controller = [CKTableViewCellController cellController];
-        controller.selectionStyle = UITableViewCellSelectionStyleNone;
-        controller.text = [object description];
-        return controller;
-    }];
-}
 
-+ (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
-    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
++ (CKTableViewController*)inlineDebuggerForObject:(id)object{
+    CKTableViewController* debugger = [[[CKTableViewController alloc]init]autorelease];
     debugger.name = @"CKInlineDebugger";
-    debugger.searchEnabled = YES;
+    //  debugger.searchEnabled = YES;
     
     //IDENTIFICATION SECTION
-    CKFormSection* sectionIdentification = [CKFormSection sectionWithObject:object properties:[NSArray arrayWithObjects:@"name",@"tag",nil] headerTitle:@"Identification"];
-    [sectionIdentification insertCellController:[CKTableViewCellController cellControllerWithTitle:@"class" subtitle:[[object class]description] action:nil] atIndex:0];
+    CKSection* sectionIdentification = [CKSection sectionWithObject:object properties:[NSArray arrayWithObjects:@"name",@"tag",nil] headerTitle:@"Identification"];
+    [sectionIdentification insertController:[CKStandardContentViewController controllerWithTitle:@"class" subtitle:[[object class]description] action:nil] atIndex:0 animated:NO];
     
     //SECTION FOR STYLESHEET
     NSMutableDictionary* styleSheet = nil;
     styleSheet = [object appliedStyle];
     
-    CKFormSection* styleSection = styleSheet ? [CKFormSection sectionWithCellControllers:
-                                                           [NSArray arrayWithObject:[[object class]cellControllerForStylesheetInObject:object]] headerTitle:@"StyleSheet"] : nil;
+    CKSection* styleSection = styleSheet ? [CKSection sectionWithControllers: @[[[object class]cellControllerForStylesheetInObject:object]] ] : nil;
+    [styleSection setHeaderTitle:@"StyleSheet"];
     
     //SECTION FOR CLASS HIERARCHY
-    CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
-    [factory addItem:[NSObject factoryItemForClass]];
+    CKReusableViewControllerFactory* factory = [CKReusableViewControllerFactory factory];
+    [factory registerFactoryWithPredicate:[NSPredicate predicateWithValue:YES] factory:^CKReusableViewController *(id object, NSIndexPath *indexPath) {
+        return [CKStandardContentViewController controllerWithTitle:[object description] action:nil];
+    }];
     
     NSArray* inheritingClasses = [[NSObject superClassesForClass:[object class]]retain];//release in the debugger dealloc block.
-    CKFormBindedCollectionSection* inheritingClassesSection = [CKFormBindedCollectionSection sectionWithCollection:[CKArrayProxyCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]] 
-                                                                                                           factory:factory 
-                                                                                                       headerTitle:@"Class Hierarchy"];
+    CKCollectionSection* inheritingClassesSection = [CKCollectionSection sectionWithCollection:[CKArrayProxyCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]]
+                                                                                                           factory:factory ];
+    inheritingClassesSection.name = @"ClassHierarchy";
+    [inheritingClassesSection setHeaderTitle:@"Class Hierarchy"];
     
     
     //PROPERTIES SECTION
-    CKFormSection* objectSection = [CKFormSection sectionWithObject:object propertyFilter:nil headerTitle:@"Properties"];
+    CKSection* objectSection = [CKSection sectionWithObject:object propertyFilter:nil headerTitle:@"Properties"];
     
     if(styleSection){
-        [debugger addSections:[NSArray arrayWithObjects:sectionIdentification,styleSection,inheritingClassesSection,objectSection,nil]];
+        [debugger addSections:[NSArray arrayWithObjects:sectionIdentification,styleSection,inheritingClassesSection,objectSection,nil] animated:NO];
     }
     else{
-        [debugger addSections:[NSArray arrayWithObjects:sectionIdentification,inheritingClassesSection,objectSection,nil]];
+        [debugger addSections:[NSArray arrayWithObjects:sectionIdentification,inheritingClassesSection,objectSection,nil] animated:NO];
     }
     
     //Setup filter callback
-    __block CKFormTableViewController* bController = debugger;
-    __block CKFormSection* propertiesSection = [objectSection retain];
-    debugger.searchBlock = ^(NSString* filter){
+    __block CKTableViewController* bController = debugger;
+    __block CKSection* propertiesSection = [objectSection retain];
+   /* debugger.searchBlock = ^(NSString* filter){
         NSInteger index = [bController indexOfSection:propertiesSection];
         if(index != NSNotFound){
             [bController removeSectionAtIndex:index];
@@ -197,7 +195,7 @@
             [propertiesSection release];
             propertiesSection = [newObjectSection retain];
         }
-    };
+    };*/
     
     debugger.deallocBlock = ^(UIViewController* controller){
         [propertiesSection release];

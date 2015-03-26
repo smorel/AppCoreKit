@@ -9,7 +9,7 @@
 #import "CKClassExplorer.h"
 #import <objc/runtime.h>
 #import "NSValueTransformer+Additions.h"
-#import "CKTableViewCellController+BlockBasedInterface.h"
+#import "CKStandardContentViewController.h"
 
 NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 {
@@ -21,10 +21,6 @@ __strong NSString* CKClassExplorerFilter = nil;
 NSString* CKClassExplorerAdditionalFilter = @"ck";
 CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 
-@interface CKCollectionViewControllerOld()
-@property (nonatomic, retain) id objectController;
-@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
-@end
 
 @interface CKClassExplorer()
 @property(nonatomic,retain)CKArrayCollection* classesCollection;
@@ -47,11 +43,11 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 
 - (void)postInit{
 	[super postInit];
-	self.searchEnabled = YES;
-	self.liveSearchDelay = 0.5;
+    //self.searchEnabled = YES;
+    //self.liveSearchDelay = 0.5;
     self.name = @"CKClassExplorer";
 	
-	self.searchScopeDefinition = [NSDictionary dictionaryWithObjectsAndKeys:
+	/*self.searchScopeDefinition = [NSDictionary dictionaryWithObjectsAndKeys:
 	    [CKCallback callbackWithBlock:^(id object){
 		    CKClassExplorer* explorer = (CKClassExplorer*)object;
 		    CKClassExplorerAdditionalFilter = @"ck";
@@ -74,12 +70,12 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 		    return (id)nil;
 	    }],@"Instances",
 	    nil];
-	self.defaultSearchScope = (CKClassExplorerCurrentType == CKClassExplorerTypeInstances) ? @"Instances" : ((CKClassExplorerAdditionalFilter) == nil ? @"All" : @"CloudKit");
+	self.defaultSearchScope = (CKClassExplorerCurrentType == CKClassExplorerTypeInstances) ? @"Instances" : ((CKClassExplorerAdditionalFilter) == nil ? @"All" : @"CloudKit");*/
 }
 
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
-	self.searchBar.text = CKClassExplorerFilter;
+    //self.searchBar.text = CKClassExplorerFilter;
 }
 
 - (id)initWithBaseClass:(Class)type{
@@ -120,33 +116,33 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
-    CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
+    CKReusableViewControllerFactory* factory = [CKReusableViewControllerFactory factory];
     
-    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
-        CKTableViewCellController* controller = [CKTableViewCellController cellController];
-        controller.name = @"CKClassExplorerCell";
-        controller.flags = CKItemViewFlagSelectable;
-        controller.text = object;
-        return controller;
+    [factory registerFactoryForObjectOfClass:[NSString class]  factory:^CKReusableViewController *(id object, NSIndexPath *indexPath) {
+        return [CKStandardContentViewController controllerWithTitle:object action:^(CKStandardContentViewController* controller){
+            int i =3;
+        }];
     }];
     
-    [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
-        CKTableViewCellController* controller = [CKTableViewCellController cellController];
-        controller.name = @"CKClassExplorerCell";
-        controller.flags = CKItemViewFlagSelectable;
-        CKClassPropertyDescriptor* nameDescriptor = [controller.value propertyDescriptorForKeyPath:@"modelName"];
+    
+    [factory registerFactoryForObjectOfClass:[NSObject class]  factory:^CKReusableViewController *(id object, NSIndexPath *indexPath) {
+        NSString* title = nil;
+        CKClassPropertyDescriptor* nameDescriptor = [object propertyDescriptorForKeyPath:@"modelName"];
         if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
-            controller.text = [controller.value valueForKeyPath:@"modelName"];
+            title = [object valueForKeyPath:@"modelName"];
         }
         else{
-            controller.text = @"Unknown";
+            title = @"Unknown";
         }
-        
-        return controller;
+
+        return [CKStandardContentViewController controllerWithTitle:title action:^(CKStandardContentViewController* controller){
+            int i =3;
+        }];
     }];
 	
-	self.controllerFactory = factory;
-	
+    CKCollectionSection* section = [CKCollectionSection sectionWithCollection:self.classesCollection  factory:factory];
+    [self addSection:section animated:NO];
+    
 	[self didSearch:CKClassExplorerFilter];
 }
 
@@ -172,42 +168,22 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
-	CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
+    CKReusableViewControllerFactory* factory = [CKReusableViewControllerFactory factory];
     
-    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
-        CKTableViewCellController* controller = [CKTableViewCellController cellController];
-        controller.name = @"CKClassExplorerCell";
-        controller.flags = CKItemViewFlagSelectable;
-        controller.text = object;
-        return controller;
+    [factory registerFactoryForObjectOfClass:[NSString class]  factory:^CKReusableViewController *(id object, NSIndexPath *indexPath) {
+        return [CKStandardContentViewController controllerWithTitle:object action:^(CKStandardContentViewController* controller){
+            int i =3;
+        }];
     }];
     
-	self.controllerFactory = factory;
+    CKCollectionSection* section = [CKCollectionSection sectionWithCollection:self.classesCollection  factory:factory];
+    [self addSection:section animated:NO];
 	
 	[self didSearch:CKClassExplorerFilter];
 }
 
-/*
-+ (CKStoreRequest*)localRequestForClassNamed:(NSString*)className range:(NSRange)range filter:(NSString*)filter domain:(NSString*)domain{
-	//TODO : append all the inherited types in the request !
-	NSString* predicate = nil;
-	if(filter != nil && [filter length] > 0){
-		predicate = [NSString stringWithFormat:@"(ANY attributes.name == '@class') AND (ANY attributes.value == '%@')  AND (name beginswith '%@')",className,filter];
-	}
-	else{
-		predicate = [NSString stringWithFormat:@"(ANY attributes.name == '@class') AND (ANY attributes.value == '%@')",className];
-	}
-	CKStoreRequest* request = [CKStoreRequest requestWithPredicateFormat:predicate
-															   arguments:nil 
-																   range:range 
-																sortKeys:[NSArray arrayWithObject:@"name"] 
-																   store:[CKStore storeWithDomainName:domain]];
-	return request;
-}
- */
-
 - (void)didSearch:(NSString*)text{
-	NSString* theFilter = [text retain];
+	/*NSString* theFilter = [text retain];
 	[CKClassExplorerFilter release];
 	CKClassExplorerFilter = theFilter;
 	
@@ -240,21 +216,9 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 		if([appDelegate respondsToSelector:@selector(ckStoreDefaultDomain)]){
 			domain = [appDelegate performSelector:@selector(ckStoreDefaultDomain)];
 		}
-		
-		if(domain){
-            /* FIXME Without CKStoreDataSource
-			CKStoreDataSource* source = [CKStoreDataSource synchronousDataSource];
-			source.requestBlock = ^(NSRange range){
-				return [[self class] localRequestForClassNamed:self.className range:range filter:text domain:domain];
-			};
-			source.transformBlock = ^(id value){
-				return (id) [NSArray objectArrayFromDictionaryArray:value];
-			};		
-			collection = [[[CKArrayCollection alloc]initWithFeedSource:source]autorelease];
-             */
-		}
 	}
 	self.objectController = [CKCollectionController controllerWithCollection:collection];
+     */
 }
 
 @end

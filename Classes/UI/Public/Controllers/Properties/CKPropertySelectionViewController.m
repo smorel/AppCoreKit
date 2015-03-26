@@ -7,9 +7,6 @@
 //
 
 #import "CKPropertySelectionViewController.h"
-#import "CKTableViewCellController.h"
-#import "CKTableViewContentCellController.h"
-#import "CKOptionTableViewController.h"
 #import "UIBarButtonItem+BlockBasedInterface.h"
 #import "CKPopoverController.h"
 #import "NSValueTransformer+Additions.h"
@@ -107,9 +104,7 @@
     self.editionControllerPresentationStyle = CKPropertyEditionPresentationStyleDefault;
     self.multiSelectionSeparatorString = @"\n";
     
-    self.flags = CKViewControllerFlagsSelectable;
-    
-    self.collectionCellController.flags = self.readOnly ? CKItemViewFlagNone : CKItemViewFlagSelectable;
+    self.flags = self.readOnly ? CKViewControllerFlagsNone : CKViewControllerFlagsSelectable;
 }
 
 - (NSString *)labelForNumberValue:(NSInteger)intValue {

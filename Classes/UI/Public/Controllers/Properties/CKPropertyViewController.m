@@ -126,7 +126,7 @@
 }
 
 - (void)endEditing{
-    [self.collectionViewController.view endEditing:YES];
+    [self.containerViewController.view endEditing:YES];
     [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
 }
 
@@ -134,8 +134,8 @@
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange{
     
-    controller.stylesheetFileName = self.collectionViewController.stylesheetFileName;
-    controller.view.backgroundColor = self.collectionViewController.view.backgroundColor;
+    controller.stylesheetFileName = self.containerViewController.stylesheetFileName;
+    controller.view.backgroundColor = self.containerViewController.view.backgroundColor;
     controller.title = _(self.property.name);
     controller.name = self.property.name;
     
@@ -201,7 +201,7 @@
             
             controller.leftButton = [UIBarButtonItem barButtonItemWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{
                 [bself resignFirstResponder];
-                [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
+                [bself.containerViewController dismissViewControllerAnimated:YES completion:nil];
                 [controller clearBindingsContext];
             }];
             
@@ -209,13 +209,13 @@
             if(shouldDismissOnPropertyValueChange){
                 [self.property.object bind:self.property.keyPath withBlock:^(id value) {
                     [bself resignFirstResponder];
-                    [bself.collectionViewController dismissViewControllerAnimated:YES completion:nil];
+                    [bself.containerViewController dismissViewControllerAnimated:YES completion:nil];
                     [controller clearBindingsContext];
                 }];
             }
             [controller endBindingsContext];
             
-            [bself.collectionViewController presentViewController:nav animated:YES completion:nil];
+            [bself.containerViewController presentViewController:nav animated:YES completion:nil];
             
             break;
         }
@@ -233,7 +233,7 @@
             [sheetController setContentViewController:navController];
             
             if(!sheetController.visible){
-                UIView* parentView = self.collectionViewController.view;
+                UIView* parentView = self.containerViewController.view;
                 [sheetController showFromRect:[parentView bounds]
                                        inView:parentView
                                      animated:YES];
@@ -308,8 +308,8 @@
         _editionToolbar = [toolbar retain];
     }
     
-    if(self.collectionViewController.state == CKViewControllerStateDidAppear
-       || self.collectionViewController.state == CKViewControllerStateWillAppear){
+    if(self.containerViewController.state == CKViewControllerStateDidAppear
+       || self.containerViewController.state == CKViewControllerStateWillAppear){
         BOOL hasNextResponder = [self hasNextResponder];
         BOOL hasPreviousResponder = [self hasPreviousResponder];
         NSMutableArray* buttons = [NSMutableArray array];

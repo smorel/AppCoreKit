@@ -22,6 +22,7 @@
 #import "NSObject+Singleton.h"
 #import "CKConfiguration.h"
 #import "CKVersion.h"
+#import "CKStandardContentViewController.h"
 
 
 
@@ -380,7 +381,7 @@
  */
 
 - (void)presentInlineDebuggerForSubView:(UIView*)view fromParentController:(UIViewController*)controller{
-    CKFormTableViewController* debugger = [[view findParentActivity] inlineDebuggerForSubView:view];
+    CKTableViewController* debugger = [[view findParentActivity] inlineDebuggerForSubView:view];
     
     debugger.title = [NSString stringWithFormat:@"%@ <%p>",[view class],view];
     UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleBordered target:self action:@selector(closeDebug:)]autorelease];
@@ -394,10 +395,10 @@
 }
 
 - (void)presentInlineDebuggerForDocumentsfromParentController:(UIViewController*)controller{
-    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain] autorelease];
+    CKTableViewController* debugger = [[[CKTableViewController alloc]initWithStyle:UITableViewStylePlain] autorelease];
     debugger.name = @"CKInlineDebugger";
     
-    __block CKFormTableViewController* bDebugger = debugger;
+    __block CKTableViewController* bDebugger = debugger;
     
     //User Defaults
     NSArray* userDefaultsClasses = [NSObject allClassesKindOfClass:[CKUserDefaults class]];
@@ -408,14 +409,15 @@
     
     NSMutableArray* userDefaultsCellControllers = [NSMutableArray array];
     for(id userDefault in userDefaultInstances){
-        CKTableViewCellController* cell = [CKTableViewCellController cellControllerWithTitle:[[userDefault  class] description] action:^(CKTableViewCellController* controller){
-            CKFormTableViewController* udDebugger = [[userDefault  class] inlineDebuggerForObject:userDefault];
+        CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:[[userDefault  class] description] action:^(CKStandardContentViewController* controller){
+            CKTableViewController* udDebugger = [[userDefault  class] inlineDebuggerForObject:userDefault];
             udDebugger.title = [[userDefault  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
         }];
         [userDefaultsCellControllers addObject:cell];
     }
-    CKFormSection* userDefaultsSection = [CKFormSection sectionWithCellControllers:userDefaultsCellControllers headerTitle:@"User Defaults"];
+    CKSection* userDefaultsSection = [CKSection sectionWithControllers:userDefaultsCellControllers];
+    [userDefaultsSection setHeaderTitle:@"User Defaults"];
     
     
     //Documents
@@ -427,22 +429,25 @@
     
     NSMutableArray* documentCellControllers = [NSMutableArray array];
     for(id document in documentInstances){
-        CKTableViewCellController* cell = [CKTableViewCellController cellControllerWithTitle:[[document class] description] action:^(CKTableViewCellController* controller){
-            CKFormTableViewController* udDebugger = [[document class] inlineDebuggerForObject:document];
+        CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:[[document class] description] action:^(CKStandardContentViewController* controller){
+            CKTableViewController* udDebugger = [[document class] inlineDebuggerForObject:document];
             udDebugger.title = [[document  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
         }];
         [documentCellControllers addObject:cell];
     }
-    CKFormSection* documentSection = [CKFormSection sectionWithCellControllers:documentCellControllers headerTitle:@"Documents"];
+    
+    CKSection* documentSection = [CKSection sectionWithControllers:documentCellControllers];
+    [documentSection setHeaderTitle:@"Documents"];
     
     //Core Data
-    CKTableViewCellController* storeExplorerCell = [CKTableViewCellController cellControllerWithTitle:@"CKStore explorer" action:^(CKTableViewCellController* controller){
+    CKStandardContentViewController* storeExplorerCell = [CKStandardContentViewController controllerWithTitle:@"CKStore explorer" action:^(CKStandardContentViewController* controller){
         CKStoreExplorer* storeExplorer = [[[CKStoreExplorer alloc]init]autorelease];
         [bDebugger.navigationController pushViewController:storeExplorer animated:YES];
     }];
-    CKFormSection* coreDataSection = [CKFormSection sectionWithCellControllers:[NSArray arrayWithObject:storeExplorerCell] headerTitle:@"Core Data"];
-    [debugger addSections:[NSArray arrayWithObjects:userDefaultsSection,documentSection,coreDataSection,nil]];
+    CKSection* coreDataSection = [CKSection sectionWithControllers:[NSArray arrayWithObject:storeExplorerCell]];
+    [coreDataSection setHeaderTitle:@"Core Data"];
+    [debugger addSections:[NSArray arrayWithObjects:userDefaultsSection,documentSection,coreDataSection,nil] animated:NO];
     
     //Init
     debugger.title = @"Documents";

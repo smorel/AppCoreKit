@@ -14,7 +14,6 @@
 #import "NSObject+Bindings.h"
 #import "CKObject.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKFormTableViewController.h"
 #import "CKVersion.h"
 #import "CKStyle+Parsing.h"
 #import "UIView+Style.h"

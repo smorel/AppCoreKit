@@ -15,6 +15,7 @@
 
 - (id)initWithControllers:(NSArray*)controllers;
 + (CKSection*)sectionWithControllers:(NSArray*)controllers;
++ (CKSection*)sectionWithControllers:(NSArray*)controllers headerTitle:(NSString*)headerTitle;
 
 - (void)addController:(CKReusableViewController*)controller animated:(BOOL)animated;
 - (void)insertController:(CKReusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated;

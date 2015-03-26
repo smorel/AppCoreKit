@@ -7,7 +7,6 @@
 //
 
 
-#import "CKCollectionViewControllerOld.h"
 #import "UIViewController+InlineDebugger.h"
 
 @interface CKCollectionViewControllerOld (CKInlineDebugger)

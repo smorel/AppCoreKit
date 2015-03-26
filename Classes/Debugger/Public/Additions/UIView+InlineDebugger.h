@@ -20,6 +20,6 @@
 
 /**
  */
-+ (CKFormTableViewController*)inlineDebuggerForSubViewsOfView:(UIView*)view;
++ (CKTableViewController*)inlineDebuggerForSubViewsOfView:(UIView*)view;
 
 @end

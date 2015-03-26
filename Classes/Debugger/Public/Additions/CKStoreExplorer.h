@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CKStore.h"
-#import "CKFormTableViewController.h"
+#import "CKTableViewController.h"
 
 /**
  */
-@interface CKStoreExplorer : CKFormTableViewController
+@interface CKStoreExplorer : CKTableViewController
 
 ///-----------------------------------
 /// @name Initializing a CKStore Explorer

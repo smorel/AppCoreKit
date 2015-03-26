@@ -16,8 +16,6 @@
 #import "CKPropertyImageViewController.h"
 #import "CKPropertyObjectViewController.h"
 
-#import "CKTableViewContentCellController.h"
-
 typedef NS_ENUM(NSInteger, TEST){
     TEST0,
     TEST1

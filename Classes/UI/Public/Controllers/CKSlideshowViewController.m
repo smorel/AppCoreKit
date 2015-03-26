@@ -11,14 +11,8 @@
 #import "CKArrayCollection.h"
 #import "CKImageView.h"
 
-//CKObjectTableViewController private interface
-@interface CKTableCollectionViewController ()
-@property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
-@end
-
-
 @interface CKSlideShowViewController ()
-- (CKCollectionCellControllerFactoryItem*)defaultItemForURL;
+- (CKReusableViewControllerFactory*)defaultItemForURL;
 @property (nonatomic, assign) BOOL controlsAreDisplayed;
 - (void)updateTitle;
 
@@ -31,7 +25,6 @@
 
 - (void)postInit{
     [super postInit];
-    self.orientation = CKTableViewOrientationLandscape;
     _controlsAreDisplayed = NO;
     _shouldHideControls = YES;
     self.overrideTitleToDisplayCurrentPage = YES;

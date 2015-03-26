@@ -28,6 +28,12 @@
     return [[[CKSection alloc]initWithControllers:controllers]autorelease];
 }
 
++ (CKSection*)sectionWithControllers:(NSArray*)controllers headerTitle:(NSString*)headerTitle{
+    CKSection* section = [CKSection sectionWithControllers:controllers];
+    [section setHeaderTitle:headerTitle];
+    return section;
+}
+
 - (void)addController:(CKReusableViewController*)controller animated:(BOOL)animated{
     [self insertController:controller atIndex:self.mutableControllers.count animated:animated];
 }

@@ -15,11 +15,12 @@
 #import "CKCoreDataManager.h"
 #import "CKDomain.h"
 #import "CKItem.h"
+#import "CKStandardContentViewController.h"
 
 
 /**
  */
-@interface CKStoreDomainExplorer : CKFormTableViewController 
+@interface CKStoreDomainExplorer : CKTableViewController
 
 ///-----------------------------------
 /// @name Initializing a CKStore Domain Explorer
@@ -39,7 +40,7 @@
 
 /**
  */
-@interface CKStoreItemExplorer : CKFormTableViewController 
+@interface CKStoreItemExplorer : CKTableViewController
 
 ///-----------------------------------
 /// @name Initializing a CKStore item Explorer
@@ -57,17 +58,17 @@
 - (void)setupWithDomains:(NSArray *)domains{
     self.title = @"Domains";
     
-    NSMutableArray* cellControllers = [NSMutableArray array];
+    NSMutableArray* controllers = [NSMutableArray array];
     for (NSString *domain in domains) {
         //CKStore *store = [CKStore storeWithDomainName:domain];
-        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:domain action:^(CKTableViewCellController* controller){
+        CKStandardContentViewController* controller = [CKStandardContentViewController controllerWithTitle:domain action:^(CKStandardContentViewController* controller){
             CKStoreDomainExplorer *domainExplorer = [[CKStoreDomainExplorer alloc] initWithDomain:domain];
             [self.navigationController pushViewController:domainExplorer animated:YES];
             [domainExplorer release];
         }];
-        [cellControllers addObject:cellController];
+        [controllers addObject:controller];
     }
-    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
+    [self addSection:[CKSection sectionWithControllers:controllers] animated:NO];
 }
 
 - (id)init{
@@ -97,19 +98,19 @@
 @implementation CKStoreDomainExplorer
 
 - (void)setupWithItems:(NSArray*)items{
-    NSMutableArray* cellControllers = [NSMutableArray array];
+    NSMutableArray* controllers = [NSMutableArray array];
     for(CKItem* item in items){
         CKAttribute* typeAttribute = [item attributeNamed:@"@class" createIfNotFound:NO];
-        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:typeAttribute ? 
-                                                                                                       [NSString stringWithFormat:@"[%@] %@",typeAttribute.value,item.name] :item.name 
-                                                                                              subtitle:[NSString stringWithFormat:@"%@", item.createdAt]  
-                                                                                                action:^(CKTableViewCellController* controller){
-                                                                                                    CKStoreItemExplorer *itemExplorer = [[[CKStoreItemExplorer alloc] initWithItem:item]autorelease];
-                                                                                                    [self.navigationController pushViewController:itemExplorer animated:YES];
-                                                                                                }];
-        [cellControllers addObject:cellController];
+        CKStandardContentViewController* controller = [CKStandardContentViewController controllerWithTitle:typeAttribute ?
+                                                       [NSString stringWithFormat:@"[%@] %@",typeAttribute.value,item.name] :item.name
+                                                                                                  subtitle:[NSString stringWithFormat:@"%@", item.createdAt]
+                                                                                                    action:^(CKStandardContentViewController* controller){
+            CKStoreItemExplorer *itemExplorer = [[[CKStoreItemExplorer alloc] initWithItem:item]autorelease];
+            [self.navigationController pushViewController:itemExplorer animated:YES];
+        }];
+        [controllers addObject:controller];
     }
-    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
+    [self addSection:[CKSection sectionWithControllers:controllers] animated:NO];
 }
 
 - (id)initWithDomain:(NSString *)domain {
@@ -138,26 +139,26 @@
     self = [super initWithStyle:UITableViewStylePlain];
 	self.title = @"Attributes";
     
-    NSMutableArray* cellControllers = [NSMutableArray array];
+    NSMutableArray* controllers = [NSMutableArray array];
     
-    CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:@"item address" subtitle:[NSString stringWithFormat:@"%p",item] action:nil];
-    [cellControllers addObject:cellController];
+    CKStandardContentViewController* controller = [CKStandardContentViewController controllerWithTitle:@"item address" subtitle:[NSString stringWithFormat:@"%p",item] action:nil];
+    [controllers addObject:controller];
     
     for(CKAttribute* attribute in [item.attributes allObjects]){
         if(attribute.value != nil){
-            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:attribute.value action:nil];
-            [cellControllers addObject:cellController];
+            CKStandardContentViewController* controller = [CKStandardContentViewController controllerWithTitle:attribute.name subtitle:attribute.value action:nil];
+            [controllers addObject:controller];
         }
         else{
-            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%lu",(unsigned long)[attribute.itemReferences count]] action:^(CKTableViewCellController* controller){
+            CKStandardContentViewController* controller = [CKStandardContentViewController controllerWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%lu",(unsigned long)[attribute.itemReferences count]] action:^(CKStandardContentViewController* controller){
                 CKStoreDomainExplorer* domainController = [[[CKStoreDomainExplorer alloc]initWithItems:[NSMutableArray arrayWithArray:attribute.items]]autorelease];
                 domainController.title = attribute.name;
                 [self.navigationController pushViewController:domainController animated:YES];
             }];
-            [cellControllers addObject:cellController];
+            [controllers addObject:controller];
         }
     }
-    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
+    [self addSection:[CKSection sectionWithControllers:controllers] animated:NO];
     
     return self;
 }
