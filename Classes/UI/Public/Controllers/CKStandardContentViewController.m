@@ -84,16 +84,16 @@
     titleLabel.name = @"TitleLabel";
     titleLabel.font = [UIFont boldSystemFontOfSize:17];
     titleLabel.numberOfLines = 0;
-    titleLabel.margins = UIEdgeInsetsMake(10,10,10,10);
     
     UILabel* subtitleLabel = [[[UILabel alloc]init]autorelease];
     subtitleLabel.name = @"SubtitleLabel";
     subtitleLabel.font = [UIFont systemFontOfSize:14];
     subtitleLabel.numberOfLines = 0;
-    subtitleLabel.margins = UIEdgeInsetsMake(10,10,10,10);
+    subtitleLabel.marginTop = 10;
     
     CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
     vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[titleLabel,subtitleLabel]];
+    vbox.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     
     CKHorizontalBoxLayout* hbox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[imageView,vbox]];

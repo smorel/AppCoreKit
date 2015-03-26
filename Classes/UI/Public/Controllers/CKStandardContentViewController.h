@@ -14,9 +14,8 @@
  #LAYOUT
  
  - default view padding is 0 0 0 0, flexibleSize is NO so that it fits the height of the content
- - default marginRight on *ImageView*: 10
- - default margins on *TitleLabel*: 10 10 10 10
- - default margins on *TitleLabel*: 10 10 10 10
+ - default padding for vertical box containing the labels is 10 10 10 10
+ - default margin bottom on *SubtitleLabel*: 10
  - default appearance for TitleLabel is bold system font of size 17, black color, numberOfLines 0
  - default appearance for SubtitleLabel is system font of size 14, black color, numberOfLines 0
  - ImageView is flexible height to match the height of the content with minimum height of 44. width will stretch to fit the image aspect ratio.
