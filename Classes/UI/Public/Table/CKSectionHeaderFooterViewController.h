@@ -57,7 +57,7 @@ typedef NS_ENUM(NSInteger,CKSectionViewControllerType){
  {
      //Target your controller by type and the property path that you set when initializing your property
  
-     "CKSectionHeaderFooterViewController[type=header]" : {
+     "CKSectionHeaderFooterViewController[type=CKSectionViewControllerTypeHeader]" : {
  
         "view" : {
            //customize the view containing the labels and text input views here
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSInteger,CKSectionViewControllerType){
      },
  
  
-     "CKSectionHeaderFooterViewController[type=footer]" : {
+     "CKSectionHeaderFooterViewController[type=CKSectionViewControllerTypeFooter]" : {
  
          "view" : {
             //customize the view containing the labels and text input views here
