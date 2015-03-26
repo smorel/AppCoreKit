@@ -259,13 +259,16 @@
         
         CGSize currentSize = self.view.bounds.size;
         CGSize size = [bself preferredSizeConstraintToSize:CGSizeMake(bself.contentViewCell.width,MAXFLOAT)];
-        if(CGSizeEqualToSize(currentSize, size))
+        CGFloat diff = fabs(currentSize.height - size.height);
+        if(diff < 1 )
             return;
         
         if([bself.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
             [bself.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:indexPath];
         }
     };
+    
+    [self setNeedsDisplay];
 }
 
 - (void)reapplyingStyleOnSubviewNamed:(NSString*)name{
@@ -414,11 +417,16 @@
         case CKViewSeparatorStyleTableViewCell:{
             if(view == cell.backgroundView || view == cell.selectedBackgroundView){
                 NSInteger numberOfRows = [tableView.dataSource tableView:tableView numberOfRowsInSection:theIndexPath.section];
-                if(numberOfRows > 1 && theIndexPath.row != numberOfRows-1){
+                /*if(numberOfRows > 1 && theIndexPath.row != numberOfRows-1){
                     return CKStyleViewSeparatorLocationBottom;
                 }
                 else{
                     return CKStyleViewSeparatorLocationNone;
+                }*/
+                if(numberOfRows == 1 || theIndexPath.row == 0){
+                    return CKStyleViewSeparatorLocationBottom | CKStyleViewSeparatorLocationTop;
+                }else{
+                    return CKStyleViewSeparatorLocationBottom;
                 }
             }
             break;
