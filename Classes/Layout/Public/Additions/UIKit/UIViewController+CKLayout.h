@@ -20,8 +20,13 @@
 @interface UIViewController (CKContainerViewController)
 
 ///-----------------------------------
-/// @name Accessing the Container Controller=
+/// @name Accessing the Container Controller
 ///-----------------------------------
+
+/**
+*/
+@property(nonatomic,retain) NSString* name;
+
 
 /**
  */
