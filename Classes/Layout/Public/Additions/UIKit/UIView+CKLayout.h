@@ -14,6 +14,11 @@
  */
 @interface UIView (CKLayout)<CKLayoutBoxProtocol>
 
+/**
+ */
+@property(nonatomic,retain) NSString* name;
+
+
 /** Default value is NO. that means layoutting the view will automatically shrink or expand its size to fit the layouted content.
  Views managed by UIViewController or UITableViewCellContentView are forced to NO as the controller, container controller or table view cell controller is responsible to manage it's view frame.
  */
