@@ -80,6 +80,19 @@
     return NO;
 }
 
+- (void)setFrame:(CGRect)frame animated:(BOOL)animated{
+    if(!animated){
+        [CATransaction begin];
+        [CATransaction
+         setValue: [NSNumber numberWithBool: YES]
+         forKey: kCATransactionDisableActions];
+        self.frame = frame;
+        [CATransaction commit];
+    }else{
+        self.frame = frame;
+    }
+}
+
 @end
 
 

@@ -36,5 +36,9 @@
  */
 - (BOOL)hasSuperviewWithClass:(Class)type;
 
+/**
+ */
+- (void)setFrame:(CGRect)frame animated:(BOOL)animated;
+
 @end
 
