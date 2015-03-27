@@ -78,7 +78,7 @@
     
     UIImageView* imageView = [[[UIImageView alloc]init]autorelease];
     imageView.name = @"ImageView";
-    imageView.flexibleHeight = YES;
+    // imageView.flexibleHeight = YES;
     
     UILabel* titleLabel = [[[UILabel alloc]init]autorelease];
     titleLabel.name = @"TitleLabel";
