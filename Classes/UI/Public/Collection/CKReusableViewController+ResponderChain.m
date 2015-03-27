@@ -189,6 +189,9 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 - (NSArray*)responderChain{
+    if(![self isViewLoaded])
+        return nil;
+    
     NSMutableArray* ar = [NSMutableArray array];
     [self addResponder:self.view toChain:ar];
     return ar;

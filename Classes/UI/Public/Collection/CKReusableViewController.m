@@ -62,7 +62,7 @@
 
 - (id)init{
     self = [super init];
-    self.estimatedRowHeight = 100;
+    self.estimatedRowHeight = 44;
     self.flags = CKViewControllerFlagsSelectable;
     self.accessoryType = UITableViewCellAccessoryNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
@@ -157,16 +157,15 @@
         
         return returnSize;
     }else{
-        static UITableViewCell* cell = nil;
+         UIView* cell = nil;
         if(!cell){
-            cell = [[UITableViewCell alloc]init];
-        }
-        for(UIView* view in cell.contentView.subviews){
-            [view removeFromSuperview];
+            cell = [[UIView alloc]init];
+            cell.flexibleSize = YES;
         }
         
-        cell.frame = CGRectMake(0, 0, self.containerViewController.view.width, 100);
-        [self prepareForReuseUsingContentView:cell.contentView contentViewCell:cell];
+        
+        //cell.frame = CGRectMake(0, 0, self.containerViewController.view.width, 1);
+        [self prepareForReuseUsingContentView:cell contentViewCell:cell];
         
         [self viewDidLoad];
         [self viewWillAppear:NO];
@@ -178,7 +177,7 @@
         CGSize returnSize = CGSizeMake(0,0);
         //Support for CKLayout
         // if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
-        returnSize = [cell.contentView preferredSizeConstraintToSize:size];
+        returnSize = [cell preferredSizeConstraintToSize:size];
         //}
         //TODO : Auto layout support !
         //else{
@@ -196,7 +195,7 @@
         
         [self prepareForReuseUsingContentView:nil contentViewCell:nil];
         
-        //[cell release];
+        [cell release];
         
         self.isComputingSize = NO;
         

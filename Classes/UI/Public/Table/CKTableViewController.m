@@ -206,6 +206,7 @@
     [super viewWillLayoutSubviews];
     [self presentsBackgroundView];
     [self presentsForegroundView];
+    [self.tableView layoutIfNeeded];
 }
  
 
@@ -395,6 +396,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+
+#ifdef DEBUG
+    NSLog(@"heightForRowAtIndexPath: (%@ - %@) %f [%d %d]",[controller class],[controller name],size.height,indexPath.section,indexPath.row);
+#endif
+    
     return size.height;
 }
 
