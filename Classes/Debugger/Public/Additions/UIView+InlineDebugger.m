@@ -140,7 +140,8 @@
         controller.viewWillAppearBlock = ^(UIViewController* controller, BOOL animated){
             CKStandardContentViewController* sc = (CKStandardContentViewController*)controller;
             
-            sc.tableViewCell.indentationLevel = indent;
+            controller.view.paddingLeft = 10 + (indent * 5);
+            
             sc.tableViewCell.imageView.layer.shadowColor = [[UIColor blackColor]CGColor];
             sc.tableViewCell.imageView.layer.shadowOpacity = 0.6;
             sc.tableViewCell.imageView.layer.shadowOffset = CGSizeMake(0,2);
@@ -157,7 +158,7 @@
         controller.didSelectBlock = ^(CKReusableViewController* controller){
             UIView* subView = (UIView*)object;
             
-            CKViewController* slideshow = [CKViewController controller];
+            /*CKViewController* slideshow = [CKViewController controller];
             slideshow.viewDidLoadBlock = ^(UIViewController* controller){
                 UIImageView* imageView = [[[UIImageView alloc]initWithFrame:controller.view.bounds]autorelease];
                 imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -166,7 +167,11 @@
                 [controller.view addSubview:imageView];
                 controller.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
             };
-            [controller.navigationController pushViewController:slideshow animated:YES];
+            [controller.navigationController pushViewController:slideshow animated:YES];*/
+            
+            
+            CKTableViewController* subViewDebugger = [[subView class]inlineDebuggerForObject:subView];
+            [controller.navigationController pushViewController:subViewDebugger animated:YES];
         };
         
         /*
