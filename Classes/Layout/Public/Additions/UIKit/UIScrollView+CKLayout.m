@@ -72,8 +72,9 @@ static char UIScrollViewManuallyManagesContentSizeKey;
 }
 
 - (BOOL)manuallyManagesContentSize{
+    BOOL isExactScrollView = [NSObject isClass:[self class] exactKindOfClass:[UIScrollView class]];
     id value = objc_getAssociatedObject(self, &UIScrollViewManuallyManagesContentSizeKey);
-    return value ? [value boolValue] : NO;
+    return value ? [value boolValue] : (isExactScrollView ? NO : YES);
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{

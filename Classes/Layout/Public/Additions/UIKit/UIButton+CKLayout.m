@@ -95,7 +95,9 @@ static char UIButtonFlexibleHeightKey;
     }
     ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
-    self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
+    CGFloat width = MIN(size.width,ret.width) + self.padding.left + self.padding.right;
+    CGFloat height = MIN(size.height,ret.height) + self.padding.top + self.padding.bottom;
+    self.lastPreferedSize = CGSizeMake(ceilf(width),ceilf(height));
     return self.lastPreferedSize;
 }
 

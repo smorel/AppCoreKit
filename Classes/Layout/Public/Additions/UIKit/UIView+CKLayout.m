@@ -84,7 +84,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
     }
     
     size = [CKLayoutBox preferredSizeConstraintToSize:size forBox:self];
-    size = CGSizeMake(size.width - (self.padding.left + self.padding.right), size.height - (self.padding.top + self.padding.bottom));
+    size = CGSizeMake(ceilf(size.width - (self.padding.left + self.padding.right)), ceilf(size.height - (self.padding.top + self.padding.bottom)));
     
     self.lastPreferedSize = CGSizeMake(size.width + self.padding.left + self.padding.right,size.height + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;

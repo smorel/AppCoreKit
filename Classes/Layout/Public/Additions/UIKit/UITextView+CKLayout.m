@@ -125,7 +125,7 @@ static char UITextViewUsesAttributedStringKey;
     
     CGFloat width = MAX(size.width,ret.width) + self.padding.left + self.padding.right;
     CGFloat height = ret.height + self.padding.top + self.padding.bottom;
-    self.lastPreferedSize = CGSizeMake(width,height);
+    self.lastPreferedSize = CGSizeMake(ceilf(width),ceilf(height));
     return self.lastPreferedSize;
 }
 
