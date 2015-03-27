@@ -20,7 +20,9 @@ static char UIViewHighlightedBackgroundColorKey;
                              &UIViewHighlightedBackgroundColorKey,
                              color,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [self updateBackgroundColor];
+    if([self isHighlighted]){
+        [self updateBackgroundColor];
+    }
 }
 
 - (UIColor*)highlightedBackgroundColor{
