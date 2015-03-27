@@ -62,7 +62,7 @@
 
 - (id)init{
     self = [super init];
-    self.estimatedRowHeight = 44;
+    self.estimatedRowHeight = 100;
     self.flags = CKViewControllerFlagsSelectable;
     self.accessoryType = UITableViewCellAccessoryNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
@@ -157,21 +157,28 @@
         
         return returnSize;
     }else{
-        UIView* view = [[UIView alloc]init];
-        view.frame = CGRectMake(0, 0, size.width, 100);
-        [self prepareForReuseUsingContentView:view contentViewCell:view];
+        static UITableViewCell* cell = nil;
+        if(!cell){
+            cell = [[UITableViewCell alloc]init];
+        }
+        for(UIView* view in cell.contentView.subviews){
+            [view removeFromSuperview];
+        }
+        
+        cell.frame = CGRectMake(0, 0, self.containerViewController.view.width, 100);
+        [self prepareForReuseUsingContentView:cell.contentView contentViewCell:cell];
         
         [self viewDidLoad];
         [self viewWillAppear:NO];
         [self viewDidAppear:NO];
         
-        [view layoutSubviews];
+        [cell layoutSubviews];
         
         //Support for CKLayout
         CGSize returnSize = CGSizeMake(0,0);
         //Support for CKLayout
         // if(view.layoutBoxes != nil && view.layoutBoxes.count > 0){
-        returnSize = [view preferredSizeConstraintToSize:size];
+        returnSize = [cell.contentView preferredSizeConstraintToSize:size];
         //}
         //TODO : Auto layout support !
         //else{
@@ -179,17 +186,17 @@
         //}
         
         if(returnSize.height <= 0){
-            returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
+            returnSize = CGSizeMake(self.view.width,self.estimatedRowHeight);
         }
         
         [self viewWillDisappear:NO];
         [self viewDidDisappear:NO];
         
-        [view clearBindingsContext];
+        [self.view clearBindingsContext];
         
         [self prepareForReuseUsingContentView:nil contentViewCell:nil];
         
-        [view release];
+        //[cell release];
         
         self.isComputingSize = NO;
         
@@ -233,15 +240,21 @@
 
 
 - (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
     [self setupAccessoryView];
     
     //HERE we do not apply style on sub views as we have reuse
     if(self.appliedStyle == nil || [self.appliedStyle isEmpty]){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableSet* appliedStack = [NSMutableSet set];
-        [self applySubViewsStyle:controllerStyle appliedStack:appliedStack  delegate:self];
+        
+        [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
+        
+        [self applySubViewStyle:controllerStyle
+                     descriptor:[self propertyDescriptorForKeyPath:@"view"]
+                   appliedStack:appliedStack
+                       delegate:self];
+        
+        //[self applySubViewsStyle:controllerStyle appliedStack:appliedStack  delegate:self];
         /// [[self class] applyStyleByIntrospection:controllerStyle toObject:self appliedStack:appliedStack delegate:nil];
         [self setAppliedStyle:controllerStyle];
     }
@@ -269,6 +282,8 @@
         }
     };
     
+    [super viewWillAppear:animated];
+    
     [self setNeedsDisplay];
 }
 
@@ -284,14 +299,13 @@
 }
 
 - (void)reapplyingStyleOnSubviewNamed:(NSString*)name{
-    // if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
+    if(self.contentViewCell.appliedStyle == nil || [self.contentViewCell.appliedStyle isEmpty]){
         [self resetStyleOnViewRecursivelly:self.contentViewCell];
         [self applySubViewStyle:[self controllerStyle]
                      descriptor:[self propertyDescriptorForKeyPath:name]
                    appliedStack:[NSMutableSet set]
                        delegate:self];
-    //}
-
+    }
 }
 
 - (void)applyStyleToSubViews{
