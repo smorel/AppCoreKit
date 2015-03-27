@@ -149,4 +149,8 @@
  */
 - (NSInteger)count;
 
+/**
+ */
+- (BOOL)isKVCComplient;
+
 @end

@@ -171,6 +171,24 @@
     }
 }
 
+
+- (BOOL)isKVCComplient{
+    if([self.object isKindOfClass:[NSDictionary class]]){
+        return YES;
+    }
+    if(self.subKeyPath == nil)
+        return YES;
+    
+    @try{
+         [self.subObject valueForKey:self.subKeyPath];
+    }
+    @catch (NSException* e) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (void)setValue:(id)value{
     if([self isReadOnly])
         return;
