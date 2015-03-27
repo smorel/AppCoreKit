@@ -17,6 +17,7 @@
 #import "CKSheetController.h"
 #import "CKRuntime.h"
 #import <objc/runtime.h>
+#import "CKVersion.h"
 
 
 @interface CKTableViewController ()
@@ -160,6 +161,8 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
+    self.tableView.estimatedRowHeight = 44;
+    
     self.backgroundView = [[[CKPassThroughView alloc]initWithFrame:self.tableView.bounds]autorelease];
     self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.backgroundView.flexibleSize = YES;
@@ -169,6 +172,7 @@
     self.foregroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.foregroundView.flexibleSize = YES;
     self.foregroundView.backgroundColor = [UIColor clearColor];
+    
     
     [self presentsTableHeaderView];
     [self presentsTableFooterView];
@@ -203,6 +207,7 @@
     [self presentsBackgroundView];
     [self presentsForegroundView];
 }
+ 
 
 #pragma Managing Life Cycle
 
@@ -390,9 +395,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
-    if(size.height < 0){
-        int i =3;
-    }
     return size.height;
 }
 
@@ -407,9 +409,6 @@
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     if(controller.contentViewCell){
         CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
-        if(size.height < 0){
-            int i =3;
-        }
         return size.height;
     }
     return controller.estimatedRowHeight;
@@ -478,9 +477,6 @@
         return UITableViewAutomaticDimension;
     
     CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)] ;
-    if(size.height < 0){
-        int i =3;
-    }
     return size.height;
 }
 
@@ -493,9 +489,6 @@
     
     if(s.headerViewController.contentViewCell){
         CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
-        if(size.height < 0){
-            int i =3;
-        }
         return size.height;
     }
     return s.headerViewController.estimatedRowHeight;
