@@ -33,6 +33,9 @@
 }
 
 + (instancetype)controllerWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
+    if(![property isKVCComplient])
+        return nil;
+    
     CKReusableViewController* controller = nil;
     
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
