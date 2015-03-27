@@ -21,6 +21,8 @@
 @interface CKCollectionViewController()
 @property (nonatomic,retain,readwrite) CKSectionContainer* sectionContainer;
 @property (nonatomic, assign, readwrite) BOOL scrolling;
+@property(nonatomic,retain,readwrite) CKPassThroughView* backgroundView;
+@property(nonatomic,retain,readwrite) CKPassThroughView* foregroundView;
 @end
 
 @implementation CKCollectionViewController
@@ -43,6 +45,12 @@
 }
 
 - (void)dealloc{
+    [self.backgroundView removeFromSuperview];
+    [self.foregroundView removeFromSuperview];
+    
+    [self clearBindingsContextWithScope:@"foregroundView"];
+    [self clearBindingsContextWithScope:@"backgroundView"];
+
     [_sectionContainer release];
     [_backgroundView release];
     [_foregroundView release];
@@ -77,19 +85,28 @@
     self.collectionView.backgroundColor = [UIColor clearColor];
 }
 
+
 - (void)presentsBackgroundView{
-    if(self.view ){
-        [self.backgroundView removeFromSuperview];
-        self.backgroundView.frame = self.collectionView.frame;
+    if(self.view  && [self.backgroundView superview] == nil){
         [self.view insertSubview:self.backgroundView belowSubview:self.collectionView];
+        
+        [self beginBindingsContextWithScope:@"backgroundView"];
+        [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
+            [self.backgroundView setFrame:self.collectionView.frame animated:NO];
+        }];
+        [self endBindingsContext];
     }
 }
 
 - (void)presentsForegroundView{
-    if(self.view ){
-        [self.foregroundView removeFromSuperview];
-        self.foregroundView.frame = self.collectionView.frame;
+    if(self.view  && [self.foregroundView superview] == nil){
         [self.view insertSubview:self.foregroundView aboveSubview:self.collectionView];
+        
+        [self beginBindingsContextWithScope:@"foregroundView"];
+        [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
+            [self.foregroundView setFrame:self.collectionView.frame animated:NO];
+        }];
+        [self endBindingsContext];
     }
 }
 

@@ -26,6 +26,8 @@
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 @property (nonatomic, assign, readwrite) NSInteger numberOfPages;
 @property (nonatomic, assign, readwrite) BOOL scrolling;
+@property(nonatomic,retain,readwrite) CKPassThroughView* backgroundView;
+@property(nonatomic,retain,readwrite) CKPassThroughView* foregroundView;
 @end
 
 @implementation CKTableViewController
@@ -52,6 +54,11 @@
 }
 
 - (void)dealloc{
+    [self.backgroundView removeFromSuperview];
+    [self.foregroundView removeFromSuperview];
+    [self clearBindingsContextWithScope:@"foregroundView"];
+    [self clearBindingsContextWithScope:@"backgroundView"];
+    
     [self unregisterForKeyboardNotifications];
     [_sectionContainer release];
     [_backgroundView release];
@@ -168,16 +175,26 @@
 }
 
 - (void)presentsBackgroundView{
-    if([self.view superview] && [self.backgroundView superview] == nil){
-        self.backgroundView.frame = self.tableView.frame;
-        [[self.view superview]insertSubview:self.backgroundView belowSubview:self.tableView];
+    if(self.view  && [self.backgroundView superview] == nil){
+        [self.view insertSubview:self.backgroundView atIndex:0];
+
+        [self beginBindingsContextWithScope:@"backgroundView"];
+        [self.tableView bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
+            [self.backgroundView setFrame:CGRectMake(self.tableView.contentOffset.x,self.tableView.contentOffset.y,self.tableView.width,self.tableView.height) animated:YES];
+        }];
+        [self endBindingsContext];
     }
 }
 
 - (void)presentsForegroundView{
-    if([self.view superview] && [self.foregroundView superview] == nil){
-        self.foregroundView.frame = self.tableView.frame;
-        [[self.view superview]insertSubview:self.foregroundView aboveSubview:self.tableView];
+    if(self.view  && [self.foregroundView superview] == nil){
+        [self.view addSubview:self.foregroundView];
+        
+        [self beginBindingsContextWithScope:@"foregroundView"];
+        [self.view bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
+            [self.foregroundView setFrame:CGRectMake(self.tableView.contentOffset.x,self.tableView.contentOffset.y,self.tableView.width,self.tableView.height) animated:YES];
+        }];
+        [self endBindingsContext];
     }
 }
 

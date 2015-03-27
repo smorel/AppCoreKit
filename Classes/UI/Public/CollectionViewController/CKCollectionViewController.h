@@ -30,13 +30,13 @@
 - (void)setCollectionViewLayout:(UICollectionViewLayout*)collectionViewLayout animated:(BOOL)animated;
 
 
-/** By default, a CKPassThroughView transparent view that does catches touches. You can set your own backgroundview in viewDidLoad
+/** By default, a CKPassThroughView transparent view that does catches touches. You can add subviews to the background view in viewDidLoad.
  */
-@property(nonatomic,retain) UIView* backgroundView;
+@property(nonatomic,retain,readonly) CKPassThroughView* backgroundView;
 
-/** By default, a CKPassThroughView transparent view that does catches touches. You can add views that must be displayed on top of the tableView here
+/** By default, a CKPassThroughView transparent view that does catches touches. You can add subviews to the foregroundView view in viewDidLoad.
  */
-@property(nonatomic,retain) UIView* foregroundView;
+@property(nonatomic,retain,readonly) CKPassThroughView* foregroundView;
 
 
 /** Default is NO. If no, selected items will be deselected right after collection view formwarded a didSelect event.
