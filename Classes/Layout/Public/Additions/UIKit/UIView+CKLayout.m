@@ -65,7 +65,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
         size.width += self.padding.left + self.padding.right;
         size.height += self.padding.top + self.padding.bottom;
     }else{
-        if([self isKindOfClass:[UIControl class]]){
+        if([self isKindOfClass:[UIControl class]] || [self isKindOfClass:[UIProgressView class]]){
             size.width -= self.padding.left + self.padding.right;
             size.height -= self.padding.top + self.padding.bottom;
             
