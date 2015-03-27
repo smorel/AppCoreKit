@@ -24,6 +24,7 @@
 @implementation CKPropertyViewController
 
 - (void)dealloc{
+    [self clearBindingsContextWithScope:@"CKPropertyViewController"];
     [_propertyNameLabel release];
     [_property release];
     [_editionToolbar release];
@@ -98,23 +99,23 @@
     if(!self.view)
         return;
     
-    [self.view beginBindingsContextWithScope:@"CKPropertyViewController"];
+    [self beginBindingsContextWithScope:@"CKPropertyViewController"];
     [self setupBindings];
-    [self.view endBindingsContext];
+    [self endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.view clearBindingsContextWithScope:@"CKPropertyViewController"];
+    [self clearBindingsContextWithScope:@"CKPropertyViewController"];
 }
 
 - (void)_setupBindings{
     if(self.state != CKViewControllerStateDidAppear || self.view == nil)
         return;
     
-    [self.view beginBindingsContextWithScope:@"CKPropertyViewController"];
+    [self beginBindingsContextWithScope:@"CKPropertyViewController"];
     [self setupBindings];
-    [self.view endBindingsContext];
+    [self endBindingsContext];
 }
 
 - (void)setupBindings{
