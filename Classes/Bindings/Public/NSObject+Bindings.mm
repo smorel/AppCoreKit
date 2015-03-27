@@ -15,6 +15,7 @@
 #import "CKDataBlockBinder.h"
 #import "CKConfiguration.h"
 #import "CKDebug.h"
+#import "CKProperty.h"
 #include <ext/hash_map>
 
 using namespace __gnu_cxx;
@@ -273,6 +274,10 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 - (void)bindPropertyChangeWithBlock:(void (^)(NSString* propertyName, id value))block{
     NSArray* allProperties = [self allPropertyNames];
     for(NSString* keyPath in allProperties){
+        CKProperty* property = [CKProperty propertyWithObject:self keyPath:keyPath];
+        if(![property isKVCComplient])
+            continue;
+        
         [self bind:keyPath withBlock:^(id value) {
             block(keyPath,value);
         }];

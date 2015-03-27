@@ -595,11 +595,15 @@ static char NSObjectAppliedStyleObjectKey;
 	for(NSString* key in [style allKeys]){
 		if([reserverKeyWords containsObject:key] == NO){
 			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
+            CKProperty* property = [CKProperty propertyWithObject:object keyPath:key];
+            if(![property isKVCComplient])
+                continue;
+            
             if(descriptor){
                 //When creating subviews by introspection, ensure style is applied on these views.
                 if([descriptor.name isEqualToString: @"subviews"] && [object isKindOfClass:[UIView class]]){
                     //FIXME : We could propbably optimize here by not creating the CKProperty as it registers weakrefs and other stuff ...
-                    [style setObjectForKey:key inProperty:[CKProperty propertyWithObject:object keyPath:key]];
+                    [style setObjectForKey:key inProperty:property];
                     
                     UIView* view = (UIView*)object;
                     for(UIView* subView in view.subviews){
@@ -612,7 +616,7 @@ static char NSObjectAppliedStyleObjectKey;
                     BOOL isUIView = (descriptor != nil && [NSObject isClass:descriptor.type kindOfClass:[UIView class]] == YES);
                     if(!isUIView){
                         //FIXME : We could propbably optimize here by not creating the CKProperty as it registers weakrefs and other stuff ...
-                        [style setObjectForKey:key inProperty:[CKProperty propertyWithObject:object keyPath:key]];
+                        [style setObjectForKey:key inProperty:property];
                     }
                     else if(isUIView){
                         if(   ([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"])
@@ -645,6 +649,10 @@ static char NSObjectAppliedStyleObjectKey;
                  delegate:(id)delegate{
     
     if(!descriptor)
+        return;
+    
+    CKProperty* property = [CKProperty propertyWithObject:self keyPath:descriptor.name];
+    if(![property isKVCComplient])
         return;
     
     //Handle special cases where styles should not be applyed !

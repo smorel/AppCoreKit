@@ -149,7 +149,13 @@ void introspectTextInputsProperties(){
         }
         else{
             CKClassPropertyDescriptor* objectProperty = [NSObject propertyForDescriptor:property ];
-            [array addObject:objectProperty];
+            if([objectProperty.name isEqualToString:@"topLayoutGuide"]
+               || [objectProperty.name isEqualToString:@"bottomLayoutGuide"]){
+                //http://stackoverflow.com/questions/18972762/uitableview-not-scrolling-after-switching-to-ios-7
+                //BYPass as it's causing UI Issues
+            }else{
+                [array addObject:objectProperty];
+            }
         }
     }
     free(ps);	
