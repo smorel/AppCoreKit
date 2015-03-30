@@ -51,6 +51,14 @@
  */
 @property(nonatomic,assign) BOOL multiselectionEnabled;
 
+/**
+ */
+- (void)selectItemAtIndexPath:(NSIndexPath*)indexPath;
+
+/**
+ */
+- (void)deselectItemAtIndexPath:(NSIndexPath*)indexPath;
+
 ///-----------------------------------
 /// @name Scrolling
 ///-----------------------------------

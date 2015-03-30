@@ -111,6 +111,17 @@
     }
 }
 
+- (void)dismissBackgroundView{
+    [self beginBindingsContextWithScope:@"backgroundView"];
+    [self.backgroundView removeFromSuperview];
+}
+
+- (void)dismissForegroundView{
+    [self beginBindingsContextWithScope:@"foregroundView"];
+    [self.foregroundView removeFromSuperview];
+}
+
+
 - (void)viewWillLayoutSubviews{
     [super viewWillLayoutSubviews];
     [self presentsBackgroundView];
@@ -122,7 +133,8 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self.sectionContainer handleViewWillAppearAnimated:animated];
+    //Support for navigation push transitions:
+    //[self.sectionContainer handleViewWillAppearAnimated:animated];
     
     [self fetchMoreData];
     
@@ -134,7 +146,8 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    [self.sectionContainer handleViewDidAppearAnimated:animated];
+    //Support for navigation push transitions:
+    // [self.sectionContainer handleViewDidAppearAnimated:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -142,13 +155,17 @@
     
     [[self.view superview] endEditing:YES];
     
-    [self.sectionContainer handleViewWillDisappearAnimated:animated];
+    //Support for navigation push transitions:
+    // [self.sectionContainer handleViewWillDisappearAnimated:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     
-    [self.sectionContainer handleViewDidDisappearAnimated:animated];
+    //Support for navigation push transitions:
+    //[self.sectionContainer handleViewDidDisappearAnimated:animated];
+    [self dismissBackgroundView];
+    [self dismissForegroundView];
 }
 
 
@@ -232,6 +249,8 @@
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     NSString* reuseIdentifier = [controller reuseIdentifier];
     
+    //  NSLog(@"self %p collectionView %p cellForIndexPath %@",self,collectionView,indexPath);
+    
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     UICollectionViewCell* cell = (UICollectionViewCell*)[self.collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     cell.contentView.flexibleSize = YES;
@@ -291,7 +310,8 @@
 #pragma mark Managing selection and highlight
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath{
-    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CKReusableViewController* controller = [cell reusableViewController];
     return controller.flags & CKViewControllerFlagsSelectable;
 }
 
@@ -304,22 +324,18 @@
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CKReusableViewController* controller = [cell reusableViewController];
+    
     BOOL selectable = controller.flags & CKViewControllerFlagsSelectable;
     
     if(self.collectionView.indexPathsForSelectedItems.count == 1 && !self.multiselectionEnabled){
         NSIndexPath* selectedIndexPath = self.collectionView.indexPathsForSelectedItems[0];
-        if([selectedIndexPath isEqual:indexPath]){
-            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
-            
-            //Cause didDeselectRowAtIndexPath is not called!
-            NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
-            [selected removeObject:indexPath];
-            self.sectionContainer.selectedIndexPaths = selected;
-            [controller didDeselect];
-            
-            selectable = NO;
-        }
+        //if([selectedIndexPath isEqual:indexPath]){
+            [self deselectItemAtIndexPath:selectedIndexPath];
+        //}
+        
+        selectable = NO;
     }
     
     return selectable;
@@ -334,7 +350,8 @@
     [selected addObject:indexPath];
     self.sectionContainer.selectedIndexPaths = selected;
     
-    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CKReusableViewController* controller = [cell reusableViewController];
     [controller didSelect];
     
     if(!self.stickySelectionEnabled){
@@ -355,8 +372,33 @@
     [selected removeObject:indexPath];
     self.sectionContainer.selectedIndexPaths = selected;
     
-    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CKReusableViewController* controller = [cell reusableViewController];
     [controller didDeselect];
+}
+
+- (void)selectItemAtIndexPath:(NSIndexPath*)indexPath{
+    [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically | UICollectionViewScrollPositionCenteredHorizontally];
+}
+
+/**
+ */
+- (void)deselectItemAtIndexPath:(NSIndexPath*)indexPath{
+    //Support for navigation push transitions:
+    
+    //CKReusableViewController* selectedController = [self.sectionContainer controllerAtIndexPath:indexPath];
+    
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CKReusableViewController* selectedController = [cell reusableViewController];
+    //------
+    
+    [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    //Cause didDeselectRowAtIndexPath is not called!
+    NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
+    [selected removeObject:indexPath];
+    self.sectionContainer.selectedIndexPaths = selected;
+    [selectedController didDeselect];
 }
 
 /*
