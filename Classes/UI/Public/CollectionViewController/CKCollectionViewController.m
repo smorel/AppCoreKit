@@ -307,18 +307,18 @@
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     BOOL selectable = controller.flags & CKViewControllerFlagsSelectable;
     
-    if(self.collectionView.indexPathsForSelectedItems.count > 0 && !self.multiselectionEnabled){
-        for(NSIndexPath* selectedIndexPath in self.collectionView.indexPathsForSelectedItems){
+    if(self.collectionView.indexPathsForSelectedItems.count == 1 && !self.multiselectionEnabled){
+        NSIndexPath* selectedIndexPath = self.collectionView.indexPathsForSelectedItems[0];
+        if([selectedIndexPath isEqual:indexPath]){
             [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
             
+            //Cause didDeselectRowAtIndexPath is not called!
             NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
             [selected removeObject:indexPath];
             self.sectionContainer.selectedIndexPaths = selected;
             [controller didDeselect];
             
-            if([selectedIndexPath isEqual:indexPath]){
-                selectable = NO;
-            }
+            selectable = NO;
         }
     }
     
