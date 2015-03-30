@@ -234,7 +234,7 @@ static char UIViewReusableViewControllerKey;
         
     }else{
         CKReusableViewController* previousController = [view reusableViewController];
-        if(previousController){
+        if(previousController && previousController.contentViewCell == view){
             if(previousController.state != CKViewControllerStateDidDisappear){
                 if(previousController.state != CKViewControllerStateWillDisappear){
                     [previousController viewWillDisappear:NO];
