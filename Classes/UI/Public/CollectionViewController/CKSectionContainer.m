@@ -73,6 +73,8 @@ static char UIViewReusableViewControllerKey;
 }
 
 - (CKAbstractSection*)sectionAtIndex:(NSInteger)index{
+    if(index >= [self mutableSections].count)
+        return nil;
     return [[self mutableSections]objectAtIndex:index];
 }
 
@@ -234,7 +236,16 @@ static char UIViewReusableViewControllerKey;
         
     }else{
         CKReusableViewController* previousController = [view reusableViewController];
+        if(previousController == controller){
+            //     NSLog(@"reusing same cell %p as previous",view);
+            return view;
+        }
+        
+        
         if(previousController && previousController.contentViewCell == view){
+            
+            //  NSLog(@"resetting previous controller %p at indexPath %@ cell %p",previousController,previousController.indexPath,view);
+            
             if(previousController.state != CKViewControllerStateDidDisappear){
                 if(previousController.state != CKViewControllerStateWillDisappear){
                     [previousController viewWillDisappear:NO];
@@ -247,6 +258,8 @@ static char UIViewReusableViewControllerKey;
             [view clearBindingsContext];
             [previousController prepareForReuseUsingContentView:nil contentViewCell:nil];
         }
+        
+        //    NSLog(@"reusing view from previous controller %p at indexPath %@ to %p at indexPath %@ cell %p" ,previousController,previousController.indexPath,controller,controller.indexPath,view);
         
         [controller prepareForReuseUsingContentView:(contentView ? contentView : view) contentViewCell:view];
         
