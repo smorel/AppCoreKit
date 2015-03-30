@@ -39,6 +39,7 @@
 
 - (void)postInit{
     [super postInit];
+    self.multiselectionEnabled = NO;
     self.stickySelectionEnabled = NO;
     self.scrolling = NO;
     self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
@@ -294,13 +295,34 @@
     return controller.flags & CKViewControllerFlagsSelectable;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath{ }
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath{
+    int i =3;
+}
 
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath{ }
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath{
+    int i =3;
+}
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
-    return controller.flags & CKViewControllerFlagsSelectable;
+    BOOL selectable = controller.flags & CKViewControllerFlagsSelectable;
+    
+    if(self.collectionView.indexPathsForSelectedItems.count > 0 && !self.multiselectionEnabled){
+        for(NSIndexPath* selectedIndexPath in self.collectionView.indexPathsForSelectedItems){
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+            
+            NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
+            [selected removeObject:indexPath];
+            self.sectionContainer.selectedIndexPaths = selected;
+            [controller didDeselect];
+            
+            if([selectedIndexPath isEqual:indexPath]){
+                selectable = NO;
+            }
+        }
+    }
+    
+    return selectable;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -323,6 +345,7 @@
             NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
             [selected removeObject:indexPath];
             self.sectionContainer.selectedIndexPaths = selected;
+            [controller didDeselect];
         });
     }
 }
@@ -331,6 +354,9 @@
     NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
     [selected removeObject:indexPath];
     self.sectionContainer.selectedIndexPaths = selected;
+    
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    [controller didDeselect];
 }
 
 /*
@@ -522,12 +548,19 @@
 
 
 @implementation CKReusableViewController(CKCollectionViewController)
-@dynamic collectionViewCell;
+@dynamic collectionViewCell,collectionView;
 
 - (UICollectionViewCell*)collectionViewCell{
     if([self.contentViewCell isKindOfClass:[UICollectionViewCell class]])
         return (UICollectionViewCell*)self.contentViewCell;
     return nil;
 }
+
+- (UICollectionView*)collectionView{
+    if([self.contentView isKindOfClass:[UICollectionView class]])
+        return (UICollectionView*)self.contentView;
+    return nil;
+}
+
 
 @end

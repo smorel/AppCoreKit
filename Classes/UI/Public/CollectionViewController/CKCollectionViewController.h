@@ -17,6 +17,10 @@
  */
 @property(nonatomic,readonly) UICollectionViewCell* collectionViewCell;
 
+/**
+ */
+@property(nonatomic,readonly) UICollectionView* collectionView;
+
 @end
 
 
@@ -42,6 +46,10 @@
 /** Default is NO. If no, selected items will be deselected right after collection view formwarded a didSelect event.
  */
 @property(nonatomic,assign) BOOL stickySelectionEnabled;
+
+/** default is NO. if NO, selected item will be deselected prior to select a new item.
+ */
+@property(nonatomic,assign) BOOL multiselectionEnabled;
 
 ///-----------------------------------
 /// @name Scrolling

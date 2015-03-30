@@ -46,6 +46,7 @@
     [self clearBindingsContext];
     
     [_didSelectBlock release];
+    [_didDeselectBlock release];
     [_didRemoveBlock release];
     [_reusableView release];
     [_contentViewCell release];
@@ -217,6 +218,13 @@
         self.didSelectBlock(self);
     }
 }
+
+- (void)didDeselect{
+    if(self.didDeselectBlock){
+        self.didDeselectBlock(self);
+    }
+}
+
 
 - (void)didRemove{
     if(self.didRemoveBlock){

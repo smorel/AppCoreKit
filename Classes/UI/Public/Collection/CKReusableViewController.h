@@ -78,6 +78,15 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
  */
 @property(nonatomic,copy) void(^didSelectBlock)(CKReusableViewController* controller);
 
+
+/** This method is called after the cell has been selected
+ */
+- (void)didDeselect;
+
+/**
+ */
+@property(nonatomic,copy) void(^didDeselectBlock)(CKReusableViewController* controller);
+
 /** This method is called after the cell has been removec
  */
 - (void)didRemove;

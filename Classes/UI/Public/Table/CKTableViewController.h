@@ -23,6 +23,11 @@
  */
 @property(nonatomic,readonly) CKTableViewCell* tableViewCell;
 
+/**
+ */
+@property(nonatomic,readonly) UITableView* tableView;
+
+
 #ifdef USING_UITableViewHeaderFooterView
 /**
  */

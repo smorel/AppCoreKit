@@ -671,6 +671,8 @@
             NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
             [selected removeObject:indexPath];
             self.sectionContainer.selectedIndexPaths = selected;
+            
+            [controller didDeselect];
         });
     }
 }
@@ -679,6 +681,9 @@
     NSMutableArray* selected = [NSMutableArray arrayWithArray:self.sectionContainer.selectedIndexPaths];
     [selected removeObject:indexPath];
     self.sectionContainer.selectedIndexPaths = selected;
+    
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    [controller didDeselect];
 }
 
 #pragma mark Managing Edition
@@ -1095,11 +1100,17 @@
 
 
 @implementation CKReusableViewController(CKTableViewController)
-@dynamic tableViewCell;
+@dynamic tableViewCell,tableView;
 
 - (CKTableViewCell*)tableViewCell{
     if([self.contentViewCell isKindOfClass:[CKTableViewCell class]])
         return (CKTableViewCell*)self.contentViewCell;
+    return nil;
+}
+
+- (UITableView*)tableView{
+    if([self.contentView isKindOfClass:[UITableView class]])
+        return (UITableView*)self.contentView;
     return nil;
 }
 
