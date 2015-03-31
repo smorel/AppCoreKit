@@ -82,22 +82,33 @@
         for(CKReusableViewController* controller in controllers){
             [controller setContainerViewController:self.containerViewController];
         }
+    }else{
+        [[self mutableControllers]insertObjects:controllers atIndexes:indexes];
+        return;
     }
     
     [self.delegate section:self willInsertControllers:controllers atIndexes:indexes animated:animated];
-    [[self mutableControllers]insertObjects:controllers atIndexes:indexes];
-    [self.delegate section:self didInsertControllers:controllers atIndexes:indexes animated:animated];
+    [self.delegate section:self didInsertControllers:controllers atIndexes:indexes animated:animated sectionUpdate:^(){
+        [[self mutableControllers]insertObjects:controllers atIndexes:indexes];
+    }];
 }
 
 - (void)removeControllersAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
     if(indexes.count <= 0)
         return;
     
+    if(!self.delegate){
+        [[self mutableControllers]removeObjectsAtIndexes:indexes];
+        return;
+    }
+    
     NSArray* controllers = [[self mutableControllers]objectsAtIndexes:indexes];
     
     [self.delegate section:self willRemoveControllers:controllers atIndexes:indexes animated:animated];
-    [[self mutableControllers]removeObjectsAtIndexes:indexes];
-    [self.delegate section:self didRemoveControllers:controllers atIndexes:indexes animated:animated];
+    [self.delegate section:self didRemoveControllers:controllers atIndexes:indexes animated:animated sectionUpdate:^(){
+        [[self mutableControllers]removeObjectsAtIndexes:indexes];
+    }];
+
 }
 
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated{

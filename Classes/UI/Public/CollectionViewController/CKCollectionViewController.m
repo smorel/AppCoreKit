@@ -173,7 +173,7 @@
 
 - (void)performBatchUpdates:(void (^)(void))updates
                  completion:(void (^)(BOOL finished))completion{
-    if(self.state == CKViewControllerStateDidAppear){
+    if(self.state == CKViewControllerStateDidAppear || self.state == CKViewControllerStateWillAppear){
         [self.collectionView performBatchUpdates:updates completion:completion];
     }else{
         if(updates){
@@ -189,38 +189,50 @@
 #pragma mark CKSectionedViewController protocol
 
 
-- (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
+    }
     
     [self performBatchUpdates:^{
+        sectionUpdate();
         [self.collectionView insertSections:indexes];
     } completion:nil];
 }
 
-- (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
+    }
     
     [self performBatchUpdates:^{
+        sectionUpdate();
         [self.collectionView deleteSections:indexes];
     } completion:nil];
 }
 
-- (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
+    }
     
     [self performBatchUpdates:^{
+        sectionUpdate();
         [self.collectionView insertItemsAtIndexPaths:indexPaths];
     } completion:nil];
 }
 
-- (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
+    }
     
     [self performBatchUpdates:^{
+        sectionUpdate();
         [self.collectionView deleteItemsAtIndexPaths:indexPaths];
     } completion:nil];
 }

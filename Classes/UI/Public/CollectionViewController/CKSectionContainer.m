@@ -124,35 +124,39 @@ static char UIViewReusableViewControllerKey;
 }
 
 - (void)insertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    if(indexes.count <= 0)
+        return;
+    
     if([self.delegate respondsToSelector:@selector(willInsertSections:atIndexes:animated:)]){
         [self.delegate willInsertSections:sections atIndexes:indexes animated:animated];
     }
     
-    [[self mutableSections]insertObjects:sections atIndexes:indexes];
-    
-    for(CKAbstractSection* section in sections){
-        section.delegate = self;
-        section.containerViewController = self.delegate;
-    }
-    
-    [self.delegate didInsertSections:sections atIndexes:indexes animated:animated];
+    [self.delegate didInsertSections:sections atIndexes:indexes animated:animated sectionUpdate:^{
+        [[self mutableSections]insertObjects:sections atIndexes:indexes];
+        
+        for(CKAbstractSection* section in sections){
+            section.containerViewController = self.delegate;
+            section.delegate = self;
+        }
+    }];
 }
 
 - (void)removeSectionsAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    if(indexes.count <= 0)
+        return;
+    
     NSArray* sections = [self sectionsAtIndexes:indexes];
     
     if([self.delegate respondsToSelector:@selector(willRemoveSections:atIndexes:animated:)]){
         [self.delegate willRemoveSections:sections atIndexes:indexes animated:animated];
     }
     
-    //TODO : Update selectedIndexPaths
-    
-    for(CKAbstractSection* section in sections){
-        section.delegate = nil;
-    }
-    [[self mutableSections]removeObjectsAtIndexes:indexes];
-    
-    [self.delegate didRemoveSections:sections atIndexes:indexes animated:animated];
+    [self.delegate didRemoveSections:sections atIndexes:indexes animated:animated sectionUpdate:^{
+        for(CKAbstractSection* section in sections){
+            section.delegate = nil;
+        }
+        [[self mutableSections]removeObjectsAtIndexes:indexes];
+    }];
 }
 
 - (NSArray*)indexPathsForIndexes:(NSIndexSet*)indexes inSection:(CKAbstractSection*)section{
@@ -160,16 +164,25 @@ static char UIViewReusableViewControllerKey;
 }
 
 - (void)section:(CKAbstractSection*)section willInsertControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    if(indexes.count <= 0)
+        return;
+    
     if([self.delegate respondsToSelector:@selector(willInsertControllers:atIndexPaths:animated:)]){
         [self.delegate willInsertControllers:controllers atIndexPaths:[self indexPathsForIndexes:indexes inSection:section] animated:animated];
     }
 }
 
-- (void)section:(CKAbstractSection*)section didInsertControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    [self.delegate didInsertControllers:controllers atIndexPaths:[self indexPathsForIndexes:indexes inSection:section] animated:animated];
+- (void)section:(CKAbstractSection*)section didInsertControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void(^)())sectionUpdate{
+    if(indexes.count <= 0)
+        return;
+    
+    [self.delegate didInsertControllers:controllers atIndexPaths:[self indexPathsForIndexes:indexes inSection:section] animated:animated sectionUpdate:sectionUpdate];
 }
 
 - (void)section:(CKAbstractSection*)section willRemoveControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
+    if(indexes.count <= 0)
+        return;
+    
     //TODO : Update selectedIndexPaths
     
     if([self.delegate respondsToSelector:@selector(willRemoveControllers:atIndexPaths:animated:)]){
@@ -177,8 +190,11 @@ static char UIViewReusableViewControllerKey;
     }
 }
 
-- (void)section:(CKAbstractSection*)section didRemoveControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    [self.delegate didRemoveControllers:controllers atIndexPaths:[self indexPathsForIndexes:indexes inSection:section] animated:animated];
+- (void)section:(CKAbstractSection*)section didRemoveControllers:(NSArray*)controllers atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void(^)())sectionUpdate{
+    if(indexes.count <= 0)
+        return;
+    
+    [self.delegate didRemoveControllers:controllers atIndexPaths:[self indexPathsForIndexes:indexes inSection:section] animated:animated sectionUpdate:sectionUpdate];
 }
 
 

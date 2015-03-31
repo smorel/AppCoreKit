@@ -321,40 +321,52 @@
 #pragma mark CKSectionedViewController protocol
 
 
-- (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
+    }
     
+    sectionUpdate();
     [self performBatchUpdates:^{
         [self.tableView insertSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
 }
 
-- (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
+    }
     
+    sectionUpdate();
     [self performBatchUpdates:^{
         [self.tableView deleteSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
 }
 
-- (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
+    }
     
+    sectionUpdate();
     [self performBatchUpdates:^{
         [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
 }
 
-- (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad)
+- (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
+    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+        sectionUpdate();
         return;
- 
+    }
+    
+    sectionUpdate();
     [self performBatchUpdates:^{
         [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
