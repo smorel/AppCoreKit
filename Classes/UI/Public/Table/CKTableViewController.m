@@ -650,9 +650,15 @@
     return controller.flags & CKViewControllerFlagsSelectable;
 }
 
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath{ }
+- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    [controller didHighlight];
+}
 
-- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath{ }
+- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath{
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    [controller didUnhighlight];
+}
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];

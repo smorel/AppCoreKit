@@ -45,6 +45,8 @@
 - (void)dealloc{
     [self clearBindingsContext];
     
+    [_didHighlightBlock release];
+    [_didUnhighlightBlock release];
     [_didSelectBlock release];
     [_didDeselectBlock release];
     [_didRemoveBlock release];
@@ -225,10 +227,21 @@
     }
 }
 
-
 - (void)didRemove{
     if(self.didRemoveBlock){
         self.didRemoveBlock(self);
+    }
+}
+
+- (void)didHighlight{
+    if(self.didHighlightBlock){
+        self.didHighlightBlock(self);
+    }
+}
+
+- (void)didUnhighlight{
+    if(self.didUnhighlightBlock){
+        self.didUnhighlightBlock(self);
     }
 }
 

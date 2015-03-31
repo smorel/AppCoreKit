@@ -96,6 +96,21 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
 @property(nonatomic,copy) void(^didRemoveBlock)(CKReusableViewController* controller);
 
 
+/** This method is called after the cell has been highlighted
+ */
+- (void)didHighlight;
+
+/**
+ */
+@property(nonatomic,copy) void(^didHighlightBlock)(CKReusableViewController* controller);
+
+/** This method is called after the cell has been unhighlighted
+ */
+- (void)didUnhighlight;
+
+/**
+ */
+@property(nonatomic,copy) void(^didUnhighlightBlock)(CKReusableViewController* controller);
 
 
 

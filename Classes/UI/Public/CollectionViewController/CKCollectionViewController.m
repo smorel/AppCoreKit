@@ -328,11 +328,15 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath{
-    int i =3;
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CKReusableViewController* controller = [cell reusableViewController];
+    [controller didHighlight];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath{
-    int i =3;
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    CKReusableViewController* controller = [cell reusableViewController];
+    [controller didUnhighlight];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath{
