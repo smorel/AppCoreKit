@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 };
 
 
-//CKSwipableAction ---------------------------------
+//CKSwipeableAction ---------------------------------
 
 
 
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
  
  As we are in a reuse view architecture, actions buttons will get reused too.
  */
-@interface CKSwipableAction : NSObject
+@interface CKSwipeableAction : NSObject
 
 /**
  */
@@ -60,11 +60,11 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 
 /**
  */
-+ (CKSwipableAction*)actionWithName:(NSString*)name action:(void(^)())action;
++ (CKSwipeableAction*)actionWithName:(NSString*)name action:(void(^)())action;
 
 /**
  */
-+ (CKSwipableAction*)actionWithName:(NSString*)name animationStyle:(CKSwipeableActionAnimationStyle)animationStyle action:(void(^)())action;
++ (CKSwipeableAction*)actionWithName:(NSString*)name animationStyle:(CKSwipeableActionAnimationStyle)animationStyle action:(void(^)())action;
 
 /**
  */
@@ -84,13 +84,13 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 
 
 
-//CKSwipableActionGroup ---------------------------------
+//CKSwipeableActionGroup ---------------------------------
 
 
 
 /**
  */
-@interface CKSwipableActionGroup : NSObject
+@interface CKSwipeableActionGroup : NSObject
 
 /**
  */
@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 
 /**
  */
-+ (CKSwipableActionGroup*)actionGroupWithStyle:(CKSwipeableActionGroupStyle)style actions:(NSArray*)actions;
++ (CKSwipeableActionGroup*)actionGroupWithStyle:(CKSwipeableActionGroupStyle)style actions:(NSArray*)actions;
 
 /**
  */
@@ -147,11 +147,11 @@ typedef NS_ENUM(NSInteger, CKSwipeableActionGroupStyle){
 
 /**
  */
-@property(nonatomic,retain) CKSwipableActionGroup* leftActions;
+@property(nonatomic,retain) CKSwipeableActionGroup* leftActions;
 
 /**
  */
-@property(nonatomic,retain) CKSwipableActionGroup* rightActions;
+@property(nonatomic,retain) CKSwipeableActionGroup* rightActions;
 
 /**
  */
