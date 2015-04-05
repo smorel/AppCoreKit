@@ -789,11 +789,14 @@
             
             id object = [self objectAtIndexPath:indexPath];
             CKCollectionCellController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
-            [controller performSelector:@selector(setContainerController:) withObject:self];
-            [controller performSelector:@selector(setValue:) withObject:object];
-            [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-            
-            [controllers insertObject:controller atIndex:[indexPath row]];
+			if(controller) {
+				[controller performSelector:@selector(setContainerController:) withObject:self];
+				[controller performSelector:@selector(setValue:) withObject:object];
+				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+
+				[controllers insertObject:controller atIndex:[indexPath row]];
+			}
+
         }
     }
 }
