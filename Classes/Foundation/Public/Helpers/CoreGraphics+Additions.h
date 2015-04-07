@@ -32,6 +32,10 @@ extern "C" {
     
     //ratio between 0 and 1 interpolate from t1 to t2
     CGAffineTransform CKCGAffineTransformInterpolate(CGAffineTransform t1,CGAffineTransform t2, CGFloat ratio);
+    
+    CGRect CKCGRectInterpolate(CGRect r1,CGRect r2, CGFloat ratio);
+    CGFloat CKCGFloatInterpolate(CGFloat f1,CGFloat f2, CGFloat ratio);
+    CGPoint CKCGRectCenter(CGRect rect);
 
 #ifdef __cplusplus
 }

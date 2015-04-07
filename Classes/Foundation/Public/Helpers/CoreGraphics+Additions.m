@@ -95,3 +95,25 @@ CGAffineTransform CKCGAffineTransformInterpolate(CGAffineTransform t1,CGAffineTr
     t.ty = t1.ty + ((t2.ty - t1.ty) * ratio);
     return t;
 }
+
+
+CGPoint CKCGRectCenter(CGRect rect){
+    CGPoint point;
+    point.x = rect.origin.x + (rect.size.width / 2.0f);
+    point.y = rect.origin.y + (rect.size.height / 2.0f);
+    return point;
+}
+
+CGRect CKCGRectInterpolate(CGRect r1,CGRect r2, CGFloat ratio){
+    CGRect r;
+    r.origin.x = r1.origin.x + ((r2.origin.x - r1.origin.x) * ratio);
+    r.origin.y = r1.origin.y + ((r2.origin.y - r1.origin.y) * ratio);
+    r.size.width = r1.size.width + ((r2.size.width - r1.size.width) * ratio);
+    r.size.height = r1.size.height + ((r2.size.height - r1.size.height) * ratio);
+    return r;
+}
+
+
+CGFloat CKCGFloatInterpolate(CGFloat f1,CGFloat f2, CGFloat ratio){
+    return f1 + ((f2 - f1) * ratio);
+}
