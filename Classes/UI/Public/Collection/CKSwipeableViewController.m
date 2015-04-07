@@ -215,7 +215,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 #pragma Scroll View and Actions Creation
 
 - (UIScrollView*)scrollView{
-    return [self isViewLoaded] ? [self.view viewWithKeyPath:@"ScrollView"] : nil;
+    return [self isViewLoaded] ? [self.view viewWithName:@"ScrollView"] : nil;
 }
 
 - (UIView*)scrollContentView{
