@@ -37,14 +37,15 @@ static char* UIImageViewImageLoaderCompletionBlockKey;
 - (void)loadImageWithUrl:(NSURL*)url completion:(void(^)(UIImage* image,NSError* error))completion
 {
     [self cancelNetworkOperations];
+    [self imageLoader].delegate = self;
     [self setImageLoaderCompletionBlock:completion];
     [[self imageLoader]loadImageWithContentOfURL:url];
 }
 
 - (void)cancelNetworkOperations
 {
-
     [[self imageLoader]cancel];
+    [self imageLoader].delegate = nil;
 }
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached

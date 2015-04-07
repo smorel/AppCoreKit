@@ -48,8 +48,8 @@ static char CKCollectionCellContentViewControllerParentSwipeableControllerKey;
 
 @interface CKSwipeableViewController ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
 @property(nonatomic,retain) CKReusableViewController* contentViewController;
-@property(nonatomic,retain) CKSwipableAction* currentLeftAction;
-@property(nonatomic,retain) CKSwipableAction* currentRightAction;
+@property(nonatomic,retain) CKSwipeableAction* currentLeftAction;
+@property(nonatomic,retain) CKSwipeableAction* currentRightAction;
 @property(nonatomic,assign) CGPoint lastScrollOffset;
 @property(nonatomic,assign) BOOL isAnimatingPendingAction;
 @property(nonatomic,assign) BOOL viewDidAppear;
@@ -109,12 +109,17 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     self = [super init];
     self.enabled = YES;
     self.internalBindingsContext = [NSString stringWithFormat:@"CKSwipableCollectionCellContentViewController_<%p>",self];
+    contentViewController.containerViewController = self;
     [self setContentViewController:contentViewController];
     [contentViewController setParentSwipeableContentViewController:self];
     return self;
 }
 
 - (void)prepareForReuseUsingContentView:(UIView*)contentView contentViewCell:(UIView*)contentViewCell{
+    if(contentView == nil){
+        [NSObject removeAllBindingsForContext:self.internalBindingsContext];
+    }
+    
     [super prepareForReuseUsingContentView:contentView contentViewCell:contentViewCell];
     [self.contentViewController prepareForReuseUsingContentView:[self scrollContentView] contentViewCell:contentViewCell];
 }
@@ -166,7 +171,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     __block CGSize oldSize = CGSizeZero;
     [self.view bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
-        if(![bself.view window])
+        if(![bself isViewLoaded] || ![bself.view window])
             return;
         
         if(!CGSizeEqualToSize(oldSize, bself.view.bounds.size)){
@@ -210,7 +215,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 #pragma Scroll View and Actions Creation
 
 - (UIScrollView*)scrollView{
-    return [self.view viewWithKeyPath:@"ScrollView"];
+    return [self isViewLoaded] ? [self.view viewWithName:@"ScrollView"] : nil;
 }
 
 - (UIView*)scrollContentView{
@@ -231,7 +236,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     _enabled = bo;
     
-    if(self.view){
+    if([self isViewLoaded]){
         [self setupEnableState];
     }
 }
@@ -276,7 +281,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     scrollContentView.layer.zPosition = 1;
     [scrollView addSubview:scrollContentView];
     
-    for(CKSwipableAction* action in self.leftActions.actions){
+    for(CKSwipeableAction* action in self.leftActions.actions){
         UIView* view =  [[[UIButton alloc]init]autorelease];
         view.userInteractionEnabled = NO;
         view.name = action.name;
@@ -285,7 +290,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
         [leftActionsViewContainer addSubview:view];
     }
     
-    for(CKSwipableAction* action in self.rightActions.actions){
+    for(CKSwipeableAction* action in self.rightActions.actions){
         UIView* view =  [[[UIButton alloc]init]autorelease];
         view.userInteractionEnabled = NO;
         view.name = action.name;
@@ -308,10 +313,10 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     if(!forced && CGSizeEqualToSize([self scrollContentView].frame.size, size))
         return NO;
     
-    [self scrollContentView].frame = CGRectMake(0,0,size.width,size.height);
+    [self scrollContentView].frame = CGRectMake(0,0,self.view.bounds.size.width,size.height);
     [self scrollView].frame = [self scrollContentView].frame;
     
-    [self scrollView].contentSize = CGSizeMake(size.width ,size.height);
+    [self scrollView].contentSize = CGSizeMake(self.view.bounds.size.width ,size.height);
     [self scrollView].contentOffset = offset;
     return YES;
 }
@@ -335,7 +340,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
         self.leftActions.setupActionGroupViewAppearance(self.leftActionsViewContainer);
     }
     
-    for(CKSwipableAction* action in self.leftActions.actions){
+    for(CKSwipeableAction* action in self.leftActions.actions){
         if(action.setupActionViewAppearance){
             UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
             action.setupActionViewAppearance((UIButton*)view);
@@ -346,7 +351,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
         self.rightActions.setupActionGroupViewAppearance(self.rightActionsViewContainer);
     }
     
-    for(CKSwipableAction* action in self.rightActions.actions){
+    for(CKSwipeableAction* action in self.rightActions.actions){
         if(action.setupActionViewAppearance){
             UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
             action.setupActionViewAppearance((UIButton*)view);
@@ -361,7 +366,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     NSInteger catchWidthLeft = 0;
     NSInteger maximumLeftWidth = 0;
-    for(CKSwipableAction* action in self.leftActions.actions){
+    for(CKSwipeableAction* action in self.leftActions.actions){
         UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
         if(action.enabled){
             view.userInteractionEnabled = NO;
@@ -383,7 +388,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     NSInteger catchWidthRight = 0;
     NSInteger maximumRightWidth = 0;
-    for(CKSwipableAction* action in self.rightActions.actions){
+    for(CKSwipeableAction* action in self.rightActions.actions){
         UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
         if(action.enabled){
             view.userInteractionEnabled = NO;
@@ -413,7 +418,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     __block BOOL needsLayoutUpdate = NO;
     
-    for(CKSwipableAction* action in self.leftActions.actions){
+    for(CKSwipeableAction* action in self.leftActions.actions){
         UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
         if([view isKindOfClass:[UIButton class]]){
             [(UIButton*)view bindEvent:UIControlEventTouchUpInside withBlock:^{
@@ -433,7 +438,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
         }];
     }
     
-    for(CKSwipableAction* action in self.rightActions.actions){
+    for(CKSwipeableAction* action in self.rightActions.actions){
         UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
         if([view isKindOfClass:[UIButton class]]){
             [(UIButton*)view bindEvent:UIControlEventTouchUpInside withBlock:^{
@@ -468,7 +473,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
         
         self.currentLeftAction = nil;
         
-        for(CKSwipableAction* action in self.leftActions.actions){
+        for(CKSwipeableAction* action in self.leftActions.actions){
             UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
             view.frame = CGRectMake(-self.leftActionsViewContainer.width,0,self.leftActionsViewContainer.width,self.scrollView.height);
         }
@@ -477,14 +482,14 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     if(self.rightActions.style == CKSwipeableActionGroupStyleSwipeToAction){
         self.currentRightAction = nil;
         
-        for(CKSwipableAction* action in self.rightActions.actions){
+        for(CKSwipeableAction* action in self.rightActions.actions){
             UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
             view.frame = CGRectMake(self.rightActionsViewContainer.width,0,self.rightActionsViewContainer.width,self.scrollView.height);
         }
     }
 }
 
-- (void)presentsSingleAction:(CKSwipableAction*)action previousAction:(CKSwipableAction*)previousAction left:(BOOL)left direction:(CGFloat)direction{
+- (void)presentsSingleAction:(CKSwipeableAction*)action previousAction:(CKSwipeableAction*)previousAction left:(BOOL)left direction:(CGFloat)direction{
     UIView* view = action ? (left ? [self.leftActionsViewContainer viewWithKeyPath:action.name] : [self.rightActionsViewContainer viewWithKeyPath:action.name]) : nil;
     UIView* previousview = previousAction ? (left ? [self.leftActionsViewContainer viewWithKeyPath:previousAction.name] : [self.rightActionsViewContainer viewWithKeyPath:previousAction.name]) : nil;
  
@@ -532,11 +537,11 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     if(self.leftActions.style == CKSwipeableActionGroupStyleSwipeToAction){
         NSInteger accumulatedWidth = 0;
         
-        CKSwipableAction* actionToPresent = nil;
+        CKSwipeableAction* actionToPresent = nil;
         
         if(scrolledAmount < 0 && scrollView.tracking){
             self.leftActionsViewContainer.hidden = NO;
-            for(CKSwipableAction* action in self.leftActions.actions){
+            for(CKSwipeableAction* action in self.leftActions.actions){
                 if(action.enabled){
                     accumulatedWidth += self.leftActionsViewContainer.width;
                     
@@ -553,7 +558,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     }else{
         self.leftActionsViewContainer.hidden = NO;
         NSInteger accumulatedWidth = 0;
-        for(CKSwipableAction* action in self.leftActions.actions){
+        for(CKSwipeableAction* action in self.leftActions.actions){
             if(action.enabled){
                 UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
                 CGSize size = [view sizeThatFits:self.scrollView.bounds.size];
@@ -567,11 +572,11 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     if(self.rightActions.style == CKSwipeableActionGroupStyleSwipeToAction){
         NSInteger accumulatedWidth = 0;
         
-        CKSwipableAction* actionToPresent = nil;
+        CKSwipeableAction* actionToPresent = nil;
         
         if(scrolledAmount > 0 && scrollView.tracking){
             self.rightActionsViewContainer.hidden = NO;
-            for(CKSwipableAction* action in self.rightActions.actions){
+            for(CKSwipeableAction* action in self.rightActions.actions){
                 if(action.enabled){
                     accumulatedWidth += self.rightActionsViewContainer.width;
                     
@@ -588,7 +593,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     }else{
         self.rightActionsViewContainer.hidden = NO;
         NSInteger accumulatedWidth = 0;
-        for(CKSwipableAction* action in self.rightActions.actions){
+        for(CKSwipeableAction* action in self.rightActions.actions){
             if(action.enabled){
                 UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
                 CGSize size = [view sizeThatFits:self.scrollView.bounds.size];
@@ -629,12 +634,12 @@ static CGFloat bounceVsDistanceRatio = 0.1;
                 [scrollView setContentOffset:CGPointZero animated:YES];
             });
             
-            for(CKSwipableAction* action in self.leftActions.actions){
+            for(CKSwipeableAction* action in self.leftActions.actions){
                 UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
                 view.userInteractionEnabled = NO;
             }
             
-            for(CKSwipableAction* action in self.rightActions.actions){
+            for(CKSwipeableAction* action in self.rightActions.actions){
                 UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
                 view.userInteractionEnabled = NO;
             }
@@ -652,7 +657,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
             });
         }
         
-        for(CKSwipableAction* action in self.rightActions.actions){
+        for(CKSwipeableAction* action in self.rightActions.actions){
             UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
             view.userInteractionEnabled = YES;
         }
@@ -669,19 +674,19 @@ static CGFloat bounceVsDistanceRatio = 0.1;
             });
         }
         
-        for(CKSwipableAction* action in self.leftActions.actions){
+        for(CKSwipeableAction* action in self.leftActions.actions){
             UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
             view.userInteractionEnabled = YES;
         }
     }else{
         *targetContentOffset = CGPointZero;
         
-        for(CKSwipableAction* action in self.leftActions.actions){
+        for(CKSwipeableAction* action in self.leftActions.actions){
             UIView* view = [self.leftActionsViewContainer viewWithKeyPath:action.name];
             view.userInteractionEnabled = NO;
         }
         
-        for(CKSwipableAction* action in self.rightActions.actions){
+        for(CKSwipeableAction* action in self.rightActions.actions){
             UIView* view = [self.rightActionsViewContainer viewWithKeyPath:action.name];
             view.userInteractionEnabled = NO;
         }
@@ -693,7 +698,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     }
 }
 
-- (void)triggerAction:(CKSwipableAction*)action{
+- (void)triggerAction:(CKSwipeableAction*)action{
     
     
     //launch actionAnimation() then calls action()
@@ -800,7 +805,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 
 
 
-@implementation CKSwipableAction
+@implementation CKSwipeableAction
 
 - (void)dealloc{
     [_name release];
@@ -823,12 +828,12 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     return self;
 }
 
-+ (CKSwipableAction*)actionWithName:(NSString*)name action:(void(^)())action{
-    return [[[CKSwipableAction alloc]initWithName:name action:action]autorelease];
++ (CKSwipeableAction*)actionWithName:(NSString*)name action:(void(^)())action{
+    return [[[CKSwipeableAction alloc]initWithName:name action:action]autorelease];
 }
 
-+ (CKSwipableAction*)actionWithName:(NSString*)name animationStyle:(CKSwipeableActionAnimationStyle)animationStyle action:(void(^)())action{
-    return [[[CKSwipableAction alloc]initWithName:name animationStyle:animationStyle action:action]autorelease];
++ (CKSwipeableAction*)actionWithName:(NSString*)name animationStyle:(CKSwipeableActionAnimationStyle)animationStyle action:(void(^)())action{
+    return [[[CKSwipeableAction alloc]initWithName:name animationStyle:animationStyle action:action]autorelease];
 }
 
 - (void)setAnimationStyle:(CKSwipeableActionAnimationStyle)style{
@@ -907,7 +912,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 
 @end
 
-@implementation CKSwipableActionGroup
+@implementation CKSwipeableActionGroup
 
 - (void)dealloc{
     [_actions release];
@@ -922,8 +927,8 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     return self;
 }
 
-+ (CKSwipableActionGroup*)actionGroupWithStyle:(CKSwipeableActionGroupStyle)style actions:(NSArray*)actions{
-    return [[[CKSwipableActionGroup alloc]initWithStyle:style actions:actions]autorelease];
++ (CKSwipeableActionGroup*)actionGroupWithStyle:(CKSwipeableActionGroupStyle)style actions:(NSArray*)actions{
+    return [[[CKSwipeableActionGroup alloc]initWithStyle:style actions:actions]autorelease];
 }
 
 @end
