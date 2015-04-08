@@ -88,11 +88,6 @@
     }
 }
 
-
-- (void)resourceManagerReloadUI{
-    [super resourceManagerReloadUI];
-}
-
 - (NSIndexPath*)indexPath{
     if([self.containerViewController respondsToSelector:@selector(indexPathForController:)]){
         return [self.containerViewController performSelector:@selector(indexPathForController:) withObject:self];
@@ -612,6 +607,16 @@
             selectedBackgroundStyleView.borderLocation = [self view:self.tableViewCell.selectedBackgroundView borderStyleWithStyle:styleForSelectedBackgroundView];
             selectedBackgroundStyleView.separatorLocation = [self view:self.tableViewCell.selectedBackgroundView separatorStyleWithStyle:styleForSelectedBackgroundView];
         }
+    }
+}
+
+
+- (void)resourceManagerReloadUI{
+    [super resourceManagerReloadUI];
+    
+    id<CKSectionContainerDelegate> parentController = (id<CKSectionContainerDelegate>)[self containerViewControllerConformsToProtocol:@protocol(CKSectionContainerDelegate) ];
+    if(parentController){
+        [parentController invalidateControllerAtIndexPath:self.indexPath];
     }
 }
 

@@ -424,6 +424,9 @@
 */
 
 - (void)invalidateControllerAtIndexPath:(NSIndexPath*)indexPath{
+    if(indexPath == nil)
+        return;
+    
     UICollectionViewLayoutInvalidationContext* context = [[[[[self.collectionViewLayout class] invalidationContextClass] alloc]init]autorelease];
     [context invalidateItemsAtIndexPaths:@[indexPath]];
     [self.collectionViewLayout invalidateLayoutWithContext:context];
