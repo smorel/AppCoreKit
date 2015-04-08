@@ -111,8 +111,9 @@ static char UITextViewUsesAttributedStringKey;
         }
     }
     
-    if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
+    /*if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
+     */
     
     //If contentSize not initalized correctly, compute the size using the text and the font instead. (first initialization !)
     if(self.contentSize.width <= size.width){

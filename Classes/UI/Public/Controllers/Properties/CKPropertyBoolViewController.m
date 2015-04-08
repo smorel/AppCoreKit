@@ -55,6 +55,7 @@
     ValueSwitch.name = @"ValueSwitch";
     
     CKVerticalBoxLayout* vBox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    vBox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,SubtitleLabel]];
     
     CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];

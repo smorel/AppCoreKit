@@ -56,8 +56,9 @@ static char UITextFieldUsesAttributedStringKey;
         }
     }
     
-    if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
+    /*if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
+     */
     
     ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     

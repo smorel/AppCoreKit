@@ -98,7 +98,7 @@ static char UILabelUsesAttributedStringKey;
     }
     
     //Backward Compatibility : Flexible width when in vertical layout to be able to handle textAlignment property
-    if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){
+   /* if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]]){
         id value = objc_getAssociatedObject(self, &UILabelFlexibleWidthKey);
         if(!value){
             //If vertical layout in scroll view, constraint is infinite
@@ -106,7 +106,7 @@ static char UILabelUsesAttributedStringKey;
                 ret.width = size.width;
             }
         }
-    }
+    }*/
     
     if(self.flexibleWidth){
         ret.width = size.width;
