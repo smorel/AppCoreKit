@@ -335,10 +335,15 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
 					[mutableTarget setObject:sourceObject forKey:key];
 				}
 			}
-			else if([[mutableTarget objectForKey:key] isKindOfClass:[NSMutableDictionary class]]){
+			else if([[mutableTarget objectForKey:key] isKindOfClass:[NSMutableDictionary class]]
+                    && [sourceObject isKindOfClass:[NSDictionary class]]){
 				NSMutableDictionary* result = [mutableTarget applyHierarchically:sourceObject toDictionary:[mutableTarget objectForKey:key]];
                 [mutableTarget setObject:result forKey:key];
-			}else if([[mutableTarget objectForKey:key] isKindOfClass:[NSArray class]]){
+            }else{
+                int i =3;
+            }
+            
+            /*else if([[mutableTarget objectForKey:key] isKindOfClass:[NSArray class]]){
                 NSMutableArray* resultArray = [NSMutableArray array];
                 for(id object in [mutableTarget objectForKey:key]){
                     if([object isKindOfClass:[NSDictionary class]]){
@@ -349,7 +354,7 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
                     }
                 }
                 [mutableTarget setObject:resultArray forKey:key];
-            }
+            }*/
 		}
     }];
     
