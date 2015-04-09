@@ -93,6 +93,21 @@
     }
 }
 
+- (void)populateSubviews:(NSMutableArray*)subviews recursive:(BOOL)recursive{
+    for(UIView* subview in self.subviews){
+        [subviews addObject:subview];
+        if(recursive){
+            [subview populateSubviews:subviews recursive:recursive];
+        }
+    }
+}
+
+- (NSArray*)allSubviewsRecursive:(BOOL)recursive{
+    NSMutableArray* array = [NSMutableArray array];
+    [self populateSubviews:array recursive:recursive];
+    return array;
+}
+
 @end
 
 

@@ -40,5 +40,9 @@
  */
 - (void)setFrame:(CGRect)frame animated:(BOOL)animated;
 
+/**
+ */
+- (NSArray*)allSubviewsRecursive:(BOOL)recursive;
+
 @end
 
