@@ -10,6 +10,9 @@
 
 @interface NSArray (Compare)
 
-- (void)compareToArray:(NSArray*)other addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet;
+/** commonIndexSet and removedIndexSet: indexes in self
+    addedIndexSet: indexes in other
+ */
+- (void)compareToArray:(NSArray*)other commonIndexSet:(NSMutableIndexSet**)commonIndexSet addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet;
 
 @end

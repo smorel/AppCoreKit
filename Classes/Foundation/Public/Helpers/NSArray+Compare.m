@@ -10,7 +10,7 @@
 
 @implementation NSArray (Compare)
 
-- (void)compareToArray:(NSArray*)other addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet{
+- (void)compareToArray:(NSArray*)other commonIndexSet:(NSMutableIndexSet**)commonIndexSet addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet{
     if(self == nil){
         if(!(*addedIndexSet)){ *addedIndexSet = [NSMutableIndexSet indexSet]; }
         [*addedIndexSet addIndexesInRange:NSMakeRange(0, other.count)];
@@ -18,11 +18,14 @@
     }
     
     if(!(*removedIndexSet)){ *removedIndexSet = [NSMutableIndexSet indexSet]; }
+    if(!(*commonIndexSet)){ *commonIndexSet = [NSMutableIndexSet indexSet]; }
     
     NSInteger index = 0;
     for(id object in self){
         if([other indexOfObject:object] == NSNotFound){
             [*removedIndexSet addIndex:index];
+        }else{
+            [*commonIndexSet addIndex:index];
         }
         ++index;
     }
