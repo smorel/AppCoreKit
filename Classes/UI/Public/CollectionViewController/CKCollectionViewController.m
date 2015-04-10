@@ -219,10 +219,16 @@
         return;
     }
     
-    [self performBatchUpdates:^{
+    if(animated){
+        [self performBatchUpdates:^{
+            sectionUpdate();
+            [self.collectionView insertItemsAtIndexPaths:indexPaths];
+        } completion:nil];
+    }else{
         sectionUpdate();
         [self.collectionView insertItemsAtIndexPaths:indexPaths];
-    } completion:nil];
+        [self.collectionView invalidateLayout];
+    }
 }
 
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
