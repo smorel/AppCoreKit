@@ -122,10 +122,19 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
  */
 - (NSString*)reuseIdentifier;
 
-/** The IndexPath of the collectionCellController
+
+
+/** The IndexPath of the reusable view controller in section container
  */
 @property(nonatomic,readonly) NSIndexPath* indexPath;
 
+/** Returns YES if the reusable view controller is a header controller in a section
+ */
+@property(nonatomic,readonly) BOOL isHeaderViewController;
+
+/** Returns YES if the reusable view controller is a footer controller in a section
+ */
+@property(nonatomic,readonly) BOOL isFooterViewController;
 
 
 
@@ -159,6 +168,29 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
 /** This method will be called by the container view controller if the separators or corners needs to be updated after some controllers have been removed/added in sections.
  */
 - (void)setNeedsDisplay;
+
+@end
+
+
+/**
+ */
+@interface NSIndexPath(CKReusableViewController)
+
+/**
+ */
++ (NSIndexPath*)indexPathForHeaderInSection:(NSInteger)section;
+
+/**
+ */
+- (BOOL)isSectionHeaderIndexPath;
+
+/**
+ */
++ (NSIndexPath*)indexPathForFooterInSection:(NSInteger)section;
+
+/**
+ */
+- (BOOL)isSectionFooterIndexPath;
 
 @end
 

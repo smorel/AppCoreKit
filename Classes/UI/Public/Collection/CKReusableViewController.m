@@ -95,6 +95,14 @@
     return nil;
 }
 
+- (BOOL)isHeaderViewController{
+    return [self.indexPath isSectionHeaderIndexPath];
+}
+
+- (BOOL)isFooterViewController{
+    return [self.indexPath isSectionFooterIndexPath];
+}
+
 - (UIView*) contentViewCell{
     return _contentViewCell;
 }
@@ -621,3 +629,25 @@
 }
 
 @end
+
+
+@implementation NSIndexPath(CKReusableViewController)
+
++ (NSIndexPath*)indexPathForHeaderInSection:(NSInteger)section{
+    return [NSIndexPath indexPathForItem:-1 inSection:section];
+}
+
+- (BOOL)isSectionHeaderIndexPath{
+    return self.item == -1;
+}
+
++ (NSIndexPath*)indexPathForFooterInSection:(NSInteger)section{
+    return [NSIndexPath indexPathForItem:-2 inSection:section];
+}
+
+- (BOOL)isSectionFooterIndexPath{
+    return self.item == -2;
+}
+
+@end
+

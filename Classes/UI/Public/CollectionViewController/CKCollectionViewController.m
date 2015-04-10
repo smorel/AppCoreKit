@@ -509,7 +509,13 @@
         return;
     
     UICollectionViewLayoutInvalidationContext* context = [[[[[self.collectionViewLayout class] invalidationContextClass] alloc]init]autorelease];
-    [context invalidateItemsAtIndexPaths:@[indexPath]];
+    if([indexPath isSectionHeaderIndexPath]){
+        [context invalidateSupplementaryElementsOfKind:UICollectionElementKindSectionHeader atIndexPaths:@[indexPath]];
+    }else if([indexPath isSectionFooterIndexPath]){
+        [context invalidateSupplementaryElementsOfKind:UICollectionElementKindSectionFooter atIndexPaths:@[indexPath]];
+    }else{
+        [context invalidateItemsAtIndexPaths:@[indexPath]];
+    }
     [self.collectionViewLayout invalidateLayoutWithContext:context];
 }
 
