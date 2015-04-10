@@ -8,6 +8,7 @@
 
 #import "CKSectionContainer.h"
 #import "CKPassThroughView.h"
+#import "CKCollectionViewFlowLayout.h"
 
 /**
  */
@@ -27,7 +28,7 @@
 
 /**
  */
-@interface CKCollectionViewController : UICollectionViewController<CKSectionContainerDelegate>
+@interface CKCollectionViewController : UICollectionViewController<CKSectionContainerDelegate, CKCollectionViewFlowLayoutDelegate>
 
 /**
  */

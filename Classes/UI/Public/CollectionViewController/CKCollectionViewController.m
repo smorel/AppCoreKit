@@ -301,21 +301,102 @@
 #pragma mark Managing Supplementary Views
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+    
+    
     if([kind isEqualToString:UICollectionElementKindSectionHeader]){
-        int i =3;
+        CKAbstractSection* s = [self.sectionContainer sectionAtIndex:indexPath.section];
+        if(!s.headerViewController)
+            return nil;
+        
+        NSString* reuseIdentifier = [s.headerViewController reuseIdentifier];
+        [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifier];
+        
+        UICollectionReusableView* view = [self.collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+        view.flexibleSize = YES;
+        
+        return (UICollectionReusableView*)[self.sectionContainer viewForController:s.headerViewController reusingView:view];
     }else if([kind isEqualToString:UICollectionElementKindSectionFooter]){
-        int i =3;
+        CKAbstractSection* s = [self.sectionContainer sectionAtIndex:indexPath.section];
+        if(!s.footerViewController)
+            return nil;
+        
+        NSString* reuseIdentifier = [s.footerViewController reuseIdentifier];
+        [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifier];
+        
+        UICollectionReusableView* view = [self.collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+        view.flexibleSize = YES;
+        
+        return (UICollectionReusableView*)[self.sectionContainer viewForController:s.footerViewController reusingView:view];
+
     }
     
     return nil;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath{
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:indexPath.section];
     
+    if([elementKind isEqualToString:UICollectionElementKindSectionHeader]){
+        if(!s.headerViewController)
+            return ;
+        
+        
+        if(s.headerViewController.view != view || s.headerViewController.state == CKViewControllerStateDidAppear)
+            return;
+        
+        if(s.headerViewController.state != CKViewControllerStateWillAppear){
+            [s.headerViewController viewWillAppear:NO];
+        }
+        if(s.headerViewController.state != CKViewControllerStateDidAppear){
+            [s.headerViewController viewDidAppear:NO];
+        }
+    }else if([elementKind isEqualToString:UICollectionElementKindSectionFooter]){
+        if(!s.footerViewController)
+            return ;
+        
+        if(s.footerViewController.view != view || s.footerViewController.state == CKViewControllerStateDidAppear)
+            return ;
+        
+        if(s.footerViewController.state != CKViewControllerStateWillAppear){
+            [s.footerViewController viewWillAppear:NO];
+        }
+        if(s.footerViewController.state != CKViewControllerStateDidAppear){
+            [s.footerViewController viewDidAppear:NO];
+        }
+    }
 }
 
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath{
+    CKAbstractSection* s = [self.sectionContainer sectionAtIndex:indexPath.section];
+    
+    if([elementKind isEqualToString:UICollectionElementKindSectionHeader]){
+        if(!s.headerViewController)
+            return ;
+        
+        if(s.headerViewController.view != view || s.headerViewController.state == CKViewControllerStateDidDisappear)
+            return;
+        
+        if(s.headerViewController.state != CKViewControllerStateWillDisappear){
+            [s.headerViewController viewWillDisappear:NO];
+        }
+        if(s.headerViewController.state != CKViewControllerStateDidDisappear){
+            [s.headerViewController viewDidDisappear:NO];
+        }
+    }else if([elementKind isEqualToString:UICollectionElementKindSectionFooter]){
+        if(!s.footerViewController)
+            return ;
+        
+        if(s.footerViewController.view != view || s.footerViewController.state == CKViewControllerStateDidDisappear)
+            return;
+        
+        if(s.footerViewController.state != CKViewControllerStateWillDisappear){
+            [s.footerViewController viewWillDisappear:NO];
+        }
+        if(s.footerViewController.state != CKViewControllerStateDidDisappear){
+            [s.footerViewController viewDidDisappear:NO];
+        }
+    }
     
 }
 
@@ -439,6 +520,24 @@
     CKReusableViewController* controller = [self controllerAtIndexPath:indexPath];
     CGSize result = [controller preferredSizeConstraintToSize:CGSizeMake(self.collectionView.width,self.collectionView.height)];
     return result;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForSupplementaryElementOfKind:(NSString*)kind atIndexPath:(NSIndexPath *)indexPath{
+    if([kind isEqualToString:UICollectionElementKindSectionHeader]){
+        CKAbstractSection* s = [self.sectionContainer sectionAtIndex:indexPath.section];
+        if(!s.headerViewController)
+            return CGSizeZero;
+        
+        return [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.collectionView.width,self.collectionView.height)];
+    }else if([kind isEqualToString:UICollectionElementKindSectionFooter]){
+        CKAbstractSection* s = [self.sectionContainer sectionAtIndex:indexPath.section];
+        if(!s.footerViewController)
+            return CGSizeZero;
+        
+        return [s.footerViewController preferredSizeConstraintToSize:CGSizeMake(self.collectionView.width,self.collectionView.height)];
+    }
+
+    return CGSizeZero;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
