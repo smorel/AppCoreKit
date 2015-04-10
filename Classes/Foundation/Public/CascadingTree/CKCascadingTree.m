@@ -756,7 +756,9 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
                         }
                     }
                     break;
-                }
+                }else{
+					[keysToRemove addObject:key];
+				}
             }
         }
     }
