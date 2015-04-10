@@ -10,6 +10,15 @@
 
 /**
  */
+@protocol CKCollectionViewFlowLayoutDelegate <UICollectionViewDelegateFlowLayout>
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForSupplementaryElementOfKind:(NSString*)kind atIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+
+/**
+ */
 @interface CKCollectionViewFlowLayout : UICollectionViewFlowLayout
 
 @end

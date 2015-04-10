@@ -356,6 +356,14 @@ static char UIViewReusableViewControllerKey;
     NSInteger sectionIndex = 0;
     for(CKSection* section in self.sections){
         
+        if(section.headerViewController && [controllers indexOfObjectIdenticalTo:section.headerViewController] != NSNotFound){
+            [indexPaths addObject:[NSIndexPath indexPathForHeaderInSection:sectionIndex]];
+        }
+        
+        if(section.footerViewController && [controllers indexOfObjectIdenticalTo:section.footerViewController] != NSNotFound){
+            [indexPaths addObject:[NSIndexPath indexPathForFooterInSection:sectionIndex]];
+        }
+        
         NSInteger controllerIndex = 0;
         for(CKReusableViewController* controller in section.controllers){
             if([controllers indexOfObjectIdenticalTo:controller] != NSNotFound){
