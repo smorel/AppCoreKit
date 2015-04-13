@@ -234,8 +234,6 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
     //    rect = CGRectApplyAffineTransform(rect, self.transform);
     self.frame = rect;
     
-    NSLog(@"Layout set frame: [%f,%f,%f,%f] view: %@, %@",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height,[self class],[self name]);
-    
     //self.bounds = CGRectMake(0,0,rect.size.width,rect.size.height);
     //self.center = CGPointMake(rect.origin.x + (rect.size.width / 2),rect.origin.y + (rect.size.height /2));
 }

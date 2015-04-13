@@ -524,13 +524,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     if( CGRectEqualToRect(self.frame, rect))
         return;
     
-    if([self.name isEqualToString:@"Labels"]){
-        int i =3;
-    }
-    
     self.frame = rect;
-    
-    NSLog(@"Layout set frame: [%f,%f,%f,%f] view: %@, %@",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height,[self class],[self name]);
     
 #ifdef LAYOUT_DEBUG_ENABLED
     self.debugView.frame = self.frame;
