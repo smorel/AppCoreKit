@@ -19,6 +19,7 @@
 #import "CKCascadingTree.h"
 #import "UIView+CKLayout.h"
 #import "UIViewController+CKLayout.h"
+#import "CKLayoutFlexibleSpace.h"
 
 using namespace __gnu_cxx;
 
@@ -166,11 +167,16 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     return nil;
 }
 
-- (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index{
+- (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index includingFexiSpace:(BOOL)includingFexiSpace{
     NSInteger i = index;
     NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
-    while(i > 0 && box && box.hidden){
-        box = [self.layoutBoxes objectAtIndex:(--i)];
+    
+    while(i >= 0 && box && (box.hidden || (!includingFexiSpace && [box isKindOfClass:[CKLayoutFlexibleSpace class]]) )){
+        NSObject<CKLayoutBoxProtocol>* theBox = [self.layoutBoxes objectAtIndex:i];
+        if(includingFexiSpace || ![theBox isKindOfClass:[CKLayoutFlexibleSpace class]]){
+            box = theBox;
+        }
+        --i;
     }
     return box.hidden ? nil : box;
 }
@@ -518,7 +524,13 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     if( CGRectEqualToRect(self.frame, rect))
         return;
     
+    if([self.name isEqualToString:@"Labels"]){
+        int i =3;
+    }
+    
     self.frame = rect;
+    
+    NSLog(@"Layout set frame: [%f,%f,%f,%f] view: %@, %@",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height,[self class],[self name]);
     
 #ifdef LAYOUT_DEBUG_ENABLED
     self.debugView.frame = self.frame;

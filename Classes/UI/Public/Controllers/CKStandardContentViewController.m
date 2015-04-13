@@ -92,6 +92,7 @@
     subtitleLabel.marginTop = 10;
     
     CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    vbox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[titleLabel,subtitleLabel]];
     vbox.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     

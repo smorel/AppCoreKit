@@ -41,6 +41,8 @@
     PropertyNameLabel.textColor = [UIColor blackColor];
     PropertyNameLabel.numberOfLines = 1;
     PropertyNameLabel.marginRight = 10;
+    PropertyNameLabel.layer.borderColor = [UIColor redColor].CGColor;
+    PropertyNameLabel.layer.borderWidth = 2;
     
     UILabel* SubtitleLabel = [[[UILabel alloc]init]autorelease];
     SubtitleLabel.name = @"SubtitleLabel";
@@ -49,16 +51,20 @@
     SubtitleLabel.numberOfLines = 1;
     SubtitleLabel.marginRight = 10;
     SubtitleLabel.marginTop = 10;
+    SubtitleLabel.layer.borderColor = [UIColor greenColor].CGColor;
+    SubtitleLabel.layer.borderWidth = 2;
     
     
     UISwitch* ValueSwitch = [[[UISwitch alloc]init]autorelease];
     ValueSwitch.name = @"ValueSwitch";
     
     CKVerticalBoxLayout* vBox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    vBox.name = @"Labels";
     vBox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,SubtitleLabel]];
     
     CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
+    hBox.name = @"BOOL Property VC Layout";
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vBox,[[[CKLayoutFlexibleSpace alloc]init]autorelease],ValueSwitch]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];

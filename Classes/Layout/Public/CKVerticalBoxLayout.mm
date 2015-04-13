@@ -27,7 +27,7 @@ namespace __gnu_cxx{
 @interface CKLayoutBox()
 
 + (CGSize)preferredSizeConstraintToSize:(CGSize)size forBox:(NSObject<CKLayoutBoxProtocol>*)box;
-- (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index;
+- (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index includingFexiSpace:(BOOL)includingFexiSpace;
 
 #ifdef LAYOUT_DEBUG_ENABLED
 @property(nonatomic,assign,readwrite) UIView* debugView;
@@ -46,7 +46,226 @@ namespace __gnu_cxx{
 - (id)init{
     self = [super init];
     self.flexibleSize = NO;
+    self.verticalAlignment = CKLayoutVerticalAlignmentCenter;
+    self.horizontalAlignment = CKLayoutHorizontalAlignmentCenter;
     return self;
+}
+
+
+- (void)computeFreeSpaceWithSize:(CGSize)size
+            computedSizePerBoxes:(hash_map<id, CGSize> &)computedSizePerBoxes
+                       freeSpace:(CGFloat&)freeSpace
+           numberOfFlexibleBoxes:(NSInteger&)numberOfFlexibleBoxes
+          numberOfFlexibleSpaces:(NSInteger&)numberOfFlexibleSpaces{
+    freeSpace = size.height;
+    
+    hash_set<id> appliedMargins;
+    
+    for(int i =0;i < [self.layoutBoxes count]; ++i){
+        NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
+        if(!box.hidden){
+            if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){ ++numberOfFlexibleSpaces; }
+            else{
+                //Computing free space taking care of size constraints on boxes
+                if(box.maximumSize.height == box.minimumSize.height){ //fixed size
+                    freeSpace -= box.maximumSize.height;
+                    
+                    CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
+                    CGSize size = [box preferredSizeConstraintToSize:CGSizeMake(width,box.minimumSize.height)];
+                    computedSizePerBoxes[box] = size;
+                }else{
+                    numberOfFlexibleBoxes++;
+                }
+                
+                //Computing free space taking care of margins on boxes
+                CGFloat topMargin = 0;
+                if(i > 0){
+                    NSObject<CKLayoutBoxProtocol>* boxBottom = [self previousVisibleBoxFromIndex:i-1 includingFexiSpace:NO];
+                    if(boxBottom && ![boxBottom isKindOfClass:[CKLayoutFlexibleSpace class]]){
+                        topMargin = MAX(box.margins.top,boxBottom.margins.bottom);
+                    }else if(appliedMargins.find(boxBottom) == appliedMargins.end()){
+                        topMargin = box.margins.top;
+                    }
+                }else{
+                    topMargin = box.margins.top;
+                }
+                appliedMargins.insert(box);
+                
+                freeSpace -= topMargin;
+            }
+        }
+    }
+    
+    NSObject<CKLayoutBoxProtocol>* lastBox = [self previousVisibleBoxFromIndex:[self.layoutBoxes count] - 1 includingFexiSpace:NO];
+    if(lastBox){
+        freeSpace -= lastBox.margins.bottom;
+    }
+}
+
+
+- (void)computeFreeSpacePerBoxWithSize:(CGSize)size
+                  computedSizePerBoxes:(hash_map<id, CGSize> &)computedSizePerBoxes
+                flexibleHeightPerBoxes:(hash_map<id, CGFloat> &)flexibleHeightPerBoxes
+                             freeSpace:(CGFloat&)freeSpace
+                 numberOfFlexibleBoxes:(NSInteger&)numberOfFlexibleBoxes
+                numberOfFlexibleSpaces:(NSInteger&)numberOfFlexibleSpaces{
+    
+    for(int i =0;i < [self.layoutBoxes count]; ++i){
+        NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
+        if(!box.hidden){
+            if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){ }
+            else{
+                if(computedSizePerBoxes.find(box) == computedSizePerBoxes.end()){
+                    
+                    CGSize subsize = CGSizeMake(0,0);
+                    if(box.maximumSize.height == box.minimumSize.height){
+                        CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
+                        CGSize constrainedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,box.minimumSize.height)];
+                        computedSizePerBoxes[box] = CGSizeMake(constrainedSize.width,box.minimumSize.height);
+                    }else{
+                        CGFloat preferedHeight = MAX(0,(freeSpace / numberOfFlexibleBoxes)) ;
+                        if(preferedHeight == 0){
+                            numberOfFlexibleBoxes--;
+                            flexibleHeightPerBoxes[box] = 0;
+                            
+                        }else if(box.minimumHeight > 0 && preferedHeight < box.minimumHeight){
+                            preferedHeight = box.minimumHeight;
+                            freeSpace -= preferedHeight;
+                            numberOfFlexibleBoxes--;
+                            flexibleHeightPerBoxes[box] = preferedHeight;
+                        }
+                        else if (box.maximumHeight > 0 && preferedHeight > box.maximumHeight){
+                            preferedHeight = box.maximumHeight;
+                            freeSpace -= preferedHeight;
+                            numberOfFlexibleBoxes--;
+                            flexibleHeightPerBoxes[box] = preferedHeight;
+                        }else{
+                            CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
+                            CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,size.height)];
+                            if(preferedSize.height < preferedHeight){
+                                preferedHeight = preferedSize.height;
+                                freeSpace -= preferedHeight;
+                                numberOfFlexibleBoxes--;
+                                flexibleHeightPerBoxes[box] = preferedHeight;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+- (void)computeSizeForBoxesWithSize:(CGSize)size
+               computedSizePerBoxes:(hash_map<id, CGSize> &)computedSizePerBoxes
+             flexibleHeightPerBoxes:(hash_map<id, CGFloat> &)flexibleHeightPerBoxes
+                          freeSpace:(CGFloat&)freeSpace
+              numberOfFlexibleBoxes:(NSInteger&)numberOfFlexibleBoxes
+             numberOfFlexibleSpaces:(NSInteger&)numberOfFlexibleSpaces{
+    for(int i =0;i < [self.layoutBoxes count]; ++i){
+        NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
+        if(!box.hidden){
+            if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){ }
+            else{
+                if(computedSizePerBoxes.find(box) == computedSizePerBoxes.end()){
+                    CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
+                    
+                    CGFloat preferedHeight = 0;
+                    if(flexibleHeightPerBoxes.find(box) == flexibleHeightPerBoxes.end()){
+                        
+                        preferedHeight = MAX(0,(freeSpace / numberOfFlexibleBoxes));
+                        --numberOfFlexibleBoxes;
+                    }else{
+                        preferedHeight = flexibleHeightPerBoxes[box];
+                    }
+                    
+                    CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,preferedHeight)];
+                    computedSizePerBoxes[box] = preferedSize;
+                    
+                    if(flexibleHeightPerBoxes.find(box) == flexibleHeightPerBoxes.end()){
+                        flexibleHeightPerBoxes[box] = preferedSize.height;
+                        freeSpace -= preferedSize.height;
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (void)computeSizeForFlexibleSpacesWithSize:(CGSize)size
+                        computedSizePerBoxes:(hash_map<id, CGSize> &)computedSizePerBoxes
+                      flexibleHeightPerBoxes:(hash_map<id, CGFloat> &)flexibleHeightPerBoxes
+                                   freeSpace:(CGFloat&)freeSpace
+                       numberOfFlexibleBoxes:(NSInteger&)numberOfFlexibleBoxes
+                      numberOfFlexibleSpaces:(NSInteger&)numberOfFlexibleSpaces{
+    
+    for(int i =0;i < [self.layoutBoxes count]; ++i){
+        NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
+        if(!box.hidden){
+            if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){
+                CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
+                
+                CGFloat preferedHeight = 0;
+                preferedHeight = MAX(0,(freeSpace / numberOfFlexibleSpaces) );
+                --numberOfFlexibleSpaces;
+                
+                CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,preferedHeight)];
+                computedSizePerBoxes[box] = preferedSize;
+                
+                if(flexibleHeightPerBoxes.find(box) == flexibleHeightPerBoxes.end()){
+                    flexibleHeightPerBoxes[box] = preferedSize.height;
+                    freeSpace -= preferedSize.height;
+                }
+            }
+        }
+    }
+}
+
+
+- (CGSize)computeMaximumSizeWithSize:(CGSize)size
+                computedSizePerBoxes:(hash_map<id, CGSize> &)computedSizePerBoxes
+              flexibleHeightPerBoxes:(hash_map<id, CGFloat> &)flexibleHeightPerBoxes
+                           freeSpace:(CGFloat&)freeSpace
+               numberOfFlexibleBoxes:(NSInteger&)numberOfFlexibleBoxes
+              numberOfFlexibleSpaces:(NSInteger&)numberOfFlexibleSpaces{
+    
+    CGFloat width = 0;
+    CGFloat height = 0;
+    
+    hash_set<id> appliedMargins;
+    
+    for(int i =0;i < [self.layoutBoxes count]; ++i){
+        NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
+        if(!box.hidden){
+            CGSize size = computedSizePerBoxes[box];
+            if(size.width > width) { width = size.width; }
+            
+            height += size.height;
+            
+            if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
+                CGFloat topMargin = 0;
+                if(i > 0){
+                    NSObject<CKLayoutBoxProtocol>* boxBottom = [self previousVisibleBoxFromIndex:i-1 includingFexiSpace:NO];
+                    if(boxBottom && ![boxBottom isKindOfClass:[CKLayoutFlexibleSpace class]]){
+                        topMargin = MAX(box.margins.top,boxBottom.margins.bottom);
+                    }else if(appliedMargins.find(boxBottom) == appliedMargins.end()){
+                        topMargin = box.margins.top;
+                    }
+                }else{
+                    topMargin = box.margins.top;
+                }
+                height += topMargin;
+            }
+        }
+    }
+    
+    NSObject<CKLayoutBoxProtocol>* lastBox = [self previousVisibleBoxFromIndex:[self.layoutBoxes count] - 1 includingFexiSpace:NO];
+    if(lastBox){
+        height += lastBox.margins.bottom;
+    }
+    
+    return CGSizeMake(width,height);
 }
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)constraintSize{
@@ -62,159 +281,51 @@ namespace __gnu_cxx{
     
     BOOL includesFlexispaces = (size.height < MAXFLOAT);
     
-    CGFloat maxHeight = 0;
-    CGFloat maxWidth = 0;
+    hash_map<id, CGSize> computedSizePerBoxes;
+    
+    CGFloat freeSpace = 0;
+    NSInteger numberOfFlexibleBoxes = 0;
+    NSInteger numberOfFlexibleSpaces = 0;
+    hash_map<id, CGFloat> flexibleHeightPerBoxes;
     
     if([self.layoutBoxes count] > 0){
         
-        //Compute flexible height
-        CGFloat flexibleHeight = size.height;
-        NSInteger flexibleCount = 0;
-        NSInteger numberOfFlexiSpaces = NO;
-        hash_set<id> appliedMargins;
-        for(int i =0;i < [self.layoutBoxes count]; ++i){
-            NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
-            if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
-                //else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
-                else{
-                    if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){
-                        numberOfFlexiSpaces++;
-                        flexibleCount++;
-                        appliedMargins.insert(box);
-                    }
-                    else {
-                        if(box.maximumSize.height == box.minimumSize.height){ //fixed size
-                            flexibleHeight -= box.maximumSize.height;
-                        }else{
-                            flexibleCount++;
-                        }
-                        
-                        CGFloat topMargin = 0;
-                        if(i > 0){
-                            NSObject<CKLayoutBoxProtocol>* boxBottom = [self previousVisibleBoxFromIndex:i-1];
-                            if(boxBottom && ![boxBottom isKindOfClass:[CKLayoutFlexibleSpace class]]){
-                                topMargin = MAX(box.margins.top,boxBottom.margins.bottom);
-                            }else if(appliedMargins.find(boxBottom) == appliedMargins.end()){
-                                topMargin = box.margins.top;
-                            }
-                        }else{
-                            topMargin = box.margins.top;
-                        }
-                        appliedMargins.insert(box);
-                        
-                        flexibleHeight -= topMargin;
-                    }
-                }
-            }
-        }
+        //1. computes free space + fixes sized boxes
+        [self computeFreeSpaceWithSize:size computedSizePerBoxes:computedSizePerBoxes freeSpace:freeSpace numberOfFlexibleBoxes:numberOfFlexibleBoxes numberOfFlexibleSpaces:numberOfFlexibleSpaces];
         
-        NSObject<CKLayoutBoxProtocol>* lastBox = [self previousVisibleBoxFromIndex:[self.layoutBoxes count] - 1];
-        if(lastBox){
-            flexibleHeight -= lastBox.margins.bottom;
-        }
+        //2. compute free space per box taking care of min/max size
         
-        //Adjust Flexible boxes using minimum/maximum sizes
-        hash_map<id, CGSize> precomputedSize;
-        CGFloat flexibleSizeToRemove = 0;
-        NSInteger flexibleCountToRemove = 0;
+        [self computeFreeSpacePerBoxWithSize:size computedSizePerBoxes:computedSizePerBoxes flexibleHeightPerBoxes:flexibleHeightPerBoxes freeSpace:freeSpace numberOfFlexibleBoxes:numberOfFlexibleBoxes numberOfFlexibleSpaces:numberOfFlexibleSpaces];
         
-        for(int i =0;i < [self.layoutBoxes count]; ++i){
-            NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
-            if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){
-                }
-                //else if([box isKindOfClass:[CKLayoutBox class]] && [[box layoutBoxes]count] <= 0){}
-                else{
-                    CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
-                    
-                    CGSize subsize = CGSizeMake(0,0);
-                    if(box.maximumSize.height == box.minimumSize.height){ //fixed size
-                        CGSize constrainedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,box.minimumSize.height)];
-                        precomputedSize[box] = CGSizeMake(constrainedSize.width,box.minimumSize.height);
-                    }else{
-                        CGFloat preferedHeight = flexibleHeight / (flexibleCount - numberOfFlexiSpaces);
-                        subsize = [box preferredSizeConstraintToSize:CGSizeMake(width,size.height/*(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)*/ /*MAXFLOAT*/)];
-                        if( numberOfFlexiSpaces > 0
-                           || (subsize.height < preferedHeight && box.maximumSize.height == MAXFLOAT)
-                           || (subsize.height <= preferedHeight && box.maximumSize.height == subsize.height)){
-                            precomputedSize[box] = subsize;
-                            flexibleSizeToRemove += subsize.height;
-                            flexibleCountToRemove++;
-                            
-                            flexibleHeight -= subsize.height;
-                            flexibleCount -= 1;
-                        }
-                    }
-                }
-            }
-        }
+        //3. compute size for boxes using their own free space
+        [self computeSizeForBoxesWithSize:size computedSizePerBoxes:computedSizePerBoxes flexibleHeightPerBoxes:flexibleHeightPerBoxes freeSpace:freeSpace numberOfFlexibleBoxes:numberOfFlexibleBoxes numberOfFlexibleSpaces:numberOfFlexibleSpaces];
         
-        //Compute layout
-        CGFloat y = 0;
-        appliedMargins.clear();
-        for(int i =0;i < [self.layoutBoxes count]; ++i){
-            NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
-            if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
-               // else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
-                else{
-                    if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
-                        CGFloat topMargin = 0;
-                        if(i > 0){
-                            NSObject<CKLayoutBoxProtocol>* boxBottom = [self previousVisibleBoxFromIndex:i-1];
-                            if(boxBottom && ![boxBottom isKindOfClass:[CKLayoutFlexibleSpace class]]){
-                                topMargin = MAX(box.margins.top,boxBottom.margins.bottom);
-                            }else if(appliedMargins.find(boxBottom) == appliedMargins.end()){
-                                topMargin = box.margins.top;
-                            }
-                        }else{
-                            topMargin = box.margins.top;
-                        }
-                        y += topMargin;
-                    }
-                    appliedMargins.insert(box);
-                    
-                    CGSize subsize = CGSizeMake(0,0);
-                    hash_map<id, CGSize>::iterator it = precomputedSize.find(box);
-                    if(it != precomputedSize.end()){
-                        subsize = it->second;
-                        box.lastComputedSize = subsize;
-                        box.lastPreferedSize = subsize;
-                    }else{
-                        CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
-                        
-                        CGFloat preferedHeight = flexibleHeight / flexibleCount;
-                        subsize = [box preferredSizeConstraintToSize:CGSizeMake(width,(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)];
-                        flexibleHeight -= subsize.height;
-                        flexibleCount--;
-                    }
-                    
-                    CGFloat totalWidth = box.margins.left + box.margins.right + subsize.width;
-                    if(maxWidth < totalWidth) maxWidth = totalWidth;
-                    
-                    y += subsize.height;
-                }
-            }
-        }
-        maxHeight = y + lastBox.margins.bottom;
+        //4. compute flexi space sizes
+        [self computeSizeForFlexibleSpacesWithSize:size computedSizePerBoxes:computedSizePerBoxes flexibleHeightPerBoxes:flexibleHeightPerBoxes freeSpace:freeSpace numberOfFlexibleBoxes:numberOfFlexibleBoxes numberOfFlexibleSpaces:numberOfFlexibleSpaces];
+        
     }
     
     if(!self.flexibleSize){
-        CGSize ret = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+        CGSize maxSize = [self computeMaximumSizeWithSize:size computedSizePerBoxes:computedSizePerBoxes flexibleHeightPerBoxes:flexibleHeightPerBoxes freeSpace:freeSpace numberOfFlexibleBoxes:numberOfFlexibleBoxes numberOfFlexibleSpaces:numberOfFlexibleSpaces];
+        
+        CGSize ret = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(MIN(maxSize.width,size.width),MIN(maxSize.height,size.height)) forBox:self];
         self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
-                                                                                     ret.height + self.padding.bottom + self.padding.top)
-                                                                   forBox:self];
-
+                                                                                      ret.height + self.padding.bottom + self.padding.top)
+                                                                    forBox:self];
+        
     }else{
         self.lastPreferedSize = constraintSize;
     }
+    
     return self.lastPreferedSize;
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
-    CGSize size = [self preferredSizeConstraintToSize:theframe.size];
-    [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
+    CGSize size = theframe.size;
+    [self setBoxFrameTakingCareOfTransform:theframe];
+    
+    // CGSize size = [self preferredSizeConstraintToSize:theframe.size];
+    // [self setBoxFrameTakingCareOfTransform:CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height)];
     
     
 #ifdef LAYOUT_DEBUG_ENABLED
@@ -231,36 +342,32 @@ namespace __gnu_cxx{
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
-                //if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
-                //else{
-                    if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
-                        CGFloat topMargin = 0;
-                        if(i > 0){
-                            NSObject<CKLayoutBoxProtocol>* boxBottom = [self previousVisibleBoxFromIndex:i-1];
-                            if(boxBottom && ![boxBottom isKindOfClass:[CKLayoutFlexibleSpace class]]){
-                                topMargin = MAX(box.margins.top,boxBottom.margins.bottom);
-                            }else if(appliedMargins.find(boxBottom) == appliedMargins.end()){
-                                topMargin = box.margins.top;
-                            }
-                        }else{
+                if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
+                    CGFloat topMargin = 0;
+                    if(i > 0){
+                        NSObject<CKLayoutBoxProtocol>* boxBottom = [self previousVisibleBoxFromIndex:i-1 includingFexiSpace:NO];
+                        if(boxBottom && ![boxBottom isKindOfClass:[CKLayoutFlexibleSpace class]]){
+                            topMargin = MAX(box.margins.top,boxBottom.margins.bottom);
+                        }else if(appliedMargins.find(boxBottom) == appliedMargins.end()){
                             topMargin = box.margins.top;
                         }
-                        y += topMargin;
+                    }else{
+                        topMargin = box.margins.top;
                     }
-                    appliedMargins.insert(box);
-                    
-                    CGSize subsize = box.lastPreferedSize;
-                    
-                    CGRect boxframe = CGRectMake(box.margins.left,y,MAX(0,subsize.width),MAX(0,subsize.height));
-                    framePerBox[box] = boxframe;
-                   // [box setBoxFrameTakingCareOfTransform:boxframe];
-                    
-                    y += subsize.height;
-               // }
+                    y += topMargin;
+                }
+                appliedMargins.insert(box);
+                
+                CGSize subsize = box.lastPreferedSize;
+                
+                CGRect boxframe = CGRectMake(box.margins.left,y,MAX(0,subsize.width),MAX(0,subsize.height));
+                framePerBox[box] = boxframe;
+                
+                y += subsize.height;
             }
         }
         
-        NSObject<CKLayoutBoxProtocol>* lastBox = [self previousVisibleBoxFromIndex:[self.layoutBoxes count] - 1];
+        NSObject<CKLayoutBoxProtocol>* lastBox = [self previousVisibleBoxFromIndex:[self.layoutBoxes count] - 1 includingFexiSpace:NO];
         CGFloat totalHeight = y + (lastBox ? lastBox.margins.bottom : 0) - (self.frame.origin.y);
         
         //Handle Vertical alignment
@@ -273,8 +380,6 @@ namespace __gnu_cxx{
                 hash_map<id, CGRect>::iterator it = framePerBox.find(box);
                 CGRect boxFrame = it->second;
                 
-                //if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
-               // else{
                     CGFloat offsetX = self.frame.origin.x + self.padding.left;
                     CGFloat offsetY = 0;
                     switch(self.horizontalAlignment){
@@ -294,7 +399,6 @@ namespace __gnu_cxx{
                     CGRect newboxFrame = CGRectIntegral(CGRectMake(boxFrame.origin.x + offsetX,boxFrame.origin.y + offsetY,boxFrame.size.width,boxFrame.size.height));
                     [box setBoxFrameTakingCareOfTransform:newboxFrame];
                     [box performLayoutWithFrame:newboxFrame];
-                //}
             }
         }
     }
