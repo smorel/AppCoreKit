@@ -35,7 +35,7 @@
     
     self.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     
-    UILabel* label = [[UILabel alloc]init];
+    UILabel* label = [[[UILabel alloc]init]autorelease];
     label.name = @"TextLabel";
     label.font = (self.type == CKSectionViewControllerTypeHeader) ? [UIFont boldSystemFontOfSize:17] : [UIFont systemFontOfSize:14];
     label.numberOfLines = (self.type == CKSectionViewControllerTypeHeader) ? 1 : 0;

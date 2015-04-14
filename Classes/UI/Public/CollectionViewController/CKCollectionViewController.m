@@ -41,7 +41,7 @@
     self.multiselectionEnabled = NO;
     self.stickySelectionEnabled = NO;
     self.scrolling = NO;
-    self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
+    self.sectionContainer = [[[CKSectionContainer alloc]initWithDelegate:self]autorelease];
 }
 
 - (void)dealloc{

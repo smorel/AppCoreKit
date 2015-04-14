@@ -43,7 +43,7 @@
     
     CKPropertyVector* vector = nil;
     if(vectorClass){
-        vector = [[vectorClass alloc]initWithProperty:property];
+        vector = [[[vectorClass alloc]initWithProperty:property]autorelease];
     }
     
     return [self initWithPropertyVector:vector readOnly:readOnly];

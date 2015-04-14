@@ -46,12 +46,10 @@ static char UIViewReusableViewControllerKey;
 @implementation CKSectionContainer
 
 - (void)dealloc{
-    [self removeAllSectionsAnimated:NO];
-    [_sections release];
     _delegate = nil;
+    [_sections release];
     [super dealloc];
 }
-
 
 - (id)initWithDelegate:(UIViewController<CKSectionContainerDelegate>*)delegate{
     self = [super init];
@@ -246,7 +244,7 @@ static char UIViewReusableViewControllerKey;
     }
     
     if(!view){
-        contentView = view = [[UIView alloc]init];
+        contentView = view = [[[UIView alloc]init]autorelease];
         [controller prepareForReuseUsingContentView:view contentViewCell:view];
         [controller viewDidLoad];
         

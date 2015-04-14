@@ -26,7 +26,7 @@
 
 - (void)postInit{
     [super postInit];
-    self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
+    self.sectionContainer = [[[CKSectionContainer alloc]initWithDelegate:self]autorelease];
 }
 
 - (void)viewDidLoad{

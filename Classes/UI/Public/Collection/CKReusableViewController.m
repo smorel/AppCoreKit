@@ -165,7 +165,7 @@
     }else{
          UIView* cell = nil;
         if(!cell){
-            cell = [[UIView alloc]init];
+            cell = [[UIView alloc]init];//release called later
             cell.flexibleSize = YES;
         }
         
@@ -529,7 +529,7 @@
 - (void)setupAccessoryView{
     if(self.tableViewCell){
         if(self.accessoryType == CKAccessoryActivityIndicator){
-            UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            UIActivityIndicatorView* activityIndicator = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]autorelease];
             self.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
             self.tableViewCell.accessoryView = activityIndicator;
             [activityIndicator startAnimating];

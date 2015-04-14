@@ -48,17 +48,17 @@
     if([self isLayoutDefinedInStylesheet])
         return;
     
-    UIActivityIndicatorView* ActivityIndicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    UIActivityIndicatorView* ActivityIndicatorView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]autorelease];
     ActivityIndicatorView.name = @"ActivityIndicatorView";
     
-    UILabel* TitleLabel = [[UILabel alloc]init];
+    UILabel* TitleLabel = [[[UILabel alloc]init]autorelease];
     TitleLabel.name = @"TitleLabel";
     TitleLabel.font = [UIFont boldSystemFontOfSize:17];
     TitleLabel.textColor = [UIColor blackColor];
     TitleLabel.numberOfLines = 1;
     TitleLabel.textAlignment = UITextAlignmentCenter;
     
-    UILabel* SubtitleLabel = [[UILabel alloc]init];
+    UILabel* SubtitleLabel = [[[UILabel alloc]init]autorelease];
     SubtitleLabel.name = @"SubtitleLabel";
     SubtitleLabel.font = [UIFont systemFontOfSize:14];
     SubtitleLabel.textColor = [UIColor blackColor];

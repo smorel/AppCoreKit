@@ -115,7 +115,7 @@ static NSDateFormatter* sharedFormatter = nil;
 - (void)becomeFirstResponder{
     [super becomeFirstResponder];
     
-    CKDatePickerViewController* picker = [[CKDatePickerViewController alloc]initWithProperty:self.property mode:self.editionControllerPickerMode];
+    CKDatePickerViewController* picker = [[[CKDatePickerViewController alloc]initWithProperty:self.property mode:self.editionControllerPickerMode]autorelease];
     
     NSDateFormatter* formatter = self.dateFormatter ? self.dateFormatter : sharedFormatter;
     picker.timeZone = formatter.timeZone;

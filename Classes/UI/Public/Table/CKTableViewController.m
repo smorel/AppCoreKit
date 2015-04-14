@@ -39,7 +39,6 @@
 
 - (instancetype)initWithStyle:(UITableViewStyle)style{
     self = [super initWithStyle:style];
-    [self postInit];
     return self;
 }
 
@@ -49,7 +48,7 @@
     self.currentPage = 0;
     self.numberOfPages = 0;
     self.scrolling = NO;
-    self.sectionContainer = [[CKSectionContainer alloc]initWithDelegate:self];
+    self.sectionContainer = [[[CKSectionContainer alloc]initWithDelegate:self]autorelease];
     self.adjustInsetsOnKeyboardNotification = YES;
     self.endEditingViewWhenScrolling = YES;
 }
@@ -398,7 +397,7 @@
     
     CKTableViewCell* cell = (CKTableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if(!cell){
-        cell = [[CKTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[[CKTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]autorelease];
         cell.showsReorderControl = YES;
     }
     
@@ -480,9 +479,9 @@
     
     if(!view){
 #ifdef USING_UITableViewHeaderFooterView
-        view = [[UITableViewHeaderFooterView alloc]initWithReuseIdentifier:reuseIdentifier];
+        view = [[[UITableViewHeaderFooterView alloc]initWithReuseIdentifier:reuseIdentifier]autorelease];
 #else
-        view = [[UIView alloc]init];
+        view = [[[UIView alloc]init]autorelease];
 #endif
         view.flexibleSize = YES;
     }
@@ -568,9 +567,9 @@
     
     if(!view){
 #ifdef USING_UITableViewHeaderFooterView
-        view = [[UITableViewHeaderFooterView alloc]initWithReuseIdentifier:reuseIdentifier];
+        view = [[[UITableViewHeaderFooterView alloc]initWithReuseIdentifier:reuseIdentifier]autorelease];
 #else
-        view = [[UIView alloc]init];
+        view = [[[UIView alloc]init]autorelease];
 #endif
         view.flexibleSize = YES;
     }
