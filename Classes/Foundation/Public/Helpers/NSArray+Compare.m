@@ -22,7 +22,7 @@
     
     NSInteger index = 0;
     for(id object in self){
-        if([other indexOfObject:object] == NSNotFound){
+        if([other indexOfObjectIdenticalTo:object] == NSNotFound){
             [*removedIndexSet addIndex:index];
         }else{
             [*commonIndexSet addIndex:index];
@@ -34,7 +34,7 @@
     
     index = 0;
     for(id object in other){
-        if([self indexOfObject:object] == NSNotFound){
+        if([self indexOfObjectIdenticalTo:object] == NSNotFound){
             [*addedIndexSet addIndex:index];
         }
         ++index;
