@@ -33,7 +33,6 @@
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout{
     self = [super initWithCollectionViewLayout:layout];
-    [self postInit];
     return self;
 }
 
