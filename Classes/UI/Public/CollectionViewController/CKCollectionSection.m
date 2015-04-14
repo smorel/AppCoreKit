@@ -8,6 +8,7 @@
 
 #import "CKCollectionSection.h"
 #import "CKSectionContainer.h"
+#import "CKWeakRef.h"
 
 @interface CKAbstractSection()
 - (NSMutableArray*)mutableControllers;
@@ -222,32 +223,37 @@
         [self removeAllCollectionControllersAnimated:YES];
     }
     
-    __unsafe_unretained CKCollectionSection* bself = self;
+    CKWeakRef* weak = [CKWeakRef weakRefWithObject:self];
     
     [NSObject beginBindingsContext:self.collectionBindingContext];
     [self.collection bindEvent:CKCollectionBindingEventAll executeBlockImmediatly:updateCollectionControllers withBlock:^(CKCollectionBindingEvents event, NSArray *objects, NSIndexSet *indexes) {
-        NSArray* indexPaths = [bself indexPathsForIndexes:[bself indexesForCollectionIndexes:indexes]];
-        
         switch(event){
             case CKCollectionBindingEventInsertion:{
-                NSMutableArray* controllers = [NSMutableArray array];
-                for(int i =0; i< objects.count; ++i){
-                    id object = objects[i];
-                    NSIndexPath* indexPath = indexPaths[i];
-                    CKReusableViewController* controller = [bself.factory controllerForObject:object indexPath:indexPath containerController:bself.containerViewController];
-                    NSAssert(controller,@"Unable to create a controller from the specified factory for object %@",object);
-                    [controllers addObject:controller];
-                }
-                [bself insertCollectionControllers:controllers atIndexes:indexes animated:YES];
+                [weak.object handleInsertionOfObjects:objects atIndexes:indexes];
                 break;
             }
             case CKCollectionBindingEventRemoval:{
-                [bself removeCollectionControllersAtIndexes:indexes animated:YES];
+                [weak.object removeCollectionControllersAtIndexes:indexes animated:YES];
                 break;
             }
         }
     }];
+    
+    
     [NSObject endBindingsContext];
+}
+
+- (void)handleInsertionOfObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes{
+    NSArray* indexPaths = [self indexPathsForIndexes:[self indexesForCollectionIndexes:indexes]];
+    NSMutableArray* controllers = [NSMutableArray array];
+    for(int i =0; i< objects.count; ++i){
+        id object = objects[i];
+        NSIndexPath* indexPath = indexPaths[i];
+        CKReusableViewController* controller = [self.factory controllerForObject:object indexPath:indexPath containerController:self.containerViewController];
+         NSAssert(controller,@"Unable to create a controller from the specified factory for object %@",object);
+        [controllers addObject:controller];
+    }
+    [self insertCollectionControllers:controllers atIndexes:indexes animated:YES];
 }
 
 - (void)clearCollectionBindings{
