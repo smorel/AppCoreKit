@@ -15,7 +15,7 @@
     if (self = [self init]) {
         self.completionBlock = block;
     }
-    return block;
+    return self;
 }
 - (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters{
     return [self initWithURL:url parameters:parameters completion:nil];
