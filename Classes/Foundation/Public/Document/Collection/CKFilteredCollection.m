@@ -8,6 +8,7 @@
 
 #import "CKFilteredCollection.h"
 #import "CKDebug.h"
+#import "NSArray+Compare.h"
 
 typedef NS_ENUM(NSInteger, CKFilteredCollectionUpdateType){
     CKFilteredCollectionUpdateTypeReload,
@@ -61,70 +62,21 @@ typedef NS_ENUM(NSInteger, CKFilteredCollectionUpdateType){
     return self;
 }
 
-- (void)compareArray:(NSArray*)source withArray:(NSArray*)target
-          updateType:(CKFilteredCollectionUpdateType)updateType
-    indexSetToRemove:(NSMutableIndexSet*)indexSetToRemove
-     objectsToInsert:(NSMutableArray*)objectsToInsert
-    indexSetToInsert:(NSMutableIndexSet*)indexSetToInsert{
-    
-    if(updateType == CKFilteredCollectionUpdateTypeReload){
-        [indexSetToRemove addIndexesInRange:NSMakeRange(0,[source count])];
-        [objectsToInsert addObjectsFromArray:target];
-        [indexSetToInsert addIndexesInRange:NSMakeRange(0,[target count])];
-    }else if(updateType == CKFilteredCollectionUpdateTypeRemoval){
-        //Finds indexs to remove :
-        int j=0;
-        int i=0;
-        for(;i<[source count];++i){
-            id src_object = [source objectAtIndex:i];
-            id target_object = (j < target.count) ? [target objectAtIndex:j] : nil;
-            if([src_object isEqual:target_object]){ ++j; }
-            else{
-                [indexSetToRemove addIndex:i];
-            }
-        }
-        
-        //CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
-    }else if(updateType == CKFilteredCollectionUpdateTypeInsertion){
-        //Finds indexs to insert :
-        int j=0;
-        int i=0;
-        for(;j<[target count];++j){
-            id target_object = [target objectAtIndex:j];
-            if(j >= [source count]){
-                [objectsToInsert addObject:target_object];
-                [indexSetToInsert addIndex:j];
-            }else{
-                id src_object = [source objectAtIndex:i];
-                if([src_object isEqual:target_object]){ ++i; }
-                else{
-                    [objectsToInsert addObject:target_object];
-                    [indexSetToInsert addIndex:j];
-                }
-            }
-        }
-        
-        //CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
-    }
-}
-
 - (void)updateFilteredArray:(CKFilteredCollectionUpdateType)updateType{
     NSArray* filteredObjects = [[self.collection allObjects]filteredArrayUsingPredicate:self.predicate];
     if([filteredObjects isEqualToArray:[self allObjects]])
         return;
-    
-    NSArray* selfObjects = [self allObjects];
 
-    NSMutableIndexSet* indexSetToRemove = [NSMutableIndexSet indexSet];
-    NSMutableIndexSet* indexSetToInsert = [NSMutableIndexSet indexSet];
-    NSMutableArray* objectsToInsert = [NSMutableArray array];
-    [self compareArray:selfObjects withArray:filteredObjects updateType:updateType indexSetToRemove:indexSetToRemove objectsToInsert:objectsToInsert indexSetToInsert:indexSetToInsert];
+    NSMutableIndexSet* removed = nil;
+    NSMutableIndexSet* added = nil;
+    NSMutableIndexSet* common = nil;
+    [[self allObjects]compareToArray:filteredObjects commonIndexSet:&common addedIndexSet:&added removedIndexSet:&removed];
     
-    if([indexSetToRemove count] > 0){
-        [super removeObjectsAtIndexes:indexSetToRemove];
+    if([removed count] > 0){
+        [super removeObjectsAtIndexes:removed];
     }
-    if([indexSetToInsert count] > 0){
-        [super insertObjects:objectsToInsert atIndexes:indexSetToInsert];
+    if([added count] > 0){
+        [super insertObjects:[filteredObjects objectsAtIndexes:added] atIndexes:added];
     }
 }
 
