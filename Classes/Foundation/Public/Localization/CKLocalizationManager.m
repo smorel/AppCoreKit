@@ -45,7 +45,7 @@ static CKLocalizationManager *sharedInstance = nil;
         self.localizedBundle = [NSBundle mainBundle];
         
         //Do not trigger KVO in init when setting the language value
-        NSString *deviceLang = [[NSLocale preferredLanguages] objectAtIndex:0];
+        NSString *deviceLang = [[self.localizedBundle preferredLocalizations] objectAtIndex:0];
         [_language release];
         _language = [deviceLang retain];
 	}
@@ -105,7 +105,7 @@ static CKLocalizationManager *sharedInstance = nil;
 // LocalizationReset;
 - (void) resetToSystemDefaultLanguage
 {
-    self.language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    self.language = [[self.localizedBundle preferredLocalizations] objectAtIndex:0];
 }
 
 
