@@ -194,10 +194,16 @@
         return;
     }
     
-    [self performBatchUpdates:^{
+    if(animated){
+        [self performBatchUpdates:^{
+            sectionUpdate();
+            [self.collectionView insertSections:indexes];
+        } completion:nil];
+    }else{
         sectionUpdate();
         [self.collectionView insertSections:indexes];
-    } completion:nil];
+        [self.collectionView invalidateLayout];
+    }
 }
 
 - (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
@@ -206,10 +212,16 @@
         return;
     }
     
-    [self performBatchUpdates:^{
+    if(animated){
+        [self performBatchUpdates:^{
+            sectionUpdate();
+            [self.collectionView deleteSections:indexes];
+        } completion:nil];
+    }else{
         sectionUpdate();
         [self.collectionView deleteSections:indexes];
-    } completion:nil];
+        [self.collectionView invalidateLayout];
+    }
 }
 
 - (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
@@ -236,10 +248,16 @@
         return;
     }
     
+    if(animated){
     [self performBatchUpdates:^{
         sectionUpdate();
         [self.collectionView deleteItemsAtIndexPaths:indexPaths];
     } completion:nil];
+    }else{
+        sectionUpdate();
+        [self.collectionView deleteItemsAtIndexPaths:indexPaths];
+        [self.collectionView invalidateLayout];
+    }
 }
 
 - (UIView*)contentView{
