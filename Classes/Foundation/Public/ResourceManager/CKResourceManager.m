@@ -91,7 +91,7 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
     }
     
     for(NSBundle* bundle in [self bundles]){
-        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext];
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil];
         if([paths count] > 0) return paths;
     }
     
@@ -104,7 +104,7 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
     }
     
     for(NSBundle* bundle in [self bundles]){
-        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext forLocalization:localizationName];
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil forLocalization:localizationName];
         if([paths count] > 0) return paths;
     }
     
@@ -117,7 +117,7 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
     }
     
     for(NSBundle* bundle in [self bundles]){
-        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext];
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil];
         if([paths count] > 0) return paths;
     }
     
@@ -130,7 +130,7 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
     }
     
     for(NSBundle* bundle in [self bundles]){
-        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:ext forLocalization:localizationName];
+        NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil forLocalization:localizationName];
         if([paths count] > 0) return paths;
     }
     
