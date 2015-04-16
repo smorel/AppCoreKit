@@ -47,6 +47,10 @@ static char UIViewReusableViewControllerKey;
 
 - (void)dealloc{
     _delegate = nil;
+    for(CKAbstractSection* section in self.sections){
+        section.containerViewController = nil;
+        section.delegate = nil;
+    }
     [_sections release];
     [super dealloc];
 }
