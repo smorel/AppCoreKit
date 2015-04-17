@@ -248,10 +248,6 @@
     }
 }
 
-- (UINavigationController*)navigationController{
-    return self.containerViewController.navigationController;
-}
-
 - (void)scrollToCell{
     if([self.containerViewController respondsToSelector:@selector(scrollToControllerAtIndexPath:animated:)]){
         [self.containerViewController scrollToControllerAtIndexPath:self.indexPath animated:YES];

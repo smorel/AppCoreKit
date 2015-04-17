@@ -346,4 +346,21 @@ static char CKViewControllerContainerViewControllerKey;
     return nil;
 }
 
+- (UINavigationController*)appcorekit_navigationController{
+    if(self.containerViewController == nil)
+        return [self appcorekit_navigationController];
+    
+    UIViewController* controller = [self containerViewController];
+    while(controller){
+        if(controller.navigationController)
+            return controller.navigationController;
+        controller = [controller containerViewController];
+    }
+    return nil;
+}
+
++ (void)load{
+    CKSwizzleSelector([UIViewController class], @selector(navigationController), @selector(appcorekit_navigationController));
+}
+
 @end
