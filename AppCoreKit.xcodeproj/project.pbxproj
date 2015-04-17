@@ -22,18 +22,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		4F4A912813F03D7B0093293F /* wc-appsignature-dark-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912013F03D7B0093293F /* wc-appsignature-dark-back.png */; };
-		4F4A912913F03D7B0093293F /* wc-appsignature-dark-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912113F03D7B0093293F /* wc-appsignature-dark-back@2x.png */; };
-		4F4A912A13F03D7B0093293F /* wc-appsignature-dark-front.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912213F03D7B0093293F /* wc-appsignature-dark-front.png */; };
-		4F4A912B13F03D7B0093293F /* wc-appsignature-dark-front@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912313F03D7B0093293F /* wc-appsignature-dark-front@2x.png */; };
-		4F4A912C13F03D7B0093293F /* wc-appsignature-light-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912413F03D7B0093293F /* wc-appsignature-light-back.png */; };
-		4F4A912D13F03D7B0093293F /* wc-appsignature-light-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912513F03D7B0093293F /* wc-appsignature-light-back@2x.png */; };
-		4F4A912E13F03D7B0093293F /* wc-appsignature-light-front.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912613F03D7B0093293F /* wc-appsignature-light-front.png */; };
-		4F4A912F13F03D7B0093293F /* wc-appsignature-light-front@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912713F03D7B0093293F /* wc-appsignature-light-front@2x.png */; };
-		4F4A914113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png */; };
-		4F4A914213F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913313F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png */; };
-		4F4A914513F040CE0093293F /* wc-appsignature-type-light-craftedby.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913913F040CE0093293F /* wc-appsignature-type-light-craftedby.png */; };
-		4F4A914613F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913B13F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png */; };
 		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
@@ -62,8 +50,6 @@
 		753178261417E64C009310A8 /* UIToolbar+introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178241417E64C009310A8 /* UIToolbar+introspection.m */; };
 		753178291417E9E3009310A8 /* UIBarButtonItem+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178271417E9E2009310A8 /* UIBarButtonItem+Introspection.h */; };
 		7531782A1417E9E3009310A8 /* UIBarButtonItem+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178281417E9E3009310A8 /* UIBarButtonItem+Introspection.m */; };
-		7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */; };
-		7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */; };
 		7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */; };
 		7536F9E313CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */; };
 		7536F9E413CE0BE900720C17 /* CKKeypadViewBackspaceButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */; };
@@ -107,8 +93,6 @@
 		7560DC8D13B8ED3600268D13 /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4013B8ED3600268D13 /* CKCoreDataManager.m */; };
 		7560DC8E13B8ED3600268D13 /* CoreGraphics+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC8F13B8ED3600268D13 /* CoreGraphics+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */; };
-		7560DC9013B8ED3600268D13 /* CKCreditsFooterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DC9113B8ED3600268D13 /* CKCreditsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */; };
 		7560DC9213B8ED3600268D13 /* CKDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4513B8ED3600268D13 /* CKDataBinder.h */; settings = {ATTRIBUTES = (); }; };
 		7560DC9313B8ED3600268D13 /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4613B8ED3600268D13 /* CKDataBinder.m */; };
 		7560DC9413B8ED3600268D13 /* CKDataBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4713B8ED3600268D13 /* CKDataBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
@@ -362,8 +346,6 @@
 		9600B8C21545C41400F07C5A /* CKTypeAhead.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8BE1545C41400F07C5A /* CKTypeAhead.mm */; };
 		9600B8C31545C41400F07C5A /* CKTypeAhead+Generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BF1545C41400F07C5A /* CKTypeAhead+Generator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8C41545C41400F07C5A /* CKTypeAhead+Generator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */; };
-		9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8CD1545C56200F07C5A /* CKObjectGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8CE1545C56200F07C5A /* CKObjectGraph.m */; };
 		9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */; };
 		9600B8DF1545CAFF00F07C5A /* CKContainerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -663,22 +645,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4F4A912013F03D7B0093293F /* wc-appsignature-dark-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-dark-back.png"; sourceTree = "<group>"; };
-		4F4A912113F03D7B0093293F /* wc-appsignature-dark-back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-dark-back@2x.png"; sourceTree = "<group>"; };
-		4F4A912213F03D7B0093293F /* wc-appsignature-dark-front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-dark-front.png"; sourceTree = "<group>"; };
-		4F4A912313F03D7B0093293F /* wc-appsignature-dark-front@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-dark-front@2x.png"; sourceTree = "<group>"; };
-		4F4A912413F03D7B0093293F /* wc-appsignature-light-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-light-back.png"; sourceTree = "<group>"; };
-		4F4A912513F03D7B0093293F /* wc-appsignature-light-back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-light-back@2x.png"; sourceTree = "<group>"; };
-		4F4A912613F03D7B0093293F /* wc-appsignature-light-front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-light-front.png"; sourceTree = "<group>"; };
-		4F4A912713F03D7B0093293F /* wc-appsignature-light-front@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-light-front@2x.png"; sourceTree = "<group>"; };
-		4F4A913213F040CE0093293F /* fr */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fr; path = "Resources/fr.lproj/wc-appsignature-type-dark-craftedby.png"; sourceTree = SOURCE_ROOT; };
-		4F4A913413F040CE0093293F /* fr */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fr; path = "Resources/fr.lproj/wc-appsignature-type-dark-craftedby@2x.png"; sourceTree = SOURCE_ROOT; };
-		4F4A913A13F040CE0093293F /* fr */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fr; path = "Resources/fr.lproj/wc-appsignature-type-light-craftedby.png"; sourceTree = SOURCE_ROOT; };
-		4F4A913C13F040CE0093293F /* fr */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fr; path = "Resources/fr.lproj/wc-appsignature-type-light-craftedby@2x.png"; sourceTree = SOURCE_ROOT; };
-		4F4A916513F040EC0093293F /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = "Resources/en.lproj/wc-appsignature-type-dark-craftedby.png"; sourceTree = SOURCE_ROOT; };
-		4F4A916613F040EC0093293F /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = "Resources/en.lproj/wc-appsignature-type-dark-craftedby@2x.png"; sourceTree = SOURCE_ROOT; };
-		4F4A916913F040EC0093293F /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = "Resources/en.lproj/wc-appsignature-type-light-craftedby.png"; sourceTree = SOURCE_ROOT; };
-		4F4A916A13F040EC0093293F /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = "Resources/en.lproj/wc-appsignature-type-light-craftedby@2x.png"; sourceTree = SOURCE_ROOT; };
 		4F4F052D13C5F5410009DE31 /* CKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKActionSheet.h; path = Classes/UI/Public/Views/CKActionSheet.h; sourceTree = "<group>"; };
 		4F4F052E13C5F5410009DE31 /* CKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKActionSheet.m; path = Classes/UI/Public/Views/CKActionSheet.m; sourceTree = "<group>"; };
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKDebug.m; path = Classes/Foundation/Public/CKDebug.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -707,8 +673,6 @@
 		753178241417E64C009310A8 /* UIToolbar+introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIToolbar+introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UIToolbar+introspection.m"; sourceTree = "<group>"; };
 		753178271417E9E2009310A8 /* UIBarButtonItem+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UIBarButtonItem+Introspection.h"; sourceTree = "<group>"; };
 		753178281417E9E3009310A8 /* UIBarButtonItem+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIBarButtonItem+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UIBarButtonItem+Introspection.m"; sourceTree = "<group>"; };
-		7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKCreditsFooterViewWCLogo.png; sourceTree = "<group>"; };
-		7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKCreditsFooterViewWCLogo@2x.png"; sourceTree = "<group>"; };
 		7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewBackspaceButton-Highlighted.png"; sourceTree = "<group>"; };
 		7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewBackspaceButton-Selected.png"; sourceTree = "<group>"; };
 		7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKKeypadViewBackspaceButton.png; sourceTree = "<group>"; };
@@ -755,8 +719,6 @@
 		7560DB4013B8ED3600268D13 /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CoreData/Public/CKCoreDataManager.m; sourceTree = "<group>"; };
 		7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CoreGraphics+Additions.h"; path = "Classes/Foundation/Public/Helpers/CoreGraphics+Additions.h"; sourceTree = "<group>"; };
 		7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CoreGraphics+Additions.m"; path = "Classes/Foundation/Public/Helpers/CoreGraphics+Additions.m"; sourceTree = "<group>"; };
-		7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCreditsFooterView.h; path = Classes/UI/Public/Views/CKCreditsFooterView.h; sourceTree = "<group>"; };
-		7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCreditsFooterView.m; path = Classes/UI/Public/Views/CKCreditsFooterView.m; sourceTree = "<group>"; };
 		7560DB4513B8ED3600268D13 /* CKDataBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDataBinder.h; path = Classes/Bindings/Private/CKDataBinder.h; sourceTree = "<group>"; };
 		7560DB4613B8ED3600268D13 /* CKDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDataBinder.m; path = Classes/Bindings/Private/CKDataBinder.m; sourceTree = "<group>"; };
 		7560DB4713B8ED3600268D13 /* CKDataBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDataBlockBinder.h; path = Classes/Bindings/Private/CKDataBlockBinder.h; sourceTree = "<group>"; };
@@ -1018,8 +980,6 @@
 		9600B8BE1545C41400F07C5A /* CKTypeAhead.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = CKTypeAhead.mm; path = Classes/Foundation/Public/TypeAhead/CKTypeAhead.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9600B8BF1545C41400F07C5A /* CKTypeAhead+Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTypeAhead+Generator.h"; path = "Classes/Foundation/Public/TypeAhead/CKTypeAhead+Generator.h"; sourceTree = "<group>"; };
 		9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = "CKTypeAhead+Generator.mm"; path = "Classes/Foundation/Public/TypeAhead/CKTypeAhead+Generator.mm"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9600B8CD1545C56200F07C5A /* CKObjectGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectGraph.h; path = Classes/Foundation/Public/ObjectGraph/CKObjectGraph.h; sourceTree = "<group>"; };
-		9600B8CE1545C56200F07C5A /* CKObjectGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectGraph.m; path = Classes/Foundation/Public/ObjectGraph/CKObjectGraph.m; sourceTree = "<group>"; };
 		9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKSlideShowViewController.h; path = Classes/UI/Public/Controllers/CKSlideShowViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKSlideShowViewController.m; path = Classes/UI/Public/Controllers/CKSlideShowViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBreadCrumbViewController.h; path = Classes/UI/Public/Controllers/Containers/CKBreadCrumbViewController.h; sourceTree = "<group>"; };
@@ -1356,7 +1316,6 @@
 				75A405EC13D8B66E00D932B0 /* CascadingTree */,
 				7506E3F313B8FBB100EE1471 /* Document */,
 				9600B8BC1545C40200F07C5A /* TypeAhead */,
-				9600B8CC1545C55200F07C5A /* ObjectGraph */,
 				964C207D153DB66A00398E0F /* Localization */,
 				96EFE7D01797009D0034F935 /* ResourceManager */,
 				96CC499117CCD3740017A6E7 /* Apple Extensions */,
@@ -1542,7 +1501,6 @@
 				D9E04C791AB1F91F00E6BECB /* TextView */,
 				D9E04C751AB1F8EC00E6BECB /* SnapshotController */,
 				D9E04C741AB1F8DA00E6BECB /* SegmentedControl */,
-				D9E04C7C1AB1F94A00E6BECB /* CreditsView */,
 				D9E04C6D1AB1F83400E6BECB /* Apple Extensions */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
@@ -1667,20 +1625,6 @@
 			children = (
 				75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */,
 				75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */,
-				4F4A913113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png */,
-				4F4A913313F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png */,
-				4F4A913913F040CE0093293F /* wc-appsignature-type-light-craftedby.png */,
-				4F4A913B13F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png */,
-				4F4A912013F03D7B0093293F /* wc-appsignature-dark-back.png */,
-				4F4A912113F03D7B0093293F /* wc-appsignature-dark-back@2x.png */,
-				4F4A912213F03D7B0093293F /* wc-appsignature-dark-front.png */,
-				4F4A912313F03D7B0093293F /* wc-appsignature-dark-front@2x.png */,
-				4F4A912413F03D7B0093293F /* wc-appsignature-light-back.png */,
-				4F4A912513F03D7B0093293F /* wc-appsignature-light-back@2x.png */,
-				4F4A912613F03D7B0093293F /* wc-appsignature-light-front.png */,
-				4F4A912713F03D7B0093293F /* wc-appsignature-light-front@2x.png */,
-				7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */,
-				7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */,
 				7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */,
 				7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */,
 				7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */,
@@ -1916,15 +1860,6 @@
 				9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */,
 			);
 			name = TypeAhead;
-			sourceTree = "<group>";
-		};
-		9600B8CC1545C55200F07C5A /* ObjectGraph */ = {
-			isa = PBXGroup;
-			children = (
-				9600B8CD1545C56200F07C5A /* CKObjectGraph.h */,
-				9600B8CE1545C56200F07C5A /* CKObjectGraph.m */,
-			);
-			name = ObjectGraph;
 			sourceTree = "<group>";
 		};
 		9600B8E51545CB3100F07C5A /* Containers */ = {
@@ -3279,15 +3214,6 @@
 			name = MapView;
 			sourceTree = "<group>";
 		};
-		D9E04C7C1AB1F94A00E6BECB /* CreditsView */ = {
-			isa = PBXGroup;
-			children = (
-				7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */,
-				7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */,
-			);
-			name = CreditsView;
-			sourceTree = "<group>";
-		};
 		D9E04C7D1AB1F9C800E6BECB /* Swipable */ = {
 			isa = PBXGroup;
 			children = (
@@ -3441,7 +3367,6 @@
 				D98F3FDE1AB37D970094572C /* CKPropertySelectionViewController.h in Headers */,
 				7560DC8E13B8ED3600268D13 /* CoreGraphics+Additions.h in Headers */,
 				96E6FA2F182D29F4001F1E6A /* CAEmitterCell+Introspection.h in Headers */,
-				7560DC9013B8ED3600268D13 /* CKCreditsFooterView.h in Headers */,
 				96B3BCEE182BED9800978B85 /* CKCollectionViewGridLayout.h in Headers */,
 				7560DC9213B8ED3600268D13 /* CKDataBinder.h in Headers */,
 				7560DC9413B8ED3600268D13 /* CKDataBlockBinder.h in Headers */,
@@ -3646,7 +3571,6 @@
 				967C51851538BE8200B3F785 /* CKDocument.h in Headers */,
 				9600B8C11545C41400F07C5A /* CKTypeAhead.h in Headers */,
 				9600B8C31545C41400F07C5A /* CKTypeAhead+Generator.h in Headers */,
-				9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */,
 				96B4515918D093A400D58489 /* CKBlurModalViewController.h in Headers */,
 				96B3BD07182BEF1C00978B85 /* CKAnimationManager.h in Headers */,
 				9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */,
@@ -3791,8 +3715,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */,
-				7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */,
 				7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */,
 				7536F9E313CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png in Resources */,
 				7536F9E413CE0BE900720C17 /* CKKeypadViewBackspaceButton.png in Resources */,
@@ -3807,18 +3729,6 @@
 				7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */,
 				7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */,
 				75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */,
-				4F4A912813F03D7B0093293F /* wc-appsignature-dark-back.png in Resources */,
-				4F4A912913F03D7B0093293F /* wc-appsignature-dark-back@2x.png in Resources */,
-				4F4A912A13F03D7B0093293F /* wc-appsignature-dark-front.png in Resources */,
-				4F4A912B13F03D7B0093293F /* wc-appsignature-dark-front@2x.png in Resources */,
-				4F4A912C13F03D7B0093293F /* wc-appsignature-light-back.png in Resources */,
-				4F4A912D13F03D7B0093293F /* wc-appsignature-light-back@2x.png in Resources */,
-				4F4A912E13F03D7B0093293F /* wc-appsignature-light-front.png in Resources */,
-				4F4A912F13F03D7B0093293F /* wc-appsignature-light-front@2x.png in Resources */,
-				4F4A914113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png in Resources */,
-				4F4A914213F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png in Resources */,
-				4F4A914513F040CE0093293F /* wc-appsignature-type-light-craftedby.png in Resources */,
-				4F4A914613F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */,
 				75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */,
 				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
 				7580AFF0144F59C3004DCF7A /* CKInlineDebugger.style in Resources */,
@@ -3876,7 +3786,6 @@
 				7560DC8813B8ED3600268D13 /* CLLocation+Additions.m in Sources */,
 				7560DC8D13B8ED3600268D13 /* CKCoreDataManager.m in Sources */,
 				7560DC8F13B8ED3600268D13 /* CoreGraphics+Additions.m in Sources */,
-				7560DC9113B8ED3600268D13 /* CKCreditsFooterView.m in Sources */,
 				7560DC9313B8ED3600268D13 /* CKDataBinder.m in Sources */,
 				7560DC9513B8ED3600268D13 /* CKDataBlockBinder.m in Sources */,
 				7560DC9813B8ED3600268D13 /* CKDictionaryFromAttributesTransformer.m in Sources */,
@@ -4074,7 +3983,6 @@
 				D9E04C8E1AB1FF3200E6BECB /* CKPropertiesSampleViewController.m in Sources */,
 				9600B8C21545C41400F07C5A /* CKTypeAhead.mm in Sources */,
 				9600B8C41545C41400F07C5A /* CKTypeAhead+Generator.mm in Sources */,
-				9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */,
 				D9418AA61ABB030D00234A15 /* NSCalendar+ValueTransformer.m in Sources */,
 				9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */,
 				9600B8E01545CAFF00F07C5A /* CKContainerViewController.mm in Sources */,
@@ -4156,42 +4064,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4F4A913113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F4A913213F040CE0093293F /* fr */,
-				4F4A916513F040EC0093293F /* en */,
-			);
-			name = "wc-appsignature-type-dark-craftedby.png";
-			sourceTree = "<group>";
-		};
-		4F4A913313F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F4A913413F040CE0093293F /* fr */,
-				4F4A916613F040EC0093293F /* en */,
-			);
-			name = "wc-appsignature-type-dark-craftedby@2x.png";
-			sourceTree = "<group>";
-		};
-		4F4A913913F040CE0093293F /* wc-appsignature-type-light-craftedby.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F4A913A13F040CE0093293F /* fr */,
-				4F4A916913F040EC0093293F /* en */,
-			);
-			name = "wc-appsignature-type-light-craftedby.png";
-			sourceTree = "<group>";
-		};
-		4F4A913B13F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F4A913C13F040CE0093293F /* fr */,
-				4F4A916A13F040EC0093293F /* en */,
-			);
-			name = "wc-appsignature-type-light-craftedby@2x.png";
-			sourceTree = "<group>";
-		};
 		7550153A13B8EA08002DAE8B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -13,7 +13,6 @@
 #import "UIView+Positioning.h"
 #import "CKActionSheet.h"
 #import "CKAlertView.h"
-#import "CKCreditsFooterView.h"
 #import "CKImageView.h"
 #import "UIImageView+URL.h"
 #import "CKTextView.h"
