@@ -11,7 +11,7 @@
 #import "CKLocalization.h"
 #import "UIGestureRecognizer+BlockBasedInterface.h"
 #import "CKPropertyExtendedAttributes+Attributes.h"
-#import <AdSupport/AdSupport.h>
+//#import <AdSupport/AdSupport.h>
 
 @interface UIImageView (CKCreditsView)
 
@@ -89,7 +89,7 @@
     if(ASIdentifierManagerClass == NULL)
         return @"";
     
-    return [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    //return [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
 }
 
 - (id)initWithStyle:(CKCreditsViewStyle)style {
