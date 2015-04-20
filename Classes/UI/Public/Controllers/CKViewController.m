@@ -937,8 +937,10 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
     if([controllerStyle containsObjectForKey:@"contentSizeForViewInPopover"]){
         self.contentSizeForViewInPopover = [controllerStyle cgSizeForKey:@"contentSizeForViewInPopover"];
     }
-    
-    self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
+
+	if(self.containerViewController == nil && [self isKindOfClass:[CKViewController class]]){
+		self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
+	}
 }
 
 -(void) AppCoreKit_viewDidUnload{
