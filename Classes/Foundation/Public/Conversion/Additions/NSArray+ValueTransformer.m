@@ -47,7 +47,8 @@
             if(sourceClassName != nil){
                 Class typeToCreate = NSClassFromString(sourceClassName);
                 id result = [NSValueTransformer transform:content toClass:typeToCreate];
-                [results addObject:result];
+				if(result)
+					[results addObject:result];
             }
             else{
                 CKAssert(NO,@"No @class defined in %@. cannot resolve the type automatically. Please define @class in the dictionary or specify contentType in the attributes",content);
