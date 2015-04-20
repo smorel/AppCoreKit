@@ -43,12 +43,19 @@
     NSMutableArray* results = [NSMutableArray array];
     for(id content in components){
         if([content isKindOfClass:[NSDictionary class]]){
-            NSString* sourceClassName = [content objectForKey:@"@class"];
+            NSString* sourceClassName = [[content objectForKey:@"@class"]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if(sourceClassName != nil){
                 Class typeToCreate = NSClassFromString(sourceClassName);
-                id result = [NSValueTransformer transform:content toClass:typeToCreate];
-				if(result)
+				if(!typeToCreate){
+				    NSLog(@"NSArray Conversion: Could not find class with name '%@'. The creation of the object will be bypassed in array with content:\n%@",sourceClassName,components);
+				}else{
+					id result = [NSValueTransformer transform:content toClass:typeToCreate];
+					if(result == nil){
+					    int i = 3;
+					}
 					[results addObject:result];
+				}
+
             }
             else{
                 CKAssert(NO,@"No @class defined in %@. cannot resolve the type automatically. Please define @class in the dictionary or specify contentType in the attributes",content);

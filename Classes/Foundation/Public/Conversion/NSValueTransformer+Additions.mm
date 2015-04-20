@@ -453,7 +453,7 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
     BOOL justCreated = YES;
 	if(target == nil){
 		Class typeToCreate = type;
-		NSString* sourceClassName = [source objectForKey:CKSerializerClassTag];
+		NSString* sourceClassName = [[source objectForKey:CKSerializerClassTag]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 		if(sourceClassName != nil){
 			typeToCreate = NSClassFromString(sourceClassName);
 		}
