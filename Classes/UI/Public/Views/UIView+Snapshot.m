@@ -8,6 +8,7 @@
 
 #import "UIView+Snapshot.h"
 #import "CKVersion.h"
+#import "CKStyleView.h"
 
 @implementation UIView(Snaphot)
 
@@ -22,6 +23,55 @@
     CGContextFillRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
     
     [self.layer renderInContext:contextRef];
+    
+    UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    if(scale != 1){
+        return [[[UIImage alloc]initWithCGImage:resultingImage.CGImage scale:scale orientation:resultingImage.imageOrientation]autorelease];
+    }
+    
+    return resultingImage;
+}
+
+
+- (UIImage*)snapshotWithoutSubviews{
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, scale);
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    
+    CGContextClearRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
+    [[UIColor clearColor]setFill];
+    CGContextFillRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
+    
+    //- I don't like this cause it will invalidate layouts
+   NSMutableArray* viewsToShow = [NSMutableArray array];
+    for(UIView* v in self.subviews){
+        if(![v isKindOfClass:[CKStyleView class]]){
+            if(!v.hidden){
+                [viewsToShow addObject:v];
+                v.hidden = YES;
+            }
+        }
+    }
+    
+    [self.layer renderInContext:contextRef];
+    
+    for(UIView* v in viewsToShow){
+        v.hidden = NO;
+    }
+    //-
+    
+    /* This doesn't draw background properly
+    UIView* firstSubView = self.subviews.count > 0 ? [self.subviews objectAtIndex:0] : nil;
+    CKStyleView* styleView = ([firstSubView isKindOfClass:[CKStyleView class]]) ? (CKStyleView*)firstSubView : nil;
+    
+    [self.layer drawInContext:contextRef];
+    
+    if(styleView){
+        [styleView.layer drawInContext:contextRef];
+    }*/
     
     UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
