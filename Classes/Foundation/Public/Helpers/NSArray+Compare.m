@@ -22,8 +22,8 @@
     
     NSInteger index = 0;
     for(id object in self){
-        NSInteger index = identicalTo ? [other indexOfObjectIdenticalTo:object] : [other indexOfObject:object];
-        if(index == NSNotFound){
+        NSInteger indexInArray = identicalTo ? [other indexOfObjectIdenticalTo:object] : [other indexOfObject:object];
+        if(indexInArray == NSNotFound){
             [*removedIndexSet addIndex:index];
         }else{
             [*commonIndexSet addIndex:index];
@@ -35,8 +35,8 @@
     
     index = 0;
     for(id object in other){
-        NSInteger index = identicalTo ? [self indexOfObjectIdenticalTo:object] : [self indexOfObject:object];
-        if(index == NSNotFound){
+        NSInteger indexInArray = identicalTo ? [self indexOfObjectIdenticalTo:object] : [self indexOfObject:object];
+        if(indexInArray == NSNotFound){
             [*addedIndexSet addIndex:index];
         }
         ++index;
