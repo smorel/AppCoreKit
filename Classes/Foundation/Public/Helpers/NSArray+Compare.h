@@ -14,5 +14,6 @@
     addedIndexSet: indexes in other
  */
 - (void)compareToArray:(NSArray*)other commonIndexSet:(NSMutableIndexSet**)commonIndexSet addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet;
+- (void)compareToArray:(NSArray*)other commonIndexSet:(NSMutableIndexSet**)commonIndexSet addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet identicalTo:(BOOL)identicalTo;
 
 @end

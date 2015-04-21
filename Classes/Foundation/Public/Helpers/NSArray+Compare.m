@@ -10,7 +10,7 @@
 
 @implementation NSArray (Compare)
 
-- (void)compareToArray:(NSArray*)other commonIndexSet:(NSMutableIndexSet**)commonIndexSet addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet{
+- (void)compareToArray:(NSArray*)other commonIndexSet:(NSMutableIndexSet**)commonIndexSet addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet identicalTo:(BOOL)identicalTo{
     if(self == nil){
         if(!(*addedIndexSet)){ *addedIndexSet = [NSMutableIndexSet indexSet]; }
         [*addedIndexSet addIndexesInRange:NSMakeRange(0, other.count)];
@@ -22,7 +22,8 @@
     
     NSInteger index = 0;
     for(id object in self){
-        if([other indexOfObjectIdenticalTo:object] == NSNotFound){
+        NSInteger index = identicalTo ? [other indexOfObjectIdenticalTo:object] : [other indexOfObject:object];
+        if(index == NSNotFound){
             [*removedIndexSet addIndex:index];
         }else{
             [*commonIndexSet addIndex:index];
@@ -34,11 +35,17 @@
     
     index = 0;
     for(id object in other){
-        if([self indexOfObjectIdenticalTo:object] == NSNotFound){
+        NSInteger index = identicalTo ? [self indexOfObjectIdenticalTo:object] : [self indexOfObject:object];
+        if(index == NSNotFound){
             [*addedIndexSet addIndex:index];
         }
         ++index;
     }
+
+}
+
+- (void)compareToArray:(NSArray*)other commonIndexSet:(NSMutableIndexSet**)commonIndexSet addedIndexSet:(NSMutableIndexSet**)addedIndexSet removedIndexSet:(NSMutableIndexSet**)removedIndexSet{
+    [self compareToArray:other commonIndexSet:commonIndexSet addedIndexSet:addedIndexSet removedIndexSet:removedIndexSet identicalTo:YES];
 }
 
 
