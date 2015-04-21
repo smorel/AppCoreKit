@@ -90,12 +90,13 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext];
     }
     
+    NSMutableArray* allPaths = [NSMutableArray array];
     for(NSBundle* bundle in [self bundles]){
         NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil];
-        if([paths count] > 0) return paths;
+        [allPaths addObjectsFromArray:paths];
     }
     
-    return nil;
+    return allPaths.count > 0 ? allPaths : nil;
 }
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext localization:(NSString *)localizationName{
@@ -103,12 +104,14 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext localization:localizationName];
     }
     
+    NSMutableArray* allPaths = [NSMutableArray array];
+    
     for(NSBundle* bundle in [self bundles]){
         NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil forLocalization:localizationName];
-        if([paths count] > 0) return paths;
+        [allPaths addObjectsFromArray:paths];
     }
     
-    return nil;
+    return allPaths.count > 0 ? allPaths : nil;
 }
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext observer:(id)observer usingBlock:(void(^)(id observer, NSArray* paths))updateBlock{
@@ -116,12 +119,13 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext observer:observer usingBlock:updateBlock];
     }
     
+    NSMutableArray* allPaths = [NSMutableArray array];
     for(NSBundle* bundle in [self bundles]){
         NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil];
-        if([paths count] > 0) return paths;
+        [allPaths addObjectsFromArray:paths];
     }
     
-    return nil;
+    return allPaths.count > 0 ? allPaths : nil;
 }
 
 + (NSArray *)pathsForResourcesWithExtension:(NSString *)ext localization:(NSString *)localizationName observer:(id)observer usingBlock:(void(^)(id observer, NSArray* paths))updateBlock{
@@ -129,12 +133,13 @@ NSString* CKResourceManagerUpdatedResourcesPathKey             = @"RMResourceMan
         return [[self resourceManagerClass]pathsForResourcesWithExtension:ext localization:localizationName observer:observer usingBlock:updateBlock];
     }
     
+    NSMutableArray* allPaths = [NSMutableArray array];
     for(NSBundle* bundle in [self bundles]){
         NSArray* paths = [bundle pathsForResourcesOfType:ext inDirectory:nil forLocalization:localizationName];
-        if([paths count] > 0) return paths;
+        [allPaths addObjectsFromArray:paths];
     }
     
-    return nil;
+    return allPaths.count > 0 ? allPaths : nil;
 }
 
 + (void)addObserverForResourcesWithExtension:(NSString*)ext object:(id)object usingBlock:(void(^)(id observer, NSArray* paths))updateBlock{
