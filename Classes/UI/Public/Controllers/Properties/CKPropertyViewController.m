@@ -49,7 +49,16 @@
     self.property = property;
     self.readOnly = NO;
     self.editionToolbarEnabled = YES;
-    self.propertyNameLabel = _(property.name);
+    
+    NSString* propertyName = _(property.name);
+    
+#ifdef DEBUG
+    if([propertyName isEqualToString:property.name]){
+        NSLog(@"%@: %@ - property name seems not localized '%@' for property \n%@",[self class],self.name,propertyName,property);
+    }
+#endif
+    
+    self.propertyNameLabel = propertyName;
     
     NSString* titleKey = [NSString stringWithFormat:@"%@_editionTitle",self.property.descriptor.name];;
     self.propertyEditionTitleLabel = _(titleKey);
