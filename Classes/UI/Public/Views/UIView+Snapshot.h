@@ -15,6 +15,7 @@
 /**
  */
 - (UIImage*)snapshot;
+- (UIImage*)snapshotWithoutSubviews;
 
 @end
 
