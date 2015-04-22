@@ -1,0 +1,22 @@
+{
+
+    "@import" : [
+        ___VARIABLE_stylesheetImports___
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___Trees" : {
+        "pushTransitionTree" : {
+            "rate" : 1,
+            "nodes" : [
+                { "name" : "Default", "duration" : 1, "damping" : 0.7 }
+            ]
+        },
+        "popTransitionTree" : {
+            "rate" : 1,
+            "nodes" : [
+                { "name" : "Default", "duration" : 1, "damping" : 0.7 }
+            ]
+        }
+    }
+
+}

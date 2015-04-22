@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowedTypes</key>
+	<array>
+		<string>public.objective-c-source</string>
+		<string>public.objective-c-plus-plus-source</string>
+	</array>
+	<key>DefaultCompletionName</key>
+	<string>MyTransitionAnimator</string>
+	<key>Description</key>
+	<string>An AppCoreKit View Controller Transition class with implementation, header and stylesheet files for transition tree definition.</string>
+	<key>Kind</key>
+	<string>Xcode.IDEKit.TextSubstitutionFileTemplateKind</string>
+	<key>MainTemplateFile</key>
+	<string>___FILEBASENAME___.m</string>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Description</key>
+			<string>The name of the class to create</string>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Name</key>
+			<string>Class</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Required</key>
+			<true/>
+			<key>Type</key>
+			<string>text</string>
+		</dict>
+		<dict>
+			<key>Default</key>
+			<string>CKTransitionTreeAnimator</string>
+			<key>Description</key>
+			<string>What class to subclass in the new file</string>
+			<key>FallbackHeader</key>
+			<string>#import &lt;AppCoreKit/AppCoreKit.h&gt;</string>
+			<key>Identifier</key>
+			<string>cocoaTouchSubclass</string>
+			<key>Name</key>
+			<string>Subclass of</string>
+			<key>Required</key>
+			<string>YES</string>
+			<key>Suffixes</key>
+			<dict>
+				<key>CKTransitionTreeAnimator - 2</key>
+				<string>TransitionAnimator</string>
+				<key>CKTransitionTreeNavigationAnimator</key>
+				<string>TransitionAnimator</string>
+			</dict>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Values</key>
+			<array>
+				<string>CKTransitionTreeAnimator</string>
+				<string>CKTransitionTreeNavigationAnimator</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Name</key>
+			<string>Import Stylesheets</string>
+			<key>Description</key>
+			<string>Stylesheet file names to import separated by comma</string>
+			<key>Identifier</key>
+			<string>stylesheetImports</string>
+			<key>Required</key>
+			<false/>
+			<key>Type</key>
+			<string>text</string>
+		</dict>
+	</array>
+	<key>Platforms</key>
+	<array>
+		<string>com.apple.platform.iphoneos</string>
+	</array>
+	<key>SortOrder</key>
+	<string>1</string>
+	<key>Summary</key>
+	<string>An AppCoreKit View Controller Transition class with implementation, header and stylesheet files for transition tree definition.</string>
+</dict>
+</plist>

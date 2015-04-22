@@ -542,6 +542,28 @@
 		B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */; };
 		D9149CE61AA7682A00D129AB /* CKReusableViewController+ResponderChain.h in Headers */ = {isa = PBXBuildFile; fileRef = D9149CE41AA7682A00D129AB /* CKReusableViewController+ResponderChain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9149CE71AA7682A00D129AB /* CKReusableViewController+ResponderChain.m in Sources */ = {isa = PBXBuildFile; fileRef = D9149CE51AA7682A00D129AB /* CKReusableViewController+ResponderChain.m */; };
+		D91D657F1AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D65691AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65801AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D656A1AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.m */; };
+		D91D65811AE8335100B19E14 /* CKTransitionNode.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D656B1AE8335100B19E14 /* CKTransitionNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65821AE8335100B19E14 /* CKTransitionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D656C1AE8335100B19E14 /* CKTransitionNode.m */; };
+		D91D65831AE8335100B19E14 /* CKTransitionTree.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D656D1AE8335100B19E14 /* CKTransitionTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65841AE8335100B19E14 /* CKTransitionTree.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D656E1AE8335100B19E14 /* CKTransitionTree.m */; };
+		D91D65851AE8335100B19E14 /* CKTransitionTreeAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D656F1AE8335100B19E14 /* CKTransitionTreeAnimator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65861AE8335100B19E14 /* CKTransitionTreeAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D65701AE8335100B19E14 /* CKTransitionTreeAnimator.m */; };
+		D91D65871AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D65711AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65881AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D65721AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.m */; };
+		D91D65891AE8335100B19E14 /* CKTransitionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D65731AE8335100B19E14 /* CKTransitionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D658A1AE8335100B19E14 /* CKTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D65741AE8335100B19E14 /* CKTransitionViewController.m */; };
+		D91D658B1AE8335100B19E14 /* CKViewTransitionContext.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D65751AE8335100B19E14 /* CKViewTransitionContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D658C1AE8335100B19E14 /* CKViewTransitionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D65761AE8335100B19E14 /* CKViewTransitionContext.m */; };
+		D91D658D1AE8335100B19E14 /* CKViewTransitionContext+Animation.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D65771AE8335100B19E14 /* CKViewTransitionContext+Animation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D658E1AE8335100B19E14 /* CKViewTransitionContext+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D65781AE8335100B19E14 /* CKViewTransitionContext+Animation.m */; };
+		D91D658F1AE8335100B19E14 /* CKViewTransitionContext+CollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D65791AE8335100B19E14 /* CKViewTransitionContext+CollectionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65901AE8335100B19E14 /* CKViewTransitionContext+CollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D657A1AE8335100B19E14 /* CKViewTransitionContext+CollectionView.m */; };
+		D91D65911AE8335100B19E14 /* CKViewTransitionContext+TableView.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D657B1AE8335100B19E14 /* CKViewTransitionContext+TableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65921AE8335100B19E14 /* CKViewTransitionContext+TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D657C1AE8335100B19E14 /* CKViewTransitionContext+TableView.m */; };
+		D91D65931AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D657D1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D91D65941AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D657E1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m */; };
 		D9418A5B1AB8654A00234A15 /* CKDatePickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A5C1AB8654A00234A15 /* CKDatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */; };
 		D9418A611AB86AD900234A15 /* CKPropertyURLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1184,6 +1206,28 @@
 		B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UINavigationController+Style.mm"; path = "Classes/Styles/Private/UINavigationController+Style.mm"; sourceTree = "<group>"; };
 		D9149CE41AA7682A00D129AB /* CKReusableViewController+ResponderChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKReusableViewController+ResponderChain.h"; path = "Classes/UI/Public/Collection/CKReusableViewController+ResponderChain.h"; sourceTree = "<group>"; };
 		D9149CE51AA7682A00D129AB /* CKReusableViewController+ResponderChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKReusableViewController+ResponderChain.m"; path = "Classes/UI/Public/Collection/CKReusableViewController+ResponderChain.m"; sourceTree = "<group>"; };
+		D91D65691AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKReusableViewController+CKTransitionTree.h"; path = "Classes/UI/Public/Transitions/CKReusableViewController+CKTransitionTree.h"; sourceTree = "<group>"; };
+		D91D656A1AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKReusableViewController+CKTransitionTree.m"; path = "Classes/UI/Public/Transitions/CKReusableViewController+CKTransitionTree.m"; sourceTree = "<group>"; };
+		D91D656B1AE8335100B19E14 /* CKTransitionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTransitionNode.h; path = Classes/UI/Public/Transitions/CKTransitionNode.h; sourceTree = "<group>"; };
+		D91D656C1AE8335100B19E14 /* CKTransitionNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTransitionNode.m; path = Classes/UI/Public/Transitions/CKTransitionNode.m; sourceTree = "<group>"; };
+		D91D656D1AE8335100B19E14 /* CKTransitionTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTransitionTree.h; path = Classes/UI/Public/Transitions/CKTransitionTree.h; sourceTree = "<group>"; };
+		D91D656E1AE8335100B19E14 /* CKTransitionTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTransitionTree.m; path = Classes/UI/Public/Transitions/CKTransitionTree.m; sourceTree = "<group>"; };
+		D91D656F1AE8335100B19E14 /* CKTransitionTreeAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTransitionTreeAnimator.h; path = Classes/UI/Public/Transitions/CKTransitionTreeAnimator.h; sourceTree = "<group>"; };
+		D91D65701AE8335100B19E14 /* CKTransitionTreeAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTransitionTreeAnimator.m; path = Classes/UI/Public/Transitions/CKTransitionTreeAnimator.m; sourceTree = "<group>"; };
+		D91D65711AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTransitionTreeNavigationAnimator.h; path = Classes/UI/Public/Transitions/CKTransitionTreeNavigationAnimator.h; sourceTree = "<group>"; };
+		D91D65721AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTransitionTreeNavigationAnimator.m; path = Classes/UI/Public/Transitions/CKTransitionTreeNavigationAnimator.m; sourceTree = "<group>"; };
+		D91D65731AE8335100B19E14 /* CKTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTransitionViewController.h; path = Classes/UI/Public/Transitions/CKTransitionViewController.h; sourceTree = "<group>"; };
+		D91D65741AE8335100B19E14 /* CKTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTransitionViewController.m; path = Classes/UI/Public/Transitions/CKTransitionViewController.m; sourceTree = "<group>"; };
+		D91D65751AE8335100B19E14 /* CKViewTransitionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKViewTransitionContext.h; path = Classes/UI/Public/Transitions/CKViewTransitionContext.h; sourceTree = "<group>"; };
+		D91D65761AE8335100B19E14 /* CKViewTransitionContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKViewTransitionContext.m; path = Classes/UI/Public/Transitions/CKViewTransitionContext.m; sourceTree = "<group>"; };
+		D91D65771AE8335100B19E14 /* CKViewTransitionContext+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKViewTransitionContext+Animation.h"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+Animation.h"; sourceTree = "<group>"; };
+		D91D65781AE8335100B19E14 /* CKViewTransitionContext+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+Animation.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+Animation.m"; sourceTree = "<group>"; };
+		D91D65791AE8335100B19E14 /* CKViewTransitionContext+CollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKViewTransitionContext+CollectionView.h"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+CollectionView.h"; sourceTree = "<group>"; };
+		D91D657A1AE8335100B19E14 /* CKViewTransitionContext+CollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+CollectionView.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+CollectionView.m"; sourceTree = "<group>"; };
+		D91D657B1AE8335100B19E14 /* CKViewTransitionContext+TableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKViewTransitionContext+TableView.h"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+TableView.h"; sourceTree = "<group>"; };
+		D91D657C1AE8335100B19E14 /* CKViewTransitionContext+TableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+TableView.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+TableView.m"; sourceTree = "<group>"; };
+		D91D657D1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKViewTransitionContext+ViewHierarchy.h"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+ViewHierarchy.h"; sourceTree = "<group>"; };
+		D91D657E1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+ViewHierarchy.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+ViewHierarchy.m"; sourceTree = "<group>"; };
 		D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDatePickerViewController.h; path = Classes/UI/Public/Controllers/CKDatePickerViewController.h; sourceTree = "<group>"; };
 		D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDatePickerViewController.m; path = Classes/UI/Public/Controllers/CKDatePickerViewController.m; sourceTree = "<group>"; };
 		D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyURLViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyURLViewController.h; sourceTree = "<group>"; };
@@ -1484,6 +1528,7 @@
 				960CAED2157E50DB00F6C887 /* Gestures */,
 				9638264D147FE53F00A9C98B /* Controllers */,
 				D9418A681AB8755A00234A15 /* Section View Controllers */,
+				D91D65681AE8333E00B19E14 /* Transitions */,
 				7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */,
 			);
 			name = UI;
@@ -2095,6 +2140,59 @@
 				963AB795179881110076925C /* CKResourceDependencyContext.m */,
 			);
 			name = ResourceManager;
+			sourceTree = "<group>";
+		};
+		D91D65681AE8333E00B19E14 /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				D91D65951AE8335500B19E14 /* Tree */,
+				D91D65961AE8336900B19E14 /* Animator */,
+				D91D65971AE8338100B19E14 /* View Controller */,
+			);
+			name = Transitions;
+			sourceTree = "<group>";
+		};
+		D91D65951AE8335500B19E14 /* Tree */ = {
+			isa = PBXGroup;
+			children = (
+				D91D656D1AE8335100B19E14 /* CKTransitionTree.h */,
+				D91D656E1AE8335100B19E14 /* CKTransitionTree.m */,
+				D91D656B1AE8335100B19E14 /* CKTransitionNode.h */,
+				D91D656C1AE8335100B19E14 /* CKTransitionNode.m */,
+				D91D65751AE8335100B19E14 /* CKViewTransitionContext.h */,
+				D91D65761AE8335100B19E14 /* CKViewTransitionContext.m */,
+				D91D65771AE8335100B19E14 /* CKViewTransitionContext+Animation.h */,
+				D91D65781AE8335100B19E14 /* CKViewTransitionContext+Animation.m */,
+				D91D65791AE8335100B19E14 /* CKViewTransitionContext+CollectionView.h */,
+				D91D657A1AE8335100B19E14 /* CKViewTransitionContext+CollectionView.m */,
+				D91D657B1AE8335100B19E14 /* CKViewTransitionContext+TableView.h */,
+				D91D657C1AE8335100B19E14 /* CKViewTransitionContext+TableView.m */,
+				D91D657D1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h */,
+				D91D657E1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m */,
+				D91D65691AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h */,
+				D91D656A1AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.m */,
+			);
+			name = Tree;
+			sourceTree = "<group>";
+		};
+		D91D65961AE8336900B19E14 /* Animator */ = {
+			isa = PBXGroup;
+			children = (
+				D91D656F1AE8335100B19E14 /* CKTransitionTreeAnimator.h */,
+				D91D65701AE8335100B19E14 /* CKTransitionTreeAnimator.m */,
+				D91D65711AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.h */,
+				D91D65721AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.m */,
+			);
+			name = Animator;
+			sourceTree = "<group>";
+		};
+		D91D65971AE8338100B19E14 /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D91D65731AE8335100B19E14 /* CKTransitionViewController.h */,
+				D91D65741AE8335100B19E14 /* CKTransitionViewController.m */,
+			);
+			name = "View Controller";
 			sourceTree = "<group>";
 		};
 		D92C10531AA78B9F00DA4B12 /* Web */ = {
@@ -3353,6 +3451,7 @@
 				D9418AAE1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h in Headers */,
 				B0EA78A6156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.h in Headers */,
 				7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */,
+				D91D657F1AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h in Headers */,
 				7560DC6E13B8ED3600268D13 /* CKAttribute.h in Headers */,
 				7560DC7013B8ED3600268D13 /* CKAttributesDictionary.h in Headers */,
 				7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */,
@@ -3417,12 +3516,14 @@
 				7560DD0C13B8ED3600268D13 /* NSObject+Bindings.h in Headers */,
 				7560DD0E13B8ED3600268D13 /* NSObject+Runtime.h in Headers */,
 				7560DD1013B8ED3600268D13 /* NSObject+Invocation.h in Headers */,
+				D91D65871AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.h in Headers */,
 				7560DD1213B8ED3600268D13 /* NSObject+JSON.h in Headers */,
 				7560DD1413B8ED3600268D13 /* NSObject+Notifications.h in Headers */,
 				96B4514118D08D0B00D58489 /* CKLayoutViewProxy.h in Headers */,
 				D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */,
 				7560DD1813B8ED3600268D13 /* NSSet+Additions.h in Headers */,
 				709C71CC1843BE8C006BB1DD /* UIControl+Introspection.h in Headers */,
+				D91D65851AE8335100B19E14 /* CKTransitionTreeAnimator.h in Headers */,
 				7560DD1A13B8ED3600268D13 /* NSString+Parsing.h in Headers */,
 				7560DD1C13B8ED3600268D13 /* NSString+URIQuery.h in Headers */,
 				D9149CE61AA7682A00D129AB /* CKReusableViewController+ResponderChain.h in Headers */,
@@ -3441,6 +3542,7 @@
 				7560DD5113B8ED3600268D13 /* CKStoreExplorer.h in Headers */,
 				7560DD5513B8ED3600268D13 /* CKStyle+Parsing.h in Headers */,
 				7560DD5713B8ED3600268D13 /* CKStyleManager.h in Headers */,
+				D91D65911AE8335100B19E14 /* CKViewTransitionContext+TableView.h in Headers */,
 				7560DD6713B8ED3600268D13 /* CKTextView.h in Headers */,
 				962C08931820131B00A6E439 /* CKStackViewController.h in Headers */,
 				7560DD6F13B8ED3600268D13 /* UIButton+Style.h in Headers */,
@@ -3466,6 +3568,7 @@
 				D9418A831AB8B89500234A15 /* CKStandardContentViewController.h in Headers */,
 				D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */,
 				7560DDAB13B8ED3600268D13 /* CKWebRequest.h in Headers */,
+				D91D658F1AE8335100B19E14 /* CKViewTransitionContext+CollectionView.h in Headers */,
 				7560DDAF13B8ED3600268D13 /* CKWebService.h in Headers */,
 				7560DDB113B8ED3600268D13 /* CKWebSource.h in Headers */,
 				D9418A871AB8C18600234A15 /* UIImageView+URL.h in Headers */,
@@ -3494,6 +3597,7 @@
 				75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */,
 				75CC170113F46E3900835FE3 /* UIColor+ValueTransformer.h in Headers */,
 				75CC170513F46E5500835FE3 /* UIImage+ValueTransformer.h in Headers */,
+				D91D65891AE8335100B19E14 /* CKTransitionViewController.h in Headers */,
 				9668EF0818AD076900E72444 /* UIScrollView+CKLayout.h in Headers */,
 				96E6FA33182D2A0C001F1E6A /* CAEmitterLayer+Introspection.h in Headers */,
 				75CC170913F46E6C00835FE3 /* NSNumber+ValueTransformer.h in Headers */,
@@ -3501,6 +3605,7 @@
 				75CC170D13F46E8200835FE3 /* NSURL+ValueTransformer.h in Headers */,
 				75CC171113F46E9800835FE3 /* NSDate+ValueTransformer.h in Headers */,
 				7560DDB513B8ED3600268D13 /* CKWebBrowserViewController.h in Headers */,
+				D91D658D1AE8335100B19E14 /* CKViewTransitionContext+Animation.h in Headers */,
 				D96494261AA5F80F00C17BB7 /* CKSound.h in Headers */,
 				75CC171513F46EAF00835FE3 /* NSArray+ValueTransformer.h in Headers */,
 				75CC171913F46EC800835FE3 /* CKCollection+ValueTransformer.h in Headers */,
@@ -3532,6 +3637,7 @@
 				D9CD827D1AC3681100B2985D /* CKSection+Property.h in Headers */,
 				7539FF92142CE94700688E2D /* NSError+Additions.h in Headers */,
 				96B3BCE6182BED9800978B85 /* CKReusableViewController.h in Headers */,
+				D91D65811AE8335100B19E14 /* CKTransitionNode.h in Headers */,
 				EDD9E7E31436166D00E104D9 /* UIViewController+Introspection.h in Headers */,
 				D9418A781AB8808100234A15 /* CKCollectionSection.h in Headers */,
 				759569691444E9FD0092F317 /* UISegmentedControl+Introspection.h in Headers */,
@@ -3545,6 +3651,7 @@
 				75AD5D8E144C68BA0008F53A /* NSObject+InlineDebugger.h in Headers */,
 				75AD5D9C144C71740008F53A /* UIView+InlineDebugger.h in Headers */,
 				75AD5DA0144C72960008F53A /* UIViewController+InlineDebugger.h in Headers */,
+				D91D65931AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h in Headers */,
 				B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */,
 				757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */,
 				7521E31E14520BBE000AEED8 /* AppCoreKit-Prefix.pch in Headers */,
@@ -3561,6 +3668,7 @@
 				96CADE381486BDFF008A23E4 /* NSObject+Validation.h in Headers */,
 				9603F22518D22B130095B128 /* NSValue+ValueTransformer.h in Headers */,
 				969FA53F14966CD90095C61E /* UILabel+Highlight.h in Headers */,
+				D91D65831AE8335100B19E14 /* CKTransitionTree.h in Headers */,
 				969FA54114966CD90095C61E /* UITableViewCell+Highlight.h in Headers */,
 				D9418A911ABA206D00234A15 /* CKPropertyDateViewController.h in Headers */,
 				96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */,
@@ -3606,6 +3714,7 @@
 				96B9D2A8177B234E00455BE8 /* CKHorizontalBoxLayout.h in Headers */,
 				96B9D2AC177B235F00455BE8 /* CKLayoutFlexibleSpace.h in Headers */,
 				D9418A8C1AB9CB1E00234A15 /* CKTableViewController.h in Headers */,
+				D91D658B1AE8335100B19E14 /* CKViewTransitionContext.h in Headers */,
 				96B9D2B0177B23DA00455BE8 /* UIButton+CKLayout.h in Headers */,
 				961E782418D9D9040008EA33 /* UIView+Bounce.h in Headers */,
 				96B9D2B4177B248500455BE8 /* UIViewController+CKLayout.h in Headers */,
@@ -3816,6 +3925,7 @@
 				7560DCDD13B8ED3600268D13 /* MKMapView+Introspection.m in Sources */,
 				7560DCDF13B8ED3600268D13 /* CKObject.m in Sources */,
 				7560DCE113B8ED3600268D13 /* CKObject+CKStore.m in Sources */,
+				D91D65941AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m in Sources */,
 				7560DCE713B8ED3600268D13 /* CKMultipartEncoder.m in Sources */,
 				7560DCE913B8ED3600268D13 /* CKMultipartParser.m in Sources */,
 				7560DCEB13B8ED3600268D13 /* CKNetworkActivityManager.m in Sources */,
@@ -3826,9 +3936,11 @@
 				D9149CE71AA7682A00D129AB /* CKReusableViewController+ResponderChain.m in Sources */,
 				7560DCF713B8ED3600268D13 /* NSData+Matching.m in Sources */,
 				7560DCF913B8ED3600268D13 /* NSData+SHA1.m in Sources */,
+				D91D65921AE8335100B19E14 /* CKViewTransitionContext+TableView.m in Sources */,
 				7560DCFC13B8ED3600268D13 /* NSDate+Calculations.m in Sources */,
 				7560DCFE13B8ED3600268D13 /* NSDate+Conversions.m in Sources */,
 				7560DD0713B8ED3600268D13 /* NSManagedObjectContext+Requests.m in Sources */,
+				D91D658E1AE8335100B19E14 /* CKViewTransitionContext+Animation.m in Sources */,
 				96B4515218D0908100D58489 /* CKMapViewBlockDelegate.m in Sources */,
 				7560DD0D13B8ED3600268D13 /* NSObject+Bindings.mm in Sources */,
 				7560DD0F13B8ED3600268D13 /* NSObject+Runtime.m in Sources */,
@@ -3852,6 +3964,8 @@
 				96B4515A18D093A400D58489 /* CKBlurModalViewController.m in Sources */,
 				D9CD825A1AC30BFC00B2985D /* CKCollectionStatusViewController.m in Sources */,
 				7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */,
+				D91D658A1AE8335100B19E14 /* CKTransitionViewController.m in Sources */,
+				D91D65901AE8335100B19E14 /* CKViewTransitionContext+CollectionView.m in Sources */,
 				7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */,
 				7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */,
 				D9418AA11ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m in Sources */,
@@ -3911,12 +4025,14 @@
 				75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */,
 				757578FC13E71C000082C247 /* CKSheetController.m in Sources */,
 				961E782518D9D9040008EA33 /* UIView+Bounce.m in Sources */,
+				D91D658C1AE8335100B19E14 /* CKViewTransitionContext.m in Sources */,
 				75F2961313F196F9009CCC70 /* NSPredicate+Additions.m in Sources */,
 				96B4515618D0924100D58489 /* CKRangeSelectorView.m in Sources */,
 				75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */,
 				75CC170213F46E3900835FE3 /* UIColor+ValueTransformer.m in Sources */,
 				D9418A751AB8806C00234A15 /* CKSection.m in Sources */,
 				D9CD827A1AC366FA00B2985D /* CKReusableViewController+Standard.m in Sources */,
+				D91D65821AE8335100B19E14 /* CKTransitionNode.m in Sources */,
 				75CC170613F46E5500835FE3 /* UIImage+ValueTransformer.m in Sources */,
 				75CC170A13F46E6C00835FE3 /* NSNumber+ValueTransformer.m in Sources */,
 				75CC170E13F46E8200835FE3 /* NSURL+ValueTransformer.m in Sources */,
@@ -3950,6 +4066,7 @@
 				96B3BCF7182BED9800978B85 /* CKCollectionViewPageLayout.m in Sources */,
 				EDD9E7E41436166D00E104D9 /* UIViewController+Introspection.m in Sources */,
 				D9418A5C1AB8654A00234A15 /* CKDatePickerViewController.m in Sources */,
+				D91D65881AE8335100B19E14 /* CKTransitionTreeNavigationAnimator.m in Sources */,
 				7595696A1444E9FD0092F317 /* UISegmentedControl+Introspection.m in Sources */,
 				96B3BCF1182BED9800978B85 /* CKCollectionViewLayout.m in Sources */,
 				75956972144626680092F317 /* CKSegmentedControl.m in Sources */,
@@ -4006,9 +4123,11 @@
 				960CAED7157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m in Sources */,
 				967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */,
 				9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */,
+				D91D65841AE8335100B19E14 /* CKTransitionTree.m in Sources */,
 				96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */,
 				96EBE434159A43AB00E0F209 /* UIView+Name.m in Sources */,
 				9659E34515E274FF00D43C33 /* CKConfiguration.m in Sources */,
+				D91D65801AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.m in Sources */,
 				96AC0A8216021F6100CC3C77 /* CKCollectionBlockBinder.m in Sources */,
 				96AC0AA916022DBC00CC3C77 /* NSString+Formating.m in Sources */,
 				96F9F36D173182D900AF4276 /* UIActivityIndicatorView+Introspection.m in Sources */,
@@ -4021,6 +4140,7 @@
 				D9418A671AB86D1200234A15 /* CKPickerViewViewController.m in Sources */,
 				96B9D2B5177B248500455BE8 /* UIViewController+CKLayout.m in Sources */,
 				D9418A711AB8805300234A15 /* CKAbstractSection.m in Sources */,
+				D91D65861AE8335100B19E14 /* CKTransitionTreeAnimator.m in Sources */,
 				96B9D2B9177B24D300455BE8 /* UILabel+CKLayout.m in Sources */,
 				96B9D2BD177B24F600455BE8 /* UIImageView+CKLayout.m in Sources */,
 				96B9D2C1177B251F00455BE8 /* UITextField+CKLayout.m in Sources */,
