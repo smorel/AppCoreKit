@@ -18,7 +18,7 @@
 
 - (void)postInit{
     [super postInit];
-    [self setupForm];
+    [self setupTableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -36,14 +36,9 @@
 
 #pragma mark Initializing Form
 
-- (void)setupForm{
-    //TODO : Initialize Sections and Cell controller for self here
-    //cf. CKFormSection, CKFormBindedCollectionSection. CKTableViewCellController
+- (void)setupTableView{
     
-    NSArray* sections = @[
-    ];
-    
-    [self addSections:sections];
+    [self addSections:@[] animated:NO];
 }
 
 #pragma mark Setup MVC and bindings

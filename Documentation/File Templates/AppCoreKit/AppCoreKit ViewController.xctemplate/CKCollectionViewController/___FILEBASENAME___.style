@@ -1,0 +1,21 @@
+{
+
+    "@import" : [
+        ___VARIABLE_stylesheetImports___
+    ],
+
+    "___FILEBASENAMEASIDENTIFIER___" : {
+
+        "backgroundView" : {
+            "backgroundColor" : "grayColor"
+        },
+
+        "foregroundView" : {
+
+        },
+
+        "collectionView" : {
+        }
+    }
+
+}

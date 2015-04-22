@@ -46,8 +46,8 @@
 			<string>YES</string>
 			<key>Suffixes</key>
 			<dict>
-				<key>CKCollectionCellContentViewController</key>
-				<string>CellContentViewController</string>
+				<key>CKReusableViewController</key>
+				<string>ViewController</string>
 				<key>CKSegmentedViewController</key>
 				<string>ViewController</string>
 				<key>CKBreadCrumbViewController</key>
@@ -60,13 +60,9 @@
 				<string>ViewController</string>
 				<key>CKContainerViewController</key>
 				<string>ViewController</string>
-				<key>CKCollectionViewLayoutController</key>
+				<key>CKCollectionViewController</key>
 				<string>ViewController</string>
-				<key>CKGridCollectionViewController</key>
-				<string>ViewController</string>
-				<key>CKMapCollectionViewController</key>
-				<string>ViewController</string>
-				<key>CKFormTableViewController</key>
+				<key>CKTableViewController</key>
 				<string>ViewController</string>
 				<key>CKViewController</key>
 				<string>ViewController</string>
@@ -76,11 +72,9 @@
 			<key>Values</key>
 			<array>
 				<string>CKViewController</string>
-				<string>CKFormTableViewController</string>
-				<string>CKMapCollectionViewController</string>
-				<string>CKGridCollectionViewController</string>
-				<string>CKCollectionViewLayoutController</string>
-				<string>CKCollectionCellContentViewController</string>
+				<string>CKTableViewController</string>
+				<string>CKCollectionViewController</string>
+				<string>CKReusableViewController</string>
 				<string>CKContainerViewController</string>
 				<string>CKSplitViewController</string>
 				<string>CKTabViewController</string>
@@ -88,6 +82,18 @@
 				<string>CKBreadCrumbViewController</string>
 				<string>CKSegmentedViewController</string>
 			</array>
+		</dict>
+		<dict>
+			<key>Name</key>
+			<string>Import Stylesheets</string>
+			<key>Description</key>
+			<string>Stylesheet file names to import separated by comma</string>
+			<key>Identifier</key>
+			<string>stylesheetImports</string>
+			<key>Required</key>
+			<false/>
+			<key>Type</key>
+			<string>text</string>
 		</dict>
 	</array>
 	<key>Platforms</key>

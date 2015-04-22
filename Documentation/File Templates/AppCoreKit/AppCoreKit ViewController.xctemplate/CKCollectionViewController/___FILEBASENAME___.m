@@ -16,41 +16,39 @@
 
 #pragma mark ViewController Life Cycle
 
+- (id)init{
+    return self = [super initWithCollectionViewLayout:[[CKCollectionViewFlowLayout alloc]init]];
+}
+
 - (void)postInit{
     [super postInit];
-    [self setupViewController];
+    [self setupSections];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self.view beginBindingsContextByRemovingPreviousBindings];
+    [self beginBindingsContextByRemovingPreviousBindings];
     [self setupBindings];
-    [self.view endBindingsContext];
+    [self endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.view clearBindingsContext];
+    [self clearBindingsContext];
 }
 
-#pragma mark Initializing View Controller
+#pragma mark Initializing Collection View Controller
 
-- (void)setupViewController{
-    //TODO : Setup self and contentCellController here
+- (void)setupSections{
+    
+    [self addSections:@[] animated:NO];
 }
-
 
 #pragma mark Setup MVC and bindings
 
 - (void)setupBindings{
-    //TODO : Setup Views, bindings and contentViewCell here
-}
-
-- (void)didSelect{
-    [super didSelect];
-    
-    //TODO : handle cell selection here
+    //TODO : Setup Views and bindings
 }
 
 @end

@@ -5,13 +5,20 @@
     ],
 
     "___FILEBASENAMEASIDENTIFIER___" : {
-   
+
+        "tableViewCell" : {
+
+        },
+
+        "collectionViewCell" : {
+
+        },
+
         "view" : {
             "layout" : {
                 "UIView" : "MainView"
             }
         }
-        
     }
 
 }
