@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Icon</key>
+	<string>TemplateIcon.tiff</string>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Description</key>
+			<string>The name of the class to create</string>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Name</key>
+			<string>Stylesheet</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Required</key>
+			<true/>
+			<key>Type</key>
+			<string>text</string>
+		</dict>
+		<dict>
+			<key>Name</key>
+			<string>Import Stylesheets</string>
+			<key>Description</key>
+			<string>Stylesheet file names to import separated by comma</string>
+			<key>Identifier</key>
+			<string>stylesheetImports</string>
+			<key>Required</key>
+			<false/>
+			<key>Type</key>
+			<string>text</string>
+		</dict>
+	</array>
+	<key>Description</key>
+	<string>A Stylesheet file</string>
+	<key>MainTemplateFile</key>
+	<string>___FILEBASENAME___.style</string>
+	<key>SortOrder</key>
+	<integer>3</integer>
+	<key>Platforms</key>
+	<array>
+		<string>com.apple.platform.iphoneos</string>
+	</array>
+</dict>
+</plist>
