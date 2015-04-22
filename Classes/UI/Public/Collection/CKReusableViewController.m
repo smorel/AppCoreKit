@@ -72,11 +72,6 @@
     return self;
 }
 
-- (void)setContainerViewController:(UIViewController *)containerViewController{
-    [super setContainerViewController:containerViewController];
-    [self postInit];
-}
-
 - (void)styleManagerDidUpdate:(NSNotification*)notification{
     
     if(!self.view){
