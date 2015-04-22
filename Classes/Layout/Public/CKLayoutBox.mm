@@ -62,7 +62,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     } forPredicate:^BOOL(NSString* containerKey, NSMutableDictionary *container, NSString *key, id value) {
         Class type = NSClassFromString(key);
         if(type
-           && ([NSObject isClass:type kindOfClass:[UIView class]] || [NSObject isClass:type kindOfClass:[CKLayoutBox class]])
+           && ([NSObject isClass:type kindOfClass:[UIView class]] || [NSObject isClass:type kindOfClass:[UIViewController class]] || [NSObject isClass:type kindOfClass:[CKLayoutBox class]])
            && [value isKindOfClass:[NSArray class]]){
             return YES;
         }
@@ -81,7 +81,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
         id nameDefinition  = [container objectForKey:@"name"];
             
         if(type
-           && ([NSObject isClass:type kindOfClass:[UIView class]] || [NSObject isClass:type kindOfClass:[CKLayoutBox class]])
+           && ([NSObject isClass:type kindOfClass:[UIView class]] || [NSObject isClass:type kindOfClass:[UIViewController class]] || [NSObject isClass:type kindOfClass:[CKLayoutBox class]])
            && [value isKindOfClass:[NSString class]]
            && classDefinition == nil
            && nameDefinition == nil){
