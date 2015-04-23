@@ -45,10 +45,12 @@
     [[UIColor clearColor]setFill];
     CGContextFillRect(contextRef, CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height));
     
+    NSArray* viewsToInclude = [self viewsToIncludeInSnapshotWithoutSubviews];
+    
     //- I don't like this cause it will invalidate layouts
    NSMutableArray* viewsToShow = [NSMutableArray array];
     for(UIView* v in self.subviews){
-        if(![v isKindOfClass:[CKStyleView class]]){
+        if(![viewsToInclude containsObject:v]){
             if(!v.hidden){
                 [viewsToShow addObject:v];
                 v.hidden = YES;
@@ -81,6 +83,16 @@
     }
     
     return resultingImage;
+}
+
+- (NSArray*)viewsToIncludeInSnapshotWithoutSubviews{
+    if(self.subviews.count <= 0)
+        return nil;
+    
+    if([[self.subviews objectAtIndex:0]isKindOfClass:[CKStyleView class]])
+        return @[[self.subviews objectAtIndex:0]];
+    
+    return nil;
 }
 
 @end

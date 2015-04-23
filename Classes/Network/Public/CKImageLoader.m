@@ -90,6 +90,12 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
     }
     else if([[self.imageURL scheme] isMatchedByRegex:@"^(http|https)$"]){
         //__block CKImageLoader *bSelf = self;
+        
+        
+        
+        
+        //TODO: if we can get it from cache, return it to delegate right now !!!!!
+        
         self.request = [CKWebRequest scheduledRequestWithURL:url completion:^(id object, NSURLResponse *response, NSError * error) {
             [self didReceiveValue:object error:error cached:(self.request.connection == nil)];
             self.request = nil;

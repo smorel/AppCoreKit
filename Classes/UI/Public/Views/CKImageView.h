@@ -2,171 +2,96 @@
 //  CKImageView.h
 //  AppCoreKit
 //
-//  Created by Fred Brunel.
-//  Copyright 2010 WhereCloud Inc. All rights reserved.
+//  Created by Sebastien Morel on 2015-04-23.
+//  Copyright (c) 2015 Sebastien Morel. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "CKImageLoader.h"
-
-
-
-@class CKImageView;
-
-
-/** 
- */
-@protocol CKImageViewDelegate
-
-///-----------------------------------
-/// @name Reacting to Image View Events
-///-----------------------------------
+#import "CKImageCache.h"
 
 /**
- */
-- (void)imageView:(CKImageView *)imageView didLoadImage:(UIImage *)image cached:(BOOL)cached;
-
-/**
- */
-- (void)imageView:(CKImageView *)imageView didFailLoadWithError:(NSError *)error;
-
-@end
-
-
-
-/** 
- */
-typedef NS_ENUM(NSInteger, CKImageViewState){
-	CKImageViewStateNone,
-	CKImageViewStateSpinner,
-	CKImageViewStateDefaultImage,
-	CKImageViewStateImage
-};
-
-/** 
  */
 typedef NS_ENUM(NSInteger, CKImageViewSpinnerStyle){
-	CKImageViewSpinnerStyleWhiteLarge = UIActivityIndicatorViewStyleWhiteLarge,
+    CKImageViewSpinnerStyleWhiteLarge = UIActivityIndicatorViewStyleWhiteLarge,
     CKImageViewSpinnerStyleWhite = UIActivityIndicatorViewStyleWhite,
     CKImageViewSpinnerStyleGray = UIActivityIndicatorViewStyleGray,
-	CKImageViewSpinnerStyleNone
+    CKImageViewSpinnerStyleNone
 };
 
-
-/* COMMENT :
- In interactive mode, we replace the imageView by a UIButton to handle touchs.
- This has limitations :
- * the contentMode in the button does not respect the one we set for all states.
- We'll have to implements touchs and feedback drawing if we want to handle it correctly.
+/** An imageview providing the control interface for handling touch and the ability to load images from file or remote URL.
+ This is backed by CKImageCache that allows to share image web requests for the same url between several instances of CKImageView reducing the network consumption. It also keep the loaded image in memory until no more CKImageView are displaying the image at the specified url.
+ 
+ Cross fade animation can be parameterized when switching the image or receiving an image from a remote url. An optional default image can be set to be displayed while the image is fetched from a remote url as well as a spinner type for an optional activity indicator.
  */
-@interface CKImageView : UIView <CKImageLoaderDelegate> 
+@interface CKImageView : UIControl
 
 ///-----------------------------------
-/// @name Customizing the image URL
+/// @name Managing the image
 ///-----------------------------------
+
+/** defaultImage will be displayed while and image is loding from a remote URL
+ */
+@property (nonatomic, retain, readwrite) UIImage *defaultImage;
+
+/** image can be set programatically or will be set internally when an image has been fetched from a file or remote URL
+ */
+@property (nonatomic, retain, readwrite) UIImage *image;
 
 /**
+ */
+- (void)setImage:(UIImage*)image animated:(BOOL)animated;
+
+///-----------------------------------
+/// @name Managing image loading
+///-----------------------------------
+
+/** setting the imageURL will start a task for loding it from a file or a remote URL.
+ A caching system is in place so that, if another instance of CKImageView2 already has fetched or starting fetching the same URL, it will reuse the same image or image loader to reduce network consumption and improve preformances. When no more CKImageView2 are displaying or fetching the image with the specified URL, the cached image or image loader is dismissed for the specified URL.
  */
 @property (nonatomic, retain, readwrite) NSURL *imageURL;
-
-/**
- */
-@property (nonatomic, copy) UIImage*(^postProcess)(UIImage* image);
-
-/**
- */
-- (void)loadImageWithContentOfURL:(NSURL *)url;
 
 ///-----------------------------------
 /// @name Customizing the appearance
 ///-----------------------------------
 
-/**
- */
-@property (nonatomic, retain, readwrite) UIImage *defaultImage;
 
-/**
- */
-@property (nonatomic, assign, readwrite) UIViewContentMode imageViewContentMode;
-
-/** default value is 0.4
+/** Specifies a duration for cross fade between default image and the image loaded from the specified imageURL when fetched from a remote source or when setting the image. A value of 0 means no animation and the image will be displayed instantaneously.
+ Default value is 0.25
  */
 @property (nonatomic, assign, readwrite) NSTimeInterval fadeInDuration;
 
-/** default value is NO
+/** If the image at the specified imageURL is already available in cache or if it is a file URL, this allow to disable cross fade animation to get the imgae displayed instantaneously. This can be interesting in the context of CKImageView2 embedded in reusableViewController in tableView or collectionView.
+ Default value is NO
  */
 @property (nonatomic, assign, readwrite) BOOL animateLoadingOfImagesLoadedFromCache;
 
-/**
- */
-@property (nonatomic, assign, readwrite) BOOL interactive;
-
-/**
+/** This specifies a type for displaying a UIActivityIndicatorView on top while fetching an image from a remote URL. UIActivityIndicatorView will be centered in the CKImageView2.
+ Default value is CKImageViewSpinnerStyleNone
  */
 @property (nonatomic, assign, readwrite) CKImageViewSpinnerStyle spinnerStyle;
 
-///-----------------------------------
-/// @name Getting the image
-///-----------------------------------
-
-/**
+/** An optional postProcess block can be set to modify the image before displaying it. It will be executed when receiving an image from the remote URL, the cache or if you set the image property.
  */
-@property (nonatomic, retain, readonly) UIImage *image;
+@property (nonatomic, copy) UIImage*(^postProcess)(UIImage* image);
 
-///-----------------------------------
-/// @name Managing the delegate
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, assign, readwrite) id<CKImageViewDelegate> delegate;
-
-///-----------------------------------
-/// @name Getting the button and image views
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, retain, readonly) UIButton *button;
-
-/**
- */
-@property (nonatomic, retain, readonly) UIView *defaultImageView;
-
-///-----------------------------------
-/// @name Managing URL Requests
-///-----------------------------------
-
-/**
- */
-- (void)reload;
-
-/**
- */
-- (void)reset;
-
-/**
- */
-- (void)cancel;
 
 @end
 
 
-/**
- */
-@interface CKImageView (CKBindings)
 
-///-----------------------------------
-/// @name Bindings
-///-----------------------------------
+@interface CKImageView(Deprecated)
 
-/**
- */
-- (void)bindEvent:(UIControlEvents)controlEvents withBlock:(void (^)())block;
+/* you can use setImageURL instead
+*/
+- (void)loadImageWithContentOfURL:(NSURL *)url;
 
-/**
+
+/** You can use contentMode instead
  */
-- (void)bindEvent:(UIControlEvents)controlEvents target:(id)target action:(SEL)selector;
+@property (nonatomic, assign, readwrite) UIViewContentMode imageViewContentMode;
+
+/** You can use userInteractionEnabled instead
+ */
+@property (nonatomic, assign, readwrite) BOOL interactive;
 
 @end

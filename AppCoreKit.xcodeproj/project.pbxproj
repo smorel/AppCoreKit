@@ -119,8 +119,6 @@
 		7560DCB513B8ED3600268D13 /* CKHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6813B8ED3600268D13 /* CKHost.m */; };
 		7560DCB813B8ED3600268D13 /* CKImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6B13B8ED3600268D13 /* CKImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCB913B8ED3600268D13 /* CKImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6C13B8ED3600268D13 /* CKImageLoader.m */; };
-		7560DCBC13B8ED3600268D13 /* CKImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6F13B8ED3600268D13 /* CKImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCBD13B8ED3600268D13 /* CKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7013B8ED3600268D13 /* CKImageView.m */; };
 		7560DCBE13B8ED3600268D13 /* CKInetEndPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7113B8ED3600268D13 /* CKInetEndPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCBF13B8ED3600268D13 /* CKInetEndPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7213B8ED3600268D13 /* CKInetEndPoint.m */; };
 		7560DCC013B8ED3600268D13 /* CKItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7313B8ED3600268D13 /* CKItem.h */; settings = {ATTRIBUTES = (); }; };
@@ -564,6 +562,10 @@
 		D91D65921AE8335100B19E14 /* CKViewTransitionContext+TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D657C1AE8335100B19E14 /* CKViewTransitionContext+TableView.m */; };
 		D91D65931AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D657D1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D91D65941AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D657E1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m */; };
+		D93CD58F1AE981CD00B3D376 /* CKImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD58B1AE981CD00B3D376 /* CKImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D93CD5901AE981CD00B3D376 /* CKImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD58C1AE981CD00B3D376 /* CKImageCache.m */; };
+		D93CD5911AE981CD00B3D376 /* CKImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD58D1AE981CD00B3D376 /* CKImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D93CD5921AE981CD00B3D376 /* CKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD58E1AE981CD00B3D376 /* CKImageView.m */; };
 		D9418A5B1AB8654A00234A15 /* CKDatePickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A5C1AB8654A00234A15 /* CKDatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */; };
 		D9418A611AB86AD900234A15 /* CKPropertyURLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -767,8 +769,6 @@
 		7560DB6813B8ED3600268D13 /* CKHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKHost.m; path = Classes/Network/Public/CKHost.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB6B13B8ED3600268D13 /* CKImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageLoader.h; path = Classes/Network/Public/CKImageLoader.h; sourceTree = "<group>"; };
 		7560DB6C13B8ED3600268D13 /* CKImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageLoader.m; path = Classes/Network/Public/CKImageLoader.m; sourceTree = "<group>"; };
-		7560DB6F13B8ED3600268D13 /* CKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageView.h; path = Classes/UI/Public/Views/CKImageView.h; sourceTree = "<group>"; };
-		7560DB7013B8ED3600268D13 /* CKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageView.m; path = Classes/UI/Public/Views/CKImageView.m; sourceTree = "<group>"; };
 		7560DB7113B8ED3600268D13 /* CKInetEndPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKInetEndPoint.h; path = Classes/Network/Public/CKInetEndPoint.h; sourceTree = "<group>"; };
 		7560DB7213B8ED3600268D13 /* CKInetEndPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKInetEndPoint.m; path = Classes/Network/Public/CKInetEndPoint.m; sourceTree = "<group>"; };
 		7560DB7313B8ED3600268D13 /* CKItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItem.h; path = Classes/CoreData/Private/CKItem.h; sourceTree = "<group>"; };
@@ -1228,6 +1228,10 @@
 		D91D657C1AE8335100B19E14 /* CKViewTransitionContext+TableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+TableView.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+TableView.m"; sourceTree = "<group>"; };
 		D91D657D1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKViewTransitionContext+ViewHierarchy.h"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+ViewHierarchy.h"; sourceTree = "<group>"; };
 		D91D657E1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+ViewHierarchy.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+ViewHierarchy.m"; sourceTree = "<group>"; };
+		D93CD58B1AE981CD00B3D376 /* CKImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageCache.h; path = Classes/UI/Public/Views/CKImageCache.h; sourceTree = "<group>"; };
+		D93CD58C1AE981CD00B3D376 /* CKImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCache.m; path = Classes/UI/Public/Views/CKImageCache.m; sourceTree = "<group>"; };
+		D93CD58D1AE981CD00B3D376 /* CKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageView.h; path = Classes/UI/Public/Views/CKImageView.h; sourceTree = "<group>"; };
+		D93CD58E1AE981CD00B3D376 /* CKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageView.m; path = Classes/UI/Public/Views/CKImageView.m; sourceTree = "<group>"; };
 		D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDatePickerViewController.h; path = Classes/UI/Public/Controllers/CKDatePickerViewController.h; sourceTree = "<group>"; };
 		D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDatePickerViewController.m; path = Classes/UI/Public/Controllers/CKDatePickerViewController.m; sourceTree = "<group>"; };
 		D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyURLViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyURLViewController.h; sourceTree = "<group>"; };
@@ -3279,8 +3283,10 @@
 			children = (
 				D9418A851AB8C18600234A15 /* UIImageView+URL.h */,
 				D9418A861AB8C18600234A15 /* UIImageView+URL.m */,
-				7560DB6F13B8ED3600268D13 /* CKImageView.h */,
-				7560DB7013B8ED3600268D13 /* CKImageView.m */,
+				D93CD58B1AE981CD00B3D376 /* CKImageCache.h */,
+				D93CD58C1AE981CD00B3D376 /* CKImageCache.m */,
+				D93CD58D1AE981CD00B3D376 /* CKImageView.h */,
+				D93CD58E1AE981CD00B3D376 /* CKImageView.m */,
 			);
 			name = ImageView;
 			sourceTree = "<group>";
@@ -3485,10 +3491,10 @@
 				7560DCB813B8ED3600268D13 /* CKImageLoader.h in Headers */,
 				965A817A18B2B6D3005E8508 /* CKCollectionViewFlowLayout.h in Headers */,
 				D9CD82701AC35CB100B2985D /* CKPropertyObjectViewController.h in Headers */,
-				7560DCBC13B8ED3600268D13 /* CKImageView.h in Headers */,
 				7560DCBE13B8ED3600268D13 /* CKInetEndPoint.h in Headers */,
 				7560DCC013B8ED3600268D13 /* CKItem.h in Headers */,
 				9649969E18D0D8EB002E03F4 /* CKSnapshotController.h in Headers */,
+				D93CD5911AE981CD00B3D376 /* CKImageView.h in Headers */,
 				7560DCC213B8ED3600268D13 /* CKItemAttributeReference.h in Headers */,
 				7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */,
 				7560DCCC13B8ED3600268D13 /* CKLocalization.h in Headers */,
@@ -3652,6 +3658,7 @@
 				75AD5D9C144C71740008F53A /* UIView+InlineDebugger.h in Headers */,
 				75AD5DA0144C72960008F53A /* UIViewController+InlineDebugger.h in Headers */,
 				D91D65931AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h in Headers */,
+				D93CD58F1AE981CD00B3D376 /* CKImageCache.h in Headers */,
 				B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */,
 				757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */,
 				7521E31E14520BBE000AEED8 /* AppCoreKit-Prefix.pch in Headers */,
@@ -3912,7 +3919,6 @@
 				7560DCB513B8ED3600268D13 /* CKHost.m in Sources */,
 				7560DCB913B8ED3600268D13 /* CKImageLoader.m in Sources */,
 				9668EF0918AD076900E72444 /* UIScrollView+CKLayout.m in Sources */,
-				7560DCBD13B8ED3600268D13 /* CKImageView.m in Sources */,
 				7560DCBF13B8ED3600268D13 /* CKInetEndPoint.m in Sources */,
 				D9418A7D1AB880D300234A15 /* CKReusableViewControllerFactory.m in Sources */,
 				7560DCC113B8ED3600268D13 /* CKItem.m in Sources */,
@@ -3984,6 +3990,7 @@
 				7560DD8613B8ED3600268D13 /* UITableView+Introspection.m in Sources */,
 				7560DD8813B8ED3600268D13 /* UITableViewCell+Introspection.m in Sources */,
 				7560DD8C13B8ED3600268D13 /* UITextField+Introspection.m in Sources */,
+				D93CD5921AE981CD00B3D376 /* CKImageView.m in Sources */,
 				7560DD9213B8ED3600268D13 /* UIView+Introspection.m in Sources */,
 				7560DD9613B8ED3600268D13 /* UIView+Style.m in Sources */,
 				7560DD9813B8ED3600268D13 /* CKViewController.m in Sources */,
@@ -4110,6 +4117,7 @@
 				96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */,
 				962C08941820131B00A6E439 /* CKStackViewController.m in Sources */,
 				B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */,
+				D93CD5901AE981CD00B3D376 /* CKImageCache.m in Sources */,
 				B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */,
 				B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */,
 				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
