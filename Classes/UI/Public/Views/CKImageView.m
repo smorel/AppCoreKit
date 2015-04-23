@@ -142,6 +142,7 @@
         
         UIImageView* imageView = [[UIImageView alloc]initWithImage:self.image];
         imageView.frame = self.bounds;
+        imageView.contentMode = self.contentMode;
         
         imageView.alpha = 0;
         [self addSubview:imageView];
@@ -161,6 +162,7 @@
         if(!self.defaultImageView){
             self.defaultImageView = [[UIImageView alloc]init];
             self.defaultImageView.frame = self.bounds;
+            self.defaultImageView.contentMode = self.contentMode;
             [self addSubview:self.defaultImageView];
         }
         
