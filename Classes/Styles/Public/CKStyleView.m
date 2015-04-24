@@ -248,12 +248,15 @@
     [super layoutSubviews];
     
     if([self shadowEnabled]){
+        [self updateShadowOffsetWithLight];
         UIImage* shadowImage = [self generateShadowImage];
         if(!self.shadowImageView){
             self.shadowImageView = [[UIImageView alloc]initWithImage:shadowImage];
             [self addSubview:self.shadowImageView];
         }else{
-            self.shadowImageView.image = shadowImage;
+            @autoreleasepool {
+                self.shadowImageView.image = shadowImage;
+            }
         }
         
         self.shadowImageView.frame = [self shadowImageViewFrame];
@@ -261,9 +264,16 @@
 }
 
 - (void)regenerateShadow{
-    UIImage* shadowImage = [self generateShadowImage];
-    self.shadowImageView.image = shadowImage;
-    [self setNeedsLayout];
+    if(![self shadowEnabled])
+        return;
+    
+    @autoreleasepool {
+        UIImage* shadowImage = [self generateShadowImage];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.shadowImageView.image = shadowImage;
+            self.shadowImageView.frame = [self shadowImageViewFrame];
+        });
+    }
 }
 
 

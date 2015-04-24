@@ -79,7 +79,7 @@
         shadowFrame.origin.x -= offset.x;
         shadowFrame.origin.y -= offset.y;
         
-        return shadowFrame;
+        return CGRectIntegral(shadowFrame);
     }
     
     return self.frame;
@@ -94,21 +94,22 @@
         
         CGRect shadowFrame = [self shadowImageViewFrame];
         
-        CGSize minimumDrawSize = CGSizeMake(( 2*(self.borderShadowRadius + self.roundedCornerSize)) + 1,(2* (self.borderShadowRadius + self.roundedCornerSize)) + 1);
+        CGSize minimumDrawSize = CGSizeMake(( 2*(self.borderShadowRadius + self.roundedCornerSize)) + 1+ fabs(self.borderShadowOffset.width),
+                                            (2* (self.borderShadowRadius + self.roundedCornerSize)) + 1 + fabs(self.borderShadowOffset.height));
         
-        CGRect imageRect = CGRectMake(0,0,
+        CGRect imageRect =  CGRectIntegral(CGRectMake(0,0,
                                       shadowFrame.size.width - (frame.size.width) + minimumDrawSize.width,
-                                      shadowFrame.size.height - (frame.size.height) + minimumDrawSize.height);
+                                      shadowFrame.size.height - (frame.size.height) + minimumDrawSize.height));
         
-        CGRect drawRect = CGRectMake(fabs(self.borderShadowOffset.width) ,
-                                     fabs(self.borderShadowOffset.height),
+        CGRect drawRect = CGRectMake(-shadowFrame.origin.x ,
+                                     -shadowFrame.origin.y,
                                      minimumDrawSize.width,
                                      minimumDrawSize.height);
         
-        UIEdgeInsets resizableInsets = UIEdgeInsetsMake(self.borderShadowRadius + self.roundedCornerSize + MAX(0,self.borderShadowOffset.height),
-                                                        self.borderShadowRadius + self.roundedCornerSize + MAX(0,self.borderShadowOffset.width),
-                                                        self.borderShadowRadius + self.roundedCornerSize + MAX(0,self.borderShadowOffset.height),
-                                                        self.borderShadowRadius + self.roundedCornerSize + MAX(0,self.borderShadowOffset.width));
+        UIEdgeInsets resizableInsets = UIEdgeInsetsMake(self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.height),
+                                                        self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.width),
+                                                        self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.height),
+                                                        self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.width));
         
         CGSize size = imageRect.size;
         CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
@@ -121,7 +122,8 @@
         
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        result = [[image resizableImageWithCapInsets:resizableInsets resizingMode:UIImageResizingModeStretch]retain];
+        
+         result = [[image resizableImageWithCapInsets:resizableInsets resizingMode:UIImageResizingModeStretch]retain];
     }
     
     return [result autorelease];
@@ -135,7 +137,6 @@
     CGContextAddPath(gc, clippingPath);
     CGContextClip(gc);
     
-    [[UIColor clearColor]setFill];
     CGContextClearRect(gc, rect);
     
     CFRelease(clippingPath);
@@ -254,35 +255,39 @@
                         change:(NSDictionary *)change
                        context:(void *)context{
     if([object isKindOfClass:[UIView class]] && [keyPath isEqualToString:@"frame"]){
-        [self updateShadow];
+        [self updateShadowWithLight];
     }else if([object isKindOfClass:[UIView class]] && [keyPath isEqualToString:@"contentOffset"]){
-        [self updateShadow];
+        [self updateShadowWithLight];
     }
 }
 
-- (void)updateShadow{
+- (void)updateShadowWithLight{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),   ^ {
+        [self updateShadowOffsetWithLight];
+        [self regenerateShadow];
+    });
+}
+
+- (void)updateShadowOffsetWithLight{
     if(![self shadowEnabled])
         return;
     
-    @autoreleasepool {
-        
-        CGPoint lightPosition = CGPointZero;
-        CGFloat lightIntensity = 10;
-        CGPoint lightDirection = CGPointMake(1,1);
-        
-        CGRect rect = [self.superview convertRect:self.frame toView:self.window];
-        CGPoint diff = CGPointMake(rect.origin.x + rect.size.width - lightPosition.x,rect.origin.y + rect.size.height - lightPosition.y );
-        
-        CGFloat distance = CKCGPointLength(diff) / 400;
-        CGPoint direction = CKCGPointNormalize( diff );
-        
-        CGSize offset = CGSizeMake(direction.x * lightIntensity , direction.y * lightIntensity);
-        [self setBorderShadowOffset:offset];
-        
-        [self regenerateShadow];
-        
-    }
+    CGPoint lightPosition = CGPointMake(0,0);
+    CGFloat lightIntensity = 20;
+    CGPoint lightDirection = CGPointMake(1,1);
+    
+    CGRect rect = [self.superview convertRect:self.frame toView:self.window];
+    CGPoint diff = CGPointMake(rect.origin.x + rect.size.width - lightPosition.x,rect.origin.y + rect.size.height - lightPosition.y );
+    
+    CGPoint direction = CKCGPointNormalize( diff );
+    
+    CGSize offset = CGSizeMake((NSInteger)(direction.x * lightIntensity) , (NSInteger)(direction.y * lightIntensity) );
+    [self setBorderShadowOffset:offset];
 }
+
+#else
+
+- (void)updateShadowOffsetWithLight {}
 
 #endif
 

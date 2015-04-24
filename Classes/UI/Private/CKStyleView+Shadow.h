@@ -13,5 +13,6 @@
 - (BOOL)shadowEnabled;
 - (CGRect)shadowImageViewFrame;
 - (UIImage*)generateShadowImage;
+- (void)updateShadowOffsetWithLight;
 
 @end

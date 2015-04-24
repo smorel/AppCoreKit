@@ -179,6 +179,7 @@
 + (CKStyleView*)cloneStyleViewForShadows:(CKStyleView*)other{
     CKStyleView* styleView = [[[CKStyleView alloc]init]autorelease];
     
+    styleView.backgroundColor = [UIColor clearColor];
     styleView.corners = other.corners;
     styleView.borderLocation = other.borderLocation;
     styleView.roundedCornerSize = other.roundedCornerSize;
