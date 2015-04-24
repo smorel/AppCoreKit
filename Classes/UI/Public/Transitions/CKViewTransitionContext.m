@@ -176,6 +176,23 @@
     [self.snapshot removeFromSuperview];
 }
 
++ (CKStyleView*)cloneStyleViewForShadows:(CKStyleView*)other{
+    CKStyleView* styleView = [[[CKStyleView alloc]init]autorelease];
+    
+    styleView.corners = other.corners;
+    styleView.borderLocation = other.borderLocation;
+    styleView.roundedCornerSize = other.roundedCornerSize;
+    styleView.borderShadowColor = other.borderShadowColor;
+    styleView.borderShadowRadius = other.borderShadowRadius;
+    styleView.borderShadowOffset = other.borderShadowOffset;
+    
+    styleView.frame = other.frame;
+    styleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [styleView layoutSubviews];
+    
+    return styleView;
+}
+
 + (UIView*)snapshotView:(UIView*)view withLayerAttributesAfterUpdate:(BOOL)afterUpdate{
     CKStyleView* styleView = [view styleView];
     
@@ -188,11 +205,8 @@
     }
     
     if(styleView && [styleView shadowEnabled]){
-        UIImage* shadowImage = [styleView generateShadowImage];
-        UIImageView* shadowImageView = [[[UIImageView alloc]initWithImage:shadowImage]autorelease];
-        shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        shadowImageView.frame = [styleView shadowImageViewFrame];
-        [snapshot addSubview:shadowImageView];
+        CKStyleView* transitionStyleView = [self cloneStyleViewForShadows:styleView];
+        [snapshot addSubview:transitionStyleView];
     }
     
     return snapshot;

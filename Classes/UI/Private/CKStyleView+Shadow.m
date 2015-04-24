@@ -108,7 +108,7 @@
 
 - (void)drawShadowInRect:(CGRect)rect inContext:(CGContextRef)gc{
     // Shadow
-    if(self.borderColor!= nil && self.borderColor != [UIColor clearColor] && self.borderWidth > 0 && self.borderLocation != CKStyleViewBorderLocationNone){
+    if(self.borderLocation != CKStyleViewBorderLocationNone){
         CGContextSaveGState(gc);
         
         if(self.borderShadowColor!= nil && self.borderShadowColor != [UIColor clearColor] && self.borderShadowRadius > 0){
