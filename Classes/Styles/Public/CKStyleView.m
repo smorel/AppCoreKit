@@ -19,6 +19,7 @@
 @interface CKStyleView ()
 @property(nonatomic,retain)UIColor* fillColor;
 @property(nonatomic,retain)UIImageView* shadowImageView;
+@property(nonatomic,retain)NSMutableArray* observedViews;
 @end
 
 
@@ -50,6 +51,9 @@
 }
 
 - (void)dealloc {
+    NSAssert(_observedViews == nil,@"see shadows management");
+    
+    [_observedViews release]; _observedViews = nil;
     [_image release]; _image = nil;
     [_gradientColors release]; _gradientColors = nil;
     [_gradientColorLocations release]; _gradientColorLocations = nil;
@@ -254,6 +258,12 @@
         
         self.shadowImageView.frame = [self shadowImageViewFrame];
     }
+}
+
+- (void)regenerateShadow{
+    UIImage* shadowImage = [self generateShadowImage];
+    self.shadowImageView.image = shadowImage;
+    [self setNeedsLayout];
 }
 
 

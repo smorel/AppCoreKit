@@ -117,3 +117,12 @@ CGRect CKCGRectInterpolate(CGRect r1,CGRect r2, CGFloat ratio){
 CGFloat CKCGFloatInterpolate(CGFloat f1,CGFloat f2, CGFloat ratio){
     return f1 + ((f2 - f1) * ratio);
 }
+
+CGFloat CKCGPointLength(CGPoint point){
+    return sqrt((point.x * point.x) + (point.y * point.y));;
+}
+
+CGPoint CKCGPointNormalize(CGPoint point){
+    CGFloat length = CKCGPointLength(point);
+    return CGPointMake((length == 0) ? 1 : (point.x / length), (length == 0) ? 1 : (point.y/length));
+}

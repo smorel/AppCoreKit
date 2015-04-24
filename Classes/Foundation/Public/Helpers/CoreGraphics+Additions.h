@@ -36,6 +36,9 @@ extern "C" {
     CGRect CKCGRectInterpolate(CGRect r1,CGRect r2, CGFloat ratio);
     CGFloat CKCGFloatInterpolate(CGFloat f1,CGFloat f2, CGFloat ratio);
     CGPoint CKCGRectCenter(CGRect rect);
+    
+    CGFloat CKCGPointLength(CGPoint point);
+    CGPoint CKCGPointNormalize(CGPoint point);
 
 #ifdef __cplusplus
 }
