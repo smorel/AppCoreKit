@@ -8,6 +8,7 @@
 
 #import "CKStyleView.h"
 #import "CKStyleView+Drawing.h"
+#import "CKStyleView+Shadow.h"
 
 #import "UIImage+Transformations.h"
 #import "NSArray+Additions.h"
@@ -17,8 +18,7 @@
 
 @interface CKStyleView ()
 @property(nonatomic,retain)UIColor* fillColor;
-@property(nonatomic,assign)CGRect drawFrame;
-@property(nonatomic,assign)CGRect originalFrame;
+@property(nonatomic,retain)UIImageView* shadowImageView;
 @end
 
 
@@ -59,6 +59,7 @@
     [_embossTopColor release]; _embossTopColor = nil;
     [_embossBottomColor release]; _embossBottomColor = nil;
     [_borderShadowColor release]; _borderShadowColor = nil;
+    [_shadowImageView release]; _shadowImageView = nil;
     [super dealloc];
 }
 
@@ -87,7 +88,6 @@
     self.gradientStyle = CKStyleViewGradientStyleVertical;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.drawFrame = CGRectMake(0,0,0,0);
     self.separatorInsets = UIEdgeInsetsMake(0,0,0,0);
     
     self.separatorDashPhase = 0;
@@ -236,93 +236,26 @@
 }
 
 - (void)updateDisplay{
-    self.frame = self.originalFrame;
     [self setNeedsDisplay];
 }
 
-- (void)setFrame:(CGRect)frame{
-    //TODO : generate stretchable shadow image and add a uiimageview subview that is inseted in layoutsubviews instead of hacking the frame here to draw "out of bounds" ..
-    //This shadow image should be accessible from the outside as we'll grab it while taking snapshots and transitioning between view controllers.
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
     
-    if(CGRectEqualToRect(self.originalFrame,CGRectZero) && CGRectEqualToRect(frame, self.drawFrame))
-        return;
-    
-    self.originalFrame = frame;
-    
-    CGSize oldSize = self.frame.size;
-    if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
-        //Shadow
-        
-        UIRectCorner roundedCorners = UIRectCornerAllCorners;
-        switch (self.corners) {
-            case CKStyleViewCornerTypeTop:
-                roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
-                break;
-            case CKStyleViewCornerTypeBottom:
-                roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
-                break;
-                
-            default:
-                break;
+    if([self shadowEnabled]){
+        UIImage* shadowImage = [self generateShadowImage];
+        if(!self.shadowImageView){
+            self.shadowImageView = [[UIImageView alloc]initWithImage:shadowImage];
+            [self addSubview:self.shadowImageView];
+        }else{
+            self.shadowImageView.image = shadowImage;
         }
         
-        CGFloat multiplier = 2;
-        CGRect shadowFrame = frame;
-        CGPoint offset = CGPointMake(0,0);
-        
-        if(_borderLocation & CKStyleViewBorderLocationLeft){
-            offset.x += multiplier * self.borderShadowRadius;
-            shadowFrame.size.width += multiplier * self.borderShadowRadius;
-            
-        }
-        if(_borderLocation & CKStyleViewBorderLocationRight){
-            shadowFrame.size.width += multiplier * self.borderShadowRadius;
-        }
-        if(_borderLocation & CKStyleViewBorderLocationTop){
-            offset.y += multiplier * self.borderShadowRadius;
-            shadowFrame.size.height += multiplier * self.borderShadowRadius;
-        }
-        if(_borderLocation & CKStyleViewBorderLocationBottom){
-            shadowFrame.size.height += multiplier * self.borderShadowRadius;
-        }
-        
-        if(self.borderLocation & CKStyleViewBorderLocationBottom && self.borderShadowOffset.height > 0){
-            shadowFrame.size.height += self.borderShadowOffset.height;
-        }
-        
-        if(self.borderLocation & CKStyleViewBorderLocationTop && self.borderShadowOffset.height < 0){
-            offset.y -= self.borderShadowOffset.height;
-            shadowFrame.size.height += -self.borderShadowOffset.height;
-        }
-        
-        if(self.borderLocation & CKStyleViewBorderLocationRight && self.borderShadowOffset.width > 0){
-            shadowFrame.size.width += self.borderShadowOffset.width;
-        }
-        
-        if(self.borderLocation & CKStyleViewBorderLocationLeft && self.borderShadowOffset.width < 0){
-            offset.x -= self.borderShadowOffset.width;
-            shadowFrame.size.width += -self.borderShadowOffset.width;
-        }
-        
-        shadowFrame.origin.x -= offset.x;
-        shadowFrame.origin.y -= offset.y;
-        
-        [super setFrame:shadowFrame];
-        
-        if( !CGSizeEqualToSize(shadowFrame.size, oldSize) ){
-            self.drawFrame = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
-            [self setNeedsDisplay];
-        }
-    }else{
-        //Draw normally
-        [super setFrame:frame];
-        
-        if( !CGSizeEqualToSize(frame.size, oldSize) ){
-            self.drawFrame = CGRectMake(0,0,frame.size.width,frame.size.height);
-            [self setNeedsDisplay];
-        }
+        self.shadowImageView.frame = [self shadowImageViewFrame];
     }
 }
+
 
 
 @end

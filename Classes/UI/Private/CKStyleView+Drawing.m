@@ -13,8 +13,6 @@
 
 @interface CKStyleView ()
 @property(nonatomic,retain)UIColor* fillColor;
-@property(nonatomic,assign)CGRect drawFrame;
-@property(nonatomic,assign)CGRect originalFrame;
 @end
 
 
@@ -23,12 +21,10 @@
 
 - (void)drawRect:(CGRect)rect{
     CGContextRef gc = UIGraphicsGetCurrentContext();
-    
-    [self drawInRect:self.drawFrame inContext:gc];
+    [self drawInRect:self.frame inContext:gc];
 }
 
 - (void)drawInRect:(CGRect)rect inContext:(CGContextRef)gc {
-    [self drawShadowInRect:rect inContext:gc];
     
     CGMutablePathRef clippingPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:rect];
     
@@ -43,68 +39,6 @@
     CFRelease(clippingPath);
 }
 
-- (void)drawShadowInRect:(CGRect)rect inContext:(CGContextRef)gc{
-    // Shadow
-    if(self.borderColor!= nil && self.borderColor != [UIColor clearColor] && self.borderWidth > 0 && self.borderLocation != CKStyleViewBorderLocationNone){
-        CGContextSaveGState(gc);
-        
-        if(self.borderShadowColor!= nil && self.borderShadowColor != [UIColor clearColor] && self.borderShadowRadius > 0){
-            CGContextSetShadowWithColor(gc, self.borderShadowOffset, self.borderShadowRadius, self.borderShadowColor.CGColor);
-            
-            CGRect shadowRect = rect;
-            if(!(self.borderLocation & CKStyleViewBorderLocationTop)){
-                shadowRect.origin.y -= self.borderShadowRadius;
-                shadowRect.size.height += self.borderShadowRadius;
-            }
-            if(!(self.borderLocation & CKStyleViewBorderLocationBottom)){
-                shadowRect.size.height += self.borderShadowRadius;
-            }
-            if(!(self.borderLocation & CKStyleViewBorderLocationLeft)){
-                shadowRect.origin.x -= self.borderShadowRadius;
-                shadowRect.size.width += self.borderShadowRadius;
-            }
-            if(!(self.borderLocation & CKStyleViewBorderLocationRight)){
-                shadowRect.size.width += self.borderShadowRadius;
-            }
-            
-            if(!(self.borderLocation & CKStyleViewBorderLocationBottom) && self.borderShadowOffset.height < 0){
-                shadowRect.size.height -= self.borderShadowOffset.height;
-            }
-            
-            if(!(self.borderLocation & CKStyleViewBorderLocationTop) && self.borderShadowOffset.height > 0){
-                shadowRect.origin.y -= self.borderShadowOffset.height;
-                shadowRect.size.height += self.borderShadowOffset.height;
-            }
-            
-            if(!(self.borderLocation & CKStyleViewBorderLocationRight) && self.borderShadowOffset.width < 0){
-                shadowRect.size.width -= self.borderShadowOffset.width;
-            }
-            
-            if(!(self.borderLocation & CKStyleViewBorderLocationLeft) && self.borderShadowOffset.width > 0){
-                shadowRect.origin.x -= self.borderShadowOffset.width;
-                shadowRect.size.width += self.borderShadowOffset.width;
-            }
-            
-            if (self.corners != CKStyleViewCornerTypeNone){
-                CGMutablePathRef shadowPath = CGPathCreateMutable();
-                if (self.corners != CKStyleViewCornerTypeNone) {
-                    shadowPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll  borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:shadowRect];
-                }
-                
-                [self.borderColor setFill];
-                CGContextAddPath(gc, shadowPath);
-                CGContextFillPath(gc);
-                CFRelease(shadowPath);
-            }else{
-                [self.borderColor setFill];
-                CGContextFillRect(gc, shadowRect);
-            }
-            
-        }
-        
-        CGContextRestoreGState(gc);
-    }
-}
 
 - (void)drawBackgroundColorInRect:(CGRect)rect clippingPath:(CGPathRef)clippingPath context:(CGContextRef)gc {
     if(self.gradientColors == nil && self.image == nil){
