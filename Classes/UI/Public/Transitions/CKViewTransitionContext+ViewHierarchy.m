@@ -240,4 +240,31 @@
     return [self contextsForSubviewsViewWithSourceView:sourceView targetView:nil ignoringViewWithNames:viewNames];
 }
 
+
++ (CKViewTransitionContext*)contextForView:(UIView*)view
+                         transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext{
+    return [self contextForView:view animation:CKViewTransitionContextAnimationNone transitionContext:transitionContext];
+}
+
++ (CKViewTransitionContext*)contextForView:(UIView*)view
+                                 animation:(CKViewTransitionContextAnimation)animation
+                         transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext{
+    
+    CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
+    context.visibility = CKViewTransitionContextVisibilityAlways;
+    context.snapshot = [CKViewTransitionContext snapshotView:view withLayerAttributesAfterUpdate:YES];
+    
+    UICollectionViewLayoutAttributes* startAttributes = [[[UICollectionViewLayoutAttributes alloc]init]autorelease];
+    startAttributes.frame =  [view.superview convertRect:view.frame toView:[transitionContext containerView]];
+    startAttributes.alpha = 1;
+
+    context.startAttributes = startAttributes;
+    
+    UICollectionViewLayoutAttributes* endAttributes =  [CKViewTransitionContext attributesFromAttributes:startAttributes animation:animation transitionContext:transitionContext];
+    context.endAttributes = endAttributes;
+    
+    return context;
+
+}
+
 @end

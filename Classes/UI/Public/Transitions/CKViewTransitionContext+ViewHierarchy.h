@@ -7,12 +7,20 @@
 //
 
 #import "CKViewTransitionContext.h"
+#import "CKViewTransitionContext+Animation.h"
 
 @interface CKViewTransitionContext (ViewHierarchy)
 
 + (CKViewTransitionContext*)contextForSubviewViewNamed:(NSString*)viewName
                                             sourceView:(UIView*)sourceView
                                             targetView:(UIView*)targetView;
+
++ (CKViewTransitionContext*)contextForView:(UIView*)view
+                         transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext;
+
++ (CKViewTransitionContext*)contextForView:(UIView*)view
+                                 animation:(CKViewTransitionContextAnimation)animation
+                         transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext;
 
 + (CKViewTransitionContext*)contextForSubviewViewNamed:(NSString*)viewName
                                                   view:(UIView*)view;
