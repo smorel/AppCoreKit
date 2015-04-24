@@ -150,3 +150,12 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 
 
 @end
+
+
+/**
+ */
+@interface UIView(CKStyleView)
+
+- (CKStyleView*)styleView;
+
+@end

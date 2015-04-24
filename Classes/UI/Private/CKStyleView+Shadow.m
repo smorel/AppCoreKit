@@ -89,18 +89,21 @@
 
     CGRect drawRect = CGRectMake(-frame.origin.x,-frame.origin.y,self.frame.size.width,self.frame.size.height);
     [self drawShadowInRect:drawRect inContext:context];
-    
-    CGMutablePathRef clippingPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:drawRect];
-    CGContextAddPath(context, clippingPath);
-    
-    CGContextClearRect(context, drawRect);
-    
-    CFRelease(clippingPath);
+    [self clearContentInRect:drawRect inContext:context];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     return image;
+}
+
+- (void)clearContentInRect:(CGRect)rect inContext:(CGContextRef)gc{
+    CGMutablePathRef clippingPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:rect];
+    CGContextAddPath(gc, clippingPath);
+    
+    CGContextClearRect(gc, rect);
+    
+    CFRelease(clippingPath);
 }
 
 - (void)drawShadowInRect:(CGRect)rect inContext:(CGContextRef)gc{
@@ -151,12 +154,12 @@
                     shadowPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll  borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:shadowRect];
                 }
                 
-                [self.borderColor setFill];
+                [[UIColor blackColor] setFill];
                 CGContextAddPath(gc, shadowPath);
                 CGContextFillPath(gc);
                 CFRelease(shadowPath);
             }else{
-                [self.borderColor setFill];
+                [[UIColor blackColor] setFill];
                 CGContextFillRect(gc, shadowRect);
             }
             

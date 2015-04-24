@@ -8,6 +8,8 @@
 
 #import "CKViewTransitionContext.h"
 #import "UIView+Snapshot.h"
+#import "CKStyleView.h"
+#import "CKStyleView+Shadow.h"
 
 @interface CKViewTransitionContext()
 @property(nonatomic,retain) NSArray* viewsToHideDuringTransition;
@@ -175,6 +177,7 @@
 }
 
 + (UIView*)snapshotView:(UIView*)view withLayerAttributesAfterUpdate:(BOOL)afterUpdate{
+    CKStyleView* styleView = [view styleView];
     
     UIView* snapshot = nil;
     if(afterUpdate){
@@ -184,17 +187,13 @@
         snapshot = [[[UIImageView alloc]initWithImage:[view snapshotWithoutSubviews]]autorelease];
     }
     
-    /*
-    snapshot.layer.cornerRadius = view.layer.cornerRadius;
-    snapshot.layer.borderColor = view.layer.borderColor;
-    snapshot.layer.borderWidth = view.layer.borderWidth;
-    snapshot.layer.shadowColor = view.layer.shadowColor;
-    snapshot.layer.shadowOffset = view.layer.shadowOffset;
-    snapshot.layer.shadowOpacity = view.layer.shadowOpacity;
-    snapshot.layer.shadowRadius = view.layer.shadowRadius;
-    snapshot.backgroundColor = view.backgroundColor;
-    snapshot.clipsToBounds = view.clipsToBounds;
-     */
+    if(styleView && [styleView shadowEnabled]){
+        UIImage* shadowImage = [styleView generateShadowImage];
+        UIImageView* shadowImageView = [[[UIImageView alloc]initWithImage:shadowImage]autorelease];
+        shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        shadowImageView.frame = [styleView shadowImageViewFrame];
+        [snapshot addSubview:shadowImageView];
+    }
     
     return snapshot;
 }

@@ -259,3 +259,19 @@
 
 
 @end
+
+
+@implementation UIView(CKStyleView)
+
+- (CKStyleView*)styleView{
+    if(self.subviews.count == 0)
+        return nil;
+    
+    UIView* first = [self.subviews objectAtIndex:0];
+    if([first isKindOfClass:[CKStyleView class]])
+        return (CKStyleView*)first;
+    
+    return nil;
+}
+
+@end
