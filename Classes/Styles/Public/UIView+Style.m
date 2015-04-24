@@ -293,7 +293,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 //if appliedStack is nil, the style is not applicated hierarchically !
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack
                    delegate:(id)delegate {
-	if(view == nil)
+	if(view == nil || [view isKindOfClass:[CKStyleView class]])
 		return NO;
     
 	NSMutableDictionary* myViewStyle = style;
@@ -736,6 +736,9 @@ static char NSObjectAppliedStyleObjectKey;
         if([self isKindOfClass:[UIView class]] == YES){
             UIView* selfView = (UIView*)self;
             for(UIView* view in [selfView subviews]){
+                if([view isKindOfClass:[CKStyleView class]])
+                    continue;
+                
                 if(([view appliedStyle] == nil || [[view appliedStyle]isEmpty]) && ![appliedStack containsObject:view]){
                     NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:nil];
                     [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];

@@ -566,6 +566,10 @@
 		D93CD5901AE981CD00B3D376 /* CKImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD58C1AE981CD00B3D376 /* CKImageCache.m */; };
 		D93CD5911AE981CD00B3D376 /* CKImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD58D1AE981CD00B3D376 /* CKImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D93CD5921AE981CD00B3D376 /* CKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD58E1AE981CD00B3D376 /* CKImageView.m */; };
+		D93CD5951AEA7F9E00B3D376 /* CKStyleView+Drawing.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD5931AEA7F9E00B3D376 /* CKStyleView+Drawing.h */; };
+		D93CD5961AEA7F9E00B3D376 /* CKStyleView+Drawing.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */; };
+		D93CD5991AEA805000B3D376 /* CKStyleView+Paths.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */; };
+		D93CD59A1AEA805000B3D376 /* CKStyleView+Paths.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */; };
 		D9418A5B1AB8654A00234A15 /* CKDatePickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A5C1AB8654A00234A15 /* CKDatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */; };
 		D9418A611AB86AD900234A15 /* CKPropertyURLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1232,6 +1236,10 @@
 		D93CD58C1AE981CD00B3D376 /* CKImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCache.m; path = Classes/UI/Public/Views/CKImageCache.m; sourceTree = "<group>"; };
 		D93CD58D1AE981CD00B3D376 /* CKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageView.h; path = Classes/UI/Public/Views/CKImageView.h; sourceTree = "<group>"; };
 		D93CD58E1AE981CD00B3D376 /* CKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageView.m; path = Classes/UI/Public/Views/CKImageView.m; sourceTree = "<group>"; };
+		D93CD5931AEA7F9E00B3D376 /* CKStyleView+Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Drawing.h"; path = "Classes/UI/Private/CKStyleView+Drawing.h"; sourceTree = "<group>"; };
+		D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Drawing.m"; path = "Classes/UI/Private/CKStyleView+Drawing.m"; sourceTree = "<group>"; };
+		D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Paths.h"; path = "Classes/UI/Private/CKStyleView+Paths.h"; sourceTree = "<group>"; };
+		D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Paths.m"; path = "Classes/UI/Private/CKStyleView+Paths.m"; sourceTree = "<group>"; };
 		D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDatePickerViewController.h; path = Classes/UI/Public/Controllers/CKDatePickerViewController.h; sourceTree = "<group>"; };
 		D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDatePickerViewController.m; path = Classes/UI/Public/Controllers/CKDatePickerViewController.m; sourceTree = "<group>"; };
 		D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyURLViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyURLViewController.h; sourceTree = "<group>"; };
@@ -1390,6 +1398,10 @@
 				7560DC0B13B8ED3600268D13 /* CKStyleManager.m */,
 				7560DB6213B8ED3600268D13 /* CKStyleView.h */,
 				7560DB6313B8ED3600268D13 /* CKStyleView.m */,
+				D93CD5931AEA7F9E00B3D376 /* CKStyleView+Drawing.h */,
+				D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */,
+				D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */,
+				D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */,
 				7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */,
 				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
 				7506E3F213B8FB1000EE1471 /* Apple Extensions */,
@@ -3588,6 +3600,7 @@
 				7560DDE413B8EE9800268D13 /* CXMLNode_XPathExtensions.h in Headers */,
 				D9CD82821AC43F7E00B2985D /* CKTableViewCell.h in Headers */,
 				7560DDE613B8EE9800268D13 /* CXMLNode.h in Headers */,
+				D93CD5991AEA805000B3D376 /* CKStyleView+Paths.h in Headers */,
 				7560DDE813B8EE9800268D13 /* TouchXML.h in Headers */,
 				7560DDEE13B8EEB600268D13 /* CXMLDocument_CreationExtensions.h in Headers */,
 				7560DDF013B8EEB600268D13 /* CXMLNode_CreationExtensions.h in Headers */,
@@ -3624,6 +3637,7 @@
 				750A157813FD50FB008BC41F /* CKBinding.h in Headers */,
 				75C6DF5813FEC5BD00E4AE4F /* Foundation.h in Headers */,
 				75C6DF5A13FEC7AD00E4AE4F /* AppCoreKit.h in Headers */,
+				D93CD5951AEA7F9E00B3D376 /* CKStyleView+Drawing.h in Headers */,
 				75C6DF5E13FEC9AA00E4AE4F /* Bindings.h in Headers */,
 				75C6DF6013FEC9E600E4AE4F /* Mappings.h in Headers */,
 				75C6DF6213FECA2F00E4AE4F /* Styles.h in Headers */,
@@ -4020,6 +4034,7 @@
 				D9CD82711AC35CB100B2985D /* CKPropertyObjectViewController.m in Sources */,
 				D9418A921ABA206D00234A15 /* CKPropertyDateViewController.m in Sources */,
 				7560DDE313B8EE9800268D13 /* CXMLNode_PrivateExtensions.m in Sources */,
+				D93CD59A1AEA805000B3D376 /* CKStyleView+Paths.m in Sources */,
 				7560DDE513B8EE9800268D13 /* CXMLNode_XPathExtensions.m in Sources */,
 				7560DDE713B8EE9800268D13 /* CXMLNode.m in Sources */,
 				7560DDEF13B8EEB600268D13 /* CXMLDocument_CreationExtensions.m in Sources */,
@@ -4034,6 +4049,7 @@
 				961E782518D9D9040008EA33 /* UIView+Bounce.m in Sources */,
 				D91D658C1AE8335100B19E14 /* CKViewTransitionContext.m in Sources */,
 				75F2961313F196F9009CCC70 /* NSPredicate+Additions.m in Sources */,
+				D93CD5961AEA7F9E00B3D376 /* CKStyleView+Drawing.m in Sources */,
 				96B4515618D0924100D58489 /* CKRangeSelectorView.m in Sources */,
 				75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */,
 				75CC170213F46E3900835FE3 /* UIColor+ValueTransformer.m in Sources */,
