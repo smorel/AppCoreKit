@@ -55,4 +55,16 @@
  */
 + (UIColor *)colorAtPoint:(CGPoint)pixelPoint data:(const UInt8*) data imageSize:(CGSize)imageSize;
 
+/**
+ */
++ (UIImage*)radialGradientImageWithRadius:(CGFloat)radius startColor:(UIColor*)startColor endColor:(UIColor*)endColor options:(CGGradientDrawingOptions)options;
+
+/**
+ */
++ (UIImage*)maskImageWithPath:(CGPathRef)path size:(CGSize)size;
+
+/**
+ */
++ (UIImage*)maskImageWithStrokePath:(CGPathRef)path width:(CGFloat)width size:(CGSize)size;
+
 @end

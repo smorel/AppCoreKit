@@ -497,6 +497,79 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     return sqrt((rDiff*rDiff) + (gDiff*gDiff) + (bDiff * bDiff));
 }
 
++ (UIImage*)radialGradientImageWithRadius:(CGFloat)radius
+                               startColor:(UIColor*)startColor
+                                 endColor:(UIColor*)endColor
+                                  options:(CGGradientDrawingOptions)options{
+    
+    CGSize size = CGSizeMake(2*radius,2*radius);
+    CGPoint center = CGPointMake(radius, radius);
+    
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    size_t gradLocationsNum = 2;
+    
+    CGFloat gradLocations[2] = {0.0f, 1.0f};
+    
+    CGFloat colors [] = {
+        startColor.red, startColor.green, startColor.blue, startColor.alpha,
+        endColor.red, endColor.green, endColor.blue, endColor.alpha
+    };
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, colors, gradLocations, gradLocationsNum);
+    CGColorSpaceRelease(colorSpace);
+    
+    CGContextDrawRadialGradient (context, gradient, center, 0, center, radius, options);
+    
+    CGGradientRelease(gradient);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
++ (UIImage*)maskImageWithPath:(CGPathRef)path size:(CGSize)size{
+    
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextAddPath(context, path);
+    
+    [[UIColor blackColor]setFill];
+    CGContextFillPath(context);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
+
++ (UIImage*)maskImageWithStrokePath:(CGPathRef)path width:(CGFloat)width size:(CGSize)size{
+    
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGPathRef thickPath = CGPathCreateCopyByStrokingPath(path, NULL, width, kCGLineCapRound, kCGLineJoinRound, 0);
+    CGContextAddPath(context, thickPath);
+    
+    [[UIColor blackColor]setFill];
+    CGContextFillPath(context);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    CGPathRelease(thickPath);
+    
+    return image;
+}
+
 @end
 
 
