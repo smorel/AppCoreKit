@@ -118,3 +118,6 @@
 //ResourceManager
 #import "CKResourceManager.h"
 #import "CKResourceManager+UIUpdate.h"
+
+
+#import "CKImageCache.h"

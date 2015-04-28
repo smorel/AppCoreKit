@@ -9,31 +9,53 @@
 #import "CKImageCache.h"
 #import <AppCoreKit/AppCoreKit.h>
 
-@interface CKImageCacheItem : NSObject<CKImageLoaderDelegate>
-@property(nonatomic,retain) CKImageLoader* imageLoader;
-@property(nonatomic,retain) NSMutableArray* weakDelegates;
-@property(nonatomic,retain) NSURL* imageURL;
+@interface CKImageCacheItem : NSObject
+@property(nonatomic,retain) NSMutableArray* handlers;
 @property(nonatomic,retain) UIImage* image;
 @end
 
 @implementation CKImageCacheItem
 
 - (void)dealloc{
-    [_imageLoader release];
-    [_weakDelegates release];
-    [_imageURL release];
+    [_handlers release];
     [_image release];
     [super dealloc];
 }
 
 - (instancetype)init{
     self = [super init];
-    self.weakDelegates = [NSMutableArray array];
+    self.handlers = [NSMutableArray array];
     return self;
 }
 
+- (void)registerHandler:(id)handler{
+    [self.handlers addObject:[NSValue valueWithNonretainedObject:handler]];
+}
+
+- (void)unregisterHandler:(id)handler{
+    [self.handlers removeObject:[NSValue valueWithNonretainedObject:handler]];
+}
+
+@end
+
+@interface CKRemoteImageCacheItem : CKImageCacheItem<CKImageLoaderDelegate>
+@property(nonatomic,retain) CKImageLoader* imageLoader;
+@property(nonatomic,retain) NSURL* imageURL;
+@end
+
+@implementation CKRemoteImageCacheItem
+
+- (void)dealloc{
+    _imageLoader.delegate = nil;
+    [_imageLoader cancel];
+    [_imageLoader release];
+    [_imageURL release];
+    [super dealloc];
+}
+
 - (void)registerDelegate:(id<CKImageCacheDelegate>)delegate{
-    [self.weakDelegates addObject:[NSValue valueWithNonretainedObject:delegate]];
+    [self registerHandler:delegate];
+    
     if(self.imageLoader == nil && self.image == nil){
         [self startLoading];
     }else if(self.image){
@@ -42,8 +64,9 @@
 }
 
 - (void)unregisterDelegate:(id<CKImageCacheDelegate>)delegate{
-    [self.weakDelegates removeObject:[NSValue valueWithNonretainedObject:delegate]];
-    if(self.weakDelegates.count == 0){
+    [self unregisterHandler:delegate];
+    
+    if(self.handlers.count == 0){
         [self stopLoading];
     }
 }
@@ -56,7 +79,7 @@
     if([self.imageURL isFileURL]){
         self.image = [UIImage imageWithContentsOfFile:[self.imageURL path]];
         
-        for(NSValue* value in self.weakDelegates){
+        for(NSValue* value in self.handlers){
             id<CKImageCacheDelegate> delegate = [value nonretainedObjectValue];
             [delegate imageWasAlreadyFetched:self.image];
         }
@@ -74,7 +97,7 @@
     self.image = image;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        for(NSValue* value in self.weakDelegates){
+        for(NSValue* value in self.handlers){
             id<CKImageCacheDelegate> delegate = [value nonretainedObjectValue];
             [delegate didFetchImage:image];
         }
@@ -83,7 +106,7 @@
 }
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error{
-    for(NSValue* value in self.weakDelegates){
+    for(NSValue* value in self.handlers){
         id<CKImageCacheDelegate> delegate = [value nonretainedObjectValue];
         [delegate didFailFetchingImage:error];
     }
@@ -92,6 +115,7 @@
 }
 
 @end
+
 
 
 
@@ -115,34 +139,73 @@
 }
 
 - (void)registerDelegate:(id<CKImageCacheDelegate>)delegate withImageURL:(NSURL*)url{
-    CKImageCacheItem* item = [self.items objectForKey:url];
+    CKRemoteImageCacheItem* item = [self.items objectForKey:[url path]];
     if(item){
         [item registerDelegate:delegate];
     }else{
-        CKImageCacheItem* item = [[[CKImageCacheItem alloc]init]autorelease];
+        CKRemoteImageCacheItem* item = [[[CKRemoteImageCacheItem alloc]init]autorelease];
         item.imageURL = url;
-        [self.items setObject:item forKey:url];
+        [self.items setObject:item forKey:[url path]];
         
         [item registerDelegate:delegate];
     }
 }
 
 - (void)unregisterDelegate:(id<CKImageCacheDelegate>)delegate withImageURL:(NSURL*)url{
-    CKImageCacheItem* item = [self.items objectForKey:url];
+    CKRemoteImageCacheItem* item = [self.items objectForKey:[url path]];
     if(item){
         [item unregisterDelegate:delegate];
         
-        if(item.weakDelegates.count == 0){
-            [self.items removeObjectForKey:url];
+        if(item.handlers.count == 0){
+            [self.items removeObjectForKey:[url path]];
         }
     }
 }
 
 - (void)reloadImageAtUrl:(NSURL*)url{
-    CKImageCacheItem* item = [self.items objectForKey:url];
+    CKRemoteImageCacheItem* item = [self.items objectForKey:[url path]];
     if(item){
         [item reload];
     }
+}
+
+- (UIImage*)imageWithUrl:(NSURL*)url{
+    CKRemoteImageCacheItem* item = [self.items objectForKey:[url path]];
+    if(!item)
+        return nil;
+    return item.image;
+}
+
+- (void)registerHandler:(id)handler image:(UIImage*)image withIdentifier:(NSString*)identifier{
+    CKImageCacheItem* item = [self.items objectForKey:identifier];
+    if(item){
+        [item registerHandler:handler];
+        item.image = image;
+    }else{
+        CKImageCacheItem* item = [[[CKImageCacheItem alloc]init]autorelease];
+        item.image = image;
+        [self.items setObject:item forKey:identifier];
+        
+        [item registerHandler:handler];
+    }
+}
+
+- (void)unregisterHandler:(id)handler withIdentifier:(NSString*)identifier{
+    CKImageCacheItem* item = [self.items objectForKey:identifier];
+    if(item){
+        [item unregisterHandler:handler];
+        
+        if(item.handlers.count == 0){
+            [self.items removeObjectForKey:identifier];
+        }
+    }
+}
+
+- (UIImage*)imageWithIdentifier:(NSString*)identifier{
+    CKImageCacheItem* item = [self.items objectForKey:identifier];
+    if(!item)
+        return nil;
+    return item.image;
 }
 
 @end

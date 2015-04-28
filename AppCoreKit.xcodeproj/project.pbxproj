@@ -562,16 +562,14 @@
 		D91D65921AE8335100B19E14 /* CKViewTransitionContext+TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D657C1AE8335100B19E14 /* CKViewTransitionContext+TableView.m */; };
 		D91D65931AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D657D1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D91D65941AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = D91D657E1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m */; };
-		D93CD58F1AE981CD00B3D376 /* CKImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD58B1AE981CD00B3D376 /* CKImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D93CD5901AE981CD00B3D376 /* CKImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD58C1AE981CD00B3D376 /* CKImageCache.m */; };
 		D93CD5911AE981CD00B3D376 /* CKImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD58D1AE981CD00B3D376 /* CKImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D93CD5921AE981CD00B3D376 /* CKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD58E1AE981CD00B3D376 /* CKImageView.m */; };
 		D93CD5951AEA7F9E00B3D376 /* CKStyleView+Drawing.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD5931AEA7F9E00B3D376 /* CKStyleView+Drawing.h */; };
 		D93CD5961AEA7F9E00B3D376 /* CKStyleView+Drawing.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */; };
 		D93CD5991AEA805000B3D376 /* CKStyleView+Paths.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */; };
 		D93CD59A1AEA805000B3D376 /* CKStyleView+Paths.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */; };
-		D93CD59D1AEA859B00B3D376 /* CKStyleView+Shadow.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD59B1AEA859B00B3D376 /* CKStyleView+Shadow.h */; };
-		D93CD59E1AEA859B00B3D376 /* CKStyleView+Shadow.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD59C1AEA859B00B3D376 /* CKStyleView+Shadow.m */; };
+		D93CD59D1AEA859B00B3D376 /* CKStyleView+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD59B1AEA859B00B3D376 /* CKStyleView+Light.h */; };
+		D93CD59E1AEA859B00B3D376 /* CKStyleView+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD59C1AEA859B00B3D376 /* CKStyleView+Light.m */; };
 		D9418A5B1AB8654A00234A15 /* CKDatePickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A5C1AB8654A00234A15 /* CKDatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */; };
 		D9418A611AB86AD900234A15 /* CKPropertyURLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -615,6 +613,8 @@
 		D96494261AA5F80F00C17BB7 /* CKSound.h in Headers */ = {isa = PBXBuildFile; fileRef = D96494241AA5F80F00C17BB7 /* CKSound.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D96494271AA5F80F00C17BB7 /* CKSound.m in Sources */ = {isa = PBXBuildFile; fileRef = D96494251AA5F80F00C17BB7 /* CKSound.m */; };
 		D96494291AA5F82C00C17BB7 /* Media.h in Headers */ = {isa = PBXBuildFile; fileRef = D96494281AA5F82600C17BB7 /* Media.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD0C1AEFD75B00A0AECD /* CKImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD0A1AEFD75B00A0AECD /* CKImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD0D1AEFD75B00A0AECD /* CKImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD0B1AEFD75B00A0AECD /* CKImageCache.m */; };
 		D98F3FCD1AB36CC40094572C /* CKPropertyNumberViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98F3FCE1AB36CC40094572C /* CKPropertyNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */; };
 		D98F3FD41AB374E10094572C /* CKPropertyBoolViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1234,16 +1234,14 @@
 		D91D657C1AE8335100B19E14 /* CKViewTransitionContext+TableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+TableView.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+TableView.m"; sourceTree = "<group>"; };
 		D91D657D1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKViewTransitionContext+ViewHierarchy.h"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+ViewHierarchy.h"; sourceTree = "<group>"; };
 		D91D657E1AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKViewTransitionContext+ViewHierarchy.m"; path = "Classes/UI/Public/Transitions/CKViewTransitionContext+ViewHierarchy.m"; sourceTree = "<group>"; };
-		D93CD58B1AE981CD00B3D376 /* CKImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageCache.h; path = Classes/UI/Public/Views/CKImageCache.h; sourceTree = "<group>"; };
-		D93CD58C1AE981CD00B3D376 /* CKImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCache.m; path = Classes/UI/Public/Views/CKImageCache.m; sourceTree = "<group>"; };
 		D93CD58D1AE981CD00B3D376 /* CKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageView.h; path = Classes/UI/Public/Views/CKImageView.h; sourceTree = "<group>"; };
 		D93CD58E1AE981CD00B3D376 /* CKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageView.m; path = Classes/UI/Public/Views/CKImageView.m; sourceTree = "<group>"; };
 		D93CD5931AEA7F9E00B3D376 /* CKStyleView+Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Drawing.h"; path = "Classes/UI/Private/CKStyleView+Drawing.h"; sourceTree = "<group>"; };
 		D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Drawing.m"; path = "Classes/UI/Private/CKStyleView+Drawing.m"; sourceTree = "<group>"; };
 		D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Paths.h"; path = "Classes/UI/Private/CKStyleView+Paths.h"; sourceTree = "<group>"; };
 		D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Paths.m"; path = "Classes/UI/Private/CKStyleView+Paths.m"; sourceTree = "<group>"; };
-		D93CD59B1AEA859B00B3D376 /* CKStyleView+Shadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Shadow.h"; path = "Classes/UI/Private/CKStyleView+Shadow.h"; sourceTree = "<group>"; };
-		D93CD59C1AEA859B00B3D376 /* CKStyleView+Shadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Shadow.m"; path = "Classes/UI/Private/CKStyleView+Shadow.m"; sourceTree = "<group>"; };
+		D93CD59B1AEA859B00B3D376 /* CKStyleView+Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Light.h"; path = "Classes/UI/Private/CKStyleView+Light.h"; sourceTree = "<group>"; };
+		D93CD59C1AEA859B00B3D376 /* CKStyleView+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Light.m"; path = "Classes/UI/Private/CKStyleView+Light.m"; sourceTree = "<group>"; };
 		D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDatePickerViewController.h; path = Classes/UI/Public/Controllers/CKDatePickerViewController.h; sourceTree = "<group>"; };
 		D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDatePickerViewController.m; path = Classes/UI/Public/Controllers/CKDatePickerViewController.m; sourceTree = "<group>"; };
 		D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyURLViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyURLViewController.h; sourceTree = "<group>"; };
@@ -1287,6 +1285,8 @@
 		D96494241AA5F80F00C17BB7 /* CKSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSound.h; path = Classes/Media/Public/CKSound.h; sourceTree = "<group>"; };
 		D96494251AA5F80F00C17BB7 /* CKSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSound.m; path = Classes/Media/Public/CKSound.m; sourceTree = "<group>"; };
 		D96494281AA5F82600C17BB7 /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Media.h; path = Classes/Media/Media.h; sourceTree = "<group>"; };
+		D98BDD0A1AEFD75B00A0AECD /* CKImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageCache.h; path = Classes/Foundation/Public/CKImageCache.h; sourceTree = "<group>"; };
+		D98BDD0B1AEFD75B00A0AECD /* CKImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCache.m; path = Classes/Foundation/Public/CKImageCache.m; sourceTree = "<group>"; };
 		D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyNumberViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.h; sourceTree = "<group>"; };
 		D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyNumberViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.m; sourceTree = "<group>"; };
 		D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyBoolViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyBoolViewController.h; sourceTree = "<group>"; };
@@ -1378,6 +1378,7 @@
 				9600B8BC1545C40200F07C5A /* TypeAhead */,
 				964C207D153DB66A00398E0F /* Localization */,
 				96EFE7D01797009D0034F935 /* ResourceManager */,
+				D98BDD091AEFD74B00A0AECD /* Image Cache */,
 				96CC499117CCD3740017A6E7 /* Apple Extensions */,
 			);
 			name = Foundation;
@@ -1406,8 +1407,8 @@
 				D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */,
 				D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */,
 				D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */,
-				D93CD59B1AEA859B00B3D376 /* CKStyleView+Shadow.h */,
-				D93CD59C1AEA859B00B3D376 /* CKStyleView+Shadow.m */,
+				D93CD59B1AEA859B00B3D376 /* CKStyleView+Light.h */,
+				D93CD59C1AEA859B00B3D376 /* CKStyleView+Light.m */,
 				7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */,
 				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
 				7506E3F213B8FB1000EE1471 /* Apple Extensions */,
@@ -3079,6 +3080,15 @@
 			name = Media;
 			sourceTree = "<group>";
 		};
+		D98BDD091AEFD74B00A0AECD /* Image Cache */ = {
+			isa = PBXGroup;
+			children = (
+				D98BDD0A1AEFD75B00A0AECD /* CKImageCache.h */,
+				D98BDD0B1AEFD75B00A0AECD /* CKImageCache.m */,
+			);
+			name = "Image Cache";
+			sourceTree = "<group>";
+		};
 		D98F3FD71AB378EC0094572C /* String */ = {
 			isa = PBXGroup;
 			children = (
@@ -3301,8 +3311,6 @@
 			children = (
 				D9418A851AB8C18600234A15 /* UIImageView+URL.h */,
 				D9418A861AB8C18600234A15 /* UIImageView+URL.m */,
-				D93CD58B1AE981CD00B3D376 /* CKImageCache.h */,
-				D93CD58C1AE981CD00B3D376 /* CKImageCache.m */,
 				D93CD58D1AE981CD00B3D376 /* CKImageView.h */,
 				D93CD58E1AE981CD00B3D376 /* CKImageView.m */,
 			);
@@ -3667,6 +3675,7 @@
 				EDD9E7E31436166D00E104D9 /* UIViewController+Introspection.h in Headers */,
 				D9418A781AB8808100234A15 /* CKCollectionSection.h in Headers */,
 				759569691444E9FD0092F317 /* UISegmentedControl+Introspection.h in Headers */,
+				D98BDD0C1AEFD75B00A0AECD /* CKImageCache.h in Headers */,
 				96B4514D18D08F9900D58489 /* UIImage+ImageEffects.h in Headers */,
 				75956970144626550092F317 /* CKSegmentedControl.h in Headers */,
 				B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */,
@@ -3678,7 +3687,6 @@
 				75AD5D9C144C71740008F53A /* UIView+InlineDebugger.h in Headers */,
 				75AD5DA0144C72960008F53A /* UIViewController+InlineDebugger.h in Headers */,
 				D91D65931AE8335100B19E14 /* CKViewTransitionContext+ViewHierarchy.h in Headers */,
-				D93CD58F1AE981CD00B3D376 /* CKImageCache.h in Headers */,
 				B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */,
 				757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */,
 				7521E31E14520BBE000AEED8 /* AppCoreKit-Prefix.pch in Headers */,
@@ -3693,7 +3701,7 @@
 				96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */,
 				96CADE351486B6F6008A23E4 /* NSObject+Runtime_private.h in Headers */,
 				96CADE381486BDFF008A23E4 /* NSObject+Validation.h in Headers */,
-				D93CD59D1AEA859B00B3D376 /* CKStyleView+Shadow.h in Headers */,
+				D93CD59D1AEA859B00B3D376 /* CKStyleView+Light.h in Headers */,
 				9603F22518D22B130095B128 /* NSValue+ValueTransformer.h in Headers */,
 				969FA53F14966CD90095C61E /* UILabel+Highlight.h in Headers */,
 				D91D65831AE8335100B19E14 /* CKTransitionTree.h in Headers */,
@@ -4070,6 +4078,7 @@
 				75CC171613F46EAF00835FE3 /* NSArray+ValueTransformer.m in Sources */,
 				D9CD82811AC43F7E00B2985D /* CKTableViewCell.m in Sources */,
 				75CC171A13F46EC800835FE3 /* CKCollection+ValueTransformer.m in Sources */,
+				D98BDD0D1AEFD75B00A0AECD /* CKImageCache.m in Sources */,
 				75CC171E13F46EF900835FE3 /* NSIndexPath+ValueTransformer.m in Sources */,
 				75CC172213F4705A00835FE3 /* NSObject+ValueTransformer.m in Sources */,
 				75CC172613F472BB00835FE3 /* NSValueTransformer+NativeTypes.m in Sources */,
@@ -4134,14 +4143,13 @@
 				9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */,
 				9600B8E01545CAFF00F07C5A /* CKContainerViewController.mm in Sources */,
 				9600B8E21545CAFF00F07C5A /* CKSplitViewController.m in Sources */,
-				D93CD59E1AEA859B00B3D376 /* CKStyleView+Shadow.m in Sources */,
+				D93CD59E1AEA859B00B3D376 /* CKStyleView+Light.m in Sources */,
 				9600B8E41545CAFF00F07C5A /* CKTabViewController.m in Sources */,
 				9600B8E91545CD1F00F07C5A /* CKSegmentedViewController.m in Sources */,
 				9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */,
 				96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */,
 				962C08941820131B00A6E439 /* CKStackViewController.m in Sources */,
 				B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */,
-				D93CD5901AE981CD00B3D376 /* CKImageCache.m in Sources */,
 				B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */,
 				B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */,
 				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
