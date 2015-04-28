@@ -180,10 +180,15 @@
 - (void)presentsBackgroundView{
     if(self.view  && [self.backgroundView superview] == nil){
         [self.view insertSubview:self.backgroundView atIndex:0];
+        
+        __unsafe_unretained CKTableViewController* bself = self;
 
         [self beginBindingsContextWithScope:@"backgroundView"];
         [self.tableView bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
-            [self.backgroundView setFrame:CGRectMake(self.tableView.contentOffset.x,self.tableView.contentOffset.y,self.tableView.width,self.tableView.height) animated:YES];
+            [bself.backgroundView setFrame:CGRectMake(bself.tableView.contentOffset.x,bself.tableView.contentOffset.y,bself.tableView.width,bself.tableView.height) animated:YES];
+        }];
+        [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
+            bself.backgroundView.hidden = bself.view.hidden;
         }];
         [self endBindingsContext];
     }
@@ -193,9 +198,14 @@
     if(self.view  && [self.foregroundView superview] == nil){
         [self.view addSubview:self.foregroundView];
         
+        __unsafe_unretained CKTableViewController* bself = self;
+        
         [self beginBindingsContextWithScope:@"foregroundView"];
         [self.view bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
-            [self.foregroundView setFrame:CGRectMake(self.tableView.contentOffset.x,self.tableView.contentOffset.y,self.tableView.width,self.tableView.height) animated:YES];
+            [bself.foregroundView setFrame:CGRectMake(bself.tableView.contentOffset.x,bself.tableView.contentOffset.y,bself.tableView.width,bself.tableView.height) animated:YES];
+        }];
+        [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
+            bself.foregroundView.hidden = bself.view.hidden;
         }];
         [self endBindingsContext];
     }
