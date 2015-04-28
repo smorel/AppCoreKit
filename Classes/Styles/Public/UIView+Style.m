@@ -174,7 +174,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 
 - (CKViewSeparatorStyle)separatorStyle{
 	return (CKViewSeparatorStyle)[self enumValueForKey:CKStyleSeparatorStyle 
-                                 withEnumDescriptor:CKEnumDefinition(@"CKViewSeparatorStyle",
+                                 withEnumDescriptor:CKBitMaskDefinition(@"CKViewSeparatorStyle",
                                                                      CKViewSeparatorStyleTableViewCell,
                                                                      CKViewSeparatorStyleTop,
                                                                      CKViewSeparatorStyleBottom,

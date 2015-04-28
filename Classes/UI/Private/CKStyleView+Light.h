@@ -1,5 +1,5 @@
 //
-//  CKStyleView+Shadow.h
+//  CKStyleView+Light.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2015-04-24.
@@ -11,8 +11,12 @@
 @interface CKStyleView (Shadow)
 
 - (BOOL)shadowEnabled;
-- (CGRect)shadowImageViewFrame;
 - (UIImage*)generateShadowImage;
-- (void)updateShadowOffsetWithLight;
+- (BOOL)updateShadowOffsetWithLight;
+
+- (CGRect)shadowImageViewFrame;
+
+- (BOOL)highlightEnabled;
+- (BOOL)updateHighlightOffsetWithLight;
 
 @end

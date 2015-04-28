@@ -1,18 +1,24 @@
 //
-//  CKStyleView+Shadow.m
+//  CKStyleView+Light.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel on 2015-04-24.
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKStyleView+Shadow.h"
+#import "CKStyleView+Light.h"
 #import "CKStyleView+Paths.h"
 #import "CoreGraphics+Additions.h"
+#import "UIColor+Additions.h"
+#import "UIColor+Components.h"
+#import "CKImageCache.h"
 
 @interface CKStyleView()
 @property(nonatomic,retain) NSMutableArray* observedViews;
+@property(nonatomic,assign)CGRect lastShadowFrame;
+@property(nonatomic,assign)CGRect lastHighlightFrame;
 - (void)regenerateShadow;
+- (void)regenerateHighlight;
 @end
 
 @implementation CKStyleView (Shadow)
@@ -207,7 +213,12 @@
     }
 }
 
-//#define LIGTH_EXPERIMENT
+- (BOOL)highlightEnabled{
+    return self.highlightColor!= nil && self.highlightColor != [UIColor clearColor] && self.highlightWidth > 0;
+}
+
+
+#define LIGTH_EXPERIMENT
 
 #ifdef LIGTH_EXPERIMENT
 
@@ -256,38 +267,77 @@
                        context:(void *)context{
     if([object isKindOfClass:[UIView class]] && [keyPath isEqualToString:@"frame"]){
         [self updateShadowWithLight];
+        [self updateHighlightWithLight];
     }else if([object isKindOfClass:[UIView class]] && [keyPath isEqualToString:@"contentOffset"]){
         [self updateShadowWithLight];
+        [self updateHighlightWithLight];
     }
 }
 
 - (void)updateShadowWithLight{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),   ^ {
-        [self updateShadowOffsetWithLight];
-        [self regenerateShadow];
+        if([self updateShadowOffsetWithLight]){
+            [self regenerateShadow];
+        }
     });
 }
 
-- (void)updateShadowOffsetWithLight{
-    if(![self shadowEnabled])
-        return;
+- (BOOL)updateShadowOffsetWithLight{
+    if(![self shadowEnabled] || !self.window)
+        return NO;
     
-    CGPoint lightPosition = CGPointMake(0,0);
-    CGFloat lightIntensity = 20;
-    CGPoint lightDirection = CGPointMake(1,1);
+    CGPoint lightPosition = self.lightPosition;
+    CGFloat lightIntensity = self.lightIntensity;
+    CGPoint lightDirection = self.lightDirection;
     
     CGRect rect = [self.superview convertRect:self.frame toView:self.window];
+    //if(CGRectEqualToRect(self.lastShadowFrame, rect))
+    //     return NO;
+    self.lastShadowFrame = rect;
+    
     CGPoint diff = CGPointMake(rect.origin.x + rect.size.width - lightPosition.x,rect.origin.y + rect.size.height - lightPosition.y );
     
     CGPoint direction = CKCGPointNormalize( diff );
     
     CGSize offset = CGSizeMake((NSInteger)(direction.x * lightIntensity) , (NSInteger)(direction.y * lightIntensity) );
     [self setBorderShadowOffset:offset];
+    
+    return YES;
+}
+
+
+- (BOOL)updateHighlightOffsetWithLight{
+    if(![self highlightEnabled] || !self.window)
+        return NO;
+    
+    CGPoint lightPosition = self.lightPosition;
+    CGFloat lightIntensity = self.lightIntensity;
+    CGPoint lightDirection = self.lightDirection;
+    
+    CGRect rect = [self.superview convertRect:self.frame toView:self.window];
+    // if(CGRectEqualToRect(self.lastHighlightFrame, rect))
+    //    return NO;
+    self.lastHighlightFrame = rect;
+    
+    CGPoint nonNormalizedLightDirection = CGPointMake(lightDirection.x * self.window.bounds.size.width * 2,lightDirection.y * self.window.bounds.size.height * 2);
+    
+    CGPoint intersection = CKCGRectIntersect(rect,lightPosition,nonNormalizedLightDirection);
+    
+    self.highlightCenter = intersection;
+    return !CGPointEqualToPoint(intersection,CGPointZero);
+}
+
+- (void)updateHighlightWithLight{
+    if([self updateHighlightOffsetWithLight]){
+        [self regenerateHighlight];
+    }
 }
 
 #else
 
 - (void)updateShadowOffsetWithLight {}
+
+- (BOOL)updateHighlightOffsetWithLight {}
 
 #endif
 

@@ -214,7 +214,13 @@
             CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerTopLeft) ? x + radius : x, y);
             shouldMove = NO;
         }
+        
         CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (x + width - radius) : (x + width), y);
+        
+        if(!(borderLocation & CKStyleViewBorderLocationRight) && (roundedCorners & UIRectCornerTopRight)){
+            CGPathAddArc(path, nil,x + width - radius,y + radius,radius, 3 * (M_PI / 2.0),0  ,NO);
+            shouldMove = YES;
+        }
     } else shouldMove = YES;
     
     //draw right

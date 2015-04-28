@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 @interface CKStyleView : UIView 
 
 ///-----------------------------------
-/// @name Customizing the appearance
+/// @name Customizing the rounded corners
 ///-----------------------------------
 
 /**
@@ -62,6 +62,11 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 /**
  */
 @property (nonatomic,assign) CGFloat roundedCornerSize;
+
+
+///-----------------------------------
+/// @name Customizing the background gradient
+///-----------------------------------
 
 /**
  */
@@ -75,6 +80,10 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
  */
 @property (nonatomic, retain) NSArray *gradientColorLocations;
 
+///-----------------------------------
+/// @name Customizing the background image
+///-----------------------------------
+
 /**
  */
 @property (nonatomic, retain) UIImage *image;
@@ -82,6 +91,11 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 /**
  */
 @property (nonatomic, assign) UIViewContentMode imageContentMode;
+
+
+///-----------------------------------
+/// @name Customizing the border
+///-----------------------------------
 
 /**
  */
@@ -94,6 +108,11 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 /**
  */
 @property (nonatomic, assign) NSInteger borderLocation;
+
+
+///-----------------------------------
+/// @name Customizing the separator
+///-----------------------------------
 
 /**
  */
@@ -127,6 +146,11 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
  */
 @property (nonatomic, assign) NSInteger separatorLocation;
 
+
+///-----------------------------------
+/// @name Customizing the emboss
+///-----------------------------------
+
 /**
  */
 @property (nonatomic, retain) UIColor *embossTopColor;
@@ -136,6 +160,10 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 @property (nonatomic, retain) UIColor *embossBottomColor;
 
 
+///-----------------------------------
+/// @name Customizing the shadow
+///-----------------------------------
+
 /**
  */
 @property (nonatomic, retain) UIColor *borderShadowColor;
@@ -144,9 +172,51 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
  */
 @property (nonatomic, assign) CGFloat borderShadowRadius;
 
-/**
+/** borderShadowOffset will be computed dynamically if specifying light source
  */
 @property (nonatomic, assign) CGSize borderShadowOffset;
+
+
+///-----------------------------------
+/// @name Customizing the highlight
+///-----------------------------------
+
+/** default value is whiteColor
+ */
+@property (nonatomic, retain) UIColor *highlightColor;
+
+/** default value is whiteColor with alpha 0
+ */
+@property (nonatomic, retain) UIColor *highlightEndColor;
+
+/** default value is 0 meaning that highlight is not activated
+ */
+@property (nonatomic, assign) CGFloat highlightWidth;
+
+/** Default value is 200
+ */
+@property (nonatomic, assign) CGFloat highlightRadius;
+
+/** highlightCenter will be computed dynamically if specifying light source
+ */
+@property (nonatomic, assign) CGPoint highlightCenter;
+
+
+///-----------------------------------
+/// @name Customizing the light source
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign) CGPoint lightPosition;
+
+/**
+ */
+@property (nonatomic, assign) CGFloat lightIntensity;
+
+/**
+ */
+@property (nonatomic, assign) CGPoint lightDirection;
 
 
 @end
