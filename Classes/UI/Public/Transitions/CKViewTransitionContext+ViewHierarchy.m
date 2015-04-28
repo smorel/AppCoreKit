@@ -252,7 +252,7 @@
     
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
     context.visibility = CKViewTransitionContextVisibilityAlways;
-    context.snapshot = [CKViewTransitionContext snapshotView:view withLayerAttributesAfterUpdate:YES];
+    context.snapshot = [CKViewTransitionContext snapshotView:view withLayerAttributesAfterUpdate:NO];
     
     UICollectionViewLayoutAttributes* startAttributes = [[[UICollectionViewLayoutAttributes alloc]init]autorelease];
     startAttributes.frame =  [view.superview convertRect:view.frame toView:[transitionContext containerView]];

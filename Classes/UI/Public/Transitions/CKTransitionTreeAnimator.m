@@ -69,16 +69,17 @@
     
     to.view.hidden = YES;
     
-    [self.transitionTree prepareForTransitionWithContext:transitionContext ];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self.transitionTree prepareForTransitionWithContext:transitionContext ];
+        
         if(!self.interactive){
             [self completeTransitionWithTransitioningContext:transitionContext];
         }
+        from.view.hidden = YES;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            from.view.hidden = YES;
-        });
+        //   dispatch_async(dispatch_get_main_queue(), ^{
+        //   from.view.hidden = YES;
+        //  });
     });
 }
 

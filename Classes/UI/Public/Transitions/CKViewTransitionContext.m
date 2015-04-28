@@ -9,7 +9,7 @@
 #import "CKViewTransitionContext.h"
 #import "UIView+Snapshot.h"
 #import "CKStyleView.h"
-#import "CKStyleView+Shadow.h"
+#import "CKStyleView+Light.h"
 
 @interface CKViewTransitionContext()
 @property(nonatomic,retain) NSArray* viewsToHideDuringTransition;
@@ -186,6 +186,9 @@
     styleView.borderShadowColor = other.borderShadowColor;
     styleView.borderShadowRadius = other.borderShadowRadius;
     styleView.borderShadowOffset = other.borderShadowOffset;
+    styleView.highlightColor = other.highlightColor;
+    styleView.highlightCenter = other.highlightCenter;
+    styleView.highlightWidth = other.highlightWidth;
     
     styleView.frame = other.frame;
     styleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
