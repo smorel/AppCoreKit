@@ -124,9 +124,9 @@ static char UIImageViewFlexibleHeightKey;
 
 - (void)UIImageView_Layout_setImage:(UIImage*)image{
     if(![image isEqual:self.image]){
-        [self UIImageView_Layout_setImage:image];
         [self invalidateLayout];
     }
+    [self UIImageView_Layout_setImage:image];
 }
 
 + (void)load{

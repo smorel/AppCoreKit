@@ -57,9 +57,10 @@
 }
 
 - (void)setDefaultImage:(UIImage *)defaultImage{
-    if(_defaultImage && [_defaultImage isEqual:defaultImage])
+    if(_defaultImage && _defaultImage == defaultImage)
         return;
     
+    [_defaultImage release];
     _defaultImage = [defaultImage retain];
     [self updateAnimated:NO];
 }
@@ -74,7 +75,7 @@
         self.imageURL = nil;
     }
     
-    if(_image && [_image isEqual:image])
+    if(_image && _image == image)
         return;
     
     [self _setImage:image animated:animated];
@@ -85,6 +86,7 @@
         image = self.postProcess(image);
     }
     
+    [_image release];
     _image = [image retain];
     [self updateAnimated:animated];
 }
@@ -97,6 +99,7 @@
         [[CKImageCache sharedInstance]unregisterDelegate:self withImageURL:_imageURL];
     }
     
+    [_imageURL release];
     _imageURL = [imageURL retain];
     
     [self updateAnimated:NO];//activate spinner

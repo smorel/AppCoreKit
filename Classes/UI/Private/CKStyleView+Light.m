@@ -193,15 +193,17 @@
             }
             
             if (self.corners != CKStyleViewCornerTypeNone){
-                CGMutablePathRef shadowPath = CGPathCreateMutable();
+                CGMutablePathRef shadowPath = nil;
                 if (self.corners != CKStyleViewCornerTypeNone) {
                     shadowPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll  borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:shadowRect];
                 }
+                if(shadowPath){
                 
-                [[UIColor blackColor] setFill];
-                CGContextAddPath(gc, shadowPath);
-                CGContextFillPath(gc);
-                CFRelease(shadowPath);
+                    [[UIColor blackColor] setFill];
+                    CGContextAddPath(gc, shadowPath);
+                    CGContextFillPath(gc);
+                    CFRelease(shadowPath);
+                }
             }else{
                 [[UIColor blackColor] setFill];
                 CGContextFillRect(gc, shadowRect);
