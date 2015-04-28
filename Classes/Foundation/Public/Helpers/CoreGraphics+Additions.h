@@ -39,6 +39,13 @@ extern "C" {
     
     CGFloat CKCGPointLength(CGPoint point);
     CGPoint CKCGPointNormalize(CGPoint point);
+    
+    CGFloat CKCGPointAngle(CGPoint p1,CGPoint p2);
+    
+#define CGPointInfinite CGPointMake(MAXFLOAT,MAXFLOAT)
+    
+    CGPoint CKCGPointIntersect(CGPoint origin1,CGPoint direction1,CGPoint origin2, CGPoint direction2);
+    CGPoint CKCGRectIntersect(CGRect rect, CGPoint origin, CGPoint direction);
 
 #ifdef __cplusplus
 }

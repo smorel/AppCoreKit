@@ -126,3 +126,81 @@ CGPoint CKCGPointNormalize(CGPoint point){
     CGFloat length = CKCGPointLength(point);
     return CGPointMake((length == 0) ? 1 : (point.x / length), (length == 0) ? 1 : (point.y/length));
 }
+
+CGFloat CKCGPointAngle(CGPoint p1,CGPoint p2){
+    CGFloat l1 = CKCGPointLength(p1);
+    CGFloat l2 = CKCGPointLength(p2);
+    CGFloat C = (p1.x*p2.x+p1.y*p2.y)/(l1*l2);
+    CGFloat S = (p1.x*p2.y-p2.x*p1.y);
+    CGFloat sign = (S >= 0) ? 1 : -1;
+    CGFloat angle = sign*acos(C);
+    return angle;
+}
+
+CGPoint CKCGPointIntersect(CGPoint origin1,CGPoint direction1,CGPoint origin2, CGPoint direction2){
+    
+    CGPoint p1 = origin1;
+    CGPoint p2 = CGPointMake(origin1.x +  direction1.x,origin1.y +  direction1.y);
+    
+    CGPoint p3 = origin2;
+    CGPoint p4 = CGPointMake(origin2.x + direction2.x,origin2.y +  direction2.y);
+    
+    CGFloat d = (p2.x - p1.x)*(p4.y - p3.y) - (p2.y - p1.y)*(p4.x - p3.x);
+    if (d == 0)
+        return CGPointInfinite; // parallel lines
+    CGFloat u = ((p3.x - p1.x)*(p4.y - p3.y) - (p3.y - p1.y)*(p4.x - p3.x))/d;
+    CGFloat v = ((p3.x - p1.x)*(p2.y - p1.y) - (p3.y - p1.y)*(p2.x - p1.x))/d;
+     if (u < 0.0 || u > 1.0)
+         return CGPointInfinite; // intersection point not between p1 and p2
+     if (v < 0.0 || v > 1.0)
+        return CGPointInfinite; // intersection point not between p3 and p4
+    
+    CGPoint intersection;
+    intersection.x = p1.x + u * (p2.x - p1.x);
+    intersection.y = p1.y + v * (p2.y - p1.y);
+    
+    return intersection;
+}
+
+
+CGPoint CKCGRectIntersect(CGRect rect, CGPoint origin, CGPoint direction){
+    CGPoint nearest = CGPointInfinite;
+    CGFloat nearestDistance = MAXFLOAT;
+    
+    CGPoint top  = CKCGPointIntersect(rect.origin,
+                                              CGPointMake(2*rect.size.width,0),
+                                              origin,
+                                              direction);
+    CGFloat topDistance = CKCGPointLength(CGPointMake(origin.x - top.x, origin.y - top.y));
+    if(topDistance < nearestDistance){ nearest = top; nearestDistance =  topDistance;}
+    
+    CGPoint left = CKCGPointIntersect(rect.origin,
+                                      CGPointMake(0,2*rect.size.height),
+                                      origin,
+                                      direction);
+    CGFloat leftDistance = CKCGPointLength(CGPointMake(origin.x - left.x, origin.y - left.y));
+    if(leftDistance < nearestDistance){ nearest = left; nearestDistance =  leftDistance;}
+    
+    
+    CGPoint bottom = CKCGPointIntersect(CGPointMake(rect.origin.x,rect.origin.y + rect.size.height),
+                                      CGPointMake(2*rect.size.width,0),
+                                      origin,
+                                        direction);
+    CGFloat bottomDistance = CKCGPointLength(CGPointMake(origin.x - bottom.x, origin.y - bottom.y));
+    if(bottomDistance < nearestDistance){ nearest = bottom; nearestDistance =  bottomDistance;}
+    
+    
+    CGPoint right = CKCGPointIntersect(CGPointMake(rect.origin.x + rect.size.width,rect.origin.y),
+                                      CGPointMake(0,2*rect.size.height),
+                                      origin,
+                                       direction);
+    CGFloat rightDistance = CKCGPointLength(CGPointMake(origin.x - right.x, origin.y - right.y));
+    if(rightDistance < nearestDistance){ nearest = right; nearestDistance =  rightDistance;}
+    
+    
+    
+    if(CGPointEqualToPoint(nearest, CGPointInfinite))
+        return nearest;
+    
+    return CGPointMake(nearest.x - rect.origin.x,nearest.y - rect.origin.y);
+}
