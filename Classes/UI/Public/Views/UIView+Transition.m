@@ -34,11 +34,12 @@
     styleView.borderShadowColor = other.borderShadowColor;
     styleView.borderShadowRadius = other.borderShadowRadius;
     styleView.borderShadowOffset = other.borderShadowOffset;
-    styleView.highlightColor = other.highlightColor;
+    /*styleView.highlightColor = other.highlightColor;
     styleView.highlightEndColor = other.highlightEndColor;
     styleView.highlightCenter = other.highlightCenter;
     styleView.highlightRadius = other.highlightRadius;
     styleView.highlightWidth = other.highlightWidth;
+     */
     styleView.lightDirection = other.lightDirection;
     styleView.lightIntensity = other.lightIntensity;
     styleView.lightPosition = other.lightPosition;
@@ -76,7 +77,7 @@
         if([v isKindOfClass:[CKStyleView class]]){
             [styleViewToRestore addObject:v];
             [(CKStyleView*)v setShadowEnabled:NO];
-            [(CKStyleView*)v setHighlightEnabled:NO];
+            // [(CKStyleView*)v setHighlightEnabled:NO];
         }
     }
     
@@ -85,7 +86,7 @@
     
     for(CKStyleView* v in styleViewToRestore){
         [(CKStyleView*)v setShadowEnabled:YES];
-        [(CKStyleView*)v setHighlightEnabled:YES];
+        //[(CKStyleView*)v setHighlightEnabled:YES];
     }
     
     for(UIView* v in viewsToShow){
@@ -125,7 +126,7 @@
 }
 
 + (void)installStyleViewDecorators:(CKStyleView*)styleView fromView:(UIView*)root inView:(UIView*)view name:(NSString*)name{
-    if(styleView && ([styleView shadowEnabled] || [styleView highlightEnabled])){
+    if(styleView && ([styleView shadowEnabled] /*|| [styleView highlightEnabled]*/)){
         CKStyleView* transitionStyleView = [[self class] cloneStyleViewDecorators:styleView root:root];
         transitionStyleView.name = name;
         [view addSubview:transitionStyleView];
@@ -180,7 +181,7 @@
         if(enabled){
             [styleView updateLights];
         }
-        [styleView setHighlightEnabled:enabled];
+        //[styleView setHighlightEnabled:enabled];
         [styleView setShadowEnabled:enabled];
     }
     

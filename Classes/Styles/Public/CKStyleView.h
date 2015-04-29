@@ -178,31 +178,6 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 
 
 ///-----------------------------------
-/// @name Customizing the highlight
-///-----------------------------------
-
-/** default value is whiteColor
- */
-@property (nonatomic, retain) UIColor *highlightColor;
-
-/** default value is whiteColor with alpha 0
- */
-@property (nonatomic, retain) UIColor *highlightEndColor;
-
-/** default value is 0 meaning that highlight is not activated
- */
-@property (nonatomic, assign) CGFloat highlightWidth;
-
-/** Default value is 200
- */
-@property (nonatomic, assign) CGFloat highlightRadius;
-
-/** highlightCenter will be computed dynamically if specifying light source
- */
-@property (nonatomic, assign) CGPoint highlightCenter;
-
-
-///-----------------------------------
 /// @name Customizing the light source
 ///-----------------------------------
 
@@ -217,6 +192,8 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 /**
  */
 @property (nonatomic, assign) CGPoint lightDirection;
+
+
 
 
 @end

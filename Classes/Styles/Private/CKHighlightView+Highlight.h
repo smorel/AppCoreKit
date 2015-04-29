@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import <AppCoreKit/AppCoreKit.h>
+#import "CKHighlightView.h"
 
-@interface CKStyleView (Highlight)
+@interface CKHighlightView (Highlight)
 
 - (void)layoutHighlightLayers;
 - (void)regenerateHighlight;

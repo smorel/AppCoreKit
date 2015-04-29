@@ -6,8 +6,9 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKStyleView+Light.h"
+#import "CKHighlightView+Light.h"
 #import "CKStyleView+Paths.h"
+#import "CKHighlightView+Highlight.h"
 #import "CoreGraphics+Additions.h"
 #import "UIColor+Additions.h"
 #import "UIColor+Components.h"
@@ -15,12 +16,12 @@
 #import "UIImage+Transformations.h"
 #import "CKStyleView+Shadow.h"
 
-@interface CKStyleView()
+@interface CKHighlightView()
 @property(nonatomic,assign)CGRect lastFrameInWindow;
-@property(nonatomic,retain)UIImageView* shadowImageView;
+@property(nonatomic,retain)CALayer* highlightLayer;
 @end
 
-@implementation CKStyleView (Light)
+@implementation CKHighlightView (Light)
 
 
 - (void)willMoveToWindow:(UIWindow *)newWindow{
@@ -49,30 +50,28 @@
         
         self.lastFrameInWindow = rect;
     
-        if([self updateShadowWithLightWithRect:rect]){
-            [self regenerateShadow];
+        if([self updateHighlightWithLightWithRect:rect]){
+            [self regenerateHighlight];
         }
-    
     //}
 }
 
-- (BOOL)updateShadowWithLightWithRect:(CGRect)rect{
-    if(![self shadowEnabled] || !self.window)
+- (BOOL)updateHighlightWithLightWithRect:(CGRect)rect{
+    if(![self highlightEnabled] || !self.window)
         return NO;
     
     CGPoint lightPosition = self.lightPosition;
     CGFloat lightIntensity = self.lightIntensity;
     CGPoint lightDirection = self.lightDirection;
     
-    CGPoint diff = CGPointMake(rect.origin.x + rect.size.width - lightPosition.x,rect.origin.y + rect.size.height - lightPosition.y );
+    CGPoint nonNormalizedLightDirection = CGPointMake(lightDirection.x * self.window.bounds.size.width * 2,lightDirection.y * self.window.bounds.size.height * 2);
     
-    CGPoint direction = CKCGPointNormalize( diff );
+    CGPoint intersection = CKCGRectIntersect(rect,lightPosition,nonNormalizedLightDirection);
     
-    CGSize offset = CGSizeMake((NSInteger)(direction.x * lightIntensity) , (NSInteger)(direction.y * lightIntensity) );
-    [self setBorderShadowOffset:offset];
-    
-    return YES;
+    self.highlightCenter = intersection;
+    return !CGPointEqualToPoint(intersection,CGPointZero);
 }
+
 
 
 @end

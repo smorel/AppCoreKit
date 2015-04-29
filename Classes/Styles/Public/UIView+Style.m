@@ -12,6 +12,7 @@
 
 #import "UILabel+Style.h"
 #import "CKLocalization.h"
+#import "CKHighlightView.h"
 
 #import "CKDebug.h"
 #import <objc/runtime.h>
@@ -46,6 +47,11 @@ NSString* CKStyleAlpha = @"alpha";
 NSString* CKStyleContentMode = @"contentMode";
 NSString* CKStyleClipsToBounds = @"clipsToBounds";
 NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
+
+NSString* CKStyleHighlightColor = @"highlightColor";
+NSString* CKStyleHighlightEndColor = @"highlightEndColor";
+NSString* CKStyleHighlightWidth= @"highlightWidth";
+NSString* CKStyleHighlightRadius= @"highlightRadius";
 
 
 NSString* CKStyleBorderColor = @"borderColor";
@@ -237,7 +243,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 @implementation UIView (CKStyle)
 
 
-+ (CKStyleView*)gradientView:(UIView*)view{
++ (CKStyleView*)styleView:(UIView*)view{
 	if([view isKindOfClass:[CKStyleView class]])
 		return (CKStyleView*)view;
 	
@@ -248,7 +254,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 	return nil;
 }
 
-+ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view{
++ (BOOL)needStyleView:(NSMutableDictionary*)style forView:(UIView*)view{
 	if(style == nil || [style isEmpty] == YES)
 		return NO;
 
@@ -268,6 +274,20 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 	}
 	return NO;
 }
+
++ (BOOL)needHighlightView:(NSMutableDictionary*)style forView:(UIView*)view{
+    if(style == nil || [style isEmpty] == YES)
+        return NO;
+    
+    if([style containsObjectForKey:CKStyleHighlightColor]
+       || [style containsObjectForKey:CKStyleHighlightEndColor]
+       || [style containsObjectForKey:CKStyleHighlightWidth]
+       || [style containsObjectForKey:CKStyleHighlightRadius]){
+        return YES;
+    }
+    return NO;
+}
+
 
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style{
 	return [self applyStyle:style propertyName:nil];
@@ -301,14 +321,41 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 		if(myViewStyle){
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
+                CKHighlightView* highlightView = nil;
 				BOOL opaque = YES;
 				
 				CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
 				CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;
 				CKStyleViewSeparatorLocation viewSeparatorType = CKStyleViewSeparatorLocationNone;
+                
+                //Problem here is that we apply the view's style to the gradient view
+                //but if a lyout is specified for the view, it will be applied to the gradient view too !
+                //we ensure we do not have layout information when applying the view's style to the gradient view :
+                
+                NSMutableDictionary* gradientViewStyle = [NSMutableDictionary dictionaryWithDictionary:myViewStyle];
+                [gradientViewStyle removeObjectForKey:@"layoutBoxes"];
+                
+                if([UIView needHighlightView:myViewStyle forView:view]){
+                    highlightView = [[[CKHighlightView alloc]init]autorelease];
+                    highlightView.frame = view.bounds;
+                    highlightView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                    
+                    [highlightView setAppliedStyle:myViewStyle];
+                    
+                    [NSObject applyStyleByIntrospection:gradientViewStyle toObject:highlightView appliedStack:appliedStack delegate:(id)delegate];
+                    
+                    
+                    if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
+                        highlightView.roundedCornerSize = [myViewStyle cornerSize];
+                    }
+                    
+                    highlightView.backgroundColor = [UIColor clearColor];
+                    
+                    [view addSubview:highlightView];
+                }
 				
-				if([UIView needSubView:myViewStyle forView:view]){
-					CKStyleView* gradientView = [UIView gradientView:view];
+				if([UIView needStyleView:myViewStyle forView:view]){
+					CKStyleView* gradientView = [UIView styleView:view];
                     [gradientView setAppliedStyle:myViewStyle];
                     
 					if(gradientView == nil){
@@ -320,22 +367,46 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 						[view insertSubview:gradientView atIndex:0];
 					}
                     
-                    //Problem here is that we apply the view's style to the gradient view
-                    //but if a lyout is specified for the view, it will be applied to the gradient view too !
-                    //we ensure we do not have layout information when applying the view's style to the gradient view :
-                    
-                    NSMutableDictionary* gradientViewStyle = [NSMutableDictionary dictionaryWithDictionary:myViewStyle];
-                    [gradientViewStyle removeObjectForKey:@"layoutBoxes"];
-                    
                     [NSObject applyStyleByIntrospection:gradientViewStyle toObject:gradientView appliedStack:appliedStack delegate:(id)delegate];
 		
 					backgroundView = gradientView;
 				}
 				
 				//backgroundView.opaque = YES;
+                
+                //Apply corners
+                {
+                    CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
+                    if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
+                        cornerStyle = [myViewStyle cornerStyle];
+                    }
+                    
+                    if((cornerStyle == CKViewCornerStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
+                        roundedCornerType = [delegate view:backgroundView cornerStyleWithStyle:myViewStyle];
+                    }
+                    else{
+                        switch(cornerStyle){
+                            case CKViewCornerStyleRounded:{
+                                roundedCornerType = CKStyleViewCornerTypeAll;
+                                break;
+                            }
+                            case CKViewCornerStyleRoundedTop:{
+                                roundedCornerType = CKStyleViewCornerTypeTop;
+                                break;
+                            }
+                            case CKViewCornerStyleRoundedBottom:{
+                                roundedCornerType = CKStyleViewCornerTypeBottom;
+                                break;
+                            }
+                        }
+                    }
+                    highlightView.corners = roundedCornerType;
+                }
+                
 				
 				if([backgroundView isKindOfClass:[CKStyleView class]]){
-					CKStyleView* gradientView = (CKStyleView*)backgroundView;
+                    CKStyleView* gradientView = (CKStyleView*)backgroundView;
+                    gradientView.corners = roundedCornerType;
 					
 					//Apply Background Image
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
@@ -370,34 +441,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 						gradientView.gradientColorLocations = [myViewStyle backgroundGradientLocations];
 					}
 					
-					//Apply corners
-					{
-                        CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
-                        if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
-                            cornerStyle = [myViewStyle cornerStyle];
-                        }
-                        
-						if((cornerStyle == CKViewCornerStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
-							roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
-						}
-						else{
-							switch(cornerStyle){
-								case CKViewCornerStyleRounded:{
-									roundedCornerType = CKStyleViewCornerTypeAll;
-									break;
-								}
-								case CKViewCornerStyleRoundedTop:{
-									roundedCornerType = CKStyleViewCornerTypeTop;
-									break;
-								}
-								case CKViewCornerStyleRoundedBottom:{
-									roundedCornerType = CKStyleViewCornerTypeBottom;
-									break;
-								}
-							}
-						}
-						gradientView.corners = roundedCornerType;
-					}
 					
 					//Apply BorderStyle
 					{
@@ -695,7 +738,7 @@ static char NSObjectAppliedStyleObjectKey;
             shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
         }
         
-        if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKStyleView class]] == NO)) )
+        if(([UIView needStyleView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKStyleView class]] == NO)) )
         {
             UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
             CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);

@@ -154,7 +154,8 @@ extern NSString* CKStyleAutoLayoutCompression;
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 
 //private
-+ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view;
++ (BOOL)needStyleView:(NSMutableDictionary*)style forView:(UIView*)view;
++ (BOOL)needHighlightView:(NSMutableDictionary*)style forView:(UIView*)view;
 
 - (void)populateViewDictionaryForVisualFormat:(NSMutableDictionary*)dico;
 

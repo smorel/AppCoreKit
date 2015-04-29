@@ -10,7 +10,6 @@
 #import "CKStyleView+Drawing.h"
 #import "CKStyleView+Light.h"
 #import "CKStyleView+Paths.h"
-#import "CKStyleView+Highlight.h"
 #import "CKStyleView+Shadow.h"
 
 #import "UIImage+Transformations.h"
@@ -25,13 +24,7 @@
 @property(nonatomic,retain)UIColor* fillColor;
 @property(nonatomic,retain)UIImageView* shadowImageView;
 
-@property(nonatomic,retain)CALayer* highlightLayer;
-@property(nonatomic,retain)NSString* highlightGradientCacheIdentifier;
-@property(nonatomic,retain)CALayer* highlightGradientLayer;
-@property(nonatomic,retain)NSString* highlightMaskCacheIdentifier;
-@property(nonatomic,retain)CALayer* highlightMaskLayer;
 
-@property(nonatomic,retain)NSMutableArray* observedViews;
 @property(nonatomic,assign)CGRect lastFrameInWindow;
 @end
 
@@ -64,20 +57,8 @@
 }
 
 - (void)dealloc {
-    NSAssert(_observedViews == nil,@"see shadows management");
-    
     [CKSharedDisplayLink unregisterHandler:self];
-    
-    if(self.highlightGradientCacheIdentifier){
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightGradientCacheIdentifier];
-    }
-    
-    
-    if(self.highlightMaskCacheIdentifier){
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightMaskCacheIdentifier];
-    }
-    
-    [_observedViews release]; _observedViews = nil;
+  
     [_image release]; _image = nil;
     [_gradientColors release]; _gradientColors = nil;
     [_gradientColorLocations release]; _gradientColorLocations = nil;
@@ -88,12 +69,6 @@
     [_embossBottomColor release]; _embossBottomColor = nil;
     [_borderShadowColor release]; _borderShadowColor = nil;
     [_shadowImageView release]; _shadowImageView = nil;
-    [_highlightColor release]; _highlightColor = nil;
-    [_highlightLayer release]; _highlightLayer = nil;
-    [_highlightMaskLayer release]; _highlightMaskLayer = nil;
-    [_highlightGradientLayer release]; _highlightGradientLayer = nil;
-    [_highlightGradientCacheIdentifier release]; _highlightGradientCacheIdentifier = nil;
-    [_highlightMaskCacheIdentifier release]; _highlightMaskCacheIdentifier = nil;
     [super dealloc];
 }
 
@@ -102,11 +77,6 @@
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
 	self.borderLocation = CKStyleViewBorderLocationNone;
-    
-    self.highlightColor = [UIColor whiteColor];
-    self.highlightRadius = 200;
-    self.highlightWidth = 0;
-    self.highlightEndColor =[UIColor colorWithRed:1 green:1 blue:1 alpha:0];
     
     self.lightPosition = CGPointMake(0,0);
     self.lightIntensity = 20;
@@ -287,13 +257,11 @@
     [super layoutSubviews];
     
     
-    //  [CATransaction begin];
-    //  [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+     [CATransaction begin];
+     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
     [self updateLights];
     [self layoutShadowImageView];
-    [self layoutHighlightLayers];
-    
-    //  [CATransaction commit];
+      [CATransaction commit];
 
 }
 

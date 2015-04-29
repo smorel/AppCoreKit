@@ -617,12 +617,16 @@
 		D98BDD0D1AEFD75B00A0AECD /* CKImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD0B1AEFD75B00A0AECD /* CKImageCache.m */; };
 		D98BDD111AEFFAD000A0AECD /* CKStyleView+Shadow.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD0F1AEFFAD000A0AECD /* CKStyleView+Shadow.h */; };
 		D98BDD121AEFFAD000A0AECD /* CKStyleView+Shadow.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD101AEFFAD000A0AECD /* CKStyleView+Shadow.m */; };
-		D98BDD151AEFFAEB00A0AECD /* CKStyleView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD131AEFFAEB00A0AECD /* CKStyleView+Highlight.h */; };
-		D98BDD161AEFFAEB00A0AECD /* CKStyleView+Highlight.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD141AEFFAEB00A0AECD /* CKStyleView+Highlight.m */; };
+		D98BDD151AEFFAEB00A0AECD /* CKHighlightView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD131AEFFAEB00A0AECD /* CKHighlightView+Highlight.h */; };
+		D98BDD161AEFFAEB00A0AECD /* CKHighlightView+Highlight.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD141AEFFAEB00A0AECD /* CKHighlightView+Highlight.m */; };
 		D98BDD191AF00B6F00A0AECD /* CKSharedDisplayLink.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD171AF00B6F00A0AECD /* CKSharedDisplayLink.h */; };
 		D98BDD1A1AF00B6F00A0AECD /* CKSharedDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD181AF00B6F00A0AECD /* CKSharedDisplayLink.m */; };
 		D98BDD1D1AF0147F00A0AECD /* UIView+Transition.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD1B1AF0147F00A0AECD /* UIView+Transition.h */; };
 		D98BDD1E1AF0147F00A0AECD /* UIView+Transition.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD1C1AF0147F00A0AECD /* UIView+Transition.m */; };
+		D98BDD221AF170BA00A0AECD /* CKHighlightView.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD201AF170BA00A0AECD /* CKHighlightView.h */; };
+		D98BDD231AF170BA00A0AECD /* CKHighlightView.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD211AF170BA00A0AECD /* CKHighlightView.m */; };
+		D98BDD261AF1720F00A0AECD /* CKHighlightView+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */; };
+		D98BDD271AF1720F00A0AECD /* CKHighlightView+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */; };
 		D98F3FCD1AB36CC40094572C /* CKPropertyNumberViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98F3FCE1AB36CC40094572C /* CKPropertyNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */; };
 		D98F3FD41AB374E10094572C /* CKPropertyBoolViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1297,13 +1301,17 @@
 		D98BDD0B1AEFD75B00A0AECD /* CKImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCache.m; path = Classes/Foundation/Public/CKImageCache.m; sourceTree = "<group>"; };
 		D98BDD0F1AEFFAD000A0AECD /* CKStyleView+Shadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Shadow.h"; path = "Classes/Styles/Private/CKStyleView+Shadow.h"; sourceTree = "<group>"; };
 		D98BDD101AEFFAD000A0AECD /* CKStyleView+Shadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Shadow.m"; path = "Classes/Styles/Private/CKStyleView+Shadow.m"; sourceTree = "<group>"; };
-		D98BDD131AEFFAEB00A0AECD /* CKStyleView+Highlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Highlight.h"; path = "Classes/Styles/Private/CKStyleView+Highlight.h"; sourceTree = "<group>"; };
-		D98BDD141AEFFAEB00A0AECD /* CKStyleView+Highlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Highlight.m"; path = "Classes/Styles/Private/CKStyleView+Highlight.m"; sourceTree = "<group>"; };
+		D98BDD131AEFFAEB00A0AECD /* CKHighlightView+Highlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKHighlightView+Highlight.h"; path = "Classes/Styles/Private/CKHighlightView+Highlight.h"; sourceTree = "<group>"; };
+		D98BDD141AEFFAEB00A0AECD /* CKHighlightView+Highlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKHighlightView+Highlight.m"; path = "Classes/Styles/Private/CKHighlightView+Highlight.m"; sourceTree = "<group>"; };
 		D98BDD171AF00B6F00A0AECD /* CKSharedDisplayLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSharedDisplayLink.h; path = Classes/Styles/Private/CKSharedDisplayLink.h; sourceTree = "<group>"; };
 		D98BDD181AF00B6F00A0AECD /* CKSharedDisplayLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSharedDisplayLink.m; path = Classes/Styles/Private/CKSharedDisplayLink.m; sourceTree = "<group>"; };
 		D98BDD1B1AF0147F00A0AECD /* UIView+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Transition.h"; path = "Classes/UI/Public/Views/UIView+Transition.h"; sourceTree = "<group>"; };
 		D98BDD1C1AF0147F00A0AECD /* UIView+Transition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Transition.m"; path = "Classes/UI/Public/Views/UIView+Transition.m"; sourceTree = "<group>"; };
 		D98BDD1F1AF1388C00A0AECD /* AppCoreKit-smorel.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AppCoreKit-smorel.podspec"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		D98BDD201AF170BA00A0AECD /* CKHighlightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKHighlightView.h; path = Classes/Styles/Public/CKHighlightView.h; sourceTree = "<group>"; };
+		D98BDD211AF170BA00A0AECD /* CKHighlightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKHighlightView.m; path = Classes/Styles/Public/CKHighlightView.m; sourceTree = "<group>"; };
+		D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKHighlightView+Light.h"; path = "Classes/Styles/Private/CKHighlightView+Light.h"; sourceTree = "<group>"; };
+		D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKHighlightView+Light.m"; path = "Classes/Styles/Private/CKHighlightView+Light.m"; sourceTree = "<group>"; };
 		D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyNumberViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.h; sourceTree = "<group>"; };
 		D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyNumberViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.m; sourceTree = "<group>"; };
 		D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyBoolViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyBoolViewController.h; sourceTree = "<group>"; };
@@ -1421,6 +1429,7 @@
 				7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */,
 				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
 				D98BDD0E1AEFF9D500A0AECD /* Style View */,
+				D98BDD281AF1721400A0AECD /* Highlight View */,
 				7506E3F213B8FB1000EE1471 /* Apple Extensions */,
 			);
 			name = Styles;
@@ -3117,10 +3126,21 @@
 				D93CD59C1AEA859B00B3D376 /* CKStyleView+Light.m */,
 				D98BDD0F1AEFFAD000A0AECD /* CKStyleView+Shadow.h */,
 				D98BDD101AEFFAD000A0AECD /* CKStyleView+Shadow.m */,
-				D98BDD131AEFFAEB00A0AECD /* CKStyleView+Highlight.h */,
-				D98BDD141AEFFAEB00A0AECD /* CKStyleView+Highlight.m */,
 			);
 			name = "Style View";
+			sourceTree = "<group>";
+		};
+		D98BDD281AF1721400A0AECD /* Highlight View */ = {
+			isa = PBXGroup;
+			children = (
+				D98BDD201AF170BA00A0AECD /* CKHighlightView.h */,
+				D98BDD211AF170BA00A0AECD /* CKHighlightView.m */,
+				D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */,
+				D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */,
+				D98BDD131AEFFAEB00A0AECD /* CKHighlightView+Highlight.h */,
+				D98BDD141AEFFAEB00A0AECD /* CKHighlightView+Highlight.m */,
+			);
+			name = "Highlight View";
 			sourceTree = "<group>";
 		};
 		D98F3FD71AB378EC0094572C /* String */ = {
@@ -3699,12 +3719,13 @@
 				753178191417E4F9009310A8 /* UIToolbar+Style.h in Headers */,
 				7531781D1417E5A1009310A8 /* UILabel+Introspection.h in Headers */,
 				753178211417E61D009310A8 /* UINavigationBar+Introspection.h in Headers */,
-				D98BDD151AEFFAEB00A0AECD /* CKStyleView+Highlight.h in Headers */,
+				D98BDD151AEFFAEB00A0AECD /* CKHighlightView+Highlight.h in Headers */,
 				753178251417E64C009310A8 /* UIToolbar+introspection.h in Headers */,
 				753178291417E9E3009310A8 /* UIBarButtonItem+Introspection.h in Headers */,
 				75305B7314228D0E0003EBB6 /* UITextInputTraits+Introspection.h in Headers */,
 				75305B7814228EC20003EBB6 /* UITextView+Introspection.h in Headers */,
 				D9CD827D1AC3681100B2985D /* CKSection+Property.h in Headers */,
+				D98BDD261AF1720F00A0AECD /* CKHighlightView+Light.h in Headers */,
 				7539FF92142CE94700688E2D /* NSError+Additions.h in Headers */,
 				96B3BCE6182BED9800978B85 /* CKReusableViewController.h in Headers */,
 				D91D65811AE8335100B19E14 /* CKTransitionNode.h in Headers */,
@@ -3789,6 +3810,7 @@
 				96B9D2AC177B235F00455BE8 /* CKLayoutFlexibleSpace.h in Headers */,
 				D9418A8C1AB9CB1E00234A15 /* CKTableViewController.h in Headers */,
 				D91D658B1AE8335100B19E14 /* CKViewTransitionContext.h in Headers */,
+				D98BDD221AF170BA00A0AECD /* CKHighlightView.h in Headers */,
 				96B9D2B0177B23DA00455BE8 /* UIButton+CKLayout.h in Headers */,
 				961E782418D9D9040008EA33 /* UIView+Bounce.h in Headers */,
 				96B9D2B4177B248500455BE8 /* UIViewController+CKLayout.h in Headers */,
@@ -3956,7 +3978,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D98BDD161AEFFAEB00A0AECD /* CKStyleView+Highlight.m in Sources */,
+				D98BDD161AEFFAEB00A0AECD /* CKHighlightView+Highlight.m in Sources */,
 				7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */,
 				7560DC6D13B8ED3600268D13 /* CKAlertView.m in Sources */,
 				7560DC6F13B8ED3600268D13 /* CKAttribute.m in Sources */,
@@ -4043,6 +4065,7 @@
 				D91D65901AE8335100B19E14 /* CKViewTransitionContext+CollectionView.m in Sources */,
 				7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */,
 				7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */,
+				D98BDD231AF170BA00A0AECD /* CKHighlightView.m in Sources */,
 				D9418AA11ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m in Sources */,
 				7560DD5813B8ED3600268D13 /* CKStyleManager.m in Sources */,
 				7560DD6813B8ED3600268D13 /* CKTextView.m in Sources */,
@@ -4163,6 +4186,7 @@
 				9691DC171843A47C00D3EDD7 /* UILabel+ValueTransformer.m in Sources */,
 				96E6FA23182D1F8B001F1E6A /* UIImage+FastLoading.m in Sources */,
 				96B3BCE7182BED9800978B85 /* CKReusableViewController.m in Sources */,
+				D98BDD271AF1720F00A0AECD /* CKHighlightView+Light.m in Sources */,
 				96CADE331486B22A008A23E4 /* CKRuntime.m in Sources */,
 				96CADE391486BDFF008A23E4 /* NSObject+Validation.m in Sources */,
 				969FA54014966CD90095C61E /* UILabel+Highlight.m in Sources */,

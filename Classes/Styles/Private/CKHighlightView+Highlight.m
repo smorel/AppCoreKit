@@ -6,12 +6,13 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKStyleView+Highlight.h"
+#import "CKHighlightView+Highlight.h"
 #import "CKStyleView+Paths.h"
 #import "CKStyleView+Light.h"
 #import "UIImage+Transformations.h"
+#import "CKImageCache.h"
 
-@interface CKStyleView()
+@interface CKHighlightView()
 @property(nonatomic,retain)CALayer* highlightLayer;
 @property(nonatomic,retain)NSString* highlightGradientCacheIdentifier;
 @property(nonatomic,retain)CALayer* highlightGradientLayer;
@@ -19,7 +20,7 @@
 @property(nonatomic,retain)CALayer* highlightMaskLayer;
 @end
 
-@implementation CKStyleView (Highlight)
+@implementation CKHighlightView (Highlight)
 
 
 - (BOOL)highlightEnabled{
@@ -116,8 +117,11 @@
 
 - (void)setupHighlightLayers{
     
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
     self.highlightGradientLayer.position = self.highlightCenter;
     
+    [CATransaction commit];
 }
 
 - (void)regenerateHighlight{
