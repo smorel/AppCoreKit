@@ -9,13 +9,15 @@
 #import "CKStyleView.h"
 #import "CKStyleView+Drawing.h"
 #import "CKStyleView+Light.h"
+#import "CKStyleView+Paths.h"
+#import "CKStyleView+Highlight.h"
+#import "CKStyleView+Shadow.h"
 
 #import "UIImage+Transformations.h"
 #import "NSArray+Additions.h"
 #import "CKPropertyExtendedAttributes+Attributes.h"
 
 #import "CKImageCache.h"
-#import "CKStyleView+Paths.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -30,8 +32,7 @@
 @property(nonatomic,retain)CALayer* highlightMaskLayer;
 
 @property(nonatomic,retain)NSMutableArray* observedViews;
-@property(nonatomic,assign)CGRect lastShadowFrame;
-@property(nonatomic,assign)CGRect lastHighlightFrame;
+@property(nonatomic,assign)CGRect lastFrameInWindow;
 @end
 
 
@@ -64,6 +65,8 @@
 
 - (void)dealloc {
     NSAssert(_observedViews == nil,@"see shadows management");
+    
+    [CKSharedDisplayLink unregisterHandler:self];
     
     if(self.highlightGradientCacheIdentifier){
         [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightGradientCacheIdentifier];
@@ -283,136 +286,17 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
-    [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
     
-    if([self shadowEnabled]){
-        if([self updateShadowOffsetWithLight]){
-            UIImage* shadowImage = [self generateShadowImage];
-            if(!self.shadowImageView){
-                self.shadowImageView = [[UIImageView alloc]initWithImage:shadowImage];
-                [self addSubview:self.shadowImageView];
-            }else{
-                @autoreleasepool {
-                    self.shadowImageView.image = shadowImage;
-                }
-            }
-            
-            self.shadowImageView.frame = [self shadowImageViewFrame];
-        }
-    }
+    //  [CATransaction begin];
+    //  [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    [self updateLights];
+    [self layoutShadowImageView];
+    [self layoutHighlightLayers];
     
-    if([self highlightEnabled]){
-        if([self updateHighlightOffsetWithLight]){
-            if(!self.highlightLayer){
-                self.highlightLayer = [[[CALayer alloc]init]autorelease];
-                [self.layer addSublayer:self.highlightLayer];
-            }
-            
-            if(!self.highlightGradientLayer){
-                self.highlightGradientLayer = [[[CALayer alloc]init]autorelease];
-                [self.highlightLayer addSublayer:self.highlightGradientLayer];
-            }
-            
-            if(!self.highlightMaskLayer){
-                self.highlightMaskLayer = [[[CALayer alloc]init]autorelease];
-                self.highlightLayer.mask = self.highlightMaskLayer;
-            }
-            
-            [self updateHighlightGradientLayerContent];
-            [self updateHighlightMaskLayerContent];
-            [self setupHighlightLayers];
-        }
+    //  [CATransaction commit];
 
-    }
-    
-    [CATransaction commit];
 }
 
-- (UIImage*)highlightGradientImage{
-    if(self.highlightGradientCacheIdentifier){
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightGradientCacheIdentifier];
-    }
-    
-    self.highlightGradientCacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Gradient_%f_%@_%@",
-                                             self.highlightRadius,self.highlightColor,self.highlightEndColor];
-    UIImage* gradientImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.highlightGradientCacheIdentifier];
-    if(!gradientImage){
-        gradientImage = [UIImage radialGradientImageWithRadius:self.highlightRadius startColor:self.highlightColor endColor:self.highlightEndColor options:0];
-    }
-    
-    [[CKImageCache sharedInstance]registerHandler:self image:gradientImage withIdentifier:self.highlightGradientCacheIdentifier];
-    return gradientImage;
-}
-
-- (void)updateHighlightGradientLayerContent{
-    UIImage* gradientImage = [self highlightGradientImage];
-    
-    self.highlightGradientLayer.contents = (id)gradientImage.CGImage;
-    self.highlightGradientLayer.bounds = CGRectMake(0,0,gradientImage.size.width,gradientImage.size.height);
-}
-
-- (UIImage*)highlightMaskImage{
-    if(self.highlightMaskCacheIdentifier){
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightMaskCacheIdentifier];
-    }
-    
-    self.highlightMaskCacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Mask_%lu_%f_%f",
-                                             (unsigned long)self.corners,self.roundedCornerSize,self.highlightWidth];
-    
-    UIImage* maskImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.highlightMaskCacheIdentifier];
-    if(!maskImage){
-        CGMutablePathRef highlightPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll
-                                                                               borderWidth:self.highlightWidth
-                                                                                cornerType:self.corners
-                                                                         roundedCornerSize:self.roundedCornerSize
-                                                                                      rect:self.bounds];
-        
-        maskImage = [UIImage maskImageWithStrokePath:highlightPath width:self.highlightWidth size:self.bounds.size];
-        
-        CGPathRelease(highlightPath);
-    }
-    
-    [[CKImageCache sharedInstance]registerHandler:self image:maskImage withIdentifier:self.highlightMaskCacheIdentifier];
-    return maskImage;
-}
-
-- (void)updateHighlightMaskLayerContent{
-    UIImage* maskImage = [self highlightMaskImage];
-    
-    self.highlightMaskLayer.contents = (id)maskImage.CGImage;
-}
-
-- (void)regenerateShadow{
-    if(![self shadowEnabled])
-        return;
-    
-    @autoreleasepool {
-        UIImage* shadowImage = [self generateShadowImage];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.shadowImageView.image = shadowImage;
-            self.shadowImageView.frame = [self shadowImageViewFrame];
-        });
-    }
-}
-
-- (void)setupHighlightLayers{
-    [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-    
-    self.highlightLayer.frame = [self bounds];
-    self.highlightGradientLayer.position = self.highlightCenter;
-    self.highlightMaskLayer.frame = self.highlightLayer.bounds;
-    
-    [CATransaction commit];
-}
-
-- (void)regenerateHighlight{
-    if(![self highlightEnabled])
-        return;
-    
-    [self setupHighlightLayers];
-}
 
 @end
 

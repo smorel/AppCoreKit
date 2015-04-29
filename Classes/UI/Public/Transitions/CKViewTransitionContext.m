@@ -9,17 +9,19 @@
 #import "CKViewTransitionContext.h"
 #import "UIView+Snapshot.h"
 #import "CKStyleView.h"
-#import "CKStyleView+Light.h"
+#import "UIView+Transition.h"
 
 @interface CKViewTransitionContext()
 @property(nonatomic,retain) NSArray* viewsToHideDuringTransition;
 @property(nonatomic,retain,readwrite) NSArray* viewTransitionContexts;
+@property(nonatomic,retain) UIView* viewBeforeSnapshot;
 @end
 
 
 @implementation CKViewTransitionContext
 
 - (void)dealloc{
+    [_viewBeforeSnapshot release];
     [_viewsToHideDuringTransition release];
     [_viewTransitionContexts release];
     [_name release];
@@ -79,6 +81,7 @@
     context.startAttributes = [other.endAttributes copy];
     context.endAttributes = [other.startAttributes copy];
     context.viewsToHideDuringTransition = [other.viewsToHideDuringTransition copy];
+    context.viewBeforeSnapshot = other.viewBeforeSnapshot;
     
     NSMutableArray* reversedChildren = [NSMutableArray array];
     for(CKViewTransitionContext* child in other.viewTransitionContexts){
@@ -153,6 +156,9 @@
     }
     
     self.snapshot.hidden = !(self.visibility & CKViewTransitionContextVisibilityAfterAnimation);
+    
+    [self.viewBeforeSnapshot setStyleViewsDecoratorsEnabled:YES];
+    
 }
 
 - (void)performTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext{
@@ -160,12 +166,15 @@
         [child performTransitionWithContext:transitionContext];
     }
     
-    self.snapshot.frame = self.endAttributes.frame;
+    self.snapshot.center = self.endAttributes.center;
+    self.snapshot.bounds = self.endAttributes.bounds;
     self.snapshot.alpha =  self.endAttributes.alpha;
     self.snapshot.layer.transform =  self.endAttributes.transform3D ;
 }
 
 - (void)endTransition{
+    [self.viewBeforeSnapshot setStyleViewsDecoratorsEnabled:YES];
+    
     for(CKViewTransitionContext* child in self.viewTransitionContexts){
         [child endTransition];
     }
@@ -176,41 +185,17 @@
     [self.snapshot removeFromSuperview];
 }
 
-+ (CKStyleView*)cloneStyleViewForShadows:(CKStyleView*)other{
-    CKStyleView* styleView = [[[CKStyleView alloc]init]autorelease];
-    
-    styleView.backgroundColor = [UIColor clearColor];
-    styleView.corners = other.corners;
-    styleView.borderLocation = other.borderLocation;
-    styleView.roundedCornerSize = other.roundedCornerSize;
-    styleView.borderShadowColor = other.borderShadowColor;
-    styleView.borderShadowRadius = other.borderShadowRadius;
-    styleView.borderShadowOffset = other.borderShadowOffset;
-    styleView.highlightColor = other.highlightColor;
-    styleView.highlightCenter = other.highlightCenter;
-    styleView.highlightWidth = other.highlightWidth;
-    
-    styleView.frame = other.frame;
-    styleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [styleView layoutSubviews];
-    
-    return styleView;
-}
 
-+ (UIView*)snapshotView:(UIView*)view withLayerAttributesAfterUpdate:(BOOL)afterUpdate{
-    CKStyleView* styleView = [view styleView];
+
++ (UIView*)snapshotView:(UIView*)view withLayerAttributesAfterUpdate:(BOOL)afterUpdate context:(CKViewTransitionContext*)context{
+    context.viewBeforeSnapshot = view;
     
     UIView* snapshot = nil;
     if(afterUpdate){
-        snapshot = [view snapshotViewAfterScreenUpdates:YES];
+        snapshot = [view transitionSnapshotAfterUpdate];
     }
     else {
-        snapshot = [[[UIImageView alloc]initWithImage:[view snapshotWithoutSubviews]]autorelease];
-    }
-    
-    if(styleView && [styleView shadowEnabled]){
-        CKStyleView* transitionStyleView = [self cloneStyleViewForShadows:styleView];
-        [snapshot addSubview:transitionStyleView];
+        snapshot = [view transitionSnapshot];
     }
     
     return snapshot;

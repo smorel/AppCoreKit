@@ -76,11 +76,8 @@
             [self completeTransitionWithTransitioningContext:transitionContext];
         }
         from.view.hidden = YES;
-        
-        //   dispatch_async(dispatch_get_main_queue(), ^{
-        //   from.view.hidden = YES;
-        //  });
-    });
+    
+     });
 }
 
 - (UIViewController*)rootViewControllerFromController:(UIViewController*)controller{
@@ -107,13 +104,12 @@
     }
                                            completion:^(BOOL finished) {
                                                if(finished){
-                                                   [self.transitionTree endTransition];
                                                    
                                                 [root.view setUserInteractionEnabled:YES];
+                                                   to.view.hidden = NO;
                                                    
+                                                   [self.transitionTree endTransition];
                                                    [self didCompleteTransitionWithTransitioningContext:transitionContext];
-                                                   
-                                                    to.view.hidden = NO;
                                                    
                                                    [transitionContext completeTransition:!transitionContext.transitionWasCancelled];
                                                }

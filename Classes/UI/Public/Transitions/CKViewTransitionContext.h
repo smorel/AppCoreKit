@@ -35,6 +35,6 @@ typedef NS_ENUM(NSInteger,CKViewTransitionContextVisibility){
 - (void)removeAllViewTransitionContextsRecursive:(BOOL)recursive;
 
 + (CKViewTransitionContext*)contextByReversingContext:(CKViewTransitionContext*)context;
-+ (UIView*)snapshotView:(UIView*)view withLayerAttributesAfterUpdate:(BOOL)afterUpdate;
++ (UIView*)snapshotView:(UIView*)view withLayerAttributesAfterUpdate:(BOOL)afterUpdate context:(CKViewTransitionContext*)context;
 
 @end

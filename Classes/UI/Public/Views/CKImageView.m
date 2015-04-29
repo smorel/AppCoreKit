@@ -192,8 +192,8 @@
     
 }
 
-- (NSArray*)viewsToIncludeInSnapshotWithoutSubviews{
-    NSMutableArray* array = [NSMutableArray arrayWithArray:[super viewsToIncludeInSnapshotWithoutSubviews]];
+- (NSArray*)viewsToIncludeInTransitionSnapshot{
+    NSMutableArray* array = [NSMutableArray arrayWithArray:[super viewsToIncludeInTransitionSnapshot]];
     if(self.defaultImageView){ [array addObject:self.defaultImageView]; }
     if(self.imageView){ [array addObject:self.imageView]; }
     return array;

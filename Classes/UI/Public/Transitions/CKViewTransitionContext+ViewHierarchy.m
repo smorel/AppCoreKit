@@ -41,7 +41,7 @@
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
     context.name = viewName;
     context.visibility = CKViewTransitionContextVisibilityAlways;
-    context.snapshot = [CKViewTransitionContext snapshotView:targetSubViewView withLayerAttributesAfterUpdate:NO];
+    context.snapshot = [CKViewTransitionContext snapshotView:targetSubViewView withLayerAttributesAfterUpdate:NO context:context];
     context.snapshot.name = viewName;
     
     UICollectionViewLayoutAttributes* cellStartAttributes = [[[UICollectionViewLayoutAttributes alloc]init]autorelease];
@@ -72,7 +72,7 @@
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
     context.name = viewName;
     context.visibility = CKViewTransitionContextVisibilityAlways;
-    context.snapshot = [CKViewTransitionContext snapshotView:sourceView withLayerAttributesAfterUpdate:NO];
+    context.snapshot = [CKViewTransitionContext snapshotView:sourceView withLayerAttributesAfterUpdate:NO context:context];
     context.snapshot.name = viewName;
     
     
@@ -252,7 +252,7 @@
     
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
     context.visibility = CKViewTransitionContextVisibilityAlways;
-    context.snapshot = [CKViewTransitionContext snapshotView:view withLayerAttributesAfterUpdate:NO];
+    context.snapshot = [CKViewTransitionContext snapshotView:view withLayerAttributesAfterUpdate:NO context:context];
     
     UICollectionViewLayoutAttributes* startAttributes = [[[UICollectionViewLayoutAttributes alloc]init]autorelease];
     startAttributes.frame =  [view.superview convertRect:view.frame toView:[transitionContext containerView]];

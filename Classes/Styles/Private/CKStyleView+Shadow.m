@@ -1,24 +1,19 @@
 //
-//  CKStyleView+Light.m
+//  CKStyleView+Shadow.m
 //  AppCoreKit
 //
-//  Created by Sebastien Morel on 2015-04-24.
+//  Created by Sebastien Morel on 2015-04-28.
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKStyleView+Light.h"
+#import "CKStyleView+Shadow.h"
 #import "CKStyleView+Paths.h"
-#import "CoreGraphics+Additions.h"
-#import "UIColor+Additions.h"
-#import "UIColor+Components.h"
-#import "CKImageCache.h"
+#import "CKStyleView+Light.h"
+#import "UIImage+Transformations.h"
 
 @interface CKStyleView()
-@property(nonatomic,retain) NSMutableArray* observedViews;
-@property(nonatomic,assign)CGRect lastShadowFrame;
-@property(nonatomic,assign)CGRect lastHighlightFrame;
-- (void)regenerateShadow;
-- (void)regenerateHighlight;
+@property(nonatomic,retain)UIImageView* shadowImageView;
+
 @end
 
 @implementation CKStyleView (Shadow)
@@ -45,7 +40,7 @@
         }
         
         CGFloat multiplier = 1;
-        CGRect shadowFrame = self.frame;
+        CGRect shadowFrame = self.bounds;
         CGPoint offset = CGPointMake(0,0);
         
         if(self.borderLocation & CKStyleViewBorderLocationLeft){
@@ -88,15 +83,15 @@
         return CGRectIntegral(shadowFrame);
     }
     
-    return self.frame;
+    return self.bounds;
 }
 
 - (UIImage*)generateShadowImage{
     UIImage* result = nil;
     @autoreleasepool {
-
+        
         //TODO: compute the smallest resizable image taking care of shadow radius and roundedcornerswidth
-        CGRect frame = self.frame;
+        CGRect frame = self.bounds;
         
         CGRect shadowFrame = [self shadowImageViewFrame];
         
@@ -104,8 +99,8 @@
                                             (2* (self.borderShadowRadius + self.roundedCornerSize)) + 1 + fabs(self.borderShadowOffset.height));
         
         CGRect imageRect =  CGRectIntegral(CGRectMake(0,0,
-                                      shadowFrame.size.width - (frame.size.width) + minimumDrawSize.width,
-                                      shadowFrame.size.height - (frame.size.height) + minimumDrawSize.height));
+                                                      shadowFrame.size.width - (frame.size.width) + minimumDrawSize.width,
+                                                      shadowFrame.size.height - (frame.size.height) + minimumDrawSize.height));
         
         CGRect drawRect = CGRectMake(-shadowFrame.origin.x ,
                                      -shadowFrame.origin.y,
@@ -129,7 +124,7 @@
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-         result = [[image resizableImageWithCapInsets:resizableInsets resizingMode:UIImageResizingModeStretch]retain];
+        result = [[image resizableImageWithCapInsets:resizableInsets resizingMode:UIImageResizingModeStretch]retain];
     }
     
     return [result autorelease];
@@ -198,7 +193,7 @@
                     shadowPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll  borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:shadowRect];
                 }
                 if(shadowPath){
-                
+                    
                     [[UIColor blackColor] setFill];
                     CGContextAddPath(gc, shadowPath);
                     CGContextFillPath(gc);
@@ -215,132 +210,37 @@
     }
 }
 
-- (BOOL)highlightEnabled{
-    return self.highlightColor!= nil && self.highlightColor != [UIColor clearColor] && self.highlightWidth > 0;
-}
-
-
-#define LIGTH_EXPERIMENT
-
-#ifdef LIGTH_EXPERIMENT
-
-- (void)willMoveToWindow:(UIWindow *)newWindow{
-    
-    if(newWindow == nil){
-        [self unregisterSuperviewFrameObservers];
-    }
-}
-
-- (void)didMoveToWindow{
-    
-    [self registerSuperviewFrameObservers];
-}
-
-- (void)unregisterSuperviewFrameObservers{
-    for(UIView* view in self.observedViews){
-        [view removeObserver:self forKeyPath:@"frame"];
-        if([view isKindOfClass:[UIScrollView class]]){
-            [view removeObserver:self forKeyPath:@"contentOffset"];
+- (void)layoutShadowImageView{
+    if([self shadowEnabled]){
+        UIImage* shadowImage = [self generateShadowImage];
+        if(!self.shadowImageView){
+            self.shadowImageView = [[UIImageView alloc]initWithImage:shadowImage];
+            self.shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [self addSubview:self.shadowImageView];
+        }else{
+            @autoreleasepool {
+                self.shadowImageView.image = shadowImage;
+            }
         }
-    }
-    self.observedViews = nil;
-}
-
-
-- (void)registerSuperviewFrameObservers{
-    [self unregisterSuperviewFrameObservers];
-    
-    self.observedViews = [NSMutableArray array];
-
-    UIView* view = [self superview];
-    while(view){
-        [self.observedViews addObject:view];
-        [view addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-        if([view isKindOfClass:[UIScrollView class]]){
-            [view addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
-        }
-        view = [view superview];
+        
+        self.shadowImageView.frame = [self shadowImageViewFrame];
     }
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context{
-    if([object isKindOfClass:[UIView class]] && [keyPath isEqualToString:@"frame"]){
-        [self updateShadowWithLight];
-        [self updateHighlightWithLight];
-    }else if([object isKindOfClass:[UIView class]] && [keyPath isEqualToString:@"contentOffset"]){
-        [self updateShadowWithLight];
-        [self updateHighlightWithLight];
+- (void)setShadowEnabled:(BOOL)enabled{
+    self.shadowImageView.hidden = !enabled;
+}
+
+
+- (void)regenerateShadow{
+    if(![self shadowEnabled])
+        return;
+    
+    @autoreleasepool {
+        UIImage* shadowImage = [self generateShadowImage];
+        self.shadowImageView.image = shadowImage;
+        self.shadowImageView.frame = [self shadowImageViewFrame];
     }
 }
-
-- (void)updateShadowWithLight{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),   ^ {
-        if([self updateShadowOffsetWithLight]){
-            [self regenerateShadow];
-        }
-    });
-}
-
-- (BOOL)updateShadowOffsetWithLight{
-    if(![self shadowEnabled] || !self.window)
-        return NO;
-    
-    CGPoint lightPosition = self.lightPosition;
-    CGFloat lightIntensity = self.lightIntensity;
-    CGPoint lightDirection = self.lightDirection;
-    
-    CGRect rect = [self.superview convertRect:self.frame toView:self.window];
-    //if(CGRectEqualToRect(self.lastShadowFrame, rect))
-    //     return NO;
-    self.lastShadowFrame = rect;
-    
-    CGPoint diff = CGPointMake(rect.origin.x + rect.size.width - lightPosition.x,rect.origin.y + rect.size.height - lightPosition.y );
-    
-    CGPoint direction = CKCGPointNormalize( diff );
-    
-    CGSize offset = CGSizeMake((NSInteger)(direction.x * lightIntensity) , (NSInteger)(direction.y * lightIntensity) );
-    [self setBorderShadowOffset:offset];
-    
-    return YES;
-}
-
-
-- (BOOL)updateHighlightOffsetWithLight{
-    if(![self highlightEnabled] || !self.window)
-        return NO;
-    
-    CGPoint lightPosition = self.lightPosition;
-    CGFloat lightIntensity = self.lightIntensity;
-    CGPoint lightDirection = self.lightDirection;
-    
-    CGRect rect = [self.superview convertRect:self.frame toView:self.window];
-    // if(CGRectEqualToRect(self.lastHighlightFrame, rect))
-    //    return NO;
-    self.lastHighlightFrame = rect;
-    
-    CGPoint nonNormalizedLightDirection = CGPointMake(lightDirection.x * self.window.bounds.size.width * 2,lightDirection.y * self.window.bounds.size.height * 2);
-    
-    CGPoint intersection = CKCGRectIntersect(rect,lightPosition,nonNormalizedLightDirection);
-    
-    self.highlightCenter = intersection;
-    return !CGPointEqualToPoint(intersection,CGPointZero);
-}
-
-- (void)updateHighlightWithLight{
-    if([self updateHighlightOffsetWithLight]){
-        [self regenerateHighlight];
-    }
-}
-
-#else
-
-- (void)updateShadowOffsetWithLight {}
-
-- (BOOL)updateHighlightOffsetWithLight {}
-
-#endif
 
 @end

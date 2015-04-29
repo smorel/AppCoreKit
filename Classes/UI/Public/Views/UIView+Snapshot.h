@@ -15,12 +15,6 @@
 /**
  */
 - (UIImage*)snapshot;
-- (UIImage*)snapshotWithoutSubviews;
-
-/** snapshoting without subviews is to grab a snapshot of the view without subviews.
- But sometime some subviews are the views that display the content of the view for example CKImageView.
- */
-- (NSArray*)viewsToIncludeInSnapshotWithoutSubviews;
 
 @end
 

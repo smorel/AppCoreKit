@@ -61,7 +61,7 @@
 }
 
 - (void)unregisterFromScreen{
-    [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [_displayLink invalidate];
     [_displayLink release];
     _displayLink = nil;

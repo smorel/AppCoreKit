@@ -8,6 +8,7 @@
 
 #import "CKTransitionNode.h"
 #import "CKPropertyExtendedAttributes.h"
+#import "NSObject+Invocation.h"
 
 @interface CKViewTransitionContext()
 
@@ -197,10 +198,18 @@
         [context willPerfomTransitionWithContext:transitionContext];
     }
     
+    /*
+    [self performBlock:^{
+        animateChildren(YES);
+    } afterDelay:((self.delay * rate) + (self.duration * rate))];
+    
+    return;
+     */
+    
     if(self.damping == 0){
-        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate options:self.options | UIViewAnimationOptionAllowUserInteraction animations:animation completion:animateChildren];
+        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate options:self.options animations:animation completion:animateChildren];
     }else{
-        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate usingSpringWithDamping:self.damping initialSpringVelocity:self.initialVelocity options:self.options | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionLayoutSubviews animations:animation completion:animateChildren];
+        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate usingSpringWithDamping:self.damping initialSpringVelocity:self.initialVelocity options:self.options animations:animation completion:animateChildren];
     }
 }
 
