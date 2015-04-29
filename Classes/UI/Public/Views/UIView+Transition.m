@@ -8,17 +8,22 @@
 
 #import "UIView+Transition.h"
 #import "CKStyleView.h"
+#import "CKHighlightView.h"
 #import "CKStyleView+Light.h"
+#import "CKHighlightView+Light.h"
 #import "UIView+Name.h"
 #import "UIView+Snapshot.h"
 #import "NSObject+Bindings.h"
 
 @interface CKStyleView()
 - (BOOL)shadowEnabled;
-- (BOOL)highlightEnabled;
 - (void)setShadowEnabled:(BOOL)enabled;
+@end
+
+
+@interface CKHighlightView()
+- (BOOL)highlightEnabled;
 - (void)setHighlightEnabled:(BOOL)enabled;
-@property(nonatomic,retain)UIImageView* shadowImageView;
 @end
 
 
@@ -34,12 +39,6 @@
     styleView.borderShadowColor = other.borderShadowColor;
     styleView.borderShadowRadius = other.borderShadowRadius;
     styleView.borderShadowOffset = other.borderShadowOffset;
-    /*styleView.highlightColor = other.highlightColor;
-    styleView.highlightEndColor = other.highlightEndColor;
-    styleView.highlightCenter = other.highlightCenter;
-    styleView.highlightRadius = other.highlightRadius;
-    styleView.highlightWidth = other.highlightWidth;
-     */
     styleView.lightDirection = other.lightDirection;
     styleView.lightIntensity = other.lightIntensity;
     styleView.lightPosition = other.lightPosition;
@@ -50,6 +49,30 @@
     
     return styleView;
 }
+
++ (CKHighlightView*)cloneHighlightViewDecorators:(CKHighlightView*)other root:(UIView*)root{
+    CKHighlightView* highlightView = [[[CKHighlightView alloc]init]autorelease];
+    
+    highlightView.backgroundColor = [UIColor clearColor];
+    highlightView.corners = other.corners;
+    highlightView.roundedCornerSize = other.roundedCornerSize;
+    highlightView.highlightColor = other.highlightColor;
+    highlightView.highlightEndColor = other.highlightEndColor;
+    highlightView.highlightCenter = other.highlightCenter;
+    highlightView.highlightRadius = other.highlightRadius;
+    highlightView.highlightWidth = other.highlightWidth;
+    
+    highlightView.lightDirection = other.lightDirection;
+    highlightView.lightIntensity = other.lightIntensity;
+    highlightView.lightPosition = other.lightPosition;
+    
+    CGRect rect = [other.superview convertRect:other.frame toView:root];
+    highlightView.frame = rect;
+    highlightView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    return highlightView;
+}
+
 
 - (UIImage*)snapshotWithoutSubviews{
     CGFloat scale = [[UIScreen mainScreen]scale];
@@ -77,16 +100,24 @@
         if([v isKindOfClass:[CKStyleView class]]){
             [styleViewToRestore addObject:v];
             [(CKStyleView*)v setShadowEnabled:NO];
-            // [(CKStyleView*)v setHighlightEnabled:NO];
+        }
+        
+        if([v isKindOfClass:[CKHighlightView class]]){
+            [styleViewToRestore addObject:v];
+            [(CKHighlightView*)v setHighlightEnabled:NO];
         }
     }
     
     [self.layer renderInContext:contextRef];
     
     
-    for(CKStyleView* v in styleViewToRestore){
-        [(CKStyleView*)v setShadowEnabled:YES];
-        //[(CKStyleView*)v setHighlightEnabled:YES];
+    for(UIView* v in styleViewToRestore){
+        if([v isKindOfClass:[CKStyleView class]]){
+            [(CKStyleView*)v setShadowEnabled:YES];
+        }
+        if([v isKindOfClass:[CKHighlightView class]]){
+            [(CKHighlightView*)v setHighlightEnabled:YES];
+        }
     }
     
     for(UIView* v in viewsToShow){
@@ -126,24 +157,39 @@
 }
 
 + (void)installStyleViewDecorators:(CKStyleView*)styleView fromView:(UIView*)root inView:(UIView*)view name:(NSString*)name{
-    if(styleView && ([styleView shadowEnabled] /*|| [styleView highlightEnabled]*/)){
+    if(styleView && ([styleView shadowEnabled])){
         CKStyleView* transitionStyleView = [[self class] cloneStyleViewDecorators:styleView root:root];
         transitionStyleView.name = name;
         [view addSubview:transitionStyleView];
     }
 }
 
++ (void)installHighlightViewDecorators:(CKHighlightView*)highlightView fromView:(UIView*)root inView:(UIView*)view name:(NSString*)name{
+    if(highlightView && ( [highlightView highlightEnabled])){
+        CKHighlightView* transitionHighlightView = [[self class] cloneHighlightViewDecorators:highlightView root:root];
+        transitionHighlightView.name = name;
+        [view addSubview:transitionHighlightView];
+    }
+}
+
 - (UIView*)transitionSnapshot{
     [self layoutSubviews];
     
-    //[self setStyleViewsDecoratorsEnabled:NO];
+    [self setStyleViewsDecoratorsEnabled:NO];
     
-    CKStyleView* styleView = [self styleView];
     
     UIView* snapshot = [[[UIImageView alloc]initWithImage:[self snapshotWithoutSubviews]]autorelease];
     snapshot.frame = self.bounds;
     
-    [[self class]installStyleViewDecorators:styleView fromView:self inView:snapshot name:self.name];
+    CKStyleView* styleView = [self styleView];
+    if(styleView){
+        [[self class]installStyleViewDecorators:styleView fromView:self inView:snapshot name:self.name];
+    }
+    
+    CKHighlightView* highlightView = [self highlightView];
+    if(highlightView){
+        [[self class]installHighlightViewDecorators:highlightView fromView:self inView:snapshot name:self.name];
+    }
     
     return snapshot;
 }
@@ -151,7 +197,7 @@
 - (UIView*)transitionSnapshotAfterUpdate{
     [self layoutSubviews];
     
-    //  [self setStyleViewsDecoratorsEnabled:NO];
+      [self setStyleViewsDecoratorsEnabled:NO];
     
     UIView* snapshot = [self snapshotViewAfterScreenUpdates:YES];
     snapshot.frame = self.bounds;
@@ -169,6 +215,11 @@
         [[self class]installStyleViewDecorators:styleView fromView:root inView:view name:self.name];
     }
     
+    CKHighlightView* highlightView = [self highlightView];
+    if(highlightView){
+        [[self class]installHighlightViewDecorators:highlightView fromView:root inView:view name:self.name];
+    }
+    
     for(UIView* subview in self.subviews){
         [subview installStyleViewDecoratorsFromView:root inView:view];
     }
@@ -183,6 +234,15 @@
         }
         //[styleView setHighlightEnabled:enabled];
         [styleView setShadowEnabled:enabled];
+    }
+    
+    CKHighlightView* highlightView = [self highlightView];
+    if(highlightView){
+        if(enabled){
+            [highlightView updateLights];
+        }
+        //[styleView setHighlightEnabled:enabled];
+        [highlightView setHighlightEnabled:enabled];
     }
     
     for(UIView* subview in self.subviews){

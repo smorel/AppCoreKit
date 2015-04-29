@@ -101,9 +101,11 @@
     if(self.subviews.count == 0)
         return nil;
     
-    UIView* last = [self.subviews objectAtIndex:self.subviews.count - 1];
-    if([last isKindOfClass:[CKHighlightView class]])
-        return (CKHighlightView*)last;
+    for(NSInteger i = self.subviews.count - 1; i >= 0; --i){
+        UIView* view =[self.subviews objectAtIndex:i];
+        if([view isKindOfClass:[CKHighlightView class]])
+            return (CKHighlightView*)view;
+    }
     
     return nil;
 }

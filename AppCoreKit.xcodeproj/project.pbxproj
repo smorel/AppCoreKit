@@ -623,7 +623,7 @@
 		D98BDD1A1AF00B6F00A0AECD /* CKSharedDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD181AF00B6F00A0AECD /* CKSharedDisplayLink.m */; };
 		D98BDD1D1AF0147F00A0AECD /* UIView+Transition.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD1B1AF0147F00A0AECD /* UIView+Transition.h */; };
 		D98BDD1E1AF0147F00A0AECD /* UIView+Transition.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD1C1AF0147F00A0AECD /* UIView+Transition.m */; };
-		D98BDD221AF170BA00A0AECD /* CKHighlightView.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD201AF170BA00A0AECD /* CKHighlightView.h */; };
+		D98BDD221AF170BA00A0AECD /* CKHighlightView.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD201AF170BA00A0AECD /* CKHighlightView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98BDD231AF170BA00A0AECD /* CKHighlightView.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD211AF170BA00A0AECD /* CKHighlightView.m */; };
 		D98BDD261AF1720F00A0AECD /* CKHighlightView+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */; };
 		D98BDD271AF1720F00A0AECD /* CKHighlightView+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */; };

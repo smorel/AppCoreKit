@@ -8,6 +8,7 @@
 
 #import "CKStyleManager.h"
 #import "CKStyleView.h"
+#import "CKHighlightView.h"
 #import "UIView+Style.h"
 #import "UIViewController+Style.h"
 #import "UIButton+Style.h"
