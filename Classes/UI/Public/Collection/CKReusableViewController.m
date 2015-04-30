@@ -21,6 +21,7 @@
 
 #import "CKTableViewController.h"
 #import "CKCollectionViewController.h"
+#import "NSValueTransformer+CGTypes.h"
 
 @interface NSObject ()
 
@@ -65,7 +66,7 @@
 
 - (id)init{
     self = [super init];
-    self.estimatedRowHeight = 44;
+    self.estimatedSize = CGSizeMake(320,44);
     self.flags = CKViewControllerFlagsSelectable;
     self.accessoryType = UITableViewCellAccessoryNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
@@ -151,7 +152,7 @@
         //}
         
         if(returnSize.height <= 0){
-            returnSize = CGSizeMake(view.width,self.estimatedRowHeight);
+            returnSize = CGSizeMake(view.width,self.estimatedSize.height);
         }
         
         self.isComputingSize = NO;
@@ -186,7 +187,7 @@
         //}
         
         if(returnSize.height <= 0){
-            returnSize = CGSizeMake(self.view.width,self.estimatedRowHeight);
+            returnSize = CGSizeMake(self.view.width,self.estimatedSize.height);
         }
         
         [self viewWillDisappear:NO];
@@ -617,6 +618,16 @@
     if(parentController){
         [parentController invalidateControllerAtIndexPath:self.indexPath];
     }
+}
+
+- (CGSize)estimatedSize{
+    if(self.appliedStyle == nil){
+        if([[self controllerStyle]containsObjectForKey:@"estimatedSize"]){
+            id object = [[self controllerStyle]objectForKey:@"estimatedSize"];
+            _estimatedSize = [NSValueTransformer convertCGSizeFromObject:object];
+        }
+    }
+    return _estimatedSize;
 }
 
 @end

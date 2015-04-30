@@ -141,9 +141,9 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
 
 
 
-/** Default is 44
+/** Default is 320,44
  */
-@property(nonatomic,assign) CGFloat estimatedRowHeight;
+@property(nonatomic,assign) CGSize estimatedSize;
 
 
 /**

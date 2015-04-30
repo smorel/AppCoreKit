@@ -439,7 +439,7 @@
         CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
         return size.height;
     }
-    return controller.estimatedRowHeight;
+    return controller.estimatedSize.height;
 }
 
 
@@ -519,7 +519,7 @@
         CGSize size = [s.headerViewController preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
         return size.height;
     }
-    return s.headerViewController.estimatedRowHeight;
+    return s.headerViewController.estimatedSize.height;
 }
 
 #endif
@@ -613,7 +613,7 @@
         }
         return size.height;
     }
-    return s.footerViewController.estimatedRowHeight;
+    return s.footerViewController.estimatedSize.height;
 }
 #endif
 

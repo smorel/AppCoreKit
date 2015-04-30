@@ -557,8 +557,13 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self controllerAtIndexPath:indexPath];
-    CGSize result = [controller preferredSizeConstraintToSize:CGSizeMake(self.collectionView.width,self.collectionView.height)];
-    return result;
+
+    if([self.collectionView.indexPathsForVisibleItems containsObject:indexPath]){
+        CGSize result = [controller preferredSizeConstraintToSize:CGSizeMake(self.collectionView.width,self.collectionView.height)];
+        return result;
+    }else{
+        return controller.estimatedSize;
+    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForSupplementaryElementOfKind:(NSString*)kind atIndexPath:(NSIndexPath *)indexPath{

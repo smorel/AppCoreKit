@@ -27,6 +27,7 @@
 
 
 @property(nonatomic,assign)CGRect lastFrameInWindow;
+@property(nonatomic,assign)CGRect lastDrawBounds;
 @end
 
 
@@ -246,14 +247,20 @@
 }
 
 - (void)updateDisplay{
+    if(CGRectEqualToRect( self.lastDrawBounds, self.bounds))
+        return;
+    
+    NSLog(@"%@ - %@",NSStringFromCGRect( self.lastDrawBounds),NSStringFromCGRect(self.bounds));
+    
     [self setNeedsDisplay];
+    self.lastDrawBounds = self.bounds;
 }
 
 
 - (void)layoutSubviews{
     [super layoutSubviews];
     
-    [self setNeedsDisplay];
+    [self updateDisplay];
     
     //   [CATransaction begin];
     //   [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];

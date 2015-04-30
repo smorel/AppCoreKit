@@ -13,6 +13,7 @@
 
 @interface CKStyleView ()
 @property(nonatomic,retain)UIColor* fillColor;
+@property(nonatomic,assign)CGRect lastDrawBounds;
 @end
 
 
