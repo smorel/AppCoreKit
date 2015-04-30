@@ -207,9 +207,9 @@
      */
     
     if(self.damping == 0){
-        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate options:self.options animations:animation completion:animateChildren];
+        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate options:self.options | UIViewAnimationOptionLayoutSubviews animations:animation completion:animateChildren];
     }else{
-        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate usingSpringWithDamping:self.damping initialSpringVelocity:self.initialVelocity options:self.options animations:animation completion:animateChildren];
+        [UIView animateWithDuration:self.duration * rate delay:self.delay * rate usingSpringWithDamping:self.damping initialSpringVelocity:self.initialVelocity options:self.options | UIViewAnimationOptionLayoutSubviews animations:animation completion:animateChildren];
     }
 }
 

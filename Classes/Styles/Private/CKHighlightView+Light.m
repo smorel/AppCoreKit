@@ -27,13 +27,21 @@
 - (void)willMoveToWindow:(UIWindow *)newWindow{
     if(newWindow == nil){
         [CKSharedDisplayLink unregisterHandler:self];
+        [self clearBindingsContextWithScope:@"Light"];
     }
 }
 
 - (void)didMoveToWindow{
-    // if([self shadowEnabled] || [self highlightEnabled]){
-        [CKSharedDisplayLink registerHandler:self];
-    //}
+    [CKSharedDisplayLink registerHandler:self];
+    
+    __unsafe_unretained CKHighlightView* bself = self;
+    
+    [self beginBindingsContextWithScope:@"Light"];
+    [NSNotificationCenter bindNotificationName:CKLightDidChangeNotification withBlock:^(NSNotification *notification) {
+        bself.lastFrameInWindow = CGRectZero;//force recompute
+        [bself updateLights];
+    }];
+    [self endBindingsContext];
 }
 
 - (void)sharedDisplayLinkDidRefresh:(CKSharedDisplayLink*)displayLink{
@@ -41,32 +49,36 @@
 }
 
 - (void)updateLights{
-    // if(   ([self shadowEnabled] && self.shadowImageView.hidden == NO)
-    //   || ([self highlightEnabled] && self.highlightLayer.hidden == NO) ){
-        CALayer* prez = self.layer.presentationLayer;
-        CGRect rect = [prez.superlayer convertRect:prez.frame toLayer:self.window.layer.presentationLayer];
-        if(CGRectEqualToRect(rect, self.lastFrameInWindow))
-            return;
-        
-        self.lastFrameInWindow = rect;
+    CGRect rect = CGRectZero;
+    CALayer* prez = self.layer.presentationLayer;
+    if(prez){
+        rect = [prez.superlayer convertRect:prez.frame toLayer:self.window.layer.presentationLayer];
+    }else{
+        rect = [self.superview convertRect:self.frame toView:self.window];
+    }
     
-        if([self updateHighlightWithLightWithRect:rect]){
-            [self regenerateHighlight];
-        }
-    //}
+    if(CGRectEqualToRect(rect, self.lastFrameInWindow))
+        return;
+    
+    self.lastFrameInWindow = rect;
+    
+    if([self updateHighlightWithLightWithRect:rect]){
+        [self regenerateHighlight];
+    }
+    
 }
 
 - (BOOL)updateHighlightWithLightWithRect:(CGRect)rect{
     if(![self highlightEnabled] || !self.window)
         return NO;
     
-    CGPoint lightPosition = self.lightPosition;
-    CGFloat lightIntensity = self.lightIntensity;
-    CGPoint lightDirection = self.lightDirection;
+    CKLight* light = self.window.light;
     
-    CGPoint nonNormalizedLightDirection = CGPointMake(lightDirection.x * self.window.bounds.size.width * 2,lightDirection.y * self.window.bounds.size.height * 2);
+    CGPoint lightStart = CGPointMake(light.origin.x * self.window.bounds.size.width, light.origin.y * self.window.bounds.size.height);
+    CGPoint lightEnd = CGPointMake(light.end.x * self.window.bounds.size.width, light.end.y * self.window.bounds.size.height);
+    CGPoint lightDirection = CGPointMake(lightEnd.x - lightStart.x,lightEnd.y - lightStart.y);
     
-    CGPoint intersection = CKCGRectIntersect(rect,lightPosition,nonNormalizedLightDirection);
+    CGPoint intersection = CKCGRectIntersect(rect,lightStart,lightDirection);
     
     self.highlightCenter = intersection;
     return !CGPointEqualToPoint(intersection,CGPointZero);

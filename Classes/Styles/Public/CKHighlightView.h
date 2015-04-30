@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "CKStyleView.h"
+#import "UIWindow+Light.h"
 
+/** The highlight view requiers a light to be set on the window.
+ */
 @interface CKHighlightView : UIView
 
 ///-----------------------------------
@@ -48,21 +51,6 @@
 @property (nonatomic, assign) CGPoint highlightCenter;
 
 
-///-----------------------------------
-/// @name Customizing the light source
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, assign) CGPoint lightPosition;
-
-/**
- */
-@property (nonatomic, assign) CGFloat lightIntensity;
-
-/**
- */
-@property (nonatomic, assign) CGPoint lightDirection;
 
 @end
 

@@ -12,13 +12,13 @@
 #import "CKHighlightView+Highlight.h"
 #import "CKHighlightView+Light.h"
 #import "CKRuntime.h"
+#import "NSObject+Bindings.h"
 
 @interface CKHighlightView()<CKSharedDisplayLinkDelegate>
-@property(nonatomic,retain)CALayer* highlightLayer;
 @property(nonatomic,retain)NSString* highlightGradientCacheIdentifier;
-@property(nonatomic,retain)CALayer* highlightGradientLayer;
+@property(nonatomic,retain)UIImageView* highlightGradientLayer;
 @property(nonatomic,retain)NSString* highlightMaskCacheIdentifier;
-@property(nonatomic,retain)CALayer* highlightMaskLayer;
+@property(nonatomic,retain)UIImageView* highlightMaskLayer;
 
 @property(nonatomic,assign)CGRect lastFrameInWindow;
 @end
@@ -28,6 +28,7 @@
 @implementation CKHighlightView
 
 - (void)dealloc {
+    [self clearBindingsContextWithScope:@"Light"];
     [CKSharedDisplayLink unregisterHandler:self];
     
     if(self.highlightGradientCacheIdentifier){
@@ -40,7 +41,6 @@
     }
     
     [_highlightColor release]; _highlightColor = nil;
-    [_highlightLayer release]; _highlightLayer = nil;
     [_highlightMaskLayer release]; _highlightMaskLayer = nil;
     [_highlightGradientLayer release]; _highlightGradientLayer = nil;
     [_highlightGradientCacheIdentifier release]; _highlightGradientCacheIdentifier = nil;
@@ -48,6 +48,29 @@
     [super dealloc];
 }
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
 
 - (void)postInit {
     self.highlightColor = [UIColor whiteColor];
@@ -55,12 +78,7 @@
     self.highlightWidth = 0;
     self.highlightEndColor =[UIColor colorWithRed:1 green:1 blue:1 alpha:0];
     
-    self.lightPosition = CGPointMake(0,0);
-    self.lightIntensity = 20;
-    self.lightDirection = CGPointMake(0.5,1);
-    
     self.backgroundColor = [UIColor clearColor];
-    self.userInteractionEnabled = NO;
     
     self.corners = CKStyleViewCornerTypeNone;
     self.roundedCornerSize = 10;
@@ -75,14 +93,12 @@
     [super layoutSubviews];
     
     
-    [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    // [CATransaction begin];
+    // [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
     [self updateLights];
     [self layoutHighlightLayers];
-    [CATransaction commit];
-    
+    //[CATransaction commit];
 }
-
 
 + (void)load{
     CKSwizzleSelector([UIView class], @selector(addSubview:), @selector(CKHighlightView_addSubview:));

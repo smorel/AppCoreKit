@@ -13,11 +13,10 @@
 #import "CKImageCache.h"
 
 @interface CKHighlightView()
-@property(nonatomic,retain)CALayer* highlightLayer;
 @property(nonatomic,retain)NSString* highlightGradientCacheIdentifier;
-@property(nonatomic,retain)CALayer* highlightGradientLayer;
+@property(nonatomic,retain)UIImageView* highlightGradientLayer;
 @property(nonatomic,retain)NSString* highlightMaskCacheIdentifier;
-@property(nonatomic,retain)CALayer* highlightMaskLayer;
+@property(nonatomic,retain)UIImageView* highlightMaskLayer;
 @end
 
 @implementation CKHighlightView (Highlight)
@@ -28,31 +27,23 @@
 }
 
 - (void)setHighlightEnabled:(BOOL)enabled{
-    self.highlightLayer.hidden = !enabled;
+    self.hidden = !enabled;
 }
 
 - (void)layoutHighlightLayers{
-    
     if([self highlightEnabled]){
-        if(!self.highlightLayer){
-            self.highlightLayer = [[[CALayer alloc]init]autorelease];
-            self.highlightLayer.contentsGravity = kCAGravityTopLeft;
-            [self.layer addSublayer:self.highlightLayer];
-        }
         
-        if(!self.highlightGradientLayer){
-            self.highlightGradientLayer = [[[CALayer alloc]init]autorelease];
-            [self.highlightLayer addSublayer:self.highlightGradientLayer];
-        }
+          if(!self.highlightGradientLayer){
+              self.highlightGradientLayer = [[[UIImageView alloc]init]autorelease];
+              [self addSubview:self.highlightGradientLayer];
+         }
         
-        if(!self.highlightMaskLayer){
-            self.highlightMaskLayer = [[[CALayer alloc]init]autorelease];
-            self.highlightLayer.mask = self.highlightMaskLayer;
-        }
+         if(!self.highlightMaskLayer){
+             self.highlightMaskLayer = [[[UIImageView alloc]init]autorelease];
+             self.layer.mask = self.highlightMaskLayer.layer;
+         }
         
-        
-        self.highlightLayer.frame = self.bounds;
-        self.highlightMaskLayer.frame = self.highlightLayer.frame;
+        self.highlightMaskLayer.frame = self.bounds;
         
         [self updateHighlightGradientLayerContent];
         [self updateHighlightMaskLayerContent];
@@ -80,7 +71,7 @@
 - (void)updateHighlightGradientLayerContent{
     UIImage* gradientImage = [self highlightGradientImage];
     
-    self.highlightGradientLayer.contents = (id)gradientImage.CGImage;
+    self.highlightGradientLayer.image = gradientImage;
     self.highlightGradientLayer.bounds = CGRectMake(0,0,gradientImage.size.width,gradientImage.size.height);
 }
 
@@ -112,14 +103,15 @@
 - (void)updateHighlightMaskLayerContent{
     UIImage* maskImage = [self highlightMaskImage];
     
-    self.highlightMaskLayer.contents = (id)maskImage.CGImage;
+    self.highlightMaskLayer.image = maskImage;
 }
 
 - (void)setupHighlightLayers{
     
     [CATransaction begin];
     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-    self.highlightGradientLayer.position = self.highlightCenter;
+    
+     self.highlightGradientLayer.layer.position = self.highlightCenter;
     
     [CATransaction commit];
 }

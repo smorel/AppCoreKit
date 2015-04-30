@@ -44,8 +44,10 @@ extern "C" {
     
 #define CGPointInfinite CGPointMake(MAXFLOAT,MAXFLOAT)
     
-    CGPoint CKCGPointIntersect(CGPoint origin1,CGPoint direction1,CGPoint origin2, CGPoint direction2);
     CGPoint CKCGRectIntersect(CGRect rect, CGPoint origin, CGPoint direction);
+    
+    CGPoint CKCGPointIntersectHorizontalEdge(CGFloat y,CGPoint lineOrigin, CGPoint lineDirection);
+    CGPoint CKCGPointIntersectVerticalEdge(CGFloat x,CGPoint lineOrigin, CGPoint lineDirection);
 
 #ifdef __cplusplus
 }

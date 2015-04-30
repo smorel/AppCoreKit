@@ -176,26 +176,6 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
  */
 @property (nonatomic, assign) CGSize borderShadowOffset;
 
-
-///-----------------------------------
-/// @name Customizing the light source
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, assign) CGPoint lightPosition;
-
-/**
- */
-@property (nonatomic, assign) CGFloat lightIntensity;
-
-/**
- */
-@property (nonatomic, assign) CGPoint lightDirection;
-
-
-
-
 @end
 
 

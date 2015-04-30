@@ -11,6 +11,7 @@
 #import "CKStyleView+Light.h"
 #import "CKStyleView+Paths.h"
 #import "CKStyleView+Shadow.h"
+#import "NSObject+Bindings.h"
 
 #import "UIImage+Transformations.h"
 #import "NSArray+Additions.h"
@@ -77,10 +78,6 @@
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
 	self.borderLocation = CKStyleViewBorderLocationNone;
-    
-    self.lightPosition = CGPointMake(0,0);
-    self.lightIntensity = 20;
-    self.lightDirection = CGPointMake(0.5,1);
     
 	self.separatorColor = [UIColor clearColor];
 	self.separatorWidth = 1;
@@ -257,11 +254,11 @@
     [super layoutSubviews];
     
     
-     [CATransaction begin];
-     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    //   [CATransaction begin];
+    //   [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
     [self updateLights];
     [self layoutShadowImageView];
-      [CATransaction commit];
+    //   [CATransaction commit];
 
 }
 

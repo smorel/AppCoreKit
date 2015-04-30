@@ -627,6 +627,8 @@
 		D98BDD231AF170BA00A0AECD /* CKHighlightView.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD211AF170BA00A0AECD /* CKHighlightView.m */; };
 		D98BDD261AF1720F00A0AECD /* CKHighlightView+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */; };
 		D98BDD271AF1720F00A0AECD /* CKHighlightView+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */; };
+		D98BDD321AF2AA9E00A0AECD /* UIWindow+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD331AF2AA9E00A0AECD /* UIWindow+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */; };
 		D98F3FCD1AB36CC40094572C /* CKPropertyNumberViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98F3FCE1AB36CC40094572C /* CKPropertyNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */; };
 		D98F3FD41AB374E10094572C /* CKPropertyBoolViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1312,6 +1314,8 @@
 		D98BDD211AF170BA00A0AECD /* CKHighlightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKHighlightView.m; path = Classes/Styles/Public/CKHighlightView.m; sourceTree = "<group>"; };
 		D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKHighlightView+Light.h"; path = "Classes/Styles/Private/CKHighlightView+Light.h"; sourceTree = "<group>"; };
 		D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKHighlightView+Light.m"; path = "Classes/Styles/Private/CKHighlightView+Light.m"; sourceTree = "<group>"; };
+		D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIWindow+Light.h"; path = "Classes/Styles/Public/UIWindow+Light.h"; sourceTree = "<group>"; };
+		D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIWindow+Light.m"; path = "Classes/Styles/Public/UIWindow+Light.m"; sourceTree = "<group>"; };
 		D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyNumberViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.h; sourceTree = "<group>"; };
 		D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyNumberViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.m; sourceTree = "<group>"; };
 		D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyBoolViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyBoolViewController.h; sourceTree = "<group>"; };
@@ -1428,6 +1432,7 @@
 				7560DC0B13B8ED3600268D13 /* CKStyleManager.m */,
 				7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */,
 				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
+				D98BDD2F1AF2AA8500A0AECD /* Light */,
 				D98BDD0E1AEFF9D500A0AECD /* Style View */,
 				D98BDD281AF1721400A0AECD /* Highlight View */,
 				7506E3F213B8FB1000EE1471 /* Apple Extensions */,
@@ -3143,6 +3148,15 @@
 			name = "Highlight View";
 			sourceTree = "<group>";
 		};
+		D98BDD2F1AF2AA8500A0AECD /* Light */ = {
+			isa = PBXGroup;
+			children = (
+				D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */,
+				D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */,
+			);
+			name = Light;
+			sourceTree = "<group>";
+		};
 		D98F3FD71AB378EC0094572C /* String */ = {
 			isa = PBXGroup;
 			children = (
@@ -3840,6 +3854,7 @@
 				9687145017CD0C8F00DB747C /* AddressBook.h in Headers */,
 				9687145117CD0C9400DB747C /* Location.h in Headers */,
 				9686227917CE76180081248D /* CKObject+CKStore_Private.h in Headers */,
+				D98BDD321AF2AA9E00A0AECD /* UIWindow+Light.h in Headers */,
 				9686227C17CE7D4B0081248D /* CKLocalizationManager_Private.h in Headers */,
 				D9CD82751AC3643B00B2985D /* CKReusableViewController+Property.h in Headers */,
 				96D5D09B17D0CD00001A4534 /* UIButton+FlatDesign.h in Headers */,
@@ -4238,6 +4253,7 @@
 				96F9F36D173182D900AF4276 /* UIActivityIndicatorView+Introspection.m in Sources */,
 				96B9D29D177B228300455BE8 /* CKLayoutBox.mm in Sources */,
 				96B9D2A1177B22EA00455BE8 /* UIView+CKLayout.m in Sources */,
+				D98BDD331AF2AA9E00A0AECD /* UIWindow+Light.m in Sources */,
 				96B9D2A5177B234000455BE8 /* CKVerticalBoxLayout.mm in Sources */,
 				96B9D2A9177B234E00455BE8 /* CKHorizontalBoxLayout.mm in Sources */,
 				96B9D2AD177B235F00455BE8 /* CKLayoutFlexibleSpace.m in Sources */,

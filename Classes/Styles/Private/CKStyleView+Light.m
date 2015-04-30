@@ -26,13 +26,22 @@
 - (void)willMoveToWindow:(UIWindow *)newWindow{
     if(newWindow == nil){
         [CKSharedDisplayLink unregisterHandler:self];
+        [self clearBindingsContextWithScope:@"Shadow"];
     }
 }
 
 - (void)didMoveToWindow{
-    // if([self shadowEnabled] || [self highlightEnabled]){
-        [CKSharedDisplayLink registerHandler:self];
-    //}
+    [CKSharedDisplayLink registerHandler:self];
+    
+    __unsafe_unretained CKStyleView* bself = self;
+    
+    [self beginBindingsContextWithScope:@"Shadow"];
+    [NSNotificationCenter bindNotificationName:CKLightDidChangeNotification withBlock:^(NSNotification *notification) {
+        bself.lastFrameInWindow = CGRectZero;//force recompute
+        [bself updateLights];
+    }];
+    [self endBindingsContext];
+
 }
 
 - (void)sharedDisplayLinkDidRefresh:(CKSharedDisplayLink*)displayLink{
@@ -40,35 +49,34 @@
 }
 
 - (void)updateLights{
-    // if(   ([self shadowEnabled] && self.shadowImageView.hidden == NO)
-    //   || ([self highlightEnabled] && self.highlightLayer.hidden == NO) ){
-        CALayer* prez = self.layer.presentationLayer;
-        CGRect rect = [prez.superlayer convertRect:prez.frame toLayer:self.window.layer.presentationLayer];
-        if(CGRectEqualToRect(rect, self.lastFrameInWindow))
-            return;
-        
-        self.lastFrameInWindow = rect;
+    CALayer* prez = self.layer.presentationLayer;
+    CGRect rect = [prez.superlayer convertRect:prez.frame toLayer:self.window.layer.presentationLayer];
+    if(CGRectEqualToRect(rect, self.lastFrameInWindow))
+        return;
     
-        if([self updateShadowWithLightWithRect:rect]){
-            [self regenerateShadow];
-        }
+    self.lastFrameInWindow = rect;
     
-    //}
+    if([self updateShadowWithLightWithRect:rect]){
+        [self regenerateShadow];
+    }
 }
 
 - (BOOL)updateShadowWithLightWithRect:(CGRect)rect{
     if(![self shadowEnabled] || !self.window)
         return NO;
     
-    CGPoint lightPosition = self.lightPosition;
-    CGFloat lightIntensity = self.lightIntensity;
-    CGPoint lightDirection = self.lightDirection;
+    CKLight* light = self.window.light;
     
-    CGPoint diff = CGPointMake(rect.origin.x + rect.size.width - lightPosition.x,rect.origin.y + rect.size.height - lightPosition.y );
+    CGPoint lightStart = CGPointMake(light.origin.x * self.window.bounds.size.width, light.origin.y * self.window.bounds.size.height);
+    CGPoint lightEnd = CGPointMake(light.end.x * self.window.bounds.size.width, light.end.y * self.window.bounds.size.height);
+    CGPoint lightDirection = CGPointMake(lightEnd.x - lightStart.x,lightEnd.y - lightStart.y);
     
-    CGPoint direction = CKCGPointNormalize( diff );
+    CGPoint intersection = CKCGRectIntersect(rect,lightStart,lightDirection);
+    CGPoint center = CGPointMake((rect.size.width / 2),(rect.size.height / 2));
     
-    CGSize offset = CGSizeMake((NSInteger)(direction.x * lightIntensity) , (NSInteger)(direction.y * lightIntensity) );
+    CGPoint direction = CKCGPointNormalize( CGPointMake(center.x - intersection.x,center.y - intersection.y) );
+    
+    CGSize offset = CGSizeMake((NSInteger)(direction.x * light.intensity) , (NSInteger)(direction.y * light.intensity) );
     [self setBorderShadowOffset:offset];
     
     return YES;
