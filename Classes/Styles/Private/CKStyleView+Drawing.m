@@ -287,13 +287,16 @@
         
         CGContextSetLineWidth(gc, self.borderWidth);
         
-        CGMutablePathRef borderPath = [CKStyleView generateBorderPathWithBorderLocation:(CKStyleViewBorderLocation)self.borderLocation borderWidth:self.borderWidth cornerType:self.corners roundedCornerSize:self.roundedCornerSize  rect:rect];
+        CGMutablePathRef borderPath = [CKStyleView generateBorderPathWithBorderLocation:(CKStyleViewBorderLocation)self.borderLocation borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize  rect:rect];
         
-        [self.borderColor setStroke];
-        CGContextAddPath(gc, borderPath);
-        CGContextStrokePath(gc);
+        CGPathRef thickPath = CGPathCreateCopyByStrokingPath(borderPath, NULL, self.borderWidth, kCGLineCapRound, kCGLineJoinRound, 0);
+        
+        [self.borderColor setFill];
+        CGContextAddPath(gc, thickPath);
+        CGContextFillPath(gc);
         
         CFRelease(borderPath);
+        CFRelease(thickPath);
         CGContextRestoreGState(gc);
     }
 }

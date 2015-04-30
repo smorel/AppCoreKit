@@ -629,6 +629,8 @@
 		D98BDD271AF1720F00A0AECD /* CKHighlightView+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */; };
 		D98BDD321AF2AA9E00A0AECD /* UIWindow+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98BDD331AF2AA9E00A0AECD /* UIWindow+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */; };
+		D98BDD361AF2CB5500A0AECD /* CKLightMotionEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD341AF2CB5500A0AECD /* CKLightMotionEffect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD371AF2CB5500A0AECD /* CKLightMotionEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD351AF2CB5500A0AECD /* CKLightMotionEffect.m */; };
 		D98F3FCD1AB36CC40094572C /* CKPropertyNumberViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98F3FCE1AB36CC40094572C /* CKPropertyNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */; };
 		D98F3FD41AB374E10094572C /* CKPropertyBoolViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1316,6 +1318,8 @@
 		D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKHighlightView+Light.m"; path = "Classes/Styles/Private/CKHighlightView+Light.m"; sourceTree = "<group>"; };
 		D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIWindow+Light.h"; path = "Classes/Styles/Public/UIWindow+Light.h"; sourceTree = "<group>"; };
 		D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIWindow+Light.m"; path = "Classes/Styles/Public/UIWindow+Light.m"; sourceTree = "<group>"; };
+		D98BDD341AF2CB5500A0AECD /* CKLightMotionEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLightMotionEffect.h; path = Classes/Styles/Public/CKLightMotionEffect.h; sourceTree = "<group>"; };
+		D98BDD351AF2CB5500A0AECD /* CKLightMotionEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLightMotionEffect.m; path = Classes/Styles/Public/CKLightMotionEffect.m; sourceTree = "<group>"; };
 		D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyNumberViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.h; sourceTree = "<group>"; };
 		D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyNumberViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.m; sourceTree = "<group>"; };
 		D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyBoolViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyBoolViewController.h; sourceTree = "<group>"; };
@@ -3153,6 +3157,8 @@
 			children = (
 				D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */,
 				D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */,
+				D98BDD341AF2CB5500A0AECD /* CKLightMotionEffect.h */,
+				D98BDD351AF2CB5500A0AECD /* CKLightMotionEffect.m */,
 			);
 			name = Light;
 			sourceTree = "<group>";
@@ -3592,6 +3598,7 @@
 				D93CD5911AE981CD00B3D376 /* CKImageView.h in Headers */,
 				7560DCC213B8ED3600268D13 /* CKItemAttributeReference.h in Headers */,
 				7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */,
+				D98BDD361AF2CB5500A0AECD /* CKLightMotionEffect.h in Headers */,
 				7560DCCC13B8ED3600268D13 /* CKLocalization.h in Headers */,
 				7560DCD013B8ED3600268D13 /* CKLocationManager.h in Headers */,
 				7560DCDC13B8ED3600268D13 /* MKMapView+Introspection.h in Headers */,
@@ -4271,6 +4278,7 @@
 				96B9D2C5177B254400455BE8 /* UITextView+CKLayout.m in Sources */,
 				96EFE7D4179700BE0034F935 /* CKResourceManager.m in Sources */,
 				96FEFDF617978D620001CC4A /* CKResourceManager+UIUpdate.m in Sources */,
+				D98BDD371AF2CB5500A0AECD /* CKLightMotionEffect.m in Sources */,
 				963AB797179881110076925C /* CKResourceDependencyContext.m in Sources */,
 				D9418A881AB8C18600234A15 /* UIImageView+URL.m in Sources */,
 				D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */,

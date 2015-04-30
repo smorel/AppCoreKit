@@ -253,6 +253,7 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
+    [self setNeedsDisplay];
     
     //   [CATransaction begin];
     //   [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];

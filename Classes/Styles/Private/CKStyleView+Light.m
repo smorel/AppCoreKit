@@ -15,6 +15,12 @@
 #import "UIImage+Transformations.h"
 #import "CKStyleView+Shadow.h"
 
+
+@interface CKLight()
+@property (nonatomic, assign) CGPoint motionEffectOffset;
+@end
+
+
 @interface CKStyleView()
 @property(nonatomic,assign)CGRect lastFrameInWindow;
 @property(nonatomic,retain)UIImageView* shadowImageView;
@@ -67,16 +73,19 @@
     
     CKLight* light = self.window.light;
     
-    CGPoint lightStart = CGPointMake(light.origin.x * self.window.bounds.size.width, light.origin.y * self.window.bounds.size.height);
+    CGPoint lightStart = CGPointMake((light.motionEffectOffset.x + light.origin.x) * self.window.bounds.size.width,
+                                     (light.motionEffectOffset.y + light.origin.y ) * self.window.bounds.size.height);
+    
     CGPoint lightEnd = CGPointMake(light.end.x * self.window.bounds.size.width, light.end.y * self.window.bounds.size.height);
     CGPoint lightDirection = CGPointMake(lightEnd.x - lightStart.x,lightEnd.y - lightStart.y);
     
     CGPoint intersection = CKCGRectIntersect(rect,lightStart,lightDirection);
-    CGPoint center = CGPointMake((rect.size.width / 2),(rect.size.height / 2));
+    CGPoint bottomRight = CGPointMake(rect.size.width ,rect.size.height);
     
-    CGPoint direction = CKCGPointNormalize( CGPointMake(center.x - intersection.x,center.y - intersection.y) );
+    CGPoint direction = CKCGPointNormalize( CGPointMake( bottomRight.x - intersection.x ,bottomRight.y - intersection.y) );
     
-    CGSize offset = CGSizeMake((NSInteger)(direction.x * light.intensity) , (NSInteger)(direction.y * light.intensity) );
+    CGSize offset = CGSizeMake((NSInteger)((-light.motionEffectOffset.x * light.intensity) +  (direction.x * light.intensity)) ,
+                               (NSInteger)((-light.motionEffectOffset.y *light.intensity) + (direction.y * light.intensity)) );
     [self setBorderShadowOffset:offset];
     
     return YES;

@@ -12,6 +12,10 @@
 
 NSString* CKLightDidChangeNotification = @"CKLightDidChangeNotification";
 
+@interface CKLight()
+@property (nonatomic, assign) CGPoint motionEffectOffset;
+@end
+
 @implementation CKLight
 
 - (instancetype)init{
@@ -36,6 +40,11 @@ NSString* CKLightDidChangeNotification = @"CKLightDidChangeNotification";
 
 - (void)setEnd:(CGPoint)lightEnd{
     _end = lightEnd;
+    [[NSNotificationCenter defaultCenter]postNotificationName:CKLightDidChangeNotification object:self];
+}
+
+- (void)setMotionEffectOffset:(CGPoint)motionEffectOffset{
+    _motionEffectOffset = motionEffectOffset;
     [[NSNotificationCenter defaultCenter]postNotificationName:CKLightDidChangeNotification object:self];
 }
 
