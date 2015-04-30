@@ -85,13 +85,17 @@
     
     UIImage* maskImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.highlightMaskCacheIdentifier];
     if(!maskImage){
+        CGSize size = CGSizeMake(2*self.roundedCornerSize+1,2*self.roundedCornerSize+1);
+        CGRect rect = CGRectMake(0,0,size.width,size.height);
+        
         CGMutablePathRef highlightPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll
                                                                                borderWidth:self.highlightWidth
                                                                                 cornerType:self.corners
                                                                          roundedCornerSize:self.roundedCornerSize
-                                                                                      rect:self.bounds];
+                                                                                      rect:rect];
         
-        maskImage = [UIImage maskImageWithStrokePath:highlightPath width:self.highlightWidth size:self.bounds.size];
+        maskImage = [UIImage maskImageWithStrokePath:highlightPath width:self.highlightWidth size:size];
+        maskImage = [maskImage resizableImageWithCapInsets:UIEdgeInsetsMake(self.roundedCornerSize, self.roundedCornerSize,self.roundedCornerSize,self.roundedCornerSize) resizingMode:UIImageResizingModeStretch];
         
         CGPathRelease(highlightPath);
     }
