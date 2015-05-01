@@ -13,5 +13,6 @@
 #import "UIViewController+Style.h"
 #import "UIButton+Style.h"
 #import "UILabel+Style.h"
-#import "UIWindow+Light.h"
-#import "CKLightMotionEffect.h"
+#import "CKEffectView.h"
+#import "CKLightEffectView.h"
+#import "CKLight.h"

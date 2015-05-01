@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NSObject+Singleton.h"
+
+
 
 extern NSString* CKLightDidChangeNotification;
 
-/**
+
+
+/** The light should be accessed using [CKLight sharedInstance] cause this is the one that is used by the CKLightEffectView instances.
  */
 @interface CKLight : NSObject
 
@@ -30,28 +35,12 @@ extern NSString* CKLightDidChangeNotification;
  */
 @property (nonatomic, assign) CGFloat intensity;
 
-@end
-
-
-/**
+/** By enabling this flag the light will be affected by the gyroscope orientation.
  */
-@interface UIWindow (Light)
+@property (nonatomic,assign) BOOL motionEffectEnabled;
 
-/** Settings window's light from a view controller cannot be done in viewDidLoad as the controller's view is nil at this moment.
- You should do it from the stylesheets or in viewWillAppear:
- 
- - (void)viewWillAppear:(BOOL)animated{
-     [super viewWillAppear:animated];
- 
-     dispatch_async(dispatch_get_main_queue(), ^{
-         CKLight* light = [[CKLight alloc]init];
-         light.origin = CGPointMake(0, 0);
-         light.end = CGPointMake(0.5, 0.5);
-         light.intensity = 20;
-         self.view.window.light = light;
-     });
- }
+/** Set the x/y scale to accentuate or reduce the motion effect
  */
-@property(nonatomic,retain) CKLight* light;
+@property (nonatomic,assign) CGPoint motionEffectScale;
 
 @end

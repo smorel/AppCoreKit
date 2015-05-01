@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "CKStyleView.h"
-#import "UIWindow+Light.h"
+#import "CKLightEffectView.h"
 
 /** The highlight view requiers a light to be set on the window.
  */
-@interface CKHighlightView : UIView
+@interface CKHighlightView : CKLightEffectView
 
 ///-----------------------------------
 /// @name Customizing the rounded corners
@@ -49,8 +49,6 @@
 /** highlightCenter will be computed dynamically if specifying light source
  */
 @property (nonatomic, assign) CGPoint highlightCenter;
-
-
 
 @end
 

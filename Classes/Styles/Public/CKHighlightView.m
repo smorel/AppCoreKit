@@ -7,20 +7,16 @@
 //
 
 #import "CKHighlightView.h"
-#import "CKSharedDisplayLink.h"
 #import "CKImageCache.h"
 #import "CKHighlightView+Highlight.h"
 #import "CKHighlightView+Light.h"
-#import "CKRuntime.h"
 #import "NSObject+Bindings.h"
 
-@interface CKHighlightView()<CKSharedDisplayLinkDelegate>
+@interface CKHighlightView()
 @property(nonatomic,retain)NSString* highlightGradientCacheIdentifier;
 @property(nonatomic,retain)UIImageView* highlightGradientLayer;
 @property(nonatomic,retain)NSString* highlightMaskCacheIdentifier;
 @property(nonatomic,retain)UIImageView* highlightMaskLayer;
-
-@property(nonatomic,assign)CGRect lastFrameInWindow;
 @end
 
 
@@ -28,13 +24,9 @@
 @implementation CKHighlightView
 
 - (void)dealloc {
-    [self clearBindingsContextWithScope:@"Light"];
-    [CKSharedDisplayLink unregisterHandler:self];
-    
     if(self.highlightGradientCacheIdentifier){
         [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightGradientCacheIdentifier];
     }
-    
     
     if(self.highlightMaskCacheIdentifier){
         [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightMaskCacheIdentifier];
@@ -91,20 +83,13 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    
-    
-    // [CATransaction begin];
-    // [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-    [self updateLights];
+
+    [self updateEffect];
     [self layoutHighlightLayers];
-    //[CATransaction commit];
 }
 
-+ (void)load{
-    CKSwizzleSelector([UIView class], @selector(addSubview:), @selector(CKHighlightView_addSubview:));
-    CKSwizzleSelector([UIView class], @selector(insertSubview:atIndex:), @selector(CKHighlightView_insertSubview:atIndex:));
-    CKSwizzleSelector([UIView class], @selector(insertSubview:belowSubview:), @selector(CKHighlightView_insertSubview:belowSubview:));
-    CKSwizzleSelector([UIView class], @selector(insertSubview:aboveSubview:), @selector(CKHighlightView_insertSubview:aboveSubview:));
+- (void)superViewDidModifySubviewHierarchy{
+    [self.superview bringSubviewToFront:self];
 }
 
 @end
@@ -125,34 +110,5 @@
     
     return nil;
 }
-
-- (void)CKHighlightView_insertSubview:(UIView *)view atIndex:(NSInteger)index{
-    [self CKHighlightView_insertSubview:view atIndex:index];
-    if([self highlightView]){
-        [self bringSubviewToFront:[self highlightView]];
-    }
-}
-
-- (void)CKHighlightView_insertSubview:(UIView *)view belowSubview:(UIView *)siblingSubview{
-    [self CKHighlightView_insertSubview:view belowSubview:siblingSubview];
-    if([self highlightView]){
-        [self bringSubviewToFront:[self highlightView]];
-    }
-}
-
-- (void)CKHighlightView_insertSubview:(UIView *)view aboveSubview:(UIView *)siblingSubview{
-    [self CKHighlightView_insertSubview:view aboveSubview:siblingSubview];
-    if([self highlightView]){
-        [self bringSubviewToFront:[self highlightView]];
-    }
-}
-
-- (void)CKHighlightView_addSubview:(UIView*)view{
-    [self CKHighlightView_addSubview:view];
-    if([self highlightView]){
-        [self bringSubviewToFront:[self highlightView]];
-    }
-}
-
 
 @end

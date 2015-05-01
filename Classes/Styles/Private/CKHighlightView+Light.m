@@ -28,56 +28,17 @@
 
 @implementation CKHighlightView (Light)
 
-
-- (void)willMoveToWindow:(UIWindow *)newWindow{
-    if(newWindow == nil){
-        [CKSharedDisplayLink unregisterHandler:self];
-        [self clearBindingsContextWithScope:@"Light"];
-    }
-}
-
-- (void)didMoveToWindow{
-    [CKSharedDisplayLink registerHandler:self];
-    
-    __unsafe_unretained CKHighlightView* bself = self;
-    
-    [self beginBindingsContextWithScope:@"Light"];
-    [NSNotificationCenter bindNotificationName:CKLightDidChangeNotification withBlock:^(NSNotification *notification) {
-        bself.lastFrameInWindow = CGRectZero;//force recompute
-        [bself updateLights];
-    }];
-    [self endBindingsContext];
-}
-
-- (void)sharedDisplayLinkDidRefresh:(CKSharedDisplayLink*)displayLink{
-    [self updateLights];
-}
-
-- (void)updateLights{
-    CGRect rect = CGRectZero;
-    CALayer* prez = self.layer.presentationLayer;
-    if(prez){
-        rect = [prez.superlayer convertRect:prez.frame toLayer:self.window.layer.presentationLayer];
-    }else{
-        rect = [self.superview convertRect:self.frame toView:self.window];
-    }
-    
-    if(CGRectEqualToRect(rect, self.lastFrameInWindow))
-        return;
-    
-    self.lastFrameInWindow = rect;
-    
+- (void)updateEffectWithRect:(CGRect)rect{
     if([self updateHighlightWithLightWithRect:rect]){
         [self regenerateHighlight];
     }
-    
 }
 
 - (BOOL)updateHighlightWithLightWithRect:(CGRect)rect{
     if(![self highlightEnabled] || !self.window)
         return NO;
     
-    CKLight* light = self.window.light;
+    CKLight* light = self.light;
     
     CGPoint lightStart = CGPointMake((light.motionEffectOffset.x + light.origin.x) * self.window.bounds.size.width,
                                      (light.motionEffectOffset.y + light.origin.y ) * self.window.bounds.size.height);
@@ -89,7 +50,5 @@
     self.highlightCenter = intersection;
     return !CGPointEqualToPoint(intersection,CGPointZero);
 }
-
-
 
 @end

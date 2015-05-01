@@ -8,7 +8,7 @@
 
 #import "CKStyleView.h"
 #import "CKSharedDisplayLink.h"
-#import "UIWindow+Light.h"
+#import "CKLight.h"
 
 @interface CKStyleView (Light)<CKSharedDisplayLinkDelegate>
 

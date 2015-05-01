@@ -14,7 +14,6 @@
 
 
 @interface CKLightMotionEffect()
-@property(nonatomic,retain, readwrite) CKLight* light;
 @property(nonatomic,assign) UIOffset calibration;
 @end
 
@@ -22,9 +21,8 @@
 
 @implementation CKLightMotionEffect
 
-- (id)initWithLight:(CKLight*)light{
+- (id)init{
     self = [super init];
-    self.light = light;
     self.scale = CGPointMake(1,1);
     return self;
 }
@@ -42,6 +40,11 @@
     
     return @{};
 }
+
+- (CKLight*)light{
+    return [CKLight sharedInstance];
+}
+
 
 @end
 

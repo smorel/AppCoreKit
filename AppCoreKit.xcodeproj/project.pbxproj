@@ -627,10 +627,14 @@
 		D98BDD231AF170BA00A0AECD /* CKHighlightView.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD211AF170BA00A0AECD /* CKHighlightView.m */; };
 		D98BDD261AF1720F00A0AECD /* CKHighlightView+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */; };
 		D98BDD271AF1720F00A0AECD /* CKHighlightView+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */; };
-		D98BDD321AF2AA9E00A0AECD /* UIWindow+Light.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D98BDD331AF2AA9E00A0AECD /* UIWindow+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */; };
-		D98BDD361AF2CB5500A0AECD /* CKLightMotionEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD341AF2CB5500A0AECD /* CKLightMotionEffect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD321AF2AA9E00A0AECD /* CKLight.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD301AF2AA9E00A0AECD /* CKLight.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD331AF2AA9E00A0AECD /* CKLight.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD311AF2AA9E00A0AECD /* CKLight.m */; };
+		D98BDD361AF2CB5500A0AECD /* CKLightMotionEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD341AF2CB5500A0AECD /* CKLightMotionEffect.h */; };
 		D98BDD371AF2CB5500A0AECD /* CKLightMotionEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD351AF2CB5500A0AECD /* CKLightMotionEffect.m */; };
+		D98BDD3C1AF3ADA200A0AECD /* CKLightEffectView.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD3A1AF3ADA200A0AECD /* CKLightEffectView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD3D1AF3ADA200A0AECD /* CKLightEffectView.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD3B1AF3ADA200A0AECD /* CKLightEffectView.m */; };
+		D98BDD411AF3ADC800A0AECD /* CKEffectView.h in Headers */ = {isa = PBXBuildFile; fileRef = D98BDD3F1AF3ADC800A0AECD /* CKEffectView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D98BDD421AF3ADC800A0AECD /* CKEffectView.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BDD401AF3ADC800A0AECD /* CKEffectView.m */; };
 		D98F3FCD1AB36CC40094572C /* CKPropertyNumberViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D98F3FCE1AB36CC40094572C /* CKPropertyNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */; };
 		D98F3FD41AB374E10094572C /* CKPropertyBoolViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1316,10 +1320,14 @@
 		D98BDD211AF170BA00A0AECD /* CKHighlightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKHighlightView.m; path = Classes/Styles/Public/CKHighlightView.m; sourceTree = "<group>"; };
 		D98BDD241AF1720F00A0AECD /* CKHighlightView+Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKHighlightView+Light.h"; path = "Classes/Styles/Private/CKHighlightView+Light.h"; sourceTree = "<group>"; };
 		D98BDD251AF1720F00A0AECD /* CKHighlightView+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKHighlightView+Light.m"; path = "Classes/Styles/Private/CKHighlightView+Light.m"; sourceTree = "<group>"; };
-		D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIWindow+Light.h"; path = "Classes/Styles/Public/UIWindow+Light.h"; sourceTree = "<group>"; };
-		D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIWindow+Light.m"; path = "Classes/Styles/Public/UIWindow+Light.m"; sourceTree = "<group>"; };
+		D98BDD301AF2AA9E00A0AECD /* CKLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLight.h; path = Classes/Styles/Public/CKLight.h; sourceTree = "<group>"; };
+		D98BDD311AF2AA9E00A0AECD /* CKLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLight.m; path = Classes/Styles/Public/CKLight.m; sourceTree = "<group>"; };
 		D98BDD341AF2CB5500A0AECD /* CKLightMotionEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLightMotionEffect.h; path = Classes/Styles/Public/CKLightMotionEffect.h; sourceTree = "<group>"; };
 		D98BDD351AF2CB5500A0AECD /* CKLightMotionEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLightMotionEffect.m; path = Classes/Styles/Public/CKLightMotionEffect.m; sourceTree = "<group>"; };
+		D98BDD3A1AF3ADA200A0AECD /* CKLightEffectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLightEffectView.h; path = Classes/Styles/Public/CKLightEffectView.h; sourceTree = "<group>"; };
+		D98BDD3B1AF3ADA200A0AECD /* CKLightEffectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLightEffectView.m; path = Classes/Styles/Public/CKLightEffectView.m; sourceTree = "<group>"; };
+		D98BDD3F1AF3ADC800A0AECD /* CKEffectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKEffectView.h; path = Classes/Styles/Public/CKEffectView.h; sourceTree = "<group>"; };
+		D98BDD401AF3ADC800A0AECD /* CKEffectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKEffectView.m; path = Classes/Styles/Public/CKEffectView.m; sourceTree = "<group>"; };
 		D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyNumberViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.h; sourceTree = "<group>"; };
 		D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyNumberViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyNumberViewController.m; sourceTree = "<group>"; };
 		D98F3FD11AB374E10094572C /* CKPropertyBoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyBoolViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyBoolViewController.h; sourceTree = "<group>"; };
@@ -1436,8 +1444,10 @@
 				7560DC0B13B8ED3600268D13 /* CKStyleManager.m */,
 				7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */,
 				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
-				D98BDD2F1AF2AA8500A0AECD /* Light */,
 				D98BDD0E1AEFF9D500A0AECD /* Style View */,
+				D98BDD3E1AF3ADB100A0AECD /* Effect View */,
+				D98BDD2F1AF2AA8500A0AECD /* Light View */,
+				D98BDD431AF3AE0700A0AECD /* Shadow View */,
 				D98BDD281AF1721400A0AECD /* Highlight View */,
 				7506E3F213B8FB1000EE1471 /* Apple Extensions */,
 			);
@@ -3123,8 +3133,6 @@
 		D98BDD0E1AEFF9D500A0AECD /* Style View */ = {
 			isa = PBXGroup;
 			children = (
-				D98BDD171AF00B6F00A0AECD /* CKSharedDisplayLink.h */,
-				D98BDD181AF00B6F00A0AECD /* CKSharedDisplayLink.m */,
 				7560DB6213B8ED3600268D13 /* CKStyleView.h */,
 				7560DB6313B8ED3600268D13 /* CKStyleView.m */,
 				D93CD5931AEA7F9E00B3D376 /* CKStyleView+Drawing.h */,
@@ -3152,15 +3160,35 @@
 			name = "Highlight View";
 			sourceTree = "<group>";
 		};
-		D98BDD2F1AF2AA8500A0AECD /* Light */ = {
+		D98BDD2F1AF2AA8500A0AECD /* Light View */ = {
 			isa = PBXGroup;
 			children = (
-				D98BDD301AF2AA9E00A0AECD /* UIWindow+Light.h */,
-				D98BDD311AF2AA9E00A0AECD /* UIWindow+Light.m */,
+				D98BDD301AF2AA9E00A0AECD /* CKLight.h */,
+				D98BDD311AF2AA9E00A0AECD /* CKLight.m */,
+				D98BDD3A1AF3ADA200A0AECD /* CKLightEffectView.h */,
+				D98BDD3B1AF3ADA200A0AECD /* CKLightEffectView.m */,
 				D98BDD341AF2CB5500A0AECD /* CKLightMotionEffect.h */,
 				D98BDD351AF2CB5500A0AECD /* CKLightMotionEffect.m */,
 			);
-			name = Light;
+			name = "Light View";
+			sourceTree = "<group>";
+		};
+		D98BDD3E1AF3ADB100A0AECD /* Effect View */ = {
+			isa = PBXGroup;
+			children = (
+				D98BDD171AF00B6F00A0AECD /* CKSharedDisplayLink.h */,
+				D98BDD181AF00B6F00A0AECD /* CKSharedDisplayLink.m */,
+				D98BDD3F1AF3ADC800A0AECD /* CKEffectView.h */,
+				D98BDD401AF3ADC800A0AECD /* CKEffectView.m */,
+			);
+			name = "Effect View";
+			sourceTree = "<group>";
+		};
+		D98BDD431AF3AE0700A0AECD /* Shadow View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Shadow View";
 			sourceTree = "<group>";
 		};
 		D98F3FD71AB378EC0094572C /* String */ = {
@@ -3664,6 +3692,7 @@
 				7560DD8513B8ED3600268D13 /* UITableView+Introspection.h in Headers */,
 				D9D196981A6833CC00AC47F6 /* UIDevice+Introspection.h in Headers */,
 				7560DD8713B8ED3600268D13 /* UITableViewCell+Introspection.h in Headers */,
+				D98BDD3C1AF3ADA200A0AECD /* CKLightEffectView.h in Headers */,
 				7560DD8B13B8ED3600268D13 /* UITextField+Introspection.h in Headers */,
 				7560DD9113B8ED3600268D13 /* UIView+Introspection.h in Headers */,
 				7560DD9513B8ED3600268D13 /* UIView+Style.h in Headers */,
@@ -3833,6 +3862,7 @@
 				D91D658B1AE8335100B19E14 /* CKViewTransitionContext.h in Headers */,
 				D98BDD221AF170BA00A0AECD /* CKHighlightView.h in Headers */,
 				96B9D2B0177B23DA00455BE8 /* UIButton+CKLayout.h in Headers */,
+				D98BDD411AF3ADC800A0AECD /* CKEffectView.h in Headers */,
 				961E782418D9D9040008EA33 /* UIView+Bounce.h in Headers */,
 				96B9D2B4177B248500455BE8 /* UIViewController+CKLayout.h in Headers */,
 				96B9D2B8177B24D300455BE8 /* UILabel+CKLayout.h in Headers */,
@@ -3861,7 +3891,7 @@
 				9687145017CD0C8F00DB747C /* AddressBook.h in Headers */,
 				9687145117CD0C9400DB747C /* Location.h in Headers */,
 				9686227917CE76180081248D /* CKObject+CKStore_Private.h in Headers */,
-				D98BDD321AF2AA9E00A0AECD /* UIWindow+Light.h in Headers */,
+				D98BDD321AF2AA9E00A0AECD /* CKLight.h in Headers */,
 				9686227C17CE7D4B0081248D /* CKLocalizationManager_Private.h in Headers */,
 				D9CD82751AC3643B00B2985D /* CKReusableViewController+Property.h in Headers */,
 				96D5D09B17D0CD00001A4534 /* UIButton+FlatDesign.h in Headers */,
@@ -4072,6 +4102,7 @@
 				7560DD1D13B8ED3600268D13 /* NSString+URIQuery.m in Sources */,
 				96B3BD06182BEF1C00978B85 /* CKAnimationInterpolator.m in Sources */,
 				7560DD1F13B8ED3600268D13 /* NSString+Validations.m in Sources */,
+				D98BDD3D1AF3ADA200A0AECD /* CKLightEffectView.m in Sources */,
 				7560DD2113B8ED3600268D13 /* NSString+Additions.m in Sources */,
 				D9418AAF1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m in Sources */,
 				965A817B18B2B6D3005E8508 /* CKCollectionViewFlowLayout.m in Sources */,
@@ -4209,6 +4240,7 @@
 				96E6FA23182D1F8B001F1E6A /* UIImage+FastLoading.m in Sources */,
 				96B3BCE7182BED9800978B85 /* CKReusableViewController.m in Sources */,
 				D98BDD271AF1720F00A0AECD /* CKHighlightView+Light.m in Sources */,
+				D98BDD421AF3ADC800A0AECD /* CKEffectView.m in Sources */,
 				96CADE331486B22A008A23E4 /* CKRuntime.m in Sources */,
 				96CADE391486BDFF008A23E4 /* NSObject+Validation.m in Sources */,
 				969FA54014966CD90095C61E /* UILabel+Highlight.m in Sources */,
@@ -4260,7 +4292,7 @@
 				96F9F36D173182D900AF4276 /* UIActivityIndicatorView+Introspection.m in Sources */,
 				96B9D29D177B228300455BE8 /* CKLayoutBox.mm in Sources */,
 				96B9D2A1177B22EA00455BE8 /* UIView+CKLayout.m in Sources */,
-				D98BDD331AF2AA9E00A0AECD /* UIWindow+Light.m in Sources */,
+				D98BDD331AF2AA9E00A0AECD /* CKLight.m in Sources */,
 				96B9D2A5177B234000455BE8 /* CKVerticalBoxLayout.mm in Sources */,
 				96B9D2A9177B234E00455BE8 /* CKHorizontalBoxLayout.mm in Sources */,
 				96B9D2AD177B235F00455BE8 /* CKLayoutFlexibleSpace.m in Sources */,

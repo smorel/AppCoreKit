@@ -71,7 +71,7 @@
     if(![self shadowEnabled] || !self.window)
         return NO;
     
-    CKLight* light = self.window.light;
+    CKLight* light = [CKLight sharedInstance];
     
     CGPoint lightStart = CGPointMake((light.motionEffectOffset.x + light.origin.x) * self.window.bounds.size.width,
                                      (light.motionEffectOffset.y + light.origin.y ) * self.window.bounds.size.height);
