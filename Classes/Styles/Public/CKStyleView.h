@@ -160,22 +160,6 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 @property (nonatomic, retain) UIColor *embossBottomColor;
 
 
-///-----------------------------------
-/// @name Customizing the shadow
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, retain) UIColor *borderShadowColor;
-
-/**
- */
-@property (nonatomic, assign) CGFloat borderShadowRadius;
-
-/** borderShadowOffset will be computed dynamically if specifying light source
- */
-@property (nonatomic, assign) CGSize borderShadowOffset;
-
 @end
 
 

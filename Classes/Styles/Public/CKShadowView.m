@@ -1,22 +1,95 @@
 //
-//  CKStyleView+Shadow.m
+//  CKShadowView.m
 //  AppCoreKit
 //
-//  Created by Sebastien Morel on 2015-04-28.
+//  Created by Sebastien Morel on 2015-05-01.
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import "CKStyleView+Shadow.h"
+#import "CKShadowView.h"
+#import "CKImageCache.h"
+#import "NSObject+Bindings.h"
 #import "CKStyleView+Paths.h"
-#import "CKStyleView+Light.h"
 #import "UIImage+Transformations.h"
+#import "CKImageCache.h"
+#import "CoreGraphics+Additions.h"
 
-@interface CKStyleView()
-@property(nonatomic,retain)UIImageView* shadowImageView;
-
+@interface CKLight()
+@property (nonatomic, assign) CGPoint motionEffectOffset;
 @end
 
-@implementation CKStyleView (Shadow)
+@interface CKShadowView()
+@property(nonatomic,retain)UIImageView* shadowImageView;
+@end
+
+@implementation CKShadowView
+
+- (void)dealloc{
+    [_borderShadowColor release]; _borderShadowColor = nil;
+    [_shadowImageView release]; _shadowImageView = nil;
+    [super dealloc];
+}
+
+
+- (void)borderLocationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKStyleViewBorderLocation",
+                                                    CKStyleViewBorderLocationNone,
+                                                    CKStyleViewBorderLocationTop,
+                                                    CKStyleViewBorderLocationBottom,
+                                                    CKStyleViewBorderLocationRight,
+                                                    CKStyleViewBorderLocationLeft,
+                                                    CKStyleViewBorderLocationAll);
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (void)postInit {
+    
+    self.borderShadowRadius = 2;
+    self.borderShadowOffset = CGSizeMake(0,0);
+    self.borderLocation = CKStyleViewBorderLocationNone;
+    
+    self.corners = CKStyleViewCornerTypeNone;
+    self.roundedCornerSize = 10;
+    
+    self.userInteractionEnabled = NO;
+    
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+}
+
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    
+    [self updateEffect];
+    [self layoutShadowImageView];
+}
+
+- (void)superViewDidModifySubviewHierarchy{
+    [self.superview bringSubviewToFront:self];
+}
 
 - (BOOL)shadowEnabled{
     return self.borderShadowColor!= nil && self.borderShadowColor != [UIColor clearColor] && self.borderShadowRadius > 0;
@@ -236,11 +309,65 @@
     if(![self shadowEnabled])
         return;
     
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    
     @autoreleasepool {
         UIImage* shadowImage = [self generateShadowImage];
         self.shadowImageView.image = shadowImage;
         self.shadowImageView.frame = [self shadowImageViewFrame];
     }
+    
+    [CATransaction commit];
+}
+
+- (void)updateEffectWithRect:(CGRect)rect{
+    if([self updateShadowWithLightWithRect:rect]){
+        [self regenerateShadow];
+    }
+}
+
+- (BOOL)updateShadowWithLightWithRect:(CGRect)rect{
+    if(![self shadowEnabled] || !self.window)
+        return NO;
+    
+    CKLight* light = [CKLight sharedInstance];
+    
+    CGPoint lightStart = CGPointMake((light.motionEffectOffset.x + light.origin.x) * self.window.bounds.size.width,
+                                     (light.motionEffectOffset.y + light.origin.y ) * self.window.bounds.size.height);
+    
+    CGPoint lightEnd = CGPointMake(light.end.x * self.window.bounds.size.width, light.end.y * self.window.bounds.size.height);
+    CGPoint lightDirection = CGPointMake(lightEnd.x - lightStart.x,lightEnd.y - lightStart.y);
+    
+    CGPoint intersection = CKCGRectIntersect(rect,lightStart,lightDirection);
+    CGPoint bottomRight = CGPointMake(rect.size.width ,rect.size.height);
+    
+    CGPoint direction = CKCGPointNormalize( CGPointMake( bottomRight.x - intersection.x ,bottomRight.y - intersection.y) );
+    
+    CGSize offset = CGSizeMake((NSInteger)((-light.motionEffectOffset.x * light.intensity) +  (direction.x * light.intensity)) ,
+                               (NSInteger)((-light.motionEffectOffset.y *light.intensity) + (direction.y * light.intensity)) );
+    [self setBorderShadowOffset:offset];
+    
+    return YES;
+}
+
+
+@end
+
+
+@implementation UIView(CKShadowView)
+
+- (CKShadowView*)shadowView{
+    if(self.subviews.count == 0)
+        return nil;
+    
+    for(NSInteger i = self.subviews.count - 1; i >= 0; --i){
+        UIView* view =[self.subviews objectAtIndex:i];
+        if([view isKindOfClass:[CKShadowView class]])
+            return (CKShadowView*)view;
+    }
+    
+    return nil;
 }
 
 @end

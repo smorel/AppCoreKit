@@ -13,6 +13,7 @@
 #import "UILabel+Style.h"
 #import "CKLocalization.h"
 #import "CKHighlightView.h"
+#import "CKShadowView.h"
 
 #import "CKDebug.h"
 #import <objc/runtime.h>
@@ -264,11 +265,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 	   || [style containsObjectForKey:CKStyleBackgroundImage]
 	   || [style containsObjectForKey:CKStyleBorderColor]
        || [style containsObjectForKey:CKStyleBorderShadowColor]
-       //|| [style containsObjectForKey:CKStyleBorderWidth]
-       //|| [style containsObjectForKey:CKStyleBorderStyle]
-	   //|| [style containsObjectForKey:CKStyleSeparatorColor]
-       //|| [style containsObjectForKey:CKStyleSeparatorWidth]
-       //|| [style containsObjectForKey:CKStyleSeparatorStyle]
 	   || ([style containsObjectForKey:CKStyleSeparatorColor] && ![view isKindOfClass:[UITableView class]])){
 		return YES;
 	}
@@ -288,6 +284,15 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return NO;
 }
 
++ (BOOL)needShadowView:(NSMutableDictionary*)style forView:(UIView*)view{
+    if(style == nil || [style isEmpty] == YES)
+        return NO;
+    
+    if([style containsObjectForKey:CKStyleBorderShadowColor]){
+        return YES;
+    }
+    return NO;
+}
 
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style{
 	return [self applyStyle:style propertyName:nil];
@@ -322,6 +327,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
                 CKHighlightView* highlightView = nil;
+                CKShadowView* shadowView = nil;
 				BOOL opaque = YES;
 				
 				CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
@@ -352,6 +358,25 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                     highlightView.backgroundColor = [UIColor clearColor];
                     
                     [view addSubview:highlightView];
+                }
+                
+                if([UIView needShadowView:myViewStyle forView:view]){
+                    shadowView = [[[CKShadowView alloc]init]autorelease];
+                    shadowView.frame = view.bounds;
+                    shadowView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                    
+                    [shadowView setAppliedStyle:myViewStyle];
+                    
+                    [NSObject applyStyleByIntrospection:gradientViewStyle toObject:shadowView appliedStack:appliedStack delegate:(id)delegate];
+                    
+                    
+                    if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
+                        shadowView.roundedCornerSize = [myViewStyle cornerSize];
+                    }
+                    
+                    shadowView.backgroundColor = [UIColor clearColor];
+                    
+                    [view addSubview:shadowView];
                 }
 				
 				if([UIView needStyleView:myViewStyle forView:view]){
@@ -401,6 +426,37 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                         }
                     }
                     highlightView.corners = roundedCornerType;
+                    shadowView.corners = roundedCornerType;
+                }
+                
+                
+                //Apply BorderStyle
+                {
+                    CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
+                    if([myViewStyle containsObjectForKey:CKStyleBorderStyle]){
+                        borderStyle = [myViewStyle borderStyle];
+                    }
+                    
+                    if((borderStyle & CKViewBorderStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
+                        viewBorderType = [delegate view:backgroundView borderStyleWithStyle:myViewStyle];
+                    }
+                    else{
+                        viewBorderType = CKStyleViewBorderLocationNone;
+                        if(borderStyle & CKViewBorderStyleTop){
+                            viewBorderType |= CKStyleViewBorderLocationTop;
+                        }
+                        if(borderStyle & CKViewBorderStyleLeft){
+                            viewBorderType |= CKStyleViewBorderLocationLeft;
+                        }
+                        if(borderStyle & CKViewBorderStyleRight){
+                            viewBorderType |= CKStyleViewBorderLocationRight;
+                        }
+                        if(borderStyle & CKViewBorderStyleBottom){
+                            viewBorderType |= CKStyleViewBorderLocationBottom;
+                        }
+                    }
+                    shadowView.borderLocation = viewBorderType;
+                    
                 }
                 
 				
@@ -444,29 +500,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 					
 					//Apply BorderStyle
 					{
-						CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
-						if([myViewStyle containsObjectForKey:CKStyleBorderStyle]){
-							borderStyle = [myViewStyle borderStyle];
-						}
-						
-						if((borderStyle & CKViewBorderStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
-							viewBorderType = [delegate view:gradientView borderStyleWithStyle:myViewStyle];
-						}
-						else{
-                            viewBorderType = CKStyleViewBorderLocationNone;
-                            if(borderStyle & CKViewBorderStyleTop){
-                                viewBorderType |= CKStyleViewBorderLocationTop;
-                            }
-                            if(borderStyle & CKViewBorderStyleLeft){
-                                viewBorderType |= CKStyleViewBorderLocationLeft;
-                            }
-							if(borderStyle & CKViewBorderStyleRight){
-                                viewBorderType |= CKStyleViewBorderLocationRight;
-                            }
-							if(borderStyle & CKViewBorderStyleBottom){
-                                viewBorderType |= CKStyleViewBorderLocationBottom;
-                            }
-						}
 						gradientView.borderLocation = viewBorderType;
                         
                         if([myViewStyle containsObjectForKey:CKStyleBorderWidth]){

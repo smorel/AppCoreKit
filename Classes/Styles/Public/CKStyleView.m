@@ -8,9 +8,7 @@
 
 #import "CKStyleView.h"
 #import "CKStyleView+Drawing.h"
-#import "CKStyleView+Light.h"
 #import "CKStyleView+Paths.h"
-#import "CKStyleView+Shadow.h"
 #import "NSObject+Bindings.h"
 
 #import "UIImage+Transformations.h"
@@ -23,10 +21,6 @@
 
 @interface CKStyleView ()
 @property(nonatomic,retain)UIColor* fillColor;
-@property(nonatomic,retain)UIImageView* shadowImageView;
-
-
-@property(nonatomic,assign)CGRect lastFrameInWindow;
 @property(nonatomic,assign)CGRect lastDrawBounds;
 @end
 
@@ -59,8 +53,6 @@
 }
 
 - (void)dealloc {
-    [CKSharedDisplayLink unregisterHandler:self];
-  
     [_image release]; _image = nil;
     [_gradientColors release]; _gradientColors = nil;
     [_gradientColorLocations release]; _gradientColorLocations = nil;
@@ -69,8 +61,6 @@
     [_fillColor release]; _fillColor = nil;
     [_embossTopColor release]; _embossTopColor = nil;
     [_embossBottomColor release]; _embossBottomColor = nil;
-    [_borderShadowColor release]; _borderShadowColor = nil;
-    [_shadowImageView release]; _shadowImageView = nil;
     [super dealloc];
 }
 
@@ -92,9 +82,6 @@
     
     self.clipsToBounds = 0;
     self.userInteractionEnabled = NO;
-    
-    _borderShadowRadius = 2;
-    _borderShadowOffset = CGSizeMake(0,0);
     
     self.gradientStyle = CKStyleViewGradientStyleVertical;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -261,13 +248,6 @@
     [super layoutSubviews];
     
     [self updateDisplay];
-    
-    //   [CATransaction begin];
-    //   [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-    [self updateLights];
-    [self layoutShadowImageView];
-    //   [CATransaction commit];
-
 }
 
 

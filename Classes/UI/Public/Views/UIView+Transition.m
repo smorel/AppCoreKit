@@ -9,13 +9,12 @@
 #import "UIView+Transition.h"
 #import "CKStyleView.h"
 #import "CKHighlightView.h"
-#import "CKStyleView+Light.h"
-#import "CKHighlightView+Light.h"
+#import "CKShadowView.h"
 #import "UIView+Name.h"
 #import "UIView+Snapshot.h"
 #import "NSObject+Bindings.h"
 
-@interface CKStyleView()
+@interface CKShadowView()
 - (BOOL)shadowEnabled;
 - (void)setShadowEnabled:(BOOL)enabled;
 @end
@@ -29,22 +28,22 @@
 
 @implementation UIView (Transition)
 
-+ (CKStyleView*)cloneShadowViewDecorators:(CKStyleView*)other root:(UIView*)root{
-    CKStyleView* styleView = [[[CKStyleView alloc]init]autorelease];
++ (CKShadowView*)cloneShadowViewDecorators:(CKShadowView*)other root:(UIView*)root{
+    CKShadowView* shadowView = [[[CKShadowView alloc]init]autorelease];
     
-    styleView.backgroundColor = [UIColor clearColor];
-    styleView.corners = other.corners;
-    styleView.roundedCornerSize = other.roundedCornerSize;
-    styleView.borderLocation = other.borderLocation;
-    styleView.borderShadowColor = other.borderShadowColor;
-    styleView.borderShadowRadius = other.borderShadowRadius;
-    styleView.borderShadowOffset = other.borderShadowOffset;
+    shadowView.backgroundColor = [UIColor clearColor];
+    shadowView.corners = other.corners;
+    shadowView.roundedCornerSize = other.roundedCornerSize;
+    shadowView.borderLocation = other.borderLocation;
+    shadowView.borderShadowColor = other.borderShadowColor;
+    shadowView.borderShadowRadius = other.borderShadowRadius;
+    shadowView.borderShadowOffset = other.borderShadowOffset;
     
     CGRect rect = [other.superview convertRect:other.frame toView:root];
-    styleView.frame = rect;
-    styleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    shadowView.frame = rect;
+    shadowView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    return styleView;
+    return shadowView;
 }
 
 + (CKHighlightView*)cloneHighlightViewDecorators:(CKHighlightView*)other root:(UIView*)root{
@@ -90,9 +89,9 @@
             }
         }
         
-        if([v isKindOfClass:[CKStyleView class]]){
+        if([v isKindOfClass:[CKShadowView class]]){
             [styleViewToRestore addObject:v];
-            [(CKStyleView*)v setShadowEnabled:NO];
+            [(CKShadowView*)v setShadowEnabled:NO];
         }
         
         if([v isKindOfClass:[CKHighlightView class]]){
@@ -105,8 +104,8 @@
     
     
     for(UIView* v in styleViewToRestore){
-        if([v isKindOfClass:[CKStyleView class]]){
-            [(CKStyleView*)v setShadowEnabled:YES];
+        if([v isKindOfClass:[CKShadowView class]]){
+            [(CKShadowView*)v setShadowEnabled:YES];
         }
         if([v isKindOfClass:[CKHighlightView class]]){
             [(CKHighlightView*)v setHighlightEnabled:YES];
@@ -149,9 +148,9 @@
     return nil;
 }
 
-+ (void)installShadowViewDecorators:(CKStyleView*)styleView fromView:(UIView*)root inView:(UIView*)view name:(NSString*)name{
++ (void)installShadowViewDecorators:(CKShadowView*)styleView fromView:(UIView*)root inView:(UIView*)view name:(NSString*)name{
     if(styleView && ([styleView shadowEnabled])){
-        CKStyleView* transitionStyleView = [[self class] cloneShadowViewDecorators:styleView root:root];
+        CKShadowView* transitionStyleView = [[self class] cloneShadowViewDecorators:styleView root:root];
         transitionStyleView.name = name;
         [view addSubview:transitionStyleView];
     }
@@ -174,7 +173,7 @@
     UIView* snapshot = [[[UIImageView alloc]initWithImage:[self snapshotWithoutSubviews]]autorelease];
     snapshot.frame = self.bounds;
     
-    CKStyleView* styleView = [self styleView];
+    CKShadowView* styleView = [self shadowView];
     if(styleView){
         [[self class]installShadowViewDecorators:styleView fromView:self inView:snapshot name:self.name];
     }
@@ -203,7 +202,7 @@
 }
 
 - (void)installStyleViewDecoratorsFromView:(UIView*)root inView:(UIView*)view{
-    CKStyleView* styleView = [self styleView];
+    CKShadowView* styleView = [self shadowView];
     if(styleView){
         [[self class]installShadowViewDecorators:styleView fromView:root inView:view name:self.name];
     }
@@ -220,10 +219,10 @@
 
 
 - (void)setStyleViewsDecoratorsEnabled:(BOOL)enabled{
-    CKStyleView* styleView = [self styleView];
+    CKShadowView* styleView = [self shadowView];
     if(styleView){
         if(enabled){
-            [styleView updateLights];
+            [styleView updateEffect];
         }
         //[styleView setHighlightEnabled:enabled];
         [styleView setShadowEnabled:enabled];
@@ -232,7 +231,7 @@
     CKHighlightView* highlightView = [self highlightView];
     if(highlightView){
         if(enabled){
-            [highlightView updateLights];
+            [highlightView updateEffect];
         }
         //[styleView setHighlightEnabled:enabled];
         [highlightView setHighlightEnabled:enabled];
