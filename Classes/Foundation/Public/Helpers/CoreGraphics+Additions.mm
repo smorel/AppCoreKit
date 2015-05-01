@@ -9,7 +9,6 @@
 #import "CoreGraphics+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 
-
 CGPoint CGPointOffset(CGPoint point, CGFloat x, CGFloat y) {
 	CGPoint newPoint = point;
 	newPoint.x += x;
@@ -249,3 +248,10 @@ CGPoint CKCGRectIntersect(CGRect r, CGPoint origin, CGPoint direction){
     
     return CGPointInfinite;
  }
+
+
+CGPathRef CGPathByReversingPath(CGPathRef path){
+    UIBezierPath* bPath = [UIBezierPath bezierPathWithCGPath:path];
+    UIBezierPath* reverse = [bPath bezierPathByReversingPath];
+    return CGPathCreateCopy(reverse.CGPath);
+}

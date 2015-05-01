@@ -49,6 +49,9 @@ extern "C" {
     CGPoint CKCGPointIntersectHorizontalEdge(CGFloat y,CGPoint lineOrigin, CGPoint lineDirection);
     CGPoint CKCGPointIntersectVerticalEdge(CGFloat x,CGPoint lineOrigin, CGPoint lineDirection);
 
+    
+    CGPathRef CGPathByReversingPath(CGPathRef path);
+    
 #ifdef __cplusplus
 }
 #endif

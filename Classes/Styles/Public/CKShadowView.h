@@ -10,6 +10,8 @@
 #import "CKStyleView.h"
 #import "CKLightEffectView.h"
 
+/** The shadow view simulates shadow on the border of the view talking care of the [CKLight sharedInstance] attributes.
+ */
 @interface CKShadowView : CKLightEffectView
 
 ///-----------------------------------
@@ -46,7 +48,7 @@
 
 /** borderShadowOffset will be computed dynamically if specifying light source
  */
-@property (nonatomic, assign) CGSize borderShadowOffset;
+@property (nonatomic, assign) CGPoint borderShadowOffset;
 
 
 @end

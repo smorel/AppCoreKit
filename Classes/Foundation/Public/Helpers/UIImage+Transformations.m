@@ -532,8 +532,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     return image;
 }
 
-+ (UIImage*)maskImageWithPath:(CGPathRef)path size:(CGSize)size{
-    
++ (UIImage*)maskImageWithPath:(CGPathRef)path size:(CGSize)size drawingMode:(CGPathDrawingMode)drawingMode{
     CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -541,12 +540,34 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     CGContextAddPath(context, path);
     
     [[UIColor blackColor]setFill];
-    CGContextFillPath(context);
+    CGContextDrawPath(context, drawingMode);
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     return image;
+}
+
++ (UIImage*)maskImageWithEvenOddPath:(CGPathRef)path size:(CGSize)size{
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextAddRect(context, rect);
+    CGContextAddPath(context, path);
+    
+    [[UIColor blackColor]setFill];
+    CGContextDrawPath(context, kCGPathEOFill);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+
+}
+
++ (UIImage*)maskImageWithPath:(CGPathRef)path size:(CGSize)size{
+    return [self maskImageWithPath:path size:size drawingMode:kCGPathFill];
 }
 
 

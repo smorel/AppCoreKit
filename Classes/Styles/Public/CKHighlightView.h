@@ -10,7 +10,7 @@
 #import "CKStyleView.h"
 #import "CKLightEffectView.h"
 
-/** The highlight view requiers a light to be set on the window.
+/** The highlight view simulates light on the border of the view talking care of the [CKLight sharedInstance] attributes.
  */
 @interface CKHighlightView : CKLightEffectView
 

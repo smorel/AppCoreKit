@@ -47,7 +47,14 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
     CKStyleViewGradientStyleHorizontal
 } ;
 
-/**
+/** CKStyleView can draw several different decorators as a background for a view:
+     - rounded corners with specific locations
+     - background color
+     - background gradient
+     - background image
+     - borders with specific locations
+     - separator with specific locations and line attributes
+     - emboss top and bottom
  */
 @interface CKStyleView : UIView 
 

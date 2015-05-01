@@ -65,6 +65,14 @@
 
 /**
  */
++ (UIImage*)maskImageWithEvenOddPath:(CGPathRef)path size:(CGSize)size;
+
+/**
+ */
++ (UIImage*)maskImageWithPath:(CGPathRef)path size:(CGSize)size drawingMode:(CGPathDrawingMode)drawingMode;
+
+/**
+ */
 + (UIImage*)maskImageWithStrokePath:(CGPathRef)path width:(CGFloat)width size:(CGSize)size;
 
 @end

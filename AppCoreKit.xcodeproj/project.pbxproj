@@ -92,7 +92,7 @@
 		7560DC8C13B8ED3600268D13 /* CKCoreDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB3F13B8ED3600268D13 /* CKCoreDataManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC8D13B8ED3600268D13 /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4013B8ED3600268D13 /* CKCoreDataManager.m */; };
 		7560DC8E13B8ED3600268D13 /* CoreGraphics+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DC8F13B8ED3600268D13 /* CoreGraphics+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */; };
+		7560DC8F13B8ED3600268D13 /* CoreGraphics+Additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.mm */; };
 		7560DC9213B8ED3600268D13 /* CKDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4513B8ED3600268D13 /* CKDataBinder.h */; settings = {ATTRIBUTES = (); }; };
 		7560DC9313B8ED3600268D13 /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4613B8ED3600268D13 /* CKDataBinder.m */; };
 		7560DC9413B8ED3600268D13 /* CKDataBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4713B8ED3600268D13 /* CKDataBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
@@ -762,7 +762,7 @@
 		7560DB3F13B8ED3600268D13 /* CKCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCoreDataManager.h; path = Classes/CoreData/Public/CKCoreDataManager.h; sourceTree = "<group>"; };
 		7560DB4013B8ED3600268D13 /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CoreData/Public/CKCoreDataManager.m; sourceTree = "<group>"; };
 		7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CoreGraphics+Additions.h"; path = "Classes/Foundation/Public/Helpers/CoreGraphics+Additions.h"; sourceTree = "<group>"; };
-		7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CoreGraphics+Additions.m"; path = "Classes/Foundation/Public/Helpers/CoreGraphics+Additions.m"; sourceTree = "<group>"; };
+		7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "CoreGraphics+Additions.mm"; path = "Classes/Foundation/Public/Helpers/CoreGraphics+Additions.mm"; sourceTree = "<group>"; };
 		7560DB4513B8ED3600268D13 /* CKDataBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDataBinder.h; path = Classes/Bindings/Private/CKDataBinder.h; sourceTree = "<group>"; };
 		7560DB4613B8ED3600268D13 /* CKDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDataBinder.m; path = Classes/Bindings/Private/CKDataBinder.m; sourceTree = "<group>"; };
 		7560DB4713B8ED3600268D13 /* CKDataBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDataBlockBinder.h; path = Classes/Bindings/Private/CKDataBlockBinder.h; sourceTree = "<group>"; };
@@ -2427,7 +2427,7 @@
 				7560DC5013B8ED3600268D13 /* CKUnit.h */,
 				7560DC5113B8ED3600268D13 /* CKUnit.m */,
 				7560DB4113B8ED3600268D13 /* CoreGraphics+Additions.h */,
-				7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.m */,
+				7560DB4213B8ED3600268D13 /* CoreGraphics+Additions.mm */,
 			);
 			name = CoreGraphics;
 			sourceTree = "<group>";
@@ -4021,7 +4021,7 @@
 				7560DC8613B8ED3600268D13 /* CKClassPropertyDescriptor.m in Sources */,
 				7560DC8813B8ED3600268D13 /* CLLocation+Additions.m in Sources */,
 				7560DC8D13B8ED3600268D13 /* CKCoreDataManager.m in Sources */,
-				7560DC8F13B8ED3600268D13 /* CoreGraphics+Additions.m in Sources */,
+				7560DC8F13B8ED3600268D13 /* CoreGraphics+Additions.mm in Sources */,
 				7560DC9313B8ED3600268D13 /* CKDataBinder.m in Sources */,
 				7560DC9513B8ED3600268D13 /* CKDataBlockBinder.m in Sources */,
 				7560DC9813B8ED3600268D13 /* CKDictionaryFromAttributesTransformer.m in Sources */,

@@ -10,7 +10,7 @@
 #import <AppCoreKit/AppCoreKit.h>
 
 @interface CKImageCacheItem : NSObject
-@property(nonatomic,retain) NSMutableArray* handlers;
+@property(nonatomic,retain) NSMutableSet* handlers;
 @property(nonatomic,retain) UIImage* image;
 @end
 
@@ -24,7 +24,7 @@
 
 - (instancetype)init{
     self = [super init];
-    self.handlers = [NSMutableArray array];
+    self.handlers = [NSMutableSet set];
     return self;
 }
 

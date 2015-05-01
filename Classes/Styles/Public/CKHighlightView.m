@@ -131,12 +131,14 @@
 }
 
 - (UIImage*)highlightGradientImage{
-    if(self.highlightGradientCacheIdentifier){
+    NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Gradient_%f_%@_%@",
+                                             self.highlightRadius,self.highlightColor,self.highlightEndColor];
+    
+    if(![self.highlightGradientCacheIdentifier isEqualToString:cacheIdentifier]){
+        self.highlightGradientCacheIdentifier = cacheIdentifier;
         [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightGradientCacheIdentifier];
     }
     
-    self.highlightGradientCacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Gradient_%f_%@_%@",
-                                             self.highlightRadius,self.highlightColor,self.highlightEndColor];
     UIImage* gradientImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.highlightGradientCacheIdentifier];
     if(!gradientImage){
         gradientImage = [UIImage radialGradientImageWithRadius:self.highlightRadius startColor:self.highlightColor endColor:self.highlightEndColor options:0];
@@ -154,12 +156,14 @@
 }
 
 - (UIImage*)highlightMaskImage{
-    if(self.highlightMaskCacheIdentifier){
+    NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Mask_%lu_%f_%f",
+                                         (unsigned long)self.corners,self.roundedCornerSize,self.highlightWidth];
+    
+    if(![self.highlightMaskCacheIdentifier isEqualToString:cacheIdentifier]){
+        self.highlightMaskCacheIdentifier = cacheIdentifier;
         [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightMaskCacheIdentifier];
     }
     
-    self.highlightMaskCacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Mask_%lu_%f_%f",
-                                         (unsigned long)self.corners,self.roundedCornerSize,self.highlightWidth];
     
     UIImage* maskImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.highlightMaskCacheIdentifier];
     if(!maskImage){
