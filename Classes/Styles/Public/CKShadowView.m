@@ -23,26 +23,19 @@
 @interface CKShadowView()
 @property(nonatomic,retain) NSString* shadowCacheIdentifier;
 @property(nonatomic,retain) UIImageView* shadowLayer;
-@property(nonatomic,retain) NSString* shadowMaskCacheIdentifier;
-@property(nonatomic,retain) UIImageView* shadowMaskLayer;
-@property(nonatomic,assign) CGPoint shadowMaskInsets;
 @end
 
-@implementation CKShadowView
+@implementation CKShadowView{
+    dispatch_queue_t _shadowQueue;
+}
 
 - (void)dealloc{
     if(self.shadowCacheIdentifier){
         [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.shadowCacheIdentifier];
     }
     
-    if(self.shadowMaskCacheIdentifier){
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.shadowMaskCacheIdentifier];
-    }
-    
     [_shadowCacheIdentifier release]; _shadowCacheIdentifier = nil;
     [_shadowLayer release]; _shadowLayer = nil;
-    [_shadowMaskCacheIdentifier release]; _shadowMaskCacheIdentifier = nil;
-    [_shadowMaskLayer release]; _shadowMaskLayer = nil;
     
     [_borderShadowColor release]; _borderShadowColor = nil;
     [super dealloc];
@@ -121,19 +114,8 @@
             [self addSubview:self.shadowLayer];
         }
         
-        if(!self.shadowMaskLayer){
-            self.shadowMaskLayer = [[[UIImageView alloc]init]autorelease];
-            //[self insertSubview:self.shadowMaskLayer belowSubview:self.shadowLayer];
-            self.layer.mask = self.shadowMaskLayer.layer;
-        }
-        
-        self.shadowMaskInsets = CGPointMake(self.borderShadowRadius + (self.light.intensity * (self.light.motionEffectScale.x + 1)),
-                                            self.borderShadowRadius + (self.light.intensity * (self.light.motionEffectScale.y + 1)));
-        
-        
         [self updateShadowLayerContent];
-        [self updateShadowMaskLayerContent];
-         [self setupShadowLayers];
+        self.shadowLayer.frame = [self shadowImageViewFrame];
     }
 }
 
@@ -228,11 +210,6 @@
 
 
 #else
-
-- (UIImage*)shadowImage{
-    return [self generateShadowImage];
-}
-
 - (CGRect)shadowImageViewFrame{
     if([self shadowEnabled]){
         //Shadow
@@ -251,7 +228,7 @@
         }
         
         CGFloat multiplier = 1;
-        CGRect shadowFrame = self.bounds;
+        CGRect shadowFrame = self.frame;
         CGPoint offset = CGPointMake(0,0);
         
         if(self.borderLocation & CKStyleViewBorderLocationLeft){
@@ -294,7 +271,7 @@
         return CGRectIntegral(shadowFrame);
     }
     
-    return self.bounds;
+    return self.frame;
 }
 
 - (UIImage*)generateShadowImage{
@@ -302,7 +279,7 @@
     @autoreleasepool {
         
         //TODO: compute the smallest resizable image taking care of shadow radius and roundedcornerswidth
-        CGRect frame = self.bounds;
+        CGRect frame = self.frame;
         
         CGRect shadowFrame = [self shadowImageViewFrame];
         
@@ -330,6 +307,7 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         
         [self drawShadowInRect:drawRect inContext:context];
+        [self clearContentInRect:drawRect inContext:context];
         
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
@@ -338,6 +316,21 @@
     }
     
     return [result autorelease];
+}
+
+- (void)clearContentInRect:(CGRect)rect inContext:(CGContextRef)gc{
+    
+    CGContextSaveGState(gc);
+    
+    CGMutablePathRef clippingPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:rect];
+    CGContextAddPath(gc, clippingPath);
+    CGContextClip(gc);
+    
+    CGContextClearRect(gc, rect);
+    
+    CFRelease(clippingPath);
+    
+    CGContextRestoreGState(gc);
 }
 
 - (void)drawShadowInRect:(CGRect)rect inContext:(CGContextRef)gc{
@@ -383,17 +376,15 @@
             }
             
             if (self.corners != CKStyleViewCornerTypeNone){
-                CGMutablePathRef shadowPath = nil;
+                CGMutablePathRef shadowPath = CGPathCreateMutable();
                 if (self.corners != CKStyleViewCornerTypeNone) {
                     shadowPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll  borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:shadowRect];
                 }
-                if(shadowPath){
-                    
-                    [[UIColor blackColor] setFill];
-                    CGContextAddPath(gc, shadowPath);
-                    CGContextFillPath(gc);
-                    CFRelease(shadowPath);
-                }
+                
+                [[UIColor blackColor] setFill];
+                CGContextAddPath(gc, shadowPath);
+                CGContextFillPath(gc);
+                CFRelease(shadowPath);
             }else{
                 [[UIColor blackColor] setFill];
                 CGContextFillRect(gc, shadowRect);
@@ -405,88 +396,33 @@
     }
 }
 
+
 #endif
 
 
 
 - (void)updateShadowLayerContent{
-    UIImage* shadowImage = [self shadowImage];
-    self.shadowLayer.image = shadowImage;
+    UIImage* shadowImage = [self generateShadowImage];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.shadowLayer.image = shadowImage;
+        self.shadowLayer.frame = [self shadowImageViewFrame];
+    });
 }
 
-
-
-- (UIImage*)shadowMaskImage{
-    NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Shadow_Mask_%lu_%f_%lu_%lu_%lu",
-                                      (unsigned long)self.corners,self.roundedCornerSize,(unsigned long)self.borderLocation,
-                                 (unsigned long)self.shadowMaskInsets.x,(unsigned long)self.shadowMaskInsets.y];
-    
-    if(![self.shadowMaskCacheIdentifier isEqualToString:@"cacheIdentifier"]){
-        self.shadowMaskCacheIdentifier = cacheIdentifier;
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.shadowMaskCacheIdentifier];
-    }
-    
-    
-    UIImage* maskImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.shadowMaskCacheIdentifier];
-    if(!maskImage){
-        CGSize size = CGSizeMake((2*self.roundedCornerSize) + (2* self.shadowMaskInsets.x) +1,
-                                 (2*self.roundedCornerSize) + (2* self.shadowMaskInsets.y) +1);
-        
-        CGRect rect = CGRectMake(self.shadowMaskInsets.x,self.shadowMaskInsets.y,
-                                 size.width - (2 *self.shadowMaskInsets.x),
-                                 size.height - (2 * self.shadowMaskInsets.y));
-        
-        CGMutablePathRef contentPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll
-                                                                               borderWidth:0
-                                                                                cornerType:self.corners
-                                                                         roundedCornerSize:self.roundedCornerSize
-                                                                                      rect:rect];
-        //CGPathRef reversePath = CGPathByReversingPath(contentPath);
-        
-        maskImage = [UIImage maskImageWithEvenOddPath:contentPath size:size];
-        maskImage = [maskImage resizableImageWithCapInsets:UIEdgeInsetsMake(self.shadowMaskInsets.y + self.roundedCornerSize,
-                                                                            self.shadowMaskInsets.x + self.roundedCornerSize,
-                                                                            self.shadowMaskInsets.y + self.roundedCornerSize,
-                                                                            self.shadowMaskInsets.x + self.roundedCornerSize)
-                                              resizingMode:UIImageResizingModeStretch];
-        
-        CGPathRelease(contentPath);
-        //CGPathRelease(reversePath);
-    }
-    
-    [[CKImageCache sharedInstance]registerHandler:self image:maskImage withIdentifier:self.shadowMaskCacheIdentifier];
-    return maskImage;
-}
-
-- (void)updateShadowMaskLayerContent{
-    UIImage* maskImage = [self shadowMaskImage];
-    self.shadowMaskLayer.image = maskImage;
-}
-
-- (void)setupShadowLayers{
-    CGRect rect = CGRectMake(-self.shadowMaskInsets.x,
-                             -self.shadowMaskInsets.y,
-                             self.bounds.size.width + (2 * self.shadowMaskInsets.x),
-                             self.bounds.size.height + (2 * self.shadowMaskInsets.y));
-    
-    self.shadowMaskLayer.frame = rect;
-    
-    self.shadowLayer.frame = CGRectMake(self.borderShadowOffset.x-self.borderShadowRadius,
-                                        self.borderShadowOffset.y-self.borderShadowRadius,
-                                        self.bounds.size.width + (2 * self.borderShadowRadius),
-                                        self.bounds.size.height+ (2 * self.borderShadowRadius));
-    
-}
 
 - (void)regenerateShadow{
     if(![self shadowEnabled])
         return;
     
 #ifndef PRE_COMPUTED_CACHED_SHADOW
-    [self updateShadowLayerContent];
-#endif 
+    if(!_shadowQueue){
+        _shadowQueue = dispatch_queue_create("_shadowQueue", 0);
+    }
     
-    [self setupShadowLayers];
+    dispatch_async(_shadowQueue, ^{
+        [self updateShadowLayerContent];
+    });
+#endif
 }
 
 
