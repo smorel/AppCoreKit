@@ -76,6 +76,18 @@
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone{
+    CKShadowView* other = [[[self class]alloc]initWithFrame:self.frame];
+    other.corners = self.corners;
+    other.roundedCornerSize = self.roundedCornerSize;
+    other.borderLocation = self.borderLocation;
+    other.borderShadowColor = self.borderShadowColor;
+    other.borderShadowRadius = self.borderShadowRadius;
+    other.borderShadowOffset = self.borderShadowOffset;
+    other.borderShadowOffset = self.borderShadowOffset;
+    return other;
+}
+
 - (void)postInit {
     
     self.borderShadowRadius = 2;
@@ -88,8 +100,10 @@
     self.userInteractionEnabled = NO;
     
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    self.shadowLayer = [[[UIImageView alloc]initWithFrame:[self shadowImageViewFrame]]autorelease];
+    [self addSubview:self.shadowLayer];
 }
-
 
 - (void)layoutSubviews{
     [super layoutSubviews];
@@ -108,12 +122,6 @@
 
 - (void)layoutShadowLayers{
     if([self shadowEnabled]){
-        
-        if(!self.shadowLayer){
-            self.shadowLayer = [[[UIImageView alloc]init]autorelease];
-            [self addSubview:self.shadowLayer];
-        }
-        
         [self updateShadowLayerContent];
         self.shadowLayer.frame = [self shadowImageViewFrame];
     }
@@ -228,7 +236,7 @@
         }
         
         CGFloat multiplier = 1;
-        CGRect shadowFrame = self.frame;
+        CGRect shadowFrame = self.bounds;
         CGPoint offset = CGPointMake(0,0);
         
         if(self.borderLocation & CKStyleViewBorderLocationLeft){
@@ -279,7 +287,7 @@
     @autoreleasepool {
         
         //TODO: compute the smallest resizable image taking care of shadow radius and roundedcornerswidth
-        CGRect frame = self.frame;
+        CGRect frame = self.bounds;
         
         CGRect shadowFrame = [self shadowImageViewFrame];
         

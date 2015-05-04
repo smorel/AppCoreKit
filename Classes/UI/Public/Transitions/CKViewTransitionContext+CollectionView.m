@@ -34,7 +34,7 @@
     
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
     
-    context.snapshot = [CKViewTransitionContext snapshotView:cell withLayerAttributesAfterUpdate:YES context:context];
+    context.snapshot = [CKViewTransitionContext snapshotView:cell withHierarchy:YES context:context];
     if(context.snapshot == nil){
         return nil;
     }
@@ -56,7 +56,7 @@
                                     transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext{
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
     
-    context.snapshot = [CKViewTransitionContext snapshotView:cell withLayerAttributesAfterUpdate:YES context:context];
+    context.snapshot = [CKViewTransitionContext snapshotView:cell withHierarchy:YES context:context];
     if(context.snapshot == nil){
         return nil;
     }

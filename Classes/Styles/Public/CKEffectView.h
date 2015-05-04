@@ -10,7 +10,7 @@
 
 /** CKEffectView is the base class for views who need to refresh drawing or views at each frame.
  */
-@interface CKEffectView : UIView
+@interface CKEffectView : UIView<NSCopying>
 
 /** didRegisterForUpdates is called after the view entered in a window
  */

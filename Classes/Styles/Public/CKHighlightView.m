@@ -88,6 +88,17 @@
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
+- (id)copyWithZone:(NSZone *)zone{
+    CKHighlightView* other = [[[self class]alloc]initWithFrame:self.frame];
+    other.corners = self.corners;
+    other.roundedCornerSize = self.roundedCornerSize;
+    other.highlightColor = self.highlightColor;
+    other.highlightRadius = self.highlightRadius;
+    other.highlightWidth = self.highlightWidth;
+    other.highlightEndColor = self.highlightEndColor;
+    return other;
+}
+
 - (void)layoutSubviews{
     [super layoutSubviews];
 

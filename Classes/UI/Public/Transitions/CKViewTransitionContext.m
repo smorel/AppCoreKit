@@ -157,7 +157,7 @@
     
     self.snapshot.hidden = !(self.visibility & CKViewTransitionContextVisibilityAfterAnimation);
     
-    [self.viewBeforeSnapshot setStyleViewsDecoratorsEnabled:YES];
+    [self.viewBeforeSnapshot setEffectViewsEnabled:YES];
     
 }
 
@@ -173,7 +173,7 @@
 }
 
 - (void)endTransition{
-    [self.viewBeforeSnapshot setStyleViewsDecoratorsEnabled:YES];
+    [self.viewBeforeSnapshot setEffectViewsEnabled:YES];
     
     for(CKViewTransitionContext* child in self.viewTransitionContexts){
         [child endTransition];
@@ -187,15 +187,15 @@
 
 
 
-+ (UIView*)snapshotView:(UIView*)view withLayerAttributesAfterUpdate:(BOOL)afterUpdate context:(CKViewTransitionContext*)context{
++ (UIView*)snapshotView:(UIView*)view withHierarchy:(BOOL)withHierarchy context:(CKViewTransitionContext*)context{
     context.viewBeforeSnapshot = view;
     
     UIView* snapshot = nil;
-    if(afterUpdate){
-        snapshot = [view transitionSnapshotAfterUpdate];
+    if(withHierarchy){
+        snapshot = [view transitionSnapshotWithViewHierarchy];
     }
     else {
-        snapshot = [view transitionSnapshot];
+        snapshot = [view transitionSnapshotWithoutViewHierarchy];
     }
     
     return snapshot;

@@ -10,9 +10,9 @@
 
 @interface UIView (Transition)
 
-- (UIView*)transitionSnapshot;
-- (UIView*)transitionSnapshotAfterUpdate;
+- (UIView*)transitionSnapshotWithoutViewHierarchy;
+- (UIView*)transitionSnapshotWithViewHierarchy;
 
-- (void)setStyleViewsDecoratorsEnabled:(BOOL)enabled;
+- (void)setEffectViewsEnabled:(BOOL)enabled;
 
 @end

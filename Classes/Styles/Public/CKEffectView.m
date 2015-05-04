@@ -10,6 +10,8 @@
 #import "CKSharedDisplayLink.h"
 #import "CKRuntime.h"
 #import <objc/runtime.h>
+#import "UIView+Name.h"
+
 
 @interface CKEffectView()<CKSharedDisplayLinkDelegate>
 @property(nonatomic,assign)CGRect lastFrameInWindow;
@@ -88,6 +90,13 @@
     CKSwizzleSelector([UIView class], @selector(insertSubview:aboveSubview:), @selector(CKHighlightView_insertSubview:aboveSubview:));
 }
 
+- (void)setEffectEnabled:(BOOL)enabled{
+    
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    return [[[self class]alloc]initWithFrame:self.frame];
+}
 
 @end
 
