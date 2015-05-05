@@ -237,7 +237,7 @@
     if(CGRectEqualToRect( self.lastDrawBounds, self.bounds))
         return;
     
-    NSLog(@"%@ - %@",NSStringFromCGRect( self.lastDrawBounds),NSStringFromCGRect(self.bounds));
+    // NSLog(@"%@ - %@",NSStringFromCGRect( self.lastDrawBounds),NSStringFromCGRect(self.bounds));
     
     [self setNeedsDisplay];
     self.lastDrawBounds = self.bounds;
