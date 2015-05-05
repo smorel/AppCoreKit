@@ -33,6 +33,8 @@
     CGContextRef gc = UIGraphicsGetCurrentContext();
     if(self.withoutSubviews){
         [self.view.layer renderInContext:gc];
+        [self.view drawRect:rect];
+        
         if(self.view.styleView){
             [self.view.styleView.layer renderInContext:gc];
         }
