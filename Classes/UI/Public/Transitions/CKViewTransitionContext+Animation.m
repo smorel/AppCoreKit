@@ -56,7 +56,7 @@
 
 + (UICollectionViewLayoutAttributes*)attributesWithAttributes:(UICollectionViewLayoutAttributes*)fromAttributes
                                                        insets:(UIEdgeInsets)insets{
-    UICollectionViewLayoutAttributes* att = [fromAttributes copy];
+    UICollectionViewLayoutAttributes* att = [[fromAttributes copy]autorelease];
     
     CGRect rect = att.frame;
     rect.origin.x += insets.left;

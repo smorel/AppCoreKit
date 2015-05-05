@@ -13,6 +13,4 @@
 - (UIView*)transitionSnapshotWithoutViewHierarchy;
 - (UIView*)transitionSnapshotWithViewHierarchy;
 
-- (void)setEffectViewsEnabled:(BOOL)enabled;
-
 @end

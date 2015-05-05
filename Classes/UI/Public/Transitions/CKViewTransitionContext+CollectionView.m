@@ -7,6 +7,7 @@
 //
 
 #import "CKViewTransitionContext+CollectionView.h"
+#import "UIView+Name.h"
 
 @implementation CKViewTransitionContext (CollectionView)
 
@@ -15,9 +16,8 @@
                                              collectionView:(UICollectionView*)collectionView
                                           transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext{
     UICollectionViewLayoutAttributes* att = [layout layoutAttributesForItemAtIndexPath:indexPath];
-    att.frame = [collectionView convertRect:att.frame toView:[transitionContext containerView]];
+    att.center = [collectionView convertPoint:att.center toView:[transitionContext containerView]];
     att.alpha = 1.0f;
-    att.transform = CGAffineTransformIdentity;
     return att;
 }
 
@@ -33,6 +33,8 @@
                                     transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext{
     
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
+    cell.name = [NSString stringWithFormat:@"%ld %ld",(long)targetIndexPath.section,(long)targetIndexPath.item];
+    context.name = cell.name;
     
     context.snapshot = [CKViewTransitionContext snapshotView:cell withHierarchy:YES context:context];
     if(context.snapshot == nil){
@@ -55,6 +57,8 @@
                                             animation:(CKViewTransitionContextAnimation)animation
                                     transitionContext:(id <UIViewControllerContextTransitioning>)transitionContext{
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
+    cell.name = [NSString stringWithFormat:@"%ld %ld",(long)sourceIndexPath.section,(long)sourceIndexPath.item];
+    context.name = cell.name;
     
     context.snapshot = [CKViewTransitionContext snapshotView:cell withHierarchy:YES context:context];
     if(context.snapshot == nil){

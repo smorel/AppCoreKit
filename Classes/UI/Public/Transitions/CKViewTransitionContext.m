@@ -78,9 +78,9 @@
     
     CKViewTransitionContext* context = [[[CKViewTransitionContext alloc]init]autorelease];
     context.snapshot = other.snapshot;
-    context.startAttributes = [other.endAttributes copy];
-    context.endAttributes = [other.startAttributes copy];
-    context.viewsToHideDuringTransition = [other.viewsToHideDuringTransition copy];
+    context.startAttributes = [[other.endAttributes copy]autorelease];
+    context.endAttributes = [[other.startAttributes copy]autorelease];
+    context.viewsToHideDuringTransition = [[other.viewsToHideDuringTransition copy]autorelease];
     context.viewBeforeSnapshot = other.viewBeforeSnapshot;
     
     NSMutableArray* reversedChildren = [NSMutableArray array];
@@ -122,7 +122,8 @@
         for(UIView* view in self.viewsToHideDuringTransition){
             view.hidden = YES;
         }
-        self.snapshot.frame = self.startAttributes.frame ;
+        self.snapshot.center = self.startAttributes.center;
+        self.snapshot.bounds = self.startAttributes.bounds;
         self.snapshot.alpha = self.startAttributes.alpha ;
         self.snapshot.layer.transform =  self.startAttributes.transform3D ;
     }
@@ -143,7 +144,8 @@
         for(UIView* view in self.viewsToHideDuringTransition){
             view.hidden = YES;
         }
-        self.snapshot.frame = self.startAttributes.frame ;
+        self.snapshot.center = self.startAttributes.center;
+        self.snapshot.bounds = self.startAttributes.bounds;
         self.snapshot.alpha = self.startAttributes.alpha ;
         self.snapshot.layer.transform =  self.startAttributes.transform3D ;
     }
@@ -156,9 +158,6 @@
     }
     
     self.snapshot.hidden = !(self.visibility & CKViewTransitionContextVisibilityAfterAnimation);
-    
-    [self.viewBeforeSnapshot setEffectViewsEnabled:YES];
-    
 }
 
 - (void)performTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext{
@@ -173,8 +172,6 @@
 }
 
 - (void)endTransition{
-    [self.viewBeforeSnapshot setEffectViewsEnabled:YES];
-    
     for(CKViewTransitionContext* child in self.viewTransitionContexts){
         [child endTransition];
     }
