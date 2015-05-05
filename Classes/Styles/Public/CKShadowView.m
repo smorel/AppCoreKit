@@ -85,7 +85,7 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
-    [self updateEffect];
+    //[self updateEffect];
     [self layoutShadowLayers];
 }
 
@@ -99,7 +99,7 @@
 
 - (void)layoutShadowLayers{
     if([self shadowEnabled]){
-        [self updateShadowLayerContent];
+        //[self updateShadowLayerContent];
         self.shadowLayer.frame = [self shadowImageViewFrame];
     }
 }
