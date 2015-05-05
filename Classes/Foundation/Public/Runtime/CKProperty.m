@@ -179,12 +179,14 @@
     if(self.subKeyPath == nil)
         return YES;
     
-    @try{
+    //FIXME: find another way to do this as it is intense on the CPU while profiling ! And it is a real pain when having an exception breakpoint!
+    
+    /* @try{
          [self.subObject valueForKey:self.subKeyPath];
     }
     @catch (NSException* e) {
         return NO;
-    }
+    } */
     
     return YES;
 }
