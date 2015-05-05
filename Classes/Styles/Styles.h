@@ -17,4 +17,5 @@
 #import "CKLightEffectView.h"
 #import "CKHighlightView.h"
 #import "CKShadowView.h"
+#import "CKShadeView.h"
 #import "CKLight.h"
