@@ -14,6 +14,7 @@
 #import "CKLocalization.h"
 #import "CKHighlightView.h"
 #import "CKShadowView.h"
+#import "CKShadeView.h"
 
 #import "CKDebug.h"
 #import <objc/runtime.h>
@@ -294,6 +295,18 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return NO;
 }
 
++ (BOOL)needShadeView:(NSMutableDictionary*)style forView:(UIView*)view{
+    if(style == nil || [style isEmpty] == YES)
+        return NO;
+    
+    if([style containsObjectForKey:@"shadeColor"]
+       || [style containsObjectForKey:@"fullShadeZ"]
+       || [style containsObjectForKey:@"noShadeZ"]){
+        return YES;
+    }
+    return NO;
+}
+
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style{
 	return [self applyStyle:style propertyName:nil];
 }
@@ -328,6 +341,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 				UIView* backgroundView = view;
                 CKHighlightView* highlightView = nil;
                 CKShadowView* shadowView = nil;
+                CKShadeView* shadeView = nil;
 				BOOL opaque = YES;
 				
 				CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
@@ -378,6 +392,23 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                     
                     [view addSubview:shadowView];
                 }
+                
+                if([UIView needShadeView:myViewStyle forView:view]){
+                    shadeView = [[[CKShadeView alloc]init]autorelease];
+                    shadeView.frame = view.bounds;
+                    shadeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                    
+                    [shadeView setAppliedStyle:myViewStyle];
+                    
+                    [NSObject applyStyleByIntrospection:gradientViewStyle toObject:shadeView appliedStack:appliedStack delegate:(id)delegate];
+                    
+                    
+                    if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
+                        shadeView.roundedCornerSize = [myViewStyle cornerSize];
+                    }
+                    
+                    [view addSubview:shadeView];
+                }
 				
 				if([UIView needStyleView:myViewStyle forView:view]){
 					CKStyleView* gradientView = [UIView styleView:view];
@@ -427,6 +458,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                     }
                     highlightView.corners = roundedCornerType;
                     shadowView.corners = roundedCornerType;
+                    shadeView.corners = roundedCornerType;
                 }
                 
                 
