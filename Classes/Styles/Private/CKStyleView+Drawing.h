@@ -10,4 +10,11 @@
 
 @interface CKStyleView (Drawing)
 
+- (UIImage*)maskImage;
+- (UIImage*)borderImage;
+- (UIImage*)gradientImage;
+- (UIImage*)separatorImage;
+- (UIImage*)embossTopImage;
+- (UIImage*)embossBottomImage;
+
 @end

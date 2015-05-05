@@ -114,19 +114,9 @@
                                  self.borderShadowColor,
                                  (unsigned long)self.borderShadowRadius];
     
-    if(![self.shadowCacheIdentifier isEqualToString:cacheIdentifier]){
-        self.shadowCacheIdentifier = cacheIdentifier;
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.shadowCacheIdentifier];
-    }
-    
-    UIImage* shadowImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.shadowCacheIdentifier];
-    if(!shadowImage){
-        shadowImage = [self generateShadowImage];
-    }
-    
-    [[CKImageCache sharedInstance]registerHandler:self image:shadowImage withIdentifier:self.shadowCacheIdentifier];
-    
-    return shadowImage;
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"shadowCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        return [self generateShadowImage];
+    }];
 }
 
 - (UIImage*)generateShadowImage{

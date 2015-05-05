@@ -122,18 +122,9 @@
     NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Gradient_%f_%@_%@",
                                              self.highlightRadius,self.highlightColor,self.highlightEndColor];
     
-    if(![self.highlightGradientCacheIdentifier isEqualToString:cacheIdentifier]){
-        self.highlightGradientCacheIdentifier = cacheIdentifier;
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightGradientCacheIdentifier];
-    }
-    
-    UIImage* gradientImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.highlightGradientCacheIdentifier];
-    if(!gradientImage){
-        gradientImage = [UIImage radialGradientImageWithRadius:self.highlightRadius startColor:self.highlightColor endColor:self.highlightEndColor options:0];
-    }
-    
-    [[CKImageCache sharedInstance]registerHandler:self image:gradientImage withIdentifier:self.highlightGradientCacheIdentifier];
-    return gradientImage;
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"highlightGradientCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        return [UIImage radialGradientImageWithRadius:self.highlightRadius startColor:self.highlightColor endColor:self.highlightEndColor options:0];
+    }];
 }
 
 - (void)updateHighlightGradientLayerContent{
@@ -147,14 +138,7 @@
     NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Highlight_Mask_%lu_%f_%f",
                                          (unsigned long)self.corners,self.roundedCornerSize,self.highlightWidth];
     
-    if(![self.highlightMaskCacheIdentifier isEqualToString:cacheIdentifier]){
-        self.highlightMaskCacheIdentifier = cacheIdentifier;
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.highlightMaskCacheIdentifier];
-    }
-    
-    
-    UIImage* maskImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.highlightMaskCacheIdentifier];
-    if(!maskImage){
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"highlightMaskCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
         CGSize size = CGSizeMake(2*self.roundedCornerSize+1,2*self.roundedCornerSize+1);
         CGRect rect = CGRectMake(0,0,size.width,size.height);
         
@@ -164,14 +148,14 @@
                                                                          roundedCornerSize:self.roundedCornerSize
                                                                                       rect:rect];
         
-        maskImage = [UIImage maskImageWithStrokePath:highlightPath width:self.highlightWidth size:size];
-        maskImage = [maskImage resizableImageWithCapInsets:UIEdgeInsetsMake(self.roundedCornerSize, self.roundedCornerSize,self.roundedCornerSize,self.roundedCornerSize) resizingMode:UIImageResizingModeStretch];
+        UIImage* maskImage = [UIImage maskImageWithStrokePath:highlightPath width:self.highlightWidth size:size];
+        maskImage = [maskImage resizableImageWithCapInsets:UIEdgeInsetsMake(self.roundedCornerSize, self.roundedCornerSize,self.roundedCornerSize,self.roundedCornerSize)
+                                              resizingMode:UIImageResizingModeStretch];
         
         CGPathRelease(highlightPath);
-    }
-    
-    [[CKImageCache sharedInstance]registerHandler:self image:maskImage withIdentifier:self.highlightMaskCacheIdentifier];
-    return maskImage;
+        
+        return maskImage;
+    }];
 }
 
 - (void)updateHighlightMaskLayerContent{

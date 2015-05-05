@@ -110,31 +110,23 @@
     NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Shade_Mask_%lu_%f_%@",
                                  (unsigned long)self.corners,self.roundedCornerSize,self.shadeColor];
     
-    if(![self.shadeImageChacheIdentifier isEqualToString:cacheIdentifier]){
-        self.shadeImageChacheIdentifier = cacheIdentifier;
-        [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.shadeImageChacheIdentifier];
-    }
-    
-    
-    UIImage* shadeImage = [[CKImageCache sharedInstance]imageWithIdentifier:self.shadeImageChacheIdentifier];
-    if(!shadeImage){
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"shadeImageChacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
         CGSize size = CGSizeMake(2*self.roundedCornerSize+1,2*self.roundedCornerSize+1);
         CGRect rect = CGRectMake(0,0,size.width,size.height);
         
         CGMutablePathRef shadePath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll
-                                                                               borderWidth:0
-                                                                                cornerType:self.corners
-                                                                         roundedCornerSize:self.roundedCornerSize
-                                                                                      rect:rect];
+                                                                           borderWidth:0
+                                                                            cornerType:self.corners
+                                                                     roundedCornerSize:self.roundedCornerSize
+                                                                                  rect:rect];
         
-        shadeImage = [UIImage filledImageWithColor:self.shadeColor path:shadePath size:size];
+        UIImage* shadeImage = [UIImage filledImageWithColor:self.shadeColor path:shadePath size:size];
         shadeImage = [shadeImage resizableImageWithCapInsets:UIEdgeInsetsMake(self.roundedCornerSize, self.roundedCornerSize,self.roundedCornerSize,self.roundedCornerSize) resizingMode:UIImageResizingModeStretch];
         
         CGPathRelease(shadePath);
-    }
-    
-    [[CKImageCache sharedInstance]registerHandler:self image:shadeImage withIdentifier:self.shadeImageChacheIdentifier];
-    return shadeImage;
+        
+        return shadeImage;
+    }];
 }
 
 @end

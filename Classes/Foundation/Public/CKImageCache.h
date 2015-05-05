@@ -70,4 +70,15 @@
  */
 - (UIImage*)imageWithIdentifier:(NSString*)identifier;
 
+
+///-----------------------------------
+/// @name Generating or fetching local images
+///-----------------------------------
+
+/** if the cacheIdentifier is different than the handler's handlerCacheIdentifier Property, the handler is unregisters from image cache for the previous identifier.
+ then, if the image with the specified cacheIdentifier already exists in cahce, it is returned and the handler is registered for the cacheIdentifier.
+ If the image doesn't exists, it is created by calling the generateImageBlock and then returned while the handler is registered for this cache identifier with the created image.
+ */
+- (UIImage*)findOrCreateImageWithHandler:(id)handler handlerCacheIdentifierProperty:(NSString*)keypath cacheIdentifier:(NSString*)cacheIdentifier generateImageBlock:(UIImage*(^)())generateImageBlock;
+
 @end

@@ -12,6 +12,11 @@
 @interface CKTransitionTreeAnimator()
 @property(nonatomic,retain,readwrite) CKTransitionTree* transitionTree;
 @property(nonatomic,retain,readwrite) id<UIViewControllerContextTransitioning> transitioningContext;
+@property(nonatomic,retain,readwrite) NSDate* startDate;
+@property(nonatomic,retain,readwrite) NSDate* computeTransitionDate;
+@property(nonatomic,retain,readwrite) NSDate* afterPrepareDate;
+@property(nonatomic,retain,readwrite) NSDate* beforePrepareTransitionDate;
+@property(nonatomic,retain,readwrite) NSDate* afterPrepareTransitionDate;
 @end
 
 @implementation CKTransitionTreeAnimator
@@ -44,6 +49,8 @@
 }
 
 - (void)startInteractiveTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+    self.startDate = [NSDate date];
+    
     CKCollectionViewController* toCollectionViewController = [self toCollectionViewControllerWithTransitioningContext:transitionContext];
     if(toCollectionViewController){
         [toCollectionViewController.collectionView layoutIfNeeded];
@@ -53,6 +60,8 @@
     if(toTableViewController){
         [toTableViewController.tableView layoutIfNeeded];
     }
+    
+    self.computeTransitionDate = [NSDate date];
     
     [self.transitionTree removeAllViewTransitionContexts];
     self.transitioningContext = transitionContext;
@@ -67,10 +76,14 @@
     
     [self prepareTransitionTreeWithContext:transitionContext];
     
+    self.afterPrepareDate = [NSDate date];
+    
     to.view.hidden = YES;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+     dispatch_async(dispatch_get_main_queue(), ^{
+        self.beforePrepareTransitionDate = [NSDate date];
         [self.transitionTree prepareForTransitionWithContext:transitionContext ];
+        self.afterPrepareTransitionDate = [NSDate date];
         
         if(!self.interactive){
             [self completeTransitionWithTransitioningContext:transitionContext];
@@ -114,6 +127,19 @@
                                                    [transitionContext completeTransition:!transitionContext.transitionWasCancelled];
                                                }
                                            }];
+    
+    NSDate* now = [NSDate date];
+    NSTimeInterval diff = [now timeIntervalSinceDate:self.startDate];
+    NSTimeInterval diff2 = [self.computeTransitionDate timeIntervalSinceDate:self.startDate];
+    NSTimeInterval diff3 = [self.afterPrepareDate timeIntervalSinceDate:self.computeTransitionDate];
+    NSTimeInterval diff4 = [self.beforePrepareTransitionDate timeIntervalSinceDate:self.afterPrepareDate];
+    NSTimeInterval diff5 = [self.afterPrepareTransitionDate timeIntervalSinceDate:self.beforePrepareTransitionDate];
+    NSLog(@"[TOTAL] %f (s) [TARGET LAYOUT] %ld%% [PREPARE TREE] %ld%% [DISPATCH] %ld%% [PREPARE TRANSITION] %ld%%",
+          diff,
+          (long)(diff2 / diff * 100),
+          (long)(diff3 / diff * 100),
+          (long)(diff4 / diff * 100),
+          (long)(diff5 / diff * 100));
 }
 
 - (void)didCompleteTransitionWithTransitioningContext:(id<UIViewControllerContextTransitioning>)transitionContext{

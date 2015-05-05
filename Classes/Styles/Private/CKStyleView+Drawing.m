@@ -7,11 +7,18 @@
 //
 
 #import "CKStyleView+Drawing.h"
+#import "UIImage+Transformations.h"
 #import "CKStyleView+Paths.h"
-
 #import "UIColor+Additions.h"
+#import "CKImageCache.h"
 
 @interface CKStyleView ()
+@property(nonatomic,retain)NSString* maskCacheIdentifier;
+@property(nonatomic,retain)NSString* borderCacheIdentifier;
+@property(nonatomic,retain)NSString* gradientCacheIdentifier;
+@property(nonatomic,retain)NSString* separatorCacheIdentifier;
+@property(nonatomic,retain)NSString* embossTopCacheIdentifier;
+@property(nonatomic,retain)NSString* embossBottomCacheIdentifier;
 @property(nonatomic,retain)UIColor* fillColor;
 @property(nonatomic,assign)CGRect lastDrawBounds;
 @end
@@ -19,188 +26,148 @@
 
 @implementation CKStyleView (Drawing)
 
-
-- (void)drawRect:(CGRect)rect{
-    CGContextRef gc = UIGraphicsGetCurrentContext();
-    [self drawInRect:self.frame inContext:gc];
-}
-
-- (void)drawInRect:(CGRect)rect inContext:(CGContextRef)gc {
+- (UIImage*)maskImage{
+    NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Mask_%lu_%f",
+                                 (unsigned long)self.corners,self.roundedCornerSize];
     
-    CGMutablePathRef clippingPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize rect:rect];
     
-    [self drawBackgroundColorInRect:rect clippingPath:clippingPath context:gc];
-    [self drawBackgroundImageInRect:rect clippingPath:clippingPath context:gc];
-    [self drawBackgroundGradientInRect:rect clippingPath:clippingPath context:gc];
-    [self drawTopEmbossInRect:rect context:gc];
-    [self drawBottomEmbossInRect:rect context:gc];
-    [self drawSeparatorInRect:rect context:gc];
-    [self drawBorderInRect:rect context:gc];
-    
-    CFRelease(clippingPath);
-}
-
-
-- (void)drawBackgroundColorInRect:(CGRect)rect clippingPath:(CGPathRef)clippingPath context:(CGContextRef)gc {
-    if(self.gradientColors == nil && self.image == nil){
-        if(self.fillColor != nil)
-            [self.fillColor setFill];
-        else
-            [[UIColor clearColor] setFill];
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"maskCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        CGSize size = CGSizeMake(2*self.roundedCornerSize+1,2*self.roundedCornerSize+1);
+        CGRect rect = CGRectMake(0,0,size.width,size.height);
         
-        if (self.corners != CKStyleViewCornerTypeNone){
-            CGContextAddPath(gc, clippingPath);
-            CGContextFillPath(gc);
-        }
-        else{
-            CGContextFillRect(gc, rect);
-        }
+        CGMutablePathRef highlightPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll
+                                                                               borderWidth:0
+                                                                                cornerType:self.corners
+                                                                         roundedCornerSize:self.roundedCornerSize
+                                                                                      rect:rect];
+        
+        UIImage* maskImage = [UIImage maskImageWithPath:highlightPath size:size];
+        maskImage = [maskImage resizableImageWithCapInsets:UIEdgeInsetsMake(self.roundedCornerSize, self.roundedCornerSize,self.roundedCornerSize,self.roundedCornerSize)
+                                              resizingMode:UIImageResizingModeStretch];
+        
+        CGPathRelease(highlightPath);
+        
+        return maskImage;
+    }];
+}
+
+
+- (UIImage*)borderImage{
+    NSString* cacheIdentifier = [NSString stringWithFormat:@"CKStyleView_Border_%lu_%f_%f_%lu_%@",
+                                 (unsigned long)self.corners,self.roundedCornerSize,self.borderWidth,(unsigned long)self.borderLocation,self.borderColor];
+    
+    
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"borderCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        CGSize size = CGSizeMake(2*self.roundedCornerSize+1,2*self.roundedCornerSize+1);
+        CGRect rect = CGRectMake(0,0,size.width,size.height);
+        
+        CGMutablePathRef path = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll
+                                                                      borderWidth:0
+                                                                       cornerType:self.corners
+                                                                roundedCornerSize:self.roundedCornerSize
+                                                                             rect:rect];
+        
+        UIImage* image = [UIImage strokePathImageWithColor:self.borderColor path:path width:self.borderWidth size:size];
+        image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(self.roundedCornerSize, self.roundedCornerSize,self.roundedCornerSize,self.roundedCornerSize) resizingMode:UIImageResizingModeStretch];
+        
+        CGPathRelease(path);
+        
+        return image;
+    }];
+}
+
+- (UIImage*)gradientImage{
+    NSMutableString* cacheIdentifier = [NSMutableString stringWithFormat:@"CKStyleView_Border_%f_%f_%lu", self.bounds.size.width,self.bounds.size.height,(unsigned long)self.gradientStyle];
+    for(UIColor* color in self.gradientColors){
+        [cacheIdentifier appendString:[color description]];
     }
-}
-
-
-- (void)drawBackgroundImageInRect:(CGRect)rect clippingPath:(CGPathRef)clippingPath context:(CGContextRef)gc {
-    if(self.image){
-        if(clippingPath != nil){
-            CGContextAddPath(gc, clippingPath);
-            CGContextClip(gc);
-        }
+    
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"gradientCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        CGPoint startPoint;
+        CGPoint endPoint;
         
-        BOOL clip = NO;
-        CGRect originalRect = rect;
-        if (self.image.size.width != rect.size.width || self.image.size.height != rect.size.height) {
-            if (self.imageContentMode == UIViewContentModeLeft) {
-                rect = CGRectMake(rect.origin.x,
-                                  rect.origin.y + floor(rect.size.height/2 - self.image.size.height/2),
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeRight) {
-                rect = CGRectMake(rect.origin.x + (rect.size.width - self.image.size.width),
-                                  rect.origin.y + floor(rect.size.height/2 - self.image.size.height/2),
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeTop) {
-                rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - self.image.size.width/2),
-                                  rect.origin.y,
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeBottom) {
-                rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - self.image.size.width/2),
-                                  rect.origin.y + floor(rect.size.height - self.image.size.height),
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeCenter) {
-                rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - self.image.size.width/2),
-                                  rect.origin.y + floor(rect.size.height/2 - self.image.size.height/2),
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeBottomLeft) {
-                rect = CGRectMake(rect.origin.x,
-                                  rect.origin.y + floor(rect.size.height - self.image.size.height),
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeBottomRight) {
-                rect = CGRectMake(rect.origin.x + (rect.size.width - self.image.size.width),
-                                  rect.origin.y + (rect.size.height - self.image.size.height),
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeTopLeft) {
-                rect = CGRectMake(rect.origin.x,
-                                  rect.origin.y,
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeTopRight) {
-                rect = CGRectMake(rect.origin.x + (rect.size.width - self.image.size.width),
-                                  rect.origin.y,
-                                  self.image.size.width, self.image.size.height);
-                clip = NO;
-            } else if (self.imageContentMode == UIViewContentModeScaleAspectFill) {
-                CGSize imageSize = self.image.size;
-                if (imageSize.height < imageSize.width) {
-                    imageSize.width = floor((imageSize.width/imageSize.height) * rect.size.height);
-                    imageSize.height = rect.size.height;
-                } else {
-                    imageSize.height = floor((imageSize.height/imageSize.width) * rect.size.width);
-                    imageSize.width = rect.size.width;
-                }
-                rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - imageSize.width/2),
-                                  rect.origin.y + floor(rect.size.height/2 - imageSize.height/2),
-                                  imageSize.width, imageSize.height);
-                clip = YES;
-            } else if (self.imageContentMode == UIViewContentModeScaleAspectFit) {
-                CGSize imageSize = self.image.size;
-                if (imageSize.height < imageSize.width) {
-                    imageSize.height = floor((imageSize.height/imageSize.width) * rect.size.width);
-                    imageSize.width = rect.size.width;
-                } else {
-                    imageSize.width = floor((imageSize.width/imageSize.height) * rect.size.height);
-                    imageSize.height = rect.size.height;
-                }
-                rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - imageSize.width/2),
-                                  rect.origin.y + floor(rect.size.height/2 - imageSize.height/2),
-                                  imageSize.width, imageSize.height);
-                clip = YES;
-            }
-        }
-        
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        if (clip) {
-            CGContextSaveGState(context);
-            CGContextAddRect(context, originalRect);
-            CGContextClip(context);
-        }
-        
-        [self.image drawInRect:rect];
-        
-        if (clip) {
-            CGContextRestoreGState(context);
-        }
-    }
-}
-
-
-- (void)drawBackgroundGradientInRect:(CGRect)rect clippingPath:(CGPathRef)clippingPath context:(CGContextRef)gc {
-    // Gradient
-    if(self.gradientColors){
-        CGContextSaveGState(gc);
-        if(clippingPath != nil){
-            CGContextAddPath(gc, clippingPath);
-            CGContextClip(gc);
-        }
-        
-        CGFloat colorLocations[self.gradientColorLocations.count];
-        int i = 0;
-        for (NSNumber *n in self.gradientColorLocations) {
-            colorLocations[i++] = [n floatValue];
-        }
-        
-        NSMutableArray *colors = [NSMutableArray array];
-        for (UIColor *color in self.gradientColors) {
-            [colors addObject:(id)([[color RGBColor]CGColor])];
-        }
-        
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)colors, colorLocations);
-        CFRelease(colorSpace);
         switch(self.gradientStyle){
             case CKStyleViewGradientStyleVertical:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(rect.origin.x, rect.origin.y), CGPointMake(rect.origin.x, rect.origin.y + rect.size.height), 0);
+                startPoint = CGPointMake(0,0);
+                endPoint =  CGPointMake(0,self.bounds.size.height);
                 break;
             case CKStyleViewGradientStyleHorizontal:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(rect.origin.x, rect.origin.y), CGPointMake(rect.origin.x + rect.size.width, rect.origin.y), 0);
+                startPoint = CGPointMake(0,0);
+                endPoint =  CGPointMake(self.bounds.size.width,0);
                 break;
         }
-        //CGContextDrawRadialGradient
         
-        CGGradientRelease(gradient);
-        CGContextRestoreGState(gc);
-    }
+        return [UIImage linearGradientImageWithColors:self.gradientColors locations:self.gradientColorLocations startPoint:startPoint endPoint:endPoint size:self.bounds.size];
+    }];
+}
+
+
+- (UIImage*)separatorImage{
+    //To go fast, we regenerate full size images. We should draw resizable minimum size image here
+    NSMutableString* cacheIdentifier = [NSMutableString stringWithFormat:@"CKStyleView_Separator_%f_%f_%@_%lu_%f_%lu_%lu_%@_%lu",
+                                        self.bounds.size.width,self.bounds.size.height,
+                                        self.separatorColor,(unsigned long)self.separatorWidth,self.separatorDashPhase,
+                                        (unsigned long)self.separatorLineCap,(unsigned long)self.separatorLineJoin,
+                                        NSStringFromUIEdgeInsets(self.separatorInsets),self.separatorLocation];
+    
+    //separatorDashLengths
+
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"separatorCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        CGRect rect = self.bounds;
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        [self drawSeparatorInRect:rect context:context];
+        
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return image;
+    }];
+}
+
+- (UIImage*)embossTopImage{
+    //To go fast, we regenerate full size images. We should draw resizable minimum size image here
+    NSMutableString* cacheIdentifier = [NSMutableString stringWithFormat:@"CKStyleView_EmbossTop_%f_%f_%@",
+                                        self.bounds.size.width,self.bounds.size.height,
+                                        self.embossTopColor];
+    
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"embossTopCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        CGRect rect = self.bounds;
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        [self drawTopEmbossInRect:rect context:context];
+        
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return image;
+    }];
+}
+
+- (UIImage*)embossBottomImage{
+    //To go fast, we regenerate full size images. We should draw resizable minimum size image here
+    NSMutableString* cacheIdentifier = [NSMutableString stringWithFormat:@"CKStyleView_EmbossBottom_%f_%f_%@",
+                                        self.bounds.size.width,self.bounds.size.height,
+                                        self.embossBottomColor];
+    
+    return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"embossBottomCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
+        CGRect rect = self.bounds;
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        [self drawBottomEmbossInRect:rect context:context];
+        
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return image;
+    }];
 }
 
 
 - (void)drawTopEmbossInRect:(CGRect)rect context:(CGContextRef)gc {
-    // Top Emboss
-    if (self.embossTopColor && (self.embossTopColor != [UIColor clearColor])) {
         CGContextSaveGState(gc);
         
         CGContextSetShadowWithColor(gc, CGSizeMake(0, 1), 0, self.embossTopColor.CGColor);
@@ -218,13 +185,10 @@
         CGContextStrokePath(gc);
         CFRelease(topEmbossPath);
         CGContextRestoreGState(gc);
-    }
 }
 
 - (void)drawBottomEmbossInRect:(CGRect)rect context:(CGContextRef)gc {
     
-    // Bottom Emboss
-    if (self.embossBottomColor && (self.embossBottomColor != [UIColor clearColor])) {
         CGContextSaveGState(gc);
         
         CGContextSetShadowWithColor(gc, CGSizeMake(0, -1), 0, self.embossBottomColor.CGColor);
@@ -242,12 +206,10 @@
         CGContextStrokePath(gc);
         CFRelease(bottomEmbossPath);
         CGContextRestoreGState(gc);
-    }
 }
 
 - (void)drawSeparatorInRect:(CGRect)rect context:(CGContextRef)gc {
     // Separator
-    if(self.separatorColor!= nil && self.separatorColor != [UIColor clearColor] && self.separatorWidth > 0 && self.separatorLocation != CKStyleViewSeparatorLocationNone){
         CGContextSaveGState(gc);
         [self.separatorColor setStroke];
         CGContextSetLineWidth(gc, self.separatorWidth);
@@ -277,29 +239,6 @@
         CFRelease(borderPath);
         CGContextStrokePath(gc);
         CGContextRestoreGState(gc);
-    }
-}
-
-
-- (void)drawBorderInRect:(CGRect)rect context:(CGContextRef)gc {
-    // Border
-    if(self.borderColor!= nil && self.borderColor != [UIColor clearColor] && self.borderWidth > 0 && self.borderLocation != CKStyleViewBorderLocationNone){
-        CGContextSaveGState(gc);
-        
-        CGContextSetLineWidth(gc, self.borderWidth);
-        
-        CGMutablePathRef borderPath = [CKStyleView generateBorderPathWithBorderLocation:(CKStyleViewBorderLocation)self.borderLocation borderWidth:0 cornerType:self.corners roundedCornerSize:self.roundedCornerSize  rect:rect];
-        
-        CGPathRef thickPath = CGPathCreateCopyByStrokingPath(borderPath, NULL, self.borderWidth, kCGLineCapRound, kCGLineJoinRound, 0);
-        
-        [self.borderColor setFill];
-        CGContextAddPath(gc, thickPath);
-        CGContextFillPath(gc);
-        
-        CFRelease(borderPath);
-        CFRelease(thickPath);
-        CGContextRestoreGState(gc);
-    }
 }
 
 @end

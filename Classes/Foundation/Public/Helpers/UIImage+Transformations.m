@@ -532,6 +532,36 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     return image;
 }
 
++ (UIImage*)linearGradientImageWithColors:(NSArray*)colors locations:(NSArray*)locations  startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint  size:(CGSize)size{
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+  
+    
+    CGFloat colorLocations[locations.count];
+    int i = 0;
+    for (NSNumber *n in locations) {
+        colorLocations[i++] = [n floatValue];
+    }
+    
+    NSMutableArray *cgcolors = [NSMutableArray array];
+    for (UIColor *color in colors) {
+        [cgcolors addObject:(id)([[color RGBColor]CGColor])];
+    }
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)cgcolors, colorLocations);
+    CFRelease(colorSpace);
+    
+    CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
+    CGGradientRelease(gradient);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 + (UIImage*)maskImageWithPath:(CGPathRef)path size:(CGSize)size drawingMode:(CGPathDrawingMode)drawingMode{
     CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
     UIGraphicsBeginImageContext(rect.size);
@@ -606,6 +636,25 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     
     return image;
 
+}
+
++ (UIImage*)strokePathImageWithColor:(UIColor*)color path:(CGPathRef)path width:(CGFloat)width size:(CGSize)size{
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGPathRef thickPath = CGPathCreateCopyByStrokingPath(path, NULL, width, kCGLineCapRound, kCGLineJoinRound, 0);
+    CGContextAddPath(context, thickPath);
+    
+    [color setFill];
+    CGContextFillPath(context);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    CGPathRelease(thickPath);
+    
+    return image;
 }
 
 @end

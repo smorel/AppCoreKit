@@ -57,6 +57,10 @@
 
 /**
  */
++ (UIImage*)linearGradientImageWithColors:(NSArray*)colors locations:(NSArray*)locations startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint size:(CGSize)size;
+
+/**
+ */
 + (UIImage*)radialGradientImageWithRadius:(CGFloat)radius startColor:(UIColor*)startColor endColor:(UIColor*)endColor options:(CGGradientDrawingOptions)options;
 
 /**
@@ -79,5 +83,10 @@
 /**
  */
 + (UIImage*)filledImageWithColor:(UIColor*)color path:(CGPathRef)path size:(CGSize)size;
+
+/**
+ */
++ (UIImage*)strokePathImageWithColor:(UIColor*)color path:(CGPathRef)path width:(CGFloat)width size:(CGSize)size;
+
 
 @end

@@ -208,4 +208,27 @@
     return item.image;
 }
 
+
+- (UIImage*)findOrCreateImageWithHandler:(id)handler
+          handlerCacheIdentifierProperty:(NSString*)keypath
+                         cacheIdentifier:(NSString*)cacheIdentifier
+                      generateImageBlock:(UIImage*(^)())generateImageBlock{
+    
+    NSString* previousCacheIdentifier = [handler valueForKeyPath:keypath];
+    
+    if(![previousCacheIdentifier isEqualToString:cacheIdentifier]){
+        [handler setValue:cacheIdentifier forKeyPath:keypath];
+        
+        [[CKImageCache sharedInstance]unregisterHandler:handler withIdentifier:previousCacheIdentifier];
+    }
+    
+    UIImage* image = [[CKImageCache sharedInstance]imageWithIdentifier:cacheIdentifier];
+    if(!image){
+        image = generateImageBlock();
+    }
+    
+    [[CKImageCache sharedInstance]registerHandler:handler image:image withIdentifier:cacheIdentifier];
+    return image;
+}
+
 @end
