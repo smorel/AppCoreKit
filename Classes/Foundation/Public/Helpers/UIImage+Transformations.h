@@ -75,4 +75,9 @@
  */
 + (UIImage*)maskImageWithStrokePath:(CGPathRef)path width:(CGFloat)width size:(CGSize)size;
 
+
+/**
+ */
++ (UIImage*)filledImageWithColor:(UIColor*)color path:(CGPathRef)path size:(CGSize)size;
+
 @end
