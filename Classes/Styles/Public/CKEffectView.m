@@ -79,7 +79,7 @@
 
 - (void)sharedDisplayLinkDidRefresh:(CKSharedDisplayLink*)displayLink{
     CGRect rect = [self rectInWindow];
-    if(self.updateOnlyWhenFrameChangesInWindow && CGRectEqualToRect(rect, self.lastFrameInWindow))
+    if(CGRectEqualToRect(rect, self.lastFrameInWindow))
         return;
     
     self.lastFrameInWindow = rect;
