@@ -23,6 +23,32 @@
     [CKSharedDisplayLink unregisterHandler:self];
     [super dealloc];
 }
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (void)postInit {
+}
 
 - (void)setNeedsEffectUpdate{
     self.lastFrameInWindow = CGRectZero;
@@ -53,7 +79,7 @@
 
 - (void)sharedDisplayLinkDidRefresh:(CKSharedDisplayLink*)displayLink{
     CGRect rect = [self rectInWindow];
-    if(CGRectEqualToRect(rect, self.lastFrameInWindow))
+    if(self.updateOnlyWhenFrameChangesInWindow && CGRectEqualToRect(rect, self.lastFrameInWindow))
         return;
     
     self.lastFrameInWindow = rect;

@@ -52,29 +52,6 @@
                                                     CKStyleViewBorderLocationAll);
 }
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        [self postInit];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self postInit];
-    }
-    return self;
-}
-
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self postInit];
-    }
-    return self;
-}
 
 - (id)copyWithZone:(NSZone *)zone{
     CKShadowView* other = [[[self class]alloc]initWithFrame:self.frame];
@@ -89,7 +66,7 @@
 }
 
 - (void)postInit {
-    
+    [super postInit];
     self.borderShadowRadius = 2;
     self.borderShadowOffset = CGPointMake(0,0);
     self.borderLocation = CKStyleViewBorderLocationNone;

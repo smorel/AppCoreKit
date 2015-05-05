@@ -12,6 +12,8 @@
  */
 @interface CKEffectView : UIView<NSCopying>
 
+- (void)postInit;
+
 /** didRegisterForUpdates is called after the view entered in a window
  */
 - (void)didRegisterForUpdates;

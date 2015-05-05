@@ -47,31 +47,8 @@
     [super dealloc];
 }
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        [self postInit];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self postInit];
-    }
-    return self;
-}
-
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self postInit];
-    }
-    return self;
-}
-
 - (void)postInit {
+    [super postInit];
     self.highlightColor = [UIColor whiteColor];
     self.highlightRadius = 200;
     self.highlightWidth = 0;
