@@ -545,15 +545,18 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 		CKObject* model = (CKObject*)target;
 		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:YES]];//PRIVATE SELECTOR
 	}
-	NSArray* descriptors = [target allPropertyDescriptors];
-	for(CKClassPropertyDescriptor* descriptor in descriptors){
-		id object = [source objectForKey:descriptor.name];
-		if(object != nil){
-			CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:descriptor.name weak:NO];
-			[NSValueTransformer transform:object inProperty:property];
-			[property autorelease];
-		}
-	}
+    
+    for(NSString* key in [source allKeys]){
+        CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptorForClass:[target class] key:key];
+        if(descriptor){
+            id object = [source objectForKey:key];
+            
+            CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:descriptor.name weak:NO];
+            [NSValueTransformer transform:object inProperty:property];
+            [property autorelease];
+        }
+    }
+    
 	if([target isKindOfClass:[CKObject class]]){
 		CKObject* model = (CKObject*)target;
 		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:NO]];//PRIVATE SELECTOR
