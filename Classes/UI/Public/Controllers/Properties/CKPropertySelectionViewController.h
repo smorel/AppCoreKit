@@ -28,9 +28,11 @@
 
 @end
 
-
-
 /**
+ * Controls the presentation mode for the selection choices
+ * CKPropertyEditionAppearanceStyleList : Displays the possible selection choices in a table view
+ * CKPropertyEditionAppearanceStylePicker : Displays the selection choices as a picker
+ *
  */
 typedef NS_ENUM(NSInteger, CKPropertyEditionAppearanceStyle){
     CKPropertyEditionAppearanceStyleDefault,

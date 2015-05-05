@@ -14,6 +14,14 @@
 
 
 /**
+ *
+ * Controls how the view controller is displayed
+ * CKPropertyEditionPresentationStylePush : pushes into a new view controller
+ * CKPropertyEditionPresentationStylePopover :
+ * CKPropertyEditionPresentationStyleModal : presents into a modal view
+ * CKPropertyEditionPresentationStyleSheet :
+ * CKPropertyEditionPresentationStyleInline : pushes into a new view controller
+ *
  */
 typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
     CKPropertyEditionPresentationStyleDefault,
