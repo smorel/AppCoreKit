@@ -23,6 +23,8 @@
 #import "CKCollectionViewController.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKWeakRef.h"
+
 @interface NSObject ()
 
 - (void)applySubViewStyle:(NSMutableDictionary*)style
@@ -38,6 +40,7 @@
 @property(nonatomic,retain) UIView* reusableView;
 @property(nonatomic,retain) UIView* contentViewCell;
 @property(nonatomic,assign) BOOL isComputingSize;
+@property(nonatomic,copy) CKLayoutBoxInvalidatedBlock layoutInvalidateBlock;
 @end
 
 
@@ -46,6 +49,7 @@
 - (void)dealloc{
     [self clearBindingsContext];
     
+    [_layoutInvalidateBlock release];
     [_didHighlightBlock release];
     [_didUnhighlightBlock release];
     [_didSelectBlock release];
@@ -70,6 +74,12 @@
     self.flags = CKViewControllerFlagsSelectable;
     self.accessoryType = UITableViewCellAccessoryNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
+    
+    CKWeakRef* weak = [CKWeakRef weakRefWithObject:self];
+    self.layoutInvalidateBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+        [weak.object viewLayoutDidInvalidate];
+    };
+    
     return self;
 }
 
@@ -123,6 +133,10 @@
 }
 
 - (void)prepareForReuseUsingContentView:(UIView*)contentView contentViewCell:(UIView*)contentViewCell{
+    if(contentView == nil && self.view){
+        self.view.invalidatedLayoutBlock = nil;
+    }
+    
     if(self.state == CKViewControllerStateDidAppear
        || self.state == CKViewControllerStateWillAppear){
         [self viewWillDisappear:NO];
@@ -278,28 +292,30 @@
     
     __unsafe_unretained CKReusableViewController* bself = self;
     
-    self.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
-        if(bself.view.window == nil || bself.isComputingSize || bself.state != CKViewControllerStateDidAppear)
-            return;
-        
-        NSIndexPath* indexPath = bself.indexPath;
-        if(!indexPath)
-            return;
-        
-        CGSize currentSize = self.view.bounds.size;
-        CGSize size = [bself preferredSizeConstraintToSize:CGSizeMake(bself.contentViewCell.width,MAXFLOAT)];
-        CGFloat diff = fabs(currentSize.height - size.height);
-        if(diff < 1 )
-            return;
-        
-        if([bself.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
-            [bself.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:indexPath];
-        }
-    };
+    self.view.invalidatedLayoutBlock = self.layoutInvalidateBlock;
     
     [super viewWillAppear:animated];
     
     [self setNeedsDisplay];
+}
+
+- (void)viewLayoutDidInvalidate{
+    if(self.view.window == nil || self.isComputingSize || self.state != CKViewControllerStateDidAppear)
+        return;
+    
+    NSIndexPath* indexPath = self.indexPath;
+    if(!indexPath)
+        return;
+    
+    CGSize currentSize = self.view.bounds.size;
+    CGSize size = [self preferredSizeConstraintToSize:CGSizeMake(self.contentViewCell.width,MAXFLOAT)];
+    CGFloat diff = fabs(currentSize.height - size.height);
+    if(diff < 1 )
+        return;
+    
+    if([self.containerViewController respondsToSelector:@selector(invalidateControllerAtIndexPath:)]){
+        [self.containerViewController performSelector:@selector(invalidateControllerAtIndexPath:) withObject:indexPath];
+    }
 }
 
 - (void)resetStyleOnViewRecursivelly:(UIView*)view{

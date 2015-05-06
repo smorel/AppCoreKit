@@ -9,6 +9,7 @@
 #import "CKSectionContainer.h"
 #import "UIView+Positioning.h"
 #import <objc/runtime.h>
+#import "CKWeakRef.h"
 
 
 @interface CKReusableViewController ()
@@ -23,11 +24,12 @@
 static char UIViewReusableViewControllerKey;
 
 - (void)setReusableViewController:(CKReusableViewController *)reusableViewController{
-    objc_setAssociatedObject(self, &UIViewReusableViewControllerKey, reusableViewController, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &UIViewReusableViewControllerKey, [CKWeakRef weakRefWithObject: reusableViewController], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CKReusableViewController*)reusableViewController{
-    return objc_getAssociatedObject(self, &UIViewReusableViewControllerKey);
+    CKWeakRef* weakRef = objc_getAssociatedObject(self, &UIViewReusableViewControllerKey);
+    return weakRef.object;
 }
 
 @end

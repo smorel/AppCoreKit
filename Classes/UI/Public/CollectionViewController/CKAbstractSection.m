@@ -22,12 +22,32 @@
 - (void)dealloc{
     [self clearBindingsContext];
     
+    for(CKReusableViewController* controller in self.controllers){
+        if(controller.state == CKViewControllerStateDidAppear){
+            [controller viewWillDisappear:NO];
+            [controller viewDidDisappear:NO];
+            [controller prepareForReuseUsingContentView:nil contentViewCell:nil];
+        }
+    }
+    
+    if(self.headerViewController.state == CKViewControllerStateDidAppear){
+        [self.headerViewController viewWillDisappear:NO];
+        [self.headerViewController viewDidDisappear:NO];
+        [self.headerViewController prepareForReuseUsingContentView:nil contentViewCell:nil];
+    }
+    
+    if(self.footerViewController.state == CKViewControllerStateDidAppear){
+        [self.footerViewController viewWillDisappear:NO];
+        [self.footerViewController viewDidDisappear:NO];
+        [self.footerViewController prepareForReuseUsingContentView:nil contentViewCell:nil];
+    }
+    
     _delegate = nil;
     _containerViewController = nil;
     [_name release];
-    [_controllers release];
     [_headerViewController release];
     [_footerViewController release];
+    [_controllers release];
     [super dealloc];
 }
 
