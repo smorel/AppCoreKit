@@ -146,6 +146,7 @@
         UIImageView* imageView = [[UIImageView alloc]initWithImage:self.image];
         imageView.frame = self.bounds;
         imageView.contentMode = self.contentMode;
+        imageView.backgroundColor = self.backgroundColor;
         
         imageView.alpha = 0;
         [self addSubview:imageView];
@@ -169,6 +170,7 @@
             [self addSubview:self.defaultImageView];
         }
         
+        self.defaultImageView.backgroundColor = self.backgroundColor;
         self.defaultImageView.image = self.defaultImage;
         
         if(self.imageURL && !self.image){
@@ -176,6 +178,8 @@
                 if(!self.activityIndicatorView){
                     self.activityIndicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)self.spinnerStyle];
                 }
+                
+                self.activityIndicatorView.backgroundColor = self.backgroundColor;
                 
                 [self addSubview:self.activityIndicatorView];
                 self.activityIndicatorView.activityIndicatorViewStyle = (UIActivityIndicatorViewStyle)self.spinnerStyle;
