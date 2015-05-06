@@ -48,6 +48,7 @@
 }
 
 - (void)postInit {
+    self.opaque = YES;
 }
 
 - (void)setNeedsEffectUpdate{
@@ -55,13 +56,17 @@
 }
 
 - (void)willMoveToWindow:(UIWindow *)newWindow{
-    if(newWindow == nil){
-        [CKSharedDisplayLink unregisterHandler:self];
-        [self didUnregisterForUpdates];
-    }
+    if(newWindow)
+        return;
+    
+    [CKSharedDisplayLink unregisterHandler:self];
+    [self didUnregisterForUpdates];
 }
 
 - (void)didMoveToWindow{
+    if(!self.window)
+        return;
+    
     [CKSharedDisplayLink registerHandler:self];
     [self didRegisterForUpdates];
 }
