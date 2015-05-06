@@ -119,6 +119,8 @@
 
 
 - (void)postInit {
+    self.opaque = YES;
+    
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
 	self.borderLocation = CKStyleViewBorderLocationNone;
@@ -262,26 +264,33 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
-    if(!self.maskImageView){
-        self.maskImageView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
-        self.layer.mask = self.maskImageView.layer;
+    if(self.corners != CKStyleViewCornerTypeNone && self.roundedCornerSize != 0){
+        if(!self.maskImageView){
+            self.maskImageView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
+            self.layer.mask = self.maskImageView.layer;
+        }
+        
+        self.maskImageView.image = [self maskImage];
+        self.maskImageView.frame = self.bounds;
     }
     
-    self.maskImageView.image = [self maskImage];
-    self.maskImageView.frame = self.bounds;
+    BOOL hasExtraBackground = NO;
     
     if(self.image ){
+        hasExtraBackground = YES;
         if(!self.backgroundImageView){
             self.backgroundImageView = [[UIImageView alloc]initWithFrame:self.bounds];
             [self addSubview:self.backgroundImageView];
         }
         self.backgroundImageView.contentMode = self.imageContentMode;
         self.backgroundImageView.image = self.image;
+        self.backgroundImageView.opaque = YES;
     }else{
         self.backgroundImageView.hidden = YES;
     }
     
     if(self.gradientColors){
+        hasExtraBackground = YES;
         if(!self.backgroundGradientView){
             self.backgroundGradientView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
             [self addSubview:self.backgroundGradientView];
@@ -294,6 +303,7 @@
     
     if (self.embossTopColor && (self.embossTopColor != [UIColor clearColor])) {
         if(!self.embossTopView){
+            hasExtraBackground = YES;
             self.embossTopView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
             [self addSubview:self.embossTopView];
         }
@@ -305,6 +315,7 @@
     
     if (self.embossBottomColor && (self.embossBottomColor != [UIColor clearColor])) {
         if(!self.embossBottomView){
+            hasExtraBackground = YES;
             self.embossBottomView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
             [self addSubview:self.embossBottomView];
         }
@@ -317,12 +328,16 @@
         if(!self.borderImageView){
             self.borderImageView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
             [self addSubview:self.borderImageView];
+            self.borderImageView.opaque = YES;
         }
         
         self.borderImageView.image = [self borderImage];
         self.borderImageView.frame = self.bounds;
+        
+        if(!hasExtraBackground){
+            self.borderImageView.backgroundColor = self.backgroundColor;
+        }
     }
-    
     
     if(self.separatorColor!= nil && self.separatorColor != [UIColor clearColor] && self.separatorWidth > 0 && self.separatorLocation != CKStyleViewSeparatorLocationNone){
         if(!self.separatorImageView){
