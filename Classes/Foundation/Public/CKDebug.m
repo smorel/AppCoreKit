@@ -28,18 +28,20 @@ NSString* cleanString(NSString* str){
         if(!systemColor){
             const CGFloat *comps = CGColorGetComponents([view.backgroundColor CGColor]);
             const CGFloat alpha = CGColorGetAlpha([view.backgroundColor CGColor]);
-            [str appendFormat:@"%@+- %@(name:%@,tag:%ld,bck:%g %g %g %g)\n",
+            [str appendFormat:@"%@+- %@(name:%@,tag:%ld,bck:%g %g %g %g)",
                 indentString, viewDescription, view.name, (long)view.tag, comps[0],comps[1],comps[2],alpha];
         }
         else{
-            [str appendFormat:@"%@+- %@(name:%@,tag:%ld,bck:%@)\n",
+            [str appendFormat:@"%@+- %@(name:%@,tag:%ld,bck:%@)",
                 indentString, viewDescription, view.name, (long)view.tag, systemColor];
         }
     }
     else{
-        [str appendFormat:@"%@+- %@(name:%@,tag:%ld)\n",
+        [str appendFormat:@"%@+- %@(name:%@,tag:%ld)",
                 indentString, viewDescription, view.name, (long)view.tag];
     }
+    
+    [str appendFormat:@" --- opaque:%lu frame:%.2f %.2f %.2f %.2f\n",(unsigned long)view.opaque,view.frame.origin.x,view.frame.origin.y,view.frame.size.width,view.frame.size.height];
 
 	if (view.subviews) {
 		NSArray *siblings = view.superview.subviews;
