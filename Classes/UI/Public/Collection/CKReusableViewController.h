@@ -39,10 +39,6 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
  */
 - (void)postInit;
 
-/**
- */
-- (UINavigationController*)navigationController;
-
 /** The collection view
  
     UITableView,
