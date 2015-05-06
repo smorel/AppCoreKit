@@ -128,6 +128,10 @@
     self.imageView.contentMode = contentMode;
 }
 
+- (CGSize)sizeThatFits:(CGSize)size{
+    return size;
+}
+
 - (void)layoutSubviews{
     [super layoutSubviews];
     
@@ -145,6 +149,7 @@
         
         UIImageView* imageView = [[UIImageView alloc]initWithImage:self.image];
         imageView.frame = self.bounds;
+        imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         imageView.contentMode = self.contentMode;
         imageView.backgroundColor = self.backgroundColor;
         
@@ -167,6 +172,7 @@
             self.defaultImageView = [[UIImageView alloc]init];
             self.defaultImageView.frame = self.bounds;
             self.defaultImageView.contentMode = self.contentMode;
+            self.defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [self addSubview:self.defaultImageView];
         }
         
