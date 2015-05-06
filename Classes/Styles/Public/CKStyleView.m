@@ -41,6 +41,9 @@
 @property(nonatomic,retain)UIImageView* embossBottomView;
 
 @property(nonatomic,assign)CGRect lastDrawBounds;
+
+@property(nonatomic,retain) UIMotionEffectGroup* motionEffectGroup;
+
 @end
 
 
@@ -92,8 +95,13 @@
         [[CKImageCache sharedInstance]unregisterHandler:self withIdentifier:self.embossBottomCacheIdentifier];
     }
     
+    if(self.motionEffectGroup){
+        [self.backgroundImageView removeMotionEffect:self.motionEffectGroup];
+    }
     
     
+    [_motionEffectGroup release]; _motionEffectGroup = nil;
+     
     [_backgroundImageView release]; _backgroundImageView = nil;
     [_image release]; _image = nil;
     [_gradientColors release]; _gradientColors = nil;
@@ -114,12 +122,15 @@
     [_embossTopView release]; _embossTopView = nil;
     [_embossBottomCacheIdentifier release]; _embossBottomCacheIdentifier = nil;
     [_embossBottomView release]; _embossBottomView = nil;
+    
     [super dealloc];
 }
 
 
 - (void)postInit {
     self.opaque = YES;
+    
+    self.imageMotionEffectOffset = 0;
     
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
@@ -258,6 +269,7 @@
 }
 
 - (void)updateDisplay{
+    //[self setNeedsLayout];
 }
 
 
@@ -282,9 +294,41 @@
             self.backgroundImageView = [[UIImageView alloc]initWithFrame:self.bounds];
             [self addSubview:self.backgroundImageView];
         }
+        
         self.backgroundImageView.contentMode = self.imageContentMode;
         self.backgroundImageView.image = self.image;
         self.backgroundImageView.opaque = YES;
+        self.backgroundImageView.frame = CGRectInset(self.bounds,-fabs(self.imageMotionEffectOffset),-fabs(self.imageMotionEffectOffset));
+        
+        if(self.imageMotionEffectOffset != 0){
+            if(self.motionEffectGroup == nil){
+                
+                UIInterpolatingMotionEffect *verticalMotionEffect =
+                [[UIInterpolatingMotionEffect alloc]
+                 initWithKeyPath:@"center.y"
+                 type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+                verticalMotionEffect.minimumRelativeValue = @(self.imageMotionEffectOffset);
+                verticalMotionEffect.maximumRelativeValue = @(-self.imageMotionEffectOffset);
+                
+                UIInterpolatingMotionEffect *horizontalMotionEffect =
+                [[UIInterpolatingMotionEffect alloc]
+                 initWithKeyPath:@"center.x"
+                 type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+                horizontalMotionEffect.minimumRelativeValue = @(self.imageMotionEffectOffset);
+                horizontalMotionEffect.maximumRelativeValue = @(-self.imageMotionEffectOffset);
+                
+                // Create group to combine both
+                self.motionEffectGroup = [UIMotionEffectGroup new];
+                self.motionEffectGroup.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+                
+                // Add both effects to your view
+                [self.backgroundImageView addMotionEffect:self.motionEffectGroup];
+            }
+        }else if(self.motionEffectGroup){
+            [self.backgroundImageView removeMotionEffect:self.motionEffectGroup];
+            self.motionEffectGroup = nil;
+        }
+        
     }else{
         self.backgroundImageView.hidden = YES;
     }

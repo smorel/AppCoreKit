@@ -99,6 +99,14 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
  */
 @property (nonatomic, assign) UIViewContentMode imageContentMode;
 
+///-----------------------------------
+/// @name Adding motion effect on background image
+///-----------------------------------
+
+/** default is 0 meaning no motion effect should be applied. if a value is set, a motion effect will affect the image center between -imageMotionEffectOffset and +imageMotionEffectOffset and insets the frame of the image by twice the absolute value of imageMotionEffectOffset.
+ */
+@property(nonatomic,assign) CGFloat imageMotionEffectOffset;
+
 
 ///-----------------------------------
 /// @name Customizing the border
