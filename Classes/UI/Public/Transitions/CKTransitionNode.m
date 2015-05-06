@@ -158,53 +158,58 @@
     // });
 }
 
+- (void)performViewContextsTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext{
+    for(CKViewTransitionContext* context in self.viewTransitionContexts){
+        [context performTransitionWithContext:transitionContext];
+    }
+}
+
+- (void)performChildNodesTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext
+                                          rate:(CGFloat)rate
+                                    completion:(void(^)(BOOL finished))completion{
+    
+    for(CKViewTransitionContext* context in self.viewTransitionContexts){
+        [context didPerfomTransitionWithContext:transitionContext];
+    }
+    
+    if(self.nodes.count == 0){
+        completion(TRUE);
+        return;
+    }
+    
+    __block NSInteger finishedCount = 0;
+    
+    for(CKTransitionNode* child in self.nodes){
+        __block BOOL allFinished = YES;
+        [child performTransitionWithContext:transitionContext rate:rate completion:^(BOOL finished) {
+            allFinished = allFinished && finished;
+            ++finishedCount;
+            
+            if(finishedCount == self.nodes.count){
+                if(completion){
+                    completion(allFinished);
+                }
+            }
+        }];
+    }
+}
+
 - (void)performTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext
                                 rate:(CGFloat)rate
                           completion:(void(^)(BOOL finished))completion{
+                              
+    __unsafe_unretained CKTransitionNode* node = self;
     void(^animation)() = ^(){
-        for(CKViewTransitionContext* context in self.viewTransitionContexts){
-            [context performTransitionWithContext:transitionContext];
-        }
+        [node performViewContextsTransitionWithContext:transitionContext];
     };
     
     void(^animateChildren)(BOOL finished) = ^(BOOL finished){
-        for(CKViewTransitionContext* context in self.viewTransitionContexts){
-            [context didPerfomTransitionWithContext:transitionContext];
-        }
-        
-        if(self.nodes.count == 0){
-            completion(TRUE);
-            return;
-        }
-        
-        __block NSInteger finishedCount = 0;
-        
-        for(CKTransitionNode* child in self.nodes){
-            __block BOOL allFinished = YES;
-            [child performTransitionWithContext:transitionContext rate:rate completion:^(BOOL finished) {
-                allFinished = allFinished && finished;
-                ++finishedCount;
-                if(finishedCount == self.nodes.count){
-                    
-                    if(completion){
-                        completion(allFinished);
-                    }
-                }
-            }];
-        }
+        [node performChildNodesTransitionWithContext:transitionContext rate:rate completion:completion];
     };
     
     for(CKViewTransitionContext* context in self.viewTransitionContexts){
         [context willPerfomTransitionWithContext:transitionContext];
     }
-    
-    /*
-    [self performBlock:^{
-        animateChildren(YES);
-    } afterDelay:((self.delay * rate) + (self.duration * rate))];
-    
-    return;
-     */
     
     if(self.damping == 0){
         [UIView animateWithDuration:self.duration * rate delay:self.delay * rate options:self.options | UIViewAnimationOptionLayoutSubviews animations:animation completion:animateChildren];

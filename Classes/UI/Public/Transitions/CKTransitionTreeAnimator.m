@@ -11,7 +11,7 @@
 
 @interface CKTransitionTreeAnimator()
 @property(nonatomic,retain,readwrite) CKTransitionTree* transitionTree;
-@property(nonatomic,retain,readwrite) id<UIViewControllerContextTransitioning> transitioningContext;
+@property(nonatomic,assign,readwrite) id<UIViewControllerContextTransitioning> transitioningContext;
 @property(nonatomic,retain,readwrite) NSDate* startDate;
 @property(nonatomic,retain,readwrite) NSDate* computeTransitionDate;
 @property(nonatomic,retain,readwrite) NSDate* afterPrepareDate;
@@ -22,7 +22,6 @@
 @implementation CKTransitionTreeAnimator
 
 - (void)dealloc{
-    [_transitioningContext release];
     [_transitionTree release];
     [super dealloc];
 }
@@ -80,6 +79,8 @@
     
     to.view.hidden = YES;
     
+    __unsafe_unretained UIViewController* bfrom = from;
+    
      dispatch_async(dispatch_get_main_queue(), ^{
         self.beforePrepareTransitionDate = [NSDate date];
         [self.transitionTree prepareForTransitionWithContext:transitionContext ];
@@ -88,8 +89,7 @@
         if(!self.interactive){
             [self completeTransitionWithTransitioningContext:transitionContext];
         }
-        from.view.hidden = YES;
-    
+        bfrom.view.hidden = YES;
      });
 }
 
@@ -112,14 +112,17 @@
     
     [transitionContext finishInteractiveTransition];
     
+    __unsafe_unretained UIViewController* broot = root;
+    __unsafe_unretained UIViewController* bto = to;
+    
     [self.transitionTree performTransitionWithContext:transitionContext percentComplete:^(CGFloat percentComplete){
         [transitionContext updateInteractiveTransition:percentComplete];
     }
                                            completion:^(BOOL finished) {
                                                if(finished){
                                                    
-                                                [root.view setUserInteractionEnabled:YES];
-                                                   to.view.hidden = NO;
+                                                   [broot.view setUserInteractionEnabled:YES];
+                                                   bto.view.hidden = NO;
                                                    
                                                    [self.transitionTree endTransition];
                                                    [self didCompleteTransitionWithTransitioningContext:transitionContext];

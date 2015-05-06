@@ -21,7 +21,7 @@
  */
 @interface CKTransitionTreeAnimator :  NSObject<UIViewControllerAnimatedTransitioning,UIViewControllerInteractiveTransitioning>
 
-@property(nonatomic,retain,readonly) id<UIViewControllerContextTransitioning> transitioningContext;
+@property(nonatomic,assign,readonly) id<UIViewControllerContextTransitioning> transitioningContext;
 
 @property(nonatomic,assign) BOOL interactive;
 
