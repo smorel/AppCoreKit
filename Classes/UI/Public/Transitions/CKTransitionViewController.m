@@ -69,6 +69,8 @@
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
+    [self clearBindingsContextWithScope:@"CKTransitionViewController_Title"];
+    
     if(self.viewController.state != CKViewControllerStateWillDisappear){
         [self.viewController viewWillDisappear:animated];
     }
@@ -91,9 +93,13 @@
          [self.delegate transitionViewController:self willPresentViewController:toViewController];
     }
     
-    [self beginBindingsContextWithScope:@"CKTransitionViewController_Title"];
-    [toViewController bind:@"title" toObject:self withKeyPath:@"title"];
-    [self endBindingsContext];
+    __unsafe_unretained CKTransitionViewController* bself = self;
+    
+     [self beginBindingsContextWithScope:@"CKTransitionViewController_Title"];
+     [toViewController bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {
+         bself.title = value;
+     }];
+     [self endBindingsContext];
     
     UIView *toView = toViewController.view;
     toView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
