@@ -80,26 +80,29 @@ void introspectTextInputsProperties(){
 
 + (CKClassPropertyDescriptor*)propertyForDescriptor:(objc_property_t)descriptor{
 	const char *propName = property_getName(descriptor);
-	if(propName) {
-		const char *attributes = property_getAttributes(descriptor);
+    if(propName) {
+        CKClassPropertyDescriptor* objectProperty = [[CKClassPropertyDescriptor alloc]init];
+        
+        @autoreleasepool {
+            const char *attributes = property_getAttributes(descriptor);
+            
+            NSString *propType = getPropertyType(descriptor);
+            Class returnType = NSClassFromString(propType);
+            
+            objectProperty.name = [NSString stringWithUTF8String:propName];
+            objectProperty.type = returnType;
+            objectProperty.className = [NSString stringWithUTF8String:class_getName(returnType)];
+            objectProperty.attributes = [NSString stringWithUTF8String:attributes];
+            objectProperty.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:objectProperty.name];
+            
+            if([NSObject isClass:returnType kindOfClass:[NSArray class]]){
+                objectProperty.insertSelector = [NSObject insertSelectorForProperty:objectProperty.name];
+                objectProperty.removeSelector = [NSObject removeSelectorForProperty:objectProperty.name];
+                objectProperty.removeAllSelector = [NSObject removeAllSelectorForProperty:objectProperty.name];
+            }
+        }
 		
-		NSString *propType = getPropertyType(descriptor);
-		Class returnType = NSClassFromString(propType);
-		
-		CKClassPropertyDescriptor* objectProperty = [[[CKClassPropertyDescriptor alloc]init]autorelease];
-		objectProperty.name = [NSString stringWithUTF8String:propName];
-		objectProperty.type = returnType;
-		objectProperty.className = [NSString stringWithUTF8String:class_getName(returnType)];
-		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
-		objectProperty.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:objectProperty.name];
-		
-		if([NSObject isClass:returnType kindOfClass:[NSArray class]]){
-			objectProperty.insertSelector = [NSObject insertSelectorForProperty:objectProperty.name];
-			objectProperty.removeSelector = [NSObject removeSelectorForProperty:objectProperty.name];
-			objectProperty.removeAllSelector = [NSObject removeAllSelectorForProperty:objectProperty.name];
-		}
-		
-		return objectProperty;
+		return [objectProperty autorelease];
 	}
 	return nil;
 }
@@ -142,19 +145,24 @@ void introspectTextInputsProperties(){
 	unsigned int outCount, i;
     objc_property_t *ps = class_copyPropertyList(c, &outCount);
     for(i = 0; i < outCount; i++) {
-        objc_property_t property = ps[i];
-        //const char *propName = property_getName(property);
-        if([textInputsProperties containsObject:[NSString stringWithUTF8String:property_getName(property)]]){
-            //CKDebugLog(@"INTROSPECTION : Skipping property %ls on class %@ because it is an unsupported protocol UITextInput yet",propName,c);
-        }
-        else{
-            CKClassPropertyDescriptor* objectProperty = [NSObject propertyForDescriptor:property ];
-            if([objectProperty.name isEqualToString:@"topLayoutGuide"]
-               || [objectProperty.name isEqualToString:@"bottomLayoutGuide"]){
-                //http://stackoverflow.com/questions/18972762/uitableview-not-scrolling-after-switching-to-ios-7
-                //BYPass as it's causing UI Issues
-            }else{
-                [array addObject:objectProperty];
+        @autoreleasepool {
+            objc_property_t property = ps[i];
+            const char *propName = property_getName(property);
+            
+            NSString* name = [NSString stringWithUTF8String:propName];
+            if([textInputsProperties containsObject:name]){
+                //CKDebugLog(@"INTROSPECTION : Skipping property %ls on class %@ because it is an unsupported protocol UITextInput yet",propName,c);
+            }
+            else{
+                CKClassPropertyDescriptor* objectProperty = [NSObject propertyForDescriptor:property ];
+                if([objectProperty.name isEqualToString:@"topLayoutGuide"]
+                   || [objectProperty.name isEqualToString:@"bottomLayoutGuide"]
+                   || [objectProperty.name hasPrefix:@"_"]){
+                    //http://stackoverflow.com/questions/18972762/uitableview-not-scrolling-after-switching-to-ios-7
+                    //BYPass as it's causing UI Issues
+                }else{
+                    [array addObject:objectProperty];
+                }
             }
         }
     }
@@ -277,19 +285,21 @@ void introspectTextInputsProperties(){
      
         NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numClasses];
         for(int i =0;i<numClasses; ++i){
-            Class theClass = classes[i];
-            NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
-            if([className hasPrefix:@"NSKVONotifying_"]){
-                //IGNORE
-            }
-            else{
-                if(filter){
-                    if([NSObject isClass:theClass kindOfClass:filter]){
-                        [ret addObject:(id)theClass];
-                    }
+            @autoreleasepool {
+                Class theClass = classes[i];
+                NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
+                if([className hasPrefix:@"NSKVONotifying_"]){
+                    //IGNORE
                 }
                 else{
-                    [ret addObject:(id)theClass];
+                    if(filter){
+                        if([NSObject isClass:theClass kindOfClass:filter]){
+                            [ret addObject:(id)theClass];
+                        }
+                    }
+                    else{
+                        [ret addObject:(id)theClass];
+                    }
                 }
             }
         }
@@ -317,15 +327,19 @@ void introspectTextInputsProperties(){
         
         NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numClasses];
         for(int i =0;i<numClasses; ++i){
-            Class theClass = classes[i];
-            NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
-            if(prefix){
-                if([className hasPrefix:prefix]){
+            @autoreleasepool {
+                
+                Class theClass = classes[i];
+                NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
+                if(prefix){
+                    if([className hasPrefix:prefix]){
+                        [ret addObject:(id)theClass];
+                    }
+                }
+                else{
                     [ret addObject:(id)theClass];
                 }
-            }
-            else{
-                [ret addObject:(id)theClass];
+                
             }
         }
         
@@ -352,21 +366,24 @@ void introspectTextInputsProperties(){
         
         NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numClasses];
         for(int i =0;i<numClasses; ++i){
-            Class theClass = classes[i];
-            NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
-            if([className hasPrefix:@"NSKVONotifying_"]){
-                //IGNORE
-            }
-            else{
-                if(filter){
-                    if([NSObject isClass:theClass kindOfClass:[NSObject class]]){
-                        if([theClass conformsToProtocol:filter]){
-                            [ret addObject:(id)theClass];
-                        }
-                    }
+            @autoreleasepool {
+                
+                Class theClass = classes[i];
+                NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
+                if([className hasPrefix:@"NSKVONotifying_"]){
+                    //IGNORE
                 }
                 else{
-                    [ret addObject:(id)theClass];
+                    if(filter){
+                        if([NSObject isClass:theClass kindOfClass:[NSObject class]]){
+                            if([theClass conformsToProtocol:filter]){
+                                [ret addObject:(id)theClass];
+                            }
+                        }
+                    }
+                    else{
+                        [ret addObject:(id)theClass];
+                    }
                 }
             }
         }
