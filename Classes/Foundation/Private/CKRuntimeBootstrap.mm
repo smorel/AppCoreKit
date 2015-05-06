@@ -11,19 +11,33 @@
 #import "NSObject+Runtime_private.h"
 #import "CKClassPropertyDescriptor_private.h"
 
-/** We precompute descriptors at launch to speed up application at runtime.
+/** This precomputes runtime property descriptors for the classes we use the most.
+ This speed-up operattion that requiers access to runtime descriptors at runtime like conversions or stylesheet application.
  */
 bool precompute_runtime_descriptors(){
-    NSArray* AppCoreKitClasses = [NSObject allClassesWithPrefix:@"CK"];
-    NSArray* ViewsClasses = [NSObject allClassesKindOfClass:[UIView class]];
+    dispatch_queue_t _queue = dispatch_queue_create("CKRuntimeBootstrap", DISPATCH_QUEUE_CONCURRENT);
     
-    for(Class c in AppCoreKitClasses){
-        [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:c];
-    }
+    NSMutableSet* set = [NSMutableSet set];
+    [set addObjectsFromArray: [NSObject allClassesKindOfClass:[UIView class]] ];
+    [set addObjectsFromArray: [NSObject allClassesKindOfClass:[UIViewController class]] ];
+    [set addObjectsFromArray: [NSObject allClassesKindOfClass: NSClassFromString(@"CKLayoutBox")] ];
     
-    for(Class c in ViewsClasses){
+    NSArray* allObjects = [set allObjects];
+    allObjects = [allObjects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        Class c = evaluatedObject;
+        NSString* className = [c description];
+        if([className hasPrefix:@"_"] || ![className hasPrefix:@"UI"] || ![className hasPrefix:@"CK"])
+            return NO;
+        return YES;
+    }]];
+    
+    
+    dispatch_apply(allObjects.count, _queue, ^(size_t index) {
+        Class c = [allObjects objectAtIndex:index];
         [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:c];
-    }
+    });
+    
+    dispatch_release(_queue);
     
     return true;
 }
