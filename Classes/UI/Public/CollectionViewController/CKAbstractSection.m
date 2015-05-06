@@ -11,6 +11,10 @@
 #import "CKContainerViewController.h"
 #import "CKSectionHeaderFooterViewController.h"
 
+@interface CKReusableViewController()
+- (void)prepareForDealloc;
+@end
+
 @interface CKAbstractSection()
 @property(nonatomic,retain, readwrite) NSArray* controllers;
 - (NSMutableArray*)mutableControllers;
@@ -23,24 +27,11 @@
     [self clearBindingsContext];
     
     for(CKReusableViewController* controller in self.controllers){
-        if(controller.state == CKViewControllerStateDidAppear){
-            [controller viewWillDisappear:NO];
-            [controller viewDidDisappear:NO];
-            [controller prepareForReuseUsingContentView:nil contentViewCell:nil];
-        }
+        [controller prepareForDealloc];
     }
     
-    if(self.headerViewController.state == CKViewControllerStateDidAppear){
-        [self.headerViewController viewWillDisappear:NO];
-        [self.headerViewController viewDidDisappear:NO];
-        [self.headerViewController prepareForReuseUsingContentView:nil contentViewCell:nil];
-    }
-    
-    if(self.footerViewController.state == CKViewControllerStateDidAppear){
-        [self.footerViewController viewWillDisappear:NO];
-        [self.footerViewController viewDidDisappear:NO];
-        [self.footerViewController prepareForReuseUsingContentView:nil contentViewCell:nil];
-    }
+    [self.headerViewController prepareForDealloc];
+    [self.footerViewController prepareForDealloc];
     
     _delegate = nil;
     _containerViewController = nil;

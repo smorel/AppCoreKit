@@ -47,6 +47,8 @@
 @implementation CKReusableViewController
 
 - (void)dealloc{
+    [self prepareForDealloc];
+    
     [self clearBindingsContext];
     
     [_layoutInvalidateBlock release];
@@ -61,6 +63,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
     
     [super dealloc];
+}
+
+- (void)prepareForDealloc{
+    if(self.state == CKViewControllerStateDidAppear){
+        [self viewWillDisappear:NO];
+        [self viewDidDisappear:NO];
+    }
+    
+    if([self isViewLoaded]){
+        [self prepareForReuseUsingContentView:nil contentViewCell:nil];
+        self.view.invalidatedLayoutBlock = nil;
+    }
 }
 
 - (NSString*)reuseIdentifier{
