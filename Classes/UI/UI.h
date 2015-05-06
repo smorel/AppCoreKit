@@ -29,6 +29,7 @@
 #import "UIView+Bounce.h"
 #import "UIView+Highlight.h"
 #import "CKReplicantView.h"
+#import "UIMotionEffect+Factory.h"
 
 
 #import "CKContainerViewController.h"

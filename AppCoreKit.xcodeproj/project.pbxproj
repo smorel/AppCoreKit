@@ -640,6 +640,8 @@
 		D9BDB5B71AF916ED00FBA443 /* CKReplicantView.h in Headers */ = {isa = PBXBuildFile; fileRef = D9BDB5B51AF916ED00FBA443 /* CKReplicantView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9BDB5B81AF916ED00FBA443 /* CKReplicantView.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB5B61AF916ED00FBA443 /* CKReplicantView.m */; };
 		D9BDB5BC1AF95EC700FBA443 /* CKRuntimeBootstrap.mm in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB5BA1AF95EC700FBA443 /* CKRuntimeBootstrap.mm */; };
+		D9BDB5C51AFAA98C00FBA443 /* UIMotionEffect+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = D9BDB5C31AFAA98C00FBA443 /* UIMotionEffect+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9BDB5C61AFAA98C00FBA443 /* UIMotionEffect+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB5C41AFAA98C00FBA443 /* UIMotionEffect+Factory.m */; };
 		D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */; };
 		D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1332,6 +1334,8 @@
 		D9BDB5B51AF916ED00FBA443 /* CKReplicantView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKReplicantView.h; path = Classes/UI/Public/Views/CKReplicantView.h; sourceTree = "<group>"; };
 		D9BDB5B61AF916ED00FBA443 /* CKReplicantView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKReplicantView.m; path = Classes/UI/Public/Views/CKReplicantView.m; sourceTree = "<group>"; };
 		D9BDB5BA1AF95EC700FBA443 /* CKRuntimeBootstrap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKRuntimeBootstrap.mm; path = Classes/Foundation/Private/CKRuntimeBootstrap.mm; sourceTree = "<group>"; };
+		D9BDB5C31AFAA98C00FBA443 /* UIMotionEffect+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIMotionEffect+Factory.h"; path = "Classes/UI/Public/Motion/UIMotionEffect+Factory.h"; sourceTree = "<group>"; };
+		D9BDB5C41AFAA98C00FBA443 /* UIMotionEffect+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIMotionEffect+Factory.m"; path = "Classes/UI/Public/Motion/UIMotionEffect+Factory.m"; sourceTree = "<group>"; };
 		D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionViewController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.h; sourceTree = "<group>"; };
 		D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionViewController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.m; sourceTree = "<group>"; };
 		D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Highlight.h"; path = "Classes/UI/Public/Views/UIView+Highlight.h"; sourceTree = "<group>"; };
@@ -1591,6 +1595,7 @@
 				D9418A681AB8755A00234A15 /* Section View Controllers */,
 				D91D65681AE8333E00B19E14 /* Transitions */,
 				7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */,
+				D9BDB5C21AFAA95F00FBA443 /* Motion */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -3240,6 +3245,15 @@
 			name = "Replicant View";
 			sourceTree = "<group>";
 		};
+		D9BDB5C21AFAA95F00FBA443 /* Motion */ = {
+			isa = PBXGroup;
+			children = (
+				D9BDB5C31AFAA98C00FBA443 /* UIMotionEffect+Factory.h */,
+				D9BDB5C41AFAA98C00FBA443 /* UIMotionEffect+Factory.m */,
+			);
+			name = Motion;
+			sourceTree = "<group>";
+		};
 		D9CD82491AC1CCA000B2985D /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -3659,6 +3673,7 @@
 				7560DCFD13B8ED3600268D13 /* NSDate+Conversions.h in Headers */,
 				96B3BD0A182BEF2300978B85 /* CKAnimationPrivate.h in Headers */,
 				D9418A6B1AB8759B00234A15 /* CKSectionContainer.h in Headers */,
+				D9BDB5C51AFAA98C00FBA443 /* UIMotionEffect+Factory.h in Headers */,
 				D9418A701AB8805300234A15 /* CKAbstractSection.h in Headers */,
 				7560DD0613B8ED3600268D13 /* NSManagedObjectContext+Requests.h in Headers */,
 				96B4514518D08F8700D58489 /* NSArray+Compare.h in Headers */,
@@ -4285,6 +4300,7 @@
 				B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */,
 				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
 				96B4514618D08F8700D58489 /* NSArray+Compare.m in Sources */,
+				D9BDB5C61AFAA98C00FBA443 /* UIMotionEffect+Factory.m in Sources */,
 				709C71CD1843BE8C006BB1DD /* UIControl+Introspection.m in Sources */,
 				B0EA78A7156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm in Sources */,
 				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
