@@ -102,11 +102,12 @@
     [_imageURL release];
     _imageURL = [imageURL retain];
     
-    [self updateAnimated:NO];//activate spinner
     
     if(_imageURL){
         [[CKImageCache sharedInstance]registerDelegate:self withImageURL:_imageURL];
     }
+    
+    [self updateAnimated:NO];//activate spinner
 }
 
 - (void)imageWasAlreadyFetched:(UIImage*)image{
@@ -144,7 +145,10 @@
 - (void)updateAnimated:(BOOL)animated{
     [self.activityIndicatorView  stopAnimating];
     
-    if(self.image && (!self.imageView || self.imageView.image != self.image)){
+    if(self.image){
+        //if(self.imageView.image == self.image)
+        //    return;
+        
         UIImageView* previousImageView = self.imageView;
         
         UIImageView* imageView = [[UIImageView alloc]initWithImage:self.image];
@@ -173,11 +177,24 @@
             self.defaultImageView.frame = self.bounds;
             self.defaultImageView.contentMode = self.contentMode;
             self.defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [self addSubview:self.defaultImageView];
         }
         
         self.defaultImageView.backgroundColor = self.backgroundColor;
         self.defaultImageView.image = self.defaultImage;
+        
+        [self addSubview:self.defaultImageView];
+        
+        if(self.imageView){
+            self.defaultImageView.alpha = 0;
+            
+            [UIView animateWithDuration:(self.window && animated) ? self.fadeInDuration : 0 animations:^{
+                self.defaultImageView.alpha = 1;
+                self.imageView.alpha = 0;
+            } completion:^(BOOL finished) {
+                [self.imageView removeFromSuperview];
+                self.imageView = nil;
+            }];
+        }
         
         if(self.imageURL && !self.image){
             if(self.spinnerStyle != CKImageViewSpinnerStyleNone){
