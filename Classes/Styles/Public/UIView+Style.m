@@ -703,7 +703,7 @@ static char NSObjectAppliedStyleObjectKey;
 	for(NSString* key in [style allKeys]){
 		if([reserverKeyWords containsObject:key] == NO){
 			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
-            CKProperty* property = [CKProperty propertyWithObject:object keyPath:key];
+            CKProperty* property = [CKProperty weakPropertyWithObject:object keyPath:key];
             if(![property isKVCComplient])
                 continue;
             
@@ -759,7 +759,7 @@ static char NSObjectAppliedStyleObjectKey;
     if(!descriptor)
         return;
     
-    CKProperty* property = [CKProperty propertyWithObject:self keyPath:descriptor.name];
+    CKProperty* property = [CKProperty weakPropertyWithObject:self keyPath:descriptor.name];
     if(![property isKVCComplient])
         return;
     
