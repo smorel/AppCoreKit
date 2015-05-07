@@ -108,7 +108,7 @@
                                         self.bounds.size.width,self.bounds.size.height,
                                         self.separatorColor,(unsigned long)self.separatorWidth,self.separatorDashPhase,
                                         (unsigned long)self.separatorLineCap,(unsigned long)self.separatorLineJoin,
-                                        NSStringFromUIEdgeInsets(self.separatorInsets),self.separatorLocation];
+                                        NSStringFromUIEdgeInsets(self.separatorInsets),(unsigned long)self.separatorLocation];
     
     //separatorDashLengths
 
