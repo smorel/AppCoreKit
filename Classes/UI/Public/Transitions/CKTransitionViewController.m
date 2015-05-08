@@ -79,6 +79,8 @@
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     
+    [self clearBindingsContextWithScope:@"CKTransitionViewController_Title"];
+    
     if(self.viewController.state != CKViewControllerStateDidDisappear){
         [self.viewController viewDidDisappear:animated];
     }
