@@ -13,6 +13,7 @@
 #import "NSValueTransformer+Additions.h"
 #import "UIView+AutoresizingMasks.h"
 #import "UIView+Positioning.h"
+#import "CKVersion.h"
 
 #import "CKSheetController.h"
 #import "CKRuntime.h"
@@ -542,14 +543,23 @@
         return;
     
     UICollectionViewLayoutInvalidationContext* context = [[[[[self.collectionViewLayout class] invalidationContextClass] alloc]init]autorelease];
-    if([indexPath isSectionHeaderIndexPath]){
-        [context invalidateSupplementaryElementsOfKind:UICollectionElementKindSectionHeader atIndexPaths:@[indexPath]];
-    }else if([indexPath isSectionFooterIndexPath]){
-        [context invalidateSupplementaryElementsOfKind:UICollectionElementKindSectionFooter atIndexPaths:@[indexPath]];
+    if([CKOSVersion() floatValue] >= 8){
+
+        if([indexPath isSectionHeaderIndexPath]){
+            [context invalidateSupplementaryElementsOfKind:UICollectionElementKindSectionHeader atIndexPaths:@[indexPath]];
+        }else if([indexPath isSectionFooterIndexPath]){
+            [context invalidateSupplementaryElementsOfKind:UICollectionElementKindSectionFooter atIndexPaths:@[indexPath]];
+        }else{
+            [context invalidateItemsAtIndexPaths:@[indexPath]];
+        }
+        [self.collectionViewLayout invalidateLayoutWithContext:context];
     }else{
-        [context invalidateItemsAtIndexPaths:@[indexPath]];
+        [self performBatchUpdates:^{
+            
+        } completion:^(BOOL finished) {
+            
+        }];
     }
-    [self.collectionViewLayout invalidateLayoutWithContext:context];
 }
 
 #pragma mark Flow Layout Management
