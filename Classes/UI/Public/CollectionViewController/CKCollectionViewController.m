@@ -72,12 +72,12 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    self.backgroundView = [[[CKPassThroughView alloc]initWithFrame:self.collectionView.bounds]autorelease];
+    self.backgroundView = [[[CKPassThroughView alloc]initWithFrame:[self backgroundViewFrame]]autorelease];
     self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.backgroundView.flexibleSize = YES;
     self.backgroundView.backgroundColor = [UIColor clearColor];
     
-    self.foregroundView = [[[CKPassThroughView alloc]initWithFrame:self.collectionView.bounds]autorelease];
+    self.foregroundView = [[[CKPassThroughView alloc]initWithFrame:[self foregroundViewFrame]]autorelease];
     self.foregroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.foregroundView.flexibleSize = YES;
     self.foregroundView.backgroundColor = [UIColor clearColor];
@@ -87,6 +87,19 @@
 }
 
 
+- (CGRect)backgroundViewFrame{
+    CGRect backgroundViewRect = CGRectMake(self.collectionView.contentOffset.x + self.backgroundViewInsets.left,
+                                           self.collectionView.contentOffset.y + self.backgroundViewInsets.top,
+                                           self.collectionView.bounds.size.width - (self.backgroundViewInsets.left + self.backgroundViewInsets.right),
+                                           self.collectionView.bounds.size.height - (self.backgroundViewInsets.top + self.backgroundViewInsets.bottom)) ;
+    return backgroundViewRect;
+}
+
+- (void)setBackgroundViewInsets:(UIEdgeInsets)insets{
+    _backgroundViewInsets = insets;
+    [self.backgroundView setFrame:[self backgroundViewFrame] animated:NO];
+}
+
 - (void)presentsBackgroundView{
     if(self.view  && [self.backgroundView superview] == nil){
         [self.view insertSubview:self.backgroundView belowSubview:self.collectionView];
@@ -95,13 +108,21 @@
         
         [self beginBindingsContextWithScope:@"backgroundView"];
         [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
-            [bself.backgroundView setFrame:bself.collectionView.frame animated:NO];
+            [bself.backgroundView setFrame:[bself backgroundViewFrame] animated:NO];
         }];
         [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
             bself.foregroundView.hidden = bself.view.hidden;
         }];
         [self endBindingsContext];
     }
+}
+
+- (CGRect)foregroundViewFrame{
+    CGRect foregroundViewRect = CGRectMake(self.collectionView.contentOffset.x + self.foregroundViewInsets.left,
+                                           self.collectionView.contentOffset.y + self.foregroundViewInsets.top,
+                                           self.collectionView.bounds.size.width - (self.foregroundViewInsets.left + self.foregroundViewInsets.right),
+                                           self.collectionView.bounds.size.height - (self.foregroundViewInsets.top + self.foregroundViewInsets.bottom)) ;
+    return foregroundViewRect;
 }
 
 - (void)presentsForegroundView{
@@ -112,13 +133,18 @@
         
         [self beginBindingsContextWithScope:@"foregroundView"];
         [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
-            [bself.foregroundView setFrame:bself.collectionView.frame animated:NO];
+            [bself.foregroundView setFrame:[bself foregroundViewFrame] animated:NO];
         }];
         [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
             bself.foregroundView.hidden = bself.view.hidden;
         }];
         [self endBindingsContext];
     }
+}
+
+- (void)setForegroundViewInsets:(UIEdgeInsets)insets{
+    _foregroundViewInsets = insets;
+    [self.foregroundView setFrame:[self foregroundViewFrame] animated:NO];
 }
 
 - (void)dismissBackgroundView{

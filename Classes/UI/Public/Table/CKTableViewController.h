@@ -66,9 +66,17 @@
  */
 @property(nonatomic,retain,readonly) CKPassThroughView* backgroundView;
 
+/** Default value is 0 0 0 0. If you want to add motion effect on the background view, sets the backgroundViewInsets so that it will expand or shringk the size of the background view accordingly.
+ */
+@property(nonatomic,assign) UIEdgeInsets backgroundViewInsets;
+
 /** By default, a CKPassThroughView transparent view that does catches touches. You can add subviews to the foregroundView view in viewDidLoad.
  */
 @property(nonatomic,retain,readonly) CKPassThroughView* foregroundView;
+
+/** Default value is 0 0 0 0. If you want to add motion effect on the foreground view, sets the foregroundViewInsets so that it will expand or shringk the size of the foreground view accordingly.
+ */
+@property(nonatomic,assign) UIEdgeInsets foregroundViewInsets;
 
 /**
  */

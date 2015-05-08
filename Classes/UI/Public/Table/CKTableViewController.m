@@ -162,12 +162,13 @@
     
     self.tableView.estimatedRowHeight = 44;
     
-    self.backgroundView = [[[CKPassThroughView alloc]initWithFrame:self.tableView.bounds]autorelease];
+    self.backgroundView = [[[CKPassThroughView alloc]initWithFrame:[self backgroundViewFrame]]autorelease];
     self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.backgroundView.flexibleSize = YES;
     self.backgroundView.backgroundColor = [UIColor clearColor];
     
-    self.foregroundView = [[[CKPassThroughView alloc]initWithFrame:self.tableView.bounds]autorelease];
+    
+    self.foregroundView = [[[CKPassThroughView alloc]initWithFrame:[self foregroundViewFrame]]autorelease];
     self.foregroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.foregroundView.flexibleSize = YES;
     self.foregroundView.backgroundColor = [UIColor clearColor];
@@ -175,6 +176,14 @@
     
     [self presentsTableHeaderView];
     [self presentsTableFooterView];
+}
+
+- (CGRect)backgroundViewFrame{
+    CGRect backgroundViewRect = CGRectMake(self.tableView.contentOffset.x + self.backgroundViewInsets.left,
+                                           self.tableView.contentOffset.y + self.backgroundViewInsets.top,
+                                           self.tableView.bounds.size.width - (self.backgroundViewInsets.left + self.backgroundViewInsets.right),
+                                           self.tableView.bounds.size.height - (self.backgroundViewInsets.top + self.backgroundViewInsets.bottom)) ;
+    return backgroundViewRect;
 }
 
 - (void)presentsBackgroundView{
@@ -185,13 +194,27 @@
 
         [self beginBindingsContextWithScope:@"backgroundView"];
         [self.tableView bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
-            [bself.backgroundView setFrame:CGRectMake(bself.tableView.contentOffset.x,bself.tableView.contentOffset.y,bself.tableView.width,bself.tableView.height) animated:YES];
+            [bself.backgroundView setFrame:[bself backgroundViewFrame] animated:YES];
         }];
         [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
             bself.backgroundView.hidden = bself.view.hidden;
         }];
         [self endBindingsContext];
     }
+}
+
+- (void)setBackgroundViewInsets:(UIEdgeInsets)insets{
+    _backgroundViewInsets = insets;
+    [self.backgroundView setFrame:[self backgroundViewFrame] animated:NO];
+}
+
+
+- (CGRect)foregroundViewFrame{
+    CGRect foregroundViewRect = CGRectMake(self.tableView.contentOffset.x + self.foregroundViewInsets.left,
+                                           self.tableView.contentOffset.y + self.foregroundViewInsets.top,
+                                           self.tableView.bounds.size.width - (self.foregroundViewInsets.left + self.foregroundViewInsets.right),
+                                           self.tableView.bounds.size.height - (self.foregroundViewInsets.top + self.foregroundViewInsets.bottom)) ;
+    return foregroundViewRect;
 }
 
 - (void)presentsForegroundView{
@@ -202,7 +225,7 @@
         
         [self beginBindingsContextWithScope:@"foregroundView"];
         [self.view bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
-            [bself.foregroundView setFrame:CGRectMake(bself.tableView.contentOffset.x,bself.tableView.contentOffset.y,bself.tableView.width,bself.tableView.height) animated:YES];
+            [bself.foregroundView setFrame:[bself foregroundViewFrame] animated:YES];
         }];
         [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
             bself.foregroundView.hidden = bself.view.hidden;
@@ -210,6 +233,12 @@
         [self endBindingsContext];
     }
 }
+
+- (void)setForegroundViewInsets:(UIEdgeInsets)insets{
+    _foregroundViewInsets = insets;
+    [self.foregroundView setFrame:[self foregroundViewFrame] animated:NO];
+}
+
 
 - (void)viewWillLayoutSubviews{
     [super viewWillLayoutSubviews];
