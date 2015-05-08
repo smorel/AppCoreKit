@@ -31,7 +31,7 @@
 - (UIView*)transitionSnapshotWithViewHierarchy{
     [self layoutSubviews];
     
-    UIView* snapshot = [self snapshotViewAfterScreenUpdates:YES];
+    UIView* snapshot = [[[CKReplicantView alloc]initWithView:self withoutSubviews:NO]autorelease];
     snapshot.frame = self.bounds;
 
     return snapshot;
