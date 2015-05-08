@@ -179,8 +179,8 @@
 }
 
 - (CGRect)backgroundViewFrame{
-    CGRect backgroundViewRect = CGRectMake(self.tableView.contentOffset.x + self.backgroundViewInsets.left,
-                                           self.tableView.contentOffset.y + self.backgroundViewInsets.top,
+    CGRect backgroundViewRect = CGRectMake(0 + self.backgroundViewInsets.left,
+                                           0 + self.backgroundViewInsets.top,
                                            self.tableView.bounds.size.width - (self.backgroundViewInsets.left + self.backgroundViewInsets.right),
                                            self.tableView.bounds.size.height - (self.backgroundViewInsets.top + self.backgroundViewInsets.bottom)) ;
     return backgroundViewRect;
@@ -210,8 +210,8 @@
 
 
 - (CGRect)foregroundViewFrame{
-    CGRect foregroundViewRect = CGRectMake(self.tableView.contentOffset.x + self.foregroundViewInsets.left,
-                                           self.tableView.contentOffset.y + self.foregroundViewInsets.top,
+    CGRect foregroundViewRect = CGRectMake(0 + self.foregroundViewInsets.left,
+                                           0 + self.foregroundViewInsets.top,
                                            self.tableView.bounds.size.width - (self.foregroundViewInsets.left + self.foregroundViewInsets.right),
                                            self.tableView.bounds.size.height - (self.foregroundViewInsets.top + self.foregroundViewInsets.bottom)) ;
     return foregroundViewRect;
