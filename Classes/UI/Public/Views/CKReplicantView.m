@@ -26,6 +26,11 @@
     self.backgroundColor = [UIColor clearColor];
     self.withoutSubviews = withoutSubviews;
     self.view = view;
+    if([self.view motionEffects].count != 0){
+        for(UIMotionEffect* effect in self.view.motionEffects){
+            [self addMotionEffect:effect];
+        }
+    }
     return self;
 }
 
@@ -39,6 +44,7 @@
             [self.view.styleView.layer renderInContext:gc];
         }
     }else{
+        //TEST
         [self.view drawViewHierarchyInRect:rect afterScreenUpdates:YES];
     }
 }
