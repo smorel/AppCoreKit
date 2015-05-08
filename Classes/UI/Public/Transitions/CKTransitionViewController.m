@@ -99,7 +99,7 @@
     
      [self beginBindingsContextWithScope:@"CKTransitionViewController_Title"];
      [toViewController bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {
-         bself.title = value;
+         bself.title = [value isKindOfClass:[NSString class]] ? value : nil;
      }];
      [self endBindingsContext];
     
