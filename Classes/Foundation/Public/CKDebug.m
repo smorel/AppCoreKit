@@ -23,6 +23,7 @@ NSString* cleanString(NSString* str){
 	if (indentString == nil) indentString = @"";
 	NSString *viewDescription = NSStringFromClass([view class]);
     
+    
     if(view.backgroundColor){
         NSString* systemColor = [view valueForKey:@"backgroundColorSystemColorName"];
         if(!systemColor){
@@ -41,7 +42,12 @@ NSString* cleanString(NSString* str){
                 indentString, viewDescription, view.name, (long)view.tag];
     }
     
-    [str appendFormat:@" --- opaque:%lu frame:%.2f %.2f %.2f %.2f\n",(unsigned long)view.opaque,view.frame.origin.x,view.frame.origin.y,view.frame.size.width,view.frame.size.height];
+    [str appendFormat:@" --- opaque:%lu frame:%.2f %.2f %.2f %.2f",(unsigned long)view.opaque,view.frame.origin.x,view.frame.origin.y,view.frame.size.width,view.frame.size.height];
+    
+    CGSize lastPreferedSize = [[view valueForKey:@"lastPreferedSize"]CGSizeValue];
+    [str appendFormat:@" --- layout size: %ld %ld", (unsigned long)lastPreferedSize.width,(unsigned long)lastPreferedSize.height];
+    
+    [str appendString:@"\n"];
 
 	if (view.subviews) {
 		NSArray *siblings = view.superview.subviews;
