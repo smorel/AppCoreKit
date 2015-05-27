@@ -373,6 +373,8 @@ namespace __gnu_cxx{
         //Handle Vertical alignment
         CGFloat totalWidth = (size.width - self.padding.left - self.padding.right);
         
+        CKLayoutHorizontalAlignment hAlign = size.width >= MAXFLOAT ? CKLayoutHorizontalAlignmentLeft : self.horizontalAlignment;
+        CKLayoutVerticalAlignment vAlign = size.height >= MAXFLOAT ? CKLayoutVerticalAlignmentTop : self.horizontalAlignment;
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
@@ -382,14 +384,14 @@ namespace __gnu_cxx{
                 
                     CGFloat offsetX = self.frame.origin.x + self.padding.left;
                     CGFloat offsetY = 0;
-                    switch(self.horizontalAlignment){
+                    switch(hAlign){
                         case CKLayoutHorizontalAlignmentLeft:break; //this is already computed
                         case CKLayoutHorizontalAlignmentRight: offsetX += totalWidth - boxFrame.size.width; break;
                         case CKLayoutVerticalAlignmentCenter:  offsetX += (totalWidth / 2) - (boxFrame.size.width / 2); break;
                     }
                     
                     if(totalHeight < (size.height - self.padding.top - self.padding.bottom)){
-                        switch(self.verticalAlignment){
+                        switch(vAlign){
                             case CKLayoutVerticalAlignmentTop: break; //default behaviour
                             case CKLayoutVerticalAlignmentCenter:  offsetY = (size.height - totalHeight) / 2; break;
                             case CKLayoutVerticalAlignmentBottom: offsetY = size.height - totalHeight; break;
@@ -401,6 +403,11 @@ namespace __gnu_cxx{
                     [box performLayoutWithFrame:newboxFrame];
             }
         }
+        
+        CGRect f = self.frame;
+        if(size.width >= MAXFLOAT){ f.size.width = totalWidth; }
+        if(size.height >= MAXFLOAT){ f.size.height = totalHeight; }
+        [self setBoxFrameTakingCareOfTransform:f];
     }
 }
 
