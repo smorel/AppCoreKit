@@ -123,6 +123,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 #endif
     */
     
+    [self removeAllLayoutBoxes];
+    
     [_layoutBoxes release];
     [_invalidatedLayoutBlock release];
     [super dealloc];
