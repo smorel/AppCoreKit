@@ -123,10 +123,14 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 #endif
     */
     
+    self.containerLayoutView = nil;
+    self.containerLayoutBox = nil;
+    self.invalidatedLayoutBlock = nil;
+    
     [self removeAllLayoutBoxes];
     
     [_layoutBoxes release];
-    [_invalidatedLayoutBlock release];
+    
     [super dealloc];
 }
 
