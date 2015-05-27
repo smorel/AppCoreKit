@@ -311,8 +311,7 @@ static char CKViewControllerContainerViewControllerKey;
         if(viewController == nil){
             [self removeFromParentViewController];
         }else{
-            if(viewController.parentViewController){
-                
+            if(self.parentViewController){
             }else{
                 [viewController addChildViewController:self];
             }
