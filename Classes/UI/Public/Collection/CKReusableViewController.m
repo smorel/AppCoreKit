@@ -630,12 +630,14 @@
             backgroundStyleView.corners = [self view:self.tableViewCell.backgroundView cornerStyleWithStyle:styleForBackgroundView];
             backgroundStyleView.borderLocation = [self view:self.tableViewCell.backgroundView borderStyleWithStyle:styleForBackgroundView];
             backgroundStyleView.separatorLocation = [self view:self.tableViewCell.backgroundView separatorStyleWithStyle:styleForBackgroundView];
+            [backgroundStyleView setNeedsLayout];
         }
         
         if(styleForSelectedBackgroundView){
             selectedBackgroundStyleView.corners = [self view:self.tableViewCell.selectedBackgroundView cornerStyleWithStyle:styleForSelectedBackgroundView];
             selectedBackgroundStyleView.borderLocation = [self view:self.tableViewCell.selectedBackgroundView borderStyleWithStyle:styleForSelectedBackgroundView];
             selectedBackgroundStyleView.separatorLocation = [self view:self.tableViewCell.selectedBackgroundView separatorStyleWithStyle:styleForSelectedBackgroundView];
+            [selectedBackgroundStyleView setNeedsLayout];
         }
     }
 }
