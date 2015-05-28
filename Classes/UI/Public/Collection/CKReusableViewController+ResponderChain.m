@@ -139,7 +139,67 @@ static char UIViewControllerFirstResponderControllerKey;
     }
 }
 
+
+- (CKReusableViewController*)rootReusableViewController{
+    CKReusableViewController* c = self;
+    while ([c.containerViewController isKindOfClass:[CKReusableViewController class]]) {
+        c = (CKReusableViewController*)c.containerViewController;
+    }
+    return c;
+}
+
+- (NSArray*)nestedReusableViewControllerChain{
+    CKReusableViewController* c = [self rootReusableViewController];
+    
+    if(![c isViewLoaded])
+        return nil;
+    
+    NSMutableArray* chain = [NSMutableArray array];
+    [CKReusableViewController addReusableViewControllerResponderFromController:c toChain:chain];
+    return chain;
+}
+
++ (void)addReusableViewControllerResponderFromController:(CKReusableViewController*)controller toChain:(NSMutableArray*)chain{
+    if([controller hasResponder]){
+        NSInteger index = [chain indexOfObjectIdenticalTo:controller];
+        if(index == NSNotFound){
+            [chain addObject:controller];
+        }
+    }
+    
+    for(NSObject<CKLayoutBoxProtocol>* box in controller.view.layoutBoxes){
+        [self addReusableViewControllerResponder:box toChain:chain];
+    }
+}
+
++ (void)addReusableViewControllerResponder:(NSObject<CKLayoutBoxProtocol>*)layoutBox toChain:(NSMutableArray*)chain{
+    if([layoutBox isKindOfClass:[CKReusableViewController class]]){
+        [self addReusableViewControllerResponderFromController:(CKReusableViewController*)layoutBox toChain:chain];
+    }
+    
+    for(NSObject<CKLayoutBoxProtocol>* box in layoutBox.layoutBoxes){
+        [self addReusableViewControllerResponder:box toChain:chain];
+    }
+}
+
 - (BOOL)activateNextResponder{
+    //TODO: handle multiple responders in [self responderChain]
+    
+    if(!self.indexPath){
+        NSArray* nested = [self nestedReusableViewControllerChain];
+        NSInteger index = [nested indexOfObjectIdenticalTo:self];
+        if(index < nested.count - 1){
+            CKReusableViewController* c = [nested objectAtIndex:index + 1];
+            [c becomeFirstResponder];
+        }else{
+            CKReusableViewController* c = [self rootReusableViewController];
+            NSIndexPath* nextIndexPath =  [c findNextResponderWithScrollEnabled:NO];
+            if(nextIndexPath == nil)
+                return NO;
+            [CKReusableViewController activateResponderAtIndexPath:nextIndexPath controller:c];
+        }
+    }
+    
     NSIndexPath* nextIndexPath = [self findNextResponderWithScrollEnabled:YES];
     if(nextIndexPath == nil)
         return NO;
@@ -150,11 +210,25 @@ static char UIViewControllerFirstResponderControllerKey;
 
 
 - (BOOL)hasNextResponder{
+    if(!self.indexPath){
+        //Handles nested reusable view controllers
+        NSArray* nested = [self nestedReusableViewControllerChain];
+        NSInteger index = [nested indexOfObjectIdenticalTo:self];
+        if(index < nested.count - 1)
+            return YES;
+        else{
+            CKReusableViewController* c = [self rootReusableViewController];
+            NSIndexPath* nextIndexPath =  [c findNextResponderWithScrollEnabled:NO];
+            return (nextIndexPath != nil);
+        }
+    }
+    
     NSIndexPath* nextIndexPath = [self findNextResponderWithScrollEnabled:NO];
-    if(nextIndexPath == nil)
-        return NO;
-    return YES;
+    return (nextIndexPath != nil);
 }
+
+
+
 
 
 - (BOOL)activatePreviousResponder{
@@ -173,6 +247,9 @@ static char UIViewControllerFirstResponderControllerKey;
     return YES;
 }
 
+
+
+
 - (void)addResponder:(UIView*)view toChain:(NSMutableArray*)chain{
     if([view isKindOfClass:[UIResponder class]]){
         if(view.hidden == NO && view.userInteractionEnabled == YES){
@@ -187,6 +264,7 @@ static char UIViewControllerFirstResponderControllerKey;
         [self addResponder:sub toChain:chain];
     }
 }
+
 
 - (NSArray*)responderChain{
     if(![self isViewLoaded])

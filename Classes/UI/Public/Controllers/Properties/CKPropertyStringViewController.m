@@ -203,7 +203,9 @@
 
 #pragma mark UITextField Delegate
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField { return YES; }
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    return YES;
+}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField { [self didResignFirstResponder]; }
 
@@ -214,6 +216,11 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    UIToolbar* toolbar = [self editionToolbar];
+    if(toolbar){
+        textField.inputAccessoryView = toolbar;
+    }
+    
     if([self hasNextResponder]){
         textField.returnKeyType = UIReturnKeyNext;
     }
@@ -246,7 +253,9 @@
 
 #pragma mark TextView Delegate
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView { return YES; }
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+    return YES;
+}
 
 - (void)textViewValueChanged:(NSString*)text{ [self updatePropertyWithValue:text]; }
 
@@ -257,6 +266,11 @@
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView{ [self didResignFirstResponder]; return YES; }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    UIToolbar* toolbar = [self editionToolbar];
+    if(toolbar){
+        textView.inputAccessoryView = toolbar;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self scrollToCell];
     });
