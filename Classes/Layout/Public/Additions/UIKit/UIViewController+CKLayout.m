@@ -276,24 +276,6 @@ static char CKViewControllerContainerViewControllerKey;
 
 
 - (void)setContainerViewController:(UIViewController *)viewController {
-    /*if([self containerViewController] != nil){
-        if([self isViewLoaded] && [[self view]superview] != nil){
-            
-            if(viewController == nil){
-                if([CKOSVersion() floatValue] < 5){
-                    [self viewWillDisappear:NO];
-                }
-                
-                [[self view]removeFromSuperview];
-                
-                if([CKOSVersion() floatValue] < 5){
-                    [self viewDidDisappear:NO];
-                }
-            }
-        }
-    }*/
-    
-    
     CKWeakRef* ref = self.containerViewControllerRef;
     if(!ref){
         ref = [CKWeakRef weakRefWithObject:viewController];
@@ -311,10 +293,11 @@ static char CKViewControllerContainerViewControllerKey;
         if(viewController == nil){
             [self removeFromParentViewController];
         }else{
-            if(self.parentViewController || viewController.parentViewController){
-            }else{
-                [viewController addChildViewController:self];
-            }
+            Class CKReusableViewControllerClass = NSClassFromString(@"CKReusableViewController");
+            if([self isKindOfClass:CKReusableViewControllerClass] && [viewController isKindOfClass:CKReusableViewControllerClass])
+                return;
+            
+            [viewController addChildViewController:self];
         }
     }
 }
