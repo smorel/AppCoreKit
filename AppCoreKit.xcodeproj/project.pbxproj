@@ -644,6 +644,8 @@
 		D9BDB5C61AFAA98C00FBA443 /* UIMotionEffect+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB5C41AFAA98C00FBA443 /* UIMotionEffect+Factory.m */; };
 		D9BDB6081B179C1B00FBA443 /* UISearchBar+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = D9BDB6061B179C1B00FBA443 /* UISearchBar+Introspection.h */; };
 		D9BDB6091B179C1B00FBA443 /* UISearchBar+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB6071B179C1B00FBA443 /* UISearchBar+Introspection.m */; };
+		D9BDB60D1B17A52E00FBA443 /* NSNull+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = D9BDB60B1B17A52E00FBA443 /* NSNull+Parsing.h */; };
+		D9BDB60E1B17A52E00FBA443 /* NSNull+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */; };
 		D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */; };
 		D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1340,6 +1342,8 @@
 		D9BDB5C41AFAA98C00FBA443 /* UIMotionEffect+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIMotionEffect+Factory.m"; path = "Classes/UI/Public/Motion/UIMotionEffect+Factory.m"; sourceTree = "<group>"; };
 		D9BDB6061B179C1B00FBA443 /* UISearchBar+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UISearchBar+Introspection.h"; path = "Classes/Foundation/Private/Additions/UIKit/UISearchBar+Introspection.h"; sourceTree = "<group>"; };
 		D9BDB6071B179C1B00FBA443 /* UISearchBar+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UISearchBar+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UISearchBar+Introspection.m"; sourceTree = "<group>"; };
+		D9BDB60B1B17A52E00FBA443 /* NSNull+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNull+Parsing.h"; path = "Classes/Foundation/Private/Additions/Foundations/NSNull+Parsing.h"; sourceTree = "<group>"; };
+		D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNull+Parsing.m"; path = "Classes/Foundation/Private/Additions/Foundations/NSNull+Parsing.m"; sourceTree = "<group>"; };
 		D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionViewController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.h; sourceTree = "<group>"; };
 		D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionViewController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.m; sourceTree = "<group>"; };
 		D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Highlight.h"; path = "Classes/UI/Public/Views/UIView+Highlight.h"; sourceTree = "<group>"; };
@@ -2459,6 +2463,7 @@
 		D92C10D21AB0A03700DA4B12 /* Foundations */ = {
 			isa = PBXGroup;
 			children = (
+				D9BDB60A1B17A51000FBA443 /* NSNull */,
 				D92C10CC1AB09FD400DA4B12 /* NSObject */,
 				D92C10C71AB09F0400DA4B12 /* NSString */,
 				D92C10C81AB09F5000DA4B12 /* NSData */,
@@ -3260,6 +3265,15 @@
 			name = Motion;
 			sourceTree = "<group>";
 		};
+		D9BDB60A1B17A51000FBA443 /* NSNull */ = {
+			isa = PBXGroup;
+			children = (
+				D9BDB60B1B17A52E00FBA443 /* NSNull+Parsing.h */,
+				D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */,
+			);
+			name = NSNull;
+			sourceTree = "<group>";
+		};
 		D9CD82491AC1CCA000B2985D /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -3646,6 +3660,7 @@
 				7560DCA313B8ED3600268D13 /* CKCollectionController.h in Headers */,
 				7560DCA913B8ED3600268D13 /* CKDomain.h in Headers */,
 				7560DCAB13B8ED3600268D13 /* CKFeedSource.h in Headers */,
+				D9BDB60D1B17A52E00FBA443 /* NSNull+Parsing.h in Headers */,
 				7560DCAF13B8ED3600268D13 /* CKStyleView.h in Headers */,
 				7560DCB113B8ED3600268D13 /* CKGridView.h in Headers */,
 				7560DCB413B8ED3600268D13 /* CKHost.h in Headers */,
@@ -4344,6 +4359,7 @@
 				D98BDD1A1AF00B6F00A0AECD /* CKSharedDisplayLink.m in Sources */,
 				D94CA30B1AA75BDF009EA887 /* CKPropertyStringViewController.m in Sources */,
 				96B9D2C5177B254400455BE8 /* UITextView+CKLayout.m in Sources */,
+				D9BDB60E1B17A52E00FBA443 /* NSNull+Parsing.m in Sources */,
 				96EFE7D4179700BE0034F935 /* CKResourceManager.m in Sources */,
 				96FEFDF617978D620001CC4A /* CKResourceManager+UIUpdate.m in Sources */,
 				D98BDD371AF2CB5500A0AECD /* CKLightMotionEffect.m in Sources */,
