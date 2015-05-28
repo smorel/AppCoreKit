@@ -292,7 +292,16 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 #endif
     
     for(NSObject<CKLayoutBoxProtocol>* subBox in boxes){
-        subBox.containerLayoutBox = box;
+        if(box.containerLayoutView){
+            //Sets this here so that stylesmanager can be found relative to the controller that contains the added one.
+            if([subBox isKindOfClass:[UIViewController class]]){
+                UIViewController* viewController = (UIViewController*)subBox;
+                viewController.containerViewController = [[box containerLayoutView]containerViewController];
+            }
+            
+            subBox.containerLayoutBox = box;
+        }
+        
         if([subBox isKindOfClass:[CKLayoutBox class]]){
             ((CKLayoutBox*)subBox).containerLayoutView = [box containerLayoutView];
         }else if([subBox isKindOfClass:[UIView class]]){
@@ -308,20 +317,21 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
         }else if([subBox isKindOfClass:[UIViewController class]]){
             UIViewController* viewController = (UIViewController*)subBox;
             
-            UIView* view = viewController.view;
-            view.autoresizingMask = 0;
-            if([view superview] != [box containerLayoutView]){
-                [viewController viewWillAppear:NO];
-                
-                if([view stylesheet] == nil){
-                    NSMutableDictionary* stylesheet = [[box containerLayoutView] stylesheet];
-                    [view findAndApplyStyleFromStylesheet:stylesheet propertyName:nil];
+            if(box.containerLayoutView){
+                UIView* view = viewController.view;
+                view.autoresizingMask = 0;
+                if([view superview] != [box containerLayoutView]){
+                    [viewController viewWillAppear:NO];
+                    
+                    if([view stylesheet] == nil){
+                        NSMutableDictionary* stylesheet = [[box containerLayoutView] stylesheet];
+                        [view findAndApplyStyleFromStylesheet:stylesheet propertyName:nil];
+                    }
+                    [[box containerLayoutView]addSubview:view];
+                    
+                    [viewController viewDidAppear:NO];
+                    
                 }
-                [[box containerLayoutView]addSubview:view];
-                
-                [viewController viewDidAppear:NO];
-                
-                viewController.containerViewController = [[box containerLayoutView]containerViewController];
             }
         }
     }
@@ -372,6 +382,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 #endif
         
         for(NSObject<CKLayoutBoxProtocol>* subBox in self.layoutBoxes){
+            
             if([subBox isKindOfClass:[CKLayoutBox class]]){
                 ((CKLayoutBox*)subBox).containerLayoutView = [self containerLayoutView];
             }else if([subBox isKindOfClass:[UIView class]]){
@@ -385,11 +396,13 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                 }
             }else if([subBox isKindOfClass:[UIViewController class]]){
                 UIViewController* viewController = (UIViewController*)subBox;
+                viewController.containerViewController = [[self containerLayoutView]containerViewController];
                 
                 UIView* view = viewController.view;
                 view.autoresizingMask = 0;
                 //TODO : verify if needs to call view will disappear did disappear
                 if([view superview] != [self containerLayoutView]){
+                    
                     [viewController viewWillAppear:NO];
                     
                     if([view stylesheet] == nil){
@@ -400,10 +413,11 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                     
                     [viewController viewDidAppear:NO];
                     
-                    viewController.containerViewController = [[self containerLayoutView]containerViewController];
                 }
                 
             }
+            
+            subBox.containerLayoutBox = self;
         }
     }
 }
