@@ -27,9 +27,9 @@ extern NSString* CKLightDidChangeNotification;
  */
 @property (nonatomic, assign) CGPoint origin;
 
-/** anchor point of light in window. values between 0 and 1.
+/** anchor point of light in views bounds. values between 0 and 1.
  */
-@property (nonatomic, assign) CGPoint end;
+@property (nonatomic, assign) CGPoint anchorPoint;
 
 /**
  */

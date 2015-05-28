@@ -139,7 +139,9 @@
                                          (unsigned long)self.corners,self.roundedCornerSize,self.highlightWidth];
     
     return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"highlightMaskCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
-        CGSize size = CGSizeMake(2*self.roundedCornerSize+1,2*self.roundedCornerSize+1);
+        CGFloat cornerSize = (self.roundedCornerSize > 0 ? self.roundedCornerSize : 1) + self.highlightWidth;
+        
+        CGSize size = CGSizeMake(2*cornerSize,2*cornerSize+1);
         CGRect rect = CGRectMake(0,0,size.width,size.height);
         
         CGMutablePathRef highlightPath = [CKStyleView generateBorderPathWithBorderLocation:CKStyleViewBorderLocationAll
@@ -149,7 +151,7 @@
                                                                                       rect:rect];
         
         UIImage* maskImage = [UIImage maskImageWithStrokePath:highlightPath width:self.highlightWidth size:size];
-        maskImage = [maskImage resizableImageWithCapInsets:UIEdgeInsetsMake(self.roundedCornerSize, self.roundedCornerSize,self.roundedCornerSize,self.roundedCornerSize)
+        maskImage = [maskImage resizableImageWithCapInsets:UIEdgeInsetsMake(cornerSize, cornerSize,cornerSize,cornerSize)
                                               resizingMode:UIImageResizingModeStretch];
         
         CGPathRelease(highlightPath);
@@ -195,7 +197,10 @@
     
     CGPoint lightStart = CGPointMake((light.motionEffectOffset.x + light.origin.x) * self.window.bounds.size.width,
                                      (light.motionEffectOffset.y + light.origin.y ) * self.window.bounds.size.height);
-    CGPoint lightEnd = CGPointMake(light.end.x * self.window.bounds.size.width, light.end.y * self.window.bounds.size.height);
+    
+    CGPoint lightEnd = CGPointMake(rect.origin.x + (light.anchorPoint.x * (rect.size.width - 1)),
+                                   rect.origin.y + (light.anchorPoint.y * (rect.size.height - 1)));
+    
     CGPoint lightDirection = CGPointMake(lightEnd.x - lightStart.x,lightEnd.y - lightStart.y);
     
     CGPoint intersection = CKCGRectIntersect(rect,lightStart,lightDirection);

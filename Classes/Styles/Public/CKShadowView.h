@@ -40,15 +40,15 @@
 
 /**
  */
-@property (nonatomic, retain) UIColor *borderShadowColor;
+@property (nonatomic, retain) UIColor *shadowColor;
 
 /**
  */
-@property (nonatomic, assign) CGFloat borderShadowRadius;
+@property (nonatomic, assign) CGFloat shadowRadius;
 
 /** borderShadowOffset will be computed dynamically if specifying light source
  */
-@property (nonatomic, assign) CGPoint borderShadowOffset;
+@property (nonatomic, assign) CGPoint shadowOffset;
 
 
 @end

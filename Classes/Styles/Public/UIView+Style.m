@@ -64,7 +64,7 @@ NSString* CKStyleSeparatorColor = @"separatorColor";
 NSString* CKStyleSeparatorWidth = @"separatorWidth";
 NSString* CKStyleSeparatorStyle = @"separatorStyle";
 
-NSString* CKStyleBorderShadowColor = @"borderShadowColor";
+NSString* CKStyleBorderShadowColor = @"shadowColor";
 
 NSString* CKStyleViewDescription = @"@views";
 NSString* CKStyleAutoLayoutConstraints = @"@constraints";
@@ -265,7 +265,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 	   || [style containsObjectForKey:CKStyleCornerSize]
 	   || [style containsObjectForKey:CKStyleBackgroundImage]
 	   || [style containsObjectForKey:CKStyleBorderColor]
-       || [style containsObjectForKey:CKStyleBorderShadowColor]
 	   || ([style containsObjectForKey:CKStyleSeparatorColor] && ![view isKindOfClass:[UITableView class]])){
 		return YES;
 	}

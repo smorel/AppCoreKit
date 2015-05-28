@@ -23,7 +23,7 @@ NSString* CKLightDidChangeNotification = @"CKLightDidChangeNotification";
     
     self.origin = CGPointMake(0,0);
     self.intensity = 20;
-    self.end = CGPointMake(0.5,0.5);
+    self.anchorPoint = CGPointMake(1,1);
     self.motionEffectScale = CGPointMake(1,1);
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -49,11 +49,11 @@ NSString* CKLightDidChangeNotification = @"CKLightDidChangeNotification";
     [[NSNotificationCenter defaultCenter]postNotificationName:CKLightDidChangeNotification object:self];
 }
 
-- (void)setEnd:(CGPoint)lightEnd{
-    if(CGPointEqualToPoint(_end, lightEnd))
+- (void)setAnchorPoint:(CGPoint)anchorPoint{
+    if(CGPointEqualToPoint(_anchorPoint, anchorPoint))
         return;
     
-    _end = lightEnd;
+    _anchorPoint = anchorPoint;
     [[NSNotificationCenter defaultCenter]postNotificationName:CKLightDidChangeNotification object:self];
 }
 

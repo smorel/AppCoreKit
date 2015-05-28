@@ -37,7 +37,7 @@
     [_shadowCacheIdentifier release]; _shadowCacheIdentifier = nil;
     [_shadowLayer release]; _shadowLayer = nil;
     
-    [_borderShadowColor release]; _borderShadowColor = nil;
+    [_shadowColor release]; _shadowColor = nil;
     [super dealloc];
 }
 
@@ -58,17 +58,16 @@
     other.corners = self.corners;
     other.roundedCornerSize = self.roundedCornerSize;
     other.borderLocation = self.borderLocation;
-    other.borderShadowColor = self.borderShadowColor;
-    other.borderShadowRadius = self.borderShadowRadius;
-    other.borderShadowOffset = self.borderShadowOffset;
-    other.borderShadowOffset = self.borderShadowOffset;
+    other.shadowColor = self.shadowColor;
+    other.shadowRadius = self.shadowRadius;
+    other.shadowOffset = self.shadowOffset;
     return other;
 }
 
 - (void)postInit {
     [super postInit];
-    self.borderShadowRadius = 2;
-    self.borderShadowOffset = CGPointMake(0,0);
+    self.shadowRadius = 2;
+    self.shadowOffset = CGPointMake(0,0);
     self.borderLocation = CKStyleViewBorderLocationNone;
     
     self.corners = CKStyleViewCornerTypeNone;
@@ -94,7 +93,7 @@
 }
 
 - (BOOL)shadowEnabled{
-    return self.borderShadowColor!= nil && self.borderShadowColor != [UIColor clearColor] && self.borderShadowRadius > 0;
+    return self.shadowColor!= nil && self.shadowColor != [UIColor clearColor] && self.shadowRadius > 0;
 }
 
 - (void)layoutShadowLayers{
@@ -207,37 +206,37 @@
         CGPoint offset = CGPointMake(0,0);
         
         if(self.borderLocation & CKStyleViewBorderLocationLeft){
-            offset.x += multiplier * self.borderShadowRadius;
-            shadowFrame.size.width += multiplier * self.borderShadowRadius;
+            offset.x += multiplier * self.shadowRadius;
+            shadowFrame.size.width += multiplier * self.shadowRadius;
             
         }
         if(self.borderLocation & CKStyleViewBorderLocationRight){
-            shadowFrame.size.width += multiplier * self.borderShadowRadius;
+            shadowFrame.size.width += multiplier * self.shadowRadius;
         }
         if(self.borderLocation & CKStyleViewBorderLocationTop){
-            offset.y += multiplier * self.borderShadowRadius;
-            shadowFrame.size.height += multiplier * self.borderShadowRadius;
+            offset.y += multiplier * self.shadowRadius;
+            shadowFrame.size.height += multiplier * self.shadowRadius;
         }
         if(self.borderLocation & CKStyleViewBorderLocationBottom){
-            shadowFrame.size.height += multiplier * self.borderShadowRadius;
+            shadowFrame.size.height += multiplier * self.shadowRadius;
         }
         
-        if(self.borderLocation & CKStyleViewBorderLocationBottom && self.borderShadowOffset.y > 0){
-            shadowFrame.size.height += self.borderShadowOffset.y;
+        if(self.borderLocation & CKStyleViewBorderLocationBottom && self.shadowOffset.y > 0){
+            shadowFrame.size.height += self.shadowOffset.y;
         }
         
-        if(self.borderLocation & CKStyleViewBorderLocationTop && self.borderShadowOffset.y < 0){
-            offset.y -= self.borderShadowOffset.y;
-            shadowFrame.size.height += -self.borderShadowOffset.y;
+        if(self.borderLocation & CKStyleViewBorderLocationTop && self.shadowOffset.y < 0){
+            offset.y -= self.shadowOffset.y;
+            shadowFrame.size.height += -self.shadowOffset.y;
         }
         
-        if(self.borderLocation & CKStyleViewBorderLocationRight && self.borderShadowOffset.x > 0){
-            shadowFrame.size.width += self.borderShadowOffset.x;
+        if(self.borderLocation & CKStyleViewBorderLocationRight && self.shadowOffset.x > 0){
+            shadowFrame.size.width += self.shadowOffset.x;
         }
         
-        if(self.borderLocation & CKStyleViewBorderLocationLeft && self.borderShadowOffset.x < 0){
-            offset.x -= self.borderShadowOffset.x;
-            shadowFrame.size.width += -self.borderShadowOffset.x;
+        if(self.borderLocation & CKStyleViewBorderLocationLeft && self.shadowOffset.x < 0){
+            offset.x -= self.shadowOffset.x;
+            shadowFrame.size.width += -self.shadowOffset.x;
         }
         
         shadowFrame.origin.x -= offset.x;
@@ -258,8 +257,8 @@
         
         CGRect shadowFrame = [self shadowImageViewFrame];
         
-        CGSize minimumDrawSize = CGSizeMake(( 2*(self.borderShadowRadius + self.roundedCornerSize)) + 1+ fabs(self.borderShadowOffset.x),
-                                            (2* (self.borderShadowRadius + self.roundedCornerSize)) + 1 + fabs(self.borderShadowOffset.y));
+        CGSize minimumDrawSize = CGSizeMake(( 2*(self.shadowRadius + self.roundedCornerSize)) + 1+ fabs(self.shadowOffset.x),
+                                            (2* (self.shadowRadius + self.roundedCornerSize)) + 1 + fabs(self.shadowOffset.y));
         
         CGRect imageRect =  CGRectIntegral(CGRectMake(0,0,
                                                       shadowFrame.size.width - (frame.size.width) + minimumDrawSize.width,
@@ -270,10 +269,10 @@
                                      minimumDrawSize.width,
                                      minimumDrawSize.height);
         
-        UIEdgeInsets resizableInsets = UIEdgeInsetsMake(self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.y),
-                                                        self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.x),
-                                                        self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.y),
-                                                        self.borderShadowRadius + self.roundedCornerSize + fabs(self.borderShadowOffset.x));
+        UIEdgeInsets resizableInsets = UIEdgeInsetsMake(self.shadowRadius + self.roundedCornerSize + fabs(self.shadowOffset.y),
+                                                        self.shadowRadius + self.roundedCornerSize + fabs(self.shadowOffset.x),
+                                                        self.shadowRadius + self.roundedCornerSize + fabs(self.shadowOffset.y),
+                                                        self.shadowRadius + self.roundedCornerSize + fabs(self.shadowOffset.x));
         
         CGSize size = imageRect.size;
         CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
@@ -313,41 +312,41 @@
     if(self.borderLocation != CKStyleViewBorderLocationNone){
         CGContextSaveGState(gc);
         
-        if(self.borderShadowColor!= nil && self.borderShadowColor != [UIColor clearColor] && self.borderShadowRadius > 0){
-            CGContextSetShadowWithColor(gc, CGSizeMake(self.borderShadowOffset.x,self.borderShadowOffset.y), self.borderShadowRadius, self.borderShadowColor.CGColor);
+        if(self.shadowColor!= nil && self.shadowColor != [UIColor clearColor] && self.shadowRadius > 0){
+            CGContextSetShadowWithColor(gc, CGSizeMake(self.shadowOffset.x,self.shadowOffset.y), self.shadowRadius, self.shadowColor.CGColor);
             
             CGRect shadowRect = rect;
             if(!(self.borderLocation & CKStyleViewBorderLocationTop)){
-                shadowRect.origin.y -= self.borderShadowRadius;
-                shadowRect.size.height += self.borderShadowRadius;
+                shadowRect.origin.y -= self.shadowRadius;
+                shadowRect.size.height += self.shadowRadius;
             }
             if(!(self.borderLocation & CKStyleViewBorderLocationBottom)){
-                shadowRect.size.height += self.borderShadowRadius;
+                shadowRect.size.height += self.shadowRadius;
             }
             if(!(self.borderLocation & CKStyleViewBorderLocationLeft)){
-                shadowRect.origin.x -= self.borderShadowRadius;
-                shadowRect.size.width += self.borderShadowRadius;
+                shadowRect.origin.x -= self.shadowRadius;
+                shadowRect.size.width += self.shadowRadius;
             }
             if(!(self.borderLocation & CKStyleViewBorderLocationRight)){
-                shadowRect.size.width += self.borderShadowRadius;
+                shadowRect.size.width += self.shadowRadius;
             }
             
-            if(!(self.borderLocation & CKStyleViewBorderLocationBottom) && self.borderShadowOffset.y < 0){
-                shadowRect.size.height -= self.borderShadowOffset.y;
+            if(!(self.borderLocation & CKStyleViewBorderLocationBottom) && self.shadowOffset.y < 0){
+                shadowRect.size.height -= self.shadowOffset.y;
             }
             
-            if(!(self.borderLocation & CKStyleViewBorderLocationTop) && self.borderShadowOffset.y > 0){
-                shadowRect.origin.y -= self.borderShadowOffset.y;
-                shadowRect.size.height += self.borderShadowOffset.y;
+            if(!(self.borderLocation & CKStyleViewBorderLocationTop) && self.shadowOffset.y > 0){
+                shadowRect.origin.y -= self.shadowOffset.y;
+                shadowRect.size.height += self.shadowOffset.y;
             }
             
-            if(!(self.borderLocation & CKStyleViewBorderLocationRight) && self.borderShadowOffset.x < 0){
-                shadowRect.size.width -= self.borderShadowOffset.x;
+            if(!(self.borderLocation & CKStyleViewBorderLocationRight) && self.shadowOffset.x < 0){
+                shadowRect.size.width -= self.shadowOffset.x;
             }
             
-            if(!(self.borderLocation & CKStyleViewBorderLocationLeft) && self.borderShadowOffset.x > 0){
-                shadowRect.origin.x -= self.borderShadowOffset.x;
-                shadowRect.size.width += self.borderShadowOffset.x;
+            if(!(self.borderLocation & CKStyleViewBorderLocationLeft) && self.shadowOffset.x > 0){
+                shadowRect.origin.x -= self.shadowOffset.x;
+                shadowRect.size.width += self.shadowOffset.x;
             }
             
             if (self.corners != CKStyleViewCornerTypeNone){
@@ -422,20 +421,28 @@
     
     CKLight* light = [CKLight sharedInstance];
     
+    CGPoint ratio = CGPointMake(1,1);
+    
+    if((2 *light.intensity) > self.bounds.size.width){
+        ratio.x = self.bounds.size.width / (2*light.intensity);
+    }
+    if((2*light.intensity) > self.bounds.size.height){
+        ratio.y = self.bounds.size.height / (2*light.intensity);
+    }
+    
+    
     CGPoint lightStart = CGPointMake((light.motionEffectOffset.x + light.origin.x) * self.window.bounds.size.width,
                                      (light.motionEffectOffset.y + light.origin.y ) * self.window.bounds.size.height);
     
-    CGPoint lightEnd = CGPointMake(light.end.x * self.window.bounds.size.width, light.end.y * self.window.bounds.size.height);
-    CGPoint lightDirection = CGPointMake(lightEnd.x - lightStart.x,lightEnd.y - lightStart.y);
+    CGPoint lightEnd = CGPointMake(rect.origin.x + (light.anchorPoint.x * rect.size.width),
+                                   rect.origin.y + (light.anchorPoint.y * rect.size.height));
     
-    CGPoint intersection = CKCGRectIntersect(rect,lightStart,lightDirection);
-    CGPoint bottomRight = CGPointMake(rect.size.width ,rect.size.height);
+    CGPoint lightDirection = CKCGPointNormalize( CGPointMake(lightEnd.x - lightStart.x,lightEnd.y - lightStart.y) );
     
-    CGPoint direction = CKCGPointNormalize( CGPointMake( bottomRight.x - intersection.x ,bottomRight.y - intersection.y) );
+    NSInteger ox = ratio.x * (((-light.motionEffectOffset.x * light.intensity) +  (lightDirection.x * light.intensity)));
+    NSInteger oy = ratio.y * (((-light.motionEffectOffset.y * light.intensity) + (lightDirection.y * light.intensity)));
     
-    CGPoint offset = CGPointMake((NSInteger)((-light.motionEffectOffset.x * light.intensity) +  (direction.x * light.intensity)) ,
-                               (NSInteger)((-light.motionEffectOffset.y *light.intensity) + (direction.y * light.intensity)) );
-    [self setBorderShadowOffset:offset];
+    [self setShadowOffset:CGPointMake( ox, oy )];
     
     return YES;
 }
