@@ -70,7 +70,7 @@ namespace __gnu_cxx{
                 if(box.maximumSize.width == box.minimumSize.width){ //fixed size
                     freeSpace -= box.maximumSize.width;
                     
-                    CGFloat height = MIN(box.maximumSize.width,size.height - box.margins.top - box.margins.bottom);
+                    CGFloat height = MIN(box.maximumSize.height,size.height - box.margins.top - box.margins.bottom);
                     CGSize size = [box preferredSizeConstraintToSize:CGSizeMake(box.minimumSize.width,height)];
                     computedSizePerBoxes[box] = size;
                 }else{
@@ -238,7 +238,7 @@ namespace __gnu_cxx{
         NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
         if(!box.hidden){
             CGSize size = computedSizePerBoxes[box];
-            if(size.height > height) { height = size.height; }
+            if(size.height > height && size.height < MAXFLOAT) { height = size.height; }
             
             width += size.width;
             
@@ -363,7 +363,7 @@ namespace __gnu_cxx{
                     
                     CGSize subsize = box.lastPreferedSize;
                     
-                    CGRect boxframe = CGRectMake(x,box.margins.top,MAX(0,subsize.width),MAX(0,subsize.height));
+                    CGRect boxframe = CGRectMake(x,box.margins.top,MAX(0,MIN(size.width,subsize.width)),MAX(0,MIN(size.height,subsize.height)));
                     framePerBox[box] = boxframe;
                     //[box setBoxFrameTakingCareOfTransform:CGRectIntegral(boxframe)];
                     

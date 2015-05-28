@@ -239,7 +239,7 @@ namespace __gnu_cxx{
         NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
         if(!box.hidden){
             CGSize size = computedSizePerBoxes[box];
-            if(size.width > width) { width = size.width; }
+            if(size.width > width && size.width < MAXFLOAT) { width = size.width; }
             
             height += size.height;
             
@@ -360,7 +360,7 @@ namespace __gnu_cxx{
                 
                 CGSize subsize = box.lastPreferedSize;
                 
-                CGRect boxframe = CGRectMake(box.margins.left,y,MAX(0,subsize.width),MAX(0,subsize.height));
+                CGRect boxframe = CGRectMake(box.margins.left,y,MAX(0,MIN(size.width,subsize.width)),MAX(0,MIN(size.height,subsize.height)));
                 framePerBox[box] = boxframe;
                 
                 y += subsize.height;
