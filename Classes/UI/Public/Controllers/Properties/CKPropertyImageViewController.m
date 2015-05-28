@@ -35,6 +35,7 @@
     ImageView.marginTop = 10;
     
     CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    vbox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,ImageView]];
     
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vbox]];

@@ -80,6 +80,7 @@
     PropertyNameLabel.numberOfLines = 1;
     
     CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    vbox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
     vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel]];
     
     for(CKProperty* editableProperty in self.vector.editableProperties){

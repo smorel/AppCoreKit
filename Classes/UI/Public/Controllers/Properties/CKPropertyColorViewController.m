@@ -27,17 +27,18 @@
     
     UIView* colorView = [[[UIView alloc]init]autorelease];
     colorView.name = @"ColorView";
+    colorView.flexibleSize = YES;
     colorView.fixedWidth = 20;
     colorView.marginLeft = 10;
     
-    CKHorizontalBoxLayout* vbox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
+    CKHorizontalBoxLayout* hbox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     
     CKPropertyVectorViewController* controller = [CKPropertyVectorViewController controllerWithProperty:self.property];
     controller.name = @"VectorViewController";
     controller.marginTop = 10;
     
-    vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[controller,colorView]];
-    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vbox]];
+    hbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[controller,colorView]];
+    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hbox]];
 }
 
 - (void)setupBindings{
