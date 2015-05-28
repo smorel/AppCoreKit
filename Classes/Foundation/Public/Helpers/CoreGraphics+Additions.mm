@@ -218,6 +218,7 @@ CGPoint CKCGRectIntersect(CGRect r, CGPoint origin, CGPoint direction){
         return CGPointMake(nearest.x - r.origin.x,nearest.y - r.origin.y);
     }
     
+    /*
     CGPoint diff = CGPointMake(r.origin.x + (r.size.width/2) - origin.x, r.origin.y  + (r.size.height/2) - origin.y);
     
     if(diff.x > 0 && diff.y > 0){
@@ -244,7 +245,7 @@ CGPoint CKCGRectIntersect(CGRect r, CGPoint origin, CGPoint direction){
         }else {
             return CGPointMake(bottom.x - r.origin.x,bottom.y - r.origin.y);
         }
-    }
+    }*/
     
     return CGPointInfinite;
  }
