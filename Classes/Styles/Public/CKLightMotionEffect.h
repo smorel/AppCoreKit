@@ -9,9 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "CKLight.h"
 
+/**
+ */
 @interface CKLightMotionEffect : UIMotionEffect
 
+/**
+ */
 @property(nonatomic,retain, readonly) CKLight* light;
+
+/**
+ */
 @property(nonatomic,assign) CGPoint scale;
 
 @end
