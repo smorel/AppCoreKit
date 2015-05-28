@@ -8,10 +8,6 @@
 
 #import "CKCollectionStatusViewController.h"
 
-@interface CKCollectionStatusViewController()
-@property(nonatomic,retain,readwrite) CKCollection* collection;
-@end
-
 @implementation CKCollectionStatusViewController
 
 - (instancetype)initWithCollection:(CKCollection*)collection{
@@ -72,11 +68,22 @@
     self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vbox]];
 }
 
+- (void)setCollection:(CKCollection *)collection{
+    [_collection release];
+    _collection = [collection retain];
+    
+    if(![self isViewLoaded])
+        return;
+    
+    [self.view beginBindingsContextWithScope:@"CKCollectionStatusViewController"];
+    [self setupBindings];
+    [self.view endBindingsContext];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    
-    if(!self.view)
+    if(![self isViewLoaded])
         return;
     
     [self.view beginBindingsContextWithScope:@"CKCollectionStatusViewController"];

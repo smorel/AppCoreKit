@@ -101,7 +101,7 @@
 
 /**
  */
-@property(nonatomic,retain,readonly) CKCollection* collection;
+@property(nonatomic,retain,readwrite) CKCollection* collection;
 
 /**
  */
