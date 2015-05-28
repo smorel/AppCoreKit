@@ -104,16 +104,16 @@
 
 - (UIImage*)separatorImage{
     //To go fast, we regenerate full size images. We should draw resizable minimum size image here
-    NSMutableString* cacheIdentifier = [NSMutableString stringWithFormat:@"CKStyleView_Separator_%f_%f_%@_%lu_%f_%lu_%lu_%@_%lu",
+    NSMutableString* cacheIdentifier = [NSMutableString stringWithFormat:@"CKStyleView_Separator_%f_%f_%@_%f_%f_%lu_%lu_%@_%lu",
                                         self.bounds.size.width,self.bounds.size.height,
-                                        self.separatorColor,(unsigned long)self.separatorWidth,self.separatorDashPhase,
+                                        self.separatorColor,self.separatorWidth,self.separatorDashPhase,
                                         (unsigned long)self.separatorLineCap,(unsigned long)self.separatorLineJoin,
                                         NSStringFromUIEdgeInsets(self.separatorInsets),(unsigned long)self.separatorLocation];
     
     //separatorDashLengths
 
     return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"separatorCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
-        CGRect rect = self.bounds;
+        CGRect rect = CGRectMake(0,0,self.bounds.size.width * [UIScreen mainScreen].scale,self.bounds.size.height * [UIScreen mainScreen].scale);
         UIGraphicsBeginImageContext(rect.size);
         CGContextRef context = UIGraphicsGetCurrentContext();
         
@@ -133,7 +133,7 @@
                                         self.embossTopColor];
     
     return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"embossTopCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
-        CGRect rect = self.bounds;
+        CGRect rect = CGRectMake(0,0,self.bounds.size.width * [UIScreen mainScreen].scale,self.bounds.size.height * [UIScreen mainScreen].scale);
         UIGraphicsBeginImageContext(rect.size);
         CGContextRef context = UIGraphicsGetCurrentContext();
         
@@ -153,7 +153,7 @@
                                         self.embossBottomColor];
     
     return [[CKImageCache sharedInstance]findOrCreateImageWithHandler:self handlerCacheIdentifierProperty:@"embossBottomCacheIdentifier" cacheIdentifier:cacheIdentifier generateImageBlock:^UIImage *{
-        CGRect rect = self.bounds;
+        CGRect rect = CGRectMake(0,0,self.bounds.size.width * [UIScreen mainScreen].scale,self.bounds.size.height * [UIScreen mainScreen].scale);
         UIGraphicsBeginImageContext(rect.size);
         CGContextRef context = UIGraphicsGetCurrentContext();
         

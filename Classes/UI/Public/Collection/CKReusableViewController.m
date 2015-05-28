@@ -374,7 +374,7 @@
     }
     
     NSIndexPath* theIndexPath = self.indexPath;
-    UITableViewCell* cell = [self isKindOfClass:[UITableViewCell class]] ? (UITableViewCell*)self.contentViewCell : nil;
+    UITableViewCell* cell = [self.contentViewCell isKindOfClass:[UITableViewCell class]] ? (UITableViewCell*)self.contentViewCell : nil;
     UITableView* tableView = (UITableView*)self.contentView;
     
     CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
@@ -427,7 +427,7 @@
     }
     
     NSIndexPath* theIndexPath = self.indexPath;
-    UITableViewCell* cell = [self isKindOfClass:[UITableViewCell class]] ? (UITableViewCell*)self.contentViewCell : nil;
+    UITableViewCell* cell = [self.contentViewCell isKindOfClass:[UITableViewCell class]] ? (UITableViewCell*)self.contentViewCell : nil;
     UITableView* tableView = (UITableView*)self.contentView;
     
     CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
@@ -478,7 +478,7 @@
     }
     
     NSIndexPath* theIndexPath = self.indexPath;
-    UITableViewCell* cell = [self isKindOfClass:[UITableViewCell class]] ? (UITableViewCell*)self.contentViewCell : nil;
+    UITableViewCell* cell = [self.contentViewCell  isKindOfClass:[UITableViewCell class]] ? (UITableViewCell*)self.contentViewCell : nil;
     UITableView* tableView = (UITableView*)self.contentView;
     
     CKStyleViewSeparatorLocation separatorType = CKStyleViewSeparatorLocationNone;
