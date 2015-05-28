@@ -40,7 +40,8 @@ static char UIViewControllerFirstResponderControllerKey;
 + (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(UIViewController*)controller{
     if([controller respondsToSelector:@selector(controllerAtIndexPath:)]){
         id c = [controller performSelector:@selector(controllerAtIndexPath:) withObject:indexPath];
-        if([c hasResponder] == YES)
+        
+        if([c hasResponder] || [c nestedReusableViewControllerChain].count > 0)
             return YES;
     }
     
@@ -125,9 +126,13 @@ static char UIViewControllerFirstResponderControllerKey;
 + (void)activateResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKReusableViewController*)controller{
     if([controller.containerViewController hasPropertyNamed:@"tableView"]){
         UITableView* tableView = (UITableView*)[controller.containerViewController valueForKey:@"tableView"];
-        [tableView scrollToRowAtIndexPath:indexPath
-                         atScrollPosition:UITableViewScrollPositionNone
-                                 animated:YES];
+        
+        if(tableView){
+            [tableView scrollToRowAtIndexPath:indexPath
+                             atScrollPosition:UITableViewScrollPositionNone
+                                     animated:YES];
+        }
+        
         
         UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
         if(tableViewCell != nil){
@@ -156,6 +161,12 @@ static char UIViewControllerFirstResponderControllerKey;
     
     NSMutableArray* chain = [NSMutableArray array];
     [CKReusableViewController addReusableViewControllerResponderFromController:c toChain:chain];
+    
+    NSInteger index = [chain indexOfObjectIdenticalTo:c];
+    if(index != NSNotFound){
+        [chain removeObjectAtIndex:index];
+    }
+    
     return chain;
 }
 
@@ -227,11 +238,24 @@ static char UIViewControllerFirstResponderControllerKey;
     return (nextIndexPath != nil);
 }
 
-
-
-
-
 - (BOOL)activatePreviousResponder{
+    //TODO: handle multiple responders in [self responderChain]
+    
+    if(!self.indexPath){
+        NSArray* nested = [self nestedReusableViewControllerChain];
+        NSInteger index = [nested indexOfObjectIdenticalTo:self];
+        if(index > 0){
+            CKReusableViewController* c = [nested objectAtIndex:index - 1];
+            [c becomeFirstResponder];
+        }else{
+            CKReusableViewController* c = [self rootReusableViewController];
+            NSIndexPath* previousIndexPath =  [c findPreviousResponderWithScrollEnabled:NO];
+            if(previousIndexPath == nil)
+                return NO;
+            [CKReusableViewController activateResponderAtIndexPath:previousIndexPath controller:c];
+        }
+    }
+    
     NSIndexPath* previousIndexPath = [self findPreviousResponderWithScrollEnabled:YES];
     if(previousIndexPath == nil)
         return NO;
@@ -241,16 +265,30 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 - (BOOL)hasPreviousResponder{
+    if(!self.indexPath){
+        //Handles nested reusable view controllers
+        NSArray* nested = [self nestedReusableViewControllerChain];
+        NSInteger index = [nested indexOfObjectIdenticalTo:self];
+        if(index > 0)
+            return YES;
+        else{
+            CKReusableViewController* c = [self rootReusableViewController];
+            NSIndexPath* previousIndexPath =  [c findPreviousResponderWithScrollEnabled:NO];
+            return (previousIndexPath != nil);
+        }
+    }
+    
     NSIndexPath* previousIndexPath = [self findPreviousResponderWithScrollEnabled:NO];
-    if(previousIndexPath == nil)
-        return NO;
-    return YES;
+    return (previousIndexPath != nil);
 }
 
 
 
 
 - (void)addResponder:(UIView*)view toChain:(NSMutableArray*)chain{
+    if(view.containerViewController != self)
+        return;
+    
     if([view isKindOfClass:[UIResponder class]]){
         if(view.hidden == NO && view.userInteractionEnabled == YES){
             UIResponder* responder = (UIResponder*)view;
@@ -292,7 +330,22 @@ static char UIViewControllerFirstResponderControllerKey;
 }
 
 - (void)becomeFirstResponder{
-    UIViewController* previousResponder = [self.containerViewController firstResponderController];
+    CKReusableViewController* previousResponder = (CKReusableViewController*)[self.containerViewController firstResponderController];
+    
+    NSIndexPath* previousIndexPath = previousResponder.indexPath;
+    if(!previousIndexPath){
+        CKReusableViewController* root = [previousResponder rootReusableViewController];
+        previousIndexPath = root.indexPath;
+    }
+    
+    NSIndexPath* indexPath = self.indexPath;
+    
+    NSInteger direction = 0;
+    if(previousIndexPath.section == indexPath.section){
+        direction = indexPath.row - previousIndexPath.row;
+    }else{
+        direction = indexPath.section - previousIndexPath.section;
+    }
     
     [self.containerViewController setFirstResponderController:self];
     
@@ -302,12 +355,22 @@ static char UIViewControllerFirstResponderControllerKey;
 
     
     UIView* responder = [self nextResponder:nil];
-    if(responder && [responder isKindOfClass:[UIResponder class]]){
-        [responder becomeFirstResponder];
+    if(!responder){
+        NSArray* nested = [self nestedReusableViewControllerChain];
+        if(nested.count > 0){
+            //todo if hit previous should become responder on last nested not 0!
+            CKReusableViewController* c = direction >= 0 ? [nested objectAtIndex:0] : [nested objectAtIndex:nested.count-1];
+            [c becomeFirstResponder];
+        }else{
+            [self didBecomeFirstResponder];
+        }
+    }else{
+        if(responder && [responder isKindOfClass:[UIResponder class]]){
+            [responder becomeFirstResponder];
+        }
+        
+        [self didBecomeFirstResponder];
     }
-    
-    [self didBecomeFirstResponder];
-    
 }
 
 - (void)didResignFirstResponder{
