@@ -55,6 +55,7 @@
     [_didHighlightBlock release];
     [_didUnhighlightBlock release];
     [_didSelectBlock release];
+    [_didSelectAccessoryBlock release];
     [_didDeselectBlock release];
     [_didRemoveBlock release];
     [_reusableView release];
@@ -245,6 +246,13 @@
 - (void)didSelect{
     if(self.didSelectBlock){
         self.didSelectBlock(self);
+    }
+}
+
+
+- (void)didSelectAccessory{
+    if(self.didSelectAccessoryBlock){
+        self.didSelectAccessoryBlock(self);
     }
 }
 

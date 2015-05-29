@@ -50,7 +50,6 @@
 
 #import "UIGestureRecognizer+BlockBasedInterface.h"
 
-//#import "CKMapCollectionViewController.h"
 
 
 #import "CKReusableViewController.h"
@@ -84,6 +83,7 @@
 #import "CKTableViewController.h"
 #import "CKPickerViewViewController.h"
 #import "CKCollectionViewController.h"
+#import "CKMapViewController.h"
 
 
 #import "CKTransitionTree.h"

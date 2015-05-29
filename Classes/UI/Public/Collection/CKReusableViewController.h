@@ -75,6 +75,15 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
 @property(nonatomic,copy) void(^didSelectBlock)(CKReusableViewController* controller);
 
 
+/** This method is called after the cell accessory view has been selected
+ */
+- (void)didSelectAccessory;
+
+/**
+ */
+@property(nonatomic,copy) void(^didSelectAccessoryBlock)(CKReusableViewController* controller);
+
+
 /** This method is called after the cell has been selected
  */
 - (void)didDeselect;

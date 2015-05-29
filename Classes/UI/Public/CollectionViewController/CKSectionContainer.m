@@ -9,6 +9,7 @@
 #import "CKSectionContainer.h"
 #import "UIView+Positioning.h"
 #import <objc/runtime.h>
+#import <MapKit/MapKit.h>
 #import "CKWeakRef.h"
 
 
@@ -241,7 +242,8 @@ static char UIViewReusableViewControllerKey;
 - (UIView*)viewForController:(CKReusableViewController*)controller reusingView:(UIView*)view{
     
     UIView* contentView = nil;
-    if(![NSObject isClass:[view class] exactKindOfClass:[UIView class]]){
+    if(![NSObject isClass:[view class] exactKindOfClass:[UIView class]]
+       && ![NSObject isClass:[view class] kindOfClass:[MKAnnotationView class]]){
         @try{
             contentView = [view valueForKey:@"contentView"];
         }

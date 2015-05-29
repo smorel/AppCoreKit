@@ -742,6 +742,11 @@
     [controller didDeselect];
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+    CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    [controller didSelectAccessory];
+}
+
 #pragma mark Managing Edition
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {

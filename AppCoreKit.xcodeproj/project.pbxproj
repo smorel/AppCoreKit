@@ -646,6 +646,8 @@
 		D9BDB6091B179C1B00FBA443 /* UISearchBar+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB6071B179C1B00FBA443 /* UISearchBar+Introspection.m */; };
 		D9BDB60D1B17A52E00FBA443 /* NSNull+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = D9BDB60B1B17A52E00FBA443 /* NSNull+Parsing.h */; };
 		D9BDB60E1B17A52E00FBA443 /* NSNull+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */; };
+		D9CCF0931B18E25A008FE344 /* CKMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9CCF0941B18E35D008FE344 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKMapViewController.m */; };
 		D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */; };
 		D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -812,8 +814,8 @@
 		7560DB8013B8ED3600268D13 /* CKLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalization.m; path = Classes/Foundation/Public/Localization/CKLocalization.m; sourceTree = "<group>"; };
 		7560DB8313B8ED3600268D13 /* CKLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocationManager.h; path = Classes/Location/Public/CKLocationManager.h; sourceTree = "<group>"; };
 		7560DB8413B8ED3600268D13 /* CKLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocationManager.m; path = Classes/Location/Public/CKLocationManager.m; sourceTree = "<group>"; };
-		7560DB8D13B8ED3600268D13 /* CKMapCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKMapCollectionViewController.h; path = Classes/UI/Public/Map/CKMapCollectionViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		7560DB8E13B8ED3600268D13 /* CKMapCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKMapCollectionViewController.m; path = Classes/UI/Public/Map/CKMapCollectionViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		7560DB8D13B8ED3600268D13 /* CKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKMapViewController.h; path = Classes/UI/Public/Map/CKMapViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		7560DB8E13B8ED3600268D13 /* CKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKMapViewController.m; path = Classes/UI/Public/Map/CKMapViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB8F13B8ED3600268D13 /* MKMapView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKMapView+Introspection.h"; path = "Classes/Foundation/Private/Additions/MapKit/MKMapView+Introspection.h"; sourceTree = "<group>"; };
 		7560DB9013B8ED3600268D13 /* MKMapView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKMapView+Introspection.m"; path = "Classes/Foundation/Private/Additions/MapKit/MKMapView+Introspection.m"; sourceTree = "<group>"; };
 		7560DB9113B8ED3600268D13 /* CKObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObject.h; path = Classes/Foundation/Public/Document/CKObject.h; sourceTree = "<group>"; };
@@ -1602,7 +1604,6 @@
 				9638264D147FE53F00A9C98B /* Controllers */,
 				D9418A681AB8755A00234A15 /* Section View Controllers */,
 				D91D65681AE8333E00B19E14 /* Transitions */,
-				7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */,
 				D9BDB5C21AFAA95F00FBA443 /* Motion */,
 			);
 			name = UI;
@@ -1627,19 +1628,11 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
-		7506E40513B8FF7A00EE1471 /* Collection View Controllers (Will all be deprecated) */ = {
-			isa = PBXGroup;
-			children = (
-				7506E40613B8FFB400EE1471 /* Map */,
-			);
-			name = "Collection View Controllers (Will all be deprecated)";
-			sourceTree = "<group>";
-		};
 		7506E40613B8FFB400EE1471 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB8D13B8ED3600268D13 /* CKMapCollectionViewController.h */,
-				7560DB8E13B8ED3600268D13 /* CKMapCollectionViewController.m */,
+				7560DB8D13B8ED3600268D13 /* CKMapViewController.h */,
+				7560DB8E13B8ED3600268D13 /* CKMapViewController.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -2992,6 +2985,7 @@
 				D9418A631AB86CDF00234A15 /* Picker */,
 				D9418A891AB9CA8500234A15 /* Table */,
 				D9CD82491AC1CCA000B2985D /* Collection */,
+				7506E40613B8FFB400EE1471 /* Map */,
 			);
 			name = "Section View Controllers";
 			sourceTree = "<group>";
@@ -3627,6 +3621,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9CCF0931B18E25A008FE344 /* CKMapViewController.h in Headers */,
 				96B4515518D0924100D58489 /* CKRangeSelectorView.h in Headers */,
 				7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */,
 				D9418AAE1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h in Headers */,
@@ -4126,6 +4121,7 @@
 				7560DCE713B8ED3600268D13 /* CKMultipartEncoder.m in Sources */,
 				7560DCE913B8ED3600268D13 /* CKMultipartParser.m in Sources */,
 				7560DCEB13B8ED3600268D13 /* CKNetworkActivityManager.m in Sources */,
+				D9CCF0941B18E35D008FE344 /* CKMapViewController.m in Sources */,
 				7560DCEF13B8ED3600268D13 /* CKNotificationBlockBinder.m in Sources */,
 				7560DCF113B8ED3600268D13 /* NSArray+Additions.m in Sources */,
 				7560DCF313B8ED3600268D13 /* NSData+Base64.m in Sources */,
