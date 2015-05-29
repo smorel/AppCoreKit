@@ -702,11 +702,13 @@ static char NSObjectAppliedStyleObjectKey;
 	for(NSString* key in [style allKeys]){
 		if([reserverKeyWords containsObject:key] == NO){
 			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
-            CKProperty* property = [CKProperty weakPropertyWithObject:object keyPath:key];
-            if(![property isKVCComplient])
-                continue;
             
             if(descriptor){
+                
+                CKProperty* property = [CKProperty weakPropertyWithObject:object keyPath:key];
+                if(![property isKVCComplient])
+                    continue;
+                
                 //When creating subviews by introspection, ensure style is applied on these views.
                 if([descriptor.name isEqualToString: @"subviews"] && [object isKindOfClass:[UIView class]]){
                     //FIXME : We could propbably optimize here by not creating the CKProperty as it registers weakrefs and other stuff ...
