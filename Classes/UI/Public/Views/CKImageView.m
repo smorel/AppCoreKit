@@ -82,6 +82,7 @@
 }
 
 - (void)_setImage:(UIImage *)image animated:(BOOL)animated{
+    [self willChangeValueForKey:@"image"];
     if(image && self.postProcess){
         image = self.postProcess(image);
     }
@@ -89,11 +90,14 @@
     [_image release];
     _image = [image retain];
     [self updateAnimated:animated];
+    [self didChangeValueForKey:@"image"];
 }
 
 - (void)setImageURL:(NSURL *)imageURL{
     if(_imageURL && [_imageURL isEqual:imageURL])
         return;
+    
+    [self willChangeValueForKey:@"imageURL"];
     
     if(_imageURL){
         [[CKImageCache sharedInstance]unregisterDelegate:self withImageURL:_imageURL];
@@ -108,6 +112,8 @@
     }
     
     [self updateAnimated:NO];//activate spinner
+    
+    [self didChangeValueForKey:@"imageURL"];
 }
 
 - (void)imageWasAlreadyFetched:(UIImage*)image{
