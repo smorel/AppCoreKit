@@ -648,6 +648,8 @@
 		D9BDB60E1B17A52E00FBA443 /* NSNull+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */; };
 		D9CCF0931B18E25A008FE344 /* CKMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CCF0941B18E35D008FE344 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKMapViewController.m */; };
+		D9CCF0A31B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CCF0A11B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9CCF0A41B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CCF0A21B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.m */; };
 		D9CD824C1AC1CD3200B2985D /* CKCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CD824D1AC1CD3200B2985D /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */; };
 		D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1346,6 +1348,8 @@
 		D9BDB6071B179C1B00FBA443 /* UISearchBar+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UISearchBar+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UISearchBar+Introspection.m"; sourceTree = "<group>"; };
 		D9BDB60B1B17A52E00FBA443 /* NSNull+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNull+Parsing.h"; path = "Classes/Foundation/Private/Additions/Foundations/NSNull+Parsing.h"; sourceTree = "<group>"; };
 		D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNull+Parsing.m"; path = "Classes/Foundation/Private/Additions/Foundations/NSNull+Parsing.m"; sourceTree = "<group>"; };
+		D9CCF0A11B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIActivityIndicatorView+CKLayout.h"; sourceTree = "<group>"; };
+		D9CCF0A21B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActivityIndicatorView+CKLayout.m"; path = "Classes/Layout/Public/Additions/UIKit/UIActivityIndicatorView+CKLayout.m"; sourceTree = "<group>"; };
 		D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionViewController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.h; sourceTree = "<group>"; };
 		D9CD824B1AC1CD3200B2985D /* CKCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionViewController.m; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.m; sourceTree = "<group>"; };
 		D9CD824F1AC2FA0E00B2985D /* UIView+Highlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Highlight.h"; path = "Classes/UI/Public/Views/UIView+Highlight.h"; sourceTree = "<group>"; };
@@ -2164,6 +2168,7 @@
 		96B9D2C6177B25A100455BE8 /* Apple Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D9CCF0A01B1CA3E0008FE344 /* UIActivityIndicatorView */,
 				D932C1111AB321B10017F602 /* UIScrollView */,
 				D932C1101AB321A60017F602 /* UIPickerView */,
 				D932C10F1AB3219D0017F602 /* UITextView */,
@@ -3268,6 +3273,15 @@
 			name = NSNull;
 			sourceTree = "<group>";
 		};
+		D9CCF0A01B1CA3E0008FE344 /* UIActivityIndicatorView */ = {
+			isa = PBXGroup;
+			children = (
+				D9CCF0A11B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h */,
+				D9CCF0A21B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.m */,
+			);
+			name = UIActivityIndicatorView;
+			sourceTree = "<group>";
+		};
 		D9CD82491AC1CCA000B2985D /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -3689,6 +3703,7 @@
 				7560DCFD13B8ED3600268D13 /* NSDate+Conversions.h in Headers */,
 				96B3BD0A182BEF2300978B85 /* CKAnimationPrivate.h in Headers */,
 				D9418A6B1AB8759B00234A15 /* CKSectionContainer.h in Headers */,
+				D9CCF0A31B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h in Headers */,
 				D9BDB5C51AFAA98C00FBA443 /* UIMotionEffect+Factory.h in Headers */,
 				D9418A701AB8805300234A15 /* CKAbstractSection.h in Headers */,
 				7560DD0613B8ED3600268D13 /* NSManagedObjectContext+Requests.h in Headers */,
@@ -4216,6 +4231,7 @@
 				7560DDE513B8EE9800268D13 /* CXMLNode_XPathExtensions.m in Sources */,
 				7560DDE713B8EE9800268D13 /* CXMLNode.m in Sources */,
 				7560DDEF13B8EEB600268D13 /* CXMLDocument_CreationExtensions.m in Sources */,
+				D9CCF0A41B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.m in Sources */,
 				7560DDF113B8EEB600268D13 /* CXMLNode_CreationExtensions.m in Sources */,
 				7560DE2013B8EFA100268D13 /* RegexKitLite.m in Sources */,
 				4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */,

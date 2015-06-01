@@ -23,3 +23,4 @@
 #import "UITextView+CKLayout.h"
 #import "UIPickerView+CKLayout.h"
 #import "UIScrollView+CKLayout.h"
+#import "UIActivityIndicatorView+CKLayout.h"
