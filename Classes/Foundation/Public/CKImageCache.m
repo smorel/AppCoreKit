@@ -214,13 +214,15 @@
                          cacheIdentifier:(NSString*)cacheIdentifier
                       generateImageBlock:(UIImage*(^)())generateImageBlock{
     
-    NSString* previousCacheIdentifier = [handler valueForKeyPath:keypath];
+    NSString* previousCacheIdentifier = [[handler valueForKeyPath:keypath] retain];
     
     if(![previousCacheIdentifier isEqualToString:cacheIdentifier]){
         [handler setValue:cacheIdentifier forKeyPath:keypath];
         
         [[CKImageCache sharedInstance]unregisterHandler:handler withIdentifier:previousCacheIdentifier];
     }
+    
+    [previousCacheIdentifier release];
     
     UIImage* image = [[CKImageCache sharedInstance]imageWithIdentifier:cacheIdentifier];
     if(!image){
