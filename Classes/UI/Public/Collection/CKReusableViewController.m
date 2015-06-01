@@ -83,21 +83,6 @@
 	return [NSString stringWithFormat:@"%@-<%p>",[[self class] description],controllerStyle];
 }
 
-- (id)init{
-    self = [super init];
-    self.estimatedSize = CGSizeMake(320,44);
-    self.flags = CKViewControllerFlagsSelectable;
-    self.accessoryType = UITableViewCellAccessoryNone;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
-    
-    CKWeakRef* weak = [CKWeakRef weakRefWithObject:self];
-    self.layoutInvalidateBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
-        [weak.object viewLayoutDidInvalidate];
-    };
-    
-    return self;
-}
-
 - (void)styleManagerDidUpdate:(NSNotification*)notification{
     
     if(!self.view){
@@ -241,6 +226,17 @@
 
 - (void)postInit{
     [super postInit];
+    
+    self.estimatedSize = CGSizeMake(320,44);
+    self.flags = CKViewControllerFlagsSelectable;
+    self.accessoryType = UITableViewCellAccessoryNone;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(styleManagerDidUpdate:) name:CKStyleManagerDidReloadNotification object:nil];
+    
+    CKWeakRef* weak = [CKWeakRef weakRefWithObject:self];
+    self.layoutInvalidateBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+        [weak.object viewLayoutDidInvalidate];
+    };
 }
 
 - (void)didSelect{
@@ -322,8 +318,12 @@
 }
 
 - (void)viewLayoutDidInvalidate{
-    if(self.view.window == nil || self.isComputingSize || self.state != CKViewControllerStateDidAppear)
+    if(self.view.window == nil || self.isComputingSize || self.state != CKViewControllerStateDidAppear){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self viewLayoutDidInvalidate];
+        });
         return;
+    }
     
     NSIndexPath* indexPath = self.indexPath;
     if(!indexPath)

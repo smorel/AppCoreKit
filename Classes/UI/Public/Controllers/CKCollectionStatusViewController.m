@@ -25,6 +25,7 @@
     self.noObjectTitleFormat = _(@"No object");
     self.oneObjectTitleFormat = _(@"1 object");
     self.multipleObjectTitleFormat = _(@"%d objects");
+    self.estimatedSize = CGSizeMake(320,0);
 }
 
 - (void)dealloc{
@@ -38,14 +39,13 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    self.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    self.view.minimumHeight = 44;
-    
     if([self isLayoutDefinedInStylesheet])
         return;
     
     UIActivityIndicatorView* ActivityIndicatorView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]autorelease];
     ActivityIndicatorView.name = @"ActivityIndicatorView";
+    ActivityIndicatorView.minimumHeight = 24;
+    ActivityIndicatorView.margins =  UIEdgeInsetsMake(10, 10, 10, 10);
     
     UILabel* TitleLabel = [[[UILabel alloc]init]autorelease];
     TitleLabel.name = @"TitleLabel";
@@ -61,11 +61,19 @@
     SubtitleLabel.numberOfLines = 1;
     SubtitleLabel.textAlignment = UITextAlignmentCenter;
     
+    CKVerticalBoxLayout* vTextbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    vTextbox.minimumHeight = 24;
+    vTextbox.margins =  UIEdgeInsetsMake(10, 10, 10, 10);
+    vTextbox.name = @"vTextbox";
+    vTextbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[TitleLabel,SubtitleLabel]];
+    
     CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
-    vbox.flexibleSize = YES;
-    vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[ActivityIndicatorView,TitleLabel,SubtitleLabel]];
+    vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[ActivityIndicatorView,vTextbox]];
+    
+    CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
+    hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[ [[[CKLayoutFlexibleSpace alloc]init]autorelease],vbox,[[[CKLayoutFlexibleSpace alloc]init]autorelease]]];
   
-    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vbox]];
+    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
 }
 
 - (void)setCollection:(CKCollection *)collection{
@@ -106,12 +114,23 @@
     }];
 }
 
+- (BOOL)forceHidingView:(UIView*)view{
+    NSMutableDictionary* style = [view appliedStyle];
+    
+    BOOL forceHidden = NO;
+    if([style containsObjectForKey:@"hidden"]){
+        forceHidden = [[style objectForKey:@"hidden"]boolValue];
+    }
+    
+    return forceHidden;
+}
+
 - (void)update{
     UIActivityIndicatorView* ActivityIndicatorView = [self.view viewWithName:@"ActivityIndicatorView"];
     UILabel* TitleLabel = [self.view viewWithName:@"TitleLabel"];
     UILabel* SubtitleLabel = [self.view viewWithName:@"SubtitleLabel"];
     
-    ActivityIndicatorView.hidden = !self.collection.isFetching || self.view.frame.size.width <= 0 || self.view.frame.size.height <= 0;
+    ActivityIndicatorView.hidden = [self forceHidingView:ActivityIndicatorView] || !self.collection.isFetching || self.view.frame.size.width <= 0 || self.view.frame.size.height <= 0;
     if(!ActivityIndicatorView.hidden){
         [ActivityIndicatorView startAnimating];
     }
@@ -119,8 +138,8 @@
         [ActivityIndicatorView stopAnimating];
     }
     
-    TitleLabel.hidden = !ActivityIndicatorView.hidden;
-    SubtitleLabel.hidden = [self.subtitleLabel length] <= 0;
+    TitleLabel.hidden = [self forceHidingView:TitleLabel] || !ActivityIndicatorView.hidden;
+    SubtitleLabel.hidden = [self forceHidingView:SubtitleLabel] || [self.subtitleLabel length] <= 0;
     SubtitleLabel.text = self.subtitleLabel;
     
     if(ActivityIndicatorView.hidden){
@@ -141,7 +160,9 @@
     }else{
         TitleLabel.text = nil;
     }
-
+    
+    id<CKLayoutBoxProtocol> vTextbox = [self.view layoutWithName:@"vTextbox"];
+    vTextbox.hidden = TitleLabel.hidden && SubtitleLabel.hidden;
 }
 
 @end

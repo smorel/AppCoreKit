@@ -446,6 +446,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+    
 /*
 #ifdef DEBUG
     NSLog(@"heightForRowAtIndexPath: (%@ - %@) %f [%d %d]",[controller class],[controller name],size.height,indexPath.section,indexPath.row);
@@ -464,11 +465,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
+    CGSize size = CGSizeZero;
     if(controller.contentViewCell){
-        CGSize size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
-        return size.height;
+        size = [controller preferredSizeConstraintToSize:CGSizeMake(self.tableView.width,MAXFLOAT)];
+    }else{
+        size = controller.estimatedSize;
     }
-    return controller.estimatedSize.height;
+    
+    //UITableView doesn't supports cells who's height is less than 2 or it assert saying it doesn't support cells with negative height ...
+    if(size.height <= 2){
+        size.height = 2;
+    }
+    return size.height;
 }
 
 
