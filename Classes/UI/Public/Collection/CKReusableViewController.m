@@ -319,9 +319,6 @@
 
 - (void)viewLayoutDidInvalidate{
     if(self.view.window == nil || self.isComputingSize || self.state != CKViewControllerStateDidAppear){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self viewLayoutDidInvalidate];
-        });
         return;
     }
     

@@ -242,6 +242,10 @@
             bself.tableViewCell.accessoryType = !image ? self.accessoryType : UITableViewCellAccessoryNone;
         }
     }];
+    
+    [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
+        self.flags = bself.readOnly ? (self.flags &~ CKViewControllerFlagsSelectable) : (self.flags | CKViewControllerFlagsSelectable);
+    }];
 }
 
 - (void)didSelect{

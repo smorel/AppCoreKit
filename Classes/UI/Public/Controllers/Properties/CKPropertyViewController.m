@@ -47,7 +47,7 @@
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     self = [super init];
     self.property = property;
-    self.readOnly = NO;
+    self.readOnly = readOnly;
     self.editionToolbarEnabled = YES;
     
     NSString* propertyName = _(property.name);

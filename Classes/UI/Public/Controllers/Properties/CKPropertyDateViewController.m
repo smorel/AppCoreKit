@@ -96,6 +96,10 @@ static NSDateFormatter* sharedFormatter = nil;
             ValueLabel.text = _(bself.valuePlaceholderLabel);
         }
     }];
+    
+    [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
+        self.flags = bself.readOnly ? (self.flags &~ CKViewControllerFlagsSelectable) : (self.flags | CKViewControllerFlagsSelectable);
+    }];
 }
 
 - (void)didSelect{
