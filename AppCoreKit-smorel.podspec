@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
 
   s.name         = "AppCoreKit-smorel"
-  s.version      = "2.5.0"
+  s.version      = "3.0.0"
   s.summary      = "AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS."
   s.homepage     = "https://github.com/smorel/AppCoreKit"
   s.license      = { :type => 'Apache Licence 2.0', :file => 'LICENSE.txt' }
   s.author       = { 'Sebastien Morel' => 'morel.sebastien@gmail.com' }
-  s.source       = { :git => 'https://github.com/smorel/AppCoreKit.git', :tag => 'v2.5.0' }
+  s.source       = { :git => 'https://github.com/smorel/AppCoreKit.git', :tag => 'v3.0.0' }
   s.platform     = :ios, '7.0'
 
   s.description = 'AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 4 years experience at Wherecloud and is a production framework that shipped more than 20 apps. AppCoreKit does not offer out of the box UI components but the technology to help you: Manage your data, Automatic serialization (KeyValue Store, Core Data), Objective-C runtime apis, Type and data structure conversions, View controllers and containers, Ui vs. Models synchronization with bindings, Appearance customization with cascading stylesheets, Responsive view layouts with a horizontal/vertical box model, Forms with automatic sizing and custom layouts, Maps, Network, And more. Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace. Screen Cast and high level description of the framework are available at http://www.appcorekit.net. A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples'
