@@ -294,7 +294,7 @@ static char CKViewControllerContainerViewControllerKey;
             [self removeFromParentViewController];
         }else{
             Class CKReusableViewControllerClass = NSClassFromString(@"CKReusableViewController");
-            if([self isKindOfClass:CKReusableViewControllerClass] && [viewController isKindOfClass:CKReusableViewControllerClass])
+            if(/*[self isKindOfClass:CKReusableViewControllerClass] && */ [viewController isKindOfClass:CKReusableViewControllerClass])
                 return;
             
             [viewController addChildViewController:self];
