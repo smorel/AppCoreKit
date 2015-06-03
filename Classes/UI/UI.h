@@ -63,10 +63,12 @@
 
 #import "CKReusableViewController+ResponderChain.h"
 #import "CKStandardContentViewController.h"
+#import "CKButtonViewController.h"
 #import "CKCollectionStatusViewController.h"
 #import "CKPropertyViewController.h"
 #import "CKPropertyStringViewController.h"
 #import "CKPropertyNumberViewController.h"
+#import "CKPropertyNumberSliderViewController.h"
 #import "CKPropertyURLViewController.h"
 #import "CKPropertyBoolViewController.h"
 #import "CKPropertySelectionViewController.h"

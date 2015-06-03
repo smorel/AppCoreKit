@@ -568,6 +568,10 @@
 		D93CD5961AEA7F9E00B3D376 /* CKStyleView+Drawing.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */; };
 		D93CD5991AEA805000B3D376 /* CKStyleView+Paths.h in Headers */ = {isa = PBXBuildFile; fileRef = D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */; };
 		D93CD59A1AEA805000B3D376 /* CKStyleView+Paths.m in Sources */ = {isa = PBXBuildFile; fileRef = D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */; };
+		D9415C0B1B1F4E79000F4B03 /* CKButtonViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9415C091B1F4E79000F4B03 /* CKButtonViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9415C0C1B1F4E79000F4B03 /* CKButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9415C0A1B1F4E79000F4B03 /* CKButtonViewController.m */; };
+		D9415C141B1F593A000F4B03 /* CKPropertyNumberSliderViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9415C121B1F593A000F4B03 /* CKPropertyNumberSliderViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9415C151B1F593A000F4B03 /* CKPropertyNumberSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9415C131B1F593A000F4B03 /* CKPropertyNumberSliderViewController.m */; };
 		D9418A5B1AB8654A00234A15 /* CKDatePickerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418A5C1AB8654A00234A15 /* CKDatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */; };
 		D9418A611AB86AD900234A15 /* CKPropertyURLViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1269,6 +1273,10 @@
 		D93CD5941AEA7F9E00B3D376 /* CKStyleView+Drawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Drawing.m"; path = "Classes/Styles/Private/CKStyleView+Drawing.m"; sourceTree = "<group>"; };
 		D93CD5971AEA805000B3D376 /* CKStyleView+Paths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyleView+Paths.h"; path = "Classes/Styles/Private/CKStyleView+Paths.h"; sourceTree = "<group>"; };
 		D93CD5981AEA805000B3D376 /* CKStyleView+Paths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyleView+Paths.m"; path = "Classes/Styles/Private/CKStyleView+Paths.m"; sourceTree = "<group>"; };
+		D9415C091B1F4E79000F4B03 /* CKButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKButtonViewController.h; path = Classes/UI/Public/Controllers/CKButtonViewController.h; sourceTree = "<group>"; };
+		D9415C0A1B1F4E79000F4B03 /* CKButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKButtonViewController.m; path = Classes/UI/Public/Controllers/CKButtonViewController.m; sourceTree = "<group>"; };
+		D9415C121B1F593A000F4B03 /* CKPropertyNumberSliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyNumberSliderViewController.h; path = Classes/UI/Public/Controllers/CKPropertyNumberSliderViewController.h; sourceTree = "<group>"; };
+		D9415C131B1F593A000F4B03 /* CKPropertyNumberSliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyNumberSliderViewController.m; path = Classes/UI/Public/Controllers/CKPropertyNumberSliderViewController.m; sourceTree = "<group>"; };
 		D9418A581AB8654A00234A15 /* CKDatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDatePickerViewController.h; path = Classes/UI/Public/Controllers/CKDatePickerViewController.h; sourceTree = "<group>"; };
 		D9418A591AB8654A00234A15 /* CKDatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDatePickerViewController.m; path = Classes/UI/Public/Controllers/CKDatePickerViewController.m; sourceTree = "<group>"; };
 		D9418A5F1AB86AD900234A15 /* CKPropertyURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyURLViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyURLViewController.h; sourceTree = "<group>"; };
@@ -2035,7 +2043,7 @@
 				D92C10531AA78B9F00DA4B12 /* Web */,
 				D92C10551AA78BCB00DA4B12 /* Slideshow */,
 				D9418A571AB8652300234A15 /* Date Picker */,
-				D9418A801AB8B86900234A15 /* Standard Content */,
+				D9418A801AB8B86900234A15 /* Cells */,
 				D94CA3061AA75B21009EA887 /* Properties */,
 				D9E04C7D1AB1F9C800E6BECB /* Swipable */,
 				D9CD82721AC35F8D00B2985D /* Class Explorer */,
@@ -3014,15 +3022,17 @@
 			name = Sections;
 			sourceTree = "<group>";
 		};
-		D9418A801AB8B86900234A15 /* Standard Content */ = {
+		D9418A801AB8B86900234A15 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
 				D9418A811AB8B89500234A15 /* CKStandardContentViewController.h */,
 				D9418A821AB8B89500234A15 /* CKStandardContentViewController.m */,
 				D9CD82571AC30BFC00B2985D /* CKCollectionStatusViewController.h */,
 				D9CD82581AC30BFC00B2985D /* CKCollectionStatusViewController.m */,
+				D9415C091B1F4E79000F4B03 /* CKButtonViewController.h */,
+				D9415C0A1B1F4E79000F4B03 /* CKButtonViewController.m */,
 			);
-			name = "Standard Content";
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		D9418A891AB9CA8500234A15 /* Table */ = {
@@ -3224,6 +3234,8 @@
 			children = (
 				D98F3FCA1AB36CC40094572C /* CKPropertyNumberViewController.h */,
 				D98F3FCB1AB36CC40094572C /* CKPropertyNumberViewController.m */,
+				D9415C121B1F593A000F4B03 /* CKPropertyNumberSliderViewController.h */,
+				D9415C131B1F593A000F4B03 /* CKPropertyNumberSliderViewController.m */,
 			);
 			name = Number;
 			sourceTree = "<group>";
@@ -3766,6 +3778,7 @@
 				D9CD82511AC2FA0E00B2985D /* UIView+Highlight.h in Headers */,
 				7560DDAB13B8ED3600268D13 /* CKWebRequest.h in Headers */,
 				D91D658F1AE8335100B19E14 /* CKViewTransitionContext+CollectionView.h in Headers */,
+				D9415C0B1B1F4E79000F4B03 /* CKButtonViewController.h in Headers */,
 				7560DDAF13B8ED3600268D13 /* CKWebService.h in Headers */,
 				7560DDB113B8ED3600268D13 /* CKWebSource.h in Headers */,
 				D9418A871AB8C18600234A15 /* UIImageView+URL.h in Headers */,
@@ -3902,6 +3915,7 @@
 				96812C6B159A2E67002160C1 /* CKClassPropertyDescriptor_private.h in Headers */,
 				96EBE433159A43AB00E0F209 /* UIView+Name.h in Headers */,
 				9659E34415E274FF00D43C33 /* CKConfiguration.h in Headers */,
+				D9415C141B1F593A000F4B03 /* CKPropertyNumberSliderViewController.h in Headers */,
 				D98BDD481AF3C01D00A0AECD /* CKShadowView.h in Headers */,
 				9668B94E15DAFF7100C57715 /* CKLayoutBoxProtocol.h in Headers */,
 				96AC0A8116021F6100CC3C77 /* CKCollectionBlockBinder.h in Headers */,
@@ -4092,6 +4106,7 @@
 				7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */,
 				7560DC6D13B8ED3600268D13 /* CKAlertView.m in Sources */,
 				7560DC6F13B8ED3600268D13 /* CKAttribute.m in Sources */,
+				D9415C0C1B1F4E79000F4B03 /* CKButtonViewController.m in Sources */,
 				9667136F18354643007218D2 /* CIFilter+ValueTransformer.m in Sources */,
 				7560DC7113B8ED3600268D13 /* CKAttributesDictionary.m in Sources */,
 				7560DC7413B8ED3600268D13 /* CKBindingsManager.mm in Sources */,
@@ -4117,6 +4132,7 @@
 				96B4516F18D09DC000D58489 /* CKBlurModalDebugViewController.m in Sources */,
 				7560DCB213B8ED3600268D13 /* CKGridView.m in Sources */,
 				7560DCB313B8ED3600268D13 /* CKGridView+NSIndexPath.m in Sources */,
+				D9415C151B1F593A000F4B03 /* CKPropertyNumberSliderViewController.m in Sources */,
 				7560DCB513B8ED3600268D13 /* CKHost.m in Sources */,
 				7560DCB913B8ED3600268D13 /* CKImageLoader.m in Sources */,
 				9668EF0918AD076900E72444 /* UIScrollView+CKLayout.m in Sources */,
