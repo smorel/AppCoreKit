@@ -77,7 +77,12 @@ static NSDateFormatter* sharedFormatter = nil;
     CKHorizontalBoxLayout* hBox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hBox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[PropertyNameLabel,[[[CKLayoutFlexibleSpace alloc]init]autorelease],ValueLabel]];
     
-    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
+    CKVerticalBoxLayout* vbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    vbox.verticalAlignment = CKLayoutVerticalAlignmentTop;
+    vbox.horizontalAlignment = CKLayoutHorizontalAlignmentLeft;
+    vbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
+    
+    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[vbox]];
 }
 
 - (void)setupBindings{
