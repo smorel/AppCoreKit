@@ -175,7 +175,7 @@ extern "C" {
     
     /**
      */
-    CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
+    CKEnumDescriptor* generateEnumDefinition(NSString* name,NSString*(^computeLabelBlock)(NSInteger value, NSString* label), BOOL bitMask,NSString* strValues, ...) ;
     
     /**
      */
@@ -187,5 +187,8 @@ extern "C" {
 
 /**
  */
-#define CKEnumDefinition(name,...) CKEnumDefinitionFunc(name,NO,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
-#define CKBitMaskDefinition(name,...) CKEnumDefinitionFunc(name,YES,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#define CKEnumDefinition(name,...) generateEnumDefinition(name,nil,NO,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#define CKBitMaskDefinition(name,...) generateEnumDefinition(name,nil,YES,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+
+#define CKEnumDefinitionWithLabelBlock(name,computeLabelBlock,...) generateEnumDefinition(name,computeLabelBlock,NO,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#define CKBitMaskDefinitionWithLabelBlock(name,computeLabelBlock,...) generateEnumDefinition(name,nil,YES,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)

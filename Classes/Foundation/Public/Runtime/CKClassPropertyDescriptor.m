@@ -512,7 +512,8 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 
 @end
 
-CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitMask,NSString* strValues, ...) {
+
+CKEnumDescriptor* generateEnumDefinition(NSString* name,NSString*(^computeLabelBlock)(NSInteger value, NSString* label), BOOL bitMask,NSString* strValues, ...) {
 	NSArray* components = [strValues componentsSeparatedByString:@","];
 	
 	va_list ArgumentList;
@@ -521,9 +522,15 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitMask,NSString* str
 	int i = 0;
 	NSMutableDictionary* valuesAndLabels = [NSMutableDictionary dictionary];
 	while (i < [components count]){
-		int value = va_arg(ArgumentList, int);
-        [valuesAndLabels setObject:[NSNumber numberWithInt:value] 
-                            forKey:[[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+		NSInteger value = va_arg(ArgumentList, NSInteger);
+        
+        NSString* label = [[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if(computeLabelBlock){
+            label = computeLabelBlock(value,label);
+        }
+        
+        [valuesAndLabels setObject:[NSNumber numberWithInteger:value]
+                            forKey:label];
 		++i;
     }
     va_end(ArgumentList);
