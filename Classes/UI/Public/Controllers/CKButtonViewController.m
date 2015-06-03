@@ -16,6 +16,7 @@
 @implementation CKButtonViewController
 
 - (void)dealloc{
+    [self clearBindingsContextWithScope:@"CKButtonViewController"];
     [_customizeButtonBlock release];
     [_label release];
     [_imageName release];
@@ -76,10 +77,19 @@
         self.customizeButtonBlock(self,Button);
     }
     
+    [self beginBindingsContextWithScope:@"CKButtonViewController"];
+    
     UIButton* button = [self.view viewWithName:@"Button"];
     [button bindEvent:UIControlEventTouchUpInside withBlock:^{
         [bself didSelect];
     }];
+    
+    [self endBindingsContext];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self clearBindingsContextWithScope:@"CKButtonViewController"];
 }
 
 - (void)setupLabel{
