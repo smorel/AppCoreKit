@@ -85,6 +85,7 @@
     
     for(CKProperty* editableProperty in self.vector.editableProperties){
         CKPropertyNumberViewController* controller = [CKPropertyNumberViewController controllerWithProperty:editableProperty];
+        controller.readOnly = self.readOnly;
         controller.name = editableProperty.name;
         controller.marginTop = 10;
         [vbox addLayoutBox:controller];
@@ -99,11 +100,23 @@
     UILabel* PropertyNameLabel = [self.view viewWithName:@"PropertyNameLabel"];
     PropertyNameLabel.text = self.propertyNameLabel;
     
-    for(CKProperty* editableProperty in self.vector.editableProperties){
-        CKPropertyNumberViewController* controller = (CKPropertyNumberViewController*)[self.view layoutWithName:editableProperty.name];
-        controller.readOnly = self.readOnly;
-        controller.property = editableProperty;
-    }
+    __block CKPropertyVectorViewController* bself = self;
+    
+    void(^update)() = ^(){
+        for(CKProperty* editableProperty in bself.vector.editableProperties){
+            CKPropertyNumberViewController* controller = (CKPropertyNumberViewController*)[bself.view layoutWithName:editableProperty.name];
+            controller.readOnly = bself.readOnly;
+            controller.property = editableProperty;
+        }
+    };
+    
+    [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
+        update();
+    }];
+    
+    [self bind:@"readOnly" withBlock:^(id value) {
+        update();
+    }];
 }
 
 @end
