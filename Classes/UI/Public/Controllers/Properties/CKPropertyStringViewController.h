@@ -123,6 +123,10 @@
  */
 @property (nonatomic,copy) BOOL(^textInputFormatter)(id textInputView,NSRange range, NSString* replacementString);
 
+/** Setting the text in the textFormat can be customized by setting a format. Default value is @"%@".
+ */
+@property(nonatomic,retain) NSString* textFormat;
+
 
 /** This block will get called when the user hits the done button in the keyboard.
  If no block is set, the keyboard will get resigned automatically.

@@ -20,7 +20,7 @@
 @implementation CKPropertyNumberSliderViewController
 
 - (void)dealloc{
-    [_valueLabelFormat release];
+    [_textFormat release];
     [super dealloc];
 }
 
@@ -36,7 +36,7 @@
 
 - (void)postInit{
     [super postInit];
-    self.valueLabelFormat = @"%g";
+    self.textFormat = @"%g";
     self.maximumValue = -1;
     self.minimumValue = -1;
 }
@@ -112,15 +112,15 @@
 
 - (void)setupLabel{
     NSNumber* value = [NSValueTransformer transformProperty:self.property toClass:[NSNumber class]];
-    NSString* str = [NSString stringWithFormat:self.valueLabelFormat,[value floatValue]];
+    NSString* str = [NSString stringWithFormat:self.textFormat,[value floatValue]];
     
     UILabel* ValueLabel = [self.view viewWithName:@"ValueLabel"];
     ValueLabel.text = str;
 }
 
-- (void)setValueLabelFormat:(NSString*)valueLabelFormat{
-    [_valueLabelFormat release];
-    _valueLabelFormat = [valueLabelFormat retain];
+- (void)setTextFormat:(NSString*)textFormat{
+    [_textFormat release];
+    _textFormat = [textFormat retain];
     
     if(self.state == CKViewControllerStateDidAppear){
         [self setupLabel];

@@ -22,10 +22,18 @@
 - (void)dealloc{
     [_textInputFormatter release];
     [_valuePlaceholderLabel release];
+    [_textFormat release];
     [super dealloc];
 }
 
 #pragma mark ViewController Life Cycle
+
+- (void)postInit{
+    [super postInit];
+    
+    self.textFormat = @"%@";
+    self.flags = CKViewControllerFlagsNone;
+}
 
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     self = [super initWithProperty:property readOnly:readOnly];
@@ -35,7 +43,6 @@
     self.minimumLength = attributes.minimumLength;
     self.maximumLength = attributes.maximumLength;
     self.textInputFormatter = attributes.textInputFormatterBlock;
-    self.flags = CKViewControllerFlagsNone;
     
     if([self.property isNumber]){
         if(attributes.placeholderValue){
@@ -131,6 +138,7 @@
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
         NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
+        str = [NSString stringWithFormat:self.textFormat,str];
 
         if(ValueTextField.hidden == NO && ![ValueTextField.text isEqualToString:str]){
             ValueTextField.text = str;

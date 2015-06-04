@@ -79,8 +79,8 @@
  */
 @property(nonatomic,assign) CGFloat maximumValue;
 
-/** Setting the text in the ValueLabel can be customized by setting a format. Default value is @"%g".
+/** Setting the text in the textFormat can be customized by setting a format. Default value is @"%g".
  */
-@property(nonatomic,retain) NSString* valueLabelFormat;
+@property(nonatomic,retain) NSString* textFormat;
 
 @end
