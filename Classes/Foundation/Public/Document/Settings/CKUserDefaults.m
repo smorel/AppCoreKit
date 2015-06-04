@@ -94,7 +94,8 @@
                         [collection addObjectsFromArray:arrayToSerialize];
                     }
                     else{
-                        [self setValue:value forKeyPath:property.name];
+                        [NSValueTransformer transform:value inProperty:[CKProperty propertyWithObject:self keyPath:property.name]];
+                        //                        [self setValue:value forKeyPath:property.name];
                     }
                 }
             }
@@ -116,7 +117,8 @@
                         [collection addObjectsFromArray:value];
                     }
                     else{
-                        [self setValue:value forKeyPath:property.name];
+                        [NSValueTransformer transform:value inProperty:[CKProperty propertyWithObject:self keyPath:property.name]];
+                        //[self setValue:value forKeyPath:property.name];
                     }
                 }
             }
@@ -154,7 +156,8 @@
         NSString* key = [NSString stringWithFormat:@"%@_%@",[[self class]description],theKeyPath];
         id value = [self valueForKeyPath:theKeyPath];
         if(value != nil){
-            [[NSUserDefaults standardUserDefaults]setObject:value forKey:key];
+            NSString* str = [NSValueTransformer transformProperty:[CKProperty propertyWithObject:self keyPath:theKeyPath] toClass:[NSString class]];
+            [[NSUserDefaults standardUserDefaults]setObject:str forKey:key];
         }
         else{
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:key];
