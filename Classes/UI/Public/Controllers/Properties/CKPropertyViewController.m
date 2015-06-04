@@ -18,7 +18,8 @@
 #import "UIView+Style.h"
 
 @interface CKPropertyViewController ()
-
+@property(nonatomic,assign) CKAccessoryType accessoryTypeToRestoreWhenResigningResponder;
+@property(nonatomic,assign) CKPropertyEditionPresentationStyle editionControllerPresentationStyle;
 @end
 
 @implementation CKPropertyViewController
@@ -148,6 +149,8 @@
     controller.view.backgroundColor = self.containerViewController.view.backgroundColor;
     controller.title = _(self.property.name);
     controller.name = self.property.name;
+    
+    self.editionControllerPresentationStyle = presentationStyle;
     
     __unsafe_unretained CKPropertyViewController* bself = self;
     
@@ -279,6 +282,9 @@
                 [self scrollToCell];
             });
             
+            self.accessoryTypeToRestoreWhenResigningResponder = self.accessoryType;
+            self.accessoryType = CKAccessoryNone;
+            
             break;
         }
     }
@@ -290,6 +296,10 @@
     CKVerticalBoxLayout* vbox = (CKVerticalBoxLayout*)[self.view layoutWithName:@"InlineEditionControllerLayout"];
     if(vbox){
         [self.view removeLayoutBox:vbox];
+    }
+    
+    if(self.editionControllerPresentationStyle == CKPropertyEditionPresentationStyleInline){
+        self.accessoryType = self.accessoryTypeToRestoreWhenResigningResponder;
     }
 }
 
