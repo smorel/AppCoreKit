@@ -12,11 +12,10 @@
  */
 @interface CKPropertyColorViewController : CKPropertyViewController
 
-
-/** Default value is a localized string as follow: _(@"propertyName") that can be customized by setting a key/value in your localization file as follow:
- "propertyName" = "My Title";
- Or simply set the propertyNameLabel property programatically or in your stylesheet in the CKPropertyStringViewController scope.
+/** You can specify the order and a selected amount of component you want to display.
+ For example if display a solid color with no alpha, you can specify [ @"red", "@green", @"blue" ] 
+ Default value is nil meaning displaying all the components.
  */
-@property(nonatomic,retain) NSString* propertyNameLabel;
+@property(nonatomic,retain) NSSet* components;
 
 @end

@@ -62,6 +62,7 @@
 
 - (void)dealloc{
     [_vector release];
+    [_components release];
     [super dealloc];
 }
 
@@ -105,6 +106,13 @@
     void(^update)() = ^(){
         for(CKProperty* editableProperty in bself.vector.editableProperties){
             CKPropertyNumberViewController* controller = (CKPropertyNumberViewController*)[bself.view layoutWithName:editableProperty.name];
+            if(bself.components){
+                if([bself.components containsObject:editableProperty.keyPath]){
+                    controller.hidden = NO;
+                }else{
+                    controller.hidden = YES;
+                }
+            }
             controller.readOnly = bself.readOnly;
             controller.property = editableProperty;
         }

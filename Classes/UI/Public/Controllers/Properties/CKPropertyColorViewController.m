@@ -12,6 +12,10 @@
 
 @implementation CKPropertyColorViewController
 
+- (void)dealloc{
+    [_components release];
+    [super dealloc];
+}
 
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     self = [super initWithProperty:property readOnly:readOnly];
@@ -46,6 +50,7 @@
     
     CKPropertyVectorViewController* controller = (CKPropertyVectorViewController*)[self.view layoutWithName:@"VectorViewController"];
     controller.propertyNameLabel = self.propertyNameLabel;
+    controller.components = self.components;
     controller.readOnly = self.readOnly;
     controller.property = self.property;
     

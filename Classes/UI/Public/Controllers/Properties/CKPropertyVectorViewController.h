@@ -43,5 +43,12 @@
  */
 + (instancetype)controllerWithPropertyVector:(CKPropertyVector*)vector readOnly:(BOOL)readOnly;
 
+/** You can specify the order and a selected amount of component you want to display.
+ For example if display a solid color with no alpha, you can specify [ @"red", "@green", @"blue" ]
+ If you just want to display the x component of a rectangle or a point you can specify [ @"x" ]
+ 
+ Default value is nil meaning displaying all the components.
+ */
+@property(nonatomic,retain) NSSet* components;
 
 @end
