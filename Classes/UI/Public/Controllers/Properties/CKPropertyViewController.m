@@ -38,7 +38,7 @@
 }
 
 + (instancetype)controllerWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
-    return [[[[self class]alloc]initWithProperty:property readOnly:NO]autorelease];
+    return [[[[self class]alloc]initWithProperty:property readOnly:readOnly]autorelease];
 }
 
 - (id)initWithProperty:(CKProperty*)property{
