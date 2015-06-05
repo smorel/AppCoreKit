@@ -76,6 +76,7 @@
 #import "CKPropertyVectorViewController.h"
 #import "CKPropertyColorViewController.h"
 #import "CKPropertiesSampleViewController.h"
+#import "CKLayoutUnitTestViewController.h"
 
 #import "CKReusableViewController+Standard.h"
 #import "CKReusableViewController+Property.h"

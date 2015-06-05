@@ -194,6 +194,29 @@ static char UIViewControllerNameKey;
     return [self.view padding];
 }
 
+- (void)setFlexibleSize:(BOOL)flexibleSize{
+    [self.view setFlexibleSize:flexibleSize];
+}
+
+- (BOOL)flexibleSize{
+    return self.view.flexibleSize;
+}
+
+
+- (void)setFlexibleHeight:(BOOL)flexibleHeight{
+    [self.view setFlexibleHeight:flexibleHeight];
+}
+- (BOOL)flexibleHeight{
+    return self.view.flexibleHeight;
+}
+
+
+- (void)setFlexibleWidth:(BOOL)flexibleWidth{
+    [self.view setFlexibleWidth:flexibleWidth];
+}
+- (BOOL)flexibleWidth{
+    return self.view.flexibleWidth;
+}
 
 - (void)setLayoutBoxes:(CKArrayCollection*)boxes{
     [self.view setLayoutBoxes:boxes];

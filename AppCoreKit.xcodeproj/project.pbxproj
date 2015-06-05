@@ -650,6 +650,8 @@
 		D9BDB6091B179C1B00FBA443 /* UISearchBar+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB6071B179C1B00FBA443 /* UISearchBar+Introspection.m */; };
 		D9BDB60D1B17A52E00FBA443 /* NSNull+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = D9BDB60B1B17A52E00FBA443 /* NSNull+Parsing.h */; };
 		D9BDB60E1B17A52E00FBA443 /* NSNull+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */; };
+		D9C3B0BB1B22030400B2C07D /* CKLayoutUnitTestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9C3B0B81B22030400B2C07D /* CKLayoutUnitTestViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D9C3B0BC1B22030400B2C07D /* CKLayoutUnitTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C3B0B91B22030400B2C07D /* CKLayoutUnitTestViewController.m */; };
 		D9CCF0931B18E25A008FE344 /* CKMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CCF0941B18E35D008FE344 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKMapViewController.m */; };
 		D9CCF0A31B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CCF0A11B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1356,6 +1358,8 @@
 		D9BDB6071B179C1B00FBA443 /* UISearchBar+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UISearchBar+Introspection.m"; path = "Classes/Foundation/Private/Additions/UIKit/UISearchBar+Introspection.m"; sourceTree = "<group>"; };
 		D9BDB60B1B17A52E00FBA443 /* NSNull+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNull+Parsing.h"; path = "Classes/Foundation/Private/Additions/Foundations/NSNull+Parsing.h"; sourceTree = "<group>"; };
 		D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNull+Parsing.m"; path = "Classes/Foundation/Private/Additions/Foundations/NSNull+Parsing.m"; sourceTree = "<group>"; };
+		D9C3B0B81B22030400B2C07D /* CKLayoutUnitTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutUnitTestViewController.h; path = "Classes/UI/Public/Unit Tests/CKLayoutUnitTestViewController.h"; sourceTree = "<group>"; };
+		D9C3B0B91B22030400B2C07D /* CKLayoutUnitTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLayoutUnitTestViewController.m; path = "Classes/UI/Public/Unit Tests/CKLayoutUnitTestViewController.m"; sourceTree = "<group>"; };
 		D9CCF0A11B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+CKLayout.h"; path = "Classes/Layout/Public/Additions/UIKit/UIActivityIndicatorView+CKLayout.h"; sourceTree = "<group>"; };
 		D9CCF0A21B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActivityIndicatorView+CKLayout.m"; path = "Classes/Layout/Public/Additions/UIKit/UIActivityIndicatorView+CKLayout.m"; sourceTree = "<group>"; };
 		D9CD824A1AC1CD3200B2985D /* CKCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionViewController.h; path = Classes/UI/Public/CollectionViewController/CKCollectionViewController.h; sourceTree = "<group>"; };
@@ -1617,6 +1621,7 @@
 				D9418A681AB8755A00234A15 /* Section View Controllers */,
 				D91D65681AE8333E00B19E14 /* Transitions */,
 				D9BDB5C21AFAA95F00FBA443 /* Motion */,
+				D9C3B0B71B2202DA00B2C07D /* Unit Tests */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -3285,6 +3290,15 @@
 			name = NSNull;
 			sourceTree = "<group>";
 		};
+		D9C3B0B71B2202DA00B2C07D /* Unit Tests */ = {
+			isa = PBXGroup;
+			children = (
+				D9C3B0B81B22030400B2C07D /* CKLayoutUnitTestViewController.h */,
+				D9C3B0B91B22030400B2C07D /* CKLayoutUnitTestViewController.m */,
+			);
+			name = "Unit Tests";
+			sourceTree = "<group>";
+		};
 		D9CCF0A01B1CA3E0008FE344 /* UIActivityIndicatorView */ = {
 			isa = PBXGroup;
 			children = (
@@ -3660,6 +3674,7 @@
 				7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */,
 				B084A649156E786D0077AFDE /* CKWebViewController.m in Headers */,
 				7560DC7B13B8ED3600268D13 /* CKCallback.h in Headers */,
+				D9C3B0BB1B22030400B2C07D /* CKLayoutUnitTestViewController.h in Headers */,
 				7560DC8313B8ED3600268D13 /* CKClassExplorer.h in Headers */,
 				7560DC8513B8ED3600268D13 /* CKClassPropertyDescriptor.h in Headers */,
 				D98BDD191AF00B6F00A0AECD /* CKSharedDisplayLink.h in Headers */,
@@ -4125,6 +4140,7 @@
 				D98F3FCE1AB36CC40094572C /* CKPropertyNumberViewController.m in Sources */,
 				7560DC9E13B8ED3600268D13 /* CKCollection.m in Sources */,
 				7560DCA413B8ED3600268D13 /* CKCollectionController.m in Sources */,
+				D9C3B0BC1B22030400B2C07D /* CKLayoutUnitTestViewController.m in Sources */,
 				7560DCAA13B8ED3600268D13 /* CKDomain.m in Sources */,
 				7560DCAC13B8ED3600268D13 /* CKFeedSource.m in Sources */,
 				D9418A6C1AB8759B00234A15 /* CKSectionContainer.m in Sources */,

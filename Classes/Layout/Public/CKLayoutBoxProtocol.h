@@ -91,6 +91,17 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 
 /**
  */
+@property(nonatomic,assign) BOOL flexibleSize;
+/**
+ */
+@property(nonatomic,assign) BOOL flexibleWidth;
+
+/**
+ */
+@property(nonatomic,assign) BOOL flexibleHeight;
+
+/**
+ */
 @property(nonatomic,assign) UIEdgeInsets margins;
 /**
  */

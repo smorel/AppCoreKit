@@ -37,7 +37,7 @@
 
 @dynamic  maximumSize, minimumSize, margins, padding, layoutBoxes,frame,containerLayoutBox,containerLayoutView,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,containerViewController;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,containerViewController, flexibleHeight, flexibleWidth;
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -83,6 +83,14 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
         size.height = 0;
     }
     
+    if(self.flexibleWidth && size.width < MAXFLOAT){
+        size.width = size.width;
+    }
+    
+    if(self.flexibleHeight && size.height < MAXFLOAT){
+        size.height = size.height;
+    }
+    
     size = [CKLayoutBox preferredSizeConstraintToSize:size forBox:self];
     size = CGSizeMake(ceilf(size.width - (self.padding.left + self.padding.right)), ceilf(size.height - (self.padding.top + self.padding.bottom)));
     
@@ -92,7 +100,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize constraint = theframe.size;
-    if(!self.flexibleSize && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
+    if(!self.flexibleHeight && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         constraint.height = MAXFLOAT;
     }
     
@@ -146,7 +154,14 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
             }
         }
         
-        CGRect newFrame = CGRectMake(self.frame.origin.x,self.frame.origin.y,boundingBox.width + (self.padding.left + self.padding.right),boundingBox.height + (self.padding.top + self.padding.bottom));
+        CGFloat width = boundingBox.width + (self.padding.left + self.padding.right);
+        CGFloat height = boundingBox.height + (self.padding.top + self.padding.bottom);
+        
+        CGRect newFrame = CGRectMake(self.frame.origin.x,self.frame.origin.y,
+                                     self.flexibleWidth ? frame.size.width : width,
+                                     self.flexibleHeight ? frame.size.height : height
+                                     );
+        
         CGRect oldFrame = self.frame;
         [self setBoxFrameTakingCareOfTransform:newFrame];
         
@@ -337,21 +352,22 @@ static char UIViewContainerLayoutBoxKey;
 static char UIViewLastComputedSizeKey;
 static char UIViewLastPreferedSizeKey;
 static char UIViewInvalidatedLayoutBlockKey;
-static char UIViewFlexibleSizeKey;
+static char UIViewFlexibleWidthKey;
+static char UIViewFlexibleHeightKey;
 
 @interface UIView (Layout_Private)
 @end
 
 @implementation UIView (Layout_Private)
 
-- (void)setFlexibleSize:(BOOL)flexibleSize{
+- (void)setFlexibleWidth:(BOOL)flexibleSize{
     objc_setAssociatedObject(self,
-                             &UIViewFlexibleSizeKey,
+                             &UIViewFlexibleWidthKey,
                              [NSNumber numberWithBool:flexibleSize],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)flexibleSize{
+- (BOOL)flexibleWidth{
     static Class c = nil;
     if(c == nil){
         c = NSClassFromString(@"UITableViewCellContentView");
@@ -361,9 +377,34 @@ static char UIViewFlexibleSizeKey;
         return YES;
     }
     
-    id value = objc_getAssociatedObject(self, &UIViewFlexibleSizeKey);
+    id value = objc_getAssociatedObject(self, &UIViewFlexibleWidthKey);
     return value ? [value boolValue] : ( [self isKindOfClass:[UIScrollView class]] ? YES : NO );
 }
+
+- (void)setFlexibleHeight:(BOOL)flexibleSize{
+    objc_setAssociatedObject(self,
+                             &UIViewFlexibleHeightKey,
+                             [NSNumber numberWithBool:flexibleSize],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)flexibleHeight{
+    static Class c = nil;
+    if(c == nil){
+        c = NSClassFromString(@"UITableViewCellContentView");
+    }
+    
+    if([self isKindOfClass:c]){
+        return YES;
+    }
+    
+    id value = objc_getAssociatedObject(self, &UIViewFlexibleHeightKey);
+    return value ? [value boolValue] : ( [self isKindOfClass:[UIScrollView class]] ? YES : NO );
+}
+
+
+- (void)setFlexibleSize:(BOOL)flexibleSize{ self.flexibleHeight = flexibleSize; self.flexibleWidth = flexibleSize; }
+- (BOOL)flexibleSize{ return self.flexibleWidth && self.flexibleHeight; }
 
 - (void)setInvalidatedLayoutBlock:(CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{
     objc_setAssociatedObject(self,

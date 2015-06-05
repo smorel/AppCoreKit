@@ -111,7 +111,7 @@
         [[CKImageCache sharedInstance]registerDelegate:self withImageURL:_imageURL];
     }
     
-    [self updateAnimated:NO];//activate spinner
+    [self updateAnimated:YES];//activate spinner
     
     [self didChangeValueForKey:@"imageURL"];
 }

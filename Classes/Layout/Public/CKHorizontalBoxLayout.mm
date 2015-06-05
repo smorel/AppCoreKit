@@ -199,6 +199,8 @@ namespace __gnu_cxx{
                        numberOfFlexibleBoxes:(NSInteger&)numberOfFlexibleBoxes
                       numberOfFlexibleSpaces:(NSInteger&)numberOfFlexibleSpaces{
     
+    BOOL bypass = (size.width >= MAXFLOAT);
+    
     for(int i =0;i < [self.layoutBoxes count]; ++i){
         NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
         if(!box.hidden){
@@ -206,7 +208,9 @@ namespace __gnu_cxx{
                 CGFloat height = MIN(box.maximumSize.width,size.height - box.margins.top - box.margins.bottom);
                 
                 CGFloat preferedWidth = 0;
-                preferedWidth = MAX(0,(freeSpace / numberOfFlexibleSpaces) );
+                if(!bypass){
+                    preferedWidth = MAX(0,(freeSpace / numberOfFlexibleSpaces) );
+                }
                 --numberOfFlexibleSpaces;
                 
                 CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(preferedWidth,height)];
@@ -306,17 +310,22 @@ namespace __gnu_cxx{
         
     }
     
-    if(!self.flexibleSize){
-        CGSize maxSize = [self computeMaximumSizeWithSize:size computedSizePerBoxes:computedSizePerBoxes flexibleWithPerBoxes:flexibleWithPerBoxes freeSpace:freeSpace numberOfFlexibleBoxes:numberOfFlexibleBoxes numberOfFlexibleSpaces:numberOfFlexibleSpaces];
-        
-        CGSize ret = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(MIN(maxSize.width,size.width),MIN(maxSize.height,size.height)) forBox:self];
-        self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
-                                                                                      ret.height + self.padding.bottom + self.padding.top)
-                                                                    forBox:self];
-        
-    }else{
-        self.lastPreferedSize = constraintSize;
+    CGSize maxSize = [self computeMaximumSizeWithSize:size computedSizePerBoxes:computedSizePerBoxes flexibleWithPerBoxes:flexibleWithPerBoxes freeSpace:freeSpace numberOfFlexibleBoxes:numberOfFlexibleBoxes numberOfFlexibleSpaces:numberOfFlexibleSpaces];
+    
+    if(self.flexibleWidth && constraintSize.width < MAXFLOAT){
+        maxSize.width = constraintSize.width - (self.padding.left + self.padding.right);
     }
+    
+    if(self.flexibleHeight && constraintSize.height < MAXFLOAT){
+        maxSize.height = constraintSize.height - (self.padding.bottom + self.padding.top);
+    }
+    
+    
+    CGSize ret = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(MIN(maxSize.width,size.width),MIN(maxSize.height,size.height)) forBox:self];
+    self.lastPreferedSize = [CKLayoutBox preferredSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
+                                                                                  ret.height + self.padding.bottom + self.padding.top)
+                                                                forBox:self];
+    
     
     return self.lastPreferedSize;
 }

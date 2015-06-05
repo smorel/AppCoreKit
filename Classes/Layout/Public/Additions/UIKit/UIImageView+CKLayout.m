@@ -36,44 +36,9 @@ CGSize CKSizeThatFitsRatio(CGSize size, CGFloat ratio){
 
 @end
 
-static char UIImageViewFlexibleWidthKey;
-static char UIImageViewFlexibleHeightKey;
 
 @implementation UIImageView (CKLayout)
-@dynamic flexibleWidth,flexibleHeight,flexibleSize;
 
-- (void)setFlexibleWidth:(BOOL)flexibleWidth{
-    objc_setAssociatedObject(self,
-                             &UIImageViewFlexibleWidthKey,
-                             [NSNumber numberWithBool:flexibleWidth],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)flexibleWidth{
-    id value = objc_getAssociatedObject(self, &UIImageViewFlexibleWidthKey);
-    return value ? [value boolValue] : NO;
-}
-
-- (void)setFlexibleHeight:(BOOL)flexibleHeight{
-    objc_setAssociatedObject(self,
-                             &UIImageViewFlexibleHeightKey,
-                             [NSNumber numberWithBool:flexibleHeight],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)flexibleHeight{
-    id value = objc_getAssociatedObject(self, &UIImageViewFlexibleHeightKey);
-    return value ? [value boolValue] : NO;
-}
-
-- (void)setFlexibleSize:(BOOL)flexibleSize{
-    [self setFlexibleHeight:flexibleSize];
-    [self setFlexibleWidth:flexibleSize];
-}
-
-- (BOOL)flexibleSize{
-    return self.flexibleHeight && self.flexibleWidth;
-}
 
 - (void)invalidateLayout{
     if([[self superview] isKindOfClass:[UIButton class]]){

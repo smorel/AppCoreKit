@@ -21,45 +21,9 @@
 @end
 
 
-static char UILabelFlexibleWidthKey;
-static char UILabelFlexibleHeightKey;
 static char UILabelUsesAttributedStringKey;
 
 @implementation UILabel (CKLayout)
-@dynamic flexibleWidth,flexibleHeight,flexibleSize;
-
-- (void)setFlexibleWidth:(BOOL)flexibleWidth{
-    objc_setAssociatedObject(self,
-                             &UILabelFlexibleWidthKey,
-                             [NSNumber numberWithBool:flexibleWidth],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)flexibleWidth{
-    id value = objc_getAssociatedObject(self, &UILabelFlexibleWidthKey);
-    return value ? [value boolValue] : NO;
-}
-
-- (void)setFlexibleHeight:(BOOL)flexibleHeight{
-    objc_setAssociatedObject(self,
-                             &UILabelFlexibleHeightKey,
-                             [NSNumber numberWithBool:flexibleHeight],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)flexibleHeight{
-    id value = objc_getAssociatedObject(self, &UILabelFlexibleHeightKey);
-    return value ? [value boolValue] : NO;
-}
-
-- (void)setFlexibleSize:(BOOL)flexibleSize{
-    [self setFlexibleHeight:flexibleSize];
-    [self setFlexibleWidth:flexibleSize];
-}
-
-- (BOOL)flexibleSize{
-    return self.flexibleHeight && self.flexibleWidth;
-}
 
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{

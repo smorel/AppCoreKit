@@ -13,10 +13,6 @@
  */
 @interface CKVerticalBoxLayout : CKLayoutBox
 
-/** default value is NO
- */
-@property(nonatomic,assign) BOOL flexibleSize;
-
 @end
 
 

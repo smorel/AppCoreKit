@@ -44,7 +44,7 @@ namespace __gnu_cxx{
 @implementation CKLayoutBox
 @synthesize maximumSize = _maximumSize, minimumSize = _minimumSize, margins = _margins, padding = _padding, layoutBoxes = _layoutBoxes,frame,containerLayoutBox,containerLayoutView = _containerLayoutView,verticalAlignment,horizontalAlignment,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock, name, containerViewController;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock, name, containerViewController,flexibleWidth = _flexibleWidth, flexibleHeight = _flexibleHeight;
 
 #ifdef LAYOUT_DEBUG_ENABLED
 @synthesize debugView;
@@ -486,6 +486,11 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 - (void)setPaddingBottom:(CGFloat)f { UIEdgeInsets insets = self.padding; insets.bottom = f; self.padding = insets; }
 - (void)setPaddingRight:(CGFloat)f  { UIEdgeInsets insets = self.padding; insets.right = f; self.padding = insets; }
 
+- (void)setFlexibleSize:(BOOL)flexibleSize{
+    self.flexibleHeight = flexibleSize; self.flexibleWidth = flexibleSize;
+}
+
+- (BOOL)flexibleSize{ return self.flexibleWidth && self.flexibleHeight; }
 
 - (CGFloat)maximumWidth  { return self.maximumSize.width; }
 - (CGFloat)maximumHeight { return self.maximumSize.height; }

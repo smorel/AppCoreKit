@@ -25,44 +25,8 @@
 
 @end
 
-static char UIButtonFlexibleWidthKey;
-static char UIButtonFlexibleHeightKey;
 
 @implementation UIButton (CKLayout)
-@dynamic flexibleWidth,flexibleHeight,flexibleSize;
-
-- (void)setFlexibleWidth:(BOOL)flexibleWidth{
-    objc_setAssociatedObject(self,
-                             &UIButtonFlexibleWidthKey,
-                             [NSNumber numberWithBool:flexibleWidth],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)flexibleWidth{
-    id value = objc_getAssociatedObject(self, &UIButtonFlexibleWidthKey);
-    return value ? [value boolValue] : NO;
-}
-
-- (void)setFlexibleHeight:(BOOL)flexibleHeight{
-    objc_setAssociatedObject(self,
-                             &UIButtonFlexibleHeightKey,
-                             [NSNumber numberWithBool:flexibleHeight],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)flexibleHeight{
-    id value = objc_getAssociatedObject(self, &UIButtonFlexibleHeightKey);
-    return value ? [value boolValue] : NO;
-}
-
-- (void)setFlexibleSize:(BOOL)flexibleSize{
-    [self setFlexibleHeight:flexibleSize];
-    [self setFlexibleWidth:flexibleSize];
-}
-
-- (BOOL)flexibleSize{
-    return self.flexibleHeight && self.flexibleWidth;
-}
 
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
