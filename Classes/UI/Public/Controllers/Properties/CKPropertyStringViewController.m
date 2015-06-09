@@ -138,7 +138,7 @@
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
         NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
-        str = [NSString stringWithFormat:self.textFormat,str];
+        str = str ? [NSString stringWithFormat:self.textFormat,str] : nil;
 
         if(ValueTextField.hidden == NO && ![ValueTextField.text isEqualToString:str]){
             ValueTextField.text = str;
