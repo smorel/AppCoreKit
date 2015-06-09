@@ -9,6 +9,7 @@
 #import "CKStandardContentViewController.h"
 #import "CKResourceManager.h"
 #import "UIImageView+URL.h"
+#import "CKImageView.h"
 
 @interface CKStandardContentViewController ()
 
@@ -76,7 +77,7 @@
         return;
     
     
-    UIImageView* imageView = [[[UIImageView alloc]init]autorelease];
+    CKImageView* imageView = [[[CKImageView alloc]init]autorelease];
     imageView.name = @"ImageView";
     // imageView.flexibleHeight = YES;
     
@@ -123,27 +124,23 @@
 }
 
 - (void)setupImageView{
-    UIImageView* imageView = [self.view viewWithName:@"ImageView"];
+    CKImageView* imageView = [self.view viewWithName:@"ImageView"];
+    
     if(self.defaultImageName){
-        imageView.image = [CKResourceManager imageNamed:self.defaultImageName];
-    }else{
-        imageView.image = nil;
+        imageView.defaultImage = [CKResourceManager imageNamed:self.defaultImageName];
     }
     
+    imageView.imageURL = nil;
+    imageView.image = imageView.defaultImage;
+    
     if(self.imageURL){
-        imageView.hidden = NO;
-        [imageView loadImageWithUrl:self.imageURL completion:^(UIImage *image, NSError *error) {
-        }];
-    }else{
-        imageView.hidden = YES;
+        imageView.imageURL = self.imageURL;
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
-    UIImageView* imageView = [self.view viewWithName:@"ImageView"];
-    [imageView cancelNetworkOperations];
+
 }
 
 

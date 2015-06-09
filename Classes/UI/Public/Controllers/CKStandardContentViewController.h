@@ -60,7 +60,7 @@
                 (font, textColor, margins, ...)
           },
  
-          "UIImageView[name=ImageView]" : {
+          "CKImageView[name=ImageView]" : {
           }
      }
  }
