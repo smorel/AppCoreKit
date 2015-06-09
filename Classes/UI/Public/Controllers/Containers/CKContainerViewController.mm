@@ -297,9 +297,9 @@ typedef void(^CKTransitionBlock)();
             return;
         
         UIViewController *newController = [self.viewControllers objectAtIndex:index];
-        if(index == self.selectedIndex && [newController.view superview] != nil){
-            return;
-        }
+        // if(index == self.selectedIndex && [newController.view superview] != nil ){
+        //    return;
+        //}
         
         UIViewController *oldController = (index == _selectedIndex) ? nil : [self.viewControllers objectAtIndex:_selectedIndex];
         
