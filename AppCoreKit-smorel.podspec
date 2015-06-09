@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.default_subspec = 'All'
 
-  s.frameworks =  'UIKit', 'Foundation', 'CoreImage', 'CoreGraphics', 'AddressBook', 'CoreData', 'QuartzCore', 'CoreLocation', 'MapKit', 'MediaPlayer', 'CoreFoundation', 'CFNetwork', 'SystemConfiguration', 'MobileCoreServices', 'Security', 'AdSupport', "Accelerate"
+  s.frameworks =  'UIKit', 'Foundation', 'CoreImage', 'CoreGraphics', 'AddressBook', 'CoreData', 'QuartzCore', 'CoreLocation', 'MapKit', 'MediaPlayer', 'CoreFoundation', 'CFNetwork', 'SystemConfiguration', 'MobileCoreServices', 'Security', 'AdSupport', 'Accelerate', 'CoreMotion'
 
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '/usr/include/libxml2', 'OTHER_LDFLAGS' => '-ObjC -all_load -lxml2 -licucore -lz -lc++ -weak_library /usr/lib/libstdc++.dylib' } 
 
