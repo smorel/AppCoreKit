@@ -77,6 +77,16 @@
     self = [super initWithProperty:property readOnly:readOnly];
     self.multiSelectionEnabled = multiSelectionEnabled;
     
+    [self updatesValues:valuesAndLabels];
+    
+    CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
+    
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    return self;
+}
+
+- (void)updatesValues:(NSDictionary*)valuesAndLabels{
     self.values = [NSMutableArray array];
     for(NSString* label in [valuesAndLabels allKeys]){
         id value = [valuesAndLabels objectForKey:label];
@@ -87,12 +97,6 @@
         v.value = value;
         [self.values addObject:v];
     }
-    
-    CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
-    
-    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    return self;
 }
 
 - (void)postInit{
@@ -168,7 +172,7 @@
 
 - (NSString*)labelForObjectValue:(id)object{
     for(CKPropertySelectionValue* v in self.values){
-        if([self.property.value isEqual:object]){
+        if([v.value isEqual:object]){
             return _(v.label);
         }
     }
@@ -270,6 +274,14 @@
 
 - (void)becomeFirstResponder{
     [super becomeFirstResponder];
+    
+    CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
+    
+    if(attributes.enumDescriptor){
+        [self updatesValues:attributes.enumDescriptor.valuesAndLabels];
+    }else if( attributes.valuesAndLabels){
+        [self updatesValues:attributes.valuesAndLabels];
+    }
     
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
