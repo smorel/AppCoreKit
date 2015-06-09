@@ -369,7 +369,6 @@
 		9622AAFC1501395E00AEF369 /* UIView+DragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+DragNDrop.m */; };
 		96234819157D6A770036002C /* UIViewController+DeviceOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96234817157D6A760036002C /* UIViewController+DeviceOrientation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9623481A157D6A770036002C /* UIViewController+DeviceOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96234818157D6A760036002C /* UIViewController+DeviceOrientation.mm */; };
-		962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
 		962C08931820131B00A6E439 /* CKStackViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 962C08911820131B00A6E439 /* CKStackViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		962C08941820131B00A6E439 /* CKStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962C08921820131B00A6E439 /* CKStackViewController.m */; };
 		962C6C5B16E7DBD100852D21 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962C6C5A16E7DBD100852D21 /* AdSupport.framework */; };
@@ -652,6 +651,7 @@
 		D9BDB60E1B17A52E00FBA443 /* NSNull+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = D9BDB60C1B17A52E00FBA443 /* NSNull+Parsing.m */; };
 		D9C3B0BB1B22030400B2C07D /* CKLayoutUnitTestViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9C3B0B81B22030400B2C07D /* CKLayoutUnitTestViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9C3B0BC1B22030400B2C07D /* CKLayoutUnitTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C3B0B91B22030400B2C07D /* CKLayoutUnitTestViewController.m */; };
+		D9C3B0E71B276AE700B2C07D /* CloudKit.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
 		D9CCF0931B18E25A008FE344 /* CKMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9CCF0941B18E35D008FE344 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKMapViewController.m */; };
 		D9CCF0A31B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = D9CCF0A11B1CA400008FE344 /* UIActivityIndicatorView+CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1679,6 +1679,7 @@
 		7506E40A13B9009400EE1471 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */,
 				75C6DF6513FEE8B100E4AE4F /* CoreData.h */,
 				7560DB9313B8ED3600268D13 /* CKObject+CKStore.h */,
 				7560DB9413B8ED3600268D13 /* CKObject+CKStore.m */,
@@ -1734,7 +1735,6 @@
 			children = (
 				7550153913B8EA08002DAE8B /* AppCoreKit-Info.plist */,
 				7550153A13B8EA08002DAE8B /* InfoPlist.strings */,
-				7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */,
 				7536F9D113CE0BE900720C17 /* Images */,
 				75A83AC213D75A8400413C17 /* CloudKit.strings */,
 			);
@@ -4060,6 +4060,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9C3B0E71B276AE700B2C07D /* CloudKit.xcdatamodeld in Resources */,
 				7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */,
 				7536F9E313CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png in Resources */,
 				7536F9E413CE0BE900720C17 /* CKKeypadViewBackspaceButton.png in Resources */,
@@ -4371,7 +4372,6 @@
 				709C71CD1843BE8C006BB1DD /* UIControl+Introspection.m in Sources */,
 				B0EA78A7156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm in Sources */,
 				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
-				962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */,
 				96B4516618D099F800D58489 /* CKSwipeableViewController.m in Sources */,
 				9623481A157D6A770036002C /* UIViewController+DeviceOrientation.mm in Sources */,
 				960CAED7157E50F500F6C887 /* UIGestureRecognizer+BlockBasedInterface.m in Sources */,
