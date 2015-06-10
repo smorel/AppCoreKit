@@ -79,6 +79,7 @@
     
     CKImageView* imageView = [[[CKImageView alloc]init]autorelease];
     imageView.name = @"ImageView";
+    imageView.animateLoadingOfImagesLoadedFromCache = NO;
     // imageView.flexibleHeight = YES;
     
     UILabel* titleLabel = [[[UILabel alloc]init]autorelease];
