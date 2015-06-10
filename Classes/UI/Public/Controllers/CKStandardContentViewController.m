@@ -136,6 +136,8 @@
     if(self.imageURL){
         imageView.imageURL = self.imageURL;
     }
+    
+    imageView.hidden = (self.defaultImageName == nil && self.imageURL == nil);
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
