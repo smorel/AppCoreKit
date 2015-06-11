@@ -63,6 +63,7 @@
 
 #import "CKReusableViewController+ResponderChain.h"
 #import "CKStandardContentViewController.h"
+#import "CKSectionHeaderFooterViewController.h"
 #import "CKButtonViewController.h"
 #import "CKCollectionStatusViewController.h"
 #import "CKPropertyViewController.h"

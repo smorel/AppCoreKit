@@ -603,7 +603,7 @@
 		D9418AA11ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418A9F1ABB024F00234A15 /* NSDateFormatter+ValueTransformer.m */; };
 		D9418AA51ABB030D00234A15 /* NSCalendar+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AA31ABB030D00234A15 /* NSCalendar+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418AA61ABB030D00234A15 /* NSCalendar+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AA41ABB030D00234A15 /* NSCalendar+ValueTransformer.m */; };
-		D9418AAE1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AAC1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h */; };
+		D9418AAE1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AAC1ABB68B100234A15 /* CKSectionHeaderFooterViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418AAF1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */; };
 		D9418AB71AC1A46B00234A15 /* CKPassThroughView.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AB51AC1A46B00234A15 /* CKPassThroughView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418AB81AC1A46B00234A15 /* CKPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AB61AC1A46B00234A15 /* CKPassThroughView.m */; };
