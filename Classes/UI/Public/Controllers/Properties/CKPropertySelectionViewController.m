@@ -81,7 +81,8 @@
     
     CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
     
-    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.accessoryType = self.readOnly ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
+    self.flags = self.readOnly ? CKViewControllerFlagsNone : CKViewControllerFlagsSelectable;
     
     return self;
 }
@@ -109,6 +110,7 @@
     self.multiSelectionSeparatorString = @"\n";
     
     self.flags = self.readOnly ? CKViewControllerFlagsNone : CKViewControllerFlagsSelectable;
+    
 }
 
 - (NSString *)labelForNumberValue:(NSInteger)intValue {
@@ -233,6 +235,7 @@
 - (void)setupBindings{
     __unsafe_unretained CKPropertySelectionViewController* bself = self;
     
+    
     UILabel* PropertyNameLabel = [self.view viewWithName:@"PropertyNameLabel"];
     PropertyNameLabel.text = self.propertyNameLabel;
     
@@ -253,7 +256,7 @@
     }];
     
     [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
-        self.flags = bself.readOnly ? (self.flags &~ CKViewControllerFlagsSelectable) : (self.flags | CKViewControllerFlagsSelectable);
+        bself.flags = bself.readOnly ? (bself.flags &~ CKViewControllerFlagsSelectable) : (bself.flags | CKViewControllerFlagsSelectable);
     }];
 }
 
