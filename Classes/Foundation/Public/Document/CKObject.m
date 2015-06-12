@@ -429,6 +429,11 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 - (void)copyPropertiesFromObject : (id)other{
 	NSArray* allProperties = [other allPropertyDescriptors ];
 	for(CKClassPropertyDescriptor* property in allProperties){
+        
+        if( [property.name isEqualToString:@"hash"]
+         || [property.name isEqualToString:@"superclass"] )
+            continue;
+        
 		if(property.isReadOnly == NO){
 			CKPropertyExtendedAttributes* attributes = [property extendedAttributesForInstance:other];
 			if(attributes.copiable){
