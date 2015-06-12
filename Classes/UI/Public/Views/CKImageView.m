@@ -167,16 +167,30 @@
         [self addSubview:imageView];
         self.imageView = imageView;
         
-        [UIView animateWithDuration:(self.window && animated) ? self.fadeInDuration : 0 animations:^{
+        void(^animate)() = ^(){
             self.activityIndicatorView.alpha = 0;
             self.defaultImageView.alpha = 0;
             previousImageView.alpha = 0;
             self.imageView.alpha = 1;
-        } completion:^(BOOL finished) {
+        };
+        
+        void(^complete)() = ^(){
             [self.activityIndicatorView removeFromSuperview];
             [self.defaultImageView removeFromSuperview];
             [previousImageView removeFromSuperview];
-        }];
+        };
+        
+        if(self.window && animated && self.fadeInDuration > 0){
+            [UIView animateWithDuration:self.fadeInDuration animations:^{
+                animate();
+            } completion:^(BOOL finished) {
+                complete();
+            }];
+        }else{
+            animate();
+            complete();
+        }
+        
     }else{
         if(!self.defaultImageView){
             self.defaultImageView = [[UIImageView alloc]init];
@@ -193,13 +207,26 @@
         if(self.imageView){
             self.defaultImageView.alpha = 0;
             
-            [UIView animateWithDuration:(self.window && animated) ? self.fadeInDuration : 0 animations:^{
+            void(^animate)() = ^(){
                 self.defaultImageView.alpha = 1;
                 self.imageView.alpha = 0;
-            } completion:^(BOOL finished) {
+            };
+            
+            void(^complete)() = ^(){
                 [self.imageView removeFromSuperview];
                 self.imageView = nil;
-            }];
+            };
+            
+            if(self.window && animated && self.fadeInDuration > 0){
+                [UIView animateWithDuration:self.fadeInDuration animations:^{
+                    animate();
+                } completion:^(BOOL finished) {
+                    complete();
+                }];
+            }else{
+                animate();
+                complete();
+            }
         }
         
         if(self.imageURL && !self.image){
