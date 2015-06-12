@@ -273,6 +273,9 @@
     [self registerForKeyboardNotifications];
     [self fetchMoreData];
     
+    //Cells should be full updated before the table appears on screen.
+    [self.sectionContainer handleViewDidAppearAnimated:animated];
+    
     //for(NSIndexPath* indexPath in self.selectedIndexPaths){
     //    [self.pickerView selectRow:indexPath.row inComponent:indexPath.section animated:NO];
     //}
@@ -281,7 +284,6 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    [self.sectionContainer handleViewDidAppearAnimated:animated];
     
     if(self.tableHeaderViewController.state != CKViewControllerStateDidAppear){
         [self.tableHeaderViewController viewDidAppear:NO];
