@@ -351,10 +351,11 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     }else if([box isKindOfClass:[UIViewController class]]){
         UIViewController* viewController = (UIViewController*)box;
         UIView* view = viewController.view;
-
-        [viewController viewWillDisappear:NO];
-        [view removeFromSuperview];
-        [viewController viewDidDisappear:NO];
+        if([view superview]){
+            [viewController viewWillDisappear:NO];
+            [view removeFromSuperview];
+            [viewController viewDidDisappear:NO];
+        }
     }
     
     for(NSObject<CKLayoutBoxProtocol>* subBox in [box layoutBoxes]){
