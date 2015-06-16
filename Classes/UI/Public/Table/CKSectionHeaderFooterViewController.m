@@ -17,6 +17,12 @@
     return controller;
 }
 
+- (void)postInit{
+    [super postInit];
+    
+    self.flags = CKViewControllerFlagsNone;
+}
+
 - (void)dealloc{
     [_text release];
     [super dealloc];
