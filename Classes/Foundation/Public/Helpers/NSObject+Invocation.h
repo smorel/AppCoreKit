@@ -55,6 +55,10 @@
 
 /** 
  */
-- (void)cancelPeformBlock;
+- (void)cancelPeformBlock;//DEPRECATED: Typo
+
+/**
+ */
+- (void)cancelPerformBlock;
 
 @end

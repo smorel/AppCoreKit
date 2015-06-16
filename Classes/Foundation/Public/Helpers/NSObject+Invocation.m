@@ -229,7 +229,8 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     [[[CKInvokationObject alloc]initWithObject:self block:block modes:modes]autorelease];
 }
 
-- (void)cancelPeformBlock{
+- (void)cancelPerformBlock{
+    
     NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:self]];
     [ar retain];
     while([ar count] > 0){
@@ -238,6 +239,10 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
         [invokation cancel];
     }
     [ar release];
+}
+
+- (void)cancelPeformBlock{
+    [self cancelPerformBlock];
 }
 
 @end
