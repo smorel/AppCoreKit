@@ -127,7 +127,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     self.containerLayoutBox = nil;
     self.invalidatedLayoutBlock = nil;
     
-    [self removeAllLayoutBoxes];
+    //[self removeAllLayoutBoxes];
     
     [_layoutBoxes release];
     
@@ -351,7 +351,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     }else if([box isKindOfClass:[UIViewController class]]){
         UIViewController* viewController = (UIViewController*)box;
         UIView* view = viewController.view;
-        if([view superview]){
+        if([box containerLayoutView]){
             [viewController viewWillDisappear:NO];
             [view removeFromSuperview];
             [viewController viewDidDisappear:NO];
