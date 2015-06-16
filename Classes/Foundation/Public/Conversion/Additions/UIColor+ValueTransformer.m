@@ -10,6 +10,7 @@
 #import "NSValueTransformer+Additions.h"
 #import "UIColor+Additions.h"
 #import "CKResourceManager.h"
+#import "UIColor+Components.h"
 
 #import "CKResourceDependencyContext.h"
 
@@ -90,7 +91,7 @@
 }
 
 + (NSString*)convertToNSString:(UIColor*)color{
-	return [color description];
+    return [NSString stringWithFormat:@"%g %g %g %g",color.red,color.green,color.blue,color.alpha ];
 }
 
 @end
