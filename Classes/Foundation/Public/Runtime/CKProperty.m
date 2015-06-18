@@ -195,8 +195,16 @@
 }
 
 - (void)setValue:(id)value{
-    if([self isReadOnly])
+    if([self isReadOnly]){
+        //supports for readonly arrays (like subviews on UIView) with insert/remove runtime extension
+        if([value isKindOfClass:[NSArray class]]){
+            [self insertObjects:value atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.count, [value count])]];
+            return;
+        }
+        
+        NSLog(@"Could not set value %@ to readonly property %@",value,self);
         return;
+    }
     
     if([self.object isKindOfClass:[NSDictionary class]]){
         [self.object setObject:value forKey:self.keyPath];
