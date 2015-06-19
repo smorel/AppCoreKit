@@ -36,6 +36,13 @@
 }
 
 - (void)dealloc{
+    for(UIViewController* controller in self.viewControllers){
+        if(controller.state == CKViewControllerStateDidAppear){
+            [controller viewWillDisappear:NO];
+            [controller viewDidDisappear:NO];
+        }
+    }
+    
     [_viewControllers release];
     _viewControllers = nil;
     [super dealloc];

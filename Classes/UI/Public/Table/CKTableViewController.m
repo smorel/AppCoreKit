@@ -27,6 +27,7 @@
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 @property (nonatomic, assign, readwrite) NSInteger numberOfPages;
 @property (nonatomic, assign, readwrite) BOOL scrolling;
+@property (nonatomic, assign, readwrite) BOOL observingContentSize;
 @property(nonatomic,retain,readwrite) CKPassThroughView* backgroundView;
 @property(nonatomic,retain,readwrite) CKPassThroughView* foregroundView;
 @end
@@ -54,6 +55,11 @@
 }
 
 - (void)dealloc{
+    if(self.observingContentSize){
+        [self.tableView removeObserver:self forKeyPath:@"contentSize"];
+        self.observingContentSize = NO;
+    }
+    
     [self.backgroundView removeFromSuperview];
     [self.foregroundView removeFromSuperview];
     [self clearBindingsContextWithScope:@"foregroundView"];
@@ -253,7 +259,11 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 
-    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    if(!self.observingContentSize){
+        self.observingContentSize = YES;
+        [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    }
+    
     [self updateNumberOfPages];
     
     [self.sectionContainer handleViewWillAppearAnimated:animated];
@@ -298,7 +308,11 @@
     [super viewWillDisappear:animated];
     
     [[self.view superview] endEditing:YES];
-    [self.tableView removeObserver:self forKeyPath:@"contentSize"];
+    
+    if(self.observingContentSize){
+        [self.tableView removeObserver:self forKeyPath:@"contentSize"];
+        self.observingContentSize = NO;
+    }
     
     [self.sectionContainer handleViewWillDisappearAnimated:animated];
     
