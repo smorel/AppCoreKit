@@ -379,13 +379,19 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                 }
                 
                 if(contentType == nil){
-                    NSString* details = [NSString stringWithFormat:@"Could not find any valid class to create an object in property : %@",property];
+                    //Sets the array or collection as it is in the source without subobjects transformation
+                    [NSValueTransformer transform:value inProperty:property];
+                    return YES;
+                    
+                    /*NSString* details = [NSString stringWithFormat:@"Could not find any valid class to create an object in property : %@",property];
                     NSString* details2 = [NSString stringWithFormat:@"The class could be defined in JSON object definition using '%@' or in property attributes",CKMappingClassKey];
                     *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidObjectClass,[NSString stringWithFormat:@"%@\n%@",details,details2]);
-                    return NO;
+                     
+                     return NO;
+                     */
+
                 }
-                
-                if([NSObject isClass:targetType kindOfClass:[NSArray class]]){
+                else if([NSObject isClass:targetType kindOfClass:[NSArray class]]){
                     id propertyArray = [property value];
                     if(!propertyArray){
                         [property setValue:[NSMutableArray array]];
@@ -898,6 +904,84 @@ static CKMappingManager* CKMappingManagerDefault = nil;
     [mapping setObject:objectDefinition forKey:CKMappingObjectKey];
     [objectDefinition setObject:contextIdentifier forKey:CKMappingMappingsKey];
     [dictionary setObject:mapping forKey:keyPath];
+}
+
+@end
+
+
+
+@implementation NSObject(CKMappings)
+
++ (id)objectFromJsonFileNamed:(NSString*)filename extension:(NSString*)extension keyPathToJsonDictionary:(NSString*)keyPathToJsonDictionary mappings:(NSString*)mappings error:(NSError**)error{
+    NSString* path = [CKResourceManager pathForResource:filename ofType:extension];
+    return [self objectFromJsonFileAtPath:path keyPathToJsonDictionary:keyPathToJsonDictionary mappings:mappings error:error];
+
+}
+
++ (NSArray*)objectsFromJsonFileNamed:(NSString*)filename extension:(NSString*)extension  keyPathToJsonArray:(NSString*)keyPathToJsonArray mappings:(NSString*)mappings range:(NSRange)range error:(NSError**)error{
+    
+    NSString* path = [CKResourceManager pathForResource:filename ofType:extension];
+    return [self objectsFromJsonFileAtPath:path keyPathToJsonArray:keyPathToJsonArray mappings:mappings range:range error:error];
+}
+
+
++ (id)objectFromJsonFileAtPath:(NSString*)filePath keyPathToJsonDictionary:(NSString*)keyPathToJsonDictionary mappings:(NSString*)mappings error:(NSError**)error{
+    NSData* data = [NSData dataWithContentsOfFile:filePath];
+    if(!data){
+        //TODO: better error
+        *error = [NSError errorWithDomain:@"CKMappings" code:0 userInfo:nil];
+        return nil;
+    }
+    
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:error ];
+    if(!json)
+        return nil;
+    
+    id jsonDictionary = json;
+    NSArray* components = [keyPathToJsonDictionary componentsSeparatedByString:@"."];
+    for(NSString* component in components){
+        jsonDictionary = [jsonDictionary valueForKey:component];
+    }
+    
+    NSAssert([jsonDictionary isKindOfClass:[NSDictionary class]],@"The specified keypath do not point to a dictionary");
+    
+    NSDictionary* jsonObject = (NSDictionary*)jsonDictionary;
+    
+    CKMappingContext* context = [CKMappingContext contextWithIdentifier:mappings];
+    id object = [context objectFromValue:jsonDictionary error:error];
+    
+    return object;
+}
+
++ (NSArray*)objectsFromJsonFileAtPath:(NSString*)filePath keyPathToJsonArray:(NSString*)keyPathToJsonArray mappings:(NSString*)mappings range:(NSRange)range error:(NSError**)error{
+    NSData* data = [NSData dataWithContentsOfFile:filePath];
+    if(!data){
+        //TODO: better error
+        *error = [NSError errorWithDomain:@"CKMappings" code:0 userInfo:nil];
+        return nil;
+    }
+    
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:error ];
+    if(!json)
+        return nil;
+    
+    id jsonValue = json;
+    NSArray* components = [keyPathToJsonArray componentsSeparatedByString:@"."];
+    for(NSString* component in components){
+        jsonValue = [jsonValue valueForKey:component];
+    }
+    
+    NSAssert([jsonValue isKindOfClass:[NSArray class]],@"The specified keypath do not point to an array");
+    
+    NSArray* jsonObjects = (NSArray*)jsonValue;
+    
+    range.length = MIN(range.length,jsonObjects.count - range.location);
+    NSArray* subset = [jsonObjects objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+    
+    CKMappingContext* context = [CKMappingContext contextWithIdentifier:mappings];
+    NSArray* objects = [context objectsFromValue:subset error:error];
+    
+    return objects;
 }
 
 @end

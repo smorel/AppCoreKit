@@ -165,3 +165,16 @@ extern NSString* const CKMappingErrorCodeKey;
 @end
 
 
+
+@interface NSObject(CKMappings)
+
++ (id)objectFromJsonFileNamed:(NSString*)filename extension:(NSString*)extension keyPathToJsonDictionary:(NSString*)keyPathToJsonDictionary mappings:(NSString*)mappings error:(NSError**)error;
+
++ (NSArray*)objectsFromJsonFileNamed:(NSString*)filename extension:(NSString*)extension keyPathToJsonArray:(NSString*)keyPathToJsonArray mappings:(NSString*)mappings range:(NSRange)range error:(NSError**)error;
+
++ (id)objectFromJsonFileAtPath:(NSString*)filePath keyPathToJsonDictionary:(NSString*)keyPathToJsonDictionary mappings:(NSString*)mappings error:(NSError**)error;
+
++ (NSArray*)objectsFromJsonFileAtPath:(NSString*)filePath keyPathToJsonArray:(NSString*)keyPathToJsonArray mappings:(NSString*)mappings range:(NSRange)range error:(NSError**)error;
+
+@end
+
