@@ -104,7 +104,7 @@
     if(self.view  && [self.backgroundView superview] == nil){
         [self.view insertSubview:self.backgroundView belowSubview:self.collectionView];
         
-        __unsafe_unretained CKCollectionViewController* bself = self;
+        __block CKCollectionViewController* bself = self;
         
         [self beginBindingsContextWithScope:@"backgroundView"];
         [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
@@ -129,7 +129,7 @@
     if(self.view  && [self.foregroundView superview] == nil){
         [self.view insertSubview:self.foregroundView aboveSubview:self.collectionView];
         
-        __unsafe_unretained CKCollectionViewController* bself = self;
+        __block CKCollectionViewController* bself = self;
         
         [self beginBindingsContextWithScope:@"foregroundView"];
         [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {

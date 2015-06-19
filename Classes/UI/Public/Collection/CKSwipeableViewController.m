@@ -146,7 +146,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
     
     self.scrollView.delegate = self;
     
-    __unsafe_unretained CKSwipeableViewController* bself = self;
+    __block CKSwipeableViewController* bself = self;
     self.contentViewController.view.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* layoutBox){
         BOOL bo = [bself updatesScrollViewContentSize:NO];
         if(bself.view.window == nil || bself.isComputingSize || bself.state != CKViewControllerStateDidAppear || !bo)
@@ -414,7 +414,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 }
 
 - (void)setupActionViewsBindings{
-    __unsafe_unretained CKSwipeableViewController* bself = self;
+    __block CKSwipeableViewController* bself = self;
     
     __block BOOL needsLayoutUpdate = NO;
     
@@ -748,7 +748,7 @@ static CGFloat bounceVsDistanceRatio = 0.1;
 #pragma mark Manages tap gesture
 
 - (void)setupTapGestureRecognizer{
-    __unsafe_unretained CKSwipeableViewController* bself = self;
+    __block CKSwipeableViewController* bself = self;
     
     UITapGestureRecognizer* gesture = [[[UITapGestureRecognizer alloc]initWithBlock:^(UIGestureRecognizer *gestureRecognizer) {
         [bself handleTapGesture:gestureRecognizer];

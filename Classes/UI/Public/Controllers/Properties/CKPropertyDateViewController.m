@@ -86,7 +86,7 @@ static NSDateFormatter* sharedFormatter = nil;
 }
 
 - (void)setupBindings{
-    __unsafe_unretained CKPropertyDateViewController* bself = self;
+    __block CKPropertyDateViewController* bself = self;
     
     UILabel* PropertyNameLabel = [self.view viewWithName:@"PropertyNameLabel"];
     PropertyNameLabel.text = self.propertyNameLabel;

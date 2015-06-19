@@ -153,7 +153,7 @@
     self.animationManager = [[[CKAnimationManager alloc]init]autorelease];
     [self.animationManager registerInScreen:[UIScreen mainScreen]];
     
-    __unsafe_unretained CKBlurModalViewController* bself = self;
+    __block CKBlurModalViewController* bself = self;
     
     CKAnimationInterpolator* interpolator = [[[CKAnimationInterpolator alloc]init]autorelease];
     interpolator.duration = self.animationDuration;

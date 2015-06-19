@@ -233,7 +233,7 @@
 }
 
 - (void)setupBindings{
-    __unsafe_unretained CKPropertySelectionViewController* bself = self;
+    __block CKPropertySelectionViewController* bself = self;
     
     
     UILabel* PropertyNameLabel = [self.view viewWithName:@"PropertyNameLabel"];
@@ -286,7 +286,7 @@
         [self updatesValues:attributes.valuesAndLabels];
     }
     
-    __unsafe_unretained CKPropertySelectionViewController* bself = self;
+    __block CKPropertySelectionViewController* bself = self;
     
     UIViewController* editionViewController = nil;
     switch(self.editionControllerAppearance){
@@ -411,13 +411,13 @@
 }
 
 - (CKReusableViewController*)defaultControllerForValue:(CKPropertySelectionValue*)v{
-    __unsafe_unretained CKPropertySelectionViewController* bself = self;
+    __block CKPropertySelectionViewController* bself = self;
     
     CKStandardContentViewController* cell = [CKStandardContentViewController controllerWithTitle:_(v.label) imageName:[self imageNameForValue:v.value] action:^(CKStandardContentViewController* controller){
         [bself setValueSelected:v];
     }];
     
-    __unsafe_unretained CKStandardContentViewController* bcell = cell;
+    __block CKStandardContentViewController* bcell = cell;
     
     [cell beginBindingsContextByRemovingPreviousBindings];
     [v.property.object bind:v.property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
@@ -430,7 +430,7 @@
 }
 
 - (CKReusableViewControllerFactory*)defaultFactory{
-    __unsafe_unretained CKPropertySelectionViewController* bself = self;
+    __block CKPropertySelectionViewController* bself = self;
     
     CKReusableViewControllerFactory* factory = [CKReusableViewControllerFactory factory];
     [factory registerFactoryForObjectOfClass:[CKPropertySelectionValue class]

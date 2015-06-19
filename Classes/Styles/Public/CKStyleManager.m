@@ -41,7 +41,7 @@ static NSInteger kLogEnabled = -1;
 }
 
 - (void)registerOnDependencies:(NSSet*)dependencies{
-    __unsafe_unretained CKStyleManager* bself = self;
+    __block CKStyleManager* bself = self;
     for(NSString* path in dependencies){
         [CKResourceManager addObserverForPath:path object:bself usingBlock:^(id observer, NSString *path) {
             [bself reloadAfterFileUpdate];

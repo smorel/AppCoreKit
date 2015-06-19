@@ -1360,7 +1360,7 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
     if(path == nil || [path isKindOfClass:[NSNull class]] || [_loadedFiles containsObject:path])
 		return NO;
     
-    __unsafe_unretained CKCascadingTree* bself = self;
+    __block CKCascadingTree* bself = self;
     [CKResourceManager addObserverForPath:path object:self usingBlock:^(id observer, NSString *newpath) {
         [bself.loadedFiles removeObject:path];
         [bself.loadedFiles addObject:newpath];

@@ -67,7 +67,7 @@
 }
 
 - (void)setupBindings{
-    __unsafe_unretained CKPropertyBoolViewController* bself = self;
+    __block CKPropertyBoolViewController* bself = self;
     
     UILabel* PropertyNameLabel = [self.view viewWithName:@"PropertyNameLabel"];
     PropertyNameLabel.text = self.propertyNameLabel;

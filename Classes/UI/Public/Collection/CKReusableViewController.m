@@ -308,7 +308,7 @@
     
     [self applyStyleToSubViews];
     
-    __unsafe_unretained CKReusableViewController* bself = self;
+    __block CKReusableViewController* bself = self;
     
     self.view.invalidatedLayoutBlock = self.layoutInvalidateBlock;
     

@@ -95,7 +95,7 @@
          [self.delegate transitionViewController:self willPresentViewController:toViewController];
     }
     
-    __unsafe_unretained CKTransitionViewController* bself = self;
+    __block CKTransitionViewController* bself = self;
     
      [self beginBindingsContextWithScope:@"CKTransitionViewController_Title"];
      [toViewController bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {

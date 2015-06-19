@@ -289,7 +289,7 @@
 }
 
 - (UIPanGestureRecognizer*)panGestureRecognizerForSelector:(CKRangeSelectorViewSelector)selector{
-    __unsafe_unretained CKRangeSelectorView* bself = self;
+    __block CKRangeSelectorView* bself = self;
     
     __block CGFloat oldStartValue = 0;
     __block CGFloat oldEndValue = 0;

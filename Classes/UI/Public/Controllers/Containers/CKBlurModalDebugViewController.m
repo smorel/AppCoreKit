@@ -79,7 +79,7 @@
 #pragma mark Setup MVC and bindings
 
 - (void)setupBindings{
-    __unsafe_unretained CKBlurModalDebugViewController* bself = self;
+    __block CKBlurModalDebugViewController* bself = self;
     
     UIButton* DimissButton = [self.view viewWithName:@"DimissButton"];
     [DimissButton bindEvent:UIControlEventTouchUpInside withBlock:^{

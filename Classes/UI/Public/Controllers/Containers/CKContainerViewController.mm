@@ -212,8 +212,8 @@ typedef void(^CKTransitionBlock)();
     
     
     [NSObject beginBindingsContext:self.subControllerNavigationItemBindings policy:CKBindingsContextPolicyRemovePreviousBindings ];
-    __unsafe_unretained UIViewController* bContainer = container;
-    __unsafe_unretained UIViewController* bViewController = viewController;
+    __block UIViewController* bContainer = container;
+    __block UIViewController* bViewController = viewController;
     
     if(_presentsSelectedViewControllerItemsInNavigationBar){
         [viewController bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {

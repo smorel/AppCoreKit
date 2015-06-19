@@ -198,7 +198,7 @@
                                 rate:(CGFloat)rate
                           completion:(void(^)(BOOL finished))completion{
                               
-    __unsafe_unretained CKTransitionNode* node = self;
+    __block CKTransitionNode* node = self;
     void(^animation)() = ^(){
         [node performViewContextsTransitionWithContext:transitionContext];
     };

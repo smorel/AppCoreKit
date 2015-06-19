@@ -21,7 +21,7 @@
 }
 
 - (void)didRegisterForUpdates{
-    __unsafe_unretained CKLightEffectView* bself = self;
+    __block CKLightEffectView* bself = self;
     
     [self beginBindingsContextWithScope:@"CKLightEffectView"];
     [NSNotificationCenter bindNotificationName:CKLightDidChangeNotification withBlock:^(NSNotification *notification) {

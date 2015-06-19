@@ -977,6 +977,8 @@ static CKMappingManager* CKMappingManagerDefault = nil;
     
     range.length = MIN(range.length,jsonObjects.count - range.location);
     NSArray* subset = [jsonObjects objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+    if(subset.count <= 0)
+        return @[];
     
     CKMappingContext* context = [CKMappingContext contextWithIdentifier:mappings];
     NSArray* objects = [context objectsFromValue:subset error:error];

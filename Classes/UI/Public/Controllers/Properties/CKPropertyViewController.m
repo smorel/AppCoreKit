@@ -152,7 +152,7 @@
     
     self.editionControllerPresentationStyle = presentationStyle;
     
-    __unsafe_unretained CKPropertyViewController* bself = self;
+    __block CKPropertyViewController* bself = self;
     
     CKPropertyEditionPresentationStyle style = presentationStyle;
     if(style == CKPropertyEditionPresentationStyleDefault){
@@ -174,7 +174,7 @@
             CKPopoverController* popover = [[CKPopoverController alloc]initWithContentViewController:controller];
             [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             
-            __unsafe_unretained CKPopoverController* bPopover = popover;
+            __block CKPopoverController* bPopover = popover;
             [controller beginBindingsContextByRemovingPreviousBindings];
             if(shouldDismissOnPropertyValueChange){
                 [self.property.object bind:self.property.keyPath withBlock:^(id value) {

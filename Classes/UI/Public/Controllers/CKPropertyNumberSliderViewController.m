@@ -90,7 +90,7 @@
         ValueSlider.minimumValue = self.minimumValue;
     }
     
-    __unsafe_unretained CKPropertyNumberSliderViewController* bself = self;
+    __block CKPropertyNumberSliderViewController* bself = self;
     
     [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
         ValueSlider.userInteractionEnabled = !bself.readOnly;

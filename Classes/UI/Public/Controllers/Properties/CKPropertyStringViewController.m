@@ -130,7 +130,7 @@
     ValueTextField.hidden = self.multiline;
     ValueTextView.hidden = !self.multiline;
     
-    __unsafe_unretained CKPropertyStringViewController* bself = self;
+    __block CKPropertyStringViewController* bself = self;
     
     [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
         ValueTextField.userInteractionEnabled = ValueTextView.userInteractionEnabled = !bself.readOnly;

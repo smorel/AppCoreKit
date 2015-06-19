@@ -79,7 +79,7 @@
     
     to.view.hidden = YES;
     
-    __unsafe_unretained UIViewController* bfrom = from;
+    __block UIViewController* bfrom = from;
     
      dispatch_async(dispatch_get_main_queue(), ^{
         self.beforePrepareTransitionDate = [NSDate date];
@@ -112,8 +112,8 @@
     
     [transitionContext finishInteractiveTransition];
     
-    __unsafe_unretained UIViewController* broot = root;
-    __unsafe_unretained UIViewController* bto = to;
+    __block UIViewController* broot = root;
+    __block UIViewController* bto = to;
     
     [self.transitionTree performTransitionWithContext:transitionContext percentComplete:^(CGFloat percentComplete){
         [transitionContext updateInteractiveTransition:percentComplete];

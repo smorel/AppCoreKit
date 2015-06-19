@@ -105,7 +105,7 @@
 }
 
 - (void)setupBindings{
-    __unsafe_unretained CKCollectionStatusViewController* bself = self;
+    __block CKCollectionStatusViewController* bself = self;
     [self.collection bind:@"isFetching" withBlock:^(id value) {
         [bself update];
     }];

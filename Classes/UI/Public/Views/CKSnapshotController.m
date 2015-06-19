@@ -83,7 +83,7 @@ static char UIViewControllerReadyForSnapshotBlockKey;
     [viewController.view layoutSubviews];
     
     if(delay){
-        __unsafe_unretained CKSnapshotController* bself = self;
+        __block CKSnapshotController* bself = self;
         delay(^(){
             [bself endSnapshot];
         });

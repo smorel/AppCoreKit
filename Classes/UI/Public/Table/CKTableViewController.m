@@ -190,7 +190,7 @@
     if(self.view  && [self.backgroundView superview] == nil){
         [self.view insertSubview:self.backgroundView atIndex:0];
         
-        __unsafe_unretained CKTableViewController* bself = self;
+        __block CKTableViewController* bself = self;
 
         [self beginBindingsContextWithScope:@"backgroundView"];
         [self.tableView bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
@@ -221,7 +221,7 @@
     if(self.view  && [self.foregroundView superview] == nil){
         [self.view addSubview:self.foregroundView];
         
-        __unsafe_unretained CKTableViewController* bself = self;
+        __block CKTableViewController* bself = self;
         
         [self beginBindingsContextWithScope:@"foregroundView"];
         [self.view bind:@"contentOffset" executeBlockImmediatly:YES withBlock:^(id value) {
@@ -976,7 +976,7 @@
    if(!self.adjustInsetsOnKeyboardNotification)
         return;
     
-    __unsafe_unretained CKTableViewController* bself = self;
+    __block CKTableViewController* bself = self;
     
     self.keyboardObservers = [NSMutableArray array];
     [self.keyboardObservers addObject:[[NSNotificationCenter defaultCenter]addObserverForName:UIKeyboardWillShowNotification
