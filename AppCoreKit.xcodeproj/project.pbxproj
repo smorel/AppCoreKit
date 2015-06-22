@@ -537,6 +537,8 @@
 		B0EA78A7156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */; };
 		B0EA78AB156EDEAC00CD5264 /* UINavigationController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */; settings = {ATTRIBUTES = (); }; };
 		B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */; };
+		D90A716E1B387077005AA99D /* CKSerialQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = D90A716C1B387077005AA99D /* CKSerialQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D90A716F1B387077005AA99D /* CKSerialQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D90A716D1B387077005AA99D /* CKSerialQueue.m */; };
 		D9149CE61AA7682A00D129AB /* CKReusableViewController+ResponderChain.h in Headers */ = {isa = PBXBuildFile; fileRef = D9149CE41AA7682A00D129AB /* CKReusableViewController+ResponderChain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9149CE71AA7682A00D129AB /* CKReusableViewController+ResponderChain.m in Sources */ = {isa = PBXBuildFile; fileRef = D9149CE51AA7682A00D129AB /* CKReusableViewController+ResponderChain.m */; };
 		D91D657F1AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h in Headers */ = {isa = PBXBuildFile; fileRef = D91D65691AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1245,6 +1247,8 @@
 		B0EA78A5156EDD5500CD5264 /* UINavigationController+BlockBasedDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UINavigationController+BlockBasedDelegate.mm"; path = "Classes/UI/Public/Controllers/UINavigationController+BlockBasedDelegate.mm"; sourceTree = "<group>"; };
 		B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Style.h"; path = "Classes/Styles/Private/UINavigationController+Style.h"; sourceTree = "<group>"; };
 		B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UINavigationController+Style.mm"; path = "Classes/Styles/Private/UINavigationController+Style.mm"; sourceTree = "<group>"; };
+		D90A716C1B387077005AA99D /* CKSerialQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSerialQueue.h; path = Classes/Foundation/Public/CKSerialQueue.h; sourceTree = "<group>"; };
+		D90A716D1B387077005AA99D /* CKSerialQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSerialQueue.m; path = Classes/Foundation/Public/CKSerialQueue.m; sourceTree = "<group>"; };
 		D9149CE41AA7682A00D129AB /* CKReusableViewController+ResponderChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKReusableViewController+ResponderChain.h"; path = "Classes/UI/Public/Collection/CKReusableViewController+ResponderChain.h"; sourceTree = "<group>"; };
 		D9149CE51AA7682A00D129AB /* CKReusableViewController+ResponderChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKReusableViewController+ResponderChain.m"; path = "Classes/UI/Public/Collection/CKReusableViewController+ResponderChain.m"; sourceTree = "<group>"; };
 		D91D65691AE8335100B19E14 /* CKReusableViewController+CKTransitionTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKReusableViewController+CKTransitionTree.h"; path = "Classes/UI/Public/Transitions/CKReusableViewController+CKTransitionTree.h"; sourceTree = "<group>"; };
@@ -1448,6 +1452,7 @@
 				964C207D153DB66A00398E0F /* Localization */,
 				96EFE7D01797009D0034F935 /* ResourceManager */,
 				D98BDD091AEFD74B00A0AECD /* Image Cache */,
+				D90A716B1B38703E005AA99D /* Queue */,
 				96CC499117CCD3740017A6E7 /* Apple Extensions */,
 			);
 			name = Foundation;
@@ -2229,6 +2234,15 @@
 				963AB795179881110076925C /* CKResourceDependencyContext.m */,
 			);
 			name = ResourceManager;
+			sourceTree = "<group>";
+		};
+		D90A716B1B38703E005AA99D /* Queue */ = {
+			isa = PBXGroup;
+			children = (
+				D90A716C1B387077005AA99D /* CKSerialQueue.h */,
+				D90A716D1B387077005AA99D /* CKSerialQueue.m */,
+			);
+			name = Queue;
 			sourceTree = "<group>";
 		};
 		D91D65681AE8333E00B19E14 /* Transitions */ = {
@@ -3785,6 +3799,7 @@
 				7560DD9713B8ED3600268D13 /* CKViewController.h in Headers */,
 				D96494291AA5F82C00C17BB7 /* Media.h in Headers */,
 				7560DD9913B8ED3600268D13 /* UIViewController+Style.h in Headers */,
+				D90A716E1B387077005AA99D /* CKSerialQueue.h in Headers */,
 				7560DD9D13B8ED3600268D13 /* CKUnit.h in Headers */,
 				7560DDA113B8ED3600268D13 /* CKVersion.h in Headers */,
 				D9BDB5B71AF916ED00FBA443 /* CKReplicantView.h in Headers */,
@@ -4378,6 +4393,7 @@
 				967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */,
 				9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */,
 				D91D65841AE8335100B19E14 /* CKTransitionTree.m in Sources */,
+				D90A716F1B387077005AA99D /* CKSerialQueue.m in Sources */,
 				96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */,
 				96EBE434159A43AB00E0F209 /* UIView+Name.m in Sources */,
 				9659E34515E274FF00D43C33 /* CKConfiguration.m in Sources */,

@@ -81,6 +81,8 @@
 #import "CKLocalizationManager.h"
 #import "CKLocalizedString.h"
 
+#import "CKSerialQueue.h"
+
 //Helpers
 #import "CKUnit.h"
 #import "UIImage+Transformations.h"
