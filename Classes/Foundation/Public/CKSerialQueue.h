@@ -69,4 +69,17 @@
  */
 - (void)cancelAllJobs;
 
+
+/**
+ */
+@property(nonatomic,assign,readonly) BOOL paused;
+
+/**
+ */
+- (void)pause;
+
+/**
+ */
+- (void)resume;
+
 @end

@@ -19,6 +19,8 @@
 @interface CKSerialQueue()
 @property(nonatomic,retain,readwrite) CKJob* currentJob;
 @property(nonatomic,retain,readwrite) NSArray* jobQueue;
+@property(nonatomic,assign,readwrite) BOOL paused;
+
 @end
 
 @implementation CKSerialQueue{
@@ -27,6 +29,7 @@
 
 - (id)init{
     self = [super init];
+    self.paused = NO;
     self.executeLastJobByCancellingEnqueuedJobs = NO;
     self.executeJobsOnMainThread = NO;
     self.jobQueue = [NSMutableArray array];
@@ -57,8 +60,17 @@
     [self enqueueJob:job];
 }
 
+- (void)pause{
+    self.paused = YES;
+}
+
+- (void)resume{
+    self.paused = NO;
+    [self dequeueJob];
+}
+
 - (void)dequeueJob{
-    if(self.currentJob || self.jobQueue.count <= 0)
+    if(self.currentJob || self.jobQueue.count <= 0 || self.paused)
         return;
     
     dispatch_async([self queue], ^{
