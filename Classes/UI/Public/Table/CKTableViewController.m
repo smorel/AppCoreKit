@@ -55,6 +55,8 @@
 }
 
 - (void)dealloc{
+    [self unregisterForKeyboardNotifications];
+    
     if(self.observingContentSize){
         [self.tableView removeObserver:self forKeyPath:@"contentSize"];
         self.observingContentSize = NO;
@@ -65,7 +67,6 @@
     [self clearBindingsContextWithScope:@"foregroundView"];
     [self clearBindingsContextWithScope:@"backgroundView"];
     
-    [self unregisterForKeyboardNotifications];
     [_sectionContainer release];
     [_backgroundView release];
     [_foregroundView release];
@@ -987,6 +988,8 @@
 
 - (void)registerForKeyboardNotifications
 {
+    [self unregisterForKeyboardNotifications];
+    
    if(!self.adjustInsetsOnKeyboardNotification)
         return;
     
