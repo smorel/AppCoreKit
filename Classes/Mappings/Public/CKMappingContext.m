@@ -948,7 +948,7 @@ static CKMappingManager* CKMappingManagerDefault = nil;
     NSDictionary* jsonObject = (NSDictionary*)jsonDictionary;
     
     CKMappingContext* context = [CKMappingContext contextWithIdentifier:mappings];
-    id object = [context objectFromValue:jsonDictionary error:error];
+    id object = [context objectFromValue:jsonObject error:error];
     
     return object;
 }

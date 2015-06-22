@@ -157,7 +157,7 @@
         
         UIImageView* previousImageView = self.imageView;
         
-        UIImageView* imageView = [[UIImageView alloc]initWithImage:self.image];
+        UIImageView* imageView = [[[UIImageView alloc]initWithImage:self.image]autorelease];
         imageView.frame = self.bounds;
         imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         imageView.contentMode = self.contentMode;
@@ -193,7 +193,7 @@
         
     }else{
         if(!self.defaultImageView){
-            self.defaultImageView = [[UIImageView alloc]init];
+            self.defaultImageView = [[[UIImageView alloc]init]autorelease];
             self.defaultImageView.frame = self.bounds;
             self.defaultImageView.contentMode = self.contentMode;
             self.defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -232,7 +232,7 @@
         if(self.imageURL && !self.image){
             if(self.spinnerStyle != CKImageViewSpinnerStyleNone){
                 if(!self.activityIndicatorView){
-                    self.activityIndicatorView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)self.spinnerStyle];
+                    self.activityIndicatorView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)self.spinnerStyle]autorelease];
                 }
                 
                 self.activityIndicatorView.backgroundColor = self.backgroundColor;

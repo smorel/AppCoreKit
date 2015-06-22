@@ -159,7 +159,18 @@ static char UIViewReusableViewControllerKey;
     [self.delegate didRemoveSections:sections atIndexes:indexes animated:animated sectionUpdate:^{
         for(CKAbstractSection* section in sections){
             section.delegate = nil;
+            for(CKReusableViewController* controller in section.controllers){
+                if(controller.state == CKViewControllerStateDidAppear){
+                    [controller viewWillDisappear:animated];
+                }
+                if(controller.state == CKViewControllerStateWillDisappear){
+                    [controller viewDidDisappear:animated];
+                }
+                [controller setContainerViewController:nil];
+            }
         }
+        
+        
         [[self mutableSections]removeObjectsAtIndexes:indexes];
     }];
 }

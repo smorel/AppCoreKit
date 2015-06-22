@@ -21,7 +21,7 @@
     
     NSAssert([property isBool],@"CKPropertyBoolViewController aims to work with BOOL properties only.");
     
-    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    //  CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     self.flags = CKViewControllerFlagsNone;
     
     return self;

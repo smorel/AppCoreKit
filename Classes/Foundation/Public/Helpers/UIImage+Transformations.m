@@ -432,8 +432,10 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
         stop = NO;
     }
     
-    if(stop)
+    if(stop){
+        CFRelease(pixelData);
         return self;
+    }
     
     NSInteger increment = realSize.width / ((precision == 0) ? 2 : precision);
     

@@ -12,21 +12,21 @@
 
 + (UIMotionEffect*)parallaxMotionEffectWithOffset:(CGFloat)offset{
     UIInterpolatingMotionEffect *verticalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc]
+    [[[UIInterpolatingMotionEffect alloc]
      initWithKeyPath:@"center.y"
-     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis]autorelease];
     verticalMotionEffect.minimumRelativeValue = @(offset);
     verticalMotionEffect.maximumRelativeValue = @(-offset);
     
     UIInterpolatingMotionEffect *horizontalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc]
+    [[[UIInterpolatingMotionEffect alloc]
      initWithKeyPath:@"center.x"
-     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis]autorelease];
     horizontalMotionEffect.minimumRelativeValue = @(offset);
     horizontalMotionEffect.maximumRelativeValue = @(-offset);
     
     // Create group to combine both
-    UIMotionEffectGroup* motionEffectGroup = [UIMotionEffectGroup new];
+    UIMotionEffectGroup* motionEffectGroup = [[[UIMotionEffectGroup alloc]init]autorelease];
     motionEffectGroup.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
     
     return motionEffectGroup;

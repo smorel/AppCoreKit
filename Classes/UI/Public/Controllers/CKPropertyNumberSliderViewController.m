@@ -27,7 +27,7 @@
 - (id)initWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly{
     self = [super initWithProperty:property readOnly:readOnly];
     
-    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    // CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 
     self.flags = CKViewControllerFlagsNone;
     

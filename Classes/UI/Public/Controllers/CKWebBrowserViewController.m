@@ -178,6 +178,7 @@
 	self.actionButtonItem = nil;
 	self.spinnerItem = nil;
     self.webView = nil;
+    [super viewDidUnload];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

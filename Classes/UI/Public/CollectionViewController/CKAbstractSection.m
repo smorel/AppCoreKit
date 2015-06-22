@@ -117,6 +117,17 @@
     
     [self.delegate section:self willRemoveControllers:controllers atIndexes:indexes animated:animated];
     [self.delegate section:self didRemoveControllers:controllers atIndexes:indexes animated:animated sectionUpdate:^(){
+        
+        for(CKReusableViewController* controller in controllers){
+            if(controller.state == CKViewControllerStateDidAppear){
+                [controller viewWillDisappear:animated];
+            }
+            if(controller.state == CKViewControllerStateWillDisappear){
+                [controller viewDidDisappear:animated];
+            }
+            [controller setContainerViewController:nil];
+        }
+        
         [[self mutableControllers]removeObjectsAtIndexes:indexes];
     }];
 
@@ -203,6 +214,8 @@
     
     [[self mutableControllers] removeObjectAtIndex:from];
     [[self mutableControllers] insertObject:controller atIndex:to];
+
+    [controller autorelease];
 }
 
 @end

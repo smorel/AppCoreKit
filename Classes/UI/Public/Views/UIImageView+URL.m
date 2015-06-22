@@ -26,7 +26,7 @@ static char* UIImageViewImageLoaderCompletionBlockKey;
 }
 
 - (void)setImageLoaderCompletionBlock:(void(^)(UIImage* image,NSError* error))completion{
-    objc_setAssociatedObject(self, &UIImageViewImageLoaderCompletionBlockKey, [completion copy], OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(self, &UIImageViewImageLoaderCompletionBlockKey, [completion copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (void(^)(UIImage* image,NSError* error))imageLoaderCompletionBlock

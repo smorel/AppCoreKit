@@ -133,7 +133,7 @@ static char UIViewControllerInlineDebuggerControllerKey;
 
 static char UIViewControllerViewWillAppearBlockKey;
 - (void)setViewWillAppearBlock:(CKViewControllerAnimatedBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerViewWillAppearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerViewWillAppearBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerAnimatedBlock)viewWillAppearBlock{
@@ -144,7 +144,7 @@ static char UIViewControllerViewWillAppearBlockKey;
 
 static char UIViewControllerViewWillAppearEndBlockKey;
 - (void)setViewWillAppearEndBlock:(CKViewControllerAnimatedBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerViewWillAppearEndBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerViewWillAppearEndBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerAnimatedBlock)viewWillAppearEndBlock{
@@ -155,7 +155,7 @@ static char UIViewControllerViewWillAppearEndBlockKey;
 
 static char UIViewControllerViewDidAppearBlockKey;
 - (void)setViewDidAppearBlock:(CKViewControllerAnimatedBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerViewDidAppearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerViewDidAppearBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerAnimatedBlock)viewDidAppearBlock{
@@ -166,7 +166,7 @@ static char UIViewControllerViewDidAppearBlockKey;
 
 static char UIViewControllerViewWillDisappearBlockKey;
 - (void)setViewWillDisappearBlock:(CKViewControllerAnimatedBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerViewWillDisappearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerViewWillDisappearBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerAnimatedBlock)viewWillDisappearBlock{
@@ -177,7 +177,7 @@ static char UIViewControllerViewWillDisappearBlockKey;
 
 static char UIViewControllerViewDidDisappearBlockKey;
 - (void)setViewDidDisappearBlock:(CKViewControllerAnimatedBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerViewDidDisappearBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerViewDidDisappearBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerAnimatedBlock)viewDidDisappearBlock{
@@ -188,7 +188,7 @@ static char UIViewControllerViewDidDisappearBlockKey;
 
 static char UIViewControllerOrientationChangeBlockKey;
 - (void)setOrientationChangeBlock:(CKViewControllerOrientationBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerOrientationChangeBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerOrientationChangeBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerOrientationBlock)orientationChangeBlock{
@@ -199,7 +199,7 @@ static char UIViewControllerOrientationChangeBlockKey;
 
 static char UIViewControllerViewDidLoadBlockKey;
 - (void)setViewDidLoadBlock:(CKViewControllerBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerViewDidLoadBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerViewDidLoadBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerBlock)viewDidLoadBlock{
@@ -210,7 +210,7 @@ static char UIViewControllerViewDidLoadBlockKey;
 
 static char UIViewControllerViewDidUnloadBlockKey;
 - (void)setViewDidUnloadBlock:(CKViewControllerBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerViewDidUnloadBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerViewDidUnloadBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerBlock)viewDidUnloadBlock{
@@ -233,7 +233,7 @@ static char UIViewControllerDeallocBlockKey;
 
 static char UIViewControllerEditingBlockKey;
 - (void)setEditingBlock:(CKViewControllerEditingBlock)block{
-    objc_setAssociatedObject(self, &UIViewControllerEditingBlockKey, [block copy], OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &UIViewControllerEditingBlockKey, [block copy], OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKViewControllerEditingBlock)editingBlock{
@@ -387,6 +387,9 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
     [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
     [self clearBindingsContext];
+    if([self isViewLoaded]){
+        [self.view clearBindingsContext];
+    }
     
     if(self.deallocBlock){
         self.deallocBlock(self);
@@ -395,6 +398,18 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKStyleManagerDidReloadNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillDisplayToolbar object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillHideToolbar object:nil];
+    
+    self.viewDidLoadBlock = nil;
+    self.viewWillAppearBlock = nil;
+    self.viewDidAppearBlock = nil;
+    self.viewWillDisappearBlock = nil;
+    self.viewDidDisappearBlock = nil;
+    self.deallocBlock = nil;
+    self.orientationChangeBlock = nil;
+    self.leftButton = nil;
+    self.rightButton = nil;
+    self.viewDidUnloadBlock = nil;
+    self.viewWillAppearEndBlock = nil;
     
 	[self AppCoreKit_dealloc];
 }

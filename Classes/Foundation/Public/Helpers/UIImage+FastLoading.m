@@ -50,6 +50,8 @@ typedef struct
     [fileData appendData:pixelData];
     
     [fileData writeToFile:outputPath atomically:YES];
+    
+    CFRelease(pixelData);
 }
 
 + (UIImage *)fastLoadingImageWithContentsOfFile:(NSString *)inputPath{

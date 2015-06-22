@@ -410,7 +410,7 @@ static char UIViewFlexibleHeightKey;
     objc_setAssociatedObject(self,
                              &UIViewInvalidatedLayoutBlockKey,
                              [invalidatedLayoutBlock copy],
-                             OBJC_ASSOCIATION_COPY_NONATOMIC);
+                             OBJC_ASSOCIATION_RETAIN);
 }
 
 - (CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{

@@ -33,7 +33,7 @@ static char UIViewControllerReadyForSnapshotBlockKey;
     objc_setAssociatedObject(self,
                              &UIViewControllerReadyForSnapshotBlockKey,
                              [block copy],
-                             OBJC_ASSOCIATION_COPY);
+                             OBJC_ASSOCIATION_RETAIN);
 }
 
 - (void(^)())readyForSnapshotBlock{

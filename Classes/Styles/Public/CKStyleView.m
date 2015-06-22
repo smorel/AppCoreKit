@@ -291,7 +291,7 @@
     if(self.image ){
         hasExtraBackground = YES;
         if(!self.backgroundImageView){
-            self.backgroundImageView = [[UIImageView alloc]initWithFrame:self.bounds];
+            self.backgroundImageView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
             [self addSubview:self.backgroundImageView];
         }
         
@@ -304,21 +304,21 @@
             if(self.motionEffectGroup == nil){
                 
                 UIInterpolatingMotionEffect *verticalMotionEffect =
-                [[UIInterpolatingMotionEffect alloc]
+                [[[UIInterpolatingMotionEffect alloc]
                  initWithKeyPath:@"center.y"
-                 type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+                 type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis]autorelease];
                 verticalMotionEffect.minimumRelativeValue = @(self.imageMotionEffectOffset);
                 verticalMotionEffect.maximumRelativeValue = @(-self.imageMotionEffectOffset);
                 
                 UIInterpolatingMotionEffect *horizontalMotionEffect =
-                [[UIInterpolatingMotionEffect alloc]
+                [[[UIInterpolatingMotionEffect alloc]
                  initWithKeyPath:@"center.x"
-                 type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+                 type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis]autorelease];
                 horizontalMotionEffect.minimumRelativeValue = @(self.imageMotionEffectOffset);
                 horizontalMotionEffect.maximumRelativeValue = @(-self.imageMotionEffectOffset);
                 
                 // Create group to combine both
-                self.motionEffectGroup = [UIMotionEffectGroup new];
+                self.motionEffectGroup = [[[UIMotionEffectGroup alloc]init]autorelease];
                 self.motionEffectGroup.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
                 
                 // Add both effects to your view
