@@ -1332,7 +1332,7 @@
 		D98BDD181AF00B6F00A0AECD /* CKSharedDisplayLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSharedDisplayLink.m; path = Classes/Styles/Private/CKSharedDisplayLink.m; sourceTree = "<group>"; };
 		D98BDD1B1AF0147F00A0AECD /* UIView+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Transition.h"; path = "Classes/UI/Public/Views/UIView+Transition.h"; sourceTree = "<group>"; };
 		D98BDD1C1AF0147F00A0AECD /* UIView+Transition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Transition.m"; path = "Classes/UI/Public/Views/UIView+Transition.m"; sourceTree = "<group>"; };
-		D98BDD1F1AF1388C00A0AECD /* AppCoreKit-smorel.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AppCoreKit-smorel.podspec"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		D98BDD1F1AF1388C00A0AECD /* AppCoreKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppCoreKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D98BDD201AF170BA00A0AECD /* CKHighlightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKHighlightView.h; path = Classes/Styles/Public/CKHighlightView.h; sourceTree = "<group>"; };
 		D98BDD211AF170BA00A0AECD /* CKHighlightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKHighlightView.m; path = Classes/Styles/Public/CKHighlightView.m; sourceTree = "<group>"; };
 		D98BDD301AF2AA9E00A0AECD /* CKLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLight.h; path = Classes/Styles/Public/CKLight.h; sourceTree = "<group>"; };
@@ -1781,7 +1781,7 @@
 			isa = PBXGroup;
 			children = (
 				963AB7B31799E1280076925C /* README.mdown */,
-				D98BDD1F1AF1388C00A0AECD /* AppCoreKit-smorel.podspec */,
+				D98BDD1F1AF1388C00A0AECD /* AppCoreKit.podspec */,
 				7560DDB713B8EDA300268D13 /* AppCoreKit */,
 				7506E41413B902ED00EE1471 /* Resources */,
 				960A2D30150572C000D30AB4 /* Documentation */,

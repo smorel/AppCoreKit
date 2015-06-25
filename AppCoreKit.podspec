@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 
-  s.name         = "AppCoreKit-smorel"
+  s.name         = "AppCoreKit"
   s.version      = "3.0.0"
   s.summary      = "AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS."
   s.homepage     = "https://github.com/smorel/AppCoreKit"
