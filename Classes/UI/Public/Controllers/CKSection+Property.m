@@ -7,6 +7,8 @@
 //
 
 #import "CKSection+Property.h"
+#import "CKReusableViewController+Property.h"
+#import "NSValueTransformer+Additions.h"
 
 
 @interface CKSection(PropertyPrivate)

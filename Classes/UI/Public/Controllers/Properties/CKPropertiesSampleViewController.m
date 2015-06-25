@@ -15,6 +15,7 @@
 #import "CKPropertyColorViewController.h"
 #import "CKPropertyImageViewController.h"
 #import "CKPropertyObjectViewController.h"
+#import <MapKit/MapKit.h>
 
 typedef NS_ENUM(NSInteger, TEST){
     TEST0,

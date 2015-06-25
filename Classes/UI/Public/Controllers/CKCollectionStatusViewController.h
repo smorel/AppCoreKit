@@ -6,7 +6,9 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import <AppCoreKit/AppCoreKit.h>
+#import "CKReusableViewController.h"
+#import "CKCollection.h"
+#import "UIView+Style.h"
 
 /** CKCollectionStatusViewController provides the logic to edit and synchronize the current state of a collection with the desired degree of customization.
  It will show an activity indicator while the feedsource is fetching data and the number of objects with custom formats when the feedsource has finished loading.

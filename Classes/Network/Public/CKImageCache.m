@@ -7,7 +7,7 @@
 //
 
 #import "CKImageCache.h"
-#import <AppCoreKit/AppCoreKit.h>
+#import "CKImageLoader.h"
 
 @interface CKImageCacheItem : NSObject
 @property(nonatomic,retain) NSMutableSet* handlers;

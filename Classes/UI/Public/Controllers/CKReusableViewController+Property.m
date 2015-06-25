@@ -17,6 +17,8 @@
 #import "CKPropertyColorViewController.h"
 #import "CKPropertyImageViewController.h"
 #import "CKPropertyObjectViewController.h"
+#import "CKPropertyURLViewController.h"
+#import "CKPropertyDateViewController.h"
 
 @implementation CKReusableViewController (Property)
 

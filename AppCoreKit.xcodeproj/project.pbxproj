@@ -1326,8 +1326,8 @@
 		D96494241AA5F80F00C17BB7 /* CKSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSound.h; path = Classes/Media/Public/CKSound.h; sourceTree = "<group>"; };
 		D96494251AA5F80F00C17BB7 /* CKSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSound.m; path = Classes/Media/Public/CKSound.m; sourceTree = "<group>"; };
 		D96494281AA5F82600C17BB7 /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Media.h; path = Classes/Media/Media.h; sourceTree = "<group>"; };
-		D98BDD0A1AEFD75B00A0AECD /* CKImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageCache.h; path = Classes/Foundation/Public/CKImageCache.h; sourceTree = "<group>"; };
-		D98BDD0B1AEFD75B00A0AECD /* CKImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCache.m; path = Classes/Foundation/Public/CKImageCache.m; sourceTree = "<group>"; };
+		D98BDD0A1AEFD75B00A0AECD /* CKImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageCache.h; path = Classes/Network/Public/CKImageCache.h; sourceTree = "<group>"; };
+		D98BDD0B1AEFD75B00A0AECD /* CKImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCache.m; path = Classes/Network/Public/CKImageCache.m; sourceTree = "<group>"; };
 		D98BDD171AF00B6F00A0AECD /* CKSharedDisplayLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSharedDisplayLink.h; path = Classes/Styles/Private/CKSharedDisplayLink.h; sourceTree = "<group>"; };
 		D98BDD181AF00B6F00A0AECD /* CKSharedDisplayLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSharedDisplayLink.m; path = Classes/Styles/Private/CKSharedDisplayLink.m; sourceTree = "<group>"; };
 		D98BDD1B1AF0147F00A0AECD /* UIView+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Transition.h"; path = "Classes/UI/Public/Views/UIView+Transition.h"; sourceTree = "<group>"; };
@@ -1451,7 +1451,6 @@
 				9600B8BC1545C40200F07C5A /* TypeAhead */,
 				964C207D153DB66A00398E0F /* Localization */,
 				96EFE7D01797009D0034F935 /* ResourceManager */,
-				D98BDD091AEFD74B00A0AECD /* Image Cache */,
 				D90A716B1B38703E005AA99D /* Queue */,
 				96CC499117CCD3740017A6E7 /* Apple Extensions */,
 			);
@@ -1727,6 +1726,7 @@
 				D9E04C811AB1FA4F00E6BECB /* MultiPart */,
 				D9E04C801AB1FA3F00E6BECB /* Network Activity Manager */,
 				D9E04C7F1AB1FA2C00E6BECB /* ImageLoader */,
+				D98BDD091AEFD74B00A0AECD /* Image Cache */,
 				D9E04C831AB1FA6F00E6BECB /* WebSource */,
 				D9E04C861AB1FAA200E6BECB /* Bonjour */,
 				D9E04C881AB1FAC900E6BECB /* WebService */,

@@ -17,6 +17,8 @@
 #import "CKReusableViewController+Property.h"
 #import "CKSection+Property.h"
 
+#import "CKStandardContentViewController.h"
+
 @implementation NSObject (CKInlineDebugger)
 
 + (CKSection*)sectionWithDictionary:(NSMutableDictionary*)dico keys:(NSArray*)keys title:(NSString*)title{

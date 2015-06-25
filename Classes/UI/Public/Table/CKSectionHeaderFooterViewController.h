@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Wherecloud. All rights reserved.
 //
 
-#import <AppCoreKit/AppCoreKit.h>
+#import "CKReusableViewController.h"
 
 typedef NS_ENUM(NSInteger,CKSectionViewControllerType){
     CKSectionViewControllerTypeHeader,

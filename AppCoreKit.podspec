@@ -74,11 +74,24 @@ Pod::Spec.new do |s|
     b.private_header_files = 'Classes/Bindings/Private/**/*.{h}'
     b.dependency 'AppCoreKit/Foundation'
   end
+  
+  s.subspec 'Mapping' do |ma|
+      ma.source_files = 'Classes/Mappings/**/*.{h,m,mm}'
+      ma.private_header_files = 'Classes/Mappings/Private/**/*.{h}'
+      ma.dependency 'AppCoreKit/Foundation'
+  end
+  
+  s.subspec 'Network' do |n|
+      n.source_files = 'Classes/Network/**/*.{h,m,mm}'
+      n.private_header_files = 'Classes/Network/Private/**/*.{h}'
+      n.dependency 'AppCoreKit/Mapping'
+  end
 
   s.subspec 'Style' do |st|    
     st.source_files = 'Classes/Styles/**/*.{h,m,mm}'
     st.private_header_files = 'Classes/Styles/Private/**/*.{h}'
     st.dependency 'AppCoreKit/Foundation'
+    st.dependency 'AppCoreKit/Network'
   end
 
   s.subspec 'Layout' do |la|    
@@ -87,17 +100,6 @@ Pod::Spec.new do |s|
     la.dependency 'AppCoreKit/Style'
   end
 
-  s.subspec 'Mapping' do |ma|    
-    ma.source_files = 'Classes/Mappings/**/*.{h,m,mm}'
-    ma.private_header_files = 'Classes/Mappings/Private/**/*.{h}'
-    ma.dependency 'AppCoreKit/Foundation'
-  end
-
-  s.subspec 'Network' do |n|    
-    n.source_files = 'Classes/Network/**/*.{h,m,mm}'
-    n.private_header_files = 'Classes/Network/Private/**/*.{h}'
-    n.dependency 'AppCoreKit/Mapping'
-  end
 
   s.subspec 'Media' do |m|    
     m.source_files = 'Classes/Media/**/*.{h,m,mm}'
@@ -111,7 +113,7 @@ Pod::Spec.new do |s|
   s.subspec 'UI' do |u|    
     u.source_files = 'Classes/UI/**/*.{h,m,mm}', 'Classes/Debugger/**/*.{h,m,mm}'
     u.private_header_files = 'Classes/UI/Private/**/*.{h}', 'Classes/Debugger/Private/**/*.{h}'
-    u.dependency 'AppCoreKit/Network'
+    u.dependency 'AppCoreKit/Style'
     u.dependency 'AppCoreKit/Binding'
     u.dependency 'AppCoreKit/Layout'
     u.dependency 'AppCoreKit/CoreData'

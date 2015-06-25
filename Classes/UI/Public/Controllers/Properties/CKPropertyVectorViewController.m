@@ -8,6 +8,9 @@
 
 #import "CKPropertyVectorViewController.h"
 #import "CKPropertyNumberViewController.h"
+#import <MapKit/MapKit.h>
+#import <QuartzCore/QuartzCore.h>
+#import "CoreGraphics+Additions.h"
 
 @interface CKPropertyVectorViewController()
 @property(nonatomic,retain) CKPropertyVector* vector;

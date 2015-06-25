@@ -7,8 +7,8 @@
 //
 
 #import "UIImageView+URL.h"
-#import <AppCoreKit/AppCoreKit.h>
 #import <objc/runtime.h>
+#import "CKImageLoader.h"
 
 static char* UIImageViewImageLoaderKey;
 static char* UIImageViewImageLoaderCompletionBlockKey;
