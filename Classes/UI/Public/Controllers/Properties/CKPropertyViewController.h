@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, CKPropertyEditionPresentationStyle){
 };
 
 
-//TODO: adds support for property validation UI compatible with any CKCollectionViewControllerOld
+//TODO: adds support for property validation UI 
 
 /** CKPropertyViewController provides the base mechanism for implementing a view controller that synchronize, edit and display any kind of properties.
  It doesn't display anything by itself and requiers to get subclassed to implement logic related to certain type of properties.

@@ -35,7 +35,7 @@
 /// @name Managing the delegate
 ///-----------------------------------
 
-/** CKObjectControllerDelegate (Usually a CKCollectionViewControllerOld)
+/** CKObjectControllerDelegate 
  */
 @property (nonatomic, assign) id delegate;
 

@@ -1001,8 +1001,6 @@
 		75AD5D9B144C71740008F53A /* UIView+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "UIView+InlineDebugger.m"; path = "Classes/Debugger/Public/Additions/UIView+InlineDebugger.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		75AD5D9E144C72950008F53A /* UIViewController+InlineDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+InlineDebugger.h"; path = "Classes/Debugger/Private/UIViewController+InlineDebugger.h"; sourceTree = "<group>"; };
 		75AD5D9F144C72960008F53A /* UIViewController+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+InlineDebugger.m"; path = "Classes/Debugger/Private/UIViewController+InlineDebugger.m"; sourceTree = "<group>"; };
-		75AD5DA2144C73280008F53A /* CKCollectionViewController+InlineDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKCollectionViewController+InlineDebugger.h"; path = "Classes/Debugger/Private/CKCollectionViewController+InlineDebugger.h"; sourceTree = "<group>"; };
-		75AD5DA3144C73290008F53A /* CKCollectionViewController+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKCollectionViewController+InlineDebugger.m"; path = "Classes/Debugger/Private/CKCollectionViewController+InlineDebugger.m"; sourceTree = "<group>"; };
 		75C6DF5713FEC5BC00E4AE4F /* Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Foundation.h; path = Classes/Foundation/Foundation.h; sourceTree = "<group>"; };
 		75C6DF5913FEC7A800E4AE4F /* AppCoreKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCoreKit.h; path = Classes/AppCoreKit.h; sourceTree = "<group>"; };
 		75C6DF5D13FEC9AA00E4AE4F /* Bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bindings.h; path = Classes/Bindings/Bindings.h; sourceTree = "<group>"; };
@@ -2087,8 +2085,6 @@
 				75AD5D9B144C71740008F53A /* UIView+InlineDebugger.m */,
 				75AD5D9E144C72950008F53A /* UIViewController+InlineDebugger.h */,
 				75AD5D9F144C72960008F53A /* UIViewController+InlineDebugger.m */,
-				75AD5DA2144C73280008F53A /* CKCollectionViewController+InlineDebugger.h */,
-				75AD5DA3144C73290008F53A /* CKCollectionViewController+InlineDebugger.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";

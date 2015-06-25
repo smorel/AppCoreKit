@@ -19,7 +19,7 @@
 /// @name Managing the delegate
 ///-----------------------------------
 
-/** CKObjectControllerDelegate (Usually a CKCollectionViewControllerOld)
+/** CKObjectControllerDelegate 
  */
 - (void)setDelegate:(id)delegate;
 
