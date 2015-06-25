@@ -26,11 +26,6 @@
 
 @end
 
-/**
- */
-@interface UIViewController (CKLayout)
-@end
-
 
 @implementation UIViewController(CKLayout)
 

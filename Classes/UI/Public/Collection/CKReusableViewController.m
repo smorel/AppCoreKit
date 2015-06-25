@@ -23,6 +23,8 @@
 #import "CKCollectionViewController.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKMapViewController.h"
+
 #import "CKWeakRef.h"
 
 @interface NSObject ()
@@ -278,7 +280,16 @@
 
 - (void)scrollToCell{
     if([self.containerViewController respondsToSelector:@selector(scrollToControllerAtIndexPath:animated:)]){
-        [self.containerViewController scrollToControllerAtIndexPath:self.indexPath animated:YES];
+        
+        NSMethodSignature* signature = [self.containerViewController methodSignatureForSelector: @selector(scrollToControllerAtIndexPath:animated:)];
+        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature: signature];
+        [invocation setTarget: self.containerViewController];
+        [invocation setSelector: @selector(scrollToControllerAtIndexPath:animated:)];
+        [invocation setArgument: self.indexPath atIndex: 2];
+        BOOL bo = YES;
+        [invocation setArgument: &bo atIndex: 3];
+        
+        [invocation invoke];
     }
 }
 

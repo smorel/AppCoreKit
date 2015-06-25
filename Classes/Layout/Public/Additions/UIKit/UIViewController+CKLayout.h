@@ -11,7 +11,7 @@
 
 /**
  */
-@interface UIViewController () <CKLayoutBoxProtocol>
+@interface UIViewController (CKLayout)<CKLayoutBoxProtocol>
 @end
 
 
