@@ -389,8 +389,8 @@ namespace __gnu_cxx{
         CGFloat totalHeight = (size.height - self.padding.top - self.padding.bottom);
         
         
-        CKLayoutHorizontalAlignment hAlign = (size.width >= MAXFLOAT) ? CKLayoutHorizontalAlignmentLeft : (CKLayoutHorizontalAlignment)self.horizontalAlignment;
-        CKLayoutVerticalAlignment vAlign = (size.height >= MAXFLOAT) ? CKLayoutVerticalAlignmentTop : (CKLayoutVerticalAlignment)self.verticalAlignment;
+        CKLayoutHorizontalAlignment hAlign = (CKLayoutHorizontalAlignment)((size.width >= MAXFLOAT) ? CKLayoutHorizontalAlignmentLeft : (CKLayoutHorizontalAlignment)self.horizontalAlignment);
+        CKLayoutVerticalAlignment vAlign = (CKLayoutVerticalAlignment)((size.height >= MAXFLOAT) ? CKLayoutVerticalAlignmentTop : (CKLayoutVerticalAlignment)self.verticalAlignment);
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){

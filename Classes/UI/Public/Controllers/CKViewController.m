@@ -318,7 +318,7 @@ static char UIViewControllerPreferredStatusBarUpdateAnimationKey;
 
 - (UIStatusBarAnimation)AppCoreKit_preferredStatusBarUpdateAnimation{
     id value = objc_getAssociatedObject(self, &UIViewControllerPreferredStatusBarUpdateAnimationKey);
-    return value ? [value integerValue] : UIStatusBarStyleDefault;
+    return value ? [value integerValue] : UIStatusBarAnimationFade;
 }
 
 - (void)preferredStatusBarUpdateAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{

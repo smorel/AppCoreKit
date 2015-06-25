@@ -55,17 +55,17 @@ CGFloat CGAffineTransformGetFlip(CGAffineTransform transform) {
 CGFloat CKCGAffineTransformGetScaleX0(CGAffineTransform transform) {
     CGFloat scale = CKCGAffineTransformGetScaleX(transform);
     CGFloat shear = CKCGAffineTransformGetShearX(transform);
-    if (shear == 0) return fabs(scale);  // Optimization for a very common case.
-    if (scale == 0) return fabs(shear);  // Not as common as above, but still common enough.
-    return hypotf(scale, shear);
+    if (shear == 0) return (CGFloat)fabs(scale);  // Optimization for a very common case.
+    if (scale == 0) return (CGFloat)fabs(shear);  // Not as common as above, but still common enough.
+    return (CGFloat)hypot(scale, shear);
 }
 
 CGFloat CKCGAffineTransformGetScaleY0(CGAffineTransform transform) {
     CGFloat scale = CKCGAffineTransformGetScaleY(transform);
     CGFloat shear = CKCGAffineTransformGetShearY(transform);
-    if (shear == 0) return fabs(scale);  // Optimization for a very common case.
-    if (scale == 0) return fabs(shear);  // Not as common as above, but still common enough.
-    return hypotf(scale, shear);
+    if (shear == 0) return (CGFloat)fabs(scale);  // Optimization for a very common case.
+    if (scale == 0) return (CGFloat)fabs(shear);  // Not as common as above, but still common enough.
+    return (CGFloat)hypot(scale, shear);
 }
 
 CGFloat CKCGAffineTransformGetRotation(CGAffineTransform transform) {
@@ -74,8 +74,8 @@ CGFloat CKCGAffineTransformGetRotation(CGAffineTransform transform) {
         CGFloat scaleX = CKCGAffineTransformGetScaleX0(transform);
         CGFloat scaleY = CKCGAffineTransformGetScaleY0(transform) * flip;
         
-        return atan2((CKCGAffineTransformGetShearY(transform)/scaleY) - (CKCGAffineTransformGetShearX(transform)/scaleX),
-                     (CKCGAffineTransformGetScaleY(transform)/scaleY) + (CKCGAffineTransformGetScaleX(transform)/scaleX));
+        return (CGFloat)atan2((CKCGAffineTransformGetShearY(transform)/scaleY) - (CKCGAffineTransformGetShearX(transform)/scaleX),
+                              (CKCGAffineTransformGetScaleY(transform)/scaleY) + (CKCGAffineTransformGetScaleX(transform)/scaleX));
     }
     return 0;
 }
@@ -118,7 +118,7 @@ CGFloat CKCGFloatInterpolate(CGFloat f1,CGFloat f2, CGFloat ratio){
 }
 
 CGFloat CKCGPointLength(CGPoint point){
-    return sqrt((point.x * point.x) + (point.y * point.y));;
+    return (CGFloat)sqrt((point.x * point.x) + (point.y * point.y));;
 }
 
 CGPoint CKCGPointNormalize(CGPoint point){
@@ -135,7 +135,7 @@ CGFloat CKCGPointAngle(CGPoint p1,CGPoint p2){
     CGFloat C = (p1.x*p2.x+p1.y*p2.y)/(l1*l2);
     CGFloat S = (p1.x*p2.y-p2.x*p1.y);
     CGFloat sign = (S >= 0) ? 1 : -1;
-    CGFloat angle = sign*acos(C);
+    CGFloat angle = (CGFloat)(sign*acos(C));
     return angle;
 }
 
@@ -143,8 +143,8 @@ CGPoint CKCGPointIntersectHorizontalEdge(CGFloat y,CGPoint lineOrigin, CGPoint l
     CGFloat beta = CKCGPointAngle( CGPointMake(1, 0), lineDirection);
     
     CGFloat b = y - lineOrigin.y;
-    CGFloat c = b / sin(beta);
-    CGFloat a = c * cos(beta);
+    CGFloat c = (CGFloat)(b / sin(beta));
+    CGFloat a = (CGFloat)(c * cos(beta));
 
     return CGPointMake(a + lineOrigin.x,y);
 }
@@ -153,8 +153,8 @@ CGPoint CKCGPointIntersectVerticalEdge(CGFloat x,CGPoint lineOrigin, CGPoint lin
     CGFloat beta = CKCGPointAngle( CGPointMake(1, 0), lineDirection);
     
     CGFloat a = x - lineOrigin.x;
-    CGFloat c = a / cos(beta);
-    CGFloat b = c * sin(beta);
+    CGFloat c = (CGFloat)(a / cos(beta));
+    CGFloat b = (CGFloat)(c * sin(beta));
     
     return CGPointMake(x,b + lineOrigin.y);
 }

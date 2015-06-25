@@ -50,7 +50,7 @@
     self.blurRadius = 2;
     self.saturationDelta = 1;
     self.blurTintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-    self.backgroundScale = 0.9;
+    self.backgroundScale = 0.9f;
     self.statusBarAnimation = UIStatusBarAnimationFade;
     return self;
 }

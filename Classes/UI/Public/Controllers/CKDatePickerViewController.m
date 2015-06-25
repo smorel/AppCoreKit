@@ -107,7 +107,7 @@
                 self.datePicker.timeZone = self.timeZone;
             }
             
-            _datePicker.datePickerMode = self.datePickerMode;
+            _datePicker.datePickerMode = (UIDatePickerMode)self.datePickerMode;
             _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
             
             CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
@@ -173,8 +173,8 @@
                 date = [NSDate date];
             }
             
-            NSDateComponents* comp2 = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear fromDate:[NSDate date]];
-            NSDateComponents* comp = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear|kCFCalendarUnitMonth fromDate:date];
+            NSDateComponents* comp2 = [[NSCalendar currentCalendar]components:NSCalendarUnitYear fromDate:[NSDate date]];
+            NSDateComponents* comp = [[NSCalendar currentCalendar]components:NSCalendarUnitYear|NSCalendarUnitMonth fromDate:date];
             NSInteger yearRow = [comp year] - [comp2 year];
             NSInteger monthRow = [comp month] - 1;
             
@@ -225,7 +225,7 @@
                 return [NSString stringWithFormat:@"%ld",(long)index];
             }
             else if(component == 1){//year
-                NSDateComponents* comp = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear fromDate:[NSDate date]];
+                NSDateComponents* comp = [[NSCalendar currentCalendar]components:NSCalendarUnitYear fromDate:[NSDate date]];
                 return [NSString stringWithFormat:@"%ld",(long)([comp year] + row)];
             }
             break;
@@ -241,7 +241,7 @@
             NSDateComponents* comp = [[[NSDateComponents alloc]init]autorelease];
             [comp setMonth:1 + [self.pickerView selectedRowInComponent:0]];
             
-            NSDateComponents* comp2 = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear fromDate:[NSDate date]];
+            NSDateComponents* comp2 = [[NSCalendar currentCalendar]components:NSCalendarUnitYear fromDate:[NSDate date]];
             [comp setYear:[comp2 year] + [self.pickerView selectedRowInComponent:1]];
             
             NSDate* newDate = [[NSCalendar currentCalendar]dateFromComponents:comp];

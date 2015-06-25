@@ -61,10 +61,10 @@
     }
     
     if(_options & CKAnimationOptionAutoReverse){
-        if(ratio >= 0.5){
-            ratio = 1 - (2 * (ratio - 0.5));
+        if(ratio >= 0.5f){
+            ratio = 1.0f - (2.0f * (ratio - 0.5f));
         }else{
-            ratio = 2 * ratio;
+            ratio = 2.0f * ratio;
         }
     }
     
@@ -79,16 +79,16 @@
         return;
     
     
-    CGFloat d = _duration;
+    CGFloat d = (CGFloat)_duration;
     if(_options & CKAnimationOptionAutoReverse){
         d *= 2;
     }
     
-    CGFloat previousRelativeTime = fmod(_cumulatedTime,d);
+    CGFloat previousRelativeTime = (CGFloat)fmod(_cumulatedTime,d);
     
     self.cumulatedTime += frameDuration;
     
-    CGFloat relativeTime = fmod(_cumulatedTime,d);
+    CGFloat relativeTime = (CGFloat)fmod(_cumulatedTime,d);
     
     if(relativeTime < previousRelativeTime && (_options & CKAnimationOptionLoop)){
         if(_eventBlock){

@@ -151,7 +151,7 @@ typedef NS_ENUM(NSInteger, CKStyleViewGradientStyle){
 
 /** see. CGContextSetLineJoin
  */
-@property (nonatomic, assign) CGLineCap separatorLineJoin;
+@property (nonatomic, assign) CGLineJoin separatorLineJoin;
 
 /**
  */

@@ -92,7 +92,7 @@
 }
 
 - (NSIndexPath*)gridIndexPathForViewAtIndexPath:(NSIndexPath*)indexPath{
-    NSInteger pageModulo = floorf((indexPath.item / (CGFloat)[self numberOfViewInAllPages]));
+    NSInteger pageModulo = (NSInteger)(floor((indexPath.item / (CGFloat)[self numberOfViewInAllPages])));
     NSInteger indexInPageModulo = indexPath.item - (pageModulo * [self numberOfViewInAllPages]);
 
     NSInteger count = 0;
@@ -145,7 +145,7 @@
 }
 
 - (NSInteger)requieredNumberOfPages{
-    CGFloat numberOfViews = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:0];
+    NSInteger numberOfViews = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:0];
     if(numberOfViews == 0)
         return 0;
     
@@ -334,11 +334,11 @@
     NSInteger page = 0;
     switch(self.orientation){
         case CKCollectionViewLayoutOrientationVertical:{
-            page = floorf(self.collectionView.contentOffset.y / self.collectionView.bounds.size.height);
+            page = (NSInteger)(floor(self.collectionView.contentOffset.y / self.collectionView.bounds.size.height));
             break;
         }
         case CKCollectionViewLayoutOrientationHorizontal:{
-            page = floorf(self.collectionView.contentOffset.x / self.collectionView.bounds.size.width);
+            page = (NSInteger)(floor(self.collectionView.contentOffset.x / self.collectionView.bounds.size.width));
             break;
         }
     }

@@ -110,19 +110,19 @@
 }
 
 - (NSInteger)red{
-    return [(UIColor*)self.property.value red] * 255;
+    return (NSInteger)([(UIColor*)self.property.value red] * 255.0f);
 }
 
 - (NSInteger)green{
-    return [(UIColor*)self.property.value green] * 255;
+    return (NSInteger)([(UIColor*)self.property.value green] * 255.0f);
 }
 
 - (NSInteger)blue{
-    return [(UIColor*)self.property.value blue] * 255;
+    return (NSInteger)([(UIColor*)self.property.value blue] * 255.0f);
 }
 
 - (NSInteger)alpha{
-    return [(UIColor*)self.property.value alpha] * 255;
+    return (NSInteger)([(UIColor*)self.property.value alpha] * 255.0f);
 }
 
 @end

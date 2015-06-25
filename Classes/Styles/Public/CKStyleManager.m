@@ -109,7 +109,7 @@ static NSInteger kLogEnabled = -1;
         BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKDebugStyle"]boolValue];
         kLogEnabled = bo;
     }
-    return kLogEnabled;
+    return (BOOL)kLogEnabled;
 }
 
 - (BOOL)isEmpty{

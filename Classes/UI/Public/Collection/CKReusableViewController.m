@@ -439,7 +439,7 @@
 
 - (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
     if(![self.contentView isKindOfClass:[UITableView class]]){
-        return CKViewBorderStyleNone;
+        return CKStyleViewBorderLocationNone;
     }
     
     NSIndexPath* theIndexPath = self.indexPath;
@@ -576,7 +576,7 @@
                 [(UIActivityIndicatorView*)self.tableViewCell.accessoryView stopAnimating];
             }
             self.tableViewCell.accessoryView = nil;
-            self.tableViewCell.accessoryType = self.accessoryType;
+            self.tableViewCell.accessoryType = (UITableViewCellAccessoryType)self.accessoryType;
         }
     }
 }

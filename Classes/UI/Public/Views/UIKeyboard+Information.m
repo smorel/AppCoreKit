@@ -31,7 +31,7 @@ CGPoint CKUIKeyboardInformationCenterEnd(NSDictionary *keyboardUserInfo) {
 
 CGFloat CKUIKeyboardInformationAnimationDuration(NSDictionary *keyboardUserInfo) {
 	NSValue *keyAnimDuration = [keyboardUserInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-	double duration;
+	CGFloat duration;
 	[keyAnimDuration getValue:&duration];
 	return duration;
 }

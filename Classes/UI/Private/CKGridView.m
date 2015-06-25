@@ -79,8 +79,8 @@
 
 - (id)initWithFrame:(CGRect)frame gridSize:(CGSize)size{
 	if (self = [self initWithFrame:frame]) {
-    	_rows = size.height;
-        _columns = size.width;
+    	_rows = (NSUInteger)size.height;
+        _columns = (NSUInteger)size.width;
     }
     
 	return self;
@@ -251,8 +251,8 @@
 	return CGPointMake((indexPath.column * self.columnWidth), (indexPath.row * self.rowHeight));
 }
 - (NSIndexPath *)indexPathForPoint:(CGPoint)point {
-	NSInteger row = point.y / self.rowHeight;
-	NSInteger column = point.x / self.columnWidth;
+	NSInteger row = (NSInteger)(point.y / self.rowHeight);
+	NSInteger column = (NSInteger)(point.x / self.columnWidth);
 	return [NSIndexPath indexPathForRow:row column:column];	
 }
 - (UIView *)viewAtPoint:(CGPoint)point {

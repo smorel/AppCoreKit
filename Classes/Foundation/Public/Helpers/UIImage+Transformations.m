@@ -50,11 +50,11 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
 
 
 - (UIImage *)imageByAddingBorderWithColor:(UIColor *)strokeColor cornerRadius:(CGFloat)radius {
-	int w = self.size.width;
-	int h = self.size.height;
+	CGFloat w = self.size.width;
+	CGFloat h = self.size.height;
 	
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef gc = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+	CGContextRef gc = CGBitmapContextCreate(NULL, (size_t)w, (size_t)h, 8, (size_t)(4 * w), colorSpace, 0);
 	
 	// Clip the image
 	CGContextSaveGState(gc);
@@ -132,8 +132,8 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     CGFloat scaleRatioV = bounds.size.height / height;
     
     CGFloat uniformScale = MAX(scaleRatioH,scaleRatioV);
-    CGFloat offsetH = (scaleRatioH < scaleRatioV) ? ((bounds.size.width / uniformScale ) - width) / 2.0 : 0;
-    CGFloat offsetV = (scaleRatioV < scaleRatioH) ? ((bounds.size.height / uniformScale) - height) / 2.0 : 0;
+    CGFloat offsetH = (scaleRatioH < scaleRatioV) ? ((bounds.size.width / uniformScale ) - width) / 2.0f : 0;
+    CGFloat offsetV = (scaleRatioV < scaleRatioH) ? ((bounds.size.height / uniformScale) - height) / 2.0f : 0;
     
     scaleRatioH = scaleRatioV = uniformScale;
     
@@ -154,7 +154,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             
         case UIImageOrientationDown: //EXIF = 3
             transform = CGAffineTransformMakeTranslation(imageSize.width, imageSize.height);
-            transform = CGAffineTransformRotate(transform, M_PI);
+            transform = CGAffineTransformRotate(transform, (CGFloat)M_PI);
             break;
             
         case UIImageOrientationDownMirrored: //EXIF = 4
@@ -168,7 +168,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeTranslation(imageSize.height, imageSize.width);
             transform = CGAffineTransformScale(transform, -1.0, 1.0);
-            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform, 3.0f * (CGFloat)M_PI / 2.0f);
             break;
             
         case UIImageOrientationLeft: //EXIF = 6
@@ -176,7 +176,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.height = bounds.size.width;
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeTranslation(0.0, imageSize.width);
-            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform, 3.0f * (CGFloat)M_PI / 2.0f);
             break;
             
         case UIImageOrientationRightMirrored: //EXIF = 7
@@ -184,7 +184,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.height = bounds.size.width;
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeScale(-1.0, 1.0);
-            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform, (CGFloat)M_PI / 2.0f);
             break;
             
         case UIImageOrientationRight: //EXIF = 8
@@ -192,7 +192,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.height = bounds.size.width;
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeTranslation(imageSize.height, 0.0);
-            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform, (CGFloat)M_PI / 2.0f);
             break;
             
         default:
@@ -257,7 +257,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             
         case UIImageOrientationDown: //EXIF = 3
             transform = CGAffineTransformMakeTranslation(imageSize.width, imageSize.height);
-            transform = CGAffineTransformRotate(transform, M_PI);
+            transform = CGAffineTransformRotate(transform, (CGFloat)M_PI);
             break;
             
         case UIImageOrientationDownMirrored: //EXIF = 4
@@ -271,7 +271,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeTranslation(imageSize.height, imageSize.width);
             transform = CGAffineTransformScale(transform, -1.0, 1.0);
-            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform, 3.0f *(CGFloat) M_PI / 2.0f);
             break;
             
         case UIImageOrientationLeft: //EXIF = 6
@@ -279,7 +279,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.height = bounds.size.width;
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeTranslation(0.0, imageSize.width);
-            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform, 3.0f * (CGFloat)M_PI / 2.0f);
             break;
             
         case UIImageOrientationRightMirrored: //EXIF = 7
@@ -287,7 +287,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.height = bounds.size.width;
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeScale(-1.0, 1.0);
-            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform,(CGFloat) M_PI / 2.0f);
             break;
             
         case UIImageOrientationRight: //EXIF = 8
@@ -295,7 +295,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
             bounds.size.height = bounds.size.width;
             bounds.size.width = boundHeight;
             transform = CGAffineTransformMakeTranslation(imageSize.height, 0.0);
-            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            transform = CGAffineTransformRotate(transform, (CGFloat)M_PI / 2.0f);
             break;
             
         default:
@@ -336,11 +336,11 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     }
     
     
-    int numberOfColorComponents = 4; // R,G,B, and A
-    float x = pixelPoint.x;
-    float y = pixelPoint.y;
-    float w = imageSize.width;
-    int pixelInfo = ((w * y) + x) * numberOfColorComponents;
+    NSInteger numberOfColorComponents = 4; // R,G,B, and A
+    CGFloat x = pixelPoint.x;
+    CGFloat y = pixelPoint.y;
+    CGFloat w = imageSize.width;
+    NSInteger pixelInfo = (NSInteger)( ((w * y) + x) * numberOfColorComponents);
     
     UInt8 red = data[pixelInfo];
     UInt8 green = data[(pixelInfo + 1)];
@@ -348,10 +348,10 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     UInt8 alpha = data[pixelInfo + 3];
     
     // RGBA values range from 0 to 255
-    return [UIColor colorWithRed:MAX(0,MIN(1,red/255.0))
-                           green:MAX(0,MIN(1,green/255.0))
-                            blue:MAX(0,MIN(1,blue/255.0))
-                           alpha:alpha/255.0];
+    return [UIColor colorWithRed:MAX(0,MIN(1,red/255.0f))
+                           green:MAX(0,MIN(1,green/255.0f))
+                            blue:MAX(0,MIN(1,blue/255.0f))
+                           alpha:alpha/255.0f];
 
 }
 
@@ -363,7 +363,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     CGFloat sumB = 0;
     CGFloat n = 0;
     
-    NSInteger increment = imageSize.width / ((precision == 0) ? 2 : precision);
+    NSInteger increment = (NSInteger)(imageSize.width / ((precision == 0) ? 2 : precision));
     
     for(NSInteger x = 0; x < imageSize.width; x += increment){
         UIColor* color = [UIImage colorAtPoint:CGPointMake(x,line) data:imageData imageSize:imageSize];
@@ -389,7 +389,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     CGFloat sumB = 0;
     CGFloat n = 0;
     
-    NSInteger increment = imageSize.height / ((precision == 0) ? 2 : precision);
+    NSInteger increment = (NSInteger)(imageSize.height / ((precision == 0) ? 2 : precision));
     
     for(NSInteger y = 0; y < imageSize.height; y += increment){
         UIColor* color = [UIImage colorAtPoint:CGPointMake(column,y) data:imageData imageSize:imageSize];
@@ -437,13 +437,13 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
         return self;
     }
     
-    NSInteger increment = realSize.width / ((precision == 0) ? 2 : precision);
+    NSInteger increment = (NSInteger)(realSize.width / ((precision == 0) ? 2 : precision));
     
     //Searching for top letter box
     NSInteger top = 0;
-    NSInteger bottom = realSize.height;
+    NSInteger bottom = (NSInteger)realSize.height;
     NSInteger left = 0;
-    NSInteger right = realSize.width;
+    NSInteger right = (NSInteger)realSize.width;
     
     //Searching for top letter box
     stop = NO;
@@ -456,7 +456,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     
     //Searching for bottom letter box
     stop = NO;
-    for(NSInteger y = realSize.height-1; y > realSize.height /2 && !stop; y -= 1){
+    for(NSInteger y = (NSInteger)(realSize.height-1); y > (NSInteger)(realSize.height /2) && !stop; y -= 1){
         BOOL match = [self doesImageLine:y matchesColor:letterBoxingColor precision:precision tolerance:tolerance imageData:data imageSize:realSize];
         stop = !match;
         if(!stop){ bottom = y; }
@@ -474,7 +474,7 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     
     //Searching for right letter box
     stop = NO;
-    for(NSInteger x = realSize.width-1; x > realSize.width /2 && !stop; x -= 1){
+    for(NSInteger x = (NSInteger)(realSize.width-1); x > (NSInteger)(realSize.width /2) && !stop; x -= 1){
         BOOL match = [self doesImageColumn:x matchesColor:letterBoxingColor precision:precision tolerance:tolerance imageData:data imageSize:realSize];
         stop = !match;
         if(!stop){ right = x; }

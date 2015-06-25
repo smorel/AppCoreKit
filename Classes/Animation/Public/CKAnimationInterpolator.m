@@ -107,18 +107,18 @@ typedef enum CKAnimationInterpolatorType{
         return;
     }
     
-    NSInteger floor = floorf(ratio * (float)([_values count]-1));
-    if(floor >= [_values count]-1){
+    NSInteger f = (NSInteger)(floor(ratio * (CGFloat)([_values count]-1)));
+    if(f >= [_values count]-1){
         if(self.updateBlock){
-            self.updateBlock(self,[_values objectAtIndex:floor]);
+            self.updateBlock(self,[_values objectAtIndex:f]);
         }
     }else{
-        CGFloat ratioFloor = floor / (float)([_values count]-1);
+        CGFloat ratioFloor = f / (float)([_values count]-1);
         CGFloat ratioDiff = ratio - ratioFloor;
         CGFloat inBetweenRatio = ratioDiff * (float)([_values count]-1);
         
-        id fromValue = [_values objectAtIndex:floor];
-        id toValue = [_values objectAtIndex:floor+1];
+        id fromValue = [_values objectAtIndex:f];
+        id toValue = [_values objectAtIndex:f+1];
         id value = [self interpolateFrom:fromValue to:toValue withRatio:inBetweenRatio];
         if(self.updateBlock){
             self.updateBlock(self,value);

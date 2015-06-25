@@ -38,7 +38,7 @@
     size.height -= self.padding.top + self.padding.bottom;
     
     CGSize ret = [self sizeThatFits:size];
-    ret.height = MAX(162.0, ret.height);
+    ret.height = MAX(162.0f, ret.height);
 
     ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     

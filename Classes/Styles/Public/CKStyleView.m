@@ -298,7 +298,7 @@
         self.backgroundImageView.contentMode = self.imageContentMode;
         self.backgroundImageView.image = self.image;
         self.backgroundImageView.opaque = YES;
-        self.backgroundImageView.frame = CGRectInset(self.bounds,-fabs(self.imageMotionEffectOffset),-fabs(self.imageMotionEffectOffset));
+        self.backgroundImageView.frame = CGRectInset(self.bounds,(CGFloat)-fabs(self.imageMotionEffectOffset),(CGFloat)-fabs(self.imageMotionEffectOffset));
         
         if(self.imageMotionEffectOffset != 0){
             if(self.motionEffectGroup == nil){

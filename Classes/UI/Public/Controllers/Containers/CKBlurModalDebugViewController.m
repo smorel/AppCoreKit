@@ -31,8 +31,8 @@
     self.radius = 2.0;
     self.saturationDelta = 1;
     self.red = self.green = self.blue = 0;
-    self.alpha = 0.5;
-    self.scale = 0.9;
+    self.alpha = 0.5f;
+    self.scale = 0.9f;
     
     [super postInit];
 }

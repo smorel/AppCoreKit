@@ -13,9 +13,9 @@
 @implementation UIColor (CKUIColorAdditions)
 
 + (UIColor *)colorWithRGBValue:(NSUInteger)value {
-	return [UIColor colorWithRed:((value & 0xFF0000) >> 16) / 255.0
-						   green:((value & 0xFF00) >> 8) / 255.0
-							blue:(value & 0xFF) / 255.0
+	return [UIColor colorWithRed:((value & 0xFF0000) >> 16) / 255.0f
+						   green:((value & 0xFF00) >> 8) / 255.0f
+							blue:(value & 0xFF) / 255.0f
 						   alpha:1.0];
 }
 
@@ -42,7 +42,7 @@
 }
 
 + (UIColor *)colorWithRedInt:(NSUInteger)red greenInt:(NSUInteger)green blueInt:(NSUInteger)blue alphaInt:(NSUInteger)alpha{
-    return [UIColor colorWithRed:(red / 255.0) green:(green / 255.0) blue:(blue / 255.0) alpha:(alpha / 255.0)];
+    return [UIColor colorWithRed:(red / 255.0f) green:(green / 255.0f) blue:(blue / 255.0f) alpha:(alpha / 255.0f)];
 }
 
 @end
