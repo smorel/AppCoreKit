@@ -93,6 +93,7 @@ Pod::Spec.new do |s|
     st.private_header_files = 'Classes/Styles/Private/**/*.{h}'
     st.dependency 'AppCoreKit/Foundation'
     st.dependency 'AppCoreKit/Network'
+    st.dependency 'AppCoreKit/Binding'
   end
 
   s.subspec 'Layout' do |la|    
