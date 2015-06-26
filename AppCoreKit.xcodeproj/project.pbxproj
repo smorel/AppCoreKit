@@ -1043,8 +1043,6 @@
 		9600B8BE1545C41400F07C5A /* CKTypeAhead.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = CKTypeAhead.mm; path = Classes/Foundation/Public/TypeAhead/CKTypeAhead.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9600B8BF1545C41400F07C5A /* CKTypeAhead+Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTypeAhead+Generator.h"; path = "Classes/Foundation/Public/TypeAhead/CKTypeAhead+Generator.h"; sourceTree = "<group>"; };
 		9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = "CKTypeAhead+Generator.mm"; path = "Classes/Foundation/Public/TypeAhead/CKTypeAhead+Generator.mm"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKSlideShowViewController.h; path = Classes/UI/Public/Controllers/CKSlideShowViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKSlideShowViewController.m; path = Classes/UI/Public/Controllers/CKSlideShowViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBreadCrumbViewController.h; path = Classes/UI/Public/Controllers/Containers/CKBreadCrumbViewController.h; sourceTree = "<group>"; };
 		9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBreadCrumbViewController.m; path = Classes/UI/Public/Controllers/Containers/CKBreadCrumbViewController.m; sourceTree = "<group>"; };
 		9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKContainerViewController.h; path = Classes/UI/Public/Controllers/Containers/CKContainerViewController.h; sourceTree = "<group>"; };
@@ -2049,7 +2047,6 @@
 				7560DC4B13B8ED3600268D13 /* CKViewController.m */,
 				9600B8E51545CB3100F07C5A /* Containers */,
 				D92C10531AA78B9F00DA4B12 /* Web */,
-				D92C10551AA78BCB00DA4B12 /* Slideshow */,
 				D9418A571AB8652300234A15 /* Date Picker */,
 				D9418A801AB8B86900234A15 /* Cells */,
 				D94CA3061AA75B21009EA887 /* Properties */,
@@ -2316,15 +2313,6 @@
 				96234818157D6A760036002C /* UIViewController+DeviceOrientation.mm */,
 			);
 			name = "Apple Extensions";
-			sourceTree = "<group>";
-		};
-		D92C10551AA78BCB00DA4B12 /* Slideshow */ = {
-			isa = PBXGroup;
-			children = (
-				9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */,
-				9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */,
-			);
-			name = Slideshow;
 			sourceTree = "<group>";
 		};
 		D92C10C51AB09EF800DA4B12 /* UIImage */ = {
