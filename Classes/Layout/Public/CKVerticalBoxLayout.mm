@@ -381,8 +381,8 @@ namespace __gnu_cxx{
         //Handle Vertical alignment
         CGFloat totalWidth = (size.width - self.padding.left - self.padding.right);
         
-        CKLayoutHorizontalAlignment hAlign = (CKLayoutHorizontalAlignment)((size.width >= MAXFLOAT) ? CKLayoutHorizontalAlignmentLeft : (CKLayoutHorizontalAlignment)self.horizontalAlignment);
-        CKLayoutVerticalAlignment vAlign = (CKLayoutVerticalAlignment)((size.height >= MAXFLOAT) ? CKLayoutVerticalAlignmentTop : (CKLayoutVerticalAlignment)self.verticalAlignment);
+        CKLayoutHorizontalAlignment hAlign = (CKLayoutHorizontalAlignment)((size.width >= MAXFLOAT) ? (CKLayoutHorizontalAlignment)CKLayoutHorizontalAlignmentLeft : (CKLayoutHorizontalAlignment)self.horizontalAlignment);
+        CKLayoutVerticalAlignment vAlign = (CKLayoutVerticalAlignment)((size.height >= MAXFLOAT) ? (CKLayoutVerticalAlignment)CKLayoutVerticalAlignmentTop : (CKLayoutVerticalAlignment)self.verticalAlignment);
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
