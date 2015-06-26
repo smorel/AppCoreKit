@@ -14,7 +14,6 @@
 #import "CKVersion.h"
 #import <objc/runtime.h>
 #import "CKResourceManager.h"
-#import "CKContainerViewController.h"
 
 
 static char UIViewControllerStyleManagerKey;
