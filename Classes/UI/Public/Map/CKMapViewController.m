@@ -21,6 +21,8 @@
 #import "CKVersion.h"
 #import "UIView+CKLayout.h"
 
+#import <objc/runtime.h>
+
 
 CGFloat distance(MKMapPoint p1, MKMapPoint p2){
     return (CGFloat)(sqrt(pow(p1.x-p2.x,2)+pow(p1.y-p2.y,2)));

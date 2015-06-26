@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.author       = { 'Sebastien Morel' => 'morel.sebastien@gmail.com' }
   s.source       = { :git => 'https://github.com/smorel/AppCoreKit.git', :tag => 'v3.0.0' }
   s.platform     = :ios, '7.0'
+  s.header_dir   = "AppCoreKit"
 
   s.description = 'AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS. This is the result of a 4 years experience at Wherecloud and is a production framework that shipped more than 20 apps. AppCoreKit does not offer out of the box UI components but the technology to help you: Manage your data, Automatic serialization (KeyValue Store, Core Data), Objective-C runtime apis, Type and data structure conversions, View controllers and containers, Ui vs. Models synchronization with bindings, Appearance customization with cascading stylesheets, Responsive view layouts with a horizontal/vertical box model, Forms with automatic sizing and custom layouts, Maps, Network, And more. Keep in mind that AppCoreKit is a toolbox. It is non intrusive so that you can cherry pick features and learn how to use it at your own pace. Screen Cast and high level description of the framework are available at http://www.appcorekit.net. A sample repository with binary versions of the framework is available at https://github.com/wherecloud/appcorekit-samples'
 
@@ -47,19 +48,19 @@ Pod::Spec.new do |s|
 
   s.subspec 'AddressBook' do |a|    
     a.source_files = 'Classes/AdressBook/**/*.{h,m,mm}'
-    a.private_header_files = 'Classes/AdressBook/Private/**/*.{h}'
+    #a.private_header_files = 'Classes/AdressBook/Private/**/*.{h}'
     a.dependency 'AppCoreKit/Foundation'
   end
 
   s.subspec 'Location' do |l|    
     l.source_files = 'Classes/Location/**/*.{h,m,mm}'
-    l.private_header_files = 'Classes/Location/Private/**/*.{h}'
+    #l.private_header_files = 'Classes/Location/Private/**/*.{h}'
     l.dependency 'AppCoreKit/Foundation'
   end
 
   s.subspec 'Mock' do |mo|    
     mo.source_files = 'Classes/Mock/**/*.{h,m,mm}'
-    mo.private_header_files = 'Classes/Mock/Private/**/*.{h}'
+    #mo.private_header_files = 'Classes/Mock/Private/**/*.{h}'
     mo.dependency 'AppCoreKit/Foundation'
   end
 
@@ -77,13 +78,13 @@ Pod::Spec.new do |s|
   
   s.subspec 'Mapping' do |ma|
       ma.source_files = 'Classes/Mappings/**/*.{h,m,mm}'
-      ma.private_header_files = 'Classes/Mappings/Private/**/*.{h}'
+      #ma.private_header_files = 'Classes/Mappings/Private/**/*.{h}'
       ma.dependency 'AppCoreKit/Foundation'
   end
   
   s.subspec 'Network' do |n|
       n.source_files = 'Classes/Network/**/*.{h,m,mm}'
-      n.private_header_files = 'Classes/Network/Private/**/*.{h}'
+      #n.private_header_files = 'Classes/Network/Private/**/*.{h}'
       n.dependency 'AppCoreKit/Mapping'
   end
 
@@ -96,14 +97,14 @@ Pod::Spec.new do |s|
 
   s.subspec 'Layout' do |la|    
     la.source_files = 'Classes/Layout/**/*.{h,m,mm}'
-    la.private_header_files = 'Classes/Layout/Private/**/*.{h}'
+    #la.private_header_files = 'Classes/Layout/Private/**/*.{h}'
     la.dependency 'AppCoreKit/Style'
   end
 
 
   s.subspec 'Media' do |m|    
     m.source_files = 'Classes/Media/**/*.{h,m,mm}'
-    m.private_header_files = 'Classes/Media/Private/**/*.{h}'
+    #m.private_header_files = 'Classes/Media/Private/**/*.{h}'
     m.dependency 'AppCoreKit/Foundation'
   end
 
