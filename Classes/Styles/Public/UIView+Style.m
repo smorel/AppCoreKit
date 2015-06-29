@@ -796,6 +796,9 @@ static char NSObjectAppliedStyleObjectKey;
         }
     }
     
+    if([myViewStyle isEmpty])
+        return;
+    
     if(([view appliedStyle] == nil || [[view appliedStyle]isEmpty])){
         
         //if(![myViewStyle isEmpty]){
