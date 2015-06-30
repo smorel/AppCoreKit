@@ -285,7 +285,9 @@
         NSInvocation* invocation = [NSInvocation invocationWithMethodSignature: signature];
         [invocation setTarget: self.containerViewController];
         [invocation setSelector: @selector(scrollToControllerAtIndexPath:animated:)];
-        [invocation setArgument: self.indexPath atIndex: 2];
+        
+        NSIndexPath* i = self.indexPath;
+        [invocation setArgument: &i atIndex: 2];
         BOOL bo = YES;
         [invocation setArgument: &bo atIndex: 3];
         
