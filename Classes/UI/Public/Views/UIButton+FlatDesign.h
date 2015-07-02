@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIButton (FlatDesign)
+@interface UIButton (BackgroundColor)
 @property(nonatomic,retain) UIColor* defaultBackgroundColor;
 @property(nonatomic,retain) UIColor* highlightedBackgroundColor;
 @property(nonatomic,retain) UIColor* disabledBackgroundColor;
@@ -29,5 +29,18 @@
 
 - (void)setFont:(UIFont *)font forState:(UIControlState)state;
 - (UIFont *)fontForState:(UIControlState)state;
+
+@end
+
+
+
+@interface UIButton (BorderColor)
+@property(nonatomic,retain) UIColor* defaultBorderColor;
+@property(nonatomic,retain) UIColor* highlightedBorderColor;
+@property(nonatomic,retain) UIColor* disabledBorderColor;
+@property(nonatomic,retain) UIColor* selectedBorderColor;
+
+- (void)setBorderColor:(UIColor *)color forState:(UIControlState)state;
+- (UIColor *)borderColorForState:(UIControlState)state;
 
 @end

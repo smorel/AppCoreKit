@@ -27,7 +27,7 @@ static char UIButtonSelectedFontKey;
     [self updateFont];
 }
 
-- (UIColor*)defaultFont{
+- (UIFont*)defaultFont{
     return objc_getAssociatedObject(self, &UIButtonDefaultFontKey);
 }
 
@@ -39,7 +39,7 @@ static char UIButtonSelectedFontKey;
     [self updateFont];
 }
 
-- (UIColor*)highlightedFont{
+- (UIFont*)highlightedFont{
     return objc_getAssociatedObject(self, &UIButtonHighlightedFontKey);
 }
 
@@ -52,7 +52,7 @@ static char UIButtonSelectedFontKey;
     
 }
 
-- (UIColor*)disabledFont{
+- (UIFont*)disabledFont{
     return objc_getAssociatedObject(self, &UIButtonDisabledFontKey);
 }
 
@@ -65,7 +65,7 @@ static char UIButtonSelectedFontKey;
     
 }
 
-- (UIColor*)selectedFont{
+- (UIFont*)selectedFont{
     return objc_getAssociatedObject(self, &UIButtonSelectedFontKey);
 }
 
@@ -118,6 +118,111 @@ static char UIButtonSelectedFontKey;
 @end
 
 
+static char UIButtonDefaultBorderColorKey;
+static char UIButtonHighlightedBorderColorKey;
+static char UIButtonDisabledBorderColorKey;
+static char UIButtonSelectedBorderColorKey;
+
+@implementation UIButton (BorderColor)
+@dynamic defaultBorderColor,highlightedBorderColor,disabledBorderColor,selectedBorderColor;
+
+- (void)setDefaultBorderColor:(UIColor*)color{
+    objc_setAssociatedObject(self,
+                             &UIButtonDefaultBorderColorKey,
+                             color,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateBorderColor];
+}
+
+- (UIColor*)defaultBorderColor{
+    return objc_getAssociatedObject(self, &UIButtonDefaultBorderColorKey);
+}
+
+- (void)setHighlightedBorderColor:(UIColor*)color{
+    objc_setAssociatedObject(self,
+                             &UIButtonHighlightedBorderColorKey,
+                             color,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateBorderColor];
+}
+
+- (UIColor*)highlightedBorderColor{
+    return objc_getAssociatedObject(self, &UIButtonHighlightedBorderColorKey);
+}
+
+- (void)setDisabledBorderColor:(UIColor*)color{
+    objc_setAssociatedObject(self,
+                             &UIButtonDisabledBorderColorKey,
+                             color,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateBorderColor];
+    
+}
+
+- (UIColor*)disabledBorderColor{
+    return objc_getAssociatedObject(self, &UIButtonDisabledBorderColorKey);
+}
+
+- (void)setSelectedBorderColor:(UIColor*)color{
+    objc_setAssociatedObject(self,
+                             &UIButtonSelectedBorderColorKey,
+                             color,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateBorderColor];
+    
+}
+
+- (UIColor*)selectedBorderColor{
+    return objc_getAssociatedObject(self, &UIButtonSelectedBorderColorKey);
+}
+
+- (void)setBorderColor:(UIColor *)color forState:(UIControlState)state{
+    switch(state){
+        case UIControlStateNormal:      [self setDefaultBorderColor:color];     break;
+        case UIControlStateHighlighted: [self setHighlightedBorderColor:color]; break;
+        case UIControlStateDisabled:    [self setDisabledBorderColor:color];    break;
+        case UIControlStateSelected:    [self setSelectedBorderColor:color];    break;
+        case UIControlStateApplication:
+        case UIControlStateReserved:
+            break;
+    }
+}
+
+- (UIColor *)borderColorForState:(UIControlState)state{
+    UIColor* color = [self defaultBorderColor];
+    switch(state){
+        case UIControlStateNormal:      color = [self defaultBorderColor];     break;
+        case UIControlStateHighlighted: color = [self highlightedBorderColor]; break;
+        case UIControlStateDisabled:    color = [self disabledBorderColor];    break;
+        case UIControlStateSelected:    color = [self selectedBorderColor];    break;
+        case UIControlStateApplication:
+        case UIControlStateReserved:
+            break;
+    }
+    
+    return color;
+}
+
+- (void)updateBorderColor{
+    UIColor* color = nil;
+    if(self.highlighted){
+        color = [self borderColorForState:UIControlStateHighlighted];
+    }else if(!self.enabled){
+        color = [self borderColorForState:UIControlStateDisabled];
+    }else if(self.selected){
+        color = [self borderColorForState:UIControlStateSelected];
+    }
+    
+    if(!color){
+        color = [self borderColorForState:UIControlStateNormal];
+    }
+    
+    if(color){
+        self.layer.borderColor = [color CGColor];
+    }
+}
+
+@end
 
 
 
@@ -126,7 +231,7 @@ static char UIButtonHighlightedBackgroundColorKey;
 static char UIButtonDisabledBackgroundColorKey;
 static char UIButtonSelectedBackgroundColorKey;
 
-@implementation UIButton (FlatDesign)
+@implementation UIButton (BackgroundColor)
 @dynamic defaultBackgroundColor,highlightedBackgroundColor,disabledBackgroundColor,selectedBackgroundColor;
 
 - (void)setDefaultBackgroundColor:(UIColor *)color{
@@ -229,18 +334,21 @@ static char UIButtonSelectedBackgroundColorKey;
     [self UIButton_FlatDesign_setSelected:selected];
     [self updateBackgroundColor];
     [self updateFont];
+    [self updateBorderColor];
 }
 
 - (void)UIButton_FlatDesign_setHighlighted:(BOOL)selected{
     [self UIButton_FlatDesign_setHighlighted:selected];
     [self updateBackgroundColor];
     [self updateFont];
+    [self updateBorderColor];
 }
 
 - (void)UIButton_FlatDesign_setEnabled:(BOOL)selected{
     [self UIButton_FlatDesign_setEnabled:selected];
     [self updateBackgroundColor];
     [self updateFont];
+    [self updateBorderColor];
 }
 
 @end
