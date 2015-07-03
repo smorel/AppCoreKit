@@ -89,6 +89,7 @@
             else{
                 CKClassPropertyDescriptor* descriptor = [property descriptor];
                 switch(descriptor.propertyType){
+                    case CKClassPropertyDescriptorTypeCppBool:
                     case CKClassPropertyDescriptorTypeChar:{
                         controller = [CKPropertyBoolViewController controllerWithProperty:property readOnly:readOnly];
                         break;
@@ -104,7 +105,6 @@
                     case CKClassPropertyDescriptorTypeUnsignedLongLong:
                     case CKClassPropertyDescriptorTypeFloat:
                     case CKClassPropertyDescriptorTypeDouble:
-                    case CKClassPropertyDescriptorTypeCppBool:
                     case CKClassPropertyDescriptorTypeVoid:
                     case CKClassPropertyDescriptorTypeCharString:{
                         controller = [CKPropertyNumberViewController controllerWithProperty:property readOnly:readOnly];
