@@ -85,6 +85,9 @@
             }
         }
         
+        if(self.jobQueue.count <= 0)
+            return;
+        
         self.currentJob = [self.jobQueue objectAtIndex:0];
         
         CKJob* job = self.currentJob;
