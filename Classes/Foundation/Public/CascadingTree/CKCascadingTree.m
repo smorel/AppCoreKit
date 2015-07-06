@@ -302,7 +302,24 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         id o = object;
         for(NSInteger i =1; i<components.count; ++i){
             NSAssert([o isKindOfClass:[NSDictionary class]], @"KeyPath refering to invalid object");
-            o = [o objectForKey:components[i]];
+            
+            /* Handles cases like:
+             { 
+                 "Root" : {
+                      "Object.Template1" : "value"
+                 }
+             }
+             
+             referenced like: "Root.Object.Template1"
+            */
+            NSMutableString* p = [NSMutableString stringWithString: components[i]];
+            id o2 = [o objectForKey:p];
+            while(o2 == nil && i<components.count){
+                ++i;
+                [p appendFormat:@".%@",components[i]];
+                o2 = [o objectForKey:p];
+            }
+            o = o2;
         }
         return o;
     };
