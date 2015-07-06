@@ -547,11 +547,11 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	}
     
     for(NSString* key in [source allKeys]){
-        CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptorForClass:[target class] key:key];
+        CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptorForObject:target keyPath:key];
         if(descriptor){
             id object = [source objectForKey:key];
             
-            CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:descriptor.name weak:NO];
+            CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:key weak:NO];
             [NSValueTransformer transform:object inProperty:property];
             [property autorelease];
         }
