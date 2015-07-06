@@ -60,15 +60,15 @@ static char UITextFieldUsesAttributedStringKey;
         ret.width = size.width;
      */
     
-    ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
     if(ret.height < self.font.lineHeight){
         ret.height = self.font.lineHeight;
     }
     
+    //Adds padding 8
     ret.height += 16;
     
-    //Adds padding 8
+    ret = [CKLayoutBox preferredSizeConstraintToSize:ret forBox:self];
     
     CGFloat width = MAX(size.width,ret.width) + self.padding.left + self.padding.right;
     CGFloat height = ret.height + self.padding.top + self.padding.bottom;
