@@ -74,7 +74,17 @@ static char UIViewControllerStylesheetFileNameKey;
     if(self.stylesheetFileName){
         manager = [CKStyleManager styleManagerWithContentOfFileNamed:self.stylesheetFileName];
     }else{
-        NSString* filePath = [CKResourceManager pathForResource:[[self class]description] ofType:@".style"];
+        //Hierarchically search .style file with class name of super class.
+        Class c = [self class];
+        NSString* filePath = [CKResourceManager pathForResource:[c description] ofType:@".style"];
+        
+        while(!filePath && c){
+            c = [c superclass];
+            if(c){
+                filePath = [CKResourceManager pathForResource:[c description] ofType:@".style"];
+            }
+        }
+        
         if(!filePath){
             UIViewController* containerViewController = nil;
             if([self respondsToSelector:@selector(containerViewController)]){
@@ -114,8 +124,8 @@ static char UIViewControllerStylesheetFileNameKey;
                 }
             }
         }else{
-            self.stylesheetFileName = [[self class]description];
-            manager = [CKStyleManager styleManagerWithContentOfFileNamed:[[self class]description]];
+            self.stylesheetFileName = [c description];
+            manager = [CKStyleManager styleManagerWithContentOfFileNamed:[c description]];
         }
     }
     
