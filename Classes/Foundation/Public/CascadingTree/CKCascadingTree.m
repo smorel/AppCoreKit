@@ -295,23 +295,42 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
 }
 
 - (id)findObjectInHierarchy:(NSString*)keyPath{
-    NSString* normalizedKeyPath = [CKCascadingTreeItemFormat normalizeFormat:keyPath];
+    //Handling path separated by "."
+    NSArray* components = [keyPath componentsSeparatedByString:@"."];
     
-	NSMutableDictionary* dico = self;
-	while(dico != nil){
-		id foundObject = [dico valueForKeyPath:keyPath];
-		if(foundObject && foundObject != self){
-			return foundObject;
-		}
-		id foundNormalizedObject = [dico valueForKeyPath:normalizedKeyPath];
+    id(^deepObject)(id object) = ^(id object){
+        id o = object;
+        for(NSInteger i =1; i<components.count; ++i){
+            NSAssert([o isKindOfClass:[NSDictionary class]], @"KeyPath refering to invalid object");
+            o = [o objectForKey:components[i]];
+        }
+        return o;
+    };
+    //-------------
+    
+    NSString* first = [components objectAtIndex:0];
+    NSString* normalizedKeyPath = [CKCascadingTreeItemFormat normalizeFormat:first];
+    
+    NSMutableDictionary* dico = self;
+    while(dico != nil){
+        id foundObject = [dico objectForKey:first];
+        
+        if(foundObject && foundObject != self){
+            return deepObject(foundObject);
+        }
+        
+        id foundNormalizedObject = [dico objectForKey:normalizedKeyPath];
         if(foundNormalizedObject && foundNormalizedObject != self){
-			return foundNormalizedObject;
-		}
+            return deepObject(foundNormalizedObject);
+        }
+        
+        if(dico && ![dico isKindOfClass:[NSDictionary class]])
+            return nil;
         
         dico = [dico parentDictionary];
-	}
+    }
     
-	return nil;
+    return nil;
 }
 
 - (NSMutableDictionary*)applyHierarchically:(NSDictionary*)source toDictionary:(NSDictionary*)target{
@@ -478,7 +497,8 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
-			NSMutableDictionary* inheritedDico = [self findObjectInHierarchy:key];
+            NSMutableDictionary* inheritedDico = [self findObjectInHierarchy:key];
+            [inheritedDico postInitAfterLoadingForObjectWithKey:key];
             
             if(!inheritedDico){
                 NSLog(@"CKCascadingTree Inheritance - Could Not find object with keypath : '%@'",key);
@@ -1252,15 +1272,8 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         if(c != nil)
             return NO;
         
-        NSMutableDictionary* context = [container parentDictionary];
-        while (context) {
-            id v = [context objectForKey:key];
-            if(v && [v isKindOfClass:[NSDictionary class]]){
-                return YES;
-            }
-            context = [context parentDictionary];
-        }
-        return NO;
+        id context = [[container parentDictionary] findObjectInHierarchy:key];
+        return context && [context isKindOfClass:[NSDictionary class]];
     }];
 }
 
