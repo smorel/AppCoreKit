@@ -49,7 +49,7 @@ static char UIScrollViewManuallyManagesContentSizeKey;
 
 - (BOOL)flexibleContentWidth{
     id value = objc_getAssociatedObject(self, &UIScrollViewFlexibleContentWidthKey);
-    return value ? [value boolValue] : YES;
+    return value ? [value boolValue] : NO;
 }
 
 - (void)setFlexibleContentHeight:(BOOL)enabled{
@@ -173,8 +173,8 @@ static char UIScrollViewManuallyManagesContentSizeKey;
     }
     
     CGRect newFrame = CGRectMake(self.frame.origin.x,self.frame.origin.y,
-                                 boundingBox.width  + (self.padding.left + self.padding.right),
-                                 boundingBox.height + (self.padding.top + self.padding.bottom) );
+                                 (boundingBox.width >= MAXFLOAT ? theframe.size.width : boundingBox.width)  + (self.padding.left + self.padding.right),
+                                 (boundingBox.height >= MAXFLOAT ? theframe.size.height : boundingBox.height) + (self.padding.top + self.padding.bottom) );
     
     if(!self.flexibleSize && self.layoutBoxes && [self.layoutBoxes count] > 0){
         CGRect frameWithInsets = CGRectMake(newFrame.origin.x, newFrame.origin.y,

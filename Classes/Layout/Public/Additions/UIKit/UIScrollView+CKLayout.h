@@ -11,7 +11,7 @@
 @interface UIScrollView (CKLayout)
 
 /** This attribute specify whether the scrollView layoutboxes bounding box is limited to the scrollView width or if it is flexible
- Default value is YES
+ Default value is NO
  */
 @property(nonatomic,assign) BOOL flexibleContentWidth;
 
