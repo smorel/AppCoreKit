@@ -101,6 +101,12 @@
      [toViewController bind:@"title" executeBlockImmediatly:YES withBlock:^(id value) {
          bself.title = [value isKindOfClass:[NSString class]] ? value : nil;
      }];
+    [toViewController bind:@"rightButton" executeBlockImmediatly:YES withBlock:^(id value) {
+        bself.rightButton = value;
+    }];
+    [toViewController bind:@"leftButton" executeBlockImmediatly:YES withBlock:^(id value) {
+        bself.leftButton = value;
+    }];
      [self endBindingsContext];
     
     UIView *toView = toViewController.view;
