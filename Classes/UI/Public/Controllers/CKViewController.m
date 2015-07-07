@@ -622,6 +622,9 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
         self.styleHasBeenApplied = YES;
     }
     
+    if(self.navigationController.topViewController != self)
+        return;
+    
     UIBarButtonItem* leftBarButtonItem = self.navigationItem.leftBarButtonItem ;
     if([CKOSVersion() floatValue] >= 7){
         for(UIBarButtonItem* item in self.navigationItem.leftBarButtonItems){
