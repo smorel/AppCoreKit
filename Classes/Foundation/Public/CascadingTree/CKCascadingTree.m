@@ -314,7 +314,7 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
             */
             NSMutableString* p = [NSMutableString stringWithString: components[i]];
             id o2 = [o objectForKey:p];
-            while(o2 == nil && i<components.count){
+            while(o2 == nil && i<components.count-1){
                 ++i;
                 [p appendFormat:@".%@",components[i]];
                 o2 = [o objectForKey:p];
