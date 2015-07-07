@@ -144,9 +144,8 @@
 - (void)presentEditionViewController:(UIViewController*)controller
                    presentationStyle:(CKPropertyEditionPresentationStyle)presentationStyle
   shouldDismissOnPropertyValueChange:(BOOL)shouldDismissOnPropertyValueChange{
-    
-    controller.stylesheetFileName = self.containerViewController.stylesheetFileName;
-    controller.view.backgroundColor = self.containerViewController.view.backgroundColor;
+
+    [controller setContainerViewController:self];
     controller.title = _(self.property.name);
     controller.name = self.property.name;
     
