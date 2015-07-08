@@ -593,14 +593,14 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
         return;
     
     //disable animations in case frames are set in stylesheets and currently in animation...
-    [CATransaction begin];
-    [CATransaction
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
-    
+//    [CATransaction begin];
+//    [CATransaction
+//     setValue: [NSNumber numberWithBool: YES]
+//     forKey: kCATransactionDisableActions];
+//    
     [self applyStyle];
-          
-    [CATransaction commit];
+//          
+//    [CATransaction commit];
 }
 
 - (void)applyStyleForNavigation{
@@ -609,10 +609,10 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
     
     
     //disable animations in case frames are set in stylesheets and currently in animation...
-    [CATransaction begin];
-    [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
+//    [CATransaction begin];
+//    [CATransaction 
+//     setValue: [NSNumber numberWithBool: YES]
+//     forKey: kCATransactionDisableActions];
     
     
     NSMutableDictionary* controllerStyle =  [self controllerStyle];;
@@ -814,8 +814,8 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
         [NSObject endBindingsContext];
     }
     
-    
-    [CATransaction commit];
+//    
+//    [CATransaction commit];
     
     //ios7
     //http://stackoverflow.com/questions/19054625/changing-back-button-in-ios-7-disables-swipe-to-navigate-back
