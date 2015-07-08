@@ -80,5 +80,19 @@
     return snapshot;
 }
 
+- (UIView*)transitionSnapshotWithoutViewHierarchy{
+    [self layoutSubviews];
+    
+    UIView* snapshot = [super transitionSnapshotWithoutViewHierarchy];
+    
+    for(UIView* v in self.subviews){
+        if([v isKindOfClass:[CKEffectView class]]){
+            [[self class]installEffectView:(CKEffectView*)v fromView:self inView:snapshot name:self.name];
+        }
+    }
+    
+    return snapshot;
+}
+
 @end
 
