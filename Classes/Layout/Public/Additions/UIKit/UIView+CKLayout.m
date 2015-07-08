@@ -132,7 +132,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
     
     //If the view has its own layout, the sub boxes are placed relative to it !
     if([self containerLayoutBox] == [self superview] || (self.layoutBoxes && [self.layoutBoxes count] > 0)){
-        subBoxesFrame = CGRectMake(self.padding.left,self.padding.top,frame.size.width,frame.size.height);
+        subBoxesFrame = CGRectMake(0,0,frame.size.width,frame.size.height);
     }
     
     //Apply padding
@@ -183,6 +183,9 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
 }
 
 - (void)invalidateLayout{
+      if(![self superview])
+        return;
+    
     NSObject<CKLayoutBoxProtocol>* l = [self rootLayoutBox];
     if(l && !CGSizeEqualToSize(l.lastComputedSize, CGSizeMake(0,0))){
         [CKLayoutBox invalidateLayoutBox:l recursivelly:YES];
