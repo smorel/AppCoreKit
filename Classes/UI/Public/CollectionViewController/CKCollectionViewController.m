@@ -24,6 +24,7 @@
 @property (nonatomic, assign, readwrite) BOOL scrolling;
 @property(nonatomic,retain,readwrite) CKPassThroughView* backgroundView;
 @property(nonatomic,retain,readwrite) CKPassThroughView* foregroundView;
+@property(nonatomic,assign) BOOL collectionViewHasInitiatedSetup;
 @end
 
 @implementation CKCollectionViewController
@@ -39,6 +40,7 @@
 
 - (void)postInit{
     [super postInit];
+    self.collectionViewHasInitiatedSetup = NO;
     self.multiselectionEnabled = NO;
     self.stickySelectionEnabled = NO;
     self.scrolling = NO;
@@ -108,7 +110,9 @@
         
         [self beginBindingsContextWithScope:@"backgroundView"];
         [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
+            [CATransaction setDisableActions:YES];
             [bself.backgroundView setFrame:[bself backgroundViewFrame] animated:NO];
+            [CATransaction commit];
         }];
         [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
             bself.foregroundView.hidden = bself.view.hidden;
@@ -133,7 +137,9 @@
         
         [self beginBindingsContextWithScope:@"foregroundView"];
         [self.collectionView bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
+            [CATransaction setDisableActions:YES];
             [bself.foregroundView setFrame:[bself foregroundViewFrame] animated:NO];
+            [CATransaction commit];
         }];
         [self.view bind:@"hidden" executeBlockImmediatly:YES withBlock:^(id value) {
             bself.foregroundView.hidden = bself.view.hidden;
@@ -167,17 +173,8 @@
 #pragma Managing Life Cycle
 
 - (void)viewWillAppear:(BOOL)animated{
-    BOOL shouldReload = (self.state == CKViewControllerStateDidLoad);
     
     [super viewWillAppear:animated];
-    
-    //The following is necessary to hadle the case where we need to update the collection sections or items in view will appear in application code.
-    if(shouldReload){
-        [self.collectionView reloadData];
-        [self.collectionView performBatchUpdates:^{
-        } completion:^(BOOL finished) {
-        }];
-    }
     
     [self fetchMoreData];
 }
@@ -212,7 +209,7 @@
 
 - (void)performBatchUpdates:(void (^)(void))updates
                  completion:(void (^)(BOOL finished))completion{
-    if(self.state == CKViewControllerStateDidAppear || self.state == CKViewControllerStateWillAppear){
+    if((self.state == CKViewControllerStateDidAppear || self.state == CKViewControllerStateWillAppear) && self.collectionViewHasInitiatedSetup){
         [self.collectionView performBatchUpdates:updates completion:completion];
     }else{
         if(updates){
@@ -229,7 +226,7 @@
 
 
 - (void)didInsertSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+    if(!self.collectionViewHasInitiatedSetup){
         sectionUpdate();
         return;
     }
@@ -243,11 +240,12 @@
         sectionUpdate();
         [self.collectionView insertSections:indexes];
         [self.collectionView invalidateLayout];
+        
     }
 }
 
 - (void)didRemoveSections:(NSArray*)sections atIndexes:(NSIndexSet*)indexes animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+    if(!self.collectionViewHasInitiatedSetup){
         sectionUpdate();
         return;
     }
@@ -265,7 +263,7 @@
 }
 
 - (void)didInsertControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+    if(!self.collectionViewHasInitiatedSetup){
         sectionUpdate();
         return;
     }
@@ -283,16 +281,16 @@
 }
 
 - (void)didRemoveControllers:(NSArray*)controllers atIndexPaths:(NSArray*)indexPaths animated:(BOOL)animated sectionUpdate:(void (^)())sectionUpdate{
-    if(self.state == CKViewControllerStateNone || self.state == CKViewControllerStateDidLoad){
+    if(!self.collectionViewHasInitiatedSetup){
         sectionUpdate();
         return;
     }
     
     if(animated){
-    [self performBatchUpdates:^{
-        sectionUpdate();
-        [self.collectionView deleteItemsAtIndexPaths:indexPaths];
-    } completion:nil];
+        [self performBatchUpdates:^{
+            sectionUpdate();
+            [self.collectionView deleteItemsAtIndexPaths:indexPaths];
+        } completion:nil];
     }else{
         sectionUpdate();
         [self.collectionView deleteItemsAtIndexPaths:indexPaths];
@@ -312,6 +310,7 @@
 #pragma mark Managing Content
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    self.collectionViewHasInitiatedSetup = YES;
     return self.sectionContainer.sections.count;
 }
 
