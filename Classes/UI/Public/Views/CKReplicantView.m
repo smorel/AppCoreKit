@@ -36,6 +36,9 @@
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef gc = UIGraphicsGetCurrentContext();
+    BOOL hidden = self.view.hidden;
+    self.view.hidden = NO;
+    
     if(self.withoutSubviews){
         [self.view.layer renderInContext:gc];
         [self.view drawRect:rect];
@@ -47,6 +50,7 @@
         //TEST
         [self.view drawViewHierarchyInRect:rect afterScreenUpdates:YES];
     }
+    self.view.hidden = hidden;
 }
 
 @end

@@ -56,7 +56,7 @@
     [self adjustAttributes:cellEndAttributes forSubView:targetSubViewView inView:targetView];
     context.endAttributes = cellEndAttributes;
     
-    context.viewsToHideDuringTransition = @[sourceView,targetView];
+    context.viewsToHideDuringTransition = @[sourceSubViewView,targetSubViewView];
     
     return context;
 }
