@@ -35,6 +35,10 @@ static NSInteger kLogEnabled = -1;
 	return CKStyleManagerDefault;
 }
 
+- (void)dealloc{
+    [CKResourceManager removeObserver:self];
+    [super dealloc];
+}
 
 + (CKStyleManager*)styleManagerWithContentOfFileNamed:(NSString*)fileName{
     return [[CKStyleManagerCache sharedInstance]styleManagerWithContentOfFileNamed:fileName];
