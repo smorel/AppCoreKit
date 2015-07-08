@@ -132,7 +132,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
     
     //If the view has its own layout, the sub boxes are placed relative to it !
     if([self containerLayoutBox] == [self superview] || (self.layoutBoxes && [self.layoutBoxes count] > 0)){
-        subBoxesFrame = CGRectMake(frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+        subBoxesFrame = CGRectMake(self.padding.left,self.padding.top,frame.size.width,frame.size.height);
     }
     
     //Apply padding
