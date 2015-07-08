@@ -65,6 +65,38 @@
 	}
 }
 
+//informal protocol for CKProperty arrays insert/remove
+//will get call when acting in property grids or table views ...
+- (void)insertMotionEffectsObjects:(NSArray *)effects atIndexes:(NSIndexSet*)indexes{
+    
+    NSInteger i = 0;
+    NSUInteger currentIndex = [indexes firstIndex];
+    while (currentIndex != NSNotFound) {
+        UIMotionEffect* effect = [effects objectAtIndex:i];
+        [self addMotionEffect:effect];
+        currentIndex = [indexes indexGreaterThanIndex: currentIndex];
+        ++i;
+    }
+}
+
+//informal protocol for CKProperty arrays insert/remove
+//will get call when acting in property grids or table views ...
+- (void)removeMotionEffectsObjectsAtIndexes:(NSIndexSet*)indexes{
+    NSArray* effects = [self.motionEffects objectsAtIndexes:indexes];
+    for(UIMotionEffect* effect in effects){
+        [self removeMotionEffect:effect];
+    }
+}
+
+//informal protocol for CKProperty arrays insert/remove
+//will get call when acting in property grids or table views ...
+- (void)removeAllMotionEffectsObjects{
+    NSArray* effects = [NSArray arrayWithArray:self.motionEffects];
+    for(UIMotionEffect* effect in effects){
+        [self removeMotionEffect:effect];
+    }
+}
+
 - (void)setSubviews:(NSArray *)subviews{
     [self removeAllSubviewsObjects];
     for(id object in subviews){
@@ -175,7 +207,11 @@
 																			 readOnly:NO]];
 	[properties addObject:[CKClassPropertyDescriptor intDescriptorForPropertyNamed:@"autoresizingMask"
 																		  readOnly:NO]];
-	
+    
+    [properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:@"motionEffects"
+                                                                           withClass:[NSArray class]
+                                                                          assignment:CKClassPropertyDescriptorAssignementTypeCopy
+                                                                            readOnly:YES]];
 	/*
 	 @property(nonatomic, getter=isHidden) BOOL hidden
 	 */
