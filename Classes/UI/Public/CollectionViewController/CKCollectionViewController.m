@@ -167,16 +167,19 @@
 #pragma Managing Life Cycle
 
 - (void)viewWillAppear:(BOOL)animated{
+    BOOL shouldReload = (self.state == CKViewControllerStateDidLoad);
+    
     [super viewWillAppear:animated];
     
-    //Support for navigation push transitions:
-    //[self.sectionContainer handleViewWillAppearAnimated:animated];
+    //The following is necessary to hadle the case where we need to update the collection sections or items in view will appear in application code.
+    if(shouldReload){
+        [self.collectionView reloadData];
+        [self.collectionView performBatchUpdates:^{
+        } completion:^(BOOL finished) {
+        }];
+    }
     
     [self fetchMoreData];
-    
-    //for(NSIndexPath* indexPath in self.selectedIndexPaths){
-    //    [self.pickerView selectRow:indexPath.row inComponent:indexPath.section animated:NO];
-    //}
 }
 
 - (void)viewDidAppear:(BOOL)animated{
