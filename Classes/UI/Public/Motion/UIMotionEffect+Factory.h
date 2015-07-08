@@ -10,6 +10,17 @@
 
 /**
  */
+@interface CKParallaxMotionEffect : UIMotionEffectGroup
+
+/**
+ */
+@property(nonatomic,assign) CGSize offset;
+
+@end
+
+
+/**
+ */
 @interface UIMotionEffect (Factory)
 
 /**

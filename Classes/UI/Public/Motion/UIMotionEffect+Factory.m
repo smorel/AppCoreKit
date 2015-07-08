@@ -8,28 +8,38 @@
 
 #import "UIMotionEffect+Factory.h"
 
-@implementation UIMotionEffect (Factory)
+@implementation CKParallaxMotionEffect
 
-+ (UIMotionEffect*)parallaxMotionEffectWithOffset:(CGFloat)offset{
+- (void)setOffset:(CGSize)offset{
+    _offset = offset;
+    
     UIInterpolatingMotionEffect *verticalMotionEffect =
     [[[UIInterpolatingMotionEffect alloc]
-     initWithKeyPath:@"center.y"
-     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis]autorelease];
-    verticalMotionEffect.minimumRelativeValue = @(offset);
-    verticalMotionEffect.maximumRelativeValue = @(-offset);
+      initWithKeyPath:@"center.y"
+      type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis]autorelease];
+    verticalMotionEffect.minimumRelativeValue = @(_offset.height);
+    verticalMotionEffect.maximumRelativeValue = @(-_offset.height);
     
     UIInterpolatingMotionEffect *horizontalMotionEffect =
     [[[UIInterpolatingMotionEffect alloc]
-     initWithKeyPath:@"center.x"
-     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis]autorelease];
-    horizontalMotionEffect.minimumRelativeValue = @(offset);
-    horizontalMotionEffect.maximumRelativeValue = @(-offset);
+      initWithKeyPath:@"center.x"
+      type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis]autorelease];
+    horizontalMotionEffect.minimumRelativeValue = @(_offset.width);
+    horizontalMotionEffect.maximumRelativeValue = @(-_offset.width);
     
-    // Create group to combine both
-    UIMotionEffectGroup* motionEffectGroup = [[[UIMotionEffectGroup alloc]init]autorelease];
-    motionEffectGroup.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
-    
-    return motionEffectGroup;
+    self.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+}
+
+@end
+
+
+
+@implementation UIMotionEffect (Factory)
+
++ (UIMotionEffect*)parallaxMotionEffectWithOffset:(CGFloat)offset{
+    CKParallaxMotionEffect* effect = [[[CKParallaxMotionEffect alloc]init]autorelease];
+    effect.offset = CGSizeMake(offset,offset);
+    return effect;
 }
 
 @end
