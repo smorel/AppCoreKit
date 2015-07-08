@@ -78,11 +78,13 @@
     self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.backgroundView.flexibleSize = YES;
     self.backgroundView.backgroundColor = [UIColor clearColor];
+    self.backgroundView.clipsToBounds = YES;
     
     self.foregroundView = [[[CKPassThroughView alloc]initWithFrame:[self foregroundViewFrame]]autorelease];
     self.foregroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.foregroundView.flexibleSize = YES;
     self.foregroundView.backgroundColor = [UIColor clearColor];
+    self.foregroundView.clipsToBounds = YES;
 
     
     self.collectionView.backgroundColor = [UIColor clearColor];
