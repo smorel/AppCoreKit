@@ -157,10 +157,12 @@
                 
                 CKViewTransitionContext* context = [CKViewTransitionContext contextForSubviewViewNamed:name
                                                                                                   view:sourceView];
-                context.startAttributes.alpha = 1;
-                context.endAttributes.alpha = 0;
                 
                 if(context){
+                    UIView* sourceSubView  = [sourceView viewWithName:name];
+                    
+                    context.startAttributes.alpha = sourceSubView.alpha;
+                    context.endAttributes.alpha = 0;
                     [contexts addObject:context];
                 }
             }
@@ -175,8 +177,10 @@
                 CKViewTransitionContext* context = [CKViewTransitionContext contextForSubviewViewNamed:name
                                                                                                   view:targetView];
                 if(context){
+                    UIView* targetSubView  = [targetView viewWithName:name];
+                    
                     context.startAttributes.alpha = 0;
-                    context.endAttributes.alpha = 1;
+                    context.endAttributes.alpha = targetSubView.alpha;
                     
                     [contexts addObject:context];
                 }
@@ -190,12 +194,27 @@
             if([name isKindOfClass:[NSNull class]] || [ignoringViewWithNames containsObject:name])
                 continue;
             
-            if([name isEqualToString:@"TokenHeaderBackgroundView"]){
-                int i =3;
-            }
+            UIView* sourceSubView  = [sourceView viewWithName:name];
+            UIView* targetSubView  = [targetView viewWithName:name];
+            
+            if(sourceSubView.hidden && targetSubView.hidden)
+                continue;
+            
             CKViewTransitionContext* context = [CKViewTransitionContext contextForSubviewViewNamed:name
                                                                                         sourceView:sourceView
                                                                                         targetView:targetView ? targetView : sourceView];
+            
+            if(sourceSubView.hidden && !targetSubView.hidden){
+                context.startAttributes.alpha = 0;
+                context.endAttributes.alpha = targetSubView.alpha;
+            }else if(!sourceSubView.hidden && targetSubView.hidden){
+                context.startAttributes.alpha = sourceSubView.alpha;
+                context.endAttributes.alpha = 0;
+            }else{
+                context.startAttributes.alpha = sourceSubView.alpha;
+                context.endAttributes.alpha = targetSubView.alpha;
+            }
+            
             if(context){
                 [contexts addObject:context];
             }
