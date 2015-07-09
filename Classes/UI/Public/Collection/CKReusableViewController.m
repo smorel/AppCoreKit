@@ -603,6 +603,14 @@
                                                  CKAccessoryActivityIndicator);
 }
 
+- (void)flagsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKViewControllerFlags",
+                                                    CKViewControllerFlagsNone,
+                                                    CKViewControllerFlagsSelectable,
+                                                    CKViewControllerFlagsRemovable,
+                                                    CKViewControllerFlagsAll);
+}
+
 
 - (void)setFlags:(CKViewControllerFlags)flags{
     if(_flags != flags){
