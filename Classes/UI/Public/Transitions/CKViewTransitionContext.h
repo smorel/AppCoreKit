@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger,CKViewTransitionContextVisibility){
 @property(nonatomic,retain) UICollectionViewLayoutAttributes* startAttributes;
 @property(nonatomic,retain) UICollectionViewLayoutAttributes* endAttributes;
 @property(nonatomic,retain,readonly) NSArray* viewTransitionContexts;
+@property(nonatomic,copy) void(^additionalAnimations)();
 
 - (CKViewTransitionContext*)reverseContext;
 

@@ -28,6 +28,7 @@
     [_snapshot release];
     [_startAttributes release];
     [_endAttributes release];
+    [_additionalAnimations release];
     [super dealloc];
 }
 
@@ -82,6 +83,7 @@
     context.endAttributes = [[other.startAttributes copy]autorelease];
     context.viewsToHideDuringTransition = [[other.viewsToHideDuringTransition copy]autorelease];
     context.viewBeforeSnapshot = other.viewBeforeSnapshot;
+    context.additionalAnimations = other.additionalAnimations;
     
     NSMutableArray* reversedChildren = [NSMutableArray array];
     for(CKViewTransitionContext* child in other.viewTransitionContexts){
@@ -169,6 +171,10 @@
     self.snapshot.bounds = self.endAttributes.bounds;
     self.snapshot.alpha =  self.endAttributes.alpha;
     self.snapshot.layer.transform =  self.endAttributes.transform3D ;
+    
+    if(self.additionalAnimations){
+        self.additionalAnimations();
+    }
 }
 
 - (void)endTransition{
