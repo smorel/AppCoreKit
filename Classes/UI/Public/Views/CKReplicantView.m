@@ -24,6 +24,10 @@
 - (id)initWithView:(UIView*)view withoutSubviews:(BOOL)withoutSubviews{
     self = [super initWithFrame:view.bounds];
     self.backgroundColor = [UIColor clearColor];
+    self.layer.borderColor = view.layer.borderColor;
+    self.layer.borderWidth = view.layer.borderWidth;
+    self.layer.cornerRadius = view.layer.cornerRadius;
+    
     self.withoutSubviews = withoutSubviews;
     self.view = view;
     if([self.view motionEffects].count != 0){
