@@ -45,4 +45,9 @@
  */
 - (void)superViewDidModifySubviewHierarchy;
 
+/** default is YES. If changing this property at runtime, the effect will start/stop updating itself when screen refreshes.
+ Setting it to NO will not removes the effect visual. Set the effect view to hidden or alpha 0 is this is what you want to do.
+ */
+@property(nonatomic,assign) BOOL effectEnabled;
+
 @end

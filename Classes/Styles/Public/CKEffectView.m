@@ -48,6 +48,7 @@
 }
 
 - (void)postInit {
+    self.effectEnabled = YES;
     self.opaque = YES;
 }
 
@@ -56,7 +57,7 @@
 }
 
 - (void)willMoveToWindow:(UIWindow *)newWindow{
-    if(newWindow)
+    if(newWindow || !self.effectEnabled)
         return;
     
     [CKSharedDisplayLink unregisterHandler:self];
@@ -64,11 +65,27 @@
 }
 
 - (void)didMoveToWindow{
-    if(!self.window)
+    if(!self.window || !self.effectEnabled)
         return;
     
     [CKSharedDisplayLink registerHandler:self];
     [self didRegisterForUpdates];
+}
+
+- (void)setEffectEnabled:(BOOL)effectEnabled{
+    _effectEnabled = effectEnabled;
+    
+    if(!self.window)
+        return;
+    
+    if(!effectEnabled){
+        [CKSharedDisplayLink unregisterHandler:self];
+        [self didUnregisterForUpdates];
+    }else{
+        [CKSharedDisplayLink registerHandler:self];
+        [self didRegisterForUpdates];
+        [self updateEffect];
+    }
 }
 
 - (CGRect)rectInWindow{
@@ -111,7 +128,9 @@
 
 - (void)updateEffect{
     CGRect rect = [self rectInWindow];
-    [self updateEffectWithRect:rect];
+    if(self.effectEnabled){
+        [self updateEffectWithRect:rect];
+    }
 }
 
 + (void)load{
@@ -119,10 +138,6 @@
     CKSwizzleSelector([UIView class], @selector(insertSubview:atIndex:), @selector(CKHighlightView_insertSubview:atIndex:));
     CKSwizzleSelector([UIView class], @selector(insertSubview:belowSubview:), @selector(CKHighlightView_insertSubview:belowSubview:));
     CKSwizzleSelector([UIView class], @selector(insertSubview:aboveSubview:), @selector(CKHighlightView_insertSubview:aboveSubview:));
-}
-
-- (void)setEffectEnabled:(BOOL)enabled{
-    
 }
 
 - (id)copyWithZone:(NSZone *)zone{
