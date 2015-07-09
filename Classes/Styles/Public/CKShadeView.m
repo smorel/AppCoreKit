@@ -11,6 +11,7 @@
 #import "CKImageCache.h"
 #import "CKStyleView+Paths.h"
 #import "UIImage+Transformations.h"
+#import "UIColor+Components.h"
 
 @interface CKShadeView()
 @property(nonatomic,retain) NSString* shadeImageChacheIdentifier;
@@ -82,10 +83,11 @@
     CGFloat z = transform.m42 + transform.m43;
     
     CGFloat shadeVect = self.fullShadeZ - self.noShadeZ;
-    CGFloat shade = (z - self.noShadeZ) / shadeVect;
+    CGFloat shade = fabs((z - self.noShadeZ) / shadeVect);
     
     CGFloat alpha = MAX(0,MIN(1,shade));
-    self.alpha = alpha;
+    
+    self.shadeImageLayer.alpha = alpha;
 }
 
 - (void)layoutShadeLayers{
@@ -127,6 +129,24 @@
         
         return shadeImage;
     }];
+}
+
+@end
+
+
+@implementation UIView(CKShadeView)
+
+- (CKShadeView*)shadeView{
+    if(self.subviews.count == 0)
+        return nil;
+    
+    for(NSInteger i = self.subviews.count - 1; i >= 0; --i){
+        UIView* view =[self.subviews objectAtIndex:i];
+        if([view isKindOfClass:[CKShadeView class]])
+            return (CKShadeView*)view;
+    }
+    
+    return nil;
 }
 
 @end

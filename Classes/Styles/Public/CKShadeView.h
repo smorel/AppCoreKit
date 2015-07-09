@@ -40,3 +40,12 @@
 @property (nonatomic,assign) CGFloat noShadeZ;
 
 @end
+
+
+/**
+ */
+@interface UIView(CKShadeView)
+
+- (CKShadeView*)shadeView;
+
+@end
