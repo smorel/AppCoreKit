@@ -189,6 +189,17 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
 @property(nonatomic,copy) CKLayoutBoxInvalidatedBlock invalidatedLayoutBlock;
 
 
+///-----------------------------------
+/// @name Animating changes that affects the the layout
+///-----------------------------------
+
+/** When you want to update sub boxes layout animated, call performLayoutBoxesBatchUpdates with an updates block where you can set your subviews hidden, change the size contraints and stuff like that.
+ The layout will be updated then the animation will occur with the specified duration.
+ completion block will be called at the end of the animation.
+ If the layout on wich performLayoutBoxesBatchUpdates is called is not invalidated, then no animation will take place as there is no updates to the layout hierarchy. In this case, the completion block will be called synchronously.
+ */
+- (void)performLayoutBoxesBatchUpdates:(void(^)())updates duration:(NSTimeInterval)duration completion:(void(^)(BOOL finished))completion;
+
 ///PRIVATE
 
 @property(nonatomic,assign,readwrite) CGSize lastComputedSize;

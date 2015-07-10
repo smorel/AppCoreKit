@@ -29,6 +29,10 @@
 
 @implementation UIViewController(CKLayout)
 
+- (void)performLayoutBoxesBatchUpdates:(void(^)())updates duration:(NSTimeInterval)duration completion:(void(^)(BOOL finished))completion{
+    [self.view performLayoutBoxesBatchUpdates:updates duration:duration completion:completion];
+}
+
 - (void)UIViewController_Layout_loadView{
     [self UIViewController_Layout_loadView];
     if(self.view){

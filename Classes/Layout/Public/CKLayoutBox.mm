@@ -91,6 +91,19 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     }];
 }
 
+
+- (void)performLayoutBoxesBatchUpdates:(void(^)())updates duration:(NSTimeInterval)duration completion:(void(^)(BOOL finished))completion{
+    if(updates) { updates(); }
+    if(CGSizeEqualToSize(CGSizeZero, self.lastComputedSize)){
+        if(completion){ completion(YES); }
+        return;
+    }
+    
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        [self.containerLayoutView layoutSubviews];
+    } completion:completion];
+}
+
 - (id)init{
     self = [super init];
     [CKLayoutBox initializeBox:self];

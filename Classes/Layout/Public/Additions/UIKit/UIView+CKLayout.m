@@ -39,6 +39,20 @@
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
 lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,containerViewController, flexibleHeight, flexibleWidth;
 
+
+- (void)performLayoutBoxesBatchUpdates:(void(^)())updates duration:(NSTimeInterval)duration completion:(void(^)(BOOL finished))completion{
+    if(updates) { updates(); }
+    
+    if(CGSizeEqualToSize(CGSizeZero, self.lastComputedSize)){
+        if(completion){ completion(YES); }
+        return;
+    }
+    
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        [self layoutSubviews];
+    } completion:completion];
+}
+
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
