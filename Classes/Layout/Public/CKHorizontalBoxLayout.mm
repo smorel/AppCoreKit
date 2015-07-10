@@ -74,6 +74,9 @@ namespace __gnu_cxx{
                     CGSize size = [box preferredSizeConstraintToSize:CGSizeMake(box.minimumSize.width,height)];
                     computedSizePerBoxes[box] = size;
                 }else{
+                    if(box.minimumWidth > 0){
+                        freeSpace -= box.minimumWidth;
+                    }
                     numberOfFlexibleBoxes++;
                 }
                 
@@ -124,12 +127,9 @@ namespace __gnu_cxx{
                         computedSizePerBoxes[box] = CGSizeMake(box.minimumSize.width,constrainedSize.height);
                     }else{
                         CGFloat preferedWidth = MAX(0,(freeSpace / numberOfFlexibleBoxes)) ;
-                        if(preferedWidth == 0){
-                            numberOfFlexibleBoxes--;
-                            flexibleWithPerBoxes[box] = 0;
-                        }else if(box.minimumWidth > 0 && preferedWidth < box.minimumWidth){
+                        if(box.minimumWidth > 0 && preferedWidth < box.minimumWidth){
                             preferedWidth = box.minimumWidth;
-                            freeSpace -= preferedWidth;
+                            // freeSpace -= preferedWidth;
                             numberOfFlexibleBoxes--;
                             flexibleWithPerBoxes[box] = preferedWidth;
                         }
@@ -138,7 +138,10 @@ namespace __gnu_cxx{
                             freeSpace -= preferedWidth;
                             numberOfFlexibleBoxes--;
                             flexibleWithPerBoxes[box] = preferedWidth;
-                        }else{
+                        }else if(preferedWidth == 0){
+                            numberOfFlexibleBoxes--;
+                            flexibleWithPerBoxes[box] = 0;
+                        }else {
                             CGFloat height = MIN(box.maximumSize.width,size.height - box.margins.top - box.margins.bottom);
                             CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(/*preferedWidth*/size.width,height)];
                             if(preferedSize.width < preferedWidth){

@@ -74,6 +74,9 @@ namespace __gnu_cxx{
                     CGSize size = [box preferredSizeConstraintToSize:CGSizeMake(width,box.minimumSize.height)];
                     computedSizePerBoxes[box] = size;
                 }else{
+                    if(box.minimumHeight > 0){
+                        freeSpace -= box.minimumHeight;
+                    }
                     numberOfFlexibleBoxes++;
                 }
                 
@@ -124,13 +127,9 @@ namespace __gnu_cxx{
                         computedSizePerBoxes[box] = CGSizeMake(constrainedSize.width,box.minimumSize.height);
                     }else{
                         CGFloat preferedHeight = MAX(0,(freeSpace / numberOfFlexibleBoxes)) ;
-                        if(preferedHeight == 0){
-                            numberOfFlexibleBoxes--;
-                            flexibleHeightPerBoxes[box] = 0;
-                            
-                        }else if(box.minimumHeight > 0 && preferedHeight < box.minimumHeight){
+                        if(box.minimumHeight > 0 && preferedHeight < box.minimumHeight){
                             preferedHeight = box.minimumHeight;
-                            freeSpace -= preferedHeight;
+                            //freeSpace -= preferedHeight;
                             numberOfFlexibleBoxes--;
                             flexibleHeightPerBoxes[box] = preferedHeight;
                         }
@@ -139,6 +138,10 @@ namespace __gnu_cxx{
                             freeSpace -= preferedHeight;
                             numberOfFlexibleBoxes--;
                             flexibleHeightPerBoxes[box] = preferedHeight;
+                        }else if(preferedHeight == 0){
+                            numberOfFlexibleBoxes--;
+                            flexibleHeightPerBoxes[box] = 0;
+                            
                         }else{
                             CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
                             CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,size.height)];
