@@ -33,6 +33,10 @@
 
 /**
  */
+- (UIImage*)tintedImageWithColor:(UIColor*)tintColor;
+
+/**
+ */
 - (UIImage*)imageInRect:(CGRect)rect;
 
 /** Due to compression, the letterboxes can have slightly changing colors. Tolerance helps going through this noise.
