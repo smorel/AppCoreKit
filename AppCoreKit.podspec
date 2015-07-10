@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
 
   s.name         = "AppCoreKit"
-  s.version      = "3.0.0"
+  s.version      = "3.0.1"
   s.summary      = "AppCoreKit is an application framework designed to improve productivity while creating Apps for iOS."
   s.homepage     = "https://github.com/smorel/AppCoreKit"
   s.license      = { :type => 'Apache Licence 2.0', :file => 'LICENSE.txt' }
   s.author       = { 'Sebastien Morel' => 'morel.sebastien@gmail.com' }
-  s.source       = { :git => 'https://github.com/smorel/AppCoreKit.git', :tag => 'v3.0.0' }
+  s.source       = { :git => 'https://github.com/smorel/AppCoreKit.git', :tag => 'v3.0.1' }
   s.platform     = :ios, '7.0'
   s.header_dir   = "AppCoreKit"
 
