@@ -27,6 +27,10 @@
 
 /**
  */
++ (UIImage*)convertFromNSDictionary:(NSDictionary*)dictionary;
+
+/**
+ */
 + (NSString*)convertToNSString:(UIImage*)image;
 
 @end

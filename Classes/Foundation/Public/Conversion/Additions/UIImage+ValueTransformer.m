@@ -10,6 +10,8 @@
 #import "NSValueTransformer+Additions.h"
 #import "NSValueTransformer+CGTypes.h"
 #import "CKResourceManager.h"
+#import "UIImage+ImageEffects.h"
+#import "UIImage+Transformations.h"
 
 #import "CKResourceDependencyContext.h"
 
@@ -63,6 +65,40 @@
 		return image;
 	}
 	return nil;
+}
+
+
++ (UIImage*)convertFromNSDictionary:(NSDictionary*)dictionary{
+    NSString* name = [dictionary objectForKey:@"name"];
+    if(!name)
+        return nil;
+    
+    UIImage* image = nil;
+    NSString* imagePath = [CKResourceManager pathForImageNamed:name];
+    if(imagePath){
+        [CKResourceDependencyContext addDependency:imagePath];
+        image = [UIImage imageWithContentsOfFile:imagePath];
+    }else{
+        image = [CKResourceManager imageNamed:name];
+    }
+    
+    if(!image)
+        return nil;
+
+    
+    NSString* colorStr = [dictionary objectForKey:@"tintColor"];
+    if(colorStr){
+        UIColor* tintColor = [NSValueTransformer transform:colorStr toClass:[UIColor class]];
+        image = [image tintedImageWithColor:tintColor];
+    }
+    
+    NSString* sizeStr = [dictionary objectForKey:@"resizableInsets"];
+    if(sizeStr){
+        CGSize size = [NSValueTransformer parseStringToCGSize:sizeStr];
+        image = [image stretchableImageWithLeftCapWidth:size.width topCapHeight:size.height];
+    }
+    
+    return image;
 }
 
 + (NSString*)convertToNSString:(UIImage*)image{
