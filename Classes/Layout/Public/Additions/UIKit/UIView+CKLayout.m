@@ -53,6 +53,14 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
     } completion:completion];
 }
 
+
+- (void)removeFromSuperLayoutBox{
+    if(!self.containerLayoutBox)
+        return;
+    
+    [self.containerLayoutBox removeLayoutBox:self];
+}
+
 - (CGSize)preferredSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
@@ -299,6 +307,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
         mm = (CKArrayCollection*)[self layoutBoxes];
     }
     
+    [box removeFromSuperLayoutBox];
     [mm addObject:box];
     
     [CKLayoutBox addLayoutBoxes:@[box] toBox:self];
@@ -312,6 +321,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
         mm = (CKArrayCollection*)[self layoutBoxes];
     }
     
+    [box removeFromSuperLayoutBox];
     [mm insertObject:box atIndex:index];
     
     [CKLayoutBox addLayoutBoxes:@[box] toBox:self];

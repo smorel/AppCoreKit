@@ -33,6 +33,11 @@
     [self.view performLayoutBoxesBatchUpdates:updates duration:duration completion:completion];
 }
 
+
+- (void)removeFromSuperLayoutBox{
+    [self.view removeFromSuperLayoutBox];
+}
+
 - (void)UIViewController_Layout_loadView{
     [self UIViewController_Layout_loadView];
     if(self.view){

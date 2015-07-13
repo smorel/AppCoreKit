@@ -157,6 +157,10 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
  */
 - (NSObject<CKLayoutBoxProtocol>*)rootLayoutBox;
 
+/** This will remove the layout box from its super layout box. If the current layout box is a UIView, it will stay in the view hierarchy until you call removeFromSuperview.
+ */
+- (void)removeFromSuperLayoutBox;
+
 
 ///-----------------------------------
 /// @name Performing the layout

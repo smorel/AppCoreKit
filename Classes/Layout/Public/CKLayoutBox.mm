@@ -259,6 +259,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
         mm = (CKArrayCollection*)[self layoutBoxes];
     }
     
+    [box removeFromSuperLayoutBox];
+    
     [mm addObject:box];
     
     [CKLayoutBox addLayoutBoxes:@[box] toBox:self];
@@ -272,6 +274,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
         self.layoutBoxes = [CKArrayCollection collection];
         mm = (CKArrayCollection*)[self layoutBoxes];
     }
+    
+    [box removeFromSuperLayoutBox];
     
     [mm insertObject:box atIndex:index];
     
@@ -294,6 +298,13 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     
     [CKLayoutBox removeLayoutBoxes:boxes fromBox:self];
     [self invalidateLayout];
+}
+
+- (void)removeFromSuperLayoutBox{
+    if(!self.containerLayoutBox)
+        return;
+    
+    [self.containerLayoutBox removeLayoutBox:self];
 }
 
 + (void)addLayoutBoxes:(NSArray*)boxes toBox:(NSObject<CKLayoutBoxProtocol>*)box{

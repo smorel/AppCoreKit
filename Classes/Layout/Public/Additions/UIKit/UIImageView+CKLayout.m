@@ -13,8 +13,8 @@
 #import <objc/runtime.h>
 
 CGSize CKSizeThatFitsRatio(CGSize size, CGFloat ratio){
-    NSInteger ratioHeight = (size.width / ratio);
-    NSInteger ratioWidth = (size.height * ratio);
+    NSInteger ratioHeight = ceilf((size.width / ratio));
+    NSInteger ratioWidth = ceilf(size.height * ratio);
     
     if(ratioHeight - size.height < 0){
         //
