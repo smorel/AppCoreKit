@@ -416,7 +416,7 @@ namespace __gnu_cxx{
                         switch(hAlign){
                             case CKLayoutHorizontalAlignmentLeft: break; //default behaviour
                             case CKLayoutHorizontalAlignmentCenter:  offsetX = (self.frame.size.width - totalWidth) / 2; break;
-                            case CKLayoutHorizontalAlignmentRight:   offsetX = (self.frame.size.width - totalWidth); break;
+                            case CKLayoutHorizontalAlignmentRight:   offsetX = (self.frame.size.width - totalWidth) - self.padding.right; break;
                         }
                     }
                     

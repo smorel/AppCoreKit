@@ -397,7 +397,7 @@ namespace __gnu_cxx{
                     CGFloat offsetY = 0;
                     switch(hAlign){
                         case CKLayoutHorizontalAlignmentLeft:break; //this is already computed
-                        case CKLayoutHorizontalAlignmentRight: offsetX += totalWidth - boxFrame.size.width; break;
+                        case CKLayoutHorizontalAlignmentRight: offsetX += totalWidth - boxFrame.size.width - self.padding.right; break;
                         case CKLayoutVerticalAlignmentCenter:  offsetX += (totalWidth / 2) - (boxFrame.size.width / 2); break;
                     }
                     
