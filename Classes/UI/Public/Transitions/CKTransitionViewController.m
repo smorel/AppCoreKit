@@ -117,9 +117,21 @@
     [toViewController setContainerViewController:self];
     // [self addChildViewController:toViewController];
     
+    
+    if(!self.parentViewController){
+        [fromViewController viewWillDisappear:NO];
+        [toViewController viewWillAppear:NO];
+    }
+    
     // If this is the initial presentation, add the new child with no animation.
     if (!fromViewController) {
         [self.view addSubview:toViewController.view];
+        
+        if(!self.parentViewController){
+            [fromViewController viewDidDisappear:NO];
+            [toViewController viewDidAppear:NO];
+        }
+        
         [toViewController didMoveToParentViewController:self];
         
         if ([self.delegate respondsToSelector:@selector (transitionViewController:didPresentViewController:)]) {
@@ -141,6 +153,11 @@
         [fromViewController removeFromParentViewController];
         [toViewController didMoveToParentViewController:self];
         
+        if(!self.parentViewController){
+            [fromViewController viewDidDisappear:NO];
+            [toViewController viewDidAppear:NO];
+        }
+        
         if ([self.delegate respondsToSelector:@selector (transitionViewController:didPresentViewController:)]) {
             [self.delegate transitionViewController:self didPresentViewController:toViewController];
         }
@@ -154,6 +171,11 @@
         [fromViewController.view removeFromSuperview];
         [fromViewController removeFromParentViewController];
         [toViewController didMoveToParentViewController:self];
+        
+        if(!self.parentViewController){
+            [fromViewController viewDidDisappear:NO];
+            [toViewController viewDidAppear:NO];
+        }
         
         if ([animator respondsToSelector:@selector (animationEnded:)]) {
             [animator animationEnded:didComplete];
