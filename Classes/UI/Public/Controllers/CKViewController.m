@@ -834,21 +834,18 @@ static char UIViewControllerPrefersStatusBarHiddenKey;
     
     if([self containerViewControllerConformsToProtocol:@protocol(CKSectionContainerDelegate)] != nil
        || [self isKindOfClass:[UINavigationController class]]){
-        //Style applied by super class
-        /*
-        NSMutableDictionary* controllerStyle = nil;
-        if(!self.styleHasBeenApplied){
-            [CATransaction begin];
-            [CATransaction
-             setValue: [NSNumber numberWithBool: YES]
-             forKey: kCATransactionDisableActions];
+        if([NSObject isClass:[self class] kindOfClass:[CKReusableViewController class]]){
             
-            controllerStyle = [self applyStyle];
-            self.styleHasBeenApplied = YES;
-            
-            [CATransaction commit];
-        }*/
-        
+        }else{
+            if(![self.styleManager isEmpty]){
+                NSMutableDictionary* controllerStyle =  [self controllerStyle];;
+                
+                if(!self.styleHasBeenApplied){
+                    controllerStyle = [self applyStyle];
+                    self.styleHasBeenApplied = YES;
+                }
+            }
+        }
     }else{
         
         if(self.rightButton){
