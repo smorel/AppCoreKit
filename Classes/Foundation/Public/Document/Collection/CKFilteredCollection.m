@@ -137,11 +137,16 @@ typedef NS_ENUM(NSInteger, CKFilteredCollectionUpdateType){
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-    NSAssert(NO,@"CKFilteredCollection removeObjectsAtIndexes Not Supported! You must insert in the non filtered collection directly.");
+    NSArray* objects = [[self allObjects]objectsAtIndexes:indexSet];
+    NSIndexSet* originalIndexes = [[self.collection allObjects]indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [objects indexOfObjectIdenticalTo:obj] != NSNotFound;
+    }];
+    
+    [self.collection removeObjectsAtIndexes:originalIndexes];
 }
 
 - (void)removeAllObjects{
-    NSAssert(NO,@"CKFilteredCollection removeAllObjects Not Supported! You must insert in the non filtered collection directly.");
+    [self removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.count)]];
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
