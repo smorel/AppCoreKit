@@ -96,7 +96,7 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
  */
 - (void)didRemove;
 
-/**
+/** If implementing didRemoveBlock, the collection or tableView will not automatically remove the cell.
  */
 @property(nonatomic,copy) void(^didRemoveBlock)(CKReusableViewController* controller);
 

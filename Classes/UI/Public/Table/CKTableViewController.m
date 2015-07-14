@@ -815,10 +815,12 @@
     if (editingStyle == UITableViewCellEditingStyleDelete){
         CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
         
-        CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
-        [self performBatchUpdates:^{
-            [section sectionContainerDelegate:self willRemoveControllerAtIndex:indexPath.row];
-        } completion:nil preventingUpdates:YES];
+        if(controller.didRemoveBlock == nil){
+            CKAbstractSection* section = [self.sectionContainer sectionAtIndex:indexPath.section];
+            [self performBatchUpdates:^{
+                [section sectionContainerDelegate:self willRemoveControllerAtIndex:indexPath.row];
+            } completion:nil preventingUpdates:YES];
+        }
         
         [controller didRemove];
     }
