@@ -35,6 +35,11 @@
  */
 - (UIImage*)tintedImageWithColor:(UIColor*)tintColor;
 
+
+/**
+ */
+- (UIImage *)greyscaleImage;
+
 /**
  */
 - (UIImage*)imageInRect:(CGRect)rect;

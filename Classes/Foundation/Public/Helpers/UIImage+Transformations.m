@@ -48,6 +48,40 @@ void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
     return [self scaleImageToFitSize:theSize];
 }
 
+- (UIImage *)greyscaleImage
+{
+    UIImage* source = self;
+    
+    CIImage * beginImage = [ self CIImage ] ;
+    CIImage * evAdjustedCIImage = nil ;
+    {
+        CIFilter * filter = [ CIFilter filterWithName:@"CIColorControls"
+                                        keysAndValues:kCIInputImageKey, beginImage
+                             , @"inputBrightness", @0.0
+                             , @"inputContrast", @1.1
+                             , @"inputSaturation", @0.0
+                             , nil ] ;
+        evAdjustedCIImage = [ filter outputImage ] ;
+    }
+    
+    CIImage * resultCIImage = nil ;
+    {
+        CIFilter * filter = [ CIFilter filterWithName:@"CIExposureAdjust"
+                                        keysAndValues:kCIInputImageKey, evAdjustedCIImage
+                             , @"inputEV", @0.7
+                             , nil ] ;
+        resultCIImage = [ filter outputImage ] ;
+    }
+    
+    CIContext * context = [ CIContext contextWithOptions:nil ] ;
+    CGImageRef resultCGImage = [ context createCGImage:resultCIImage
+                                              fromRect:resultCIImage.extent ] ;
+    UIImage * result = [ UIImage imageWithCGImage:resultCGImage ] ;
+    CGImageRelease( resultCGImage ) ;
+    
+    return result;
+}
+
 - (UIImage*)tintedImageWithColor:(UIColor *)tintColor{
     CGFloat scale = [[UIScreen mainScreen]scale];
     
