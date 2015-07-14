@@ -65,6 +65,16 @@
     [self updateAnimated:NO];
 }
 
+
+- (void)setPostProcess:(UIImage *(^)(UIImage * source))postProcess{
+    [_postProcess release];
+    
+    _postProcess = [postProcess copy];
+    if(self.image && _postProcess){
+        self.image = _postProcess(self.image);
+    }
+}
+
 - (void)setImage:(UIImage *)image{
     [self setImage:image animated:NO];
 }
