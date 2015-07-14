@@ -149,6 +149,8 @@
 }
 
 - (void)removeCollectionHeaderControllerAtIndex:(NSInteger)index animated:(BOOL)animated{
+    if(index == NSNotFound)
+        return;
     [self removeCollectionHeaderControllersAtIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -165,8 +167,15 @@
 }
 
 - (void)removeCollectionHeaderControllersAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    [[self mutableCollectionHeaderControllers]removeObjectsAtIndexes:indexes];
-    [super removeControllersAtIndexes:[self indexesForCollectionHeaderIndexes:indexes] animated:animated];
+    NSMutableIndexSet* mi = [NSMutableIndexSet indexSet];
+    [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        if(idx != NSNotFound){
+            [mi addIndex:idx];
+        }
+    }];
+    
+    [[self mutableCollectionHeaderControllers]removeObjectsAtIndexes:mi];
+    [super removeControllersAtIndexes:[self indexesForCollectionHeaderIndexes:mi] animated:animated];
 }
 
 
@@ -179,6 +188,8 @@
 }
 
 - (void)insertCollectionFooterController:(CKReusableViewController*)controller atIndex:(NSInteger)index animated:(BOOL)animated{
+    if(index == NSNotFound)
+        return;
     [self insertCollectionFooterControllers:@[controller] atIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -196,6 +207,8 @@
 }
 
 - (void)removeCollectionFooterControllerAtIndex:(NSInteger)index animated:(BOOL)animated{
+    if(index == NSNotFound)
+        return;
     [self removeCollectionFooterControllersAtIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -212,8 +225,15 @@
 }
 
 - (void)removeCollectionFooterControllersAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    [[self mutableCollectionFooterControllers]removeObjectsAtIndexes:indexes];
-    [super removeControllersAtIndexes:[self indexesForCollectionFooterIndexes:indexes] animated:animated];
+    NSMutableIndexSet* mi = [NSMutableIndexSet indexSet];
+    [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        if(idx != NSNotFound){
+            [mi addIndex:idx];
+        }
+    }];
+    
+    [[self mutableCollectionFooterControllers]removeObjectsAtIndexes:mi];
+    [super removeControllersAtIndexes:[self indexesForCollectionFooterIndexes:mi] animated:animated];
 }
 
 - (void)setupCollectionControllersByUpdatingCollectionController:(BOOL)updateCollectionControllers{

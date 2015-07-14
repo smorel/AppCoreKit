@@ -55,7 +55,10 @@
     [self removeControllerAtIndex:index animated:animated];
 }
 
-- (void)removeControllerAtIndex:(NSInteger)index animated:(BOOL)animated{    
+- (void)removeControllerAtIndex:(NSInteger)index animated:(BOOL)animated{
+    if(index == NSNotFound)
+        return;
+    
     [self removeControllersAtIndexes:[NSIndexSet indexSetWithIndex:index] animated:animated];
 }
 
@@ -69,7 +72,14 @@
 }
 
 - (void)removeControllersAtIndexes:(NSIndexSet*)indexes animated:(BOOL)animated{
-    [super removeControllersAtIndexes:indexes animated:animated];
+    NSMutableIndexSet* mi = [NSMutableIndexSet indexSet];
+    [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        if(idx != NSNotFound){
+            [mi addIndex:idx];
+        }
+    }];
+    
+    [super removeControllersAtIndexes:mi animated:animated];
 }
 
 @end
