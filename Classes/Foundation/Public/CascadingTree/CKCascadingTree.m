@@ -940,22 +940,29 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
     [self makeAllTransformForObjectWithKey:objectKey];
     
     for(id key in [self allKeys]){
+        if([self isReservedKeyWord:key])
+            continue;
+        
         id object = [[self objectForKey:key]retain];
         
         if([object isKindOfClass:[NSArray class]]){
             for(id subObject in object){
-                if([subObject isKindOfClass:[NSDictionary class]]){
+                if([subObject isKindOfClass:[NSMutableDictionary class]]){
                     NSMutableDictionary* dico = subObject;
                     [dico makeAllTransformRecursivellyForObjectWithKey:@""];
                     [dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                }else if([subObject isKindOfClass:[NSDictionary class]]){
+                    int i =3;
                 }
             }
         }
-        else if([object isKindOfClass:[NSDictionary class]]
+        else if([object isKindOfClass:[NSMutableDictionary class]]
                 && (![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode])){
             NSMutableDictionary* dico = object;
             [dico makeAllTransformRecursivellyForObjectWithKey:key];
             [dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+        }else if([object isKindOfClass:[NSDictionary class]]){
+            int i =3;
         }
         [object release];
     }
@@ -1368,10 +1375,6 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         if(c != nil)
             return NO;
         
-        if([key isEqualToString:@"Background"]){
-            int i =3;
-        }
-        
         id context = [[container parentDictionary] findObjectInHierarchy:key];
         if(![context isKindOfClass:[NSDictionary class]])
             return NO;
@@ -1383,10 +1386,19 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         
         
         if([copied containsObjectForKey:@"@class"]){
-            return context;
+            id classValue = [copied objectForKey:@"@class"];
+            if(![classValue isKindOfClass:[NSString class]])
+                return NO;
+            
+            Class c = NSClassFromString(classValue);
+            CKClassPropertyDescriptor* namePropertyDescriptor = [NSObject propertyDescriptorForClass:c key:@"name"];
+            if(!namePropertyDescriptor)
+                return NO;
+            
+            return YES;
         }
     
-        return nil ;
+        return NO ;
     }];
 }
 
