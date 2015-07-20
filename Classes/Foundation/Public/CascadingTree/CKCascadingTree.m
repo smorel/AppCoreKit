@@ -633,12 +633,20 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         
         if([object isKindOfClass:[NSString class]]){
             NSString* injectionPath = (NSString*)object;
-            
-            if([injectionPath isEqualToString:@"#text"]){
-                int i =3;
+
+            id result = nil;
+            while(injectionPath){
+                id found = [self findObjectInHierarchy:injectionPath];
+                if(found){
+                    result = found;
+                    if([found isKindOfClass:[NSString class]]){
+                        injectionPath = result;
+                    }
+                }else{
+                    injectionPath = nil;
+                }
             }
             
-            id result = [self findObjectInHierarchy:injectionPath];
             if(result){
                 if([result isKindOfClass:[NSDictionary class]]){
                     result = [self deepCleanCopy:result];
