@@ -627,21 +627,28 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         
         id object = [self objectForKey:key];
         
-        if([object isKindOfClass:[NSString class]] && [object isEqualToString:@"#imageSize"]){
-            int i =3;
-        }
         
         if([object isKindOfClass:[NSString class]]){
             NSString* injectionPath = (NSString*)object;
 
             id result = nil;
             while(injectionPath){
+                if([injectionPath isEqualToString:@"Colors.TextField.Light.Background"]){
+                    int i =3;
+                }
                 id found = [self findObjectInHierarchy:injectionPath];
                 if(found){
-                    result = found;
                     if([found isKindOfClass:[NSString class]]){
-                        injectionPath = result;
+                        if([found isEqualToString:result]){
+                            injectionPath = nil;
+                            continue;
+                        }
+                        
+                        injectionPath = found;
+                    }else{
+                        injectionPath = nil;
                     }
+                    result = found;
                 }else{
                     injectionPath = nil;
                 }
