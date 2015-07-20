@@ -1258,6 +1258,70 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
     return fullPath;
 }
 
+- (id)descriptionWithoutReservedKeywords{
+    NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+    for(NSString* key in [self allKeys]){
+        if(   [key isEqualToString:CKCascadingTreePrefix]
+           || [key isEqualToString:CKCascadingTreeFormats]
+           || [key isEqualToString:CKCascadingTreeParent]
+           || [key isEqualToString:CKCascadingTreeEmpty]
+           || [key isEqualToString:CKCascadingTreeNode]
+           || [key isEqualToString:CKCascadingTreeInherits]
+           || [key isEqualToString:CKCascadingTreeImport]
+           || [key isEqualToString:CKCascadingTreeDevice]){
+            continue;
+        }
+        
+        id value = [self objectForKey:key];
+        [dictionary setObject:[value descriptionWithoutReservedKeywords] forKey:key];
+    }
+    
+    return dictionary;
+}
+
+@end
+
+
+@interface NSString(DescriptionWithoutReservedKeywords)
+- (id)descriptionWithoutReservedKeywords;
+@end
+
+@implementation  NSString(DescriptionWithoutReservedKeywords)
+
+- (id)descriptionWithoutReservedKeywords{
+    return self;
+}
+
+@end
+
+
+
+@interface NSNumber(DescriptionWithoutReservedKeywords)
+- (id)descriptionWithoutReservedKeywords;
+@end
+
+@implementation  NSNumber(DescriptionWithoutReservedKeywords)
+
+- (id)descriptionWithoutReservedKeywords{
+    return self;
+}
+
+@end
+
+@interface NSArray(DescriptionWithoutReservedKeywords)
+- (id)descriptionWithoutReservedKeywords;
+@end
+
+@implementation  NSArray(DescriptionWithoutReservedKeywords)
+
+- (id)descriptionWithoutReservedKeywords{
+    NSMutableArray* array = [NSMutableArray array];
+    for(id value in self){
+        [array addObject:[value descriptionWithoutReservedKeywords]];
+    }
+    return array;
+}
+
 @end
 
 //CKCascadingTree
@@ -1304,8 +1368,25 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
         if(c != nil)
             return NO;
         
+        if([key isEqualToString:@"Background"]){
+            int i =3;
+        }
+        
         id context = [[container parentDictionary] findObjectInHierarchy:key];
-        return context && [context isKindOfClass:[NSDictionary class]];
+        if(![context isKindOfClass:[NSDictionary class]])
+            return NO;
+        
+        NSMutableDictionary* copied = [container deepCleanCopy:context];
+        [copied setObject:[NSValue valueWithNonretainedObject:[context parentDictionary]] forKey:CKCascadingTreeParent];
+        
+        [copied makeAllInheritsForObjectWithKey:key];
+        
+        
+        if([copied containsObjectForKey:@"@class"]){
+            return context;
+        }
+    
+        return nil ;
     }];
 }
 
@@ -1489,7 +1570,9 @@ NSString* const CKCascadingTreeOSVersion  = @"@ios";
 }
 
 - (NSString*)description{
-	return [_tree description];
+	return [[_tree descriptionWithoutReservedKeywords] description];
 }
 
 @end
+
+
