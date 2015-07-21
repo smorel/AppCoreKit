@@ -52,7 +52,7 @@
     [self beginBindingsContextWithScope:@"CKPropertySwitch"];
     
     [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
-        self.userInteractionEnabled = !bself.readOnly;
+        bself.userInteractionEnabled = !bself.readOnly;
     }];
     
     [self bindEvent:UIControlEventValueChanged withBlock:^{

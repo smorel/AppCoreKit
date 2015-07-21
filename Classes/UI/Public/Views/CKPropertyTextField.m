@@ -14,6 +14,10 @@
 #import "CKPropertyStringViewController.h"
 #import "CKPropertyNumberViewController.h"
 
+@interface CKPropertyTextField()
+@property(nonatomic,retain) UIColor* defaultTextColor;
+@end
+
 @implementation CKPropertyTextField
 
 - (instancetype)init{
@@ -41,6 +45,19 @@
     self.property = property;
     
     return self;
+}
+
+- (void)setTextColor:(UIColor *)textColor{
+    if(![textColor isEqual:self.readOnlyTextColor]){
+        self.defaultTextColor = textColor;
+    }
+    
+    if(self.readOnlyTextColor && self.readOnly){
+        [super setTextColor:self.readOnlyTextColor];
+        return;
+    }
+    
+    [super setTextColor:textColor];
 }
 
 - (void)setProperty:(CKProperty *)property{
@@ -75,7 +92,8 @@
     [self beginBindingsContextWithScope:@"CKPropertyTextField"];
     
     [self bind:@"readOnly" executeBlockImmediatly:YES withBlock:^(id value) {
-        self.userInteractionEnabled = !bself.readOnly;
+        bself.userInteractionEnabled = !bself.readOnly;
+        bself.textColor = bself.readOnly ? (bself.readOnlyTextColor ? bself.readOnlyTextColor : bself.defaultTextColor ) : bself.defaultTextColor;
     }];
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
@@ -112,6 +130,8 @@
     [_didResignFirstResponder release];
     [_didBecomeFirstResponder release];
     [_valuePlaceholderLabel release];
+    [_readOnlyTextColor release];
+    [_defaultTextColor release];
     [super dealloc];
 }
 

@@ -28,6 +28,10 @@
  */
 @property(nonatomic,assign)BOOL readOnly;
 
+/** If not set, uses the default text color when readonly.
+ */
+@property(nonatomic,retain) UIColor* readOnlyTextColor;
+
 /** Default value is a localized string as follow: _(@"propertyName_placeholder") that can be customized by setting a key/value in your localization file as follow:
  "propertyName_placeholder" = "My Placeholder";
  If the property is a number and the extended attribute placeholderValue property is set, valuePlaceholderLabel will have the specified value.
