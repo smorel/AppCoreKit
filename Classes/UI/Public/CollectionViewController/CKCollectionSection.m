@@ -237,7 +237,6 @@
 }
 
 - (void)setupCollectionControllersByUpdatingCollectionController:(BOOL)updateCollectionControllers{
-    self.collectionBindingContext = [NSString stringWithFormat:@"CKCollectionSection_<%p>",self];
     
     if(updateCollectionControllers){
         [self removeAllCollectionControllersAnimated:YES];
@@ -245,7 +244,7 @@
     
     CKWeakRef* weak = [CKWeakRef weakRefWithObject:self];
     
-    [NSObject beginBindingsContext:self.collectionBindingContext];
+    [self beginBindingsContextWithScope:@"CKCollectionSection"];
     [self.collection bindEvent:CKCollectionBindingEventAll executeBlockImmediatly:updateCollectionControllers withBlock:^(CKCollectionBindingEvents event, NSArray *objects, NSIndexSet *indexes) {
         switch(event){
             case CKCollectionBindingEventInsertion:{
@@ -260,7 +259,7 @@
     }];
     
     
-    [NSObject endBindingsContext];
+    [self endBindingsContext];
 }
 
 - (void)handleInsertionOfObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes{
@@ -277,9 +276,7 @@
 }
 
 - (void)clearCollectionBindings{
-    if(!self.collectionBindingContext)
-        return;
-    [NSObject removeAllBindingsForContext:self.collectionBindingContext];
+    [self clearBindingsContextWithScope:@"CKCollectionSection"];
 }
 
 - (void)removeAllCollectionControllersAnimated:(BOOL)animated{
