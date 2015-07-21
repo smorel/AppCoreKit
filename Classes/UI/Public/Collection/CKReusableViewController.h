@@ -125,7 +125,7 @@ typedef NS_ENUM(NSInteger,CKAccessoryType){
 
 /**
  */
-- (NSString*)reuseIdentifier;
+@property(nonatomic,retain) NSString* reuseIdentifier;
 
 
 

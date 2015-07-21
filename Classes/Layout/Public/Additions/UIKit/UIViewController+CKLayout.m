@@ -71,7 +71,10 @@ typedef NS_ENUM(NSInteger, _CKViewControllerState){
 }
 
 - (void)removeFromSuperLayoutBox{
-    [self.view removeFromSuperLayoutBox];
+    if(!self.containerLayoutBox)
+        return;
+    
+    [self.containerLayoutBox removeLayoutBox:self];
 }
 
 - (void)UIViewController_Layout_loadView{

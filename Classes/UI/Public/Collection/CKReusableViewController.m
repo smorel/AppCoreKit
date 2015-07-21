@@ -53,6 +53,7 @@
     
     [self clearBindingsContext];
     
+    [_reuseIdentifier release];
     [_layoutInvalidateBlock release];
     [_didHighlightBlock release];
     [_didUnhighlightBlock release];
@@ -78,11 +79,6 @@
         [self prepareForReuseUsingContentView:nil contentViewCell:nil];
         self.view.invalidatedLayoutBlock = nil;
     }
-}
-
-- (NSString*)reuseIdentifier{
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
-	return [NSString stringWithFormat:@"%@-<%p>",[[self class] description],controllerStyle];
 }
 
 - (void)styleManagerDidUpdate:(NSNotification*)notification{
@@ -126,6 +122,14 @@
         return self.reusableView;
     
     return [super view];
+}
+
+- (NSString*)reuseIdentifier{
+    if(!_reuseIdentifier){
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
+        _reuseIdentifier = [[NSString stringWithFormat:@"%@-<%p>",[[self class] description],controllerStyle]retain];
+    }
+    return _reuseIdentifier;
 }
 
 - (BOOL)isViewLoaded{
@@ -331,7 +335,7 @@
 }
 
 - (void)viewLayoutDidInvalidate{
-    if(self.view.window == nil || self.isComputingSize || self.state != CKViewControllerStateDidAppear){
+    if(/*self.view.window == nil ||*/ self.isComputingSize /*|| self.state != CKViewControllerStateDidAppear*/){
         return;
     }
     

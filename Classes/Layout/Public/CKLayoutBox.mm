@@ -269,6 +269,12 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 
 - (void)addLayoutBox:(id<CKLayoutBoxProtocol>)box{
     CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
+    NSInteger index = [mm indexOfObjectIdenticalTo:box];
+    if(index != NSNotFound && box.containerLayoutView &&  (box.containerLayoutBox == self)){
+        [self invalidateLayout];
+        return;
+    }
+    
     if(!mm){
         self.layoutBoxes = [CKArrayCollection collection];
         mm = (CKArrayCollection*)[self layoutBoxes];
@@ -360,6 +366,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                 UIView* view = viewController.view;
                 view.autoresizingMask = 0;
                 if([view superview] != [box containerLayoutView]){
+                    
                     [viewController viewWillAppear:NO];
                     
                     if([view stylesheet] == nil){
@@ -387,6 +394,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     if([box isKindOfClass:[UIView class]]){
         UIView* view = (UIView*)box;
         [view removeFromSuperview];
+        return;
     }else if([box isKindOfClass:[UIViewController class]]){
         UIViewController* viewController = (UIViewController*)box;
         UIView* view = viewController.view;
@@ -395,6 +403,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
             [view removeFromSuperview];
             [viewController viewDidDisappear:NO];
         }
+        return;
     }
     
     for(NSObject<CKLayoutBoxProtocol>* subBox in [box layoutBoxes]){
