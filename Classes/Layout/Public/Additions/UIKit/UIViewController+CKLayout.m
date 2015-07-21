@@ -26,6 +26,16 @@
 
 @end
 
+typedef NS_ENUM(NSInteger, _CKViewControllerState){
+    _CKViewControllerStateNone           = 1 << 0,
+    _CKViewControllerStateWillAppear     = 1 << 1,
+    _CKViewControllerStateDidAppear      = 1 << 2,
+    _CKViewControllerStateWillDisappear  = 1 << 3,
+    _CKViewControllerStateDidDisappear   = 1 << 4,
+    _CKViewControllerStateDidUnload      = 1 << 5,
+    _CKViewControllerStateDidLoad        = 1 << 6
+};
+
 
 @implementation UIViewController(CKLayout)
 
@@ -33,6 +43,32 @@
     [self.view performLayoutBoxesBatchUpdates:updates duration:duration completion:completion];
 }
 
+- (void)layoutWillMoveToWindow:(UIWindow*)newWindow{
+    //Compatibility with extension of UI in AppCoreKit
+    _CKViewControllerState state = 0;
+    CKClassPropertyDescriptor* statePropertyDescriptor = [self propertyDescriptorForKeyPath:@"state"];
+    if(statePropertyDescriptor){
+        state = [[self valueForKey:@"state"]integerValue];
+    }
+    
+    
+    if(newWindow){
+        if(state != _CKViewControllerStateWillAppear && state != _CKViewControllerStateDidAppear){
+            [self viewWillAppear:NO];
+        }
+        if(state != _CKViewControllerStateDidAppear){
+            [self viewDidAppear:NO];
+        }
+    }else{
+        if(state != _CKViewControllerStateWillDisappear && state != _CKViewControllerStateDidDisappear){
+            [self viewWillDisappear:NO];
+        }
+        if(state != _CKViewControllerStateDidDisappear){
+            [self viewDidDisappear:NO];
+        }
+    }
+    [self.view layoutWillMoveToWindow:newWindow];
+}
 
 - (void)removeFromSuperLayoutBox{
     [self.view removeFromSuperLayoutBox];

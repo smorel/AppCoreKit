@@ -161,6 +161,10 @@ typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layout
  */
 - (void)removeFromSuperLayoutBox;
 
+/**
+ */
+- (void)layoutWillMoveToWindow:(UIWindow*)newWindow;
+
 
 ///-----------------------------------
 /// @name Performing the layout

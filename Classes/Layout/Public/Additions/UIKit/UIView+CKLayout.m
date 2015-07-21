@@ -29,6 +29,8 @@
 + (void)removeLayoutBoxes:(NSArray*)boxes fromBox:(NSObject<CKLayoutBoxProtocol>*)box;
 + (void)initializeBox:(NSObject<CKLayoutBoxProtocol>*)box;
 
++ (void)layoutWillMoveToWindow:(UIWindow*)window forBox:(NSObject<CKLayoutBoxProtocol>*)box;
+
 @end
 
 @implementation UIView (CKLayout)
@@ -647,38 +649,22 @@ static char UIViewFlexibleHeightKey;
     }
 }
 
-/*- (BOOL)UIView_Layout_isHidden{
-    BOOL selfHidden = [self UIView_Layout_isHidden];
-    if(selfHidden)
-        return YES;
-    
-    if(self.containerLayoutBox){
-        id container = [self containerLayoutBox];
-        while(container){
-            if([container isHidden])
-                return YES;
-            container = [container containerLayoutBox];
-        }
-    }
-    
-    return NO;
-}*/
-
-- (void)UIView_Layout_setTransform:(CGAffineTransform)theTransform{
-  /*  if(!CGAffineTransformEqualToTransform(theTransform, self.transform)){
-        [self UIView_Layout_setTransform:theTransform];
-        [self invalidateLayout];
-    }
-   */
+- (void)UIView_Layout_willMoveToWindow:(UIWindow *)newWindow{
+    [self UIView_Layout_willMoveToWindow:newWindow];
+    [self layoutWillMoveToWindow:newWindow];
 }
+
+- (void)layoutWillMoveToWindow:(UIWindow*)newWindow{
+    [CKLayoutBox layoutWillMoveToWindow:newWindow forBox:self];
+}
+
 
 + (void)load{
     CKSwizzleSelector([UIView class], @selector(layoutSubviews), @selector(UIView_Layout_layoutSubviews));
     CKSwizzleSelector([UIView class], @selector(init), @selector(UIView_Layout_init));
     CKSwizzleSelector([UIView class], @selector(initWithFrame:), @selector(UIView_Layout_initWithFrame:));
     CKSwizzleSelector([UIView class], @selector(setHidden:), @selector(UIView_Layout_setHidden:));
-  //  CKSwizzleSelector([UIView class], @selector(isHidden), @selector(UIView_Layout_isHidden));
-  //  CKSwizzleSelector([UIView class], @selector(setTransform:), @selector(UIView_Layout_setTransform:));
+    CKSwizzleSelector([UIView class], @selector(willMoveToWindow:), @selector(UIView_Layout_willMoveToWindow:));
 }
 
 @end

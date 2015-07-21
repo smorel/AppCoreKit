@@ -214,6 +214,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                                                  CKLayoutHorizontalAlignmentRight);
 }
 
+
 + (void)initializeBox:(NSObject<CKLayoutBoxProtocol>*)box{
     box.maximumSize = CGSizeMake(MAXFLOAT,MAXFLOAT);
     box.minimumSize = CGSizeMake(-MAXFLOAT,-MAXFLOAT);
@@ -251,6 +252,20 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
     }
 }
 
+
+- (void)layoutWillMoveToWindow:(UIWindow*)newWindow{
+    [[self class]layoutWillMoveToWindow:newWindow forBox:self];
+}
+
++ (void)layoutWillMoveToWindow:(UIWindow*)window forBox:(NSObject<CKLayoutBoxProtocol>*)box{
+    for(NSObject<CKLayoutBoxProtocol>* subbox in box.layoutBoxes){
+        if([subbox isKindOfClass:[UIViewController class]]){
+            UIViewController* viewController = (UIViewController*)subbox;
+        }
+        
+        [subbox layoutWillMoveToWindow:window];
+    }
+}
 
 - (void)addLayoutBox:(id<CKLayoutBoxProtocol>)box{
     CKArrayCollection* mm = (CKArrayCollection*)[self layoutBoxes];
