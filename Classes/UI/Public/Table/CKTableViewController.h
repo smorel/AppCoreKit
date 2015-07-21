@@ -99,6 +99,13 @@
  */
 @property(nonatomic,assign) BOOL stickySelectionEnabled;
 
+/** Default is UITableViewRowAnimationFade
+ */
+@property(nonatomic,assign) UITableViewRowAnimation insertAnimation;
+
+/** Default is UITableViewRowAnimationFade
+ */
+@property(nonatomic,assign) UITableViewRowAnimation removeAnimation;
 
 ///-----------------------------------
 /// @name Getting the Controller status

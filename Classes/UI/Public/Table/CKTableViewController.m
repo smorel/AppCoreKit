@@ -43,8 +43,35 @@
     return self;
 }
 
+- (void)insertAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UITableViewRowAnimation",
+                                                 UITableViewRowAnimationFade,
+                                                 UITableViewRowAnimationRight,
+                                                 UITableViewRowAnimationLeft,
+                                                 UITableViewRowAnimationTop,
+                                                 UITableViewRowAnimationBottom,
+                                                 UITableViewRowAnimationNone,
+                                                 UITableViewRowAnimationMiddle,
+                                                 UITableViewRowAnimationAutomatic
+                                                 );
+}
+
+- (void)removeAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UITableViewRowAnimation",
+                                                 UITableViewRowAnimationFade,
+                                                 UITableViewRowAnimationRight,
+                                                 UITableViewRowAnimationLeft,
+                                                 UITableViewRowAnimationTop,
+                                                 UITableViewRowAnimationBottom,
+                                                 UITableViewRowAnimationNone,
+                                                 UITableViewRowAnimationMiddle,
+                                                 UITableViewRowAnimationAutomatic
+                                                 );
+}
+
 - (void)postInit{
     [super postInit];
+    self.insertAnimation = self.removeAnimation = UITableViewRowAnimationFade;
     self.stickySelectionEnabled = NO;
     self.currentPage = 0;
     self.numberOfPages = 0;
@@ -384,7 +411,7 @@
     
     sectionUpdate();
     [self performBatchUpdates:^{
-        [self.tableView insertSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self.tableView insertSections:indexes withRowAnimation:(animated ? self.insertAnimation : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
 }
@@ -397,7 +424,7 @@
     
     sectionUpdate();
     [self performBatchUpdates:^{
-        [self.tableView deleteSections:indexes withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self.tableView deleteSections:indexes withRowAnimation:(animated ? self.removeAnimation : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
 }
@@ -410,7 +437,7 @@
     
     sectionUpdate();
     [self performBatchUpdates:^{
-        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? self.insertAnimation : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
 }
@@ -423,7 +450,7 @@
     
     sectionUpdate();
     [self performBatchUpdates:^{
-        [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone) ];
+        [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(animated ? self.removeAnimation : UITableViewRowAnimationNone) ];
         [self updateAppearanceOfVisibleControllers];
     } completion:nil preventingUpdates:YES];
 }
