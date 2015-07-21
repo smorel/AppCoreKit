@@ -101,7 +101,11 @@
     CKHorizontalBoxLayout* hbox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     hbox.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[imageView,vbox]];
     
-    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hbox]];
+    CKVerticalBoxLayout* mainVbox = [[[CKVerticalBoxLayout alloc]init]autorelease];
+    mainVbox.name = @"MainVerticalLayout";
+    mainVbox.layoutBoxes =  [CKArrayCollection collectionWithObjectsFromArray:@[hbox]];
+    
+    self.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[mainVbox]];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
