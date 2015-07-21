@@ -7,23 +7,34 @@
 //
 
 #import "CKLayoutUnitTestViewController.h"
+#import "CKPropertyTextField.h"
+#import "CKPropertyTextView.h"
+#import "CKPropertySwitch.h"
 
 @interface CKLayoutUnitTestViewController ()
-
+@property(nonatomic,retain) NSString* text;
+@property(nonatomic,assign) BOOL bo;
 @end
 
 @implementation CKLayoutUnitTestViewController
 
 - (void)postInit{
     [super postInit];
+    self.text = @"HEY!";
     [self setupTableView];
 }
 
 - (void)setupTableView{
-    CKReusableViewController* controller = [self testViewController];
-    CKSection* section = [CKSection sectionWithControllers:@[controller]];
+    CKSection* section = [CKSection sectionWithControllers:@[[self testViewController], [self propertyTextFieldController], [self propertyTextViewController], [self propertySwitchController]]];
     
     [self addSections:@[section] animated:NO];
+    
+    /*[self beginBindingsContext];
+    [self bindPropertyChangeWithBlock:^(NSString *propertyName, id value) {
+        NSLog(@"Property Changed: %@ - %@",propertyName,value);
+    }];
+    [self endBindingsContext];
+     */
 }
 
 - (CKReusableViewController*)testViewController{
@@ -54,6 +65,63 @@
         
         controller.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[hBox]];
     };
+    return controller;
+}
+
+- (CKReusableViewController*)propertyTextFieldController{
+    CKReusableViewController* controller = [[[CKReusableViewController alloc]init]autorelease];
+    controller.viewDidLoadBlock = ^(UIViewController* controller){
+        controller.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        
+        CKPropertyTextField* propertyView = [[[CKPropertyTextField alloc]init]autorelease];
+        propertyView.name = @"textField";
+        
+        controller.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[propertyView]];
+    };
+    
+    controller.viewWillAppearBlock = ^(UIViewController* controller, BOOL animated){
+        CKPropertyTextField* propertyView = [controller.view viewWithName:@"propertyView"];
+        propertyView.property = [CKProperty propertyWithObject:self keyPath:@"text"];
+    };
+    
+    return controller;
+}
+
+- (CKReusableViewController*)propertyTextViewController{
+    CKReusableViewController* controller = [[[CKReusableViewController alloc]init]autorelease];
+    controller.viewDidLoadBlock = ^(UIViewController* controller){
+        controller.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        
+        CKPropertyTextView* propertyView = [[[CKPropertyTextView alloc]init]autorelease];
+        propertyView.name = @"propertyView";
+        
+        controller.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[propertyView]];
+    };
+    
+    controller.viewWillAppearBlock = ^(UIViewController* controller, BOOL animated){
+        CKPropertyTextView* propertyView = [controller.view viewWithName:@"propertyView"];
+        propertyView.property = [CKProperty propertyWithObject:self keyPath:@"text"];
+    };
+    
+    return controller;
+}
+
+- (CKReusableViewController*)propertySwitchController{
+    CKReusableViewController* controller = [[[CKReusableViewController alloc]init]autorelease];
+    controller.viewDidLoadBlock = ^(UIViewController* controller){
+        controller.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        
+        CKPropertySwitch* propertyView = [[[CKPropertySwitch alloc]init]autorelease];
+        propertyView.name = @"propertyView";
+        
+        controller.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[propertyView]];
+    };
+    
+    controller.viewWillAppearBlock = ^(UIViewController* controller, BOOL animated){
+        CKPropertySwitch* propertyView = [controller.view viewWithName:@"propertyView"];
+        propertyView.property = [CKProperty propertyWithObject:self keyPath:@"bo"];
+    };
+    
     return controller;
 }
 

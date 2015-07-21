@@ -80,6 +80,7 @@
     
     UITextField* ValueTextField = [[[UITextField alloc]init]autorelease];
     ValueTextField.name = @"ValueTextField";
+    ValueTextField.flexibleWidth = YES;
     ValueTextField.font = [UIFont systemFontOfSize:14];
     ValueTextField.minimumWidth = 100;
     ValueTextField.textAlignment = UITextAlignmentRight;
@@ -87,6 +88,7 @@
     
     CKTextView* ValueTextView = [[[CKTextView alloc]init]autorelease];
     ValueTextView.name = @"ValueTextView";
+    ValueTextView.flexibleWidth = YES;
     ValueTextView.font = [UIFont systemFontOfSize:14];
     ValueTextView.marginTop = 10;
     

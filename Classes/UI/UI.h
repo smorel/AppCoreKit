@@ -79,6 +79,11 @@
 #import "CKPropertiesSampleViewController.h"
 #import "CKLayoutUnitTestViewController.h"
 
+#import "CKPropertyTextField.h"
+#import "CKPropertyTextView.h"
+#import "CKPropertySwitch.h"
+
+
 #import "CKReusableViewController+Standard.h"
 #import "CKReusableViewController+Property.h"
 #import "CKSection+Property.h"
