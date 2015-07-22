@@ -7,12 +7,14 @@
 //
 
 #import "CKLayoutUnitTestViewController.h"
+#import "CKReusableViewController+Property.h"
 #import "CKPropertyTextField.h"
 #import "CKPropertyTextView.h"
 #import "CKPropertySwitch.h"
 
 @interface CKLayoutUnitTestViewController ()
 @property(nonatomic,retain) NSString* text;
+@property(nonatomic,retain) UIColor* color;
 @property(nonatomic,assign) BOOL bo;
 @end
 
@@ -25,7 +27,9 @@
 }
 
 - (void)setupTableView{
-    CKSection* section = [CKSection sectionWithControllers:@[[self testViewController], [self propertyTextFieldController], [self propertyTextViewController], [self propertySwitchController]]];
+      CKSection* section = [CKSection sectionWithControllers:@[[self testViewController], [self propertyTextFieldController], [self propertyTextViewController], [self propertySwitchController],
+                          [CKReusableViewController controllerWithObject:self keyPath:@"color"],
+                                                               [CKReusableViewController controllerWithObject:self keyPath:@"text"] ] ];
     
     [self addSections:@[section] animated:NO];
     
@@ -74,7 +78,7 @@
         controller.view.padding = UIEdgeInsetsMake(10, 10, 10, 10);
         
         CKPropertyTextField* propertyView = [[[CKPropertyTextField alloc]init]autorelease];
-        propertyView.name = @"textField";
+        propertyView.name = @"propertyView";
         
         controller.view.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:@[propertyView]];
     };
