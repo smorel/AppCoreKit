@@ -183,6 +183,10 @@ namespace __gnu_cxx{
                         preferedHeight = flexibleHeightPerBoxes[box];
                     }
                     
+                    if(box.minimumHeight > 0){
+                        preferedHeight += box.minimumHeight;
+                    }
+                    
                     CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(width,preferedHeight)];
                     computedSizePerBoxes[box] = preferedSize;
                     

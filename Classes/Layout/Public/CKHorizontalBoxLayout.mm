@@ -182,6 +182,10 @@ namespace __gnu_cxx{
                         preferedWidth = flexibleWithPerBoxes[box];
                     }
                     
+                    if(box.minimumWidth > 0){
+                        preferedWidth += box.minimumWidth;
+                    }
+                    
                     CGSize preferedSize = [box preferredSizeConstraintToSize:CGSizeMake(preferedWidth,height)];
                     computedSizePerBoxes[box] = preferedSize;
                     
