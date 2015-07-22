@@ -162,8 +162,8 @@
         return bo;
     }
     
-    NSInteger min = [attributes minimumLength];
-    NSInteger max = [attributes maximumLength];
+    NSInteger min = attributes ? [attributes minimumLength] : -1;
+    NSInteger max = attributes ? [attributes maximumLength] : -1;
     if (range.length>0) {
         if(min >= 0 && range.location < min){
             return NO;
