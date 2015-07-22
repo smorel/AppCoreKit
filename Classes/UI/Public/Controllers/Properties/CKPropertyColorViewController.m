@@ -33,7 +33,6 @@
     colorView.name = @"ColorView";
     colorView.flexibleSize = YES;
     colorView.fixedWidth = 20;
-    colorView.marginLeft = 10;
     
     CKHorizontalBoxLayout* hbox = [[[CKHorizontalBoxLayout alloc]init]autorelease];
     
