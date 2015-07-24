@@ -114,7 +114,7 @@
     for (CFIndex i = 0; i < ABMultiValueGetCount(theEmails); i++) {
         ABMultiValueRef personEmails = ABRecordCopyValue(_record, kABPersonEmailProperty);
         if (ABMultiValueGetCount(personEmails) > 0) {
-            CFStringRef personEmail = ABMultiValueCopyValueAtIndex(personEmails, 0);
+            CFStringRef personEmail = ABMultiValueCopyValueAtIndex(personEmails, i);
             NSString* email = [(NSString *)personEmail retain];
             [emails addObject:email];
         } else {
@@ -382,6 +382,8 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 }
 
 - (NSArray *)findPeopleWithEmails:(NSArray *)emails {
+    NSArray* lowercaseEmails = [emails valueForKey:@"lowercaseString"];
+    
 	NSMutableArray *match = [NSMutableArray array];
 	CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(_addressBook);
 	
@@ -392,7 +394,7 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 		for (CFIndex j = 0; j < ABMultiValueGetCount(personEmails); j++) {
 			CFStringRef personEmail = ABMultiValueCopyValueAtIndex(personEmails, j);
 			
-			if ([emails containsString:(NSString *)personEmail]) {
+			if ([lowercaseEmails containsString:[(NSString *)personEmail lowercaseString]]) {
 				[match addObject:[CKAddressBookPerson personWithRecord:person]];
 				CFRelease(personEmail);
 				break;
@@ -418,7 +420,7 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 		NSString* lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
         NSString* fullName = [NSString stringWithFormat:@"%@ %@",firstName,lastName];
         
-        if ([fullName isEqualToString:filter]) {
+        if ([[fullName lowercaseString] isEqualToString:[filter lowercaseString]]) {
             [match addObject:[CKAddressBookPerson personWithRecord:person]];
             break;
 		}
