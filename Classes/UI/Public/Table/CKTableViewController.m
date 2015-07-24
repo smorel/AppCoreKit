@@ -28,6 +28,7 @@
 @property (nonatomic, assign, readwrite) NSInteger numberOfPages;
 @property (nonatomic, assign, readwrite) BOOL scrolling;
 @property (nonatomic, assign, readwrite) BOOL observingContentSize;
+@property(nonatomic,assign) BOOL creatingCell;
 @property(nonatomic,retain,readwrite) CKPassThroughView* backgroundView;
 @property(nonatomic,retain,readwrite) CKPassThroughView* foregroundView;
 @end
@@ -71,6 +72,7 @@
 
 - (void)postInit{
     [super postInit];
+    self.creatingCell = NO;
     self.insertAnimation = self.removeAnimation = UITableViewRowAnimationFade;
     self.stickySelectionEnabled = NO;
     self.currentPage = 0;
@@ -475,6 +477,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.creatingCell = YES;
+    
     CKReusableViewController* controller = [self.sectionContainer controllerAtIndexPath:indexPath];
     NSString* reuseIdentifier = [controller reuseIdentifier];
     
@@ -484,7 +488,9 @@
         cell.showsReorderControl = YES;
     }
     
-    return (UITableViewCell*)[self.sectionContainer viewForControllerAtIndexPath:indexPath reusingView:cell];
+    cell = (CKTableViewCell*)[self.sectionContainer viewForControllerAtIndexPath:indexPath reusingView:cell];
+    self.creatingCell = NO;
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -502,6 +508,9 @@
 
 
 - (void)invalidateControllerAtIndexPath:(NSIndexPath*)indexPath{
+    if(self.creatingCell)
+        return;
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
