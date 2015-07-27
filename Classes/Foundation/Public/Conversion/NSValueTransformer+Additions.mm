@@ -509,17 +509,24 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	if([NSObject isClass:type kindOfClass:[NSString class]]
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
+        CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+        if(attributes.enumDescriptor != nil){
+            return [NSValueTransformer convertEnumToString:[[property value]integerValue] withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
+        }
+        /*
 		switch(descriptor.propertyType){
 			case CKClassPropertyDescriptorTypeInt:
             case CKClassPropertyDescriptorTypeLong:
-            case CKClassPropertyDescriptorTypeLongLong:{
+            case CKClassPropertyDescriptorTypeLongLong:
+            case CKClassPropertyDescriptorTypeUnsignedLong:
+            case CKClassPropertyDescriptorTypeUnsignedLongLong:{
                 CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 				if(attributes.enumDescriptor != nil){
 					return [NSValueTransformer convertEnumToString:[[property value]integerValue] withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
 				}
 				break;
 			}
-		}
+		}*/
 	}
 	//special case for date ...
     else if([NSObject isClass:type kindOfClass:[NSDate class]] && [property.value isKindOfClass:[NSString class]]){
