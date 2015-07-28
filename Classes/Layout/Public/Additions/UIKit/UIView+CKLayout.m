@@ -45,7 +45,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,flexibleSize,name,conta
 - (void)performLayoutBoxesBatchUpdates:(void(^)())updates duration:(NSTimeInterval)duration completion:(void(^)(BOOL finished))completion{
     if(updates) { updates(); }
     
-    if(CGSizeEqualToSize(CGSizeZero, self.lastComputedSize)){
+    if([self rootLayoutBox] != self && CGSizeEqualToSize(CGSizeZero, self.lastComputedSize)){
         if(completion){ completion(YES); }
         return;
     }
