@@ -33,5 +33,4 @@
  */
 - (id)JSONRepresentation;
 
-
 @end
