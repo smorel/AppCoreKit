@@ -8,6 +8,8 @@
 
 #import "NSObject+JSON.h"
 #import "JSONKit.h"
+#import "NSObject+Runtime.h"
+#import "NSValueTransformer+Additions.h"
 
 @implementation NSObject (CKNSObjectJSON)
 
@@ -16,7 +18,7 @@
 		return [NSString stringWithFormat:@"\"%@\"", [(NSString*)self stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"]];
 	}
 	
-	if ([self isKindOfClass:[NSArray class]]) {
+	else if ([self isKindOfClass:[NSArray class]]) {
 		NSMutableArray *JSONRepresentations = [NSMutableArray array];
 		
 		for (NSObject *object in (NSArray *)self) {
@@ -28,7 +30,7 @@
 		return [NSString stringWithFormat:@"[%@]", [JSONRepresentations componentsJoinedByString:@","]];
 	}
 	
-	if ([self isKindOfClass:[NSDictionary class]]) {
+	else if ([self isKindOfClass:[NSDictionary class]]) {
 		NSDictionary *dictionary = (NSDictionary *)self;
 		NSMutableArray *JSONPairs = [NSMutableArray array];
 		
@@ -39,9 +41,32 @@
 		return [NSString stringWithFormat:@"{%@}", [JSONPairs componentsJoinedByString:@","]];
 	}
 	
-	if ([self isKindOfClass:[NSNumber class]]) {
+	else if ([self isKindOfClass:[NSNumber class]]) {
 		return [(NSNumber *)self stringValue];
 	}
+    
+    else if( [self isKindOfClass:[NSObject class]] ){
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        
+        for(CKClassPropertyDescriptor* descriptor in [self allPropertyDescriptors]){
+            id value =[self valueForKey:descriptor.name];
+            CKProperty* property = [CKProperty propertyWithObject:self keyPath:descriptor.name];
+            
+            id json  = nil;
+            if([property isNumber]){
+                json = [NSValueTransformer transformProperty:property toClass:[NSNumber class]];
+            }else{
+                json = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+            }
+            
+            if(!json){
+                json = [value JSONRepresentation];
+            }
+            
+            [dictionary setObject:json forKey:descriptor.name];
+        }
+        return dictionary;
+    }
 	
 	return @"null";
 }
