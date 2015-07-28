@@ -103,9 +103,11 @@
 }
 
 - (void)setViewControllers:(NSArray *)viewControllers {
-    id<CKLayoutBoxProtocol> layout = [self.view layoutWithName:@"SplitViewLayout"];
-    if(layout){
-        [layout removeAllLayoutBoxes];
+    if([self isViewLoaded]){
+        id<CKLayoutBoxProtocol> layout = [self.view layoutWithName:@"SplitViewLayout"];
+        if(layout){
+            [layout removeAllLayoutBoxes];
+        }
     }
     
     [_viewControllers release];
@@ -114,8 +116,11 @@
     if(!viewControllers)
         return;
     
-    if(layout){
-        layout.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:viewControllers];
+    if([self isViewLoaded]){
+        id<CKLayoutBoxProtocol> layout = [self.view layoutWithName:@"SplitViewLayout"];
+        if(layout){
+            layout.layoutBoxes = [CKArrayCollection collectionWithObjectsFromArray:viewControllers];
+        }
     }
 }
 
