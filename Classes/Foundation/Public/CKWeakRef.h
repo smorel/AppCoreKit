@@ -90,4 +90,8 @@
  */
 + (CKWeakRef*)weakRefWithObject:(id)object target:(id)target action:(SEL)action;
 
+/** This allows to store meta data that could be used in dealloc callback as the object is in a state where its properties are not accessible or it could crash in release.
+ */
+@property(nonatomic,retain) id userData;
+
 @end
