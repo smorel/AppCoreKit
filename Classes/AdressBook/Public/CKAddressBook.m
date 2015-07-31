@@ -11,6 +11,9 @@
 
 #import "NSArray+Additions.h"
 
+
+#define safeCFRelease(object) if(object)  CFRelease(object)
+
 @implementation CKAddressBookPerson {
 	ABRecordRef _record;
 	NSString *_fullName;
@@ -26,7 +29,7 @@
 + (id)person {
 	ABRecordRef ABPerson = ABPersonCreate();
 	CKAddressBookPerson *person = [CKAddressBookPerson personWithRecord:ABPerson];
-	CFRelease(ABPerson);
+	safeCFRelease(ABPerson);
 	return person;
 }
 
@@ -42,7 +45,7 @@
 	[_emails release];
 	[_image release];
 	[_phoneNumbers release];
-	CFRelease(_record);
+	safeCFRelease(_record);
 	[super dealloc];
 }
 
@@ -83,9 +86,9 @@
 	
 	_fullName = [fullName retain];
 
-	if (firstName) CFRelease(firstName);
-	if (lastName) CFRelease(lastName);
-	if (companyName) CFRelease(companyName);
+	safeCFRelease(firstName);
+	safeCFRelease(lastName);
+	safeCFRelease(companyName);
 
 	return _fullName;
 }
@@ -125,7 +128,7 @@
     
     _emails = [emails retain];
     
-    CFRelease(theEmails);
+    safeCFRelease(theEmails);
     
     return _emails;
     
@@ -154,7 +157,7 @@
 	if (ABPersonHasImageData(_record)) {
 		CFDataRef data = ABPersonCopyImageData(_record);
 		_image = [[UIImage imageWithData:(NSData *)data] retain];
-		CFRelease(data);
+		safeCFRelease(data);
 	}
 	
 	return _image;
@@ -180,14 +183,14 @@
 		
 		[phoneNumbers addObject:array];
 		
-		CFRelease(aLabel);
-		CFRelease(aLocalizedLabel);
-		CFRelease(aNumber);
+		safeCFRelease(aLabel);
+		safeCFRelease(aLocalizedLabel);
+		safeCFRelease(aNumber);
 	}
 	
 	_phoneNumbers = [phoneNumbers retain];
 	
-	CFRelease(thePhoneNumbers);
+	safeCFRelease(thePhoneNumbers);
 	
 	return _phoneNumbers;
 }
@@ -220,7 +223,7 @@
 	ABMultiValueIdentifier multivalueIdentifier;
 	ABMultiValueAddValueAndLabel(multiStringProperty, value, (CFStringRef)label, &multivalueIdentifier);
 	error = [self setValue:multiStringProperty forProperty:property];
-	CFRelease(multiStringProperty);
+	safeCFRelease(multiStringProperty);
 	
 	return error;
 }
@@ -295,7 +298,7 @@
                                          (__bridge CFStringRef)name, NULL);
     
     ABRecordSetValue(_record, kABPersonSocialProfileProperty, social, NULL);
-    CFRelease(social);
+    safeCFRelease(social);
 }
 
 @end
@@ -334,7 +337,7 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 - (void)reload{
     [[NSNotificationCenter defaultCenter]postNotificationName:CKAddressBookHasBeenModifiedExternallyNotification object:self];
     /*ABAddressBookUnregisterExternalChangeCallback(_addressBook,MyAddressBookExternalChangeCallback, self);
-    CFRelease(_addressBook);
+    safeCFRelease(_addressBook);
     
     _addressBook = ABAddressBookCreate();*/
 }
@@ -355,7 +358,7 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 
 - (void)dealloc {
     ABAddressBookUnregisterExternalChangeCallback(_addressBook,MyAddressBookExternalChangeCallback, self);
-	CFRelease(_addressBook);
+	safeCFRelease(_addressBook);
 	[super dealloc];
 }
 
@@ -373,10 +376,10 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 		if (ABMultiValueGetCount(personEmails) > 0) {
 			[match addObject:[CKAddressBookPerson personWithRecord:person]];
 		}
-		CFRelease(personEmails);
+		safeCFRelease(personEmails);
 	}
 	
-	CFRelease(people);
+	safeCFRelease(people);
 	
 	return match;
 }
@@ -396,16 +399,16 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 			
 			if ([lowercaseEmails containsString:[(NSString *)personEmail lowercaseString]]) {
 				[match addObject:[CKAddressBookPerson personWithRecord:person]];
-				CFRelease(personEmail);
+				safeCFRelease(personEmail);
 				break;
 			}
-			CFRelease(personEmail);
+			safeCFRelease(personEmail);
 		}
 		
-		CFRelease(personEmails);
+		safeCFRelease(personEmails);
 	}
 	
-	CFRelease(people);
+	safeCFRelease(people);
 	
 	return match;
 }
@@ -427,7 +430,7 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 		
 	}
 	
-	CFRelease(people);
+	safeCFRelease(people);
 	
 	return match;
 }
@@ -447,7 +450,7 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
 		
 	}
 	
-	CFRelease(people);
+	safeCFRelease(people);
 	
 	return match;
 }
@@ -462,7 +465,7 @@ NSString* CKAddressBookHasBeenModifiedExternallyNotification = @"CKAddressBookHa
         [match addObject:[CKAddressBookPerson personWithRecord:person]];
     }
     
-    CFRelease(people);
+    safeCFRelease(people);
     
     return match;
 }
