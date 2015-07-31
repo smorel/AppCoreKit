@@ -108,6 +108,9 @@
 
 
 - (void)prepareForTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext preparedViews:(NSMutableSet*)preparedViews{
+    if(!self.snapshot)
+        return;
+    
     if([preparedViews containsObject: self.snapshot])
         return;
     
@@ -137,6 +140,9 @@
 }
 
 - (void)willPerfomTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext{
+    if(!self.snapshot)
+        return;
+    
     for(CKViewTransitionContext* child in self.viewTransitionContexts){
         [child willPerfomTransitionWithContext:transitionContext];
     }
@@ -155,6 +161,9 @@
 
 
 - (void)didPerfomTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext{
+    if(!self.snapshot)
+        return;
+    
     for(CKViewTransitionContext* child in self.viewTransitionContexts){
         [child didPerfomTransitionWithContext:transitionContext];
     }
@@ -163,6 +172,9 @@
 }
 
 - (void)performTransitionWithContext:(id <UIViewControllerContextTransitioning>)transitionContext{
+    if(!self.snapshot)
+        return;
+    
     for(CKViewTransitionContext* child in self.viewTransitionContexts){
         [child performTransitionWithContext:transitionContext];
     }
@@ -178,6 +190,9 @@
 }
 
 - (void)endTransition{
+    if(!self.snapshot)
+        return;
+    
     for(CKViewTransitionContext* child in self.viewTransitionContexts){
         [child endTransition];
     }
