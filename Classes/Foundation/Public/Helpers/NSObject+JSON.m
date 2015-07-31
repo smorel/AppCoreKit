@@ -63,7 +63,9 @@
                 json = [value JSONRepresentation];
             }
             
-            [dictionary setObject:json forKey:descriptor.name];
+            if(json){
+                [dictionary setObject:json forKey:descriptor.name];
+            }
         }
         return dictionary;
     }
