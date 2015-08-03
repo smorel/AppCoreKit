@@ -609,6 +609,8 @@
 		D9418AAF1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */; };
 		D9418AB71AC1A46B00234A15 /* CKPassThroughView.h in Headers */ = {isa = PBXBuildFile; fileRef = D9418AB51AC1A46B00234A15 /* CKPassThroughView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9418AB81AC1A46B00234A15 /* CKPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D9418AB61AC1A46B00234A15 /* CKPassThroughView.m */; };
+		D94A944B1B700CC60092615E /* NSDictionary+Regex.h in Headers */ = {isa = PBXBuildFile; fileRef = D94A94491B700CC60092615E /* NSDictionary+Regex.h */; };
+		D94A944C1B700CC60092615E /* NSDictionary+Regex.m in Sources */ = {isa = PBXBuildFile; fileRef = D94A944A1B700CC60092615E /* NSDictionary+Regex.m */; };
 		D94CA30A1AA75BDF009EA887 /* CKPropertyStringViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D94CA30B1AA75BDF009EA887 /* CKPropertyStringViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */; };
 		D94CA3101AA75C25009EA887 /* CKPropertyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1321,6 +1323,8 @@
 		D9418AAD1ABB68B100234A15 /* CKSectionHeaderFooterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSectionHeaderFooterViewController.m; path = Classes/UI/Public/Table/CKSectionHeaderFooterViewController.m; sourceTree = "<group>"; };
 		D9418AB51AC1A46B00234A15 /* CKPassThroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPassThroughView.h; path = Classes/UI/Public/Views/CKPassThroughView.h; sourceTree = "<group>"; };
 		D9418AB61AC1A46B00234A15 /* CKPassThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPassThroughView.m; path = Classes/UI/Public/Views/CKPassThroughView.m; sourceTree = "<group>"; };
+		D94A94491B700CC60092615E /* NSDictionary+Regex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+Regex.h"; path = "Classes/Foundation/Public/NSDictionary+Regex.h"; sourceTree = "<group>"; };
+		D94A944A1B700CC60092615E /* NSDictionary+Regex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+Regex.m"; path = "Classes/Foundation/Public/NSDictionary+Regex.m"; sourceTree = "<group>"; };
 		D94CA3071AA75BDF009EA887 /* CKPropertyStringViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyStringViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.h; sourceTree = "<group>"; };
 		D94CA3081AA75BDF009EA887 /* CKPropertyStringViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyStringViewController.m; path = Classes/UI/Public/Controllers/Properties/CKPropertyStringViewController.m; sourceTree = "<group>"; };
 		D94CA30D1AA75C25009EA887 /* CKPropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyViewController.h; path = Classes/UI/Public/Controllers/Properties/CKPropertyViewController.h; sourceTree = "<group>"; };
@@ -2491,6 +2495,7 @@
 				D92C10C81AB09F5000DA4B12 /* NSData */,
 				D92C10C61AB09EFF00DA4B12 /* NSDate */,
 				D92C10CB1AB09FBD00DA4B12 /* NSArray */,
+				D94A94481B700C800092615E /* NSDictionary */,
 				D92C10CE1AB09FF600DA4B12 /* NSSet */,
 				D92C10D01AB0A00F00DA4B12 /* NSTimer */,
 				D92C10CF1AB0A00200DA4B12 /* NSPredicate */,
@@ -3114,6 +3119,15 @@
 				D9418AB61AC1A46B00234A15 /* CKPassThroughView.m */,
 			);
 			name = PassThrough;
+			sourceTree = "<group>";
+		};
+		D94A94481B700C800092615E /* NSDictionary */ = {
+			isa = PBXGroup;
+			children = (
+				D94A94491B700CC60092615E /* NSDictionary+Regex.h */,
+				D94A944A1B700CC60092615E /* NSDictionary+Regex.m */,
+			);
+			name = NSDictionary;
 			sourceTree = "<group>";
 		};
 		D94CA2F91AA64AF8009EA887 /* Reusable View Controller */ = {
@@ -3756,6 +3770,7 @@
 				7560DCC013B8ED3600268D13 /* CKItem.h in Headers */,
 				9649969E18D0D8EB002E03F4 /* CKSnapshotController.h in Headers */,
 				D93CD5911AE981CD00B3D376 /* CKImageView.h in Headers */,
+				D94A944B1B700CC60092615E /* NSDictionary+Regex.h in Headers */,
 				7560DCC213B8ED3600268D13 /* CKItemAttributeReference.h in Headers */,
 				7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */,
 				D98BDD361AF2CB5500A0AECD /* CKLightMotionEffect.h in Headers */,
@@ -4200,6 +4215,7 @@
 				D9418A6C1AB8759B00234A15 /* CKSectionContainer.m in Sources */,
 				7560DCB013B8ED3600268D13 /* CKStyleView.m in Sources */,
 				96B4516F18D09DC000D58489 /* CKBlurModalDebugViewController.m in Sources */,
+				D94A944C1B700CC60092615E /* NSDictionary+Regex.m in Sources */,
 				7560DCB213B8ED3600268D13 /* CKGridView.m in Sources */,
 				7560DCB313B8ED3600268D13 /* CKGridView+NSIndexPath.m in Sources */,
 				D9415C151B1F593A000F4B03 /* CKPropertyNumberSliderViewController.m in Sources */,
