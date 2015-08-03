@@ -92,7 +92,11 @@
         
         CKJob* job = self.currentJob;
         job.didComplete = ^(){
-            [(NSMutableArray*)self.jobQueue removeObjectAtIndex:0];
+            //in case jobs have been cancelled in between
+            if(self.jobQueue.count > 0){
+                [(NSMutableArray*)self.jobQueue removeObjectAtIndex:0];
+            }
+            
             self.currentJob = nil;
             [self dequeueJob];
         };
