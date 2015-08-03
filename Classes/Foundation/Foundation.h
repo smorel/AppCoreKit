@@ -115,6 +115,8 @@
 #import "NSArray+Compare.h"
 #import "UIColor+Components.h"
 #import "UIImage+ImageEffects.h"
+#import "NSDictionary+Regex.h"
+
 
 
 //ResourceManager
