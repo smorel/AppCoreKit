@@ -139,15 +139,17 @@
     }];
     
     [self.property.object bind:self.property.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
-        NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
-        str = str ? [NSString stringWithFormat:self.textFormat,str] : nil;
-
-        if(ValueTextField.hidden == NO && ![ValueTextField.text isEqualToString:str]){
-            ValueTextField.text = str;
+        if(ValueTextField.hidden == NO
+           && [ValueTextField isFirstResponder]){
+            return;
         }
-        if(ValueTextView.hidden == NO && ![ValueTextView.text isEqualToString:str]){
-            ValueTextView.text = str;
+        
+        if(ValueTextView.hidden == NO
+           && [ValueTextView isFirstResponder]){
+            return;
         }
+        
+        [bself updateTextFieldAndTextView];
     }];
     
     [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification
@@ -157,6 +159,29 @@
                                                      }];
 
 }
+
+- (void)updateTextFieldAndTextView{
+    NSString* str = [NSValueTransformer transform:self.property.value toClass:[NSString class]];
+    str = str ? [NSString stringWithFormat:self.textFormat,str] : nil;
+    
+    
+    UITextField* ValueTextField = [self.view viewWithName:@"ValueTextField"];
+    
+    CKTextView* ValueTextView = [self.view viewWithName:@"ValueTextView"];
+    
+    if(ValueTextField.hidden == NO && ![ValueTextField.text isEqualToString:str]){
+        ValueTextField.text = str;
+    }
+    if(ValueTextView.hidden == NO && ![ValueTextView.text isEqualToString:str]){
+        ValueTextView.text = str;
+    }
+
+}
+
+- (void)didResignFirstResponder{
+    [super didResignFirstResponder];
+    [self updateTextFieldAndTextView];
+   }
 
 - (void)updatePropertyWithValue:(id)value{
     id result = [NSValueTransformer transform:value toClass:[self.property isNumber] ? [NSNumber class] : self.property.type];
