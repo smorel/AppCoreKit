@@ -443,6 +443,24 @@
     return [NSObject isClass:self.descriptor.type exactKindOfClass:[NSNumber class]];
 }
 
+- (BOOL)isFloatingNumber{
+    switch(self.descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeFloat:
+        case CKClassPropertyDescriptorTypeDouble:
+            return YES;
+    }
+    
+    if ([NSObject isClass:self.descriptor.type exactKindOfClass:[NSNumber class]] ){
+        NSNumber* number = [self value];
+        if(!number)
+            return NO;
+        
+        return strcmp( @encode(float), [number objCType] ) == 0 || strcmp( @encode(double), [number objCType] ) == 0;
+    }
+    
+    return NO;
+}
+
 
 - (BOOL)isBool{
     switch(self.descriptor.propertyType){
