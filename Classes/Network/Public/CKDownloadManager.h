@@ -42,6 +42,10 @@ extern NSString *CKDownloadManagerDownloadDidFailNotification;
 
 /**
  */
+- (CKWebRequest*)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name completion:(void(^)(NSURL* downloadedFileURL, NSError* error))completion;
+
+/**
+ */
 - (void)resumeAllDownloads;
 
 

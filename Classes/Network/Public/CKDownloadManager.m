@@ -117,7 +117,13 @@ static CKDownloadManager *CKSharedDownloadManager;
     return [self.downloaders objectForKey:name];
 }
 
+
 - (CKWebRequest*)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name {
+    return [self downloadContentOfURL:URL fileName:name completion:nil];
+}
+
+- (CKWebRequest*)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name completion:(void(^)(NSURL* downloadedFileURL, NSError* error))completion{
+
     if ([self fileURLForName:name]){
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         [userInfo setObject:name forKey:@"name"];
@@ -138,20 +144,30 @@ static CKDownloadManager *CKSharedDownloadManager;
     NSString *temporaryFilePath = [self temporaryFilePathForName:name];
     NSString *metadataPath = [self metaFilePathForName:name];
     CKWebRequest *downloader = [CKWebRequest scheduledRequestWithURL:URL parameters:nil downloadAtPath:temporaryFilePath completion:^(id object, NSURLResponse *response, NSError *error) {
-        [self downloader:[self downloaderForName:name] didReceiveResponse:(NSHTTPURLResponse*)response];
-        //TODO : HANDLE ERRORS HERE !
+        CKWebRequest* downloader = [self downloaderForName:name];
+        
+        [self downloader:downloader didReceiveResponse:(NSHTTPURLResponse*)response];
+
         if (!error) {
             NSError *error = nil;
             [[NSFileManager defaultManager] moveItemAtPath:temporaryFilePath toPath:filePath error:&error];
             [[NSFileManager defaultManager] removeItemAtPath:metadataPath error:&error];
             if(error){
-                [self downloader:[self downloaderForName:name] didFailWithError:error];
+                [self downloader:downloader didFailWithError:error];
             }else{
-                [self downloaderDidFinish:[self downloaderForName:name]];
+                [self downloaderDidFinish:downloader];
+            }
+            
+            if(completion){
+                completion([self fileURLForName:downloader.downloadName],nil);
             }
         }
-        else 
-            [self downloader:[self downloaderForName:name] didFailWithError:error];
+        else {
+            [self downloader:downloader didFailWithError:error];
+            if(completion){
+                completion(nil,error);
+            }
+        }
     }];
     
     [self.downloaders setObject:downloader forKey:name];
