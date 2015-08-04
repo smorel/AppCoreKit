@@ -49,6 +49,10 @@
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
         
         for(CKClassPropertyDescriptor* descriptor in [self allPropertyDescriptors]){
+            if(descriptor.propertyType == CKClassPropertyDescriptorTypeObject
+               || descriptor.propertyType == CKClassPropertyDescriptorTypeUnknown)
+                continue;
+        
             id value =[self valueForKey:descriptor.name];
             CKProperty* property = [CKProperty propertyWithObject:self keyPath:descriptor.name];
             
