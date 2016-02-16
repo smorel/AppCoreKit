@@ -49,7 +49,7 @@ AppCoreKit supports all iOS versions 7.0 and higher.
 
 **ResourceManager**
 
-Since the begining the the version 2.2.0 (Master), AppCoreKit integrates a new Resource management framework as a weak dependency. This framework called **ResourceManager** allows live update of your application when you modify your application's resources from 1 or several repositories. You can provide your XCode project folder when working in the simulator or a dropbox folder when working on your device to see your application reload when you modify or add images, strings files, sounds, stylesheets, layouts, color palettes, mappings, ...
+Since the begining the the version 2.2.0 (Master), AppCoreKit integrates a new Resource management framework as a weak dependency. This framework called **ResourceManager** allows live update of your application when you modify your application's resources from 1 or several repositories. You can provide your Xcode project folder when working in the simulator or a dropbox folder when working on your device to see your application reload when you modify or add images, strings files, sounds, stylesheets, layouts, color palettes, mappings, ...
 
 If this framework is not linked with your app, the AppCoreKit will use the resources from your application's main bundle. If the framework is linked, you can specify one or several repository you want to sync with.
 
@@ -62,7 +62,7 @@ ResourceManager is also available as CocoaPods:
 <pre>pod 'ResourceManager'</pre>
 
 
-## XCode Integration
+## Xcode Integration
 
 ### File Templates
 
@@ -106,7 +106,7 @@ pod 'AppCoreKit'
 #### Compiling the framework
 
 AppCoreKit is built as a Static Framework. Static Framework are not natively supported by Xcode 5 and less and requires some additional specifications to get compiled properly.
-You can skip this setup if using XCode 6 and more.
+You can skip this setup if using Xcode 6 and more.
 
 Copy the following file:
 
