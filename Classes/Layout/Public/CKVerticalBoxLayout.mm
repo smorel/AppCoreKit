@@ -41,6 +41,7 @@ namespace __gnu_cxx{
 + (void)load{
     [CKCascadingTree registerAlias:[[self class]description] forKey:@"VBox"];
     [CKCascadingTree registerAlias:[[self class]description] forKey:@"Vertical"];
+    [CKCascadingTree registerAlias:[[self class]description] forKey:@"vertical"];
 }
 
 - (id)init{

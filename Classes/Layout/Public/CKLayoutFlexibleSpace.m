@@ -33,6 +33,8 @@
 + (void)load{
     [CKCascadingTree registerAlias:[[self class]description] forKey:@"FlexibleSpace"];
     [CKCascadingTree registerAlias:[[self class]description] forKey:@"Flexible"];
+    [CKCascadingTree registerAlias:[[self class]description] forKey:@"flexible"];
+
 }
 
 - (id)init{
