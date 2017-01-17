@@ -107,9 +107,15 @@ static char UIViewControllerStylesheetFileNameKey;
                 UIViewController* c = self;
                 while(c){
                     if([c respondsToSelector:@selector(containerViewController)]){
-                        c = [c performSelector:@selector(containerViewController)];
+                        UIViewController* previous = c;
+                        c = [previous performSelector:@selector(containerViewController)];
                         if(c){
-                            [controllerStack insertObject:c atIndex:0];
+                            [controllerStack addObject:c];
+                        }else if(previous.navigationController && [previous.navigationController respondsToSelector:@selector(containerViewController)]){
+                            c = [previous.navigationController performSelector:@selector(containerViewController)];
+                            if(c){
+                                [controllerStack addObject:c];
+                            }
                         }
                     }
                     else{
@@ -152,9 +158,15 @@ static char UIViewControllerStylesheetFileNameKey;
     UIViewController* c = self;
     while(c){
         if([c respondsToSelector:@selector(containerViewController)]){
-            c = [c performSelector:@selector(containerViewController)];
+            UIViewController* previous = c;
+            c = [previous performSelector:@selector(containerViewController)];
             if(c){
-                [controllerStack insertObject:c atIndex:0];
+                [controllerStack addObject:c];
+            }else if(previous.navigationController && [previous.navigationController respondsToSelector:@selector(containerViewController)]){
+                c = [previous.navigationController performSelector:@selector(containerViewController)];
+                if(c){
+                    [controllerStack addObject:c];
+                }
             }
         }
         else{
