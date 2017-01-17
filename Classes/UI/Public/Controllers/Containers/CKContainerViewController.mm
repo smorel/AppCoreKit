@@ -16,7 +16,7 @@
 
 typedef void(^CKTransitionBlock)();
 
-@interface CKTransition : CATransition
+@interface CKTransition : CATransition<CAAnimationDelegate>
 @property(nonatomic,copy)CKTransitionBlock beginBlock;
 @property(nonatomic,copy)CKTransitionBlock endBlock;
 @end
