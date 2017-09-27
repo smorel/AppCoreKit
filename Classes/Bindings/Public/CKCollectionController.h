@@ -54,10 +54,6 @@
 
 /**
  */
-@property (nonatomic, assign) BOOL appendSpinnerAsFooterCell;
-
-/**
- */
 @property (nonatomic, assign) NSInteger maximumNumberOfObjectsToDisplay;
 
 @end

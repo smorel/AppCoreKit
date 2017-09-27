@@ -22,7 +22,6 @@
 	CKCollection* _collection;
 	BOOL observing;
 	BOOL animateInsertionsOnReload;
-	BOOL appendSpinnerAsFooterCell;
 	NSInteger maximumNumberOfObjectsToDisplay;
 	BOOL locked;
 	BOOL changedWhileLocked;
@@ -30,7 +29,6 @@
 
 @synthesize collection = _collection;
 @synthesize delegate;
-@synthesize appendSpinnerAsFooterCell;
 @synthesize maximumNumberOfObjectsToDisplay;
 @synthesize animateInsertionsOnReload;
 @synthesize delegateRef = _delegateRef;
@@ -84,7 +82,6 @@
         }
         observing = NO;
         
-        appendSpinnerAsFooterCell = NO;
         animateInsertionsOnReload = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
         locked = NO;
         changedWhileLocked = NO;
@@ -133,14 +130,8 @@
 
 - (NSUInteger)numberOfObjectsForSection:(NSInteger)section{
 	NSInteger count = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay,[_collection count]) : [_collection count];
-	if(appendSpinnerAsFooterCell /*&& _collection.feedSource*/){
-		return count + 1;
-	}
-	else {
-		return count;
-	}
-
-	return 0;
+	
+    return count;
 }
 
 - (id)objectAtIndexPath:(NSIndexPath*)indexPath{
@@ -152,10 +143,6 @@
 		NSInteger index = indexPath.row;
 		return [_collection objectAtIndex:index];
 	}
-	else if(appendSpinnerAsFooterCell /*&& _collection.feedSource*/){
-		return _collection;
-	}
-
 	return nil;
 }
 
